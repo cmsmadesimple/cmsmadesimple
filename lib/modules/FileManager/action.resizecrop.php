@@ -9,12 +9,12 @@ if( !is_array($selall) ) $selall = unserialize($selall);
 unset($params['selall']);
 
 if (count($selall)==0) {
-  $params["fmerror"]="nofilesselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="nofilesselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 if (count($selall)>1) {
-  $params["fmerror"]="morethanonefiledirselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="morethanonefiledirselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
 $config = cmsms()->getConfig();
@@ -22,8 +22,8 @@ $basedir = $config['root_path'];
 $filename=$this->decodefilename($selall[0]);
 $src = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),$filename);
 if( !file_exists($src) ) {
-  $params["fmerror"]="filenotfound";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="filenotfound";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 $imageinfo = getimagesize($src);
 if( !$imageinfo || !isset($imageinfo['mime']) || !startswith($imageinfo['mime'],'image') ) {
@@ -44,27 +44,27 @@ if(empty($params['reset'])
    && !empty($params['cw']) && !empty($params['ch'])
    && !empty($params['iw']) && !empty($params['ih'])) {
 
-  //Get the mimeType
-  $mimeType = imageEditor::getMime($src);
+    //Get the mimeType
+    $mimeType = imageEditor::getMime($src);
 
-  //Open new Instance
-  $instance = imageEditor::open($src);
+    //Open new Instance
+    $instance = imageEditor::open($src);
 
-  //Resize it if necessary
-  if( !empty($params['iw']) && !empty($params['ih']) ) {
-      $instance = imageEditor::resize($instance, $mimeType, $params['iw'], $params['ih']);
-  }
+    //Resize it if necessary
+    if( !empty($params['iw']) && !empty($params['ih']) ) {
+        $instance = imageEditor::resize($instance, $mimeType, $params['iw'], $params['ih']);
+    }
 
-  //Crop it if necessary
-  if( !empty($params['cx']) && !empty($params['cy']) && !empty($params['cw']) && !empty($params['ch']) ) {
-      $instance = imageEditor::crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
-  }
+    //Crop it if necessary
+    if( !empty($params['cx']) && !empty($params['cy']) && !empty($params['cw']) && !empty($params['ch']) ) {
+        $instance = imageEditor::crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
+    }
 
-  //Save it
-  $res = imageEditor::save($instance, $src, $mimeType);
-  if( $this->GetPreference('create_thumbnails') ) filemanager_utils::create_thumbnail($src);
+    //Save it
+    $res = imageEditor::save($instance, $src, $mimeType);
+    if( $this->GetPreference('create_thumbnails') ) filemanager_utils::create_thumbnail($src);
 
-  $this->Redirect($id,"defaultadmin",$returnid);
+    $this->Redirect($id,"defaultadmin",$returnid);
 }
 
 

@@ -38,7 +38,8 @@ namespace ModuleManager;
 
 final class utils
 {
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public static function get_installed_modules($include_inactive = FALSE, $as_hash = FALSE)
     {

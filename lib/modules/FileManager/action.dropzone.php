@@ -26,35 +26,35 @@ if( strlen($advancedmode) > 1 ) $advancedmode = 0;
 
     // now get a simple list of all of the directories we have 'write' access to.
     $basedir = dirname($startdir);
-    function get_dirs($startdir,$prefix = '/') {
-        $res = array();
-        if( !is_dir($startdir) ) return;
+function get_dirs($startdir,$prefix = '/') {
+    $res = array();
+    if( !is_dir($startdir) ) return;
 
-        global $showhiddenfiles;
-        $dh = opendir($startdir);
-        while( false !== ($entry = readdir($dh)) ) {
-            if( $entry == '.' ) continue;
-            if( $entry == '..' ) continue;
-            $full = filemanager_utils::join_path($startdir,$entry);
-            if( !is_dir($full) ) continue;
-            if( !is_readable($full) ) continue;
-            if( !$showhiddenfiles && ($entry[0] == '.' || $entry[0] == '_') ) continue;
+    global $showhiddenfiles;
+    $dh = opendir($startdir);
+    while( false !== ($entry = readdir($dh)) ) {
+        if( $entry == '.' ) continue;
+        if( $entry == '..' ) continue;
+        $full = filemanager_utils::join_path($startdir,$entry);
+        if( !is_dir($full) ) continue;
+        if( !is_readable($full) ) continue;
+        if( !$showhiddenfiles && ($entry[0] == '.' || $entry[0] == '_') ) continue;
 
-            if( $entry == '.svn' || $entry == '.git' ) continue;
-            if( is_writable($full) ) $res[$prefix.$entry] = $prefix.$entry;
-            $tmp = get_dirs($full,$prefix.$entry.'/');
-            if( is_array($tmp) && count($tmp) ) $res = array_merge($res,$tmp);
-        }
-        closedir($dh);
-        return $res;
+        if( $entry == '.svn' || $entry == '.git' ) continue;
+        if( is_writable($full) ) $res[$prefix.$entry] = $prefix.$entry;
+        $tmp = get_dirs($full,$prefix.$entry.'/');
+        if( is_array($tmp) && count($tmp) ) $res = array_merge($res,$tmp);
     }
+    closedir($dh);
+    return $res;
+}
 
     $output = get_dirs($startdir,'/'.basename($startdir).'/');
     $output['/'.basename($startdir)] = '/'.basename($startdir);
-    if( count($output) ) {
-        ksort($output);
-        $smarty->assign('dirlist',$output);
-    }
+if( count($output) ) {
+    ksort($output);
+    $smarty->assign('dirlist',$output);
+}
 }
 
 $smarty->assign('FileManager',$this);

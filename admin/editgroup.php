@@ -47,8 +47,8 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["editgroup"]) && $group_id != 1) $active = 0;
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php".$urlext);
-	return;
+    redirect("listgroups.php".$urlext);
+    return;
 }
 
 $userid = get_userid();
@@ -100,51 +100,48 @@ if (strlen($group) > 0) $CMS_ADMIN_SUBTITLE = $group;
 include_once("header.php");
 
 if (!$access) {
-  echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('editgroup')))."</p></div>";
+    echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('editgroup')))."</p></div>";
 }
 else {
-  if ($error != "") {
-    echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
-  }
-?>
+    if ($error != "") {
+        echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+    }
+    ?>
 
 <div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('editgroup'); ?>
+    <?php echo $themeObject->ShowHeader('editgroup'); ?>
 	<form method="post" action="editgroup.php">
         <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME; ?>" value="<?php echo $_SESSION[CMS_USER_KEY]; ?>" />
         </div>
 	<div class="pageoverflow">
-	  <p class="pagetext"><label for="groupname"><?php echo lang('name')?>:</label></p>
- 	  <p class="pageinput"><input type="text" id="groupname" name="group" maxlength="25" value="<?php echo $group?>" /></p>
+	  <p class="pagetext"><label for="groupname"><?php echo lang('name'); ?>:</label></p>
+ 	  <p class="pageinput"><input type="text" id="groupname" name="group" maxlength="25" value="<?php echo $group; ?>" /></p>
         </div>
 	<div class="pageoverflow">
-	  <p class="pagetext"><label for="description"><?php echo lang('description')?>:</label></p>
- 	  <p class="pageinput"><input type="text" id="description" name="description" size="80" maxlength="255" value="<?php echo $description?>" /></p>
+	  <p class="pagetext"><label for="description"><?php echo lang('description'); ?>:</label></p>
+ 	  <p class="pageinput"><input type="text" id="description" name="description" size="80" maxlength="255" value="<?php echo $description; ?>" /></p>
         </div>
-	<?php if( !$useringroup && ($group_id != 1) ) { ?>
+    <?php if( !$useringroup && ($group_id != 1) ) { ?>
 	  <div class="pageoverflow">
-	    <p class="pagetext"><label for="active"><?php echo lang('active')?>:</label></p>
-	    <p class="pageinput"><input type="checkbox" id="active" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+	    <p class="pagetext"><label for="active"><?php echo lang('active'); ?>:</label></p>
+	    <p class="pageinput"><input type="checkbox" id="active" name="active" <?php echo ($active == 1?"checked=\"checked\"":""); ?> /></p>
 	  </div>
- 	   <?php } else { ?>
-                <div><input type="hidden" name="active" value="<?php echo $active ?>"/></div>
-           <?php } ?>
+    <?php } else { ?>
+                <div><input type="hidden" name="active" value="<?php echo $active; ?>"/></div>
+    <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-				<input type="hidden" name="group_id" value="<?php echo $group_id?>" /><input type="hidden" name="editgroup" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="hidden" name="group_id" value="<?php echo $group_id; ?>" /><input type="hidden" name="editgroup" value="true" />
+				<input type="submit" value="<?php echo lang('submit'); ?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>
 </div>
-<?php
+    <?php
 
 }
 
 include_once("footer.php");
-
-
-?>

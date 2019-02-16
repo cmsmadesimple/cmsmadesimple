@@ -28,6 +28,7 @@
 # END_LICENSE
 #-------------------------------------------------------------------------
 use FilePicker\ProfileDAO;
+
 if( !defined('CMS_VERSION') ) exit;
 
 try {

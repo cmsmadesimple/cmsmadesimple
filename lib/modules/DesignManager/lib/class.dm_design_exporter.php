@@ -1,14 +1,22 @@
 <?php
 class dm_design_exporter
 {
+
     private $_design;
+
     private $_tpl_list;
+
     private $_css_list;
+
     private $_files;
+
     private $_image = null;
+
     private $_description;
-    static  $_mm_types;
-    static  $_nav_types;
+
+    static $_mm_types;
+
+    static $_nav_types;
 
     private static $_dtd = <<<EOT
 <!DOCTYPE design [
@@ -81,16 +89,16 @@ EOT;
         $ob = &$this;
         $regex='/url\s*\(\"*(.*)\"*\)/i';
         $content = preg_replace_callback($regex,
-                                         function($matches) use ($ob) {
-                                             $config = cmsms()->GetConfig();
-                                             $url = $matches[1];
-                                             if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
-                                                 $sig = $ob->_get_signature($url);
-                                                 $sig = "url(".$sig.")";
-                                                 return $sig;
-                                             }
-                                             return $matches[0];
-                                         },
+                                            function($matches) use ($ob) {
+                                                $config = cmsms()->GetConfig();
+                                                $url = $matches[1];
+                                                if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
+                                                    $sig = $ob->_get_signature($url);
+                                                    $sig = "url(".$sig.")";
+                                                    return $sig;
+                                                }
+                                                return $matches[0];
+                                            },
                                          $content);
 
         return $content;
@@ -103,19 +111,19 @@ EOT;
         $temp_fix_cmsselflink = function($matches) use ($ob) {
             // GCB (required name param)
             $out = preg_replace_callback("/href\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob) {
-                                             return str_replace($matches[1],'ignore::'.$matches[1],$matches[0]);
-                                         },$matches[0]);
+                                            function($matches) use ($ob) {
+                                                return str_replace($matches[1],'ignore::'.$matches[1],$matches[0]);
+                                            },$matches[0]);
             return $out;
         };
 
         $undo_fix_cmsselflink = function($matches) use ($ob) {
             // GCB (required name param)
             $out = preg_replace_callback("/href\s*=[\\\"']{0,1}(ignore\:\:[a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob) {
-                                             $rep = substr($matches[1],8);
-                                             return str_replace($matches[1],$reo,$matches[0]);
-                                         },$matches[0]);
+                                            function($matches) use ($ob) {
+                                                $rep = substr($matches[1],8);
+                                                return str_replace($matches[1],$reo,$matches[0]);
+                                            },$matches[0]);
             return $out;
         };
 
@@ -141,18 +149,18 @@ EOT;
         foreach( $types as $type ) {
             $innerT = '[a-z0-9:?=&@/._-]+?';
             $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
-                                             function($matches) use ($ob,$type,&$is_same_host) {
-                                                 $config = cmsms()->GetConfig();
-                                                 $url = $matches[2];
-                                                 $root_url = new cms_url($config['root_url']);
-                                                 $the_url = new cms_url($url);
-                                                 if( !startswith($url,'ignore::') && $is_same_host($root_url,$the_url) ) {
-                                                     $sig = $ob->_get_signature($url);
-                                                     //return $sig;
-                                                     return " $type=\"$sig\"";
-                                                 }
-                                                 return $matches[0];
-                                             },
+                                                function($matches) use ($ob,$type,&$is_same_host) {
+                                                    $config = cmsms()->GetConfig();
+                                                    $url = $matches[2];
+                                                    $root_url = new cms_url($config['root_url']);
+                                                    $the_url = new cms_url($url);
+                                                    if( !startswith($url,'ignore::') && $is_same_host($root_url,$the_url) ) {
+                                                        $sig = $ob->_get_signature($url);
+                                                        //return $sig;
+                                                        return " $type=\"$sig\"";
+                                                    }
+                                                    return $matches[0];
+                                                },
                                              $content);
         }
 
@@ -201,52 +209,52 @@ EOT;
     public function _add_template($name,$type = 'TPL')
     {
         switch( $type ) {
-        case 'TPL':
-            $tpl_ob = null;
-            if( is_object($name) ) {
-                $tpl_ob = $name;
-                $name = $tpl_ob->get_name();
-            }
-            else {
-                $tpl_ob = CmsLayoutTemplate::load($name);
-            }
-            $sig = $this->_get_signature($tpl_ob->get_name(),$type);
+            case 'TPL':
+                $tpl_ob = null;
+                if( is_object($name) ) {
+                    $tpl_ob = $name;
+                    $name = $tpl_ob->get_name();
+                }
+                else {
+                    $tpl_ob = CmsLayoutTemplate::load($name);
+                }
+                $sig = $this->_get_signature($tpl_ob->get_name(),$type);
 
-            // recursion...
-            $new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
-            $new_content = $this->_get_sub_templates($new_content);
-            $sig = $this->_get_signature($tpl_ob->get_name(),'TPL');
-            $new_tpl_ob = clone $tpl_ob;
-            $new_tpl_ob->set_name($sig);
-            $new_tpl_ob->set_content($new_content);
+                // recursion...
+                $new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
+                $new_content = $this->_get_sub_templates($new_content);
+                $sig = $this->_get_signature($tpl_ob->get_name(),'TPL');
+                $new_tpl_ob = clone $tpl_ob;
+                $new_tpl_ob->set_name($sig);
+                $new_tpl_ob->set_content($new_content);
 
-            if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
-            $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
-            return $sig;
+                if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
+                $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
+                return $sig;
 
-        case 'MM':
-            // MenuManager file template
-            $mod = cms_utils::get_module('MenuManager');
-            if( !$mod ) throw new \CmsException('MenuManager file template specified, but MenuManager could not be loaded.');
+            case 'MM':
+                // MenuManager file template
+                $mod = cms_utils::get_module('MenuManager');
+                if( !$mod ) throw new \CmsException('MenuManager file template specified, but MenuManager could not be loaded.');
 
-            $tpl = $mod->GetTemplateFromFile($name);
-            if( !$tpl ) throw new \CmsException('Could not find MenuMaager template '.$name);
+                $tpl = $mod->GetTemplateFromFile($name);
+                if( !$tpl ) throw new \CmsException('Could not find MenuMaager template '.$name);
 
-            // create a new CmsLayoutTemplate object for this template
-            // and add it to the list.
-            // notice we don't recurse.
-            $tpl = $this->_parse_tpl_urls($tpl);
-            $new_tpl_ob = new CmsLayoutTemplate;
-            $new_tpl_ob->set_content($tpl);
-            $name = substr($name,0,-4);
-            $type = 'TPL';
-            $sig = $this->_get_signature($name,$type);
-            $new_tpl_ob->set_name($sig);
-            // it's a menu manager template
-            // we need to get a 'type' for this.
-            $new_tpl_ob->set_type(self::$_mm_types[0]);
-            $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
-            return $sig;
+                // create a new CmsLayoutTemplate object for this template
+                // and add it to the list.
+                // notice we don't recurse.
+                $tpl = $this->_parse_tpl_urls($tpl);
+                $new_tpl_ob = new CmsLayoutTemplate;
+                $new_tpl_ob->set_content($tpl);
+                $name = substr($name,0,-4);
+                $type = 'TPL';
+                $sig = $this->_get_signature($name,$type);
+                $new_tpl_ob->set_name($sig);
+                // it's a menu manager template
+                // we need to get a 'type' for this.
+                $new_tpl_ob->set_type(self::$_mm_types[0]);
+                $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
+                return $sig;
         } // switch
     }
 
@@ -261,16 +269,16 @@ EOT;
 
             $have_template = false;
             $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob,&$have_template) {
-                                             $the_tpl = $matches[1];
-                                             if( ($pos = strpos($matches[1],' ')) !== FALSE )  $the_tpl = substr($matches[1],0,$pos);
-                                             $type = 'TPL';
-                                             if( endswith($the_tpl,'.tpl') ) $type = 'MM';
-                                             $sig = $ob->_add_template($the_tpl,$type);
-                                             $have_template = TRUE;
-                                             $out = str_replace($the_tpl,$sig,$matches[0]);
-                                             return $out;
-                                         },$matches[0]);
+                                            function($matches) use ($ob,&$have_template) {
+                                                $the_tpl = $matches[1];
+                                                if( ($pos = strpos($matches[1],' ')) !== FALSE )  $the_tpl = substr($matches[1],0,$pos);
+                                                $type = 'TPL';
+                                                if( endswith($the_tpl,'.tpl') ) $type = 'MM';
+                                                $sig = $ob->_add_template($the_tpl,$type);
+                                                $have_template = TRUE;
+                                                $out = str_replace($the_tpl,$sig,$matches[0]);
+                                                return $out;
+                                            },$matches[0]);
 
             if( !$have_template ) {
                 // MenuManager default template.
@@ -288,11 +296,11 @@ EOT;
 
             $have_template = false;
             $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob,&$have_template) {
-                                             $have_template = TRUE;
-                                             $sig = $ob->_add_template($matches[1]);
-                                             return str_replace($matches[1],$sig,$matches[0]);
-                                         },$matches[0]);
+                                            function($matches) use ($ob,&$have_template) {
+                                                $have_template = TRUE;
+                                                $sig = $ob->_add_template($matches[1]);
+                                                return str_replace($matches[1],$sig,$matches[0]);
+                                            },$matches[0]);
             if( !$have_template ) {
                 // Navigator default template.
                 $tpl = CmsLayoutTemplate::load_dflt_by_type('Navigator::navigation');
@@ -305,24 +313,24 @@ EOT;
         $replace_gcb = function($matches) use ($ob) {
             // GCB (required name param)
             $out = preg_replace_callback("/name\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob) {
-                                             $sig = $ob->_add_template($matches[1]);
-                                             return str_replace($matches[1],$sig,$matches[0]);
-                                         },$matches[0]);
+                                            function($matches) use ($ob) {
+                                                $sig = $ob->_add_template($matches[1]);
+                                                return str_replace($matches[1],$sig,$matches[0]);
+                                            },$matches[0]);
             return $out;
         };
 
         $replace_include = function($matches) use ($ob) {
             // include (required file param)
             $out = preg_replace_callback("/file\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob) {
-                                             if( !startswith($matches[1],'cms_template:') ) {
-                                                 throw new \CmsException('Only templates that use {include} with cms_template resources can be exported.');
-                                             }
-                                             $tpl = substr($matches[1],strlen('cms_template:'));
-                                             $sig = $ob->_add_template($tpl);
-                                             return str_replace($matches[1],'cms_template:'.$sig,$matches[0]);
-                                         },$matches[0]);
+                                            function($matches) use ($ob) {
+                                                if( !startswith($matches[1],'cms_template:') ) {
+                                                    throw new \CmsException('Only templates that use {include} with cms_template resources can be exported.');
+                                                }
+                                                $tpl = substr($matches[1],strlen('cms_template:'));
+                                                $sig = $ob->_add_template($tpl);
+                                                return str_replace($matches[1],'cms_template:'.$sig,$matches[0]);
+                                            },$matches[0]);
             return $out;
         };
 
@@ -444,63 +452,63 @@ EOT;
         $output = $this->_open_tag('file',$lvl);
         $output .= $this->_output('fkey',$key,$lvl+1);
         switch($nkey) {
-        case 'URL':
-            // javascript file or image or something.
-            // could have smarty syntax.
-            $nvalue = $value;
-            if( strpos($value,'[[') !== FALSE ) {
-                // smarty syntax with [[ and ]] as delimiters
-                $smarty->left_delimiter = '[[';
-                $smarty->right_delimiter = ']]';
-                $nvalue = $smarty->fetch('string:'.$value);
-                $smarty->left_delimiter = '{';
-                $smarty->right_delimiter = '}';
-            }
-            else if( strpos($value,'{') !== FALSE ) {
-                // smarty syntax with { and } as delimiters
-                $nvalue = $smarty->fetch('string:'.$value);
-            }
+            case 'URL':
+                // javascript file or image or something.
+                // could have smarty syntax.
+                $nvalue = $value;
+                if( strpos($value,'[[') !== FALSE ) {
+                    // smarty syntax with [[ and ]] as delimiters
+                    $smarty->left_delimiter = '[[';
+                    $smarty->right_delimiter = ']]';
+                    $nvalue = $smarty->fetch('string:'.$value);
+                    $smarty->left_delimiter = '{';
+                    $smarty->right_delimiter = '}';
+                }
+                else if( strpos($value,'{') !== FALSE ) {
+                    // smarty syntax with { and } as delimiters
+                    $nvalue = $smarty->fetch('string:'.$value);
+                }
 
-            // now, it should be a full URL, or start at /
-            // gotta convert it to a file.
-            // assumes it's a filename relative to root.
-            $fn = cms_join_path($config['root_path'],$nvalue);
-            if( startswith($nvalue,'/') && !startswith($nvalue,'//') ) {
+                // now, it should be a full URL, or start at /
+                // gotta convert it to a file.
+                // assumes it's a filename relative to root.
                 $fn = cms_join_path($config['root_path'],$nvalue);
-            } elseif( startswith($nvalue,$config['root_url']) ) {
-                $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
-            }
+                if( startswith($nvalue,'/') && !startswith($nvalue,'//') ) {
+                    $fn = cms_join_path($config['root_path'],$nvalue);
+                } elseif( startswith($nvalue,$config['root_url']) ) {
+                    $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
+                }
 
-            if( !is_file($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
+                if( !is_file($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
 
-            $data = file_get_contents($fn);
-            if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
+                $data = file_get_contents($fn);
+                if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
 
-            $nvalue = basename($nvalue);
-            $output .= $this->_output('fvalue',$nvalue,$lvl+1);
-            $output .= $this->_output_data('fdata',$data,$lvl+1);
-            break;
+                $nvalue = basename($nvalue);
+                $output .= $this->_output('fvalue',$nvalue,$lvl+1);
+                $output .= $this->_output_data('fdata',$data,$lvl+1);
+                break;
 
-        case 'TPL':
-            // template signature...
-            // just need the key and value.
-            $output .= $this->_output('fvalue',$value,$lvl+1);
-            break;
+            case 'TPL':
+                // template signature...
+                // just need the key and value.
+                $output .= $this->_output('fvalue',$value,$lvl+1);
+                break;
 
-        case 'CSS':
-            // stylesheet signature
-            // just need the key and value.
-            $output .= $this->_output('fvalue',$value,$lvl+1);
-            break;
+            case 'CSS':
+                // stylesheet signature
+                // just need the key and value.
+                $output .= $this->_output('fvalue',$value,$lvl+1);
+                break;
 
-        case 'MM':
-            // menu manager file template
-            // just need the key and value.
-            $output .= $this->_output('fvalue',$value,$lvl+1);
-            break;
+            case 'MM':
+                // menu manager file template
+                // just need the key and value.
+                $output .= $this->_output('fvalue',$value,$lvl+1);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         $output .= $this->_close_tag('file',$lvl);
         return $output;

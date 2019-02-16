@@ -18,45 +18,45 @@ if (isset($params['bulk_action']) ) {
         }
 
         switch($params['bulk_action']) {
-        case 'delete':
-            if (!$this->CheckPermission('Delete News')) {
-                echo $this->ShowErrors($this->Lang('needpermission', array('Modify News')));
-            }
-            else {
-                foreach( $sel as $news_id ) {
-                    news_admin_ops::delete_article( $news_id );
+            case 'delete':
+                if (!$this->CheckPermission('Delete News')) {
+                    echo $this->ShowErrors($this->Lang('needpermission', array('Modify News')));
                 }
-            }
-            echo $this->ShowMessage($this->Lang('msg_success'));
-            break;
+                else {
+                    foreach( $sel as $news_id ) {
+                        news_admin_ops::delete_article( $news_id );
+                    }
+                }
+                echo $this->ShowMessage($this->Lang('msg_success'));
+                break;
 
-        case 'setcategory':
-            $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET news_category_id = ?, modified_date = NOW()
+            case 'setcategory':
+                $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET news_category_id = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
-            $parms = array((int)$params['category']);
-            $db7->Execute($query,$parms);
-            audit('',$this->GetName(),'category changed on '.count($sel).' articles');
-            echo $this->ShowMessage($this->Lang('msg_success'));
-            break;
+                $parms = array((int)$params['category']);
+                $db7->Execute($query,$parms);
+                audit('',$this->GetName(),'category changed on '.count($sel).' articles');
+                echo $this->ShowMessage($this->Lang('msg_success'));
+                break;
 
-        case 'setpublished':
-            $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
+            case 'setpublished':
+                $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
-            $db->Execute($query,array('published'));
-            audit('',$this->GetName(),'status changed on '.count($sel).' articles');
-            echo $this->ShowMessage($this->Lang('msg_success'));
-            break;
+                $db->Execute($query,array('published'));
+                audit('',$this->GetName(),'status changed on '.count($sel).' articles');
+                echo $this->ShowMessage($this->Lang('msg_success'));
+                break;
 
-        case 'setdraft':
-            $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
+            case 'setdraft':
+                $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
-            $db->Execute($query,array('draft'));
-            audit('',$this->GetName(),'status changed on '.count($sel).' articles');
-            echo $this->ShowMessage($this->Lang('msg_success'));
-            break;
+                $db->Execute($query,array('draft'));
+                audit('',$this->GetName(),'status changed on '.count($sel).' articles');
+                echo $this->ShowMessage($this->Lang('msg_success'));
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 }

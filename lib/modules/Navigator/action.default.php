@@ -64,108 +64,108 @@ $tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null,$
 $hm = $gCms->GetHierarchyManager();
 foreach( $params as $key => $value ) {
     switch( $key ) {
-    case 'loadprops':
-        $deep = cms_to_bool($value);
-        break;
+        case 'loadprops':
+            $deep = cms_to_bool($value);
+            break;
 
-    case 'items':
-        // hardcoded list of items (and their children)
-        Nav_utils::clear_excludes();
-        $items = trim($value);
-        $nlevels = 1;
-        $start_element = null;
-        $start_page = null;
-        $start_level = null;
-        $childrenof = null;
-        break;
-
-    case 'includeprefix':
-        Nav_utils::clear_excludes();
-        $list = explode(',',$value);
-        if( is_array($list) && count($list) ) {
-            foreach( $list as &$one ) {
-                $one = trim($one);
-            }
-            $list = array_unique($list);
-            if( count($list) ) {
-                $flatlist = $hm->getFlatList();
-                if( is_array($flatlist) && count($flatlist) ) {
-                    $tmp = [];
-                    foreach( $flatlist as $id => &$node ) {
-                        $alias = $node->get_tag('alias');
-                        foreach( $list as $t1 ) {
-                            if( startswith( $alias, $t1 ) ) $tmp[] = $alias;
-                        }
-                    }
-                    if( is_array($tmp) && count($tmp) ) $items = implode(',',$tmp);
-                }
-            }
-        }
-        $nlevels = 1;
-        $start_element = null;
-        $start_page = null;
-        $start_level = null;
-        $childrenof = null;
-        break;
-
-    case 'excludeprefix':
-        Nav_utils::set_excludes($value);
-        $items = null;
-        break;
-
-    case 'nlevels':
-    case 'number_of_levels':
-        // a maximum number of levels;
-        if( (int)$value > 0 ) $nlevels = (int)$value;
-        break;
-
-    case 'show_all':
-        // show all items, even if marked as 'not shown in menu'
-        $show_all = cms_to_bool($value);
-        break;
-
-    case 'show_root_siblings':
-        // given a start element or start page ... show it's siblings too
-        $show_root_siblings = cms_to_bool($value);
-        break;
-
-    case 'start_element':
-        $start_element = trim($value);
-        $start_page = null;
-        $start_level = null;
-        $childrenof = null;
-        $items = null;
-        break;
-
-    case 'start_page':
-        $start_element = null;
-        $start_page = trim($value);
-        $start_level = null;
-        $childrenof = null;
-        $items = null;
-        break;
-
-    case 'start_level':
-        $value = (int)$value;
-        if( $value > 1 ) {
+        case 'items':
+            // hardcoded list of items (and their children)
+            Nav_utils::clear_excludes();
+            $items = trim($value);
+            $nlevels = 1;
             $start_element = null;
             $start_page = null;
+            $start_level = null;
+            $childrenof = null;
+            break;
+
+        case 'includeprefix':
+            Nav_utils::clear_excludes();
+            $list = explode(',',$value);
+            if( is_array($list) && count($list) ) {
+                foreach( $list as &$one ) {
+                    $one = trim($one);
+                }
+                $list = array_unique($list);
+                if( count($list) ) {
+                    $flatlist = $hm->getFlatList();
+                    if( is_array($flatlist) && count($flatlist) ) {
+                        $tmp = [];
+                        foreach( $flatlist as $id => &$node ) {
+                            $alias = $node->get_tag('alias');
+                            foreach( $list as $t1 ) {
+                                if( startswith( $alias, $t1 ) ) $tmp[] = $alias;
+                            }
+                        }
+                        if( is_array($tmp) && count($tmp) ) $items = implode(',',$tmp);
+                    }
+                }
+            }
+            $nlevels = 1;
+            $start_element = null;
+            $start_page = null;
+            $start_level = null;
+            $childrenof = null;
+            break;
+
+        case 'excludeprefix':
+            Nav_utils::set_excludes($value);
             $items = null;
-            $start_level = $value;
-        }
-        break;
+            break;
 
-    case 'childrenof':
-        $start_page = null;
-        $start_element = null;
-        $start_level = null;
-        $childrenof = trim($value);
-        $items = null;
-        break;
+        case 'nlevels':
+        case 'number_of_levels':
+            // a maximum number of levels;
+            if( (int)$value > 0 ) $nlevels = (int)$value;
+            break;
 
-    case 'collapse':
-        $collapse = (int)$value;
-        break;
+        case 'show_all':
+            // show all items, even if marked as 'not shown in menu'
+            $show_all = cms_to_bool($value);
+            break;
+
+        case 'show_root_siblings':
+            // given a start element or start page ... show it's siblings too
+            $show_root_siblings = cms_to_bool($value);
+            break;
+
+        case 'start_element':
+            $start_element = trim($value);
+            $start_page = null;
+            $start_level = null;
+            $childrenof = null;
+            $items = null;
+            break;
+
+        case 'start_page':
+            $start_element = null;
+            $start_page = trim($value);
+            $start_level = null;
+            $childrenof = null;
+            $items = null;
+            break;
+
+        case 'start_level':
+            $value = (int)$value;
+            if( $value > 1 ) {
+                $start_element = null;
+                $start_page = null;
+                $items = null;
+                $start_level = $value;
+            }
+            break;
+
+        case 'childrenof':
+            $start_page = null;
+            $start_element = null;
+            $start_level = null;
+            $childrenof = trim($value);
+            $items = null;
+            break;
+
+        case 'collapse':
+            $collapse = (int)$value;
+            break;
     }
 } // params
 

@@ -1,4 +1,8 @@
 <?php
+namespace CMSMS;
+use \cms_utils;
+use \cms_userprefs;
+use \cms_siteprefs;
 
 $starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) @ob_start();

@@ -5,7 +5,8 @@ namespace FilePicker;
 // this may pollute the session, but meh we can deal with that later.
 class TemporaryInstanceStorage
 {
-    private function __construct() {}
+    private function __construct() {
+    }
 
     public static function set($sig,$val)
     {

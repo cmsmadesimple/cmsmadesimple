@@ -3,7 +3,9 @@ namespace CMSMS;
 
 class ScriptManager
 {
+
     private $_scripts = [];
+
     private $_script_priority = 2;
 
     public function get_script_priority()
@@ -25,11 +27,11 @@ class ScriptManager
         if( is_null( $priority ) ) $priority = $this->_script_priority;
 
         $this->_scripts[$sig] = [
-            'file' => $filename,
-            'mtime' => filemtime( $filename ),
-            'priority' => $priority,
-            'index' => count( $this->_scripts )
-            ];
+          'file' => $filename,
+          'mtime' => filemtime( $filename ),
+          'priority' => $priority,
+          'index' => count( $this->_scripts )
+          ];
     }
 
     public function render_scripts( string $output_path, $force = false, $allow_defer = true )
@@ -50,12 +52,12 @@ class ScriptManager
         // because module actions can be processed first... we 'lower' their priority
         $scripts = $this->_scripts;
         usort( $scripts, function( $a, $b ) {
-                if( $a['priority'] < $b['priority'] ) return -1;
-                if( $a['priority'] > $b['priority'] ) return 1;
-                if( $a['index'] < $b['index'] ) return -1;
-                if( $a['index'] > $b['index'] ) return 1;
-                return 0;
-            });
+              if( $a['priority'] < $b['priority'] ) return -1;
+              if( $a['priority'] > $b['priority'] ) return 1;
+              if( $a['index'] < $b['index'] ) return -1;
+              if( $a['index'] > $b['index'] ) return 1;
+              return 0;
+        });
 
         $t_sig = $t_mtime = null;
         foreach( $scripts as $sig => $rec ) {
@@ -66,7 +68,7 @@ class ScriptManager
         $js_filename = "cms_$sig.js";
         $output_file = "$output_path/$js_filename";
         if( $force || !is_file($output_file) || filemtime($output_file) < $t_mtime ) {
-	    $output = null;
+            $output = null;
             foreach( $scripts as $sig => $rec ) {
                 $content = file_get_contents( $rec['file'] );
                 $output .= $content."\n\n";

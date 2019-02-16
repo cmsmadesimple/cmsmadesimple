@@ -90,4 +90,3 @@ header('Cache-Control: private',false);
 header('Content-type: text/javascript');
 echo $out;
 exit;
-?>

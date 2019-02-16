@@ -18,7 +18,7 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
-if (!isset($gCms)) exit ;
+if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Manage Stylesheets')) return;
 
 $this->SetCurrentTab('stylesheets');

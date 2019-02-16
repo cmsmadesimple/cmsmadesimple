@@ -23,53 +23,53 @@ if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 $this->SetCurrentTab('stylesheets');
 if( !isset($params['css']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $orig_css = CmsLayoutStylesheet::load($params['css']);
-  if( isset($params['submit']) || isset($params['submitandedit']) ) {
-    try {
-			$new_css = clone($orig_css);
-			$new_css->set_name(trim($params['new_name']));
-			$new_css->set_designs(array());
-			$new_css->save();
+    $orig_css = CmsLayoutStylesheet::load($params['css']);
+    if( isset($params['submit']) || isset($params['submitandedit']) ) {
+        try {
+            $new_css = clone($orig_css);
+            $new_css->set_name(trim($params['new_name']));
+            $new_css->set_designs(array());
+            $new_css->save();
 
-      if( isset($params['submitandedit']) ) {
-				$this->SetMessage($this->Lang('msg_stylesheet_copied_edit'));
-				$this->Redirect($id,'admin_edit_css',$returnid,array('css'=>$new_css->get_id()));
-			}
-			else {
-				$this->SetMessage($this->Lang('msg_stylesheet_copied'));
-				$this->RedirectToAdminTab();
-			}
+            if( isset($params['submitandedit']) ) {
+                $this->SetMessage($this->Lang('msg_stylesheet_copied_edit'));
+                $this->Redirect($id,'admin_edit_css',$returnid,array('css'=>$new_css->get_id()));
+            }
+            else {
+                $this->SetMessage($this->Lang('msg_stylesheet_copied'));
+                $this->RedirectToAdminTab();
+            }
+        }
+        catch( Exception $e ) {
+            echo $this->ShowErrors($e->GetMessage());
+        }
     }
-    catch( Exception $e ) {
-      echo $this->ShowErrors($e->GetMessage());
+
+    // build a display
+    $designs = CmsLayoutCollection::get_all();
+    if( count($designs) ) {
+        $tmp = array();
+        for( $i = 0; $i < count($designs); $i++ ) {
+            $tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
+        }
+        $smarty->assign('design_names',$tmp2);
     }
-  }
 
-  // build a display
-	$designs = CmsLayoutCollection::get_all();
-	if( count($designs) ) {
-		$tmp = array();
-		for( $i = 0; $i < count($designs); $i++ ) {
-			$tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
-		}
-		$smarty->assign('design_names',$tmp2);
-	}
-
-  $smarty->assign('css',$orig_css);
-  echo $this->ProcessTemplate('admin_copy_css.tpl');
+    $smarty->assign('css',$orig_css);
+    echo $this->ProcessTemplate('admin_copy_css.tpl');
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

@@ -3,8 +3,11 @@ namespace FilePicker;
 
 class UploadHandler extends jquery_upload_handler
 {
+
     private $_path;
+
     private $_mod;
+
     private $_profile;
 
     public function __construct( \FilePicker $mod, \CMSMS\FilePickerProfile $profile, $path )
@@ -52,7 +55,7 @@ class UploadHandler extends jquery_upload_handler
         $i_src = imagecreatefromstring(file_get_contents($complete_path));
         $i_dest = imagecreatetruecolor($width,$height);
         imagealphablending($i_dest,FALSE);
-        $color = imageColorAllocateAlpha($i_src, 255, 255, 255, 127);
+        $color = imagecolorallocatealpha($i_src, 255, 255, 255, 127);
         imagecolortransparent($i_dest,$color);
         imagefill($i_dest,0,0,$color);
         imagesavealpha($i_dest,TRUE);
@@ -60,15 +63,15 @@ class UploadHandler extends jquery_upload_handler
 
         $res = null;
         switch( $info['mime'] ) {
-        case 'image/gif':
-            $res = imagegif($i_dest,$complete_thumb);
-            break;
-        case 'image/png':
-            $res = imagepng($i_dest,$complete_thumb,9);
-            break;
-        case 'image/jpeg':
-            $res = imagejpeg($i_dest,$complete_thumb,100);
-            break;
+            case 'image/gif':
+                $res = imagegif($i_dest,$complete_thumb);
+                break;
+            case 'image/png':
+                $res = imagepng($i_dest,$complete_thumb,9);
+                break;
+            case 'image/jpeg':
+                $res = imagejpeg($i_dest,$complete_thumb,100);
+                break;
         }
     }
 }

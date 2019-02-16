@@ -37,22 +37,64 @@ final class CmsJobManager extends \CMSModule
     const EVT_ONFAILEDJOB = 'CmsJobManager::OnJobFailed';
 
     private $_current_job;
-    private $_lock;
-    public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
-    function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.3'; }
-    function MinimumCMSVersion() { return '2.1.99'; }
-    function GetAuthor() { return 'Calguy1000'; }
-    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-    function IsPluginModule() { return TRUE; }
-    function HasAdmin() { return TRUE; }
-    function GetAdminDescription() { return $this->Lang('moddescription'); }
-    function GetAdminSection() { return 'siteadmin'; }
-    function LazyLoadFrontend() { return FALSE; }
-    function LazyLoadAdmin() { return FALSE; }
-    function VisibleToAdminUser() { return $this->CheckPermission(\CmsJobManager::MANAGE_JOBS); }
-    public function GetHelp() { return $this->Lang('help'); }
+    private $_lock;
+
+    public static function table_name() {
+        return cms_db_prefix().'mod_cmsjobmgr';
+    }
+
+    public function GetFriendlyName() {
+        return $this->Lang('friendlyname');
+    }
+
+    public function GetVersion() {
+        return '0.3';
+    }
+
+    public function MinimumCMSVersion() {
+        return '2.1.99';
+    }
+
+    public function GetAuthor() {
+        return 'Calguy1000';
+    }
+
+    public function GetAuthorEmail() {
+        return 'calguy1000@cmsmadesimple.org';
+    }
+
+    public function IsPluginModule() {
+        return TRUE;
+    }
+
+    public function HasAdmin() {
+        return TRUE;
+    }
+
+    public function GetAdminDescription() {
+        return $this->Lang('moddescription');
+    }
+
+    public function GetAdminSection() {
+        return 'siteadmin';
+    }
+
+    public function LazyLoadFrontend() {
+        return FALSE;
+    }
+
+    public function LazyLoadAdmin() {
+        return FALSE;
+    }
+
+    public function VisibleToAdminUser() {
+        return $this->CheckPermission(\CmsJobManager::MANAGE_JOBS);
+    }
+
+    public function GetHelp() {
+        return $this->Lang('help');
+    }
 
     public function InitializeFrontend()
     {
@@ -152,36 +194,36 @@ final class CmsJobManager extends \CMSModule
         $now = time();
         $res = false;
 
-		// 1.  Get task objects from files.
-		$dir = CMS_ROOT_PATH.'/lib/tasks';
+        // 1.  Get task objects from files.
+        $dir = CMS_ROOT_PATH.'/lib/tasks';
 
         // fairly expensive as we have to iterate a directory and load files and create objects.
-		$tmp = new DirectoryIterator($dir);
-		$iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
-		foreach( $iterator as $match ) {
-			$tmp = explode('.',basename($match->current()));
-			if( is_array($tmp) && count($tmp) == 4 ) {
-				$classname = $tmp[1].'Task';
-				require_once($dir.'/'.$match->current());
-				$obj = new $classname;
-				if( !$obj instanceof CmsRegularTask ) continue;
+        $tmp = new DirectoryIterator($dir);
+        $iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
+        foreach( $iterator as $match ) {
+            $tmp = explode('.',basename($match->current()));
+            if( is_array($tmp) && count($tmp) == 4 ) {
+                $classname = $tmp[1].'Task';
+                require_once($dir.'/'.$match->current());
+                $obj = new $classname;
+                if( !$obj instanceof CmsRegularTask ) continue;
                 if( !$obj->test($now) ) continue;
                 $job = new \CMSMS\Async\RegularTask($obj);
                 $job->save();
                 $res = true;
-			}
-		}
+            }
+        }
 
-		// 2.  Get task objects from modules.
-		$opts = ModuleOperations::get_instance();
-		$modules = $opts->get_modules_with_capability('tasks');
-		if (!$modules) return;
-		foreach( $modules as $one ) {
-			if( !is_object($one) ) $one = \cms_utils::get_module($one);
-			if( !method_exists($one,'get_tasks') ) continue;
+        // 2.  Get task objects from modules.
+        $opts = ModuleOperations::get_instance();
+        $modules = $opts->get_modules_with_capability('tasks');
+        if (!$modules) return;
+        foreach( $modules as $one ) {
+            if( !is_object($one) ) $one = \cms_utils::get_module($one);
+            if( !method_exists($one,'get_tasks') ) continue;
 
-			$tasks = $one->get_tasks();
-			if( !$tasks ) continue;
+            $tasks = $one->get_tasks();
+            if( !$tasks ) continue;
             if( !is_array($tasks) ) $tasks = array($tasks);
 
             foreach( $tasks as $onetask ) {
@@ -193,7 +235,7 @@ final class CmsJobManager extends \CMSModule
                 $job->save();
                 $res = true;
             }
-		}
+        }
 
         return $res;
     }
@@ -312,5 +354,4 @@ final class CmsJobManager extends \CMSModule
             // do nothing
         }
     }
-
-} // class CGSmartNav
+} // class

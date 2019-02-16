@@ -181,7 +181,8 @@ function generate_checksum_file(&$report)
     }
 
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+    }
     header('Pragma: public');
     header('Expires: 0');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -208,13 +209,13 @@ $res = true;
 $report = '';
 if( isset($_POST['action']) ) {
     switch($_POST['action']) {
-    case 'upload':
-        $res = check_checksum_data($report);
-        if( $res === true )  $smarty->assign('message',lang('checksum_passed'));
-        break;
-    case 'download':
-        $res = generate_checksum_file($report);
-        break;
+        case 'upload':
+            $res = check_checksum_data($report);
+            if( $res === true )  $smarty->assign('message',lang('checksum_passed'));
+            break;
+        case 'download':
+            $res = generate_checksum_file($report);
+            break;
     }
 }
 

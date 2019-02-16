@@ -18,6 +18,7 @@
  */
 final class CmsFormUtils
 {
+
     /**
      * @ignore
      */
@@ -36,7 +37,8 @@ final class CmsFormUtils
     /**
      * @ignore
      */
-    private function __construct() {}
+    private function __construct() {
+    }
 
 
     /**
@@ -145,27 +147,27 @@ final class CmsFormUtils
         $out = "<select name=\"{$name}\"";
         foreach( $params as $key => $value ) {
             switch( $key ) {
-            case 'id':
-                $out .= " id=\"{$value}\"";
-                $elem_id = $value;
-                break;
+                case 'id':
+                    $out .= " id=\"{$value}\"";
+                    $elem_id = $value;
+                    break;
 
-            case 'multiple':
-                $out .= " multiple=\"multiple\"";
-                break;
+                case 'multiple':
+                    $out .= " multiple=\"multiple\"";
+                    break;
 
-            case 'class':
-                $out .= " class=\"{$value}\"";
-                break;
+                case 'class':
+                    $out .= " class=\"{$value}\"";
+                    break;
 
-            case 'title':
-                $out .= " title=\"{$value}\"";
-                break;
+                case 'title':
+                    $out .= " title=\"{$value}\"";
+                    break;
 
-            case 'size':
-                $value = (int)$value;
-                $out .= " size=\"{$value}\"";
-                break;
+                case 'size':
+                    $value = (int)$value;
+                    $out .= " size=\"{$value}\"";
+                    break;
             }
         }
         $out .= ">".$options."</select>\n";
@@ -325,7 +327,6 @@ final class CmsFormUtils
         $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,CmsNlsOperations::get_encoding()).'</textarea>';
         return $result;
     }
-
 } // end of class
 
 ?>

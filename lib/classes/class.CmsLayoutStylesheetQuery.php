@@ -43,12 +43,12 @@
  */
 class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 {
-	/**
-	 * Execute the query in this object.
-	 *
-     * @throws CmsInvalidDataException
-	 * @throws CmsSQLErrorException
-	 */
+    /**
+     * Execute the query in this object.
+     *
+        * @throws CmsInvalidDataException
+     * @throws CmsSQLErrorException
+     */
     public function execute()
     {
         if( !is_null($this->_rs) ) return;
@@ -60,13 +60,13 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
         $have_design = FALSE;
         foreach( $this->_args as $key => $val ) {
             switch( $key ) {
-            case 'sortby':
-                $dflt_sort = FALSE;
-                break;
+                case 'sortby':
+                    $dflt_sort = FALSE;
+                    break;
 
-            case 'd':
-            case 'design':
-                $have_design = TRUE;
+                case 'd':
+                case 'design':
+                    $have_design = TRUE;
             }
         }
 
@@ -82,71 +82,71 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
             if( empty($val) ) continue;
             if( is_numeric($key) && $val[1] == ':' ) list($key,$val) = explode(':',$val,2);
             switch( strtolower($key) ) {
-            case 'i':
-            case 'id':
-                $val = (int)$val;
-                $where[] = "id = $val";
-                break;
-
-            case 'n': // name (prefix)
-            case 'name': // name (prefix)
-                $val = trim($val);
-                $where[] = 'name LIKE '.$db->qstr($val.'%');
-                break;
-
-            case 'fullname':
-                $val = trim($val);
-                $where[] = 'name = '.$db->qstr($val.'%');
-                break;
-
-            case 'd': // design
-            case 'design':
-                $query .= ' LEFT JOIN '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' D ON S.id = D.css_id';
-                $val = (int)$val;
-                $where[] = "D.design_id = $val";
-                break;
-
-            case 'limit':
-                $this->_limit = max(1,min(1000,$val));
-                break;
-
-            case 'offset':
-                $this->_offset = max(0,$val);
-                break;
-
-            case 'sortby':
-                $val = strtolower($val);
-                switch( $val ) {
+                case 'i':
                 case 'id':
-                    $sortby = 'S.id';
+                    $val = (int)$val;
+                    $where[] = "id = $val";
                     break;
 
-                case 'item_order':
+                case 'n': // name (prefix)
+                case 'name': // name (prefix)
+                    $val = trim($val);
+                    $where[] = 'name LIKE '.$db->qstr($val.'%');
+                    break;
+
+                case 'fullname':
+                    $val = trim($val);
+                    $where[] = 'name = '.$db->qstr($val.'%');
+                    break;
+
+                case 'd': // design
                 case 'design':
-                    if( !$have_design ) throw new CmsInvalidDataException('Cannot sort by item_order/design if design_id is not known');
-                    $sortby = 'D.item_order';
+                    $query .= ' LEFT JOIN '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' D ON S.id = D.css_id';
+                    $val = (int)$val;
+                    $where[] = "D.design_id = $val";
                     break;
 
-                case 'name':
-                default:
-                    $sortby = 'S.name';
-                    break;
-                }
-                break;
-
-            case 'sortorder':
-                $val = strtoupper($val);
-                switch( $val ) {
-                case 'DESC':
-                    $sortorder = 'DESC';
+                case 'limit':
+                    $this->_limit = max(1,min(1000,$val));
                     break;
 
-                case 'ASC':
-                default:
-                    $sortorder = 'ASC';
+                case 'offset':
+                    $this->_offset = max(0,$val);
                     break;
-                }
-                break;
+
+                case 'sortby':
+                    $val = strtolower($val);
+                    switch( $val ) {
+                        case 'id':
+                            $sortby = 'S.id';
+                            break;
+
+                        case 'item_order':
+                        case 'design':
+                            if( !$have_design ) throw new CmsInvalidDataException('Cannot sort by item_order/design if design_id is not known');
+                            $sortby = 'D.item_order';
+                            break;
+
+                        case 'name':
+                        default:
+                            $sortby = 'S.name';
+                            break;
+                    }
+                    break;
+
+                case 'sortorder':
+                    $val = strtoupper($val);
+                    switch( $val ) {
+                        case 'DESC':
+                            $sortorder = 'DESC';
+                            break;
+
+                        case 'ASC':
+                        default:
+                            $sortorder = 'ASC';
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -175,12 +175,12 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
         return $obj;
     }
 
-	/**
-	 * Return all of the matches for this query
-	 *
-	 * @throws CmsLogicExceptin
-	 * @return array Array of CmsLayoutStylesheet object
-	 */
+    /**
+     * Return all of the matches for this query
+     *
+     * @throws CmsLogicExceptin
+     * @return array Array of CmsLayoutStylesheet object
+     */
     public function GetMatches()
     {
         $this->execute();

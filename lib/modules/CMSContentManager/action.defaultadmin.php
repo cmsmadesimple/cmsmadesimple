@@ -65,28 +65,28 @@ if( isset($params['setoptions']) ) {
     $filter = null;
     $filter_type = (isset($params['filter_type'])) ? $params['filter_type'] : null;
     switch( $filter_type ) {
-    case ContentListFilter::EXPR_DESIGN:
-        $filter = new ContentListFilter;
-        $filter->type = ContentListFilter::EXPR_DESIGN;
-        $filter->expr = $params['filter_design'];
-        break;
-    case ContentListFilter::EXPR_TEMPLATE:
-        $filter = new ContentListFilter;
-        $filter->type = ContentListFilter::EXPR_TEMPLATE;
-        $filter->expr = $params['filter_template'];
-        break;
-    case ContentListFilter::EXPR_OWNER:
-        $filter = new ContentListFilter;
-        $filter->type = ContentListFilter::EXPR_OWNER;
-        $filter->expr = $params['filter_owner'];
-        break;
-    case ContentListFilter::EXPR_EDITOR:
-        $filter = new ContentListFilter;
-        $filter->type = ContentListFilter::EXPR_EDITOR;
-        $filter->expr = $params['filter_editor'];
-        break;
-    default:
-        cms_userprefs::remove($this->GetName().'_userfilter');
+        case ContentListFilter::EXPR_DESIGN:
+            $filter = new ContentListFilter;
+            $filter->type = ContentListFilter::EXPR_DESIGN;
+            $filter->expr = $params['filter_design'];
+            break;
+        case ContentListFilter::EXPR_TEMPLATE:
+            $filter = new ContentListFilter;
+            $filter->type = ContentListFilter::EXPR_TEMPLATE;
+            $filter->expr = $params['filter_template'];
+            break;
+        case ContentListFilter::EXPR_OWNER:
+            $filter = new ContentListFilter;
+            $filter->type = ContentListFilter::EXPR_OWNER;
+            $filter->expr = $params['filter_owner'];
+            break;
+        case ContentListFilter::EXPR_EDITOR:
+            $filter = new ContentListFilter;
+            $filter->type = ContentListFilter::EXPR_EDITOR;
+            $filter->expr = $params['filter_editor'];
+            break;
+        default:
+            cms_userprefs::remove($this->GetName().'_userfilter');
     }
     if( $filter ) cms_userprefs::set($this->GetName().'_userfilter',serialize($filter));
     $curpage = 1;

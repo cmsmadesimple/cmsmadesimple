@@ -55,6 +55,7 @@ namespace CMSMS\Async;
  */
 trait CronJobTrait
 {
+
     /**
      * @ignore
      */
@@ -66,15 +67,15 @@ trait CronJobTrait
     public function __get($key)
     {
         switch( $key ) {
-        case 'frequency':
-            return trim($this->_data[$key]);
+            case 'frequency':
+                return trim($this->_data[$key]);
 
-        case 'start':
-        case 'until':
-            return (int) $this->_data[$key];
+            case 'start':
+            case 'until':
+                return (int) $this->_data[$key];
 
-        default:
-            return parent::__get($key);
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -84,42 +85,42 @@ trait CronJobTrait
     public function __set($key,$val)
     {
         switch( $key ) {
-        case 'frequency':
-            switch( $val ) {
-            case self::RECUR_NONE:
-            case self::RECUR_15M:
-            case self::RECUR_30M:
-            case self::RECUR_HOURLY:
-            case self::RECUR_2H:
-            case self::RECUR_3H:
-            case self::RECUR_12H:
-            case self::RECUR_DAILY:
-            case self::RECUR_WEEKLY:
-            case self::RECUR_MONTHLY:
-                $this->_data[$key] = $val;
+            case 'frequency':
+                switch( $val ) {
+                    case self::RECUR_NONE:
+                    case self::RECUR_15M:
+                    case self::RECUR_30M:
+                    case self::RECUR_HOURLY:
+                    case self::RECUR_2H:
+                    case self::RECUR_3H:
+                    case self::RECUR_12H:
+                    case self::RECUR_DAILY:
+                    case self::RECUR_WEEKLY:
+                    case self::RECUR_MONTHLY:
+                        $this->_data[$key] = $val;
+                        break;
+                    default:
+                        throw new \LogicException("$val is an invalid value for $key");
+                }
                 break;
+
+            case 'force_start':
+                // internal use only.
+                $this->_data['start'] = (int) $val;
+                break;
+
+            case 'start':
+                // this start overrides the one in the base class.
+                $val = (int) $val;
+                if( $val < time() - 60 ) throw new \LogicException('Cannot adjust a start value to the past');
+                // fall through.
+
+            case 'until':
+                $this->_data[$key] = (int) $val;
+                break;
+
             default:
-                throw new \LogicException("$val is an invalid value for $key");
-            }
-            break;
-
-        case 'force_start':
-            // internal use only.
-            $this->_data['start'] = (int) $val;
-            break;
-
-        case 'start':
-            // this start overrides the one in the base class.
-            $val = (int) $val;
-            if( $val < time() - 60 ) throw new \LogicException('Cannot adjust a start value to the past');
-            // fall through.
-
-        case 'until':
-            $this->_data[$key] = (int) $val;
-            break;
-
-        default:
-            return parent::__set($key,$val);
+                return parent::__set($key,$val);
         }
     }
 }

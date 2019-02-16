@@ -42,43 +42,43 @@ $userid = get_userid(); // <- Checks also login
  */
 function siteprefs_interpret_permissions($perms)
 {
-  $owner = array();
-  $group = array();
-  $other = array();
+    $owner = array();
+    $group = array();
+    $other = array();
 
-  if( $perms & 0400 ) $owner[] = lang('read');
-  if( $perms & 0200 ) $owner[] = lang('write');
-  if( $perms & 0100 ) $owner[] = lang('execute');
-  if( $perms & 0040 ) $group[] = lang('read');
-  if( $perms & 0020 ) $group[] = lang('write');
-  if( $perms & 0010 ) $group[] = lang('execute');
-  if( $perms & 0004 ) $other[] = lang('read');
-  if( $perms & 0002 ) $other[] = lang('write');
-  if( $perms & 0001 ) $other[] = lang('execute');
+    if( $perms & 0400 ) $owner[] = lang('read');
+    if( $perms & 0200 ) $owner[] = lang('write');
+    if( $perms & 0100 ) $owner[] = lang('execute');
+    if( $perms & 0040 ) $group[] = lang('read');
+    if( $perms & 0020 ) $group[] = lang('write');
+    if( $perms & 0010 ) $group[] = lang('execute');
+    if( $perms & 0004 ) $other[] = lang('read');
+    if( $perms & 0002 ) $other[] = lang('write');
+    if( $perms & 0001 ) $other[] = lang('execute');
 
-  return array($owner,$group,$other);
+    return array($owner,$group,$other);
 }
 
 
 function siteprefs_display_permissions($permsarr)
 {
-  $tmparr = array(lang('owner'),lang('group'),lang('other'));
-  if( count($permsarr) != 3 ) return lang('permissions_parse_error');
+    $tmparr = array(lang('owner'),lang('group'),lang('other'));
+    if( count($permsarr) != 3 ) return lang('permissions_parse_error');
 
-  $result = array();
-  for( $i = 0; $i < 3; $i++ ) {
-    $str = $tmparr[$i].': ';
-    $str .= implode(',',$permsarr[$i]);
-    $result[] = $str;
-  }
-  $str = implode('<br/>&nbsp;&nbsp;',$result);
-  return $str;
+    $result = array();
+    for( $i = 0; $i < 3; $i++ ) {
+        $str = $tmparr[$i].': ';
+        $str .= implode(',',$permsarr[$i]);
+        $result[] = $str;
+    }
+    $str = implode('<br/>&nbsp;&nbsp;',$result);
+    return $str;
 }
 
 $access = check_permission($userid, 'Modify Site Preferences');
 if (!$access) {
-  die('Permission Denied'); // <- Pretty cruel huh? maybe redirection and message, or something. -Stikki-
-  return;
+    die('Permission Denied'); // <- Pretty cruel huh? maybe redirection and message, or something. -Stikki-
+    return;
 }
 
 $gCms = cmsms();
@@ -139,8 +139,8 @@ $mailprefs = array('mailer'=>'mail',
 		   'charset'=>'utf-8');
 
 if (isset($_POST["cancel"])) {
-  redirect("index.php".$urlext);
-  return;
+    redirect("index.php".$urlext);
+    return;
 }
 
 /**
@@ -227,193 +227,193 @@ if( isset($_POST['testmail']) ) {
 }
 
 if (isset($_POST["testumask"])) {
-  $testdir = TMP_CACHE_LOCATION;
-  $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
-  if( !is_writable($testdir) ) {
-    $testresults = lang('errordirectorynotwritable');
-  }
-  else {
-    @umask(octdec($global_umask));
-
-    $fh = @fopen($testfile,"w");
-    if( !$fh ) {
-      $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
+    $testdir = TMP_CACHE_LOCATION;
+    $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
+    if( !is_writable($testdir) ) {
+        $testresults = lang('errordirectorynotwritable');
     }
     else {
-      @fclose($fh);
-      $filestat = stat($testfile);
-      if( $filestat == FALSE ) $testresults = lang('errorcantcreatefile');
+        @umask(octdec($global_umask));
 
-      if(function_exists("posix_getpwuid")) {
-	//function posix_getpwuid not available on WAMP systems
-	$userinfo = @posix_getpwuid($filestat[4]);
-	$username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	$permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
-	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),$username,lang('permissions'),$permsstr);
-      } else {
-	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),"N/A",lang('permissions'),"N/A");
-      }
-      @unlink($testfile);
+        $fh = @fopen($testfile,"w");
+        if( !$fh ) {
+            $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
+        }
+        else {
+            @fclose($fh);
+            $filestat = stat($testfile);
+            if( $filestat == FALSE ) $testresults = lang('errorcantcreatefile');
+
+            if(function_exists("posix_getpwuid")) {
+                //function posix_getpwuid not available on WAMP systems
+                $userinfo = @posix_getpwuid($filestat[4]);
+                $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+                $permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
+                $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),$username,lang('permissions'),$permsstr);
+            } else {
+                $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),"N/A",lang('permissions'),"N/A");
+            }
+            @unlink($testfile);
+        }
     }
-  }
 }
 
 if (isset($_POST["editsiteprefs"])) {
-	if ($access) {
-		switch( $tab ) {
-		case 'general':
-			// tab 1
-			if (isset($_POST['sitename'])) $sitename = cleanValue($_POST['sitename']);
-			cms_siteprefs::set('sitename', $sitename);
-			if (isset($_POST['frontendlang'])) $frontendlang = cleanValue($_POST['frontendlang']);
-			cms_siteprefs::set('frontendlang', $frontendlang);
-			if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = cleanValue($_POST['frontendwysiwyg']);
-			cms_siteprefs::set('frontendwysiwyg', $frontendwysiwyg);
-			if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
-			cms_siteprefs::set('metadata', $metadata);
-			if (isset($_POST["logintheme"])) $logintheme = cleanValue($_POST["logintheme"]);
-			cms_siteprefs::set('logintheme', $logintheme);
-			if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = cleanValue($_POST['backendwysiwyg']);
-			cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
-			if (isset($_POST["defaultdateformat"])) $defaultdateformat = str_replace('&#37;','%',cleanValue($_POST["defaultdateformat"])); // have to undo some cleaning.
-			cms_siteprefs::set('defaultdateformat', $defaultdateformat);
-			if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
-			if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
-			cms_siteprefs::set('thumbnail_width',$thumbnail_width);
-			cms_siteprefs::set('thumbnail_height',$thumbnail_height);
-			if( isset($_POST['search_module']) ) {
-				$search_module = trim(cleanValue($_POST['search_module']));
-				cms_siteprefs::set('searchmodule',$search_module);
-			}
-			break;
-
-		case 'editcontent':
-			if( $pretty_urls ) {
-                $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
-                cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
-                $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
-                cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
-                $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
-                cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
-            }
-            $content_imagefield_path = trim($_POST['content_imagefield_path']);
-            cms_siteprefs::set('content_imagefield_path',$content_imagefield_path);
-            $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
-            cms_siteprefs::set('content_thumbnailfield_path',$content_thumbnailfield_path);
-            $contentimage_path = trim($_POST['contentimage_path']);
-            cms_siteprefs::set('contentimage_path',$contentimage_path);
-            $content_cssnameisblockname = (int)$_POST['content_cssnameisblockname'];
-            cms_siteprefs::set('content_cssnameisblockname',$content_cssnameisblockname);
-            if( isset($_POST['basic_attributes']) ) {
-                $basic_attributes = implode(',',($_POST['basic_attributes']));
-            }
-            else {
-                $basic_attributes = null;
-            }
-            cms_siteprefs::set('basic_attributes',$basic_attributes);
-            $disallowed_contenttypes = '';
-            if( isset($_POST['disallowed_contenttypes']) ) $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
-            cms_siteprefs::set('disallowed_contenttypes',$disallowed_contenttypes);
-            break;
-
-        case 'sitedown':
-            if( isset($_POST['sitedownexcludes']) ) $sitedownexcludes = trim($_POST['sitedownexcludes']);
-            $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
-            $prevsitedown = $enablesitedownmessage;
-            if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
-            if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
-            if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
-            if( !$prevsitedown && $enablesitedownmessage ) {
-                audit('','Global Settings','Sitedown enabled');
-            }
-            else if( $prevsitedown && !$enablesitedownmessage ) {
-                audit('','Global Settings','Sitedown disabled');
-            }
-            $tmp = trim(strip_tags($sitedownmessage));
-            if( !$tmp ) $error .= lang('error_sitedownmessage');
-            if( !$error ) cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
-            cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
-            cms_siteprefs::set('sitedownmessage', $sitedownmessage);
-            cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
-            cms_siteprefs::set('sitedownexcludeadmins',$sitedownexcludeadmins);
-            break;
-
-        case 'mail':
-            // gather mailprefs
-            $prefix = 'mailprefs_';
-            foreach( $_POST as $key => $val ) {
-                if( !startswith($key,$prefix) ) continue;
-                $key = substr($key,strlen($prefix));
-
-                $mailprefs[$key] = trim($val);
-            }
-
-            // validate
-            if( $mailprefs['from'] == '' ) {
-                $error  .= '<li>'.lang('error_fromrequired').'</li>';
-            }
-            else if( !is_email($mailprefs['from']) ) {
-                $error .= '<li>'.lang('error_frominvalid').'</li>';
-            }
-            if( $mailprefs['mailer'] == 'smtp' ) {
-                if( $mailprefs['host'] == '' ) {
-                    $error .= '<li>'.lang('error_hostrequired').'</li>';
+    if ($access) {
+        switch( $tab ) {
+            case 'general':
+                  // tab 1
+                  if (isset($_POST['sitename'])) $sitename = cleanValue($_POST['sitename']);
+                  cms_siteprefs::set('sitename', $sitename);
+                  if (isset($_POST['frontendlang'])) $frontendlang = cleanValue($_POST['frontendlang']);
+                  cms_siteprefs::set('frontendlang', $frontendlang);
+                  if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = cleanValue($_POST['frontendwysiwyg']);
+                  cms_siteprefs::set('frontendwysiwyg', $frontendwysiwyg);
+                  if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+                  cms_siteprefs::set('metadata', $metadata);
+                  if (isset($_POST["logintheme"])) $logintheme = cleanValue($_POST["logintheme"]);
+                  cms_siteprefs::set('logintheme', $logintheme);
+                  if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = cleanValue($_POST['backendwysiwyg']);
+                  cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
+                  if (isset($_POST["defaultdateformat"])) $defaultdateformat = str_replace('&#37;','%',cleanValue($_POST["defaultdateformat"])); // have to undo some cleaning.
+                  cms_siteprefs::set('defaultdateformat', $defaultdateformat);
+                  if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
+                  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
+                  cms_siteprefs::set('thumbnail_width',$thumbnail_width);
+                  cms_siteprefs::set('thumbnail_height',$thumbnail_height);
+                if( isset($_POST['search_module']) ) {
+                    $search_module = trim(cleanValue($_POST['search_module']));
+                    cms_siteprefs::set('searchmodule',$search_module);
                 }
-                if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
-                if( $mailprefs['port'] < 1 || $mailprefs['port'] > 10240 ) {
-                    $error .= '<li>'.lang('error_portinvalid').'</li>';
-                }
-                if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
-                if( $mailprefs['timeout'] < 1 || $mailprefs['timeout'] > 3600 ) {
-                    $error .= '<li>'.lang('error_timeoutinvalid').'</li>';
-                }
-                if( $mailprefs['smtpauth'] ) {
-                    if( $mailprefs['username'] == '' ) $error .= '<li>'.lang('error_usernamerequired').'</li>';
-                    if( $mailprefs['password'] == '' ) $error .= '<li>'.lang('error_passwordrequired').'</li>';
-                }
-            }
+                break;
 
-            // save.
-            if( !$error ) {
-                cms_siteprefs::set('mail_is_set',1);
-                cms_siteprefs::set('mailprefs',serialize($mailprefs));
-            }
-            break;
+            case 'editcontent':
+                if( $pretty_urls ) {
+                    $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
+                    cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
+                    $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
+                    cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
+                    $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
+                    cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
+                }
+                $content_imagefield_path = trim($_POST['content_imagefield_path']);
+                cms_siteprefs::set('content_imagefield_path',$content_imagefield_path);
+                $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
+                cms_siteprefs::set('content_thumbnailfield_path',$content_thumbnailfield_path);
+                $contentimage_path = trim($_POST['contentimage_path']);
+                cms_siteprefs::set('contentimage_path',$contentimage_path);
+                $content_cssnameisblockname = (int)$_POST['content_cssnameisblockname'];
+                cms_siteprefs::set('content_cssnameisblockname',$content_cssnameisblockname);
+                if( isset($_POST['basic_attributes']) ) {
+                    $basic_attributes = implode(',',($_POST['basic_attributes']));
+                }
+                else {
+                    $basic_attributes = null;
+                }
+                cms_siteprefs::set('basic_attributes',$basic_attributes);
+                $disallowed_contenttypes = '';
+                if( isset($_POST['disallowed_contenttypes']) ) $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
+                cms_siteprefs::set('disallowed_contenttypes',$disallowed_contenttypes);
+                break;
 
-        case 'setup':
-            if (isset($_POST["lock_timeout"])) $lock_timeout = (int)$_POST['lock_timeout'];
-            if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
-            if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
-            if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
-            cms_siteprefs::set('global_umask', $global_umask);
-            cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
-            cms_siteprefs::set('checkversion', $checkversion);
-            cms_siteprefs::set('lock_timeout',$lock_timeout);
-            if( isset($_POST['allow_browser_cache']) ) {
-                $allow_browser_cache = (int)$_POST['allow_browser_cache'];
-                cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
-            }
-            if( isset($_POST['browser_cache_expiry']) ) {
-                $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
-                cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
-            }
-            if( isset($_POST['auto_clear_cache_age']) ) {
-                $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
-                cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
-            }
-            if (isset($_POST["adminlog_lifetime"])) {
-                $adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
-                cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
-            }
-            break;
+            case 'sitedown':
+                if( isset($_POST['sitedownexcludes']) ) $sitedownexcludes = trim($_POST['sitedownexcludes']);
+                $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
+                $prevsitedown = $enablesitedownmessage;
+                if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
+                if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
+                if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
+                if( !$prevsitedown && $enablesitedownmessage ) {
+                     audit('','Global Settings','Sitedown enabled');
+                }
+                else if( $prevsitedown && !$enablesitedownmessage ) {
+                     audit('','Global Settings','Sitedown disabled');
+                }
+                $tmp = trim(strip_tags($sitedownmessage));
+                if( !$tmp ) $error .= lang('error_sitedownmessage');
+                if( !$error ) cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
+                cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
+                cms_siteprefs::set('sitedownmessage', $sitedownmessage);
+                cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
+                cms_siteprefs::set('sitedownexcludeadmins',$sitedownexcludeadmins);
+                break;
 
-        case 'smarty':
-            if( isset($_POST['use_smartycompilecheck']) ) {
-                $use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
-                cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
-            }
-            $gCms->clear_cached_files();
-            break;
+            case 'mail':
+                // gather mailprefs
+                $prefix = 'mailprefs_';
+                foreach( $_POST as $key => $val ) {
+                     if( !startswith($key,$prefix) ) continue;
+                     $key = substr($key,strlen($prefix));
+
+                     $mailprefs[$key] = trim($val);
+                }
+
+                // validate
+                if( $mailprefs['from'] == '' ) {
+                     $error  .= '<li>'.lang('error_fromrequired').'</li>';
+                }
+                else if( !is_email($mailprefs['from']) ) {
+                     $error .= '<li>'.lang('error_frominvalid').'</li>';
+                }
+                if( $mailprefs['mailer'] == 'smtp' ) {
+                    if( $mailprefs['host'] == '' ) {
+                        $error .= '<li>'.lang('error_hostrequired').'</li>';
+                    }
+                     if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
+                    if( $mailprefs['port'] < 1 || $mailprefs['port'] > 10240 ) {
+                        $error .= '<li>'.lang('error_portinvalid').'</li>';
+                    }
+                     if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
+                    if( $mailprefs['timeout'] < 1 || $mailprefs['timeout'] > 3600 ) {
+                        $error .= '<li>'.lang('error_timeoutinvalid').'</li>';
+                    }
+                    if( $mailprefs['smtpauth'] ) {
+                        if( $mailprefs['username'] == '' ) $error .= '<li>'.lang('error_usernamerequired').'</li>';
+                        if( $mailprefs['password'] == '' ) $error .= '<li>'.lang('error_passwordrequired').'</li>';
+                    }
+                }
+
+                // save.
+                if( !$error ) {
+                     cms_siteprefs::set('mail_is_set',1);
+                     cms_siteprefs::set('mailprefs',serialize($mailprefs));
+                }
+                break;
+
+            case 'setup':
+                if (isset($_POST["lock_timeout"])) $lock_timeout = (int)$_POST['lock_timeout'];
+                if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
+                if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
+                if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
+                cms_siteprefs::set('global_umask', $global_umask);
+                cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
+                cms_siteprefs::set('checkversion', $checkversion);
+                cms_siteprefs::set('lock_timeout',$lock_timeout);
+                if( isset($_POST['allow_browser_cache']) ) {
+                     $allow_browser_cache = (int)$_POST['allow_browser_cache'];
+                     cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
+                }
+                if( isset($_POST['browser_cache_expiry']) ) {
+                     $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
+                     cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
+                }
+                if( isset($_POST['auto_clear_cache_age']) ) {
+                     $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
+                     cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
+                }
+                if (isset($_POST["adminlog_lifetime"])) {
+                     $adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
+                     cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
+                }
+                break;
+
+            case 'smarty':
+                if( isset($_POST['use_smartycompilecheck']) ) {
+                     $use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
+                     cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
+                }
+                $gCms->clear_cached_files();
+                break;
         }
 
         // put mention into the admin log
@@ -439,17 +439,17 @@ if ($message != "") $themeObject->ShowMessage($message);
 // Make sure cache folder is writable
 if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
     FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) ) {
-  $themeObject->ShowErrors(lang('cachenotwritable'));
+    $themeObject->ShowErrors(lang('cachenotwritable'));
 }
 
 $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
 if( is_array($modules) && count($modules) ) {
-  $tmp = array();
-  $tmp['-1'] = lang('none');
-  for( $i = 0; $i < count($modules); $i++ ) {
-    $tmp[$modules[$i]] = $modules[$i];
-  }
-  $smarty->assign('search_modules',$tmp);
+    $tmp = array();
+    $tmp['-1'] = lang('none');
+    for( $i = 0; $i < count($modules); $i++ ) {
+        $tmp[$modules[$i]] = $modules[$i];
+    }
+    $smarty->assign('search_modules',$tmp);
 }
 
 $maileritems = array();
@@ -473,22 +473,22 @@ $smarty->assign('pretty_urls',$pretty_urls);
 {
   $tmp = \CMSMS\internal\module_meta::get_instance()->module_list_by_capability('wysiwyg');
   $tmp2 = array(-1=>lang('none'));
-  for( $i = 0; $i < count($tmp); $i++ ) {
+for( $i = 0; $i < count($tmp); $i++ ) {
     $tmp2[$tmp[$i]] = $tmp[$i];
-  }
+}
   $smarty->assign('wysiwyg',$tmp2);
 }
 
 if ($dir=opendir(dirname(__FILE__)."/themes/"))
 {
-  $themes = array();
-  while (($file = readdir($dir)) !== false ) {
-    if( @is_dir("themes/".$file) && ($file[0]!='.') && @is_readable("themes/{$file}/{$file}Theme.php")) {
-      $themes[$file] = $file;
+    $themes = array();
+    while (($file = readdir($dir)) !== false ) {
+        if( @is_dir("themes/".$file) && ($file[0]!='.') && @is_readable("themes/{$file}/{$file}Theme.php")) {
+            $themes[$file] = $file;
+        }
     }
-  }
-  $smarty->assign('themes',$themes);
-  $smarty->assign('logintheme',cms_siteprefs::get('logintheme','default'));
+    $smarty->assign('themes',$themes);
+    $smarty->assign('logintheme',cms_siteprefs::get('logintheme','default'));
 }
 
 $smarty->assign('tabs_end',$themeObject->EndTabContent());
@@ -560,16 +560,16 @@ $all_attributes = null;
 {
 	$content_obj = new Content; // should this be the default type?
 	$list = $content_obj->GetProperties();
-	if( is_array($list) && count($list) ) {
-		// pre-remove some items.
-		$all_attributes = array();
-		for( $i = 0; $i < count($list); $i++ ) {
-			$obj = $list[$i];
-			if( $obj->tab == $content_obj::TAB_PERMS ) continue;
-			if( !isset($all_attributes[$obj->tab]) ) $all_attributes[$obj->tab] = array('label'=>lang($obj->tab),'value'=>array());
-			$all_attributes[$obj->tab]['value'][] = array('value'=>$obj->name,'label'=>lang($obj->name));
-		}
-	}
+if( is_array($list) && count($list) ) {
+    // pre-remove some items.
+    $all_attributes = array();
+    for( $i = 0; $i < count($list); $i++ ) {
+        $obj = $list[$i];
+        if( $obj->tab == $content_obj::TAB_PERMS ) continue;
+        if( !isset($all_attributes[$obj->tab]) ) $all_attributes[$obj->tab] = array('label'=>lang($obj->tab),'value'=>array());
+        $all_attributes[$obj->tab]['value'][] = array('value'=>$obj->name,'label'=>lang($obj->name));
+    }
+}
 	$txt = CmsFormUtils::create_option($all_attributes);
 }
 $smarty->assign('all_attributes',$all_attributes);
@@ -592,5 +592,3 @@ $smarty->assign('formurl', $thisurl);
 # begin outputg
 $smarty->display('siteprefs.tpl');
 include_once("footer.php");
-
-?>

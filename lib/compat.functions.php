@@ -39,7 +39,3 @@ if( !function_exists('gzopen') ) {
         return gzopen64($filename, $mode, $use_include_path);
     }
 }
-
-#
-# EOF
-#

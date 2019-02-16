@@ -42,6 +42,7 @@ namespace CMSMS\AdminAlerts;
  */
 class SimpleAlert extends Alert
 {
+
     /**
      * @ignore
      */
@@ -86,16 +87,16 @@ class SimpleAlert extends Alert
     public function __get($key)
     {
         switch( $key ) {
-        case 'perms':
-            return $this->_perms;
-        case 'icon':
-            return $this->_icon;
-        case 'title':
-            return $this->_title;
-        case 'msg':
-            return $this->_msg;
-        default:
-            return parent::__get($key);
+            case 'perms':
+                return $this->_perms;
+            case 'icon':
+                return $this->_icon;
+            case 'title':
+                return $this->_title;
+            case 'msg':
+                return $this->_msg;
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -110,29 +111,29 @@ class SimpleAlert extends Alert
     public function __set($key,$val)
     {
         switch( $key ) {
-        case 'icon':
-            $this->_icon = trim($val);
-            break;
-        case 'title':
-            $this->_title = trim($val);
-            break;
-        case 'msg':
-            $this->_msg = trim($val);
-            break;
-        case 'perms':
-            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
-            $tmp = [];
-            foreach( $val as $one ) {
-                $one = trim($one);
-                if( !$one ) continue;
-                if( !in_array($one,$tmp) ) $tmp[] = $one;
-            }
-            if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
-            $this->_perms = $tmp;
-            break;
+            case 'icon':
+                $this->_icon = trim($val);
+                break;
+            case 'title':
+                $this->_title = trim($val);
+                break;
+            case 'msg':
+                $this->_msg = trim($val);
+                break;
+            case 'perms':
+                if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+                $tmp = [];
+                foreach( $val as $one ) {
+                      $one = trim($one);
+                      if( !$one ) continue;
+                      if( !in_array($one,$tmp) ) $tmp[] = $one;
+                }
+                if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+                $this->_perms = $tmp;
+                break;
 
-        default:
-            return parent::__set($key,$val);
+            default:
+                return parent::__set($key,$val);
         }
     }
 
@@ -184,5 +185,4 @@ class SimpleAlert extends Alert
     {
         return $this->_icon;
     }
-
 } // end of class

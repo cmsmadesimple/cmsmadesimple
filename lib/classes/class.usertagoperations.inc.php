@@ -38,111 +38,114 @@
  */
 final class UserTagOperations
 {
-	/**
-	 * @ignore
-	 */
-	private static $_instance;
 
-	/**
-	 * @ignore
-	 */
-	protected function __construct() {}
+    /**
+     * @ignore
+     */
+    private static $_instance;
 
-	/**
-	 * Get a reference to thie only allowed instance of this class
-	 * @return UserTagOperations
-	 */
-	public static function &get_instance()
-	{
-		if( !isset(self::$_instance) ) self::$_instance = new UserTagOperations();
-		return self::$_instance;
-	}
+    /**
+     * @ignore
+     */
+    protected function __construct()
+    {
+    }
+
+    /**
+     * Get a reference to thie only allowed instance of this class
+     * @return UserTagOperations
+     */
+    public static function &get_instance()
+    {
+        if( !isset(self::$_instance) ) self::$_instance = new UserTagOperations();
+        return self::$_instance;
+    }
 
 
-	/**
-	 * @ignore
-	 */
-	public function __call($name,$arguments)
-	{
+    /**
+     * @ignore
+     */
+    public function __call($name,$arguments)
+    {
         return $this->CallUserTag($name,$arguments);
-	}
+    }
 
-	/**
-	 * Load all the information about user tags.
-     * Since 2.3, his function is now an empty stub.
-     *
-     * @deprecated
-	 */
+    /**
+     * Load all the information about user tags.
+        * Since 2.3, his function is now an empty stub.
+        *
+        * @deprecated
+     */
     public function LoadUserTags()
     {
         // does not do anything.
     }
 
 
-	/**
-	 * Retrieve the body of a user defined tag
-     * Since 2.3, his function is now an empty stub.
-	 *
-	 * @param string $name User defined tag name
-     * @deprecated
-	 * @return string|false
-	 */
-	function GetUserTag( $name )
-	{
+    /**
+     * Retrieve the body of a user defined tag
+        * Since 2.3, his function is now an empty stub.
+     *
+     * @param string $name User defined tag name
+        * @deprecated
+     * @return string|false
+     */
+    public function GetUserTag( $name )
+    {
         return false;
-	}
+    }
 
-	/**
-	 * Test if a user defined tag with a specific name exists
-	 *
-	 * @param string $name User defined tag name
-	 * @return string|false
-	 * @since 1.10
-	 */
-	function UserTagExists($name)
-	{
+    /**
+     * Test if a user defined tag with a specific name exists
+     *
+     * @param string $name User defined tag name
+     * @return string|false
+     * @since 1.10
+     */
+    public function UserTagExists($name)
+    {
         $gCms = \CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
         return $mgr->plugin_exists($name);
-	}
+    }
 
 
-	/**
-	 * Add or update a named user defined tag into the database
-     * Since 2.3, his function is now an empty stub.
-	 *
-	 * @param string $name User defined tag name
-	 * @param string $text Body of user defined tag
-	 * @param string $description Description for the user defined tag.
-     * @param int    $id ID of existing user tag (for updates).
-	 * @return bool
-	 */
-	function SetUserTag( $name, $text, $description, $id = null )
-	{
+    /**
+     * Add or update a named user defined tag into the database
+        * Since 2.3, his function is now an empty stub.
+     *
+     * @param string $name User defined tag name
+     * @param string $text Body of user defined tag
+     * @param string $description Description for the user defined tag.
+        * @param int    $id ID of existing user tag (for updates).
+     * @return bool
+     */
+    public function SetUserTag( $name, $text, $description, $id = null )
+    {
         return false;
-	}
+    }
 
 
-	/**
-	 * Remove a named user defined tag from the database
-     * Since 2.3, his function is now an empty stub.
-	 *
-	 * @param string $name User defined tag name
-	 * @return bool
-	 */
-	function RemoveUserTag( $name )
-	{
+    /**
+     * Remove a named user defined tag from the database
+        * Since 2.3, his function is now an empty stub.
+     *
+     * @param string $name User defined tag name
+     * @return bool
+     */
+    public function RemoveUserTag( $name )
+    {
         return false;
-	}
+    }
 
 
- 	/**
-	 * Return a list (suitable for use in a pulldown) of user tags.
-	 *
-	 * @return array|false
-	 */
-	function ListUserTags()
-	{
+    /**
+    * Return a list (suitable for use in a pulldown) of user tags.
+    *
+    * @return array|false
+    */
+    public function ListUserTags()
+    {
         $gCms = \CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
         $tmp = $mgr->get_list();
@@ -154,34 +157,32 @@ final class UserTagOperations
         }
         asort($out);
         return $out;
-	}
+    }
 
 
-	/**
-	 * Execute a user defined tag
-	 *
-	 * @param string $name The name of the user defined tag
-	 * @param array  $params Optional parameters.
-	 * @return mixed|false The returned data from the user defined tag, or FALSE if the UDT could not be found. 
-     * @deprecated
-	 */
-	function CallUserTag($name, &$params)
-	{
+    /**
+     * Execute a user defined tag
+     *
+     * @param string $name The name of the user defined tag
+     * @param array  $params Optional parameters.
+     * @return mixed|false The returned data from the user defined tag, or FALSE if the UDT could not be found.
+        * @deprecated
+     */
+    public function CallUserTag($name, &$params)
+    {
         $gCms = \CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
-		return $mgr->call_plugin($name,$params,$gCms->GetSmarty());
-	}
+        return $mgr->call_plugin($name,$params,$gCms->GetSmarty());
+    }
 
-	/**
-	 * Given a UDT name create an executable function from it
-     * Since 2.3, his function is now an empty stub.
-	 *
-	 * @internal
-	 * @param string $name The name of the user defined tag to operate with.
-	 */
-	function CreateTagFunction($name)
-	{
-        return;
-	}
-
+    /**
+     * Given a UDT name create an executable function from it
+        * Since 2.3, his function is now an empty stub.
+     *
+     * @internal
+     * @param string $name The name of the user defined tag to operate with.
+     */
+    public function CreateTagFunction($name)
+    {
+    }
 } // class

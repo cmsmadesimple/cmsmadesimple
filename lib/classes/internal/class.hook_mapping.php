@@ -10,21 +10,23 @@ class hook_mapping implements JsonSerializable
     const TYPE_SIMPLE = 'simple_plugin';
 
     private $_hook;
+
     private $_handlers;
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public function __get( string $key )
     {
         switch( $key ) {
-        case 'hook':
-            return $this->_hook;
+            case 'hook':
+                return $this->_hook;
 
-        case 'handlers':
-            return $this->_handlers;
+            case 'handlers':
+                return $this->_handlers;
 
-        default:
-            throw new \InvalidArgumentException("$key is not a gettable property of ".__CLASS__);
+            default:
+                throw new \InvalidArgumentException("$key is not a gettable property of ".__CLASS__);
         }
     }
 
@@ -44,23 +46,23 @@ class hook_mapping implements JsonSerializable
         $obj = new self;
         foreach( $in as $key => $val ) {
             switch( $key ) {
-            case 'hook':
-                $val = trim($val);
-                if( empty($val) ) throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__);
-                $obj->_hook = $val;
-                break;
+                case 'hook':
+                    $val = trim($val);
+                    if( empty($val) ) throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__);
+                    $obj->_hook = $val;
+                    break;
 
-            case 'handlers':
-                if( empty($val) || !is_array($val) ) throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__);
-                foreach( $val as $handler ) {
-                    if( !is_array($handler) || !isset($handler['type']) || !isset($handler['name']) ) {
-                        throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__.'(2)');
+                case 'handlers':
+                    if( empty($val) || !is_array($val) ) throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__);
+                    foreach( $val as $handler ) {
+                        if( !is_array($handler) || !isset($handler['type']) || !isset($handler['name']) ) {
+                            throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__.'(2)');
+                        }
+                        if( !in_array($handler['type'], [ self::TYPE_MODULE, self::TYPE_CALLABLE, self::TYPE_SIMPLE ] ) ) {
+                            throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__.'(3)');
+                        }
+                        $obj->_handlers[$handler['name']] = $handler;
                     }
-                    if( !in_array($handler['type'], [ self::TYPE_MODULE, self::TYPE_CALLABLE, self::TYPE_SIMPLE ] ) ) {
-                        throw new \InvalidArgumentException('Invalid data passed to '.__METHOD__.'(3)');
-                    }
-                    $obj->_handlers[$handler['name']] = $handler;
-                }
             }
         }
         return $obj;
@@ -70,13 +72,12 @@ class hook_mapping implements JsonSerializable
     {
         $type = trim($type);
         switch( $type ) {
-        case self::TYPE_MODULE:
-        case self::TYPE_SIMPLE:
-        case self::TYPE_CALLABLE:
-            break;
-        default:
-            throw new \InvalidArgumentException('Invalid handler type passed to '.__METHOD__);
-            break;
+            case self::TYPE_MODULE:
+            case self::TYPE_SIMPLE:
+            case self::TYPE_CALLABLE:
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid handler type passed to '.__METHOD__);
         }
         $handler = trim($handler);
         if( empty($handler) ) throw new \InvalidArgumentException('Invalid handler name passed to '.__METHOD__);
@@ -92,13 +93,12 @@ class hook_mapping implements JsonSerializable
     {
         $type = trim($type);
         switch( $type ) {
-        case self::TYPE_MODULE:
-        case self::TYPE_SIMPLE:
-        case self::TYPE_CALLABLE:
-            break;
-        default:
-            throw new \InvalidArgumentException('Invalid handler type passed to '.__METHOD__);
-            break;
+            case self::TYPE_MODULE:
+            case self::TYPE_SIMPLE:
+            case self::TYPE_CALLABLE:
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid handler type passed to '.__METHOD__);
         }
         $handler = trim($handler);
         if( empty($handler) ) throw new \InvalidArgumentException('Invalid handler name passed to '.__METHOD__);
@@ -117,5 +117,4 @@ class hook_mapping implements JsonSerializable
     {
         return [ 'hook'=>$this->_hook, 'handlers'=>$this->_handlers ];
     }
-
 } // class

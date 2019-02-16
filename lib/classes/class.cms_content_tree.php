@@ -53,205 +53,205 @@
  */
 class cms_content_tree extends cms_tree
 {
-	/**
-	 * Find a tree node given a specfied tag and value.
-	 *
-	 * @param string $tag_name The tag name to search for
-	 * @param mixed  $value The tag value to search for
-	 * @param bool $case_insensitive Wether the value should be treated as case insensitive.
-     * @param bool $usequick Optionally, when searching by id... uise the quickfind method if possible.
-	 * @return cms_tree
-	 */
-	public function &find_by_tag(string $tag_name,$value,bool $case_insensitive = FALSE,bool $usequick = TRUE)
-	{
-		if( $usequick && $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
-			$res = ContentOperations::get_instance()->quickfind_node_by_id($value);
-			return $res;
-		}
-		return parent::find_by_tag($tag_name,$value,$case_insensitive);
-	}
+    /**
+     * Find a tree node given a specfied tag and value.
+     *
+     * @param string $tag_name The tag name to search for
+     * @param mixed  $value The tag value to search for
+     * @param bool $case_insensitive Wether the value should be treated as case insensitive.
+        * @param bool $usequick Optionally, when searching by id... uise the quickfind method if possible.
+     * @return cms_tree
+     */
+    public function &find_by_tag(string $tag_name,$value,bool $case_insensitive = FALSE,bool $usequick = TRUE)
+    {
+        if( $usequick && $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
+            $res = ContentOperations::get_instance()->quickfind_node_by_id($value);
+            return $res;
+        }
+        return parent::find_by_tag($tag_name,$value,$case_insensitive);
+    }
 
-	/**
-	 * Retrieve a node by it's id.
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @param int $id
-	 * @return cms_content_tree
-	 */
-	public function sureGetNodeById(int $id)
-	{
+    /**
+     * Retrieve a node by it's id.
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @param int $id
+     * @return cms_content_tree
+     */
+    public function sureGetNodeById(int $id)
+    {
         return ContentOperations::get_instance()->quickfind_node_by_id($id);
-	}
+    }
 
 
-	/**
-	 * Retrieve a node by it's id.
-	 *
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @param int $id
-	 * @return cms_content_tree
-	 */
-	public function getNodeById(int $id)
-	{
-		return $this->find_by_tag('id',$id);
-	}
+    /**
+     * Retrieve a node by it's id.
+     *
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @param int $id
+     * @return cms_content_tree
+     */
+    public function getNodeById(int $id)
+    {
+        return $this->find_by_tag('id',$id);
+    }
 
 
-	/**
-	 * Retrieve a node by it's alias
-	 *
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @param string $alias
-	 * @return cms_content_tree
-	 */
-	public function sureGetNodeByAlias(string $alias)
-	{
-		if( $alias == '' ) return;
-		if( (int)$alias > 0 && is_numeric($alias) ) return $this->find_by_tag('id',$alias,true);
-		return $this->find_by_tag('alias',$alias,true);
-	}
+    /**
+     * Retrieve a node by it's alias
+     *
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @param string $alias
+     * @return cms_content_tree
+     */
+    public function sureGetNodeByAlias(string $alias)
+    {
+        if( $alias == '' ) return;
+        if( (int)$alias > 0 && is_numeric($alias) ) return $this->find_by_tag('id',$alias,true);
+        return $this->find_by_tag('alias',$alias,true);
+    }
 
 
-	/**
-	 * Retrieve a node by it's alias
-	 *
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @param string $alias
-	 * @return cms_content_tree
-	 */
-	public function getNodeByAlias(string $alias)
-	{
-		return $this->find_by_tag('alias',$alias,true);
-	}
+    /**
+     * Retrieve a node by it's alias
+     *
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @param string $alias
+     * @return cms_content_tree
+     */
+    public function getNodeByAlias(string $alias)
+    {
+        return $this->find_by_tag('alias',$alias,true);
+    }
 
 
-	/**
-	 * Retrieve a node by hierarchy position.
-	 *
-	 * @param string $position
-	 * @return cms_content_tree or null.
-	 */
-	function getNodeByHierarchy(string $position)
-	{
-		$result = null;
-		$id = ContentOperations::get_instance()->GetPageIDFromHierarchy($position);
-		if ($id) $result = $this->find_by_tag('id',$id);
-		return $result;
-	}
+    /**
+     * Retrieve a node by hierarchy position.
+     *
+     * @param string $position
+     * @return cms_content_tree or null.
+     */
+    public function getNodeByHierarchy(string $position)
+    {
+        $result = null;
+        $id = ContentOperations::get_instance()->GetPageIDFromHierarchy($position);
+        if ($id) $result = $this->find_by_tag('id',$id);
+        return $result;
+    }
 
 
-	/**
-	 * Test if this node has children.
-	 *
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @see cms_tree:has_children()
-	 * @return bool
-	 */
-	public function hasChildren()
-	{
-		return $this->has_children();
-	}
+    /**
+     * Test if this node has children.
+     *
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @see cms_tree:has_children()
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        return $this->has_children();
+    }
 
 
-	/**
-	 * Set a tag value
-	 *
-	 * A backwards compatibility method
-	 *
-	 * @deprecated
-	 * @see cms_tree::set_tag
-	 * @param string $key The tag name/key
-	 * @param mixed  $value The tag value
-	 */
-	public function setTag(string $key,$value)
-	{
-		return $this->set_tag($key,$value);
-	}
+    /**
+     * Set a tag value
+     *
+     * A backwards compatibility method
+     *
+     * @deprecated
+     * @see cms_tree::set_tag
+     * @param string $key The tag name/key
+     * @param mixed  $value The tag value
+     */
+    public function setTag(string $key,$value)
+    {
+        return $this->set_tag($key,$value);
+    }
 
 
-	/**
-	 * Get this nodes id.
-	 *
-	 * A backwards compatibility method
-	 *
-	 * @deprecated
-	 * @see cms_tree::get_tag('id')
-	 * @return int The node id.
-	 */
-	public function getId()
-	{
-		return $this->get_tag('id');
-	}
+    /**
+     * Get this nodes id.
+     *
+     * A backwards compatibility method
+     *
+     * @deprecated
+     * @see cms_tree::get_tag('id')
+     * @return int The node id.
+     */
+    public function getId()
+    {
+        return $this->get_tag('id');
+    }
 
 
-	/**
-	 * Get a node tag.
-	 *
-	 * A backwards compatibility method
-	 *
-	 * @deprecated
-	 * @see cms_tree::get_tag('id')
-	 * @param  string $key Tag name/key
-	 * @return mixed Node value.
-	 */
-	public function getTag(string $key = 'id')
-	{
-		return $this->get_tag($key);
-	}
+    /**
+     * Get a node tag.
+     *
+     * A backwards compatibility method
+     *
+     * @deprecated
+     * @see cms_tree::get_tag('id')
+     * @param  string $key Tag name/key
+     * @return mixed Node value.
+     */
+    public function getTag(string $key = 'id')
+    {
+        return $this->get_tag($key);
+    }
 
 
 
-	/**
-	 * Get this nodes parent.
-	 *
-	 * A backwards compatibility method
-	 *
-	 * @deprecated
-	 * @see cms_tree::get_parent()
-	 * @return cms_tree or null.
-	 */
-	public function &getParentNode()
-	{
-		return $this->getParent();
-	}
+    /**
+     * Get this nodes parent.
+     *
+     * A backwards compatibility method
+     *
+     * @deprecated
+     * @see cms_tree::get_parent()
+     * @return cms_tree or null.
+     */
+    public function &getParentNode()
+    {
+        return $this->getParent();
+    }
 
 
-	/**
-	 * Add a node to the tree
-	 *
-	 * A backwards compatibility method.
-	 *
-	 * @deprecated
-	 * @see cms_tree::add_node()
-	 * @param cms_content_tree The node to add
-	 */
-	public function addNode(cms_content_tree &$node)
-	{
-		return $this->add_node($node);
-	}
+    /**
+     * Add a node to the tree
+     *
+     * A backwards compatibility method.
+     *
+     * @deprecated
+     * @see cms_tree::add_node()
+     * @param cms_content_tree The node to add
+     */
+    public function addNode(cms_content_tree &$node)
+    {
+        return $this->add_node($node);
+    }
 
 
-	/**
-	 * Retrieve the content object associated with this node.
-	 *
-	 * This method will return the content object associated with this node, loading it if necessary.
-	 *
-	 * @param bool $deep load all child proeprties for the content object if loading is required.
-	 * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
-	 * @param bool $loadall If loading siblings, include inactive/disabled pages.
-     * @return mixed Either the content object specified or FALSE
-	 */
-	public function getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
-	{
+    /**
+     * Retrieve the content object associated with this node.
+     *
+     * This method will return the content object associated with this node, loading it if necessary.
+     *
+     * @param bool $deep load all child proeprties for the content object if loading is required.
+     * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
+     * @param bool $loadall If loading siblings, include inactive/disabled pages.
+        * @return mixed Either the content object specified or FALSE
+     */
+    public function getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
+    {
         $id = $this->get_tag('id');
         if( !$id ) throw new \LogicException('Cannot load content if there is no id');
 
@@ -265,72 +265,72 @@ class cms_content_tree extends cms_tree
             $ops->LoadChildren($parent_id,$deep,$loadall);
         }
         return $ops->LoadContentFromId($id, $deep);
-	}
+    }
 
 
-	/**
-	 * Count the number of children
-	 *
-	 * A backwards compatibility function
-	 *
-	 * @deprecated
-	 * @see cms_tree::count_children()
-	 * @return int
-	 */
-	public function getChildrenCount()
-	{
-		return $this->count_children();
-	}
+    /**
+     * Count the number of children
+     *
+     * A backwards compatibility function
+     *
+     * @deprecated
+     * @see cms_tree::count_children()
+     * @return int
+     */
+    public function getChildrenCount()
+    {
+        return $this->count_children();
+    }
 
 
-	/**
-	 * Count the number of siblings
-	 *
-	 * A backwards compatibility function
-	 *
-	 * @deprecated
-	 * @see cms_tree::count_siblings()
-	 * @return int
-	 */
-	public function getSiblingCount()
-	{
-		return $this->count_siblings();
-	}
+    /**
+     * Count the number of siblings
+     *
+     * A backwards compatibility function
+     *
+     * @deprecated
+     * @see cms_tree::count_siblings()
+     * @return int
+     */
+    public function getSiblingCount()
+    {
+        return $this->count_siblings();
+    }
 
 
-	/**
-	 * Get this nodes depth in the tree
-	 *
-	 * A backwards compatibility function
-	 *
-	 * @deprecated
-	 * @see cms_tree::get_level()
-	 * @return int
-	 */
-	public function getLevel()
-	{
-		return $this->get_level();
-	}
+    /**
+     * Get this nodes depth in the tree
+     *
+     * A backwards compatibility function
+     *
+     * @deprecated
+     * @see cms_tree::get_level()
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->get_level();
+    }
 
 
-	/**
-	 * Get the children for this node.
-	 *
-	 * This method will retrieve a list of the children of this node, loading
-	 * their content objects at the same time (as a preformance enhancement).
-	 *
-	 * @param bool $deep Optionally load the properties of the children (only used when loadcontent is true)
-	 * @param bool $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
-	 * @param bool $loadcontent Load content objects for children
-	 * @return Array of cms_tree objects.
-	 */
-	public function &getChildren($deep = false,$all = false,$loadcontent = true)
-	{
+    /**
+     * Get the children for this node.
+     *
+     * This method will retrieve a list of the children of this node, loading
+     * their content objects at the same time (as a preformance enhancement).
+     *
+     * @param bool $deep Optionally load the properties of the children (only used when loadcontent is true)
+     * @param bool $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
+     * @param bool $loadcontent Load content objects for children
+     * @return Array of cms_tree objects.
+     */
+    public function &getChildren($deep = false,$all = false,$loadcontent = true)
+    {
         if( $loadcontent ) ContentOperations::get_instance()->LoadChildren($this->get_tag('id'),$deep,$all);
-		$children = $this->get_children();
+        $children = $this->get_children();
 
-		return $children;
-	}
+        return $children;
+    }
 
 
     /**
@@ -359,68 +359,67 @@ class cms_content_tree extends cms_tree
         return $result;
     }
 
-	/**
-	 * A function to build an array of cms_tree nodes, containing this node and all of the
-	 * children.
-	 *
-	 * @return Array of cms_tree nodes.
-	 */
-	public function &getFlatList()
-	{
+    /**
+     * A function to build an array of cms_tree nodes, containing this node and all of the
+     * children.
+     *
+     * @return Array of cms_tree nodes.
+     */
+    public function &getFlatList()
+    {
         static $result = null;
         if( is_null($result) ) $result = $this->_buildFlatList();
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * A recursive method to find the (estimated) hierarchy position of this node.
-	 *
-	 * @return string
-	 */
-	private function _getPeerIndex()
-	{
-		// find index of current node amongst peers.
-		$parent = $this->get_parent();
-		if( $parent ) {
-			$children = $parent->get_children();
-			for( $i = 0, $n = count($children); $i < $n; $i++ ) {
-				if( $children[$i]->get_tag('id') == $this->get_tag('id') ) return $i+1;
-			}
-		}
-	}
+    /**
+     * A recursive method to find the (estimated) hierarchy position of this node.
+     *
+     * @return string
+     */
+    private function _getPeerIndex()
+    {
+        // find index of current node amongst peers.
+        $parent = $this->get_parent();
+        if( $parent ) {
+            $children = $parent->get_children();
+            for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                if( $children[$i]->get_tag('id') == $this->get_tag('id') ) return $i+1;
+            }
+        }
+    }
 
-	/**
-	 * @ignore
-	 */
-	private function _getHierarchyArray()
-	{
-		$list = array();
-		$list[] = $this->_getPeerIndex();
-		$parent = $this->get_parent();
-		if( $parent ) {
-			$out = $parent->_getHierarchyArray();
-			if( $out ) $list = array_merge($list,$out);
-		}
-		return $list;
-	}
+    /**
+     * @ignore
+     */
+    private function _getHierarchyArray()
+    {
+        $list = array();
+        $list[] = $this->_getPeerIndex();
+        $parent = $this->get_parent();
+        if( $parent ) {
+            $out = $parent->_getHierarchyArray();
+            if( $out ) $list = array_merge($list,$out);
+        }
+        return $list;
+    }
 
-	/**
-	 * Get the hierarchy position of this node
-	 *
-	 * @return string
-	 */
-	public function getHierarchy()
-	{
-		if( ($hier = $this->get_tag('hierarchy')) != '' ) return $hier;
+    /**
+     * Get the hierarchy position of this node
+     *
+     * @return string
+     */
+    public function getHierarchy()
+    {
+        if( ($hier = $this->get_tag('hierarchy')) != '' ) return $hier;
 
-		$list = $this->_getHierarchyArray();
-		foreach( $list as &$one ) {
-			$one = sprintf('%05d',$one);
-		}
-		$out = implode('.',array_reverse(array_splice($list,0,-1)));
-		$this->set_tag('hierarchy',$out);
+        $list = $this->_getHierarchyArray();
+        foreach( $list as &$one ) {
+            $one = sprintf('%05d',$one);
+        }
+        $out = implode('.',array_reverse(array_splice($list,0,-1)));
+        $this->set_tag('hierarchy',$out);
 
-		return $out;
-	}
-
+        return $out;
+    }
 } // end of class.

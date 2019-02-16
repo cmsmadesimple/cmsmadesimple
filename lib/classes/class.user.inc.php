@@ -36,70 +36,70 @@
 class User
 {
 
-	/**
-	 * @var int $id User id
-	 */
-	var $id;
+    /**
+     * @var int $id User id
+     */
+    public $id;
 
-	/**
-	 * @var string Username
-	 */
-	var $username;
+    /**
+     * @var string Username
+     */
+    public $username;
 
-	/**
-	 * @var string $password Password (md5 encoded)
-	 */
-	var $password;
+    /**
+     * @var string $password Password (md5 encoded)
+     */
+    public $password;
 
-	/**
-	 * @var string $firstname Users First Name
-	 */
-	var $firstname;
+    /**
+     * @var string $firstname Users First Name
+     */
+    public $firstname;
 
-	/**
-	 * @var string $lastname Last Name
-	 */
-	var $lastname;
+    /**
+     * @var string $lastname Last Name
+     */
+    public $lastname;
 
-	/**
-	 * @var string $email Users Email Address
-	 */
-	var $email;
+    /**
+     * @var string $email Users Email Address
+     */
+    public $email;
 
-	/**
-	 * @var bool $active Active Flag
-	 */
-	var $active;
+    /**
+     * @var bool $active Active Flag
+     */
+    public $active;
 
-	/**
-	 * @var bool $adminaccess Flag to tell whether user can login to admin panel
-	 */
-	var $adminaccess;
+    /**
+     * @var bool $adminaccess Flag to tell whether user can login to admin panel
+     */
+    public $adminaccess;
 
-	/**
-	 * Generic constructor.  Runs the SetInitialValues fuction.
-	 */
-	function __construct()
-	{
-		$this->SetInitialValues();
-	}
+    /**
+     * Generic constructor.  Runs the SetInitialValues fuction.
+     */
+    public function __construct()
+    {
+        $this->SetInitialValues();
+    }
 
-	/**
-	 * Sets object to some sane initial values
-	 *
-	 * @since 0.6.1
-	 */
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->username = '';
-		$this->password = '';
-		$this->firstname = '';
-		$this->lastname = '';
-		$this->email = '';
-		$this->active = false;
-		$this->adminaccess = false;
-	}
+    /**
+     * Sets object to some sane initial values
+     *
+     * @since 0.6.1
+     */
+    public function SetInitialValues()
+    {
+        $this->id = -1;
+        $this->username = '';
+        $this->password = '';
+        $this->firstname = '';
+        $this->lastname = '';
+        $this->email = '';
+        $this->active = false;
+        $this->adminaccess = false;
+    }
 
     /**
      * Sets the user's active state.
@@ -112,16 +112,16 @@ class User
         $this->active = (bool) $flag;
     }
 
-	/**
-	 * Encrypts and sets password for the User
-	 *
-	 * @since 0.6.1
-	 * @param string $password The plaintext password.
-	 */
-	function SetPassword($password)
-	{
+    /**
+     * Encrypts and sets password for the User
+     *
+     * @since 0.6.1
+     * @param string $password The plaintext password.
+     */
+    public function SetPassword($password)
+    {
         $this->password = password_hash( $password, PASSWORD_BCRYPT );
-	}
+    }
 
     /**
      * Authenticate a users password.
@@ -141,48 +141,48 @@ class User
         }
     }
 
-	/**
-	 * Saves the user to the database.  If no user_id is set, then a new record
-	 * is created.  If the uset_id is set, then the record is updated to all values
-	 * in the User object.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.6.1
-	 */
-	function Save()
-	{
-		$result = false;
+    /**
+     * Saves the user to the database.  If no user_id is set, then a new record
+     * is created.  If the uset_id is set, then the record is updated to all values
+     * in the User object.
+     *
+     * @returns mixed If successful, true.  If it fails, false.
+     * @since 0.6.1
+     */
+    public function Save()
+    {
+        $result = false;
 
         $userops = UserOperations::get_instance();
-		if ($this->id > -1) {
-			$result = $userops->UpdateUser($this);
-		}
-		else {
-			$newid = $userops->InsertUser($this);
-			if ($newid > -1) {
-				$this->id = $newid;
-				$result = true;
-			}
-		}
+        if ($this->id > -1) {
+            $result = $userops->UpdateUser($this);
+        }
+        else {
+            $newid = $userops->InsertUser($this);
+            if ($newid > -1) {
+                $this->id = $newid;
+                $result = true;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Delete the record for this user from the database and resets
-	 * all values to their initial values.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.6.1
-	 */
-	function Delete()
-	{
-		$result = false;
-		if ($this->id > -1) {
-			$userops = UserOperations::get_instance();
-			$result = $userops->DeleteUserByID($this->id);
-			if ($result) $this->SetInitialValues();
-		}
-		return $result;
-	}
-}
+    /**
+     * Delete the record for this user from the database and resets
+     * all values to their initial values.
+     *
+     * @returns mixed If successful, true.  If it fails, false.
+     * @since 0.6.1
+     */
+    public function Delete()
+    {
+        $result = false;
+        if ($this->id > -1) {
+            $userops = UserOperations::get_instance();
+            $result = $userops->DeleteUserByID($this->id);
+            if ($result) $this->SetInitialValues();
+        }
+        return $result;
+    }
+} // class

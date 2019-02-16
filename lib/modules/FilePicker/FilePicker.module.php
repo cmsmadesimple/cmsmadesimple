@@ -35,7 +35,9 @@ require_once(__DIR__.'/lib/class.ProfileDAO.php');
 
 final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 {
+
     protected $_dao;
+
     protected $_typehelper;
 
     public function __construct()
@@ -55,7 +57,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return base64_decode($encodedfilename . '==');
     }
 
-    function VisibleToAdminUser()
+    public function VisibleToAdminUser()
     {
         return $this->CheckPermission('Modify Site Preferences');
     }
@@ -71,26 +73,43 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
      * end of private methods
      */
 
-    function GetFriendlyName() { return $this->Lang('friendlyname');  }
-    function GetVersion() { return '1.0.1'; }
-    function GetHelp() { return $this->Lang('help'); }
-    function IsPluginModule() { return FALSE; }
-    function HasAdmin() { return TRUE; }
-    function GetAdminSection() { return 'extensions'; }
+    public function GetFriendlyName() {
+        return $this->Lang('friendlyname');
+    }
 
-    function HasCapability( $capability, $params = array() )
+    public function GetVersion() {
+        return '1.0.1';
+    }
+
+    public function GetHelp() {
+        return $this->Lang('help');
+    }
+
+    public function IsPluginModule() {
+        return FALSE;
+    }
+
+    public function HasAdmin() {
+        return TRUE;
+    }
+
+    public function GetAdminSection() {
+        return 'extensions';
+    }
+
+    public function HasCapability( $capability, $params = array() )
     {
         switch( $capability ) {
-        case 'contentblocks':
-        case 'filepicker':
-        case 'upload':
-            return TRUE;
-        default:
-            return FALSE;
+            case 'contentblocks':
+            case 'filepicker':
+            case 'upload':
+                return TRUE;
+            default:
+                return FALSE;
         }
     }
 
-    function GetContentBlockFieldInput($blockName, $value, $params, $adding, ContentBase $content_obj)
+    public function GetContentBlockFieldInput($blockName, $value, $params, $adding, ContentBase $content_obj)
     {
         if( empty($blockName) ) return FALSE;
         $uid = get_userid(FALSE);
@@ -104,16 +123,16 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return $out;
     }
 
-//  function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
-//  {
-//    echo('<br/>:::::::::::::::::::::<br/>');
-//    debug_display($blockName, '$blockName');
-//    debug_display($value, '$value');
-//    debug_display($blockparams, '$blockparams');
-//    //debug_display($adding, '$adding');
-//    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
-//    //die('<br/>RIP!<br/>');
-//  }
+    //  function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
+    //  {
+    //    echo('<br/>:::::::::::::::::::::<br/>');
+    //    debug_display($blockName, '$blockName');
+    //    debug_display($value, '$value');
+    //    debug_display($blockparams, '$blockparams');
+    //    //debug_display($adding, '$adding');
+    //    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
+    //    //die('<br/>RIP!<br/>');
+    //  }
 
     public function GetFileList($path = '')
     {
@@ -161,31 +180,31 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $tpl_ob->assign('profile',$profile);
         $tpl_ob->assign('required',$required);
         switch( $profile->type ) {
-        case FileType::TYPE_IMAGE:
-            $tpl_ob->assign('title',$this->Lang('select_an_image'));
-            break;
-        case FileType::TYPE_AUDIO:
-            $tpl_ob->assign('title',$this->Lang('select_an_audio_file'));
-            break;
-        case FileType::TYPE_VIDEO:
-            $tpl_ob->assign('title',$this->Lang('select_a_video_file'));
-            break;
-        case FileType::TYPE_MEDIA:
-            $tpl_ob->assign('title',$this->Lang('select_a_media_file'));
-            break;
-        case FileType::TYPE_XML:
-            $tpl_ob->assign('title',$this->Lang('select_an_xml_file'));
-            break;
-        case FileType::TYPE_DOCUMENT:
-            $tpl_ob->assign('title',$this->Lang('select_a_document'));
-            break;
-        case FileType::TYPE_ARCHIVE:
-            $tpl_ob->assign('title',$this->Lang('select_an_archive_file'));
-            break;
-        case FileType::TYPE_ANY:
-        default:
-            $tpl_ob->assign('title',$this->Lang('select_a_file'));
-            break;
+            case FileType::TYPE_IMAGE:
+                $tpl_ob->assign('title',$this->Lang('select_an_image'));
+                break;
+            case FileType::TYPE_AUDIO:
+                $tpl_ob->assign('title',$this->Lang('select_an_audio_file'));
+                break;
+            case FileType::TYPE_VIDEO:
+                $tpl_ob->assign('title',$this->Lang('select_a_video_file'));
+                break;
+            case FileType::TYPE_MEDIA:
+                $tpl_ob->assign('title',$this->Lang('select_a_media_file'));
+                break;
+            case FileType::TYPE_XML:
+                $tpl_ob->assign('title',$this->Lang('select_an_xml_file'));
+                break;
+            case FileType::TYPE_DOCUMENT:
+                $tpl_ob->assign('title',$this->Lang('select_a_document'));
+                break;
+            case FileType::TYPE_ARCHIVE:
+                $tpl_ob->assign('title',$this->Lang('select_an_archive_file'));
+                break;
+            case FileType::TYPE_ANY:
+            default:
+                $tpl_ob->assign('title',$this->Lang('select_a_file'));
+                break;
         }
         $out = $tpl_ob->fetch();
         return $out;
@@ -213,33 +232,33 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
 
         switch( $profile->type ) {
-        case \CMSMS\FileType::TYPE_IMAGE:
-            if( $this->_typehelper->is_image( $filename ) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_IMAGE:
+                if( $this->_typehelper->is_image( $filename ) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_AUDIO:
-            if( $this->_typehelper->is_audio( $filename ) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_AUDIO:
+                if( $this->_typehelper->is_audio( $filename ) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_VIDEO:
-            if( $this->_typehelper->is_video( $filename ) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_VIDEO:
+                if( $this->_typehelper->is_video( $filename ) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_MEDIA:
-            if( $this->_typehelper->is_media( $filename) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_MEDIA:
+                if( $this->_typehelper->is_media( $filename) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_XML:
-            if( $this->_typehelper->is_xml( $filename) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_XML:
+                if( $this->_typehelper->is_xml( $filename) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_DOCUMENT:
-            if( $this->_typehelper->is_document( $filename) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_DOCUMENT:
+                if( $this->_typehelper->is_document( $filename) ) return TRUE;
+                return FALSE;
 
-        case \CMSMS\FileType::TYPE_ARCHIVE:
-            if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
-            return FALSE;
+            case \CMSMS\FileType::TYPE_ARCHIVE:
+                if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
+                return FALSE;
         }
 
         // passed

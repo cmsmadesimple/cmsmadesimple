@@ -4,7 +4,8 @@ namespace CmsJobManager;
 
 final class JobQueue
 {
-    private function __construct() {}
+    private function __construct() {
+    }
 
     public static function have_jobs()
     {
@@ -99,5 +100,4 @@ final class JobQueue
         }
         $mod->SetPreference('last_badjob_run',$now);
     }
-
 }

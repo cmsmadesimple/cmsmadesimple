@@ -28,6 +28,7 @@ namespace CMSMS\AdminAlerts;
  */
 class TranslatableAlert extends Alert
 {
+
     /**
      * @ignore
      */
@@ -80,18 +81,18 @@ class TranslatableAlert extends Alert
     public function __get($key)
     {
         switch( $key ) {
-        case 'perms':
-            return $this->_perms;
-        case 'icon':
-            return $this->_icon;
-        case 'titlekey':
-            return $this->_titlekey;
-        case 'msgkey':
-            return $this->_msgkey;
-        case 'msgargs':
-            return $this->_msgargs;
-        default:
-            return parent::__get($key);
+            case 'perms':
+                return $this->_perms;
+            case 'icon':
+                return $this->_icon;
+            case 'titlekey':
+                return $this->_titlekey;
+            case 'msgkey':
+                return $this->_msgkey;
+            case 'msgargs':
+                return $this->_msgargs;
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -106,33 +107,33 @@ class TranslatableAlert extends Alert
     public function __set($key,$val)
     {
         switch( $key ) {
-        case 'icon':
-            $this->_icon = trim($val);
-            break;
-        case 'titlekey':
-            $this->_titlekey = trim($val);
-            break;
-        case 'msgkey':
-            $this->_msgkey = trim($val);
-            break;
-        case 'msgargs':
-            if( !is_array( $val ) ) $val = [ $val ];
-            $this->_msgargs = $val; // accept string or array...
-            break;
-        case 'perms':
-            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
-            $tmp = [];
-            foreach( $val as $one ) {
-                $one = trim($one);
-                if( !$one ) continue;
-                if( !in_array($one,$tmp) ) $tmp[] = $one;
-            }
-            if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
-            $this->_perms = $tmp;
-            break;
+            case 'icon':
+                $this->_icon = trim($val);
+                break;
+            case 'titlekey':
+                $this->_titlekey = trim($val);
+                break;
+            case 'msgkey':
+                $this->_msgkey = trim($val);
+                break;
+            case 'msgargs':
+                if( !is_array( $val ) ) $val = [ $val ];
+                $this->_msgargs = $val; // accept string or array...
+                break;
+            case 'perms':
+                if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+                $tmp = [];
+                foreach( $val as $one ) {
+                      $one = trim($one);
+                      if( !$one ) continue;
+                      if( !in_array($one,$tmp) ) $tmp[] = $one;
+                }
+                if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+                $this->_perms = $tmp;
+                break;
 
-        default:
-            return parent::__set($key,$val);
+            default:
+                return parent::__set($key,$val);
         }
     }
 
@@ -194,5 +195,4 @@ class TranslatableAlert extends Alert
     {
         return $this->_icon;
     }
-
 } // end of class

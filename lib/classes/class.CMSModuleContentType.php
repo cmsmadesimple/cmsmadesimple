@@ -33,40 +33,40 @@
  */
 abstract class CMSModuleContentType extends ContentBase
 {
-  /**
-   * A method for returning the module that the content type belongs to.
-   *
-   * @abstract
-   * @return string
-   */
-  abstract public function ModuleName();
+    /**
+     * A method for returning the module that the content type belongs to.
+     *
+     * @abstract
+     * @return string
+     */
+    abstract public function ModuleName();
 
-  /**
-   * Retrieve a language string from the module.
-   *
-   * @param string $name The key for the language string
-   * @param array  $params Optional parameters for use in vsprintf
-   */
-  public function Lang($name, $params=array())
-  {
-    $obj = cms_utils::get_module($this->ModuleName());
-    if( $obj ) {
-      return $obj->Lang($name, $params);
+    /**
+     * Retrieve a language string from the module.
+     *
+     * @param string $name The key for the language string
+     * @param array  $params Optional parameters for use in vsprintf
+     */
+    public function Lang($name, $params=array())
+    {
+        $obj = cms_utils::get_module($this->ModuleName());
+        if( $obj ) {
+            return $obj->Lang($name, $params);
+        }
+        else {
+            return 'ModuleName() not defined properly';
+        }
     }
-    else {
-      return 'ModuleName() not defined properly';
-    }
-  }
 
-  /**
-   * Returns the instance of the module this content type belongs to
-   */
-  final public function GetModuleInstance()
-  {
-    $mod = cms_utils::get_module($this->ModuleName());
-    if( $mod ) return $mod;
-    return 'ModuleName() not defined properly';
-  }
+    /**
+     * Returns the instance of the module this content type belongs to
+     */
+    final public function GetModuleInstance()
+    {
+        $mod = cms_utils::get_module($this->ModuleName());
+        if( $mod ) return $mod;
+        return 'ModuleName() not defined properly';
+    }
 } // end of class.
 
 #

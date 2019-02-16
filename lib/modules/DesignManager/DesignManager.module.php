@@ -18,28 +18,74 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
-if( !isset($gCms) ) exit;
 
 final class DesignManager extends CMSModule
 {
-    function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-    function GetVersion()  { return '1.1.6'; }
-    function MinimumCMSVersion()  { return '2.1'; }
-    function LazyLoadAdmin() { return TRUE; }
-    function LazyLoadFrontend() { return TRUE; }
-    function IsPluginModule() { return FALSE; }
-    function GetAuthor() { return 'Calguy1000'; }
-    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-    function HasAdmin() { return true; }
-    function GetAdminSection() { return 'layout'; }
-    function AllowAutoInstall() { return TRUE; }
-    function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_designmanager_help'); }
-    function GetChangeLog() { return file_get_contents(__DIR__.'/changelog.inc'); }
-    function GetAdminDescription() { return $this->Lang('moddescription'); }
-    function InstallPostMessage() { return $this->Lang('postinstall'); }
-    function UninstallPostMessage() { return $this->Lang('postuninstall'); }
+    public function GetFriendlyName()  {
+        return $this->Lang('friendlyname');
+    }
 
-    function VisibleToAdminUser()
+    public function GetVersion()  {
+        return '1.1.6';
+    }
+
+    public function MinimumCMSVersion()  {
+        return '2.1';
+    }
+
+    public function LazyLoadAdmin() {
+        return TRUE;
+    }
+
+    public function LazyLoadFrontend() {
+        return TRUE;
+    }
+
+    public function IsPluginModule() {
+        return FALSE;
+    }
+
+    public function GetAuthor() {
+        return 'Calguy1000';
+    }
+
+    public function GetAuthorEmail() {
+        return 'calguy1000@cmsmadesimple.org';
+    }
+
+    public function HasAdmin() {
+        return true;
+    }
+
+    public function GetAdminSection() {
+        return 'layout';
+    }
+
+    public function AllowAutoInstall() {
+        return TRUE;
+    }
+
+    public function GetHelp() {
+        return CmsLangOperations::lang_from_realm('help','help_designmanager_help');
+    }
+
+    public function GetChangeLog() {
+        return file_get_contents(__DIR__.'/changelog.inc');
+    }
+
+    public function GetAdminDescription() {
+        return $this->Lang('moddescription');
+    }
+
+    public function InstallPostMessage() {
+        return $this->Lang('postinstall');
+    }
+
+    public function UninstallPostMessage() {
+        return $this->Lang('postuninstall');
+    }
+
+    public function VisibleToAdminUser()
     {
         if( $this->CheckPermission('Add Templates') ||
             $this->CheckPermission('Modify Templates') ||
@@ -83,35 +129,36 @@ final class DesignManager extends CMSModule
         return lang('event_desc_'.$eventname);
     }
 
-	/**
-	 * A module method for handling module response with ajax actions, returning a JSON encoded response.
-	 * @param  string $status The status of returned response, in example error, success, warning, info
-	 * @param  string $message The message of returned response
-	 * @param  mixed $data A string or array of response data
-	 * @return string Returns a string containing the JSON representation of provided response data
-	 */
-	public function GetJSONResponse($status, $message, $data = null)
-	{
+    /**
+     * A module method for handling module response with ajax actions, returning a JSON encoded response.
+     * @param  string $status The status of returned response, in example error, success, warning, info
+     * @param  string $message The message of returned response
+     * @param  mixed $data A string or array of response data
+     * @return string Returns a string containing the JSON representation of provided response data
+     */
+    public function GetJSONResponse($status, $message, $data = null)
+    {
 
-		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
 
-			$handlers = ob_list_handlers();
-			for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+            $handlers = ob_list_handlers();
+            for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+            }
 
-			header('Content-type:application/json; charset=utf-8');
+            header('Content-type:application/json; charset=utf-8');
 
-			if ($data) {
-				$json = json_encode(array('status' => $status, 'message' => $message, 'data' => $data));
-			} else {
-				$json = json_encode(array('status' => $status, 'message' => $message));
-			}
+            if ($data) {
+                $json = json_encode(array('status' => $status, 'message' => $message, 'data' => $data));
+            } else {
+                $json = json_encode(array('status' => $status, 'message' => $message));
+            }
 
-			echo $json;
-			exit();
-		}
+            echo $json;
+            exit();
+        }
 
-		return false;
-	}
+        return false;
+    }
 } // class
 
 #

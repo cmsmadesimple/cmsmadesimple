@@ -23,21 +23,21 @@ if( !$this->CheckPermission('Modify Templates') ) return;
 
 $this->SetCurrentTab('types');
 if( !isset($params['type']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $type = CmsLayoutTemplateType::load($params['type']);
-  $type->reset_content_to_factory();
-  $type->save();
+    $type = CmsLayoutTemplateType::load($params['type']);
+    $type->reset_content_to_factory();
+    $type->save();
 
-  $this->SetMessage($this->Lang('msg_template_reset',$type->get_langified_display_value()));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_template_reset',$type->get_langified_display_value()));
+    $this->RedirectToAdminTab();
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

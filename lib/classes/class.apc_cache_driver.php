@@ -5,7 +5,9 @@ use \APCIterator;
 
 class apc_cache_driver extends cms_cache_driver
 {
+
     protected $ttl_seconds;
+
     protected $group;
 
     public function __construct( int $ttl_seconds )
@@ -43,8 +45,7 @@ class apc_cache_driver extends cms_cache_driver
 
     public function get($key, $group = '')
     {
-        $out = apc_fetch($this->get_key($key,$group));
-        return $out;
+        return apc_fetch($this->get_key($key,$group));
     }
 
     public function exists($key, $group = '')
@@ -68,5 +69,4 @@ class apc_cache_driver extends cms_cache_driver
         $group = trim($group);
         $this->group = $group;
     }
-
 } // class

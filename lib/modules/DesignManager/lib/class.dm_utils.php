@@ -21,50 +21,50 @@
 
 final class dm_utils
 {
-    public function __construct() {}
+    public function __construct() {
+    }
 
     public static function locking_enabled()
     {
-		$mod = cms_utils::get_module('DesignManager');
+        $mod = cms_utils::get_module('DesignManager');
         $timeout = $mod->GetPreference('lock_timeout');
         if( $timeout > 0 ) return TRUE;
         return FALSE;
     }
 
-	public static function get_template_locks()
-	{
-		static $_locks = null;
-		static $_locks_loaded = FALSE;
-		if( !$locks_loaded ) {
-			$_locks_loaded = TRUE;
-			$tmp = CmsLockOperations::get_locks('template');
-			if( is_array($tmp) && count($tmp) ) {
-				$_locks = array();
-				foreach( $tmp as $lock_obj ) {
-					$_locks[$lock_obj['oid']] = $lock_obj;
-				}
-			}
-		}
-		return $_locks;
-	}
+    public static function get_template_locks()
+    {
+        static $_locks = null;
+        static $_locks_loaded = FALSE;
+        if( !$locks_loaded ) {
+            $_locks_loaded = TRUE;
+            $tmp = CmsLockOperations::get_locks('template');
+            if( is_array($tmp) && count($tmp) ) {
+                $_locks = array();
+                foreach( $tmp as $lock_obj ) {
+                    $_locks[$lock_obj['oid']] = $lock_obj;
+                }
+            }
+        }
+        return $_locks;
+    }
 
-	public static function get_css_locks()
-	{
-		static $_locks = null;
-		static $_locks_loaded = FALSE;
-		if( !$locks_loaded ) {
-			$_locks_loaded = TRUE;
-			$tmp = CmsLockOperations::get_locks('stylesheet');
-			if( is_array($tmp) && count($tmp) ) {
-				$_locks = array();
-				foreach( $tmp as $lock_obj ) {
-					$_locks[$lock_obj['oid']] = $lock_obj;
-				}
-			}
-		}
-		return $_locks;
-	}
-
+    public static function get_css_locks()
+    {
+        static $_locks = null;
+        static $_locks_loaded = FALSE;
+        if( !$locks_loaded ) {
+            $_locks_loaded = TRUE;
+            $tmp = CmsLockOperations::get_locks('stylesheet');
+            if( is_array($tmp) && count($tmp) ) {
+                $_locks = array();
+                foreach( $tmp as $lock_obj ) {
+                    $_locks[$lock_obj['oid']] = $lock_obj;
+                }
+            }
+        }
+        return $_locks;
+    }
 } // end of class
 
 #

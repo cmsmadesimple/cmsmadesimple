@@ -41,82 +41,82 @@ try {
     $bulk_op = null;
     $stylesheets = CmsLayoutStylesheet::load_bulk($params['css_select']);
     switch( $params['css_bulk_action'] ) {
-    case 'delete':
-        $bulk_op = 'bulk_action_delete_css';
-        if( isset($params['submit']) ) {
-            if( !isset($params['check1']) || !isset($params['check2']) ) {
-                echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+        case 'delete':
+            $bulk_op = 'bulk_action_delete_css';
+            if( isset($params['submit']) ) {
+                if( !isset($params['check1']) || !isset($params['check2']) ) {
+                    echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+                }
+                else {
+                    $stylesheets = CmsLayoutStylesheet::load_bulk($params['css_select']);
+                    foreach( $stylesheets as $one ) {
+                        if( in_array($one->get_id(),$params['css_select']) ) {
+                            $one->delete();
+                        }
+                    }
+
+                    audit('',$this->GetName(),'Deleted '.count($stylesheets).' stylesheets');
+                    $this->SetMessage($this->Lang('msg_bulkop_complete'));
+                    $this->RedirectToAdminTab();
+                }
             }
-            else {
-                $stylesheets = CmsLayoutStylesheet::load_bulk($params['css_select']);
+            break;
+
+        case 'export':
+            $bulk_op = 'bulk_action_export_css';
+            $first_css = $stylesheets[0];
+            $outfile = $first_css->get_content_filename();
+            $dn = dirname($outfile);
+            if( !is_dir($dn) || !is_writable($dn) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            if( isset($params['submit']) ) {
+                $n = 0;
                 foreach( $stylesheets as $one ) {
                     if( in_array($one->get_id(),$params['css_select']) ) {
-                        $one->delete();
+                        $outfile = $one->get_content_filename();
+                        if( !is_file($outfile) ) {
+                            file_put_contents($outfile,$one->get_content());
+                            $n++;
+                        }
                     }
                 }
+                if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkexport_noneprocessed'));
 
-                audit('',$this->GetName(),'Deleted '.count($stylesheets).' stylesheets');
+                audit('',$this->GetName(),'Exported '.count($stylesheets).' stylesheets');
                 $this->SetMessage($this->Lang('msg_bulkop_complete'));
                 $this->RedirectToAdminTab();
             }
-        }
-        break;
+            break;
 
-    case 'export':
-        $bulk_op = 'bulk_action_export_css';
-        $first_css = $stylesheets[0];
-        $outfile = $first_css->get_content_filename();
-        $dn = dirname($outfile);
-        if( !is_dir($dn) || !is_writable($dn) ) {
-            throw new \RuntimeException($this->Lang('error_assets_writeperm'));
-        }
-        if( isset($params['submit']) ) {
-            $n = 0;
-            foreach( $stylesheets as $one ) {
-                if( in_array($one->get_id(),$params['css_select']) ) {
-                    $outfile = $one->get_content_filename();
-                    if( !is_file($outfile) ) {
-                        file_put_contents($outfile,$one->get_content());
-                        $n++;
+        case 'import':
+            $bulk_op = 'bulk_action_import_css';
+            if( isset($params['submit']) ) {
+                $n=0;
+                foreach( $stylesheets as $one ) {
+                    if( in_array($one->get_id(),$params['css_select']) ) {
+                        $infile = $one->get_content_filename();
+                        if( is_file($infile) && is_readable($infile) && is_writable($infile) ) {
+                            $data = file_get_contents($infile);
+                            $one->set_content($data);
+                            $one->save();
+                            unlink($infile);
+                            $n++;
+                        }
                     }
                 }
+                if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkimport_noneprocessed'));
+
+                audit('',$this->GetName(),'Imported '.count($stylesheets).' stylesheets');
+                $this->SetMessage($this->Lang('msg_bulkop_complete'));
+                $this->RedirectToAdminTab();
             }
-            if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkexport_noneprocessed'));
+            break;
 
-            audit('',$this->GetName(),'Exported '.count($stylesheets).' stylesheets');
-            $this->SetMessage($this->Lang('msg_bulkop_complete'));
+        default:
+            $this->SetError($this->Lang('error_missingparam'));
             $this->RedirectToAdminTab();
-        }
-        break;
-
-    case 'import':
-        $bulk_op = 'bulk_action_import_css';
-        if( isset($params['submit']) ) {
-            $n=0;
-            foreach( $stylesheets as $one ) {
-                if( in_array($one->get_id(),$params['css_select']) ) {
-                    $infile = $one->get_content_filename();
-                    if( is_file($infile) && is_readable($infile) && is_writable($infile) ) {
-                        $data = file_get_contents($infile);
-                        $one->set_content($data);
-                        $one->save();
-                        unlink($infile);
-                        $n++;
-                    }
-                }
-            }
-            if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkimport_noneprocessed'));
-
-            audit('',$this->GetName(),'Imported '.count($stylesheets).' stylesheets');
-            $this->SetMessage($this->Lang('msg_bulkop_complete'));
-            $this->RedirectToAdminTab();
-        }
-        break;
-
-    default:
-        $this->SetError($this->Lang('error_missingparam'));
-        $this->RedirectToAdminTab();
-        break;
+            break;
     }
 
     $smarty->assign('bulk_op',$bulk_op);

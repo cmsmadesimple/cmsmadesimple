@@ -46,48 +46,48 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
  */
 function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=array(), $inline=false)
 {
-	$name = $modinstance->GetName();
+    $name = $modinstance->GetName();
 
-	// Suggestion by Calguy to make sure 2 actions don't get sent
-	if (isset($params['action']))unset($params['action']);
-	if (isset($params['id'])) unset($params['id']);
-	if (isset($params['module'])) unset($params['module']);
-	if (!$inline && $returnid != '') $id = 'cntnt01';
+    // Suggestion by Calguy to make sure 2 actions don't get sent
+    if (isset($params['action']))unset($params['action']);
+    if (isset($params['id'])) unset($params['id']);
+    if (isset($params['module'])) unset($params['module']);
+    if (!$inline && $returnid != '') $id = 'cntnt01';
 
-	$text = '';
-	if ($returnid != '') {
+    $text = '';
+    if ($returnid != '') {
         $contentops = ContentOperations::get_instance();
-		$content = $contentops->LoadContentFromId($returnid);
-		if( !is_object($content) ) {
-			// no destination content object
-			return;
-		}
-		$text .= $content->GetURL();
+        $content = $contentops->LoadContentFromId($returnid);
+        if( !is_object($content) ) {
+            // no destination content object
+            return;
+        }
+        $text .= $content->GetURL();
 
-		$parts = parse_url($text);
-		if( isset($parts['query']) && $parts['query'] != '?' ) {
-			$text .= '&';
-		}
-		else {
-			$text .= '?';
-		}
-	}
-	else {
-		$text .= 'moduleinterface.php?';
-	}
+        $parts = parse_url($text);
+        if( isset($parts['query']) && $parts['query'] != '?' ) {
+            $text .= '&';
+        }
+        else {
+            $text .= '?';
+        }
+    }
+    else {
+        $text .= 'moduleinterface.php?';
+    }
 
-	$text .= 'mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
-	if ($returnid != '') {
-		$text .= '&'.$id.'returnid='.$returnid;
-	}
-	else {
-	    $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	}
+    $text .= 'mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
+    if ($returnid != '') {
+        $text .= '&'.$id.'returnid='.$returnid;
+    }
+    else {
+        $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+    }
 
-	foreach ($params as $key=>$value) {
-		if( $key !== '' && $value !== '' ) $text .= '&'.$id.$key.'='.rawurlencode($value);
-	}
-	redirect($text);
+    foreach ($params as $key=>$value) {
+        if( $key !== '' && $value !== '' ) $text .= '&'.$id.$key.'='.rawurlencode($value);
+    }
+    redirect($text);
 }
 
 ?>

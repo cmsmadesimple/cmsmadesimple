@@ -36,19 +36,20 @@ use \CMSMS\internal\module_meta;
  */
 final class ModuleOperations
 {
-	/**
-	 * System Modules - a list (hardcoded) of all system modules
-	 *
-	 * @access private
-	 * @internal
-	 */
-	protected $cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'DesignManager', 'CMSContentManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
+
+    /**
+     * System Modules - a list (hardcoded) of all system modules
+     *
+     * @access private
+     * @internal
+     */
+    protected $cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'DesignManager', 'CMSContentManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
                                      'Navigator', 'CmsJobManager', 'FilePicker', 'CoreAdminLogin' ];
 
-	/**
-	 * @ignore
-	 */
-	static private $_instance = null;
+    /**
+     * @ignore
+     */
+    static private $_instance = null;
 
     /**
      * @ignore
@@ -70,20 +71,21 @@ final class ModuleOperations
      */
     static private $_classmap = null;
 
-	/**
-	 * @ignore
-	 */
-	private $_modules = null;
-
-	/**
-	 * @ignore
-	 */
-	private $_moduleinfo;
+    /**
+     * @ignore
+     */
+    private $_modules = null;
 
     /**
      * @ignore
      */
-    private function __construct() {}
+    private $_moduleinfo;
+
+    /**
+     * @ignore
+     */
+    private function __construct() {
+    }
 
 
     /**
@@ -240,12 +242,12 @@ final class ModuleOperations
                       (module_name,version,status,admin_only,active,allow_fe_lazyload,allow_admin_lazyload)
                       VALUES (?,?,?,?,?,?,?)';
             $dbr = $db->Execute($query,array($module_obj->GetName(),$module_obj->GetVersion(),'installed',
-                                             ($module_obj->IsAdminOnly()==true)?1:0,
-                                             1,$lazyload_fe,$lazyload_admin));
+                                         ($module_obj->IsAdminOnly()==true)?1:0,
+                                         1,$lazyload_fe,$lazyload_admin));
 
             $deps = $module_obj->GetDependencies();
             if( is_array($deps) && count($deps) ) {
-                $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
+                  $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
                           VALUES (?,?,?,NOW(),NOW())';
                 foreach( $deps as $depname => $depversion ) {
                     if( !$depname || !$depversion ) continue;
@@ -321,8 +323,8 @@ final class ModuleOperations
                 if( $all_deps && count($all_deps) ) {
                     foreach( $all_deps as $mname => $deps ) {
                         if( is_array($deps) && count($deps) && isset($this->_moduleinfo[$mname]) ) {
-                            $minfo =& $this->_moduleinfo[$mname];
-                            $minfo['dependants'] = array_keys($deps);
+                              $minfo =& $this->_moduleinfo[$mname];
+                              $minfo['dependants'] = array_keys($deps);
                         }
                     }
                 }
@@ -357,8 +359,8 @@ final class ModuleOperations
                     // this is the start of a recursive routine. get_module_instance() may call _load_module
                     $obj2 = $this->get_module_instance($name,$ver);
                     if( !is_object($obj2) ) {
-                        cms_warning("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
-                        return FALSE;
+                          cms_warning("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
+                          return FALSE;
                     }
                 }
             }
@@ -412,9 +414,9 @@ final class ModuleOperations
                 if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
                     $res = $this->_install_module($obj);
                     if( $res[0] == FALSE ) {
-                        // nope, can't auto install...
-                        unset($obj,$this->_modules[$module_name]);
-                        return FALSE;
+                          // nope, can't auto install...
+                          unset($obj,$this->_modules[$module_name]);
+                          return FALSE;
                     }
                 }
                 else if( $needs_upgrade ) {
@@ -436,7 +438,6 @@ final class ModuleOperations
                 return FALSE;
             }
         }
-
 
         if( !$force_load && (!isset($info[$module_name]['status']) || $info[$module_name]['status'] != 'installed') ) {
             debug_buffer('Cannot load an uninstalled module');
@@ -644,7 +645,7 @@ final class ModuleOperations
                         $tpls = CmsLayoutTemplate::template_query(array('t:'.$type->get_id()));
                         if( is_array($tpls) && count($tpls) ) {
                             foreach( $tpls as $tpl ) {
-                                $tpl->delete();
+                                  $tpl->delete();
                             }
                         }
                         $type->delete();

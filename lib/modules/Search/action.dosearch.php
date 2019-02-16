@@ -3,7 +3,9 @@ if (!isset($gCms)) exit;
 
 class SearchItemCollection
 {
+
     var $_ary;
+
     var $maxweight;
 
     function __construct()

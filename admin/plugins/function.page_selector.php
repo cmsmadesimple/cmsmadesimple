@@ -25,9 +25,9 @@ function smarty_function_page_selector($params,&$template)
     $for_child = (isset($params['for_child']) ) ? cms_to_bool($params['for_child']) : 0;
 
     $out = \ContentOperations::get_instance()->CreateHierarchyDropdown('',$value,$name,$allowcurrent,0,0,$allow_all,$for_child);
-	if( isset($params['assign']) )	{
-		$smarty->assign(trim($params['assign']),$out);
-		return;
-	}
-	return $out;
+    if( isset($params['assign']) )	{
+        $smarty->assign(trim($params['assign']),$out);
+        return;
+    }
+    return $out;
 }

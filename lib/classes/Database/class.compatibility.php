@@ -42,7 +42,9 @@
 
 namespace CMSMS\Database {
 
-    class Error extends \Exception {}
+    class Error extends \Exception
+    {
+    }
 
     /**
      * A class for providing some compatibility functionality with older module code
@@ -54,7 +56,8 @@ namespace CMSMS\Database {
         /**
          * @ignore
          */
-        private function __construct() {}
+        private function __construct() {
+        }
 
         /**
          * Initialize the database connection according to config settings.
@@ -98,8 +101,8 @@ namespace CMSMS\Database {
             debug_to_log("Database Error: $errtype($error_number) - $error_msg");
             debug_bt_to_log();
             if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-            throw new Error( $error_msg.' -- '.$conn->ErrorMsg(), $error_number );
             \CmsApp::get_instance()->add_error(debug_display($error_msg, '', false, true));
+            throw new Error( $error_msg.' -- '.$conn->ErrorMsg(), $error_number );
         }
 
         /**

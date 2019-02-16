@@ -26,17 +26,17 @@ if (isset($params["cancel"])) $this->Redirect($id,"defaultadmin",$returnid,$para
 
 $selall = $params['selall'];
 if( !is_array($selall) ) {
-  $selall = unserialize($selall);
+    $selall = unserialize($selall);
 }
 unset($params['selall']);
 
 if (count($selall)==0) {
-  $params["fmerror"]="nofilesselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="nofilesselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 if (count($selall)>1) {
-  $params["fmerror"]="morethanonefiledirselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="morethanonefiledirselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
 $advancedmode = filemanager_utils::check_advanced_mode();
@@ -46,22 +46,22 @@ $basedir = $config['root_path'];
 $filename=$this->decodefilename($selall[0]);
 $src = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),$filename);
 if( !file_exists($src) ) {
-  $params["fmerror"]="filenotfound";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="filenotfound";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
 
 if( isset($params['submit']) ) {
-  $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
-  $thumb = filemanager_utils::create_thumbnail($src);
-  
-  if( !$thumb ) {
-    $params["fmerror"]="thumberror";
-  }
-  else {
-    $params["fmmessage"]="thumbsuccess";
-  }
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
+    $thumb = filemanager_utils::create_thumbnail($src);
+
+    if( !$thumb ) {
+        $params["fmerror"]="thumberror";
+    }
+    else {
+        $params["fmmessage"]="thumbsuccess";
+    }
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
 //

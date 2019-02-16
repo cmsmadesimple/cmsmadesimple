@@ -117,7 +117,7 @@ else {
         foreach($files as $onefile) {
             $file = basename($onefile);
             $parts = explode('.',$file);
-	    if( startswith($file,'prefilter.') || startswith($file,'postfilter.') ) continue;
+            if( startswith($file,'prefilter.') || startswith($file,'postfilter.') ) continue;
             if( !is_array($parts) || count($parts) != 3 ) continue;
 
             $rec = array();
@@ -128,9 +128,9 @@ else {
 
             include_once($onefile);
 
-	    // leave samrty_nocache for compatibility for a while
+            // leave samrty_nocache for compatibility for a while
             if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
-	        !function_exists('smarty_nocache_'.$rec['type'].'_'.$rec['name']) &&
+            !function_exists('smarty_nocache_'.$rec['type'].'_'.$rec['name']) &&
                 !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
 
             if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) ) {

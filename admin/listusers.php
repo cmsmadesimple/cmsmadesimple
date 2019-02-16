@@ -94,7 +94,7 @@ else if (isset($_GET["toggleactive"])) {
     }
 } else if (isset($_POST['bulk']) && isset($_POST['bulkaction']) && isset($_POST['multiselect']) && is_array($_POST['multiselect']) && count($_POST['multiselect'])) {
     switch( $_POST['bulkaction'] ) {
-        case 'delete' :
+        case 'delete':
             $ndeleted = 0;
             foreach ($_POST['multiselect'] as $uid) {
                 $uid = (int)$uid;
@@ -121,7 +121,7 @@ else if (isset($_GET["toggleactive"])) {
             }
             break;
 
-        case 'clearoptions' :
+        case 'clearoptions':
             $nusers = 0;
             foreach ($_POST['multiselect'] as $uid) {
                 $uid = (int)$uid;
@@ -141,7 +141,7 @@ else if (isset($_GET["toggleactive"])) {
             }
             break;
 
-        case 'copyoptions' :
+        case 'copyoptions':
             $nusers = 0;
             if (isset($_POST['userlist'])) {
                 $fromuser = (int)$_POST['userlist'];
@@ -174,7 +174,7 @@ else if (isset($_GET["toggleactive"])) {
             }
             break;
 
-        case 'disable' :
+        case 'disable':
             $nusers = 0;
             foreach ($_POST['multiselect'] as $uid) {
                 $uid = (int)$uid;
@@ -199,7 +199,7 @@ else if (isset($_GET["toggleactive"])) {
             }
             break;
 
-        case 'enable' :
+        case 'enable':
             $nusers = 0;
             foreach ($_POST['multiselect'] as $uid) {
                 $uid = (int)$uid;

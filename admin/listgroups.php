@@ -30,8 +30,8 @@ $userid = get_userid();
 $access = check_permission($userid, "Manage Groups");
 
 if (!$access) {
-  die('Permission Denied');
-  return;
+    die('Permission Denied');
+    return;
 }
 
 
@@ -44,19 +44,18 @@ include_once("header.php");
 	<div class="pageoverflow">
 
 <?php
-
 if (check_permission($userid, 'Add Groups')) {
-?>
+    ?>
 	<div class="pageoptions">
-			<a href="addgroup.php<?php echo $urlext ?>">
+			<a href="addgroup.php<?php echo $urlext; ?>">
 				<?php
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
+    echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
 				?>
 			</a>
 	</div>
 </div>
-<?php
+    <?php
 }
 
 	$userid = get_userid();
@@ -69,91 +68,88 @@ if (check_permission($userid, 'Add Groups')) {
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
-        if (count($grouplist) > $limit) {
-	  echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
-	}
-	if (count($grouplist) > 0) {
-	  echo "<table class=\"pagetable\">\n";
-	  echo '<thead>';
-	  echo "<tr>\n";
-	  echo "<th class=\"pagew60\">".lang('name')."</th>\n";
-	  echo "<th class=\"pagepos\">".lang('active')."</th>\n";
-	  echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  echo "</tr>\n";
-	  echo '</thead>';
-	  echo '<tbody>';
+if (count($grouplist) > $limit) {
+    echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
+}
+if (count($grouplist) > 0) {
+    echo "<table class=\"pagetable\">\n";
+    echo '<thead>';
+    echo "<tr>\n";
+    echo "<th class=\"pagew60\">".lang('name')."</th>\n";
+    echo "<th class=\"pagepos\">".lang('active')."</th>\n";
+    echo "<th class=\"pageicon\">&nbsp;</th>\n";
+    echo "<th class=\"pageicon\">&nbsp;</th>\n";
+    echo "<th class=\"pageicon\">&nbsp;</th>\n";
+    echo "<th class=\"pageicon\">&nbsp;</th>\n";
+    echo "</tr>\n";
+    echo '</thead>';
+    echo '<tbody>';
 
-	  $currow = "row1";
+    $currow = "row1";
 
-	  // construct true/false button images
-	  $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-	  $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
-	  $image_groupassign = $themeObject->DisplayImage('icons/system/groupassign.gif', lang('assignments'),'','','systemicon');
-	  $image_permissions = $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','systemicon');
+    // construct true/false button images
+    $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+    $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+    $image_groupassign = $themeObject->DisplayImage('icons/system/groupassign.gif', lang('assignments'),'','','systemicon');
+    $image_permissions = $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','systemicon');
 
-	  $counter=0;
-	  foreach ($grouplist as $onegroup){
-	    if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-	      echo "<tr class=\"$currow\">\n";
-	      echo "<td><a title=\"".$onegroup->description."\" href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
-	      echo "<td class=\"pagepos\">";
-	      if( $onegroup->id == 1 ) {
-		echo '&nbsp;';
-	      }
-	      else {
-		if( $onegroup->active == 1 ) {
-		  echo $image_true;
-		}
-		else {
-		  echo $image_false;
-		}
-	      }
-	      echo "</td>\n";
-	      echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
-	      echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
-	      echo "<td class=\"icons_wide\"><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">";
-	      echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-	      echo "</a></td>\n";
-	      if ($onegroup->id != 1 && !$userops->UserInGroup($userid,$onegroup->id)) {
-		echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $onegroup->name) )."');\">";
-		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-		echo "</a></td>\n";
-	      }
-	      else {
-		echo '<td class="icons_wide">&nbsp;</td>'."\n";
-	      }
-	      echo "</tr>\n";
+    $counter=0;
+    foreach ($grouplist as $onegroup){
+        if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+            echo "<tr class=\"$currow\">\n";
+            echo "<td><a title=\"".$onegroup->description."\" href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+            echo "<td class=\"pagepos\">";
+            if( $onegroup->id == 1 ) {
+                echo '&nbsp;';
+            }
+            else {
+                if( $onegroup->active == 1 ) {
+                         echo $image_true;
+                }
+                else {
+                         echo $image_false;
+                }
+            }
+            echo "</td>\n";
+            echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
+            echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+            echo "<td class=\"icons_wide\"><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">";
+            echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+            echo "</a></td>\n";
+            if ($onegroup->id != 1 && !$userops->UserInGroup($userid,$onegroup->id)) {
+                echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $onegroup->name) )."');\">";
+                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+                echo "</a></td>\n";
+            }
+            else {
+                echo '<td class="icons_wide">&nbsp;</td>'."\n";
+            }
+            echo "</tr>\n";
 
-	      ($currow == "row1"?$currow="row2":$currow="row1");
-	    }
-	    $counter++;
-	  }
+            ($currow == "row1"?$currow="row2":$currow="row1");
+        }
+        $counter++;
+    }
 
-	  echo '</tbody>';
-	  echo "</table>\n";
+    echo '</tbody>';
+    echo "</table>\n";
 
-	}
+}
 
 if (check_permission($userid, 'Add Groups')) {
-?>
+    ?>
 	<div class="pageoptions">
-			<a href="addgroup.php<?php echo $urlext ?>">
+			<a href="addgroup.php<?php echo $urlext; ?>">
 				<?php
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
+    echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
 				?>
 			</a>
 	</div>
-<?php
+    <?php
 }
 ?>
 
 </div>
 <?php
-
 include_once("footer.php");
-
-?>

@@ -37,16 +37,15 @@
  */
 abstract class CmsLanguageDetector
 {
-  /**
-   * Abstract function to determine a language.
-   * This method may use cookies, session data, user preferences, values from the url
-   * or from the browser to determine a language.  The returned language must exist
-   * within the CMSMS Install.
-   *
-   * @return string language name
-   */
-  abstract public function find_language();
-
+    /**
+     * Abstract function to determine a language.
+     * This method may use cookies, session data, user preferences, values from the url
+     * or from the browser to determine a language.  The returned language must exist
+     * within the CMSMS Install.
+     *
+     * @return string language name
+     */
+    abstract public function find_language();
 } // end of class
 
 #

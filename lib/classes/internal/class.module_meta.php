@@ -38,8 +38,11 @@ use \ModuleOperations;
  */
 final class module_meta
 {
+
     static private $_instance = null;
+
     private $_data = array();
+
     private $_driver;
 
     private function __construct()

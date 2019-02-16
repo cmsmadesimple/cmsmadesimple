@@ -35,6 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 use \ModuleManager\utils as modmgr_utils;
+
 if( !isset($gCms) ) exit;
 
 global $CMS_VERSION;
@@ -45,76 +46,76 @@ $writable = is_writable( $moduledir );
 $results = array();
 
 if( !empty($newversions) ) {
-	foreach( $newversions as $row ) {
-		$txt = '';
-		$onerow = new stdClass();
-		$onerow->txt = $onerow->error = $onerow->age = $onerow->depends_url = $onerow->about_url = $onerow->help_url = $onerow->helplink = $onerow->aboutlink = $onerow->dependslink = null;
-		foreach( $row as $key => $val ) {
-			$onerow->$key = $val;
-		}
+    foreach( $newversions as $row ) {
+        $txt = '';
+        $onerow = new stdClass();
+        $onerow->txt = $onerow->error = $onerow->age = $onerow->depends_url = $onerow->about_url = $onerow->help_url = $onerow->helplink = $onerow->aboutlink = $onerow->dependslink = null;
+        foreach( $row as $key => $val ) {
+            $onerow->$key = $val;
+        }
 
-		$mod = $this->GetModuleInstance($row['name']);
-		if( !is_object($mod) ) {
-			$onerow->error = $this->Lang('error_module_object',$row['name']);
-		}
-		else {
-			$mver = $mod->GetVersion();
-			if( version_compare($row['version'],$mver) > 0 ) {
-				$modinst = cms_utils::get_module($row['name']);
-				if( is_object($modinst) ) $onerow->haveversion = $modinst->GetVersion();
+        $mod = $this->GetModuleInstance($row['name']);
+        if( !is_object($mod) ) {
+            $onerow->error = $this->Lang('error_module_object',$row['name']);
+        }
+        else {
+            $mver = $mod->GetVersion();
+            if( version_compare($row['version'],$mver) > 0 ) {
+                $modinst = cms_utils::get_module($row['name']);
+                if( is_object($modinst) ) $onerow->haveversion = $modinst->GetVersion();
 
-				$onerow->age = modmgr_utils::get_status($row['date']);
-				$onerow->downloads = $row['downloads'];
-				$onerow->date = $row['date'];
-				$onerow->age = modmgr_utils::get_status($row['date']);
+                $onerow->age = modmgr_utils::get_status($row['date']);
+                $onerow->downloads = $row['downloads'];
+                $onerow->date = $row['date'];
+                $onerow->age = modmgr_utils::get_status($row['date']);
 
-				$onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
-				$onerow->version = $row['version'];
+                $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
+                $onerow->version = $row['version'];
 
-				$onerow->help_url = $this->create_url($id,'modulehelp',$returnid,
-													  array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
-				$onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid, $this->Lang('helptxt'),
-													   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->help_url = $this->create_url($id,'modulehelp',$returnid,
+                     array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid, $this->Lang('helptxt'),
+                      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
-				$onerow->depends_url = $this->create_url( $id, 'moduledepends', $returnid,
-														  array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->depends_url = $this->create_url( $id, 'moduledepends', $returnid,
+                      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
-				$onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
-														  $this->Lang('dependstxt'),
-														  array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
+                      $this->Lang('dependstxt'),
+                      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
-				$onerow->about_url = $this->create_url( $id, 'moduleabout', $returnid,
-														array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->about_url = $this->create_url( $id, 'moduleabout', $returnid,
+                    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
-				$onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
-														$this->Lang('abouttxt'),
-														array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+                $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
+                    $this->Lang('abouttxt'),
+                    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
-				$onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
-				if( isset( $row['description'] ) ) $onerow->description=$row['description'];
-				$onerow->txt= $this->Lang('upgrade_available',$row['version'],$mver);
-				$moddir = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-				if( (($writable && is_dir($moddir) && is_directory_writable( $moddir )) ||
-					 ($writable && !file_exists( $moddir ) )) && $caninstall ) {
-					if( (!empty($row['maxcmsversion']) && version_compare($CMS_VERSION,$row['maxcmsversion']) > 0) ||
-						(!empty($row['mincmsversion']) && version_compare($CMS_VERSION,$row['mincmsversion']) < 0) ) {
-						$onerow->status = 'incompatible';
-					} else {
-						$onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
-															 $this->Lang('upgrade'),
-															 array('name' => $row['name'],'version' => $row['version'],
-																   'filename' => $row['filename'],'size' => $row['size'],
-																   'active_tab'=>'newversions','reset_prefs' => 1));
-					}
-				}
-				else {
-					$onerow->status = $this->Lang('cantdownload');
-				}
-			}
-		}
+                $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
+                if( isset( $row['description'] ) ) $onerow->description=$row['description'];
+                $onerow->txt= $this->Lang('upgrade_available',$row['version'],$mver);
+                $moddir = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+                if( (($writable && is_dir($moddir) && is_directory_writable( $moddir )) ||
+                  ($writable && !file_exists( $moddir ) )) && $caninstall ) {
+                    if( (!empty($row['maxcmsversion']) && version_compare($CMS_VERSION,$row['maxcmsversion']) > 0) ||
+                        (!empty($row['mincmsversion']) && version_compare($CMS_VERSION,$row['mincmsversion']) < 0) ) {
+                           $onerow->status = 'incompatible';
+                    } else {
+                        $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
+                        $this->Lang('upgrade'),
+                        array('name' => $row['name'],'version' => $row['version'],
+                        'filename' => $row['filename'],'size' => $row['size'],
+                        'active_tab'=>'newversions','reset_prefs' => 1));
+                    }
+                }
+                else {
+                    $onerow->status = $this->Lang('cantdownload');
+                }
+            }
+        }
 
-		$results[] = $onerow;
-	}
+        $results[] = $onerow;
+    }
 }
 
 if( !count($results) ) {

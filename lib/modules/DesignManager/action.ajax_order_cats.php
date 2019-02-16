@@ -22,25 +22,26 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Templates') ) return;
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+}
 
 $out = null;
 try {
-	if( isset($_GET['cat']) && is_array($_GET['cat']) && count($_GET['cat']) > 0 ) {
-		foreach( $_GET['cat'] as $idx => $cat_id ) {
-			$cat = CmsLayoutTemplateCategory::load($cat_id);
-			$cat->set_item_order($idx+1);
-			$cat->save();
-		}
-	}
-	audit('',$this->GetName(),'Category order changed');
-	$out = $this->Lang('category_reordered');
-	$response = 'success';
+    if( isset($_GET['cat']) && is_array($_GET['cat']) && count($_GET['cat']) > 0 ) {
+        foreach( $_GET['cat'] as $idx => $cat_id ) {
+            $cat = CmsLayoutTemplateCategory::load($cat_id);
+            $cat->set_item_order($idx+1);
+            $cat->save();
+        }
+    }
+    audit('',$this->GetName(),'Category order changed');
+    $out = $this->Lang('category_reordered');
+    $response = 'success';
 }
 catch( CmsException $e ) {
     cms_warning('Problem working with category in ajax: '.$e->GetMessage());
-	$out = 'ERROR: '.$e->GetMessage();
-	$response = 'error';
+    $out = 'ERROR: '.$e->GetMessage();
+    $response = 'error';
 }
 
 $this->GetJSONResponse($response, $out);

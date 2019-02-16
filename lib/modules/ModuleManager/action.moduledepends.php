@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2008 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -40,38 +40,38 @@ $this->SetCurrentTab('modules');
 
 $name = get_parameter_value($params,'name');
 if( !$name ) {
-  $this->SetError($this->Lang('error_insufficientparams'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_insufficientparams'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $version = get_parameter_value($params,'version');
 if( !$version ) {
-  $this->SetError($this->Lang('error_insufficientparams'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_insufficientparams'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $url = $this->GetPreference('module_repository');
 if( !$url ) {
-  $this->SetError($this->Lang('error_norepositoryurl'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_norepositoryurl'));
+    $this->RedirectToAdminTab();
+    return;
 }
 $url .= '/modulehelp';
 
 $xmlfile = get_parameter_value($params,'filename');
 if( !$xmlfile ) {
-  $this->SetError($this->Lang('error_nofilename'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_nofilename'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $depends = modulerep_client::get_module_depends($xmlfile);
 if( !is_array($depends) || count($depends) != 2 || $depends[0] == false ) {
-  $this->SetError($depends[1]);
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($depends[1]);
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $smarty->assign('title',$this->Lang('dependstxt'));
@@ -82,19 +82,19 @@ $smarty->assign('modulename',$name);
 $smarty->assign('moduleversion',$version);
 $smarty->assign('xmlfile',$xmlfile);
 $smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
-$smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+$smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
 
 $depends = $depends[1];
 $txt = '';
 if( is_array($depends) ) {
-  $txt = '<ul>';
-  foreach( $depends as $one ) {
-    $txt .= '<li>'.$one['name'].' => '.$one['version'].'</li>';
-  }
-  $txt .= '</ul>';
+    $txt = '<ul>';
+    foreach( $depends as $one ) {
+        $txt .= '<li>'.$one['name'].' => '.$one['version'].'</li>';
+    }
+    $txt .= '</ul>';
 }
 else {
-  $txt = $this->Lang('msg_nodependencies');
+    $txt = $this->Lang('msg_nodependencies');
 }
 $smarty->assign('content',$txt);
 echo $this->ProcessTemplate('remotecontent.tpl');

@@ -31,18 +31,18 @@
  */
 function cms_module_ListTemplates(&$modinstance, $modulename = '')
 {
-	$db = CmsApp::get_instance()->GetDb();
-	$retresult = array();
+    $db = CmsApp::get_instance()->GetDb();
+    $retresult = array();
 
-	$query = 'SELECT * from '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? ORDER BY template_name ASC';
-	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName()));
+    $query = 'SELECT * from '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? ORDER BY template_name ASC';
+    $result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName()));
 
-	while (isset($result) && !$result->EOF) {
-		$retresult[] = $result->fields['template_name'];
-		$result->MoveNext();
-	}
+    while (isset($result) && !$result->EOF) {
+        $retresult[] = $result->fields['template_name'];
+        $result->MoveNext();
+    }
 
-	return $retresult;
+    return $retresult;
 }
 
 /**
@@ -52,17 +52,17 @@ function cms_module_ListTemplates(&$modinstance, $modulename = '')
  */
 function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
 {
-	$db = CmsApp::get_instance()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
 
-	$query = 'SELECT * from '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? and template_name = ?';
-	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
+    $query = 'SELECT * from '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? and template_name = ?';
+    $result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 
-	if ($result && $result->RecordCount() > 0) {
-		$row = $result->FetchRow();
-		return $row['content'];
-	}
+    if ($result && $result->RecordCount() > 0) {
+        $row = $result->FetchRow();
+        return $row['content'];
+    }
 
-	return '';
+    return '';
 }
 
 /**
@@ -72,19 +72,19 @@ function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
  */
 function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 {
-	$ok = (strpos($template_name, '..') === false);
-	if (!$ok) return;
+    $ok = (strpos($template_name, '..') === false);
+    if (!$ok) return;
 
-	$tpl_base  = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
-	$tpl_base .= $modinstance->GetName().DIRECTORY_SEPARATOR.'templates';
-	$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name;
-	if( !endswith($template,'.tpl') ) $template .= '.tpl';
-	if (is_file($template)) {
-		return file_get_contents($template);
-	}
-	else {
-		return null;
-	}
+    $tpl_base  = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
+    $tpl_base .= $modinstance->GetName().DIRECTORY_SEPARATOR.'templates';
+    $template = $tpl_base.DIRECTORY_SEPARATOR.$template_name;
+    if( !endswith($template,'.tpl') ) $template .= '.tpl';
+    if (is_file($template)) {
+        return file_get_contents($template);
+    }
+    else {
+        return null;
+    }
 }
 
 /**
@@ -92,20 +92,20 @@ function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
  */
 function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename = '')
 {
-	$db = CmsApp::get_instance()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
 
-	$query = 'SELECT module_name FROM '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? and template_name = ?';
-	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
+    $query = 'SELECT module_name FROM '.CMS_DB_PREFIX.'module_templates WHERE module_name = ? and template_name = ?';
+    $result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 
-	$time = $db->DBTimeStamp(time());
-	if ($result && $result->RecordCount() < 1) {
-		$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
-		$db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name, $content));
-	}
-	else {
-		$query = 'UPDATE '.CMS_DB_PREFIX.'module_templates SET content = ?, modified_date = '.$time.' WHERE module_name = ? AND template_name = ?';
-		$db->Execute($query, array($content, $modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
-	}
+    $time = $db->DBTimeStamp(time());
+    if ($result && $result->RecordCount() < 1) {
+        $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
+        $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name, $content));
+    }
+    else {
+        $query = 'UPDATE '.CMS_DB_PREFIX.'module_templates SET content = ?, modified_date = '.$time.' WHERE module_name = ? AND template_name = ?';
+        $db->Execute($query, array($content, $modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
+    }
 }
 
 /**
@@ -113,14 +113,14 @@ function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename 
  */
 function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = '')
 {
-	$db = CmsApp::get_instance()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
 
-	$parms = array($modulename != ''?$modulename:$modinstance->GetName());
-	$query = "DELETE FROM ".CMS_DB_PREFIX."module_templates WHERE module_name = ?";
-	if( $tpl_name != '' ) {
-		$query .= 'AND template_name = ?';
-	    $parms[] = $tpl_name;
-	}
-	$result = $db->Execute($query, $parms);
-	return ($result == false)?false:true;
+    $parms = array($modulename != ''?$modulename:$modinstance->GetName());
+    $query = "DELETE FROM ".CMS_DB_PREFIX."module_templates WHERE module_name = ?";
+    if( $tpl_name != '' ) {
+        $query .= 'AND template_name = ?';
+        $parms[] = $tpl_name;
+    }
+    $result = $db->Execute($query, $parms);
+    return ($result == false)?false:true;
 }

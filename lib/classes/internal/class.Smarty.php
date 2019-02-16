@@ -32,6 +32,7 @@ namespace CMSMS\internal;
  */
 class Smarty extends smarty_base_template
 {
+
     private static $_instance;
 
     /**
@@ -146,17 +147,17 @@ class Smarty extends smarty_base_template
                 if( !is_array($parts) || count($parts) != 3 ) continue;
 
                 switch( $parts[0] ) {
-                case 'output':
-                    $output[] = $parts[1];
-                    break;
+                    case 'output':
+                        $output[] = $parts[1];
+                        break;
 
-                case 'prefilter':
-                    $pre[] = $parts[1];
-                    break;
+                    case 'prefilter':
+                        $pre[] = $parts[1];
+                        break;
 
-                case 'postfilter':
-                    $post[] = $parts[1];
-                    break;
+                    case 'postfilter':
+                        $post[] = $parts[1];
+                        break;
                 }
             }
         }
@@ -306,7 +307,6 @@ class Smarty extends smarty_base_template
         // count($_name_parts) < 3 === !isset($_name_parts[2])
         if (!isset($_name_parts[2]) || strtolower($_name_parts[0]) !== 'smarty') {
             throw new SmartyException("plugin {$plugin_name} is not a valid name format");
-            return false;
         }
 
         // if type is "internal", get plugin from sysplugins
@@ -342,5 +342,4 @@ class Smarty extends smarty_base_template
         // no plugin loaded
         return false;
     }
-
 } // end of class

@@ -36,7 +36,7 @@ $group_name="";
 
 if (isset($_POST["cancel"])) {
     redirect("changegroupassign.php".$urlext);
-return;
+    return;
 }
 
 $userid = get_userid();
@@ -111,7 +111,7 @@ if ($submitted == 1) {
     }
 
     // put mention into the admin log
-	audit($userid, 'Assignment User ID: '.$userid, 'Changed');
+    audit($userid, 'Assignment User ID: '.$userid, 'Changed');
     $message = lang('assignmentchanged');
     $gCms->clear_cached_files();
 }

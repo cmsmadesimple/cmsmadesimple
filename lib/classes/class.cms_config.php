@@ -75,7 +75,8 @@ final class cms_config implements ArrayAccess
     /**
      * ignore
      */
-    private function __construct()  {}
+    private function __construct()  {
+    }
 
     /**
      * Retrieve the maximum file upload size (in bytes)
@@ -88,7 +89,8 @@ final class cms_config implements ArrayAccess
             $i=0;$ss='';$x=0;
             while ($i < $l) {
                 if (is_numeric($maxFileSize[$i]))
-				{$ss .= $maxFileSize[$i];}
+                {$ss .= $maxFileSize[$i];
+                }
                 else {
                     if (strtolower($maxFileSize[$i]) == 'g') $x=1000000000;
                     if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
@@ -210,17 +212,17 @@ final class cms_config implements ArrayAccess
             foreach( $config as $key => &$value ) {
                 if( isset($this->_types[$key]) ) {
                     switch( $this->_types[$key] ) {
-                    case self::TYPE_BOOL:
-                        $value = cms_to_bool($value);
-                        break;
+                        case self::TYPE_BOOL:
+                            $value = cms_to_bool($value);
+                            break;
 
-                    case self::TYPE_STRING:
-                        $value = trim($value);
-                        break;
+                        case self::TYPE_STRING:
+                              $value = trim($value);
+                            break;
 
-                    case self::TYPE_INT:
-                        $value = (int)$value;
-                        break;
+                        case self::TYPE_INT:
+                            $value = (int)$value;
+                            break;
                     }
                 }
             }
@@ -324,7 +326,6 @@ final class cms_config implements ArrayAccess
                  */
                 define('CMS_ROOT_URL',self::$_instance['root_url']);
 
-
                 /**
                  * A constant containing the CMSMS uploads url.
                  * If the uploads_url is not specified in the config file, then CMSMS will calculate one from the root url.
@@ -370,28 +371,28 @@ final class cms_config implements ArrayAccess
         // hardcoded config vars
         // usually old values valid in past versions.
         switch( $key ) {
-        case 'use_adodb_lite':
-        case 'use_hierarchy':
-            // deprecated, backwards compat only
-            return TRUE;
+            case 'use_adodb_lite':
+            case 'use_hierarchy':
+                // deprecated, backwards compat only
+                return TRUE;
 
-        case 'use_smarty_php_tags':
-        case 'output_compression':
-            // deprecated, backwards compat only
-            return FALSE;
+            case 'use_smarty_php_tags':
+            case 'output_compression':
+                // deprecated, backwards compat only
+                return FALSE;
 
-        case 'default_upload_permission':
-            $mask = octdec(cms_siteprefs::get('global_umask','0022'));
-            $val = 0666 & ~$mask;
-            return sprintf('%o',$val);
+            case 'default_upload_permission':
+                $mask = octdec(cms_siteprefs::get('global_umask','0022'));
+                $val = 0666 & ~$mask;
+                return sprintf('%o',$val);
 
-        case 'assume_mod_rewrite':
-            // deprecated, backwards compat only
-            return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
+            case 'assume_mod_rewrite':
+                // deprecated, backwards compat only
+                return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
 
-        case 'internal_pretty_urls':
-            // deprecated, backwards compat only
-            return ($this['url_rewriting'] == 'internal')?true:false;
+            case 'internal_pretty_urls':
+                // deprecated, backwards compat only
+                return ($this['url_rewriting'] == 'internal')?true:false;
         }
 
         // from the config file.
@@ -402,185 +403,183 @@ final class cms_config implements ArrayAccess
 
         // it's not explicitly specified in the config file.
         switch( $key ) {
-        case 'dbms':
-        case 'db_hostname':
-        case 'db_username':
-        case 'db_password':
-        case 'db_name':
-            // these guys have to be set
-            stack_trace();
-            die('FATAL ERROR: Could not find database connection key "'.$key.'" in the config file');
-            break;
+            case 'dbms':
+            case 'db_hostname':
+            case 'db_username':
+            case 'db_password':
+            case 'db_name':
+                // these guys have to be set
+                die('FATAL ERROR: Could not find database connection key "'.$key.'" in the config file');
 
-        case 'db_prefix':
-            return 'cms_';
+            case 'db_prefix':
+                return 'cms_';
 
-        case 'query_var':
-            return 'page';
+            case 'query_var':
+                return 'page';
 
-        case 'permissive_smarty':
-        case 'persist_db_conn':
-            return false;
+            case 'permissive_smarty':
+            case 'persist_db_conn':
+                return false;
 
-        case 'smart_urls':
-        case 'set_names':
-            return true;
+            case 'smart_urls':
+            case 'set_names':
+                return true;
 
-        case 'content_processing_mode':
-            return 2;
+            case 'content_processing_mode':
+                return 2;
 
-        case 'root_path':
-            $out = dirname(dirname(__DIR__)); // realpath here?
-            $this->_cache[$key] = $out;
-            return $out;
+            case 'root_path':
+                $out = dirname(dirname(__DIR__)); // realpath here?
+                $this->_cache[$key] = $out;
+                return $out;
 
-        case 'root_url':
-            if( !isset($_SERVER['HTTP_HOST']) ) return;
-            $parts = parse_url($_SERVER['PHP_SELF']);
-            $path = '';
-            if( !empty($parts['path']) ) {
-                $path = dirname($parts['path']);
-                if( endswith($path,'install') ) {
-                    $path = substr($path,0,strlen($path)-strlen('install')-1);
-                }
-                else if( endswith($path,$this->offsetGet('admin_dir')) ) {
-                    $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
-                }
-                else if (strstr($path,'/lib') !== FALSE) {
-                    while( strstr($path,'/lib') !== FALSE ) {
-                        $path = dirname($path);
+            case 'root_url':
+                if( !isset($_SERVER['HTTP_HOST']) ) return;
+                $parts = parse_url($_SERVER['PHP_SELF']);
+                $path = '';
+                if( !empty($parts['path']) ) {
+                      $path = dirname($parts['path']);
+                    if( endswith($path,'install') ) {
+                          $path = substr($path,0,strlen($path)-strlen('install')-1);
                     }
+                    else if( endswith($path,$this->offsetGet('admin_dir')) ) {
+                          $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+                    }
+                    else if (strstr($path,'/lib') !== FALSE) {
+                        while( strstr($path,'/lib') !== FALSE ) {
+                            $path = dirname($path);
+                        }
+                    }
+                    while(endswith($path, DIRECTORY_SEPARATOR)) {
+                          $path = substr($path,0,strlen($path)-1);
+                    }
+                      if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
                 }
-                while(endswith($path, DIRECTORY_SEPARATOR)) {
-                    $path = substr($path,0,strlen($path)-1);
+                $prefix = 'http://';
+                if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
+                $str = $prefix.$this->calculate_request_hostname().$path;
+                $this->_cache[$key] = $str;
+                return $str;
+
+            case 'pr_root_url':
+                $str = $this->offsetGet('root_url');
+                if( startswith($str,'http:') ) {
+                      $str = substr($str,5);
                 }
-                if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
-            }
-            $prefix = 'http://';
-            if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
-            $str = $prefix.$this->calculate_request_hostname().$path;
-            $this->_cache[$key] = $str;
-            return $str;
+                else if( startswith($str,'https:') ) {
+                      $str = substr($str,6);
+                }
+                $this->_cache[$key] = $str;
+                return $str;
 
-        case 'pr_root_url':
-            $str = $this->offsetGet('root_url');
-            if( startswith($str,'http:') ) {
-                $str = substr($str,5);
-            }
-            else if( startswith($str,'https:') ) {
-                $str = substr($str,6);
-            }
-            $this->_cache[$key] = $str;
-            return $str;
+            case 'ssl_url':
+                // as of v2.3 this is just an alias for the root_url
+                return $this->offsetGet('root_url');
 
-        case 'ssl_url':
-            // as of v2.3 this is just an alias for the root_url
-            return $this->offsetGet('root_url');
+            case 'uploads_path':
+                $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'uploads');
+                return $this->_cache[$key];
 
-        case 'uploads_path':
-            $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'uploads');
-            return $this->_cache[$key];
+            case 'uploads_url':
+                $this->_cache[$key] = $this->offsetGet('root_url').'/uploads';
+                return $this->_cache[$key];
 
-        case 'uploads_url':
-            $this->_cache[$key] = $this->offsetGet('root_url').'/uploads';
-            return $this->_cache[$key];
+            case 'ssl_uploads_url':
+                // as of v2.3 this is just an alias for the uploads_url
+                return $this->offsetGet('uploads_url');
 
-        case 'ssl_uploads_url':
-            // as of v2.3 this is just an alias for the uploads_url
-            return $this->offsetGet('uploads_url');
+            case 'image_uploads_path':
+                $this->_cache[$key] = cms_join_path($this->offsetGet('uploads_path'),'images');
+                return $this->_cache[$key];
 
-        case 'image_uploads_path':
-            $this->_cache[$key] = cms_join_path($this->offsetGet('uploads_path'),'images');
-            return $this->_cache[$key];
+            case 'image_uploads_url':
+                $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
+                return $this->_cache[$key];
 
-        case 'image_uploads_url':
-            $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
-            return $this->_cache[$key];
+            case 'ssl_image_uploads_url':
+                // as of v2.3 this is just an alias for the image_uploads_url
+                return $this->offsetGet('image_uploads_url');
 
-        case 'ssl_image_uploads_url':
-            // as of v2.3 this is just an alias for the image_uploads_url
-            return $this->offsetGet('image_uploads_url');
+            case 'previews_path':
+                return TMP_CACHE_LOCATION;
 
-        case 'previews_path':
-            return TMP_CACHE_LOCATION;
+            case 'admin_dir':
+                return 'admin';
 
-        case 'admin_dir':
-            return 'admin';
+            case 'debug':
+                return false;
 
-        case 'debug':
-            return false;
+            case 'timezone':
+                return '';
 
-        case 'timezone':
-            return '';
+            case 'assets_dir':
+                return 'assets';
 
-        case 'assets_dir':
-            return 'assets';
+            case 'assets_path':
+                $this->_cache[$key] =  cms_join_path($this->OffsetGet('root_path'), $this->OffsetGet('assets_dir') );
+                return $this->_cache[$key];
 
-        case 'assets_path':
-            $this->_cache[$key] =  cms_join_path($this->OffsetGet('root_path'), $this->OffsetGet('assets_dir') );
-            return $this->_cache[$key];
+            case 'assets_url':
+                $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('assets_dir');
+                return $this->_cache[$key];
 
-        case 'assets_url':
-            $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('assets_dir');
-            return $this->_cache[$key];
+            case 'db_port':
+                return '';
 
-        case 'db_port':
-            return '';
+            case 'max_upload_size':
+            case 'upload_max_filesize':
+                $this->_cache[$key] = $this->get_upload_size();
+                return $this->_cache[$key];
 
-        case 'max_upload_size':
-        case 'upload_max_filesize':
-            $this->_cache[$key] = $this->get_upload_size();
-            return $this->_cache[$key];
+            case 'auto_alias_content':
+                return true;
 
-        case 'auto_alias_content':
-            return true;
+            case 'url_rewriting':
+                return 'none';
 
-        case 'url_rewriting':
-            return 'none';
+            case 'page_extension':
+                return '';
 
-        case 'page_extension':
-            return '';
+            case 'locale':
+                return '';
 
-        case 'locale':
-            return '';
+            case 'default_encoding':
+            case 'admin_encoding':
+                return 'utf-8';
 
-        case 'default_encoding':
-        case 'admin_encoding':
-            return 'utf-8';
+            case 'admin_path':
+                $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));
+                return $this->_cache[$key];
 
-        case 'admin_path':
-            $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));
-            return $this->_cache[$key];
+            case 'admin_url':
+                $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
+                return $this->_cache[$key];
 
-        case 'admin_url':
-            $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
-            return $this->_cache[$key];
+            case 'ignore_lazy_load':
+                return false;
 
-        case 'ignore_lazy_load':
-            return false;
+            case 'css_path':
+                return PUBLIC_CACHE_LOCATION.DIRECTORY_SEPARATOR;
 
-        case 'css_path':
-            return PUBLIC_CACHE_LOCATION.DIRECTORY_SEPARATOR;
+            case 'css_url':
+                return PUBLIC_CACHE_URL;
 
-        case 'css_url':
-            return PUBLIC_CACHE_URL;
+            case 'tmp_cache_location':
+            case 'public_cache_location':
+                $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+                return $this->_cache[$key];
 
-        case 'tmp_cache_location':
-        case 'public_cache_location':
-            $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','cache');
-            return $this->_cache[$key];
+            case 'public_cache_url':
+                $this->_cache[$key] = $this->offsetGet('root_url').'/tmp/cache';
+                return $this->_cache[$key];
 
-        case 'public_cache_url':
-            $this->_cache[$key] = $this->offsetGet('root_url').'/tmp/cache';
-            return $this->_cache[$key];
+            case 'tmp_templates_c_location':
+                $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
+                return $this->_cache[$key];
 
-        case 'tmp_templates_c_location':
-            $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
-            return $this->_cache[$key];
-
-        default:
-            // not a mandatory key for the config.php file... and one we don't understand.
-            return null;
+            default:
+                // not a mandatory key for the config.php file... and one we don't understand.
+                return null;
         }
     }
 
@@ -615,17 +614,17 @@ final class cms_config implements ArrayAccess
 
         $str = '';
         switch( $type ) {
-        case self::TYPE_STRING:
-            $str = "'".$value."'";
-            break;
+            case self::TYPE_STRING:
+                $str = "'".$value."'";
+                break;
 
-        case self::TYPE_BOOL:
-            $str = ($value)?'true':'false';
-            break;
+            case self::TYPE_BOOL:
+                $str = ($value)?'true':'false';
+                break;
 
-        case self::TYPE_INT:
-            $str = (int)$value;
-            break;
+            case self::TYPE_INT:
+                $str = (int)$value;
+                break;
         }
         return $str;
     }

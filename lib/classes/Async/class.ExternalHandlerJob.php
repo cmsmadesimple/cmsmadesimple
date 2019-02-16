@@ -72,14 +72,14 @@ class ExternalHandlerJob extends Job
     public function __get($key)
     {
         switch( $key ) {
-        case 'function':
-            return trim($this->_data[$key]);
+            case 'function':
+                return trim($this->_data[$key]);
 
-        case 'is_udt':
-            return (bool) $this->_data[$key];
+            case 'is_udt':
+                return (bool) $this->_data[$key];
 
-        default:
-            return parent::__get($key);
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -89,16 +89,16 @@ class ExternalHandlerJob extends Job
     public function __set($key,$val)
     {
         switch( $key ) {
-        case 'function':
-            $this->_data[$key] = trim($val);
-            break;
+            case 'function':
+                $this->_data[$key] = trim($val);
+                break;
 
-        case 'is_udt':
-            $this->_data[$key] = cms_to_bool($val);
-            break;
+            case 'is_udt':
+                $this->_data[$key] = cms_to_bool($val);
+                break;
 
-        default:
-            return parent::__set($key,$val);
+            default:
+                return parent::__set($key,$val);
         }
     }
 

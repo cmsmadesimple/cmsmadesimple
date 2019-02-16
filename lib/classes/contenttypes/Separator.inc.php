@@ -39,56 +39,77 @@
 class Separator extends ContentBase
 {
 
-    function SetProperties()
+    public function SetProperties()
     {
-		parent::SetProperties();
-		$this->RemoveProperty('secure',0);
-		$this->RemoveProperty('template','-1');
-		$this->RemoveProperty('alias','');
-		$this->RemoveProperty('title','');
-		$this->RemoveProperty('menutext','');
-		$this->RemoveProperty('target','');
-		$this->RemoveProperty('accesskey','');
-		$this->RemoveProperty('titleattribute','');
-		$this->RemoveProperty('cachable',true);
-		$this->RemoveProperty('page_url','');
-		$this->RemoveProperty('tabindex','');
+        parent::SetProperties();
+        $this->RemoveProperty('secure',0);
+        $this->RemoveProperty('template','-1');
+        $this->RemoveProperty('alias','');
+        $this->RemoveProperty('title','');
+        $this->RemoveProperty('menutext','');
+        $this->RemoveProperty('target','');
+        $this->RemoveProperty('accesskey','');
+        $this->RemoveProperty('titleattribute','');
+        $this->RemoveProperty('cachable',true);
+        $this->RemoveProperty('page_url','');
+        $this->RemoveProperty('tabindex','');
     }
 
-    function GetURL(bool $rewrite = true) { return '#';  }
-	function IsViewable() { return FALSE; }
-    function FriendlyName() { return lang('contenttype_separator'); }
-    function HasUsableLink() { return false; }
-    function WantsChildren() { return false; }
-    function RequiresAlias() { return FALSE; }
-	public function HasSearchableContent() { return FALSE; }
-
-    function TabNames()
+    public function GetURL(bool $rewrite = true)
     {
-		$res = array(lang('main'));
-		if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
-		return $res;
+        return '#';
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function IsViewable()
     {
-		switch($tab) {
-		case '0':
-			return $this->display_attributes($adding);
-			break;
-		case '1':
-			return $this->display_attributes($adding,1);
-			break;
-		}
+        return FALSE;
     }
 
-    function ValidateData()
+    public function FriendlyName()
     {
-		$this->mName = CMS_CONTENT_HIDDEN_NAME;
-		return parent::ValidateData();
+        return lang('contenttype_separator');
     }
 
-}
+    public function HasUsableLink()
+    {
+        return false;
+    }
 
+    public function WantsChildren()
+    {
+        return false;
+    }
 
-?>
+    public function RequiresAlias()
+    {
+        return FALSE;
+    }
+
+    public function HasSearchableContent()
+    {
+        return FALSE;
+    }
+
+    public function TabNames()
+    {
+        $res = array(lang('main'));
+        if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
+        return $res;
+    }
+
+    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+        switch($tab) {
+            case '0':
+                return $this->display_attributes($adding);
+            case '1':
+                return $this->display_attributes($adding,1);
+        }
+    }
+
+    public function ValidateData()
+    {
+        $this->mName = CMS_CONTENT_HIDDEN_NAME;
+        return parent::ValidateData();
+    }
+} // class

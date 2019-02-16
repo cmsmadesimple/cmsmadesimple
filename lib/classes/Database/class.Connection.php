@@ -197,7 +197,10 @@ namespace CMSMS\Database {
         /**
          * An alias for Disconnect.
          */
-        final public function Close() { return $this->Disconnect(); }
+        final public function Close()
+        {
+            return $this->Disconnect();
+        }
 
         //// utilities
 
@@ -302,21 +305,21 @@ namespace CMSMS\Database {
                     foreach( $arr as $v ) {
                         $sql .= $sqlarr[$i];
                         switch(gettype($v)){
-						case 'string':
-							$sql .= $this->qstr($v);
-							break;
-						case 'double':
-							$sql .= str_replace(',', '.', $v);
-							break;
-						case 'boolean':
-							$sql .= $v ? 1 : 0;
-							break;
-                        case 'integer':
-                            $sql .= $v;
-                            break;
-						default:
-							if ($v === null) $sql .= 'NULL';
-							else $sql .=$this->qstr( (string) $v );
+                            case 'string':
+                                $sql .= $this->qstr($v);
+							                         break;
+                            case 'double':
+                                $sql .= str_replace(',', '.', $v);
+							                         break;
+                            case 'boolean':
+                                $sql .= $v ? 1 : 0;
+							                         break;
+                            case 'integer':
+                                $sql .= $v;
+                                break;
+                            default:
+                                if ($v === null) $sql .= 'NULL';
+                                else $sql .=$this->qstr( (string) $v );
                         }
                         $i += 1;
                     }
@@ -378,7 +381,7 @@ namespace CMSMS\Database {
          *
          * @deprecated
          * @see Pear::getAssoc()
-	 * @param string $sql The SQL statement to execute
+         * @param string $sql The SQL statement to execute
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @param bool $force_array Force each element of the output to be an associative array.
          * @param bool $first2cols Only output the first 2 columns in an associative array.  Does not work with force_array.
@@ -596,14 +599,20 @@ namespace CMSMS\Database {
          *
          * @return int
          */
-        public function Time() { return $this->UnixTimeStamp(); }
+        public function Time()
+        {
+            return $this->UnixTimeStamp();
+        }
 
         /**
          * An Alias for the UnixDate method.
          *
          * @return int
          */
-        public function Date() { return $this->UnixDate(); }
+        public function Date()
+        {
+            return $this->UnixDate();
+        }
 
         //// error and debug message handling
 
@@ -684,11 +693,11 @@ namespace CMSMS\Database {
             }
 
             switch( $errtype ) {
-            case self::ERROR_CONNECT:
-                throw new DatabaseConnectionException($error_message,$error_number);
+                case self::ERROR_CONNECT:
+                    throw new DatabaseConnectionException($error_message,$error_number);
 
-            case self::ERROR_EXECUTE:
-                throw new DatabaseException($error_message,$error_number,$this->sql,$this->_connectionSpec);
+                case self::ERROR_EXECUTE:
+                    throw new DatabaseException($error_message,$error_number,$this->sql,$this->_connectionSpec);
             }
         }
 
@@ -700,7 +709,7 @@ namespace CMSMS\Database {
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
-	 * @todo  Move this into a factory class
+         * @todo  Move this into a factory class
          */
         public static function &Initialize(ConnectionSpec $spec)
         {
@@ -716,7 +725,6 @@ namespace CMSMS\Database {
             if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
             return $obj;
         }
-
     } // end of class
 
     /**
@@ -724,6 +732,7 @@ namespace CMSMS\Database {
      */
     class DatabaseException extends \LogicException
     {
+
         /**
          * @internal
          */
@@ -753,19 +762,27 @@ namespace CMSMS\Database {
          * Get the SQL statement related to this exception.
          * @return string
          */
-        public function getSQL() { return $this->_sql; }
+        public function getSQL()
+        {
+            return $this->_sql;
+        }
 
         /**
          * Get the Connectionspec that was used when generating the error.
          *
          * @return \CMSMS\Database\ConnectionSpec
          */
-        public function getConnectionSpec() { return $this->_connection; }
+        public function getConnectionSpec()
+        {
+            return $this->_connection;
+        }
     }
 
     /**
      * A special exception indicating a problem connecting to the database.
      */
-    class DatabaseConnectionException extends \Exception {}
+    class DatabaseConnectionException extends \Exception
+    {
+    }
 
 } // end of Namespace

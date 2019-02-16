@@ -3,7 +3,9 @@ namespace FilePicker;
 
 class PathAssistant
 {
+
     private $_topdir;
+
     private $_topurl;
 
     public function __construct(\cms_config $config, $topdir)

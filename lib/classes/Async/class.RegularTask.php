@@ -53,6 +53,7 @@ namespace CMSMS\Async;
  */
 class RegularTask extends Job
 {
+
     /**
      * @ignore
      */
@@ -76,10 +77,10 @@ class RegularTask extends Job
     public function __get($key)
     {
         switch( $key ) {
-        case 'task':
-            return $this->_task;
-        default:
-            return parent::__get($key);
+            case 'task':
+                return $this->_task;
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -89,13 +90,13 @@ class RegularTask extends Job
     public function __set($key,$val)
     {
         switch( $key ) {
-        case 'task':
-            if( !$val instanceof \CmsRegularTask ) throw new \LogicException('Invalid value for '.$key.' in a '.__CLASS__);
-            $this->_task = $val;
-            break;
+            case 'task':
+                if( !$val instanceof \CmsRegularTask ) throw new \LogicException('Invalid value for '.$key.' in a '.__CLASS__);
+                $this->_task = $val;
+                break;
 
-        default:
-            return parent::__set($key,$val);
+            default:
+                return parent::__set($key,$val);
         }
     }
 

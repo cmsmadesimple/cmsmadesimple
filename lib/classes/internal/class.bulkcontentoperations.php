@@ -35,51 +35,52 @@ namespace CMSMS\internal;
  **/
 final class bulkcontentoperations
 {
-	private function __construct() {}
-	private static $_list = array();
+    private function __construct() {
+    }
+    private static $_list = array();
 
-	/**
-	 * Register a function to show in the bulk content operations list
-	 * in listcontent.php.
-	 *
-	 * @param string $label Label to show to users
-	 * @param string $name Name of the action to call
-	 * @param string $module Name of module, defaults to "core"
-	 * @return void
-	 */
-	static public function register_function($label,$name,$module='core')
-	{
-      if( empty($name) || empty($label) ) return FALSE;
+    /**
+     * Register a function to show in the bulk content operations list
+     * in listcontent.php.
+     *
+     * @param string $label Label to show to users
+     * @param string $name Name of the action to call
+     * @param string $module Name of module, defaults to "core"
+     * @return void
+     */
+    static public function register_function($label,$name,$module='core')
+    {
+         if( empty($name) || empty($label) ) return FALSE;
 
-      $name = $module.'::'.$name;
-	  self::$_list[$name] = $label;
+         $name = $module.'::'.$name;
+        self::$_list[$name] = $label;
     }
 
-	/**
-	 * Gets a list of the registered bulk operations.
-	 *
-	 * @param bool $separate_modules Split out the actions from various modules
-	 *                                  with a horizontal line.
-	 * @return array The list of operations
-	 */
-	static public function get_operation_list($separate_modules = true)
+    /**
+     * Gets a list of the registered bulk operations.
+     *
+     * @param bool $separate_modules Split out the actions from various modules
+     *                                  with a horizontal line.
+     * @return array The list of operations
+     */
+    static public function get_operation_list($separate_modules = true)
     {
-		$tmpc = array();
-		$tmpm = array();
-		foreach( self::$_list as $name => $label ) {
-			if( startswith($name,'core::') ) {
-				$tmpc[$name] = $label;
-			}
-			else {
-				$tmpm[$name] = $label;
-			}
-		}
+        $tmpc = array();
+        $tmpm = array();
+        foreach( self::$_list as $name => $label ) {
+            if( startswith($name,'core::') ) {
+                $tmpc[$name] = $label;
+            }
+            else {
+                $tmpm[$name] = $label;
+            }
+        }
 
-		if( $separate_modules && count($tmpm) ) {
-			$tmpc[-1] = '----------';
-		}
-		$tmpc = array_merge($tmpc,$tmpm);
-		return $tmpc;
+        if( $separate_modules && count($tmpm) ) {
+            $tmpc[-1] = '----------';
+        }
+        $tmpc = array_merge($tmpc,$tmpm);
+        return $tmpc;
     }
 } // end of class
 

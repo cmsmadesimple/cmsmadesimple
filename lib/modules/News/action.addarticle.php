@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms))
-    exit ;
+    exit;
 
 if (!$this->CheckPermission('Modify News'))
     return;
@@ -220,11 +220,11 @@ if (isset($params['submit'])) {
                                               'extra' => $extra ));
             // put mention into the admin log
             audit($articleid, 'News: ' . $title, 'Article added');
-			$this->SetMessage($this->Lang('articleadded'));
+            $this->SetMessage($this->Lang('articleadded'));
             $this->Redirect($id, 'defaultadmin', $returnid);
         } // if !$error
     } // outer if !$error
-// end submit
+    // end submit
 } elseif (isset($params['preview'])) {
     // save data for preview.
     unset($params['apply']);
@@ -269,7 +269,7 @@ if (isset($params['submit'])) {
     }
     header('Content-Type: text/xml');
     echo $response;
-    exit ;
+    exit;
 }
 
 //

@@ -25,8 +25,8 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $cur_userid = get_userid();
 if( !check_permission($cur_userid, 'Manage Users') ) {
-die('Permission Denied');
-return;
+    die('Permission Denied');
+    return;
 }
 
 $dodelete = true;

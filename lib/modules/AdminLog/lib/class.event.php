@@ -16,25 +16,25 @@ class event
 
         foreach( $params as $key => $val ) {
             switch( $key ) {
-            case 'timestamp':
-            case 'severity':
-                $this->_data[$key] = (int) $val;
-                break;
+                case 'timestamp':
+                case 'severity':
+                    $this->_data[$key] = (int) $val;
+                    break;
 
-            case 'uid':
-            case 'item_id':
-                if( is_int($val) && $val > 0 ) $this->_data[$key] = $val;
-                break;
+                case 'uid':
+                case 'item_id':
+                    if( is_int($val) && $val > 0 ) $this->_data[$key] = $val;
+                    break;
 
-            case 'ip_addr':
-            case 'username':
-                if( is_string($val) ) $this->_data[$key] = $val;
-                break;
+                case 'ip_addr':
+                case 'username':
+                    if( is_string($val) ) $this->_data[$key] = $val;
+                    break;
 
-            case 'subject':
-            case 'msg':
-                $this->_data[$key] = trim($val);
-                break;
+                case 'subject':
+                case 'msg':
+                    $this->_data[$key] = trim($val);
+                    break;
             }
         }
 
@@ -47,23 +47,23 @@ class event
     public function __get( $key )
     {
         switch( $key ) {
-        case 'timestamp':
-        case 'severity':
-        case 'uid':
-            return (int) $this->_data[$key];
+            case 'timestamp':
+            case 'severity':
+            case 'uid':
+                return (int) $this->_data[$key];
 
-        case 'item_id':
-            if( !is_null($this->_data[$key]) ) return (int) $this->_data[$key];
-            return;
+            case 'item_id':
+                if( !is_null($this->_data[$key]) ) return (int) $this->_data[$key];
+                return;
 
-        case 'ip_addr':
-        case 'username':
-        case 'subject':
-        case 'msg':
-            return trim($this->_data[$key]);
+            case 'ip_addr':
+            case 'username':
+            case 'subject':
+            case 'msg':
+                return trim($this->_data[$key]);
 
-        default:
-            throw new \LogicException("$key is not a gettable member of ".__CLASS__);
+            default:
+                throw new \LogicException("$key is not a gettable member of ".__CLASS__);
         }
     }
 } // end of class

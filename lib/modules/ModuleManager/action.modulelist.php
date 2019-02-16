@@ -35,6 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 use \ModuleManager\utils as modmgr_utils;
+
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Modules') ) exit;
 
@@ -49,10 +50,10 @@ $repmodules = $repmodules[1];
 $instmodules = '';
 {
   $result = modmgr_utils::get_installed_modules();
-  if( ! $result[0] ) {
+if( ! $result[0] ) {
     $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
     return;
-  }
+}
 
   $instmodules = $result[1];
 }
@@ -62,92 +63,92 @@ $caninstall = (is_dir($dir) && is_writable($dir));
 
 $data = modmgr_utils::build_module_data($repmodules,$instmodules,false);
 if( count( $data ) ) {
-  $size = count($data);
+    $size = count($data);
 
-  // check for permissions
-  $moduledir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-  $writable = is_writable( $moduledir );
+    // check for permissions
+    $moduledir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+    $writable = is_writable( $moduledir );
 
-  // build the table
-  $rowarray = array();
-  $newestdisplayed="";
-  foreach( $data as $row ) {
-    $onerow = new stdClass();
-    $onerow->date = $row['date'];
-    $onerow->age = modmgr_utils::get_status($row['date']);
-    $onerow->downloads = $row['downloads'];
-    $onerow->name = $row['name'];
-    $onerow->version = $row['version'];
-    $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
+    // build the table
+    $rowarray = array();
+    $newestdisplayed="";
+    foreach( $data as $row ) {
+        $onerow = new stdClass();
+        $onerow->date = $row['date'];
+        $onerow->age = modmgr_utils::get_status($row['date']);
+        $onerow->downloads = $row['downloads'];
+        $onerow->name = $row['name'];
+        $onerow->version = $row['version'];
+        $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
 					   $this->Lang('helptxt'),
 					   array('name' => $row['name'],
-						 'version' => $row['version'],
-						 'filename' => $row['filename']));
-    $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
+         'version' => $row['version'],
+         'filename' => $row['filename']));
+        $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
 					      $this->Lang('dependstxt'),
 					      array('name' => $row['name'],
 						    'version' => $row['version'],
 						    'filename' => $row['filename']));
-    $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
-					    $this->Lang('abouttxt'),
-					    array('name' => $row['name'],
-						  'version' => $row['version'],
-						  'filename' => $row['filename']));
+        $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
+           $this->Lang('abouttxt'),
+           array('name' => $row['name'],
+          'version' => $row['version'],
+          'filename' => $row['filename']));
 
-    switch( $row['status'] ) {
-    case 'incompatible':
-      $onerow->status = $this->Lang('incompatible');
-      break;
-    case 'uptodate':
-      $onerow->status = $this->Lang('uptodate');
-      break;
-    case 'newerversion':
-      $onerow->status = $this->Lang('newerversion');
-      break;
-    case 'notinstalled':
-      {
-	$mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
-	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
-	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
-					       $this->Lang('download'),
-					       array('name' => $row['name'],
-						     'version' => $row['version'],
-						     'filename' => $row['filename'],
-						     'size' => $row['size']));
-	}
-	else {
-	  $onerow->status = $this->Lang('cantdownload');
-	}
-      }
-      break;
+        switch( $row['status'] ) {
+            case 'incompatible':
+                $onerow->status = $this->Lang('incompatible');
+                break;
+            case 'uptodate':
+                $onerow->status = $this->Lang('uptodate');
+                break;
+            case 'newerversion':
+                $onerow->status = $this->Lang('newerversion');
+                break;
+            case 'notinstalled':
+            {
+                $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+                if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+                ($writable && !file_exists( $mod ) )) && $caninstall ) {
+                          $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
+                            $this->Lang('download'),
+                            array('name' => $row['name'],
+                           'version' => $row['version'],
+                           'filename' => $row['filename'],
+                           'size' => $row['size']));
+                }
+                else {
+                      $onerow->status = $this->Lang('cantdownload');
+                }
+            }
+                  break;
 
-    case 'upgrade':
-      {
-	$mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
-	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
-	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
-					       $this->Lang('upgrade'),
-					       array('name' => $row['name'],
-						     'version' => $row['version'],
-						     'filename' => $row['filename'],
-						     'size' => $row['size']));
-	}
-	else {
-	  $onerow->status = $this->Lang('cantdownload');
-	}
-      }
-      break;
-    }
+            case 'upgrade':
+            {
+                $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+                if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+                ($writable && !file_exists( $mod ) )) && $caninstall ) {
+                          $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
+                            $this->Lang('upgrade'),
+                            array('name' => $row['name'],
+                           'version' => $row['version'],
+                           'filename' => $row['filename'],
+                           'size' => $row['size']));
+                }
+                else {
+                      $onerow->status = $this->Lang('cantdownload');
+                }
+            }
+                  break;
+        }
 
-    $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
-    if( isset( $row['description'] ) ) $onerow->description=$row['description'];
-    $rowarray[] = $onerow;
-  } // for
+        $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
+        if( isset( $row['description'] ) ) $onerow->description=$row['description'];
+        $rowarray[] = $onerow;
+    } // for
 
-  $smarty->assign('items', $rowarray);
-  $smarty->assign('itemcount', count($rowarray));
+    $smarty->assign('items', $rowarray);
+    $smarty->assign('itemcount', count($rowarray));
 }
 
 modmgr_utils::get_images();

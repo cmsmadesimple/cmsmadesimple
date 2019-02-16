@@ -1,5 +1,5 @@
 <?php
-if (!isset($gCms))  exit ;
+if (!isset($gCms))  exit;
 
 if (!$this->CheckPermission('Modify News'))  return;
 if (isset($params['cancel'])) $this->Redirect($id, 'defaultadmin', $returnid);
@@ -264,7 +264,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
 
     if (!isset($params['apply']) && !$error) {
         // redirect out of here.
-		$this->SetMessage($this->Lang('articlesubmitted'));
+        $this->SetMessage($this->Lang('articlesubmitted'));
         $this->Redirect($id, 'defaultadmin', $returnid);
         return;
     }
@@ -272,7 +272,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
     if ($error)
         echo $this->ShowErrors($error);
 
-// end submit or apply
+    // end submit or apply
 } elseif (isset($params['preview'])) {
     // save data for preview.
     unset($params['apply']);
@@ -315,7 +315,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
     }
     header('Content-Type: text/xml');
     echo $response;
-    exit ;
+    exit;
 } else {
     //
     // Load data from database

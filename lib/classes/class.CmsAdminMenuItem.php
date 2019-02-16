@@ -44,6 +44,7 @@
  */
 final class CmsAdminMenuItem
 {
+
     /**
      * @ignore
      * 'system' is for internal use only.
@@ -63,20 +64,20 @@ final class CmsAdminMenuItem
     {
         if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
         switch( $k ) {
-        case 'url':
-            if( isset($this->_data[$k]) && $this->_data[$k] ) return $this->_data[$k];
-            // url can be dynamically generated... maybe
-            if( $this->module && $this->action ) {
-                $mod = \cms_utils::get_module($this->module);
-                if( $mod ) {
-                    $url = $mod->create_url('m1_',$this->action);
-                    return $url;
+            case 'url':
+                if( isset($this->_data[$k]) && $this->_data[$k] ) return $this->_data[$k];
+                // url can be dynamically generated... maybe
+                if( $this->module && $this->action ) {
+                      $mod = \cms_utils::get_module($this->module);
+                    if( $mod ) {
+                        $url = $mod->create_url('m1_',$this->action);
+                        return $url;
+                    }
                 }
-            }
-            break;
+                break;
 
-        default:
-            if( isset($this->_data[$k]) ) return $this->_data[$k];
+            default:
+                if( isset($this->_data[$k]) ) return $this->_data[$k];
         }
     }
 

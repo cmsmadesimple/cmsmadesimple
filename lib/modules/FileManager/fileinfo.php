@@ -35,14 +35,14 @@ define ('IMAGE_MIME', 'mime');
  **/
 function image_info($file = null, $out = null) {
 
-  // If $file is not supplied or is not a file, warn the user and return false.
-  if (is_null($file) || !is_file($file)) {
-   // echo '<p><b>Warning:</b> image_info() => first argument must be a file.</p>';
-    return false;
-  }
+    // If $file is not supplied or is not a file, warn the user and return false.
+    if (is_null($file) || !is_file($file)) {
+        // echo '<p><b>Warning:</b> image_info() => first argument must be a file.</p>';
+        return false;
+    }
 
-  // Defines the keys we want instead of 0, 1, 2, 3, 'bits', 'channels', and 'mime'.
-  $redefine_keys = array(
+    // Defines the keys we want instead of 0, 1, 2, 3, 'bits', 'channels', and 'mime'.
+    $redefine_keys = array(
        'width',
        'height',
        'type',
@@ -79,18 +79,18 @@ function image_info($file = null, $out = null) {
 
        // Get the image info using getimagesize().
        // If $temp fails to populate, warn the user and return false.
-       if (!$temp = @getimagesize($file)) {
-         //echo '<p><b>Warning:</b> image_info() => first argument must be an image.</p>';
-         return false;
-       }
+    if (!$temp = @getimagesize($file)) {
+        //echo '<p><b>Warning:</b> image_info() => first argument must be an image.</p>';
+        return false;
+    }
 
        // Get the values returned by getimagesize()
        $temp = array_values($temp);
 
        // Make an array using values from $redefine_keys as keys and values from $temp as values.
-       foreach ($temp AS $k => $v) {
-         $data[$redefine_keys[$k]] = $v;
-       }
+    foreach ($temp AS $k => $v) {
+        $data[$redefine_keys[$k]] = $v;
+    }
 
        // Make 'type' usefull.
        $data['type'] = $types[$data['type']];
@@ -101,25 +101,26 @@ function image_info($file = null, $out = null) {
 
 
 function GetFileInfo($filename,$ext,$dir=false) {
-  $result="";
-  if ($dir) {
-    $result="&nbsp;";
-  } else {
+    $result="";
+    if ($dir) {
+        $result="&nbsp;";
+    } else {
 
-    switch (strtolower($ext)) {
-      case "png" :
-      case "gif" :
-      case "jpg" : {
-        $imginfo=image_info($filename);
-        if ($imginfo) {
-          $result=$imginfo["width"]."x".$imginfo["height"]."x".$imginfo["bits"];
+        switch (strtolower($ext)) {
+            case "png":
+            case "gif":
+            case "jpg" : {
+                $imginfo=image_info($filename);
+                if ($imginfo) {
+                    $result=$imginfo["width"]."x".$imginfo["height"]."x".$imginfo["bits"];
+                }
+                break;
+            }
+            default:
+                $result="&nbsp;";
         }
-        break;
-      }
-      default : $result="&nbsp;";
     }
-  }
-  return $result;
+    return $result;
 }
 
 

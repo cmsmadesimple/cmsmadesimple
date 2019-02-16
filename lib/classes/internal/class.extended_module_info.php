@@ -4,9 +4,11 @@ use \ModuleOperations;
 
 class extended_module_info extends module_info
 {
+
     private static $_ekeys = array('installed','status','active','system_module','installed_version','admin_only',
                                    'active','allow_fe_lazyload','allow_admin_lazyload','dependants','can_deactivate',
                                    'can_uninstall','missingdeps');
+
     private $_edata = array();
 
     public function __construct($module_name,$can_load = false)
@@ -47,7 +49,7 @@ class extended_module_info extends module_info
                     if( !$depinfo['installed'] || version_compare($depinfo['version'],$onedepversion) < 0 ) $out[$onedepname] = $onedepversion;
                 }
             }
-	    return $out;
+            return $out;
         }
     }
 

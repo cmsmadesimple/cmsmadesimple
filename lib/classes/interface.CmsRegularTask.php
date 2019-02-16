@@ -33,57 +33,54 @@
  */
 interface CmsRegularTask
 {
-  /**
-   * Get the name for this task
-   *
-   * @return string
-   */
-  public function get_name();
+    /**
+     * Get the name for this task
+     *
+     * @return string
+     */
+    public function get_name();
 
 
-  /**
-   * Get the description for this task.
-   *
-   * @return string
-   */
-  public function get_description();
+    /**
+     * Get the description for this task.
+     *
+     * @return string
+     */
+    public function get_description();
 
 
-  /**
-   * Test if a function should be executed given the supplied time argument
-   *
-   * @param   int $time The time at which any comparisons for execution should be performed.  If empty the current time is assumed.
-   * @returns boolean TRUE IF the task should be executed, FALSE otherwise.
-   */
-  public function test($time = '');
+    /**
+     * Test if a function should be executed given the supplied time argument
+     *
+     * @param   int $time The time at which any comparisons for execution should be performed.  If empty the current time is assumed.
+     * @returns boolean TRUE IF the task should be executed, FALSE otherwise.
+     */
+    public function test($time = '');
 
 
-  /**
-   * Execute a given task
-   *
-   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
-   * @return bool TRUE on success, FALSE otherwise.
-   */
-  public function execute($time = '');
+    /**
+     * Execute a given task
+     *
+     * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+     * @return bool TRUE on success, FALSE otherwise.
+     */
+    public function execute($time = '');
 
 
-  /**
-   * Execute steps that should be taken on success of this task.
-   * This method is called after the execute step if the execute step returned TRUE.
-   *
-   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
-   */
-  public function on_success($time = '');
+    /**
+     * Execute steps that should be taken on success of this task.
+     * This method is called after the execute step if the execute step returned TRUE.
+     *
+     * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+     */
+    public function on_success($time = '');
 
 
-  /**
-   * Execute steps that should be taken on failure of this task.
-   * This method is called after the execute step if the execute step returned FALSE.
-   *
-   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
-   */
-  public function on_failure($time = '');
-
+    /**
+     * Execute steps that should be taken on failure of this task.
+     * This method is called after the execute step if the execute step returned FALSE.
+     *
+     * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+     */
+    public function on_failure($time = '');
 } // interface
-
-?>

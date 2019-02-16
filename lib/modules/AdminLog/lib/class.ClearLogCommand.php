@@ -22,5 +22,4 @@ class ClearLogCommand extends Command
         $storage->clear();
         audit('','Admin log','Cleared');
     }
-
 }

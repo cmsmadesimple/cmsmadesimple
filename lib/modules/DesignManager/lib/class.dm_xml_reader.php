@@ -21,40 +21,43 @@
 
 class dm_xml_reader extends XMLReader
 {
-  private $_setup;
-  private $_old_err_handler;
-  private $_old_internal_errors;
 
-  public static function __errhandler($errno,$errstr,$errfile,$errline)
-  {
-    if( strpos($errstr,'XMLReader') !== FALSE ) {
-      cms_error("DesignManger\\dm_xml_reader: ".$errstr);
-      $mod = cms_utils::get_module('DesignManager');
-      throw new CmsXMLErrorException($mod->Lang('error_xmlstructure').':<br/>'.$errstr);
-      return TRUE;
+    private $_setup;
+
+    private $_old_err_handler;
+
+    private $_old_internal_errors;
+
+    public static function __errhandler($errno,$errstr,$errfile,$errline)
+    {
+        if( strpos($errstr,'XMLReader') !== FALSE ) {
+            cms_error("DesignManger\\dm_xml_reader: ".$errstr);
+            $mod = cms_utils::get_module('DesignManager');
+            throw new CmsXMLErrorException($mod->Lang('error_xmlstructure').':<br/>'.$errstr);
+            return TRUE;
+        }
     }
-  }
 
-  public function __setup()
-  {
-    if( !$this->_setup ) {
-      $this->_old_internal_errors = libxml_use_internal_errors(FALSE);
-      $this->_old_err_handler = set_error_handler(array($this,'__errhandler'));
-      $this->_setup = 1;
+    public function __setup()
+    {
+        if( !$this->_setup ) {
+            $this->_old_internal_errors = libxml_use_internal_errors(FALSE);
+            $this->_old_err_handler = set_error_handler(array($this,'__errhandler'));
+            $this->_setup = 1;
+        }
     }
-  }
 
-  public function __destruct()
-  {
-    if( $this->_old_err_handler )
-      set_error_handler($this->_old_err_handler);
-  }
+    public function __destruct()
+    {
+        if( $this->_old_err_handler )
+        set_error_handler($this->_old_err_handler);
+    }
 
-  public function read()
-  {
-    $this->__setup();
-    return parent::read();
-  }
+    public function read()
+    {
+        $this->__setup();
+        return parent::read();
+    }
 } // end of class
 
 #

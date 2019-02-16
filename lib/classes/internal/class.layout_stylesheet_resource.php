@@ -35,8 +35,8 @@ namespace CMSMS\internal;
  */
 class layout_stylesheet_resource extends fixed_smarty_custom_resource
 {
-	protected function fetch($name,&$source,&$mtime)
-	{
+    protected function fetch($name,&$source,&$mtime)
+    {
         // clean up the input
         $name = trim($name);
         if( !$name ) return;
@@ -52,8 +52,7 @@ class layout_stylesheet_resource extends fixed_smarty_custom_resource
 
         $mtime = $obj->get_modified();
         $source = $text;
-	}
-
+    }
 } // end of class
 
 #

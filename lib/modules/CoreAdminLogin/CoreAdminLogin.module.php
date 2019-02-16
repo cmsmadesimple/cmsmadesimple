@@ -1,8 +1,10 @@
 <?php
 class CoreAdminLogin extends CMSModule
 {
-    public function GetName() { return 'CoreAdminLogin'; }
-    public function GetVersion() { return '0.0.1'; }
+    public function GetName() { return 'CoreAdminLogin';
+    }
+    public function GetVersion() { return '0.0.1';
+    }
 
     protected function getLoginUtils()
     {

@@ -3,8 +3,8 @@ if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
 
 if( $_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['showtemplate']) && $_GET['showtemplate'] == 'false' ) {
-  echo filemanager_utils::get_cwd();
-  exit;
+    echo filemanager_utils::get_cwd();
+    exit;
 }
 
 if( !isset($params["newdir"]) && !isset($params['setdir']) ) $this->RedirectToAdminTab();

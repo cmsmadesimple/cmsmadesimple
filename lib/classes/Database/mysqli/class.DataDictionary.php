@@ -18,33 +18,50 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
     protected function ActualType($meta)
     {
         switch( $meta ) {
-		case 'C': return 'VARCHAR';
-		case 'XL':return 'LONGTEXT';
-		case 'X': return 'TEXT';
+            case 'C':
+    		          return 'VARCHAR';
+            case 'XL':
+                return 'LONGTEXT';
+            case 'X':
+                return 'TEXT';
 
-		case 'C2': return 'VARCHAR';
-		case 'X2': return 'LONGTEXT';
+            case 'C2':
+                return 'VARCHAR';
+            case 'X2':
+                return 'LONGTEXT';
 
-		case 'B': return 'LONGBLOB';
+            case 'B':
+                return 'LONGBLOB';
 
-		case 'D': return 'DATE';
-		case 'DT': return 'DATETIME';
-		case 'T': return 'TIME';
-		case 'TS': return 'TIMESTAMP';
-		case 'L': return 'TINYINT';
+            case 'D':
+                return 'DATE';
+            case 'DT':
+                return 'DATETIME';
+            case 'T':
+                return 'TIME';
+            case 'TS':
+                return 'TIMESTAMP';
+            case 'L':
+                return 'TINYINT';
 
-		case 'R':
-		case 'I4':
-		case 'I': return 'INTEGER';
-		case 'I1': return 'TINYINT';
-		case 'I2': return 'SMALLINT';
-		case 'I8': return 'BIGINT';
+            case 'R':
+            case 'I4':
+            case 'I':
+                return 'INTEGER';
+            case 'I1':
+                return 'TINYINT';
+            case 'I2':
+                return 'SMALLINT';
+            case 'I8':
+                return 'BIGINT';
 
-		case 'F': return 'DOUBLE';
-		case 'N': return 'NUMERIC';
-		default:
-			return $meta;
-		}
+            case 'F':
+                return 'DOUBLE';
+            case 'N':
+                return 'NUMERIC';
+            default:
+                return $meta;
+        }
     }
 
     protected function MetaType($t,$len=-1,$fieldobj=false)
@@ -58,46 +75,49 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
 
         $len = -1; // mysql max_length is not accurate
         switch (strtoupper($t)) {
-        case 'STRING':
-        case 'CHAR':
-        case 'VARCHAR':
-        case 'TINYBLOB':
-        case 'TINYTEXT':
-        case 'ENUM':
-        case 'SET':
-            if ($len <= $this->blobSize) return 'C';
+            case 'STRING':
+            case 'CHAR':
+            case 'VARCHAR':
+            case 'TINYBLOB':
+            case 'TINYTEXT':
+            case 'ENUM':
+            case 'SET':
+                if ($len <= $this->blobSize) return 'C';
+	               return 'X';
 
-        case 'TEXT':
-        case 'LONGTEXT':
-        case 'MEDIUMTEXT':
-            return 'X';
+            case 'TEXT':
+            case 'LONGTEXT':
+            case 'MEDIUMTEXT':
+                return 'X';
 
             // php_mysql extension always returns 'blob' even if 'text'
             // so we have to check whether binary...
-        case 'IMAGE':
-        case 'LONGBLOB':
-        case 'BLOB':
-        case 'MEDIUMBLOB':
-            return !empty($fieldobj->binary) ? 'B' : 'X';
+            case 'IMAGE':
+            case 'LONGBLOB':
+            case 'BLOB':
+            case 'MEDIUMBLOB':
+                return !empty($fieldobj->binary) ? 'B' : 'X';
 
-        case 'YEAR':
-        case 'DATE': return 'D';
+            case 'YEAR':
+            case 'DATE':
+                return 'D';
 
-        case 'TIME':
-        case 'DATETIME':
-        case 'TIMESTAMP': return 'T';
+            case 'TIME':
+            case 'DATETIME':
+            case 'TIMESTAMP':
+                return 'T';
 
-        case 'INT':
-        case 'INTEGER':
-        case 'BIGINT':
-        case 'TINYINT':
-        case 'MEDIUMINT':
-        case 'SMALLINT':
-            if (!empty($fieldobj->primary_key)) return 'R';
-            return 'I';
+            case 'INT':
+            case 'INTEGER':
+            case 'BIGINT':
+            case 'TINYINT':
+            case 'MEDIUMINT':
+            case 'SMALLINT':
+                if (!empty($fieldobj->primary_key)) return 'R';
+                return 'I';
 
-        default:
-            static $typeMap = array(
+            default:
+                static $typeMap = array(
                 'VARCHAR' => 'C',
                 'VARCHAR2' => 'C',
                 'CHAR' => 'C',
@@ -192,12 +212,12 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
                 "SQLNVCHAR" => 'C',
                 "SQLLVARCHAR" => 'X',
                 "SQLBOOL" => 'L'
-                );
+                    );
 
-            $tmap = false;
-            $t = strtoupper($t);
-            $tmap = (isset($typeMap[$t])) ? $typeMap[$t] : 'N';
-            return $tmap;
+                $tmap = false;
+                $t = strtoupper($t);
+                $tmap = (isset($typeMap[$t])) ? $typeMap[$t] : 'N';
+                return $tmap;
         }
     }
 
@@ -225,17 +245,17 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
     }
 
     protected function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
-	{
-		$suffix = '';
-		if ($funsigned) $suffix .= ' UNSIGNED';
-		if ($fnotnull) $suffix .= ' NOT NULL';
-		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
-		if ($fautoinc) $suffix .= ' AUTO_INCREMENT';
-		if ($fconstraint) $suffix .= ' '.$fconstraint;
-		return $suffix;
-	}
+    {
+        $suffix = '';
+        if ($funsigned) $suffix .= ' UNSIGNED';
+        if ($fnotnull) $suffix .= ' NOT NULL';
+        if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
+        if ($fautoinc) $suffix .= ' AUTO_INCREMENT';
+        if ($fconstraint) $suffix .= ' '.$fconstraint;
+        return $suffix;
+    }
 
-    function _ProcessOptions($opts)
+    protected function _ProcessOptions($opts)
     {
         // fixes for old TYPE= stuff in tabopts.
         if( is_array($opts) && count($opts) ) {
@@ -248,43 +268,43 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         return $opts;
     }
 
-	function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
-	{
-		$sql = array();
+    protected function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
+    {
+        $sql = array();
 
-		if ( isset($idxoptions['REPLACE']) || isset($idxoptions['DROP']) ) {
-			if ($this->alterTableAddIndex) $sql[] = "ALTER TABLE $tabname DROP INDEX $idxname";
-			else $sql[] = sprintf($this->dropIndex, $idxname, $tabname);
+        if ( isset($idxoptions['REPLACE']) || isset($idxoptions['DROP']) ) {
+            if ($this->alterTableAddIndex) $sql[] = "ALTER TABLE $tabname DROP INDEX $idxname";
+            else $sql[] = sprintf($this->dropIndex, $idxname, $tabname);
 
-			if ( isset($idxoptions['DROP']) ) return $sql;
-		}
+            if ( isset($idxoptions['DROP']) ) return $sql;
+        }
 
-		if ( empty ($flds) ) return $sql;
+        if ( empty ($flds) ) return $sql;
 
-		if (isset($idxoptions['FULLTEXT'])) {
-			$unique = ' FULLTEXT';
-		} elseif (isset($idxoptions['UNIQUE'])) {
-			$unique = ' UNIQUE';
-		} else {
-			$unique = '';
-		}
+        if (isset($idxoptions['FULLTEXT'])) {
+            $unique = ' FULLTEXT';
+        } elseif (isset($idxoptions['UNIQUE'])) {
+            $unique = ' UNIQUE';
+        } else {
+            $unique = '';
+        }
 
-		if ( is_array($flds) ) $flds = implode(', ',$flds);
+        if ( is_array($flds) ) $flds = implode(', ',$flds);
 
-		if ($this->alterTableAddIndex) $s = "ALTER TABLE $tabname ADD $unique INDEX $idxname ";
-		else $s = 'CREATE' . $unique . ' INDEX ' . $idxname . ' ON ' . $tabname;
+        if ($this->alterTableAddIndex) $s = "ALTER TABLE $tabname ADD $unique INDEX $idxname ";
+        else $s = 'CREATE' . $unique . ' INDEX ' . $idxname . ' ON ' . $tabname;
 
-		$s .= ' (' . $flds . ')';
+        $s .= ' (' . $flds . ')';
 
         if( ($opts = $this->get_dbtype_options($idxoptions)) ) $s .= $opts;
 
-		$sql[] = $s;
+        $sql[] = $s;
 
-		return $sql;
-	}
+        return $sql;
+    }
 
-	function CreateTableSQL($tabname, $flds, $tableoptions=false)
-	{
+    public function CreateTableSQL($tabname, $flds, $tableoptions=false)
+    {
         $str = 'ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
         $dbtype = $this->_DBType();
 
@@ -312,6 +332,5 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         }
 
         return parent::CreateTableSQL($tabname, $flds, $tableoptions);
-	}
-
+    }
 } // end of class

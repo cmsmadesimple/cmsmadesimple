@@ -42,45 +42,45 @@ try {
     if( $design_id > 0 ) {
         $mode = $this->GetPreference('template_list_mode','designpage');
         switch( $mode ) {
-        case 'alldesign':
-            // all templates for this design
-            $design = CmsLayoutCollection::load($design_id);
-            $template_list = $design->get_templates();
+            case 'alldesign':
+                // all templates for this design
+                $design = CmsLayoutCollection::load($design_id);
+                $template_list = $design->get_templates();
 
-            $templates = CmsLayoutTemplate::load_bulk($template_list);
-            $out = array();
-            foreach( $templates as $one ) {
-                if( !$one->get_listable() ) continue;
-                $out[$one->get_id()] = $one->get_name();
-            }
-            break;
-
-        case 'designpage':
-            $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-            $type_id = $type->get_id();
-            $design = CmsLayoutCollection::load($design_id);
-            $template_list = $design->get_templates();
-
-            $templates = CmsLayoutTemplate::load_bulk($template_list);
-            if( is_array($templates) && count($templates) ) {
+                $templates = CmsLayoutTemplate::load_bulk($template_list);
                 $out = array();
                 foreach( $templates as $one ) {
-                    if( $one->get_type_id() != $type_id ) continue;
                     if( !$one->get_listable() ) continue;
                     $out[$one->get_id()] = $one->get_name();
                 }
-            }
-            break;
+                break;
 
-        case 'allpage':
-            $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-            $template_list = CmsLayoutTemplate::load_all_by_type($type);
-            $out = array();
-            foreach( $template_list as $one ) {
-                if( !$one->get_listable() ) continue;
-                $out[$one->get_id()] = $one->get_name();
-            }
-            break;
+            case 'designpage':
+                $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+                $type_id = $type->get_id();
+                $design = CmsLayoutCollection::load($design_id);
+                $template_list = $design->get_templates();
+
+                $templates = CmsLayoutTemplate::load_bulk($template_list);
+                if( is_array($templates) && count($templates) ) {
+                    $out = array();
+                    foreach( $templates as $one ) {
+                        if( $one->get_type_id() != $type_id ) continue;
+                        if( !$one->get_listable() ) continue;
+                        $out[$one->get_id()] = $one->get_name();
+                    }
+                }
+                break;
+
+            case 'allpage':
+                $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+                $template_list = CmsLayoutTemplate::load_all_by_type($type);
+                $out = array();
+                foreach( $template_list as $one ) {
+                    if( !$one->get_listable() ) continue;
+                    $out[$one->get_id()] = $one->get_name();
+                }
+                break;
         }
     }
 }

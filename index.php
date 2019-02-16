@@ -300,7 +300,8 @@ while( $trycount < 2 ) {
     catch (Exception $e) {
         // Catch rest of exceptions
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+        }
         $code = $e->GetCode();
         if( !$showtemplate && $code >= 400 ) {
             @ob_end_clean();

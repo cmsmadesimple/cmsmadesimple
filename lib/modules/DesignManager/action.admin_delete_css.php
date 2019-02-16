@@ -23,34 +23,34 @@ if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 $this->SetCurrentTab('stylesheets');
 if( isset($params['cancel']) ) {
-  if( $params['cancel'] == $this->Lang('cancel') ) {
-    $this->SetMessage($this->Lang('msg_cancelled'));
-  }
-  $this->RedirectToAdminTab();
+    if( $params['cancel'] == $this->Lang('cancel') ) {
+        $this->SetMessage($this->Lang('msg_cancelled'));
+    }
+    $this->RedirectToAdminTab();
 }
 
 try {
-  if( !isset($params['css']) ) throw new CmsException($this->Lang('error_missingparam'));
+    if( !isset($params['css']) ) throw new CmsException($this->Lang('error_missingparam'));
 
-  $css_ob = CmsLayoutStylesheet::load($params['css']);
+    $css_ob = CmsLayoutStylesheet::load($params['css']);
 
-  if( isset($params['submit']) ) {
-    if( !isset($params['check1']) || !isset($params['check2']) ) {
-      echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+    if( isset($params['submit']) ) {
+        if( !isset($params['check1']) || !isset($params['check2']) ) {
+            echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+        }
+        else {
+            $css_ob->delete();
+            $this->SetMessage($this->Lang('msg_stylesheet_deleted'));
+            $this->RedirectToAdminTab();
+        }
     }
-    else {
-      $css_ob->delete();
-      $this->SetMessage($this->Lang('msg_stylesheet_deleted'));
-      $this->RedirectToAdminTab();
-    }
-  }
 
-  $smarty->assign('css',$css_ob);
-  echo $this->ProcessTemplate('admin_delete_css.tpl');
+    $smarty->assign('css',$css_ob);
+    echo $this->ProcessTemplate('admin_delete_css.tpl');
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

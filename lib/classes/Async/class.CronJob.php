@@ -52,7 +52,8 @@ namespace CMSMS\Async;
  * @copyright Copyright (c) 2016, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.2
  */
-abstract class CronJob extends Job implements CronJobInterface {
+abstract class CronJob extends Job implements CronJobInterface
+{
     use CronJobTrait;
 
     /**
@@ -63,5 +64,4 @@ abstract class CronJob extends Job implements CronJobInterface {
         parent::__construct();
         $this->_data['start'] = time();
     }
-
 }

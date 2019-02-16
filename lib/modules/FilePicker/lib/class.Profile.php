@@ -1,26 +1,29 @@
 <?php
 namespace FilePicker;
 
-class ProfileException extends \Exception {}
+class ProfileException extends \Exception
+{
+}
 
 class Profile extends \CMSMS\FilePickerProfile
 {
+
     private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null, 'file_extensions'=>null ];
 
     protected function setValue( $key, $val )
     {
         switch( $key ) {
-        case 'name':
-        case 'file_extensions':
-            $this->_data[$key] = trim($val);
-            break;
-        case 'create_date':
-        case 'modified_date':
-            $this->_data[$key] = (int) $val;
-            break;
-        default:
-            parent::setValue( $key, $val );
-            break;
+            case 'name':
+            case 'file_extensions':
+                $this->_data[$key] = trim($val);
+                break;
+            case 'create_date':
+            case 'modified_date':
+                $this->_data[$key] = (int) $val;
+                break;
+            default:
+                parent::setValue( $key, $val );
+                break;
         }
     }
 
@@ -30,12 +33,12 @@ class Profile extends \CMSMS\FilePickerProfile
 
         foreach( $in as $key => $value ) {
             switch( $key ) {
-            case 'id':
-                $this->_data[$key] = (int) $value;
-                break;
-            default:
-                $this->setValue( $key, $value );
-                break;
+                case 'id':
+                    $this->_data[$key] = (int) $value;
+                    break;
+                default:
+                    $this->setValue( $key, $value );
+                    break;
             }
         }
     }
@@ -43,42 +46,42 @@ class Profile extends \CMSMS\FilePickerProfile
     public function __get($key)
     {
         switch( $key ) {
-        case 'id':
-            return (int) $this->_data[$key];
+            case 'id':
+                return (int) $this->_data[$key];
 
-        case 'name':
-        case 'file_extensions':
-            return trim($this->_data[$key]);
+            case 'name':
+            case 'file_extensions':
+                return trim($this->_data[$key]);
 
-        case 'create_date':
-        case 'modified_date':
-            return (int) $this->_data[$key];
+            case 'create_date':
+            case 'modified_date':
+                return (int) $this->_data[$key];
 
-        case 'relative_top':
-        case 'reltop':
-            // parent top is checked for relative or absolute
-            // return relative to uploads path
-            $val = parent::__get('top');
-            if( startswith($val,'/') ) {
-                $config = \cms_config::get_instance();
-                $uploads_path = $config['uploads_path'];
-                if( startswith( $val, $uploads_path ) ) $val = substr($val,strlen($uploads_path));
-                if( startswith( $val, '/') ) $val = substr($val,1);
-            }
-            return $val;
+            case 'relative_top':
+            case 'reltop':
+                // parent top is checked for relative or absolute
+                // return relative to uploads path
+                $val = parent::__get('top');
+                if( startswith($val,'/') ) {
+                    $config = \cms_config::get_instance();
+                    $uploads_path = $config['uploads_path'];
+                    if( startswith( $val, $uploads_path ) ) $val = substr($val,strlen($uploads_path));
+                    if( startswith( $val, '/') ) $val = substr($val,1);
+                }
+                return $val;
 
-        case 'top':
-            // parent top is checked for relative or absolute
-            // if relative, prepend uploads path
-            $val = parent::__get('top');
-            if( !startswith($val,'/') ) {
-                $config = \cms_config::get_instance();
-                $val = $config['uploads_path'].'/'.$val;
-            }
-            return $val;
+            case 'top':
+                // parent top is checked for relative or absolute
+                // if relative, prepend uploads path
+                $val = parent::__get('top');
+                if( !startswith($val,'/') ) {
+                    $config = \cms_config::get_instance();
+                    $val = $config['uploads_path'].'/'.$val;
+                }
+                return $val;
 
-        default:
-            return parent::__get($key);
+            default:
+                return parent::__get($key);
         }
     }
 
@@ -105,13 +108,13 @@ class Profile extends \CMSMS\FilePickerProfile
         $obj = clone( $this );
         foreach( $params as $key => $val ) {
             switch( $key ) {
-            case 'id':
-                // cannot set a new id this way
-                break;
+                case 'id':
+                    // cannot set a new id this way
+                    break;
 
-            default:
-                $obj->setValue($key,$val);
-                break;
+                default:
+                    $obj->setValue($key,$val);
+                    break;
             }
         }
         return $obj;

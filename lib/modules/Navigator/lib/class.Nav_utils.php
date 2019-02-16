@@ -37,8 +37,10 @@
 
 final class Nav_utils
 {
+
     private static $_excludes;
-    private function __construct() {}
+    private function __construct() {
+    }
 
     public static function set_excludes($data)
     {

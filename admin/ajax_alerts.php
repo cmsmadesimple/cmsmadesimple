@@ -32,27 +32,23 @@ try {
     $alert_name = cleanValue($_POST['alert']);
 
     switch( $op ) {
-    case 'delete':
-        $alert = \CMSMS\AdminAlerts\Alert::load_by_name($alert_name);
-        $alert->delete();
-        break;
-    default:
-        throw new \Exception('Unknown operation '.$op);
+        case 'delete':
+            $alert = \CMSMS\AdminAlerts\Alert::load_by_name($alert_name);
+            $alert->delete();
+            break;
+        default:
+            throw new \Exception('Unknown operation '.$op);
     }
     echo $out;
 }
 catch( \Exception $e ) {
     // do 500 error.
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+    }
 
     header("HTTP/1.0 500 ".$e->GetMessage());
     header("Status: 500 Server Error");
     echo $e->GetMessage();
 }
 exit;
-
-#
-# EOF
-#
-?>

@@ -21,6 +21,7 @@ use \FilePicker\TemporaryProfileStorage;
 use \FilePicker\PathAssistant;
 use \FilePicker\utils;
 use \CMSMS\FileType;
+
 if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
@@ -32,9 +33,9 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //
 $sesskey = md5(__FILE__);
 if( isset($_GET['_enc']) ) {
-   $parms = unserialize(base64_decode($_GET['_enc']));
-   $_GET = array_merge($_GET,$parms);
-   unset($_GET['_enc']);
+    $parms = unserialize(base64_decode($_GET['_enc']));
+    $_GET = array_merge($_GET,$parms);
+    unset($_GET['_enc']);
 }
 
 try {
@@ -56,13 +57,13 @@ try {
 
     $filemanager = cms_utils::get_module('FileManager');
 
-// get our absolute top directory, and it's matching url
+    // get our absolute top directory, and it's matching url
     $topdir = $profile->top;
     if( !$topdir ) $topdir = $config['uploads_path'];
     $assistant = new PathAssistant($config,$topdir);
 
-// get our current working directory relative to $topdir
-// use cwd stored in session first... then if necessary the profile topdir, then if necessary, the absolute topdir
+    // get our current working directory relative to $topdir
+    // use cwd stored in session first... then if necessary the profile topdir, then if necessary, the absolute topdir
     $cwd = '';
     if( isset($_SESSION[$sesskey]) ) $cwd = trim($_SESSION[$sesskey]);
     if( !$cwd && $profile->top ) $cwd = $assistant->to_relative($profile->top);
@@ -70,14 +71,14 @@ try {
         $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
         $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
     }
-// failsave, if we don't have a valid working directory, set it to the $topdir;
+    // failsave, if we don't have a valid working directory, set it to the $topdir;
     if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
         $cwd = '';
     }
-//if( $cwd ) $_SESSION[$sesskey] = $cwd;
+    //if( $cwd ) $_SESSION[$sesskey] = $cwd;
     $_SESSION[$sesskey] = $cwd;
 
-// now we're set to go.
+    // now we're set to go.
     $starturl = $assistant->relative_path_to_url($cwd);
     $startdir = $assistant->to_absolute($cwd);
 
@@ -113,10 +114,10 @@ try {
         return $imagetag;
     };
 
-/*
- * A quick check for a file type based on extension
- * @String $filename
- */
+    /*
+    * A quick check for a file type based on extension
+    * @String $filename
+    */
     $get_filetype = function($filename) use (&$is_image,&$is_archive) {
         $ext = strtolower(substr($filename,strrpos($filename,".")+1));
         $filetype = 'file'; // default to all file
@@ -138,9 +139,9 @@ try {
         return $filetype;
     };
 
-//
-// get our file list
-//
+    //
+    // get our file list
+    //
     $files = $thumbs = [];
     $dh = dir($startdir);
     while( false !== ($filename = $dh->read()) ) {

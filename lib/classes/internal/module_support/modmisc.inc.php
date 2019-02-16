@@ -31,19 +31,19 @@
  */
 function cms_module_GetAbout(&$modinstance)
 {
-	$str = '';
-	if ($modinstance->GetAuthor() != '') {
-		$str .= "<br />".lang('author').": " . $modinstance->GetAuthor();
-		if ($modinstance->GetAuthorEmail() != '') $str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
-		$str .= "<br />";
-	}
-	$str .= "<br />".lang('version').": " .$modinstance->GetVersion() . "<br />";
+    $str = '';
+    if ($modinstance->GetAuthor() != '') {
+        $str .= "<br />".lang('author').": " . $modinstance->GetAuthor();
+        if ($modinstance->GetAuthorEmail() != '') $str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
+        $str .= "<br />";
+    }
+    $str .= "<br />".lang('version').": " .$modinstance->GetVersion() . "<br />";
 
-	if ($modinstance->GetChangeLog() != '') {
-		$str .= "<br />".lang('changehistory').":<br />";
-		$str .= $modinstance->GetChangeLog() . '<br />';
-	}
-	return $str;
+    if ($modinstance->GetChangeLog() != '') {
+        $str .= "<br />".lang('changehistory').":<br />";
+        $str .= $modinstance->GetChangeLog() . '<br />';
+    }
+    return $str;
 }
 
 /**
@@ -51,36 +51,36 @@ function cms_module_GetAbout(&$modinstance)
  */
 function cms_module_GetHelpPage(&$modinstance)
 {
-	$str = '';
-	@ob_start();
-	echo $modinstance->GetHelp();
-	$str .= @ob_get_contents();
-	@ob_end_clean();
-	$dependencies = $modinstance->GetDependencies();
-	if (count($dependencies) > 0 ) {
-		$str .= '<h3>'.lang('dependencies').'</h3>';
-		$str .= '<ul>';
-		foreach( $dependencies as $dep => $ver ) {
-			$str .= '<li>';
-			$str .= $dep.' =&gt; '.$ver;
-			$str .= '</li>';
-		}
-		$str .= '</ul>';
-	}
-	$paramarray = $modinstance->GetParameters();
-	if (count($paramarray) > 0) {
-		$str .= '<h3>'.lang('parameters').'</h3>';
-		$str .= '<ul>';
-		foreach ($paramarray as $oneparam) {
-			$str .= '<li>';
-			$help = '';
-			if ($oneparam['optional'] == true) $str .= '<em>(optional)</em> ';
-			if( isset($oneparam['help']) ) $help = $oneparam['help'];
-			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
-		}
-		$str .= '</ul>';
-	}
-	return $str;
+    $str = '';
+    @ob_start();
+    echo $modinstance->GetHelp();
+    $str .= @ob_get_contents();
+    @ob_end_clean();
+    $dependencies = $modinstance->GetDependencies();
+    if (count($dependencies) > 0 ) {
+        $str .= '<h3>'.lang('dependencies').'</h3>';
+        $str .= '<ul>';
+        foreach( $dependencies as $dep => $ver ) {
+            $str .= '<li>';
+            $str .= $dep.' =&gt; '.$ver;
+            $str .= '</li>';
+        }
+        $str .= '</ul>';
+    }
+    $paramarray = $modinstance->GetParameters();
+    if (count($paramarray) > 0) {
+        $str .= '<h3>'.lang('parameters').'</h3>';
+        $str .= '<ul>';
+        foreach ($paramarray as $oneparam) {
+            $str .= '<li>';
+            $help = '';
+            if ($oneparam['optional'] == true) $str .= '<em>(optional)</em> ';
+            if( isset($oneparam['help']) ) $help = $oneparam['help'];
+            $str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
+        }
+        $str .= '</ul>';
+    }
+    return $str;
 }
 
 ?>

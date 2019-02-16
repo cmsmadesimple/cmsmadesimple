@@ -36,6 +36,7 @@ namespace CMSMS\internal;
  */
 abstract class fixed_smarty_custom_resource extends \Smarty_Resource_Custom
 {
+
     protected $smarty;
 
     public function populate(\Smarty_Template_Source $source, \Smarty_Internal_Template $_template = null)

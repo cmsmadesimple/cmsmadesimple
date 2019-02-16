@@ -37,84 +37,94 @@
  */
 class Link extends ContentBase
 {
-    public function IsCopyable() { return TRUE; }
-    public function IsViewable() { return FALSE; }
-	public function HasSearchableContent() { return FALSE; }
-    public function FriendlyName() { return lang('contenttype_redirlink'); }
-
-    function SetProperties()
+    public function IsCopyable()
     {
-		parent::SetProperties();
-		$this->RemoveProperty('secure',0);
-		$this->RemoveProperty('cachable',true);
-		$this->AddProperty('url',3,self::TAB_MAIN,TRUE,TRUE);
+        return TRUE;
     }
 
-    function FillParams(array $params,bool $editing = false)
+    public function IsViewable()
     {
-		parent::FillParams($params,$editing);
-
-		if (isset($params)) {
-			$parameters = array('url');
-			foreach ($parameters as $oneparam) {
-				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
-			}
-
-			if (isset($params['file_url'])) $this->SetPropertyValue('url', $params['file_url']);
-		}
+        return FALSE;
     }
 
-    function ValidateData()
+    public function HasSearchableContent()
     {
-		$errors = parent::ValidateData();
-		if( $errors === FALSE )	$errors = array();
-
-		if ($this->GetPropertyValue('url') == '') {
-			$errors[]= lang('nofieldgiven',array(lang('url')));
-			$result = false;
-		}
-
-		return (count($errors) > 0?$errors:FALSE);
+        return FALSE;
     }
 
-    function TabNames()
+    public function FriendlyName()
     {
-		$res = array(lang('main'));
-		if( check_permission(get_userid(),'Manage All Content') ) {
-			$res[] = lang('options');
-		}
-		return $res;
+        return lang('contenttype_redirlink');
     }
 
-    function display_single_element(string $one, bool $adding)
+    public function SetProperties()
     {
-		switch($one) {
-		case 'url':
-			return array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
-			break;
-
-		default:
-			return parent::display_single_element($one,$adding);
-		}
+        parent::SetProperties();
+        $this->RemoveProperty('secure',0);
+        $this->RemoveProperty('cachable',true);
+        $this->AddProperty('url',3,self::TAB_MAIN,TRUE,TRUE);
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function FillParams(array $params,bool $editing = false)
     {
-		switch($tab) {
-		case '0':
-			return $this->display_attributes($adding);
-			break;
-		case '1':
-			return $this->display_attributes($adding,1);
-			break;
-		}
+        parent::FillParams($params,$editing);
+
+        if (isset($params)) {
+            $parameters = array('url');
+            foreach ($parameters as $oneparam) {
+                if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+            }
+
+            if (isset($params['file_url'])) $this->SetPropertyValue('url', $params['file_url']);
+        }
     }
 
-    function GetURL(bool $rewrite = true)
+    public function ValidateData()
     {
-		return $this->GetPropertyValue('url');
-		//return cms_htmlentities($this->GetPropertyValue('url'));
-    }
-}
+        $errors = parent::ValidateData();
+        if( $errors === FALSE )	$errors = array();
 
-?>
+        if ($this->GetPropertyValue('url') == '') {
+            $errors[]= lang('nofieldgiven',array(lang('url')));
+            $result = false;
+        }
+
+        return (count($errors) > 0?$errors:FALSE);
+    }
+
+    public function TabNames()
+    {
+        $res = array(lang('main'));
+        if( check_permission(get_userid(),'Manage All Content') ) {
+            $res[] = lang('options');
+        }
+        return $res;
+    }
+
+    public function display_single_element(string $one, bool $adding)
+    {
+        switch($one) {
+            case 'url':
+                return array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
+
+            default:
+                return parent::display_single_element($one,$adding);
+        }
+    }
+
+    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+        switch($tab) {
+            case '0':
+                return $this->display_attributes($adding);
+            case '1':
+                return $this->display_attributes($adding,1);
+        }
+    }
+
+    public function GetURL(bool $rewrite = true)
+    {
+        return $this->GetPropertyValue('url');
+        //return cms_htmlentities($this->GetPropertyValue('url'));
+    }
+} // class

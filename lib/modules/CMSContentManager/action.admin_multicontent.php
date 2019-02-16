@@ -56,12 +56,12 @@ if( isset($params['multiaction']) ) $multiaction = $params['multiaction'];
 // validate 1
 //
 if( !is_array($multicontent) || count($multicontent) == 0 ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 if( !$multiaction ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 //
@@ -85,42 +85,42 @@ if( $module != 'core' ) {
 
 $parms = array('multicontent'=>$params['multicontent']);
 switch( $bulkaction ) {
- case 'inactive':
-   $parms['active'] = 0;
-   $this->Redirect($id,'admin_bulk_active',$returnid,$parms);
-   break;
+    case 'inactive':
+        $parms['active'] = 0;
+        $this->Redirect($id,'admin_bulk_active',$returnid,$parms);
+        break;
 
- case 'active':
-   $parms['active'] = 1;
-   $this->Redirect($id,'admin_bulk_active',$returnid,$parms);
-   break;
+    case 'active':
+        $parms['active'] = 1;
+        $this->Redirect($id,'admin_bulk_active',$returnid,$parms);
+        break;
 
- case 'setcachable':
-   $parms['cachable'] = 1;
-   $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
-   break;
+    case 'setcachable':
+        $parms['cachable'] = 1;
+        $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
+        break;
 
- case 'setnoncachable':
-   $parms['cachable'] = 0;
-   $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
-   break;
+    case 'setnoncachable':
+        $parms['cachable'] = 0;
+        $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
+        break;
 
- case 'showinmenu':
-   $parms['showinmenu'] = 1;
-   $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
-   break;
+    case 'showinmenu':
+        $parms['showinmenu'] = 1;
+        $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
+        break;
 
- case 'hidefrommenu':
-   $parms['showinmenu'] = 0;
-   $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
-   break;
+    case 'hidefrommenu':
+        $parms['showinmenu'] = 0;
+        $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
+        break;
 
- case 'settemplatersrc':
- case 'setdesign':
- case 'changeowner':
- case 'delete':
-   $this->Redirect($id,'admin_bulk_'.$bulkaction,$returnid,$parms);
-   break;
+    case 'settemplatersrc':
+    case 'setdesign':
+    case 'changeowner':
+    case 'delete':
+        $this->Redirect($id,'admin_bulk_'.$bulkaction,$returnid,$parms);
+        break;
 
 }
 

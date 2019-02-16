@@ -46,8 +46,8 @@
  */
 function lang_by_realm($realm,$key)
 {
-  $args = func_get_args();
-  return CmsLangOperations::lang_from_realm($args);
+    $args = func_get_args();
+    return CmsLangOperations::lang_from_realm($args);
 }
 
 
@@ -59,7 +59,7 @@ function lang_by_realm($realm,$key)
  */
 function allow_admin_lang($flag = TRUE)
 {
-  return CmsLangOperations::allow_nonadmin_lang($flag);
+    return CmsLangOperations::allow_nonadmin_lang($flag);
 }
 
 
@@ -78,8 +78,8 @@ function allow_admin_lang($flag = TRUE)
  */
 function lang($key)
 {
-  $args = func_get_args();
-  return CmsLangOperations::lang($args);
+    $args = func_get_args();
+    return CmsLangOperations::lang($args);
 }
 
 /**
@@ -92,17 +92,17 @@ function lang($key)
  */
 function get_language_list($allow_none = true)
 {
-  $tmp = array();
-  if( $allow_none ) $tmp = array(''=>lang('nodefault'));
+    $tmp = array();
+    if( $allow_none ) $tmp = array(''=>lang('nodefault'));
 
-  $langs = CmsNlsOperations::get_installed_languages();
-  asort($langs);
-  foreach( $langs as $key  ) {
-    $obj = CmsNlsOperations::get_language_info($key);
-    $value = $obj->display();
-    if( $obj->fullname() ) $value .= ' ('.$obj->fullname().')';
-    $tmp[$key] = $value;
-  }
+    $langs = CmsNlsOperations::get_installed_languages();
+    asort($langs);
+    foreach( $langs as $key  ) {
+        $obj = CmsNlsOperations::get_language_info($key);
+        $value = $obj->display();
+        if( $obj->fullname() ) $value .= ' ('.$obj->fullname().')';
+        $tmp[$key] = $value;
+    }
 
-  return $tmp;
+    return $tmp;
 }

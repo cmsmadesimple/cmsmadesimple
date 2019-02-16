@@ -120,18 +120,18 @@ abstract class Alert
     public function __get($key)
     {
         switch( $key ) {
-        case 'name':
-            return trim($this->_name);
-        case 'module':
-            return trim($this->_module);
-        case 'priority':
-            return trim($this->_priority);
-        case 'created':
-            return (int) $this->_created;
-        case 'loaded':
-            return (bool) $this->_loaded;
-        default:
-            throw new \InvalidArgumentException("$key is not a gettable member of ".get_class($this));
+            case 'name':
+                return trim($this->_name);
+            case 'module':
+                return trim($this->_module);
+            case 'priority':
+                return trim($this->_priority);
+            case 'created':
+                return (int) $this->_created;
+            case 'loaded':
+                return (bool) $this->_loaded;
+            default:
+                throw new \InvalidArgumentException("$key is not a gettable member of ".get_class($this));
         }
     }
 
@@ -151,28 +151,28 @@ abstract class Alert
     {
         if( $this->_loaded ) throw new \LogicException('Alerts cannot be altered once saved');
         switch( $key ) {
-        case 'name':
-            $this->_name = trim($val);
-            break;
-
-        case 'module':
-            $this->_module = trim($val);
-            break;
-
-        case 'priority':
-            switch( $val ) {
-            case self::PRIORITY_HIGH:
-            case self::PRIORITY_NORMAL:
-            case self::PRIORITY_LOW:
-                $this->_priority = $val;
+            case 'name':
+                $this->_name = trim($val);
                 break;
-            default:
-                throw new \InvalidArgumentException("$val is an invalid value for the priority of an alert");
-            }
-            break;
 
-        default:
-            throw new \InvalidArgumentException("$key is not a settable member of ".get_class($this));
+            case 'module':
+                $this->_module = trim($val);
+                break;
+
+            case 'priority':
+                switch( $val ) {
+                    case self::PRIORITY_HIGH:
+                    case self::PRIORITY_NORMAL:
+                    case self::PRIORITY_LOW:
+                        $this->_priority = $val;
+                        break;
+                    default:
+                        throw new \InvalidArgumentException("$val is an invalid value for the priority of an alert");
+                }
+                break;
+
+            default:
+                throw new \InvalidArgumentException("$key is not a settable member of ".get_class($this));
         }
     }
 
@@ -328,12 +328,12 @@ abstract class Alert
         // now sort these fuggers by priority
         $map = [ Alert::PRIORITY_HIGH => 0, Alert::PRIORITY_NORMAL => 1, Alert::PRIORITY_LOW => 2 ];
         usort($out,function($a,$b) use ($map) {
-                $pa = $map[$a->priority];
-                $pb = $map[$b->priority];
-                if( $pa < $pb ) return -1;
-                if( $pa > $pb ) return 1;
-                return strcasecmp($a->module,$b->module);
-            });
+              $pa = $map[$a->priority];
+              $pb = $map[$b->priority];
+              if( $pa < $pb ) return -1;
+              if( $pa > $pb ) return 1;
+              return strcasecmp($a->module,$b->module);
+        });
         if( count($out) ) return $out;
     }
 

@@ -35,14 +35,14 @@ if ($params['dir'] == "down")
     $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET item_order = (item_order + 1), modified_date = '.$time.' WHERE id = ?';
     $db->Execute($query, array($fdid));
 
-  }
+}
 else if ($params['dir'] == "up")
   {
     $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ?';
     $db->Execute($query, array($order - 1));
     $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET item_order = (item_order - 1), modified_date = '.$time.' WHERE id = ?';
     $db->Execute($query, array($fdid));
-  }
+}
 
 $this->RedirectToAdminTab('customfields','','admin_settings');
 ?>

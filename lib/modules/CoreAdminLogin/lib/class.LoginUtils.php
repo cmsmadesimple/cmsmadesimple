@@ -3,6 +3,7 @@ namespace CoreAdminLogin;
 
 class LoginUtils
 {
+
     protected $_mod;
 
     public function __construct( \CoreAdminLogin $mod )

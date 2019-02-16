@@ -69,7 +69,8 @@ final class JobManager
     /**
      * @ignore
      */
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     /**
      * Get the sole permitted instance of this object

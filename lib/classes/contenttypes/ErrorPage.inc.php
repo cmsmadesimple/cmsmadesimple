@@ -33,7 +33,9 @@
  */
 class ErrorPage extends Content
 {
+
     var $doAliasCheck;
+
     var $error_types;
 
     public function __construct()
@@ -48,20 +50,20 @@ class ErrorPage extends Content
         }
         $this->doAliasCheck = false;
         $this->doAutoAliasIfEnabled = false;
-        $this->mType = strtolower(get_class($this)) ;
+        $this->mType = strtolower(get_class($this));
     }
 
-    function HandlesAlias()
+    public function HandlesAlias()
     {
         return true;
     }
 
-    function FriendlyName()
+    public function FriendlyName()
     {
         return lang('contenttype_errorpage');
     }
 
-    function SetProperties()
+    public function SetProperties()
     {
         parent::SetProperties();
         $this->RemoveProperty('secure',0);
@@ -88,32 +90,32 @@ class ErrorPage extends Content
         $this->mPreview = true;
     }
 
-    function IsCopyable()
+    public function IsCopyable()
     {
         return FALSE;
     }
 
-    function IsDefaultPossible()
+    public function IsDefaultPossible()
     {
         return FALSE;
     }
 
-    function HasUsableLink()
+    public function HasUsableLink()
     {
         return false;
     }
 
-    function WantsChildren()
+    public function WantsChildren()
     {
         return false;
     }
 
-    function IsSystemPage()
+    public function IsSystemPage()
     {
         return true;
     }
 
-    function FillParams(array $params,bool $editing = false)
+    public function FillParams(array $params,bool $editing = false)
     {
         parent::FillParams($params,$editing);
         $this->mParentId = -1;
@@ -122,62 +124,48 @@ class ErrorPage extends Content
         $this->mActive = true;
     }
 
-    function display_single_element($one,$adding)
+    public function display_single_element($one,$adding)
     {
         switch($one) {
-        case 'alias':
-            $dropdownopts = '';
-            //$dropdownopts = '<option value="">'.lang('none').'</option>';
-            foreach ($this->error_types as $code=>$name)
-            {
-                $dropdownopts .= '<option value="error' . $code . '"';
-                if ('error'.$code == $this->mAlias)
-                {
-                    $dropdownopts .= ' selected="selected" ';
+            case 'alias':
+                $dropdownopts = '';
+                //$dropdownopts = '<option value="">'.lang('none').'</option>';
+                foreach ($this->error_types as $code=>$name) {
+                    $dropdownopts .= '<option value="error' . $code . '"';
+                    if ('error'.$code == $this->mAlias) $dropdownopts .= ' selected="selected" ';
+                    $dropdownopts .= ">{$name} ({$code})</option>";
                 }
-                $dropdownopts .= ">{$name} ({$code})</option>";
-            }
-            return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
-            break;
+                return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
 
-        default:
-            return parent::display_single_element($one,$adding);
+            default:
+                return parent::display_single_element($one,$adding);
         }
     }
 
-    function ValidateData()
+    public function ValidateData()
     {
         // $this->SetPropertyValue('searchable',0);
         // force not searchable.
 
         $errors = parent::ValidateData();
-        if ($errors == FALSE)
-        {
-            $errors = array();
-        }
+        if ($errors == FALSE) $errors = [];
 
         //Do our own alias check
-        if ($this->mAlias == '')
-        {
+        if ($this->mAlias == '') {
             $errors[] = lang('nofieldgiven', array(lang('error_type')));
         }
-        else if (in_array($this->mAlias, $this->error_types))
-        {
+        else if (in_array($this->mAlias, $this->error_types)) {
             $errors[] = lang('nofieldgiven', array(lang('error_type')));
         }
-        else if ($this->mAlias != $this->mOldAlias)
-        {
+        else if ($this->mAlias != $this->mOldAlias) {
             $gCms = cmsms();
             $contentops =& $gCms->GetContentOperations();
             $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-            if ($error !== FALSE)
-            {
-                if ($error == lang('aliasalreadyused'))
-                {
+            if ($error !== FALSE) {
+                if ($error == lang('aliasalreadyused')) {
                     $errors[] = lang('errorpagealreadyinuse');
                 }
-                else
-                {
+                else {
                     $errors[] = $error;
                 }
             }

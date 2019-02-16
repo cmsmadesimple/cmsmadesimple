@@ -53,69 +53,70 @@
  */
 final class cms_module_smarty_plugin_manager
 {
-	/**
-	 * @ignore
-	 */
-	private static $_instance;
 
-	/**
-	 * @ignore
-	 */
-	private $_data;
+    /**
+     * @ignore
+     */
+    private static $_instance;
 
-	/**
-	 * @ignore
-	 */
-	private $_loaded;
+    /**
+     * @ignore
+     */
+    private $_data;
 
-	/**
-	 * @ignore
-	 */
-	private $_modified;
+    /**
+     * @ignore
+     */
+    private $_loaded;
+
+    /**
+     * @ignore
+     */
+    private $_modified;
 
     /**
      * @ignore
      */
     private $_cache;
 
-	/**
-	 * A flag indicating that the plugin is intended to be available for the frontend
-	 */
-	const AVAIL_FRONTEND = 1;
+    /**
+     * A flag indicating that the plugin is intended to be available for the frontend
+     */
+    const AVAIL_FRONTEND = 1;
 
-	/**
-	 * A flag indicating that the plugin is intended to be available for admin templates
-	 */
-	const AVAIL_ADMIN    = 2;
+    /**
+     * A flag indicating that the plugin is intended to be available for admin templates
+     */
+    const AVAIL_ADMIN    = 2;
 
-	/**
-	 * @ignore
-	 */
-	protected function __construct()
+    /**
+     * @ignore
+     */
+    protected function __construct()
     {
         $this->_cache = \CmsApp::get_instance()->get_cache_driver();
     }
 
-	/**
-	 * Get the single allowed instance of this class
-	 */
-	public static function &get_instance()
-	{
-		if( !self::$_instance ) self::$_instance = new cms_module_smarty_plugin_manager();
-		return self::$_instance;
-	}
+    /**
+     * Get the single allowed instance of this class
+     */
+    public static function &get_instance()
+    {
+        if( !self::$_instance ) self::$_instance = new cms_module_smarty_plugin_manager();
+        return self::$_instance;
+    }
 
-	/**
-	 * @ignore
-	 */
-	private function _load()
-	{
-		if( $this->_loaded == true ) return;
-		// todo: cache this stuff.  does not need to be run on each request
+    /**
+     * @ignore
+     */
+    private function _load()
+    {
+        if( $this->_loaded == true ) return;
+        // todo: cache this stuff.  does not need to be run on each request
 
         $data = $this->_cache->get(__CLASS__);
         $this->_data = [];
-		$this->_loaded = TRUE;
+        $this->_loaded = TRUE;
         if( !$data ) {
             $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_smarty_plugins ORDER BY module';
@@ -123,211 +124,210 @@ final class cms_module_smarty_plugin_manager
             $this->_cache->set(__CLASS__,$data);
         }
 
-		if( is_array($data) && count($data) ) {
-			for( $i = 0, $n = count($data); $i < $n; $i++ ) {
-				$row = $data[$i];
-				$tmp2 = unserialize($row['callback']);
+        if( is_array($data) && count($data) ) {
+            for( $i = 0, $n = count($data); $i < $n; $i++ ) {
+                $row = $data[$i];
+                $tmp2 = unserialize($row['callback']);
                 if( $tmp2 ) $row['callback'] = $tmp2;
-				$this->_data[$row['sig']] = $row;
-			}
-		}
-	}
+                $this->_data[$row['sig']] = $row;
+            }
+        }
+    }
 
-	/**
-	 * @ignore
-	 */
-	private function _save()
-	{
-		if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE ) return;
+    /**
+     * @ignore
+     */
+    private function _save()
+    {
+        if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE ) return;
 
         $this->_cache->erase(__CLASS__);
-		$db = CmsApp::get_instance()->GetDb();
-		$query = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'module_smarty_plugins';
-		$db->Execute($query);
+        $db = CmsApp::get_instance()->GetDb();
+        $query = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'module_smarty_plugins';
+        $db->Execute($query);
 
-		$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
-		$fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
-		foreach( $this->_data as $key => $row ) {
+        $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
+        $fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
+        foreach( $this->_data as $key => $row ) {
             $row['callback'] = serialize($row['callback']);
-			$query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],$row['callback'],$row['cachable'],$row['available']);
-		}
-		if( endswith($query,',') ) $query = substr($query,0,-1);
-		$dbr = $db->Execute($query);
-		if( !$dbr ) return FALSE;
+            $query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],$row['callback'],$row['cachable'],$row['available']);
+        }
+        if( endswith($query,',') ) $query = substr($query,0,-1);
+        $dbr = $db->Execute($query);
+        if( !$dbr ) return FALSE;
 
-		$this->_modified = FALSE;
-		return TRUE;
-	}
+        $this->_modified = FALSE;
+        return TRUE;
+    }
 
-	/**
-	 * Attempt to load a specific plugin
-	 * This is called by the smarty class when looking for an unknwon plugin.
-	 *
-	 * @internal
-	 */
-	public static function load_plugin($name,$type)
-	{
-		$row = self::get_instance()->find($name,$type);
-		if( !is_array($row) ) return;
+    /**
+     * Attempt to load a specific plugin
+     * This is called by the smarty class when looking for an unknwon plugin.
+     *
+     * @internal
+     */
+    public static function load_plugin($name,$type)
+    {
+        $row = self::get_instance()->find($name,$type);
+        if( !is_array($row) ) return;
 
-		// load the module
-		$module = cms_utils::get_module($row['module']);
-		if( $module ) {
-			// fix the callback, incase somebody used 'this' in the string.
-			if( is_array($row['callback']) ) {
-				// its an array
-				if( count($row['callback']) == 2 ) {
-					// first element is some kind of string... do some magic to point to the module object
-					if( !is_string($row['callback'][0]) || strtolower($row['callback'][0]) == 'this') $row['callback'][0] = $row['module'];
-				}
-				else {
-					// an array with only one item?
-					cms_errort('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because of errors in the callback');
-					return;
-				}
-			}
-			else if( startswith($row['callback'],'::') ) {
-				// ::method syntax (implies module name)
-				$row['callback'] = array($row['module'],substr($row['callback'],2));
-			}
-			else {
-				// assume it's just a method name
-				$row['callback'] = array($row['module'],$row['callback']);
-			}
-		}
-		if( !is_callable($row['callback']) ) {
-			// it's in the db... but not callable.
-			cms_error('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
-			$row['callback'] = array($row['module'],'function_plugin');
-			return $row;
-		}
-		return $row;
-	}
+        // load the module
+        $module = cms_utils::get_module($row['module']);
+        if( $module ) {
+            // fix the callback, incase somebody used 'this' in the string.
+            if( is_array($row['callback']) ) {
+                // its an array
+                if( count($row['callback']) == 2 ) {
+                    // first element is some kind of string... do some magic to point to the module object
+                    if( !is_string($row['callback'][0]) || strtolower($row['callback'][0]) == 'this') $row['callback'][0] = $row['module'];
+                }
+                else {
+                    // an array with only one item?
+                    cms_errort('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because of errors in the callback');
+                    return;
+                }
+            }
+            else if( startswith($row['callback'],'::') ) {
+                // ::method syntax (implies module name)
+                $row['callback'] = array($row['module'],substr($row['callback'],2));
+            }
+            else {
+                // assume it's just a method name
+                $row['callback'] = array($row['module'],$row['callback']);
+            }
+        }
+        if( !is_callable($row['callback']) ) {
+            // it's in the db... but not callable.
+            cms_error('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
+            $row['callback'] = array($row['module'],'function_plugin');
+            return $row;
+        }
+        return $row;
+    }
 
-	/**
-	 * Find the details for a specific plugin
-	 *
-	 * @param string $name
-	 * @param string $type
-	 * @return array
-	 */
-	public function find($name,$type)
-	{
-		$this->_load();
-		if( is_array($this->_data) && count($this->_data) ) {
-			foreach( $this->_data as $key => $row ) {
-				if( $row['name'] == $name && $row['type'] == $type ) return $row;
-			}
-		}
-	}
+    /**
+     * Find the details for a specific plugin
+     *
+     * @param string $name
+     * @param string $type
+     * @return array
+     */
+    public function find($name,$type)
+    {
+        $this->_load();
+        if( is_array($this->_data) && count($this->_data) ) {
+            foreach( $this->_data as $key => $row ) {
+                if( $row['name'] == $name && $row['type'] == $type ) return $row;
+            }
+        }
+    }
 
-	/**
-	 * Add information about a plugin to the database
-	 * This method is normally called from within a module's installation directory.
-	 *
-	 * @param string $module_name The module name
-	 * @param string $name  The plugin name
-	 * @param string $type  The plugin type (function,block,modifier)
-	 * @param callable $callback A static function to call.
-	 * @param bool $cachable Whether the plugin is cachable
-	 * @param int  $available Flags indicating the availability of the plugin.   See AVAil_ADMIN AND AVAIL_FRONTEND
-	 */
-	public static function addStatic($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
-	{
-		return self::get_instance()->add($module_name,$name,$type,$callback,$cachable,$available);
-	}
+    /**
+     * Add information about a plugin to the database
+     * This method is normally called from within a module's installation directory.
+     *
+     * @param string $module_name The module name
+     * @param string $name  The plugin name
+     * @param string $type  The plugin type (function,block,modifier)
+     * @param callable $callback A static function to call.
+     * @param bool $cachable Whether the plugin is cachable
+     * @param int  $available Flags indicating the availability of the plugin.   See AVAil_ADMIN AND AVAIL_FRONTEND
+     */
+    public static function addStatic($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
+    {
+        return self::get_instance()->add($module_name,$name,$type,$callback,$cachable,$available);
+    }
 
 
-	/**
-	 * add information about a plugin to the database.
-	 * This method is normally called from within a module's installation directory.
-	 *
-	 * @param string $module_name The module name
-	 * @param string $name  The plugin name
-	 * @param string $type  The plugin type (function,block,modifier)
-	 * @param callable $callback A static function to call.
-	 * @param bool $cachable Whether the plugin is cachable
-	 * @param int  $available Flags indicating the availability of the plugin.   See AVAil_ADMIN AND AVAIL_FRONTEND
-	 */
-	public function add($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
-	{
-		$this->_load();
-		if( !is_array($this->_data) ) $this->_data = array();
+    /**
+     * add information about a plugin to the database.
+     * This method is normally called from within a module's installation directory.
+     *
+     * @param string $module_name The module name
+     * @param string $name  The plugin name
+     * @param string $type  The plugin type (function,block,modifier)
+     * @param callable $callback A static function to call.
+     * @param bool $cachable Whether the plugin is cachable
+     * @param int  $available Flags indicating the availability of the plugin.   See AVAil_ADMIN AND AVAIL_FRONTEND
+     */
+    public function add($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
+    {
+        $this->_load();
+        if( !is_array($this->_data) ) $this->_data = array();
 
-		// todo... check valid input
+        // todo... check valid input
 
-		$sig = md5($name.$module_name.serialize($callback));
-		if( !isset($this->_data[$sig]) ) {
-			if( $available == 0 ) $available = self::AVAIL_FRONTEND;
-			$this->_data[$name] =
-				array('sig'=>$sig, 'module'=>$module_name, 'name'=>$name, 'type'=>$type,
-					  'callback'=>$callback, 'cachable'=>(int)$cachable, 'available'=>$available);
-			$this->_modified = TRUE;
-			return $this->_save();
-		}
-		return TRUE;
-	}
+        $sig = md5($name.$module_name.serialize($callback));
+        if( !isset($this->_data[$sig]) ) {
+            if( $available == 0 ) $available = self::AVAIL_FRONTEND;
+            $this->_data[$name] =
+            array('sig'=>$sig, 'module'=>$module_name, 'name'=>$name, 'type'=>$type,
+            'callback'=>$callback, 'cachable'=>(int)$cachable, 'available'=>$available);
+            $this->_modified = TRUE;
+            return $this->_save();
+        }
+        return TRUE;
+    }
 
-	/**
-	 * Remove all of the plugins for a module
-	 *
-	 * @param string $module_name
-	 */
-	public static function remove_by_module($module_name)
-	{
-		self::get_instance()->_remove_by_module($module_name);
-	}
+    /**
+     * Remove all of the plugins for a module
+     *
+     * @param string $module_name
+     */
+    public static function remove_by_module($module_name)
+    {
+        self::get_instance()->_remove_by_module($module_name);
+    }
 
-	/**
-	 * Remove all of the plugins for a module
-	 *
-	 * @param string $module_name
-	 */
-	public function _remove_by_module($module_name)
-	{
-		$this->_load();
-		if( is_array($this->_data) && count($this->_data) ) {
-			$new = array();
-			foreach( $this->_data as $key => $row ) {
-				if( $row['module'] != $module_name ) $new[$key] = $row;
-			}
-			$this->_data = $new;
-			$this->_modified = true;
-			$this->_save();
-		}
-	}
+    /**
+     * Remove all of the plugins for a module
+     *
+     * @param string $module_name
+     */
+    public function _remove_by_module($module_name)
+    {
+        $this->_load();
+        if( is_array($this->_data) && count($this->_data) ) {
+            $new = array();
+            foreach( $this->_data as $key => $row ) {
+                if( $row['module'] != $module_name ) $new[$key] = $row;
+            }
+            $this->_data = $new;
+            $this->_modified = true;
+            $this->_save();
+        }
+    }
 
-	/**
-	 * Remove the plugin by it's name and type
-	 *
-	 * @param string $name
-	 * @param string $type (function,block,modifier)
-	 */
-	public static function remove_by_name($name)
-	{
-		self::get_instance()->_remove_by_name($name);
-	}
+    /**
+     * Remove the plugin by it's name and type
+     *
+     * @param string $name
+     * @param string $type (function,block,modifier)
+     */
+    public static function remove_by_name($name)
+    {
+        self::get_instance()->_remove_by_name($name);
+    }
 
-	/**
-	 * Remove the plugin by it's name and type
-	 *
-	 * @param string $name
-	 * @param string $type (function,block,modifier)
-	 */
-	public function _remove_by_name($name)
-	{
-		$this->_load();
-		if( is_array($this->_data) && count($this->_data) ) {
-			$new = array();
-			foreach( $this->_data as $key => $row ) {
-				if( $name != $row['name'] ) $new[$key] = $row;
-			}
-			$this->_data = $new;
-			$this->_modified = true;
-			$this->_save();
-		}
-	}
-
+    /**
+     * Remove the plugin by it's name and type
+     *
+     * @param string $name
+     * @param string $type (function,block,modifier)
+     */
+    public function _remove_by_name($name)
+    {
+        $this->_load();
+        if( is_array($this->_data) && count($this->_data) ) {
+            $new = array();
+            foreach( $this->_data as $key => $row ) {
+                if( $name != $row['name'] ) $new[$key] = $row;
+            }
+            $this->_data = $new;
+            $this->_modified = true;
+            $this->_save();
+        }
+    }
 } // end of class
 
 #

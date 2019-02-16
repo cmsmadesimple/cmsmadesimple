@@ -29,21 +29,18 @@ check_login();
 $bookmark_id = -1;
 if (isset($_GET["bookmark_id"]))
 {
-	$bookmark_id = $_GET["bookmark_id"];
+    $bookmark_id = $_GET["bookmark_id"];
 
-	$result = false;
+    $result = false;
 
-	$bookops = cmsms()->GetBookmarkOperations();
-	$markobj = $bookops->LoadBookmarkByID($bookmark_id);
+    $bookops = cmsms()->GetBookmarkOperations();
+    $markobj = $bookops->LoadBookmarkByID($bookmark_id);
 
-	if ($markobj)
-	{
-		$result = $markobj->Delete();
-	}
+    if ($markobj)
+    {
+        $result = $markobj->Delete();
+    }
 
 }
 
 redirect("listbookmarks.php".$urlext);
-
-
-?>

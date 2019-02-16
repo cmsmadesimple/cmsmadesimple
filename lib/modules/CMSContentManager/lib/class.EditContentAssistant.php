@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CMSContentManager (c) 2013 by Robert Campbell 
+# Module: CMSContentManager (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -41,26 +41,27 @@ use \CMSMS\internal\ContentAssistant;
  */
 abstract class EditContentAssistant implements ContentAssistant
 {
-  private $_content_obj;
 
-  /**
-   * construct an EditContentAssistant object.
-   *
-   * @param ContentBase Specifyt he content object that we are building an assistant for.
-   */
-  public function __construct(Contentbase $content)
-  {
-    $this->_content_obj = $content;
-  }
+    private $_content_obj;
 
-  /**
-   * Get HTML (including javascript) that should go in the page content when eding this content object.
-   * This could be used for outputting some javascript to enhance the functionality of some content fields.
-   *
-   * This function
-   * @return string
-   */
-  abstract public function getExtraCode();
+    /**
+     * construct an EditContentAssistant object.
+     *
+     * @param ContentBase Specifyt he content object that we are building an assistant for.
+     */
+    public function __construct(Contentbase $content)
+    {
+        $this->_content_obj = $content;
+    }
+
+    /**
+     * Get HTML (including javascript) that should go in the page content when eding this content object.
+     * This could be used for outputting some javascript to enhance the functionality of some content fields.
+     *
+     * This function
+     * @return string
+     */
+    abstract public function getExtraCode();
 }
 
 #

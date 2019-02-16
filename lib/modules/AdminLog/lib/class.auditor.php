@@ -3,7 +3,9 @@ namespace AdminLog;
 
 class auditor implements \CMSMS\IAuditManager
 {
+
     private $_mod;
+
     private $_storage;
 
     public function __construct( \AdminLog $mod, storage $store )
@@ -34,14 +36,16 @@ class auditor implements \CMSMS\IAuditManager
     {
         $sevmsg = null;
         switch( $severity ) {
-        case event::TYPE_WARNING:
-            $sevmsg = 'WARNING';
-        case event::TYPE_ERROR:
-            $sevmsg = 'ERROR';
-        case event::TYPE_NOTICE:
-        default:
-            $sevmsg = 'NOTICE';
-            break;
+            case event::TYPE_WARNING:
+                $sevmsg = 'WARNING';
+		              break;
+            case event::TYPE_ERROR:
+                $sevmsg = 'ERROR';
+		              break;
+            case event::TYPE_NOTICE:
+            default:
+                $sevmsg = 'NOTICE';
+                break;
         }
         $sitename = \cms_siteprefs::get('sitename','CMSMS');
         $msg = "$sitename $sevmsg: $msg";
@@ -77,5 +81,4 @@ class auditor implements \CMSMS\IAuditManager
         $this->_storage->save( $ev );
         $this->error_log( $ev::TYPE_ERROR, $msg );
     }
-
 } // end of class

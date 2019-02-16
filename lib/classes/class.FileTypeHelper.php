@@ -21,38 +21,47 @@ namespace CMSMS;
  */
 class FileTypeHelper
 {
+
     /**
      * @ignore
      */
     private $_mime_ok;
+
     /**
      * @ignore
      */
     private $_use_mimetype;
+
     /**
      * @ignore
      */
     private $_config;
+
     /**
      * @ignore
      */
     private $_image_extensions = ['jpg','jpeg','bmp','wbmp','gif','png','webp'];
+
     /**
      * @ignore
      */
     private $_archive_extensions = ['.zip', '.tar.gz', '.tar.bz2', '.7z', '.rar', '.s7z', '.gz', '.z' ];
+
     /**
      * @ignore
      */
     private $_audio_extensions = ['mp3','wav','flac','ra','ram','wm','ogg'];
+
     /**
      * @ignore
      */
     private $_video_extensions = ['swf','mov','mpg','mp4','mpeg','wmv','rm','avi'];
+
     /**
      * @ignore
      */
     private $_xml_extensions = ['xml','rss'];
+
     /**
      * @ignore
      */
@@ -245,10 +254,10 @@ class FileTypeHelper
         if( $this->_use_mimetype && $this->is_readable( $filename ) ) {
             $type = $this->get_mime_type( $filename );
             switch( $type ) {
-            case 'text/xml';
-            case 'application/xml':
-            case 'application/rss+xml':
-                return TRUE;
+                case 'text/xml':
+                case 'application/xml':
+                case 'application/rss+xml':
+                    return TRUE;
             }
         }
         $ext = strtolower(substr($filename,strrpos($filename,'.')+1));

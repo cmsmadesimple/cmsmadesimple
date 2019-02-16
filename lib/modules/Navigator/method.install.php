@@ -175,9 +175,9 @@ try {
     }
 }
 catch( \Exception $e ) {
-  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
-  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
-  return $e->GetMessage();
+    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+    audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+    return $e->GetMessage();
 }
 
 // register plugins

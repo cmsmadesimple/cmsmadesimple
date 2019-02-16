@@ -49,61 +49,62 @@
  */
 abstract class CmsExtraDataException extends Exception
 {
-  /**
-   * @ignore
-   */
-  private $_extra;
 
-  /**
-   * Constructor
-   * This method accepts variable arguments
-   *
-   * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$prev)
-   * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$extra,$prev)
-   *
-   * @see \Exception
-   */
-  public function __construct(/* var args */)
-  {
-      $args = $msg = $prev = NULL;
-      $code = 0;
-      $args = func_get_args();
-      if( is_array($args) && count($args) == 1 ) $args = $args[0];
-      for( $i = 0; $i < count($args); $i++ ) {
-          switch( $i ) {
-          case 0:
-              $msg = $args[$i];
-              break;
+    /**
+     * @ignore
+     */
+    private $_extra;
 
-          case 1:
-              $code = (int)$args[$i];
-              break;
+    /**
+     * Constructor
+     * This method accepts variable arguments
+     *
+     * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$prev)
+     * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$extra,$prev)
+     *
+     * @see \Exception
+     */
+    public function __construct(/* var args */)
+    {
+        $args = $msg = $prev = NULL;
+        $code = 0;
+        $args = func_get_args();
+        if( is_array($args) && count($args) == 1 ) $args = $args[0];
+        for( $i = 0; $i < count($args); $i++ ) {
+            switch( $i ) {
+                case 0:
+                    $msg = $args[$i];
+                    break;
 
-          case 2:
-              if( is_object($args[$i]) ) {
-                  $prev = $args[$i];
-              }
-              else {
-                  $this->_extra = $args[$i];
-              }
-              break;
+                case 1:
+                    $code = (int)$args[$i];
+                    break;
 
-          case 3:
-              if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
-              break;
-          }
-      }
-      parent::__construct($msg,$code,$prev);
-  }
+                case 2:
+                    if( is_object($args[$i]) ) {
+                        $prev = $args[$i];
+                    }
+                    else {
+                        $this->_extra = $args[$i];
+                    }
+                    break;
 
-  /**
-   * Return extra data associated with the exception
-   * @return mixed
-   */
-  public function GetExtraData()
-  {
-      return $this->_extra;
-  }
+                case 3:
+                    if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
+                    break;
+            }
+        }
+        parent::__construct($msg,$code,$prev);
+    }
+
+    /**
+     * Return extra data associated with the exception
+     * @return mixed
+     */
+    public function GetExtraData()
+    {
+        return $this->_extra;
+    }
 }
 
 /**
@@ -149,7 +150,9 @@ class CmsException extends CmsExtraDataException
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsLogicException extends CmsException {}
+class CmsLogicException extends CmsException
+{
+}
 
 /**
  * A base CMSMS Communications Exception
@@ -159,7 +162,9 @@ class CmsLogicException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsCommunicationException extends CmsException {}
+class CmsCommunicationException extends CmsException
+{
+}
 
 /**
  * A base CMSMS Privacy Exception
@@ -169,7 +174,9 @@ class CmsCommunicationException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsPrivacyException extends CmsException {}
+class CmsPrivacyException extends CmsException
+{
+}
 
 /**
  * A base CMSMS Singleton Exception
@@ -179,7 +186,9 @@ class CmsPrivacyException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsSingletonException extends CmsException {}
+class CmsSingletonException extends CmsException
+{
+}
 
 /**
  * An exception indicating invalid data was supplied to a function or class.
@@ -189,7 +198,9 @@ class CmsSingletonException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsInvalidDataException extends CmsLogicException {}
+class CmsInvalidDataException extends CmsLogicException
+{
+}
 
 /**
  * An exception indicating that the requested data could not be found.
@@ -199,7 +210,9 @@ class CmsInvalidDataException extends CmsLogicException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsDataNotFoundException extends CmsException {}
+class CmsDataNotFoundException extends CmsException
+{
+}
 
 /**
  * A special exception indicating that a 404 error should be supplied.
@@ -209,7 +222,9 @@ class CmsDataNotFoundException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.3
  */
-class CmsError400Exception extends CmsException {}
+class CmsError400Exception extends CmsException
+{
+}
 
 /**
  * A special exception indicating that a 404 error should be supplied.
@@ -219,7 +234,9 @@ class CmsError400Exception extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
-class CmsError404Exception extends CmsException {}
+class CmsError404Exception extends CmsException
+{
+}
 
 /**
  * A special exception indicating that a 403 error should be supplied.
@@ -228,7 +245,9 @@ class CmsError404Exception extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.12
  */
-class CmsError403Exception extends CmsException {}
+class CmsError403Exception extends CmsException
+{
+}
 
 /**
  * A special exception indicating that the install is temporarily unavailable (down for maintenance)
@@ -237,7 +256,9 @@ class CmsError403Exception extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.12
  */
-class CmsError503Exception extends CmsException {}
+class CmsError503Exception extends CmsException
+{
+}
 
 /**
  * a special exception indicating that content processing should stop, but other than that it is not
@@ -247,7 +268,9 @@ class CmsError503Exception extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.3
  */
-class CmsStopProcessingContentException extends CmsException {}
+class CmsStopProcessingContentException extends CmsException
+{
+}
 
 /**
  * A special exception indicating an error with a content object
@@ -257,7 +280,9 @@ class CmsStopProcessingContentException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsContentException extends CmsException {}
+class CmsContentException extends CmsException
+{
+}
 
 /**
  * A special exception indicating an error when editing content.
@@ -267,7 +292,9 @@ class CmsContentException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
-class CmsEditContentException extends CmsContentException {}
+class CmsEditContentException extends CmsContentException
+{
+}
 
 /**
  * A special exception indicating an SQL Error.
@@ -277,7 +304,9 @@ class CmsEditContentException extends CmsContentException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsSQLErrorException extends CmsException {}
+class CmsSQLErrorException extends CmsException
+{
+}
 
 
 /**
@@ -288,7 +317,9 @@ class CmsSQLErrorException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsXMLErrorException extends CmsException {}
+class CmsXMLErrorException extends CmsException
+{
+}
 
 /**
  * A special exception indicating a problem with a file, directory, or filesystem
@@ -298,6 +329,6 @@ class CmsXMLErrorException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsFileSystemException extends CmsException {}
-
-?>
+class CmsFileSystemException extends CmsException
+{
+}

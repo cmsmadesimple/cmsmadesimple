@@ -5,8 +5,8 @@ $this->SetCurrentTab('installed');
 
 $mod = get_parameter_value($params,'mod');
 if( !$mod ) {
-  $this->SetError($this->Lang('error_missingparams'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparams'));
+    $this->RedirectToAdminTab();
 }
 
 $ops = ModuleOperations::get_instance();
@@ -14,15 +14,15 @@ $result = $ops->InstallModule($mod);
 if( !is_array($result) || !isset($result[0]) ) $result = array(FALSE,$this->Lang('error_moduleinstallfailed'));
 
 if( $result[0] == FALSE ) {
-  $this->SetError($result[1]);
-  $this->RedirectToAdminTab();
+    $this->SetError($result[1]);
+    $this->RedirectToAdminTab();
 }
 
 $modinstance = $ops->get_module_instance($mod,'',TRUE);
 if( !is_object($modinstance) ) {
-  // uh-oh...
-  $this->SetError($this->Lang('error_getmodule',$mod));
-  $this->RedirectToAdminTab();
+    // uh-oh...
+    $this->SetError($this->Lang('error_getmodule',$mod));
+    $this->RedirectToAdminTab();
 }
 
 audit('',$this->GetName(),'Installed '.$modinstance->GetName().' '.$modinstance->GetVersion());

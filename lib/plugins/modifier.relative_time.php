@@ -1,7 +1,8 @@
 <?php
 /**
  * Smarty plugin
- * @package Smarty
+ *
+ * @package    Smarty
  * @subpackage plugins
  */
 
@@ -14,10 +15,11 @@
  * Purpose:  converts a date to a relative time
  * Input:    date to format
  * Example:  {$datetime|relative_datetime}
- * @author   Eric Lamb <eric@ericlamb.net>
+ *
+ * @author  Eric Lamb <eric@ericlamb.net>
  * @version 1.0
- * @param string
- * @return string
+ * @param   string
+ * @return  string
  */
 
 /*
@@ -25,9 +27,10 @@
  */
 function smarty_modifier_relative_time($timestamp)
 {
-    if(!$timestamp) return;
+    if(!$timestamp) { return;
+    }
 
-    if( !preg_match('/^[0-9]+$/',$timestamp) ) {
+    if(!preg_match('/^[0-9]+$/', $timestamp) ) {
         $timestamp = (int) strtotime($timestamp);
     }
     $difference = time() - $timestamp;
@@ -53,7 +56,7 @@ function smarty_modifier_relative_time($timestamp)
     }
 
     $period = lang('period_'.$period);
-    $text = lang('period_fmt',$difference,$period,$ending);
+    $text = lang('period_fmt', $difference, $period, $ending);
 
     return $text;
 }

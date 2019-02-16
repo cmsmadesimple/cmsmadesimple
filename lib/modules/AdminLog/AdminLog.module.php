@@ -34,7 +34,9 @@ require_once(__DIR__.'/lib/class.event.php');
 
 final class AdminLog extends \CMSModule
 {
+
     protected $storage;
+
     protected $auditor;
 
     public function InitializeAdmin()
@@ -45,12 +47,12 @@ final class AdminLog extends \CMSModule
                 if( $perm_source != 'AdminLog' ) return;
                 $key = 'perm_'.str_replace(' ','_',$perm_name);
                 return $this->Lang($key);
-            });
+        });
         \CMSMS\HookManager::add_hook('getperminfo',function($perm_source,$perm_name) {
                 if( $perm_source != 'AdminLog' ) return;
                 $key = 'permdesc_'.str_replace(' ','_',$perm_name);
                 return $this->Lang($key);
-            });
+        });
     }
 
     public function SetParameters()
@@ -66,13 +68,20 @@ final class AdminLog extends \CMSModule
         }
     }
 
-    public function GetFriendlyName() { return $this->Lang('friendlyname');  }
-    public function GetVersion() { return '1.0'; }
-    public function GetHelp() { return $this->Lang('help'); }
-    public function IsPluginModule() { return FALSE; }
-    public function HasAdmin() { return TRUE; }
-    public function GetAdminSection() { return 'siteadmin'; }
-    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
+    public function GetFriendlyName() { return $this->Lang('friendlyname');
+    }
+    public function GetVersion() { return '1.0';
+    }
+    public function GetHelp() { return $this->Lang('help');
+    }
+    public function IsPluginModule() { return FALSE;
+    }
+    public function HasAdmin() { return TRUE;
+    }
+    public function GetAdminSection() { return 'siteadmin';
+    }
+    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences');
+    }
 
     public function HasCapability($capability, $params = array())
     {

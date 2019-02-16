@@ -1,22 +1,22 @@
 <?php
-# CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
-# Visit our homepage at: http://cmsmadesimple.org
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
-#
-#$Id: class.module.inc.php 7061 2011-05-28 18:48:04Z calguy1000 $
+/**
+ * CMS - CMS Made Simple
+ * (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+ * Visit our homepage at: http://cmsmadesimple.org
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * BUT withOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
+ */
 
 /**
  * This file contains the base module class for all CMSMS modules.
@@ -32,9 +32,9 @@ use \CMSMS\internal\bulkcontentoperations;
  *
  * All modules should inherit and extend this class with their functionality.
  *
+ * @package     CMS
+ * @release     2.0
  * @since		0.9
- * @version     2.0
- * @package		CMS
  * @property    CmsApp $cms A reference to the application object (deprecated)
  * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
@@ -42,11 +42,6 @@ use \CMSMS\internal\bulkcontentoperations;
  */
 abstract class CMSModule
 {
-    /**
-     * ------------------------------------------------------------------
-     * Initialization Functions and parameters
-     * ------------------------------------------------------------------
-     */
 
     /**
      * A hash of the parameters passed in to the module action
@@ -102,7 +97,7 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $_action_tpl;
+    private $action_tpl;
 
     /**
      * ------------------------------------------------------------------
@@ -144,14 +139,14 @@ abstract class CMSModule
     public function __get($key)
     {
         switch( $key ) {
-        case 'cms':
-            return CmsApp::get_instance();
+            case 'cms':
+                return CmsApp::get_instance();
 
-        case 'config':
-            return \cms_config::get_instance();
+            case 'config':
+                return \cms_config::get_instance();
 
-        case 'db':
-            return CmsApp::get_instance()->GetDb();
+            case 'db':
+                return CmsApp::get_instance()->GetDb();
         }
 
         return null;
@@ -319,7 +314,6 @@ abstract class CMSModule
         }
         else {
             return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(), 'function', 'function_plugin',$cachable);
-            return TRUE;
         }
     }
 
@@ -499,7 +493,8 @@ abstract class CMSModule
      * @since 1.11
      * @author Robert Campbell
      */
-    public function CreateStaticRoutes() {}
+    public function CreateStaticRoutes() {
+    }
 
     /**
      * Returns a list of parameters and their help strings in a hash.  This is generally
@@ -559,42 +554,42 @@ abstract class CMSModule
 
                 if( $paramtype != '' ) {
                     switch( $paramtype ) {
-                    case 'CLEAN_INT':
-                        $mappedcount++;
-                        $mapped = true;
-                        $value = (int) $value;
-                        break;
-                    case 'CLEAN_FLOAT':
-                        $mappedcount++;
-                        $mapped = true;
-                        $value = (float) $value;
-                        break;
-                    case 'CLEAN_NONE':
-                        // pass through without cleaning.
-                        $mappedcount++;
-                        $mapped = true;
-                        break;
-                    case 'CLEAN_STRING':
-                        $value = cms_htmlentities($value);
-                        $mappedcount++;
-                        $mapped = true;
-                        break;
-                    case 'CLEAN_FILE':
-                        $value = realpath($value);
-                        if( $realpath === FALSE ) {
-                            $value = CLEANED_FILENAME;
-                        }
-                        else {
-                            if( strpos($realpath, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
-                        }
-                        $mappedcount++;
-                        $mapped = true;
-                        break;
-                    default:
-                        $mappedcount++;
-                        $mapped = true;
-                        $value = cms_htmlentities($value);
-                        break;
+                        case 'CLEAN_INT':
+                            $mappedcount++;
+                            $mapped = true;
+                            $value = (int) $value;
+                            break;
+                        case 'CLEAN_FLOAT':
+                            $mappedcount++;
+                            $mapped = true;
+                            $value = (float) $value;
+                            break;
+                        case 'CLEAN_NONE':
+                            // pass through without cleaning.
+                            $mappedcount++;
+                            $mapped = true;
+                            break;
+                        case 'CLEAN_STRING':
+                            $value = cms_htmlentities($value);
+                            $mappedcount++;
+                            $mapped = true;
+                            break;
+                        case 'CLEAN_FILE':
+                            $value = realpath($value);
+                            if( $realpath === FALSE ) {
+                                $value = CLEANED_FILENAME;
+                            }
+                            else {
+                                if( strpos($realpath, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
+                            }
+                            $mappedcount++;
+                            $mapped = true;
+                            break;
+                        default:
+                            $mappedcount++;
+                            $mapped = true;
+                            $value = cms_htmlentities($value);
+                            break;
                     } // switch
                 } // if $paramtype
             }
@@ -629,7 +624,8 @@ abstract class CMSModule
      * @see InitializeCommon()
      * @deprecated
      */
-    public function SetParameters() {}
+    public function SetParameters() {
+    }
 
     /**
      * This method can be overriden to perform module initialization that is common to the admin and
@@ -641,7 +637,8 @@ abstract class CMSModule
      * @see InitializeFrontend()
      * @see InitializeAdmin()
      */
-    public function InitializeCommon() {}
+    public function InitializeCommon() {
+    }
 
     /**
      * Called from within the constructor, ONLY for frontend module
@@ -655,7 +652,8 @@ abstract class CMSModule
      * @see RegisterRoute
      * @see RegisterModulePlugin
      */
-    public function InitializeFrontend() {}
+    public function InitializeFrontend() {
+    }
 
     /**
      * Called from within the constructor, ONLY for admin module
@@ -669,7 +667,8 @@ abstract class CMSModule
      * @see CreateParameter
      * @see InitializeCommon()
      */
-    public function InitializeAdmin() {}
+    public function InitializeAdmin() {
+    }
 
 
     /**
@@ -708,16 +707,16 @@ abstract class CMSModule
     final public function SetParameterType(string $param, string $type)
     {
         switch($type) {
-        case CLEAN_INT:
-        case CLEAN_FLOAT:
-        case CLEAN_NONE:
-        case CLEAN_STRING:
-        case CLEAN_FILE:
-            $this->param_map[trim($param)] = $type;
-            break;
-        default:
-            trigger_error('Attempt to set invalid parameter type');
-            break;
+            case CLEAN_INT:
+            case CLEAN_FLOAT:
+            case CLEAN_NONE:
+            case CLEAN_STRING:
+            case CLEAN_FILE:
+                $this->param_map[trim($param)] = $type;
+                break;
+            default:
+                trigger_error('Attempt to set invalid parameter type');
+                break;
         }
     }
 
@@ -859,7 +858,7 @@ abstract class CMSModule
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
      */
-    function GetContentBlockFieldInput($blockName,$value,$params,$adding,ContentBase $content_obj)
+    public function GetContentBlockFieldInput($blockName,$value,$params,$adding,ContentBase $content_obj)
     {
         return FALSE;
     }
@@ -883,7 +882,7 @@ abstract class CMSModule
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed|false The content block value if possible.
      */
-    function GetContentBlockFieldValue($blockName,$blockParams,$inputParams,ContentBase $content_obj)
+    public function GetContentBlockFieldValue($blockName,$blockParams,$inputParams,ContentBase $content_obj)
     {
         return FALSE;
     }
@@ -904,7 +903,7 @@ abstract class CMSModule
      * @param contentBase $content_obj The content object that is currently being edited.
      * @return string An error message if the value is invalid, empty otherwise.
      */
-    function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
+    public function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
     {
         return '';
     }
@@ -921,7 +920,7 @@ abstract class CMSModule
      * @param ContentBase $content_obj The content object that is currently being displayed
      * @return string
      */
-    function RenderContentBlockField($blockName,$value,$blockparams,ContentBase $content_obj)
+    public function RenderContentBlockField($blockName,$value,$blockparams,ContentBase $content_obj)
     {
         return $value;
     }
@@ -1398,7 +1397,7 @@ abstract class CMSModule
                     $gCms = CmsApp::get_instance();
                     $db = $gCms->GetDb();
                     $config = $gCms->GetConfig();
-                    $smarty = $this->_action_tpl; // smarty in scope.
+                    $smarty = $this->action_tpl; // smarty in scope.
                     $out = include($filename);
                     if( $out === 1 ) $out = null;
                     return $out;
@@ -1479,11 +1478,11 @@ abstract class CMSModule
             $tpl->assign('returnid',$returnid);
             $tpl->assign('mod',$this);
 
-            $this->_action_tpl = $tpl; // parent smarty template,  which is the global smarty object if this is called directly from a template
+            $this->action_tpl = $tpl; // parent smarty template,  which is the global smarty object if this is called directly from a template
         }
         $output = $this->DoAction($name, $id, $params, $returnid);
         if( $gCms->template_processing_allowed() ) {
-            $this->_action_tpl = null;
+            $this->action_tpl = null;
         }
 
         if( isset($params['assign']) ) {
@@ -1515,7 +1514,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
+    public function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
                                      $enctype='',$inline=true,$idsuffix='',$params=[])
     {
         return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
@@ -1535,7 +1534,7 @@ abstract class CMSModule
      * @param string $extra Text to append to the <form>-statement, for instanse for javascript-validation code
      * @return string
      */
-    function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = [], $extra='')
+    public function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = [], $extra='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
@@ -1547,7 +1546,7 @@ abstract class CMSModule
      *
      * @return string
      */
-    function CreateFormEnd()
+    public function CreateFormEnd()
     {
         return '</form>'."\n";
     }
@@ -1565,7 +1564,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+    public function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
@@ -1582,7 +1581,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
+    public function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
@@ -1600,7 +1599,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
+    public function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
@@ -1619,7 +1618,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+    public function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
@@ -1636,7 +1635,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputHidden($id, $name, $value='', $addttext='')
+    public function CreateInputHidden($id, $name, $value='', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
@@ -1654,7 +1653,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
+    public function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
@@ -1673,7 +1672,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
+    public function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
@@ -1690,7 +1689,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputReset($id, $name, $value='Reset', $addttext='')
+    public function CreateInputReset($id, $name, $value='Reset', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
@@ -1709,7 +1708,7 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
+    public function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
@@ -1729,7 +1728,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    function CreateInputSelectList($id, $name, $items, $selecteditems=[], $size=3, $addttext='', $multiple = true)
+    public function CreateInputSelectList($id, $name, $items, $selecteditems=[], $size=3, $addttext='', $multiple = true)
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
@@ -1747,7 +1746,7 @@ abstract class CMSModule
      * @param string $delimiter A delimiter to throw between each radio button, e.g., a <br /> tag or something for formatting
      * @return string
      */
-    function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
+    public function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
@@ -1773,7 +1772,7 @@ abstract class CMSModule
      * @deprecated
      * @see CmsFormUtils::create_textarea
      */
-    function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='', $rows='',$forcewysiwyg='',$wantedsyntax='',$addtext='')
+    public function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='', $rows='',$forcewysiwyg='',$wantedsyntax='',$addtext='')
     {
         $parms = [];
         $parms['enablewysiwyg'] = $enablewysiwyg;
@@ -1815,11 +1814,11 @@ abstract class CMSModule
      * @param string $addtext Additional text for the text area tag.
      * @return string
      */
-    function CreateSyntaxArea($id,$text,$name,$classname='',$htmlid='',$encoding='',
+    public function CreateSyntaxArea($id,$text,$name,$classname='',$htmlid='',$encoding='',
                               $stylesheet='',$cols='80',$rows='15',$addtext='')
     {
         return create_textarea(false,$text,$id.$name,$classname,$htmlid, $encoding, $stylesheet,
-                               $cols,$rows,'','html',$addtext);
+                             $cols,$rows,'','html',$addtext);
     }
 
     /**
@@ -1842,12 +1841,12 @@ abstract class CMSModule
      * @param string $prettyurl An optional pretty url segment (relative to the root of the site) to use when generating the link.
      * @return string
      */
-    function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=[],
+    public function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=[],
                                  $warn_message='', $onlyhref=false, $inline=true, $addtext='',
                                  $targetcontentonly=false, $prettyurl='' )
     {
         return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
-                                  $inline, $addtext, $targetcontentonly, $prettyurl );
+                                $inline, $addtext, $targetcontentonly, $prettyurl );
     }
 
     /**
@@ -1870,7 +1869,7 @@ abstract class CMSModule
      * @param string $prettyurl An optional pretty url segment (related to the root of the website) for a pretty url.
      * @return string
      */
-    function CreateLink($id, $action, $returnid='', $contents='', $params=[],
+    public function CreateLink($id, $action, $returnid='', $contents='', $params=[],
                         $warn_message='', $onlyhref=false, $inline=false, $addttext='',
                         $targetcontentonly=false, $prettyurl='')
     {
@@ -2118,7 +2117,7 @@ abstract class CMSModule
      */
     final public function GetActionTemplateObject()
     {
-        if( $this->_action_tpl ) return $this->_action_tpl;
+        if( $this->action_tpl ) return $this->action_tpl;
     }
 
     /**
@@ -2268,7 +2267,7 @@ abstract class CMSModule
     final public function ProcessTemplate(string $tpl_name, string $designation = null, $cache = false, $cacheid = '')
     {
         if( strpos($tpl_name, '..') !== false ) return;
-        $template = $this->_action_tpl;
+        $template = $this->action_tpl;
         if( !$template ) $template = \CmsApp::get_instance()->GetSmarty();
         return $template->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name );
     }
@@ -2286,7 +2285,7 @@ abstract class CMSModule
      */
     final public function ProcessTemplateFromData( string $data )
     {
-        return $this->_action_tpl->fetch('string:'.$data);
+        return $this->action_tpl->fetch('string:'.$data);
     }
 
     /**
@@ -2301,7 +2300,7 @@ abstract class CMSModule
      */
     final public function ProcessTemplateFromDatabase(string $tpl_name, $designation = '', $cache = false, $modulename = '')
     {
-        return $this->_action_tpl->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
+        return $this->action_tpl->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
     /**
@@ -2577,7 +2576,7 @@ abstract class CMSModule
             $perm->save();
         }
         catch( Exception $e ) {
-			// ignored.
+            // ignored.
         }
     }
 
@@ -2841,7 +2840,6 @@ abstract class CMSModule
     {
         Events::SendEvent($this->GetName(), $eventname, $params);
     }
-
 } // end of class
 
 

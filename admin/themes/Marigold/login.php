@@ -36,15 +36,15 @@ $smarty = $gCms->GetSmarty();
 
 debug_buffer('Debug in the page is: ' . $error);
 if (isset($error) && $error != '') {
-	$smarty->assign('error', $error);
+    $smarty->assign('error', $error);
 } else if (isset($warningLogin) && $warningLogin != '') {
-	$smarty->assign('warninglogin', $warningLogin);
+    $smarty->assign('warninglogin', $warningLogin);
 } else if (isset($acceptLogin) && $acceptLogin != '') {
-	$smarty->assign('acceptlogin', $acceptLogin);
+    $smarty->assign('acceptlogin', $acceptLogin);
 }
 
 if ($changepwhash != '') {
-	$smarty->assign('changepwhash', $changepwhash);
+    $smarty->assign('changepwhash', $changepwhash);
 }
 
 $smarty->assign('encoding', CmsNlsOperations::get_encoding());

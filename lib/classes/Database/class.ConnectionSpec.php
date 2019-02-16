@@ -62,6 +62,7 @@ namespace CMSMS\Database;
  */
 class ConnectionSpec
 {
+
     /**
      * @ignore
      */
@@ -103,6 +104,8 @@ class ConnectionSpec
 /**
  * A special exception to indicate a problem with a ConnectionSpec
  */
-class ConnectionSpecException extends \Exception {}
+class ConnectionSpecException extends \Exception
+{
+}
 
 ?>

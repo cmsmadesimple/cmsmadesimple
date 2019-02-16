@@ -128,19 +128,19 @@ function redirect(string $to)
  */
 function redirect_to_alias(string $alias)
 {
-  $manager = CmsApp::get_instance()->GetHierarchyManager();
-  $node = $manager->sureGetNodeByAlias($alias);
-  if( !$node ) {
-	// put mention into the admin log
-    cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
-    return;
-  }
-  $content = $node->GetContent();
-  if (!is_object($content)) {
-    cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
-    return;
-  }
-  if ($content->GetURL() != '') redirect($content->GetURL());
+    $manager = CmsApp::get_instance()->GetHierarchyManager();
+    $node = $manager->sureGetNodeByAlias($alias);
+    if( !$node ) {
+        // put mention into the admin log
+        cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
+        return;
+    }
+    $content = $node->GetContent();
+    if (!is_object($content)) {
+        cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
+        return;
+    }
+    if ($content->GetURL() != '') redirect($content->GetURL());
 }
 
 
@@ -215,26 +215,26 @@ function cms_relative_path(string $in,string $relative_to = null)
  */
 function cms_htmlentities(string $val = null, string $param=ENT_QUOTES, string $charset="UTF-8", bool $convert_single_quotes = false)
 {
-  if( $val == '') return '';
+    if( $val == '') return '';
 
-  $val = str_replace( "&#032;", " ", $val );
-  $val = str_replace( "&"            , "&amp;"         , $val );
-  $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
-  $val = str_replace( "-->"          , "--&#62;"       , $val );
-  $val = str_ireplace( "<script"     , "&#60;script"   , $val );
-  $val = str_replace( ">"            , "&gt;"          , $val );
-  $val = str_replace( "<"            , "&lt;"          , $val );
-  $val = str_replace( "\""           , "&quot;"        , $val );
-  $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-  $val = str_replace( "!"            , "&#33;"         , $val );
-  $val = str_replace( "'"            , "&#39;"         , $val );
+    $val = str_replace( "&#032;", " ", $val );
+    $val = str_replace( "&"            , "&amp;"         , $val );
+    $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
+    $val = str_replace( "-->"          , "--&#62;"       , $val );
+    $val = str_ireplace( "<script"     , "&#60;script"   , $val );
+    $val = str_replace( ">"            , "&gt;"          , $val );
+    $val = str_replace( "<"            , "&lt;"          , $val );
+    $val = str_replace( "\""           , "&quot;"        , $val );
+    $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
+    $val = str_replace( "!"            , "&#33;"         , $val );
+    $val = str_replace( "'"            , "&#39;"         , $val );
 
-  if ($convert_single_quotes) {
-    $val = str_replace("\\'", "&apos;", $val);
-    $val = str_replace("'", "&apos;", $val);
-  }
+    if ($convert_single_quotes) {
+        $val = str_replace("\\'", "&apos;", $val);
+        $val = str_replace("'", "&apos;", $val);
+    }
 
-  return $val;
+    return $val;
 }
 
 
@@ -544,7 +544,7 @@ function get_parameter_value(array $parameters, string $value, $default_value = 
  */
 function is_directory_writable( string $path )
 {
-    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
+    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/';
 
     if( !is_dir($path) ) return FALSE;
     $result = TRUE;
@@ -625,25 +625,29 @@ function get_recursive_file_list ( string $path ,array $excludes, int $maxdepth 
         return false;
     };
 
-    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }
-    $dirlist = array () ;
-    if ( $mode != "FILES" ) { $dirlist[] = $path ; }
+    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/';
+    $dirlist = array();
+    if ( $mode != "FILES" ) { $dirlist[] = $path;
+    }
     if ( $handle = opendir ( $path ) ) {
         while ( false !== ( $file = readdir ( $handle ) ) ) {
             if( $file == '.' || $file == '..' ) continue;
             if( $fn( $file, $excludes ) ) continue;
 
-            $file = $path . $file ;
-            if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+            $file = $path . $file;
+            if ( ! @is_dir ( $file ) ) {
+                if ( $mode != "DIRS" ) $dirlist[] = $file;
+            }
             elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) ) {
-                $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
-                $dirlist = array_merge ( $dirlist , $result ) ;
+                $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 );
+                $dirlist = array_merge ( $dirlist , $result );
             }
         }
-        closedir ( $handle ) ;
+        closedir ( $handle );
     }
-    if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
-    return ( $dirlist ) ;
+    if ( $d == 0 ) { natcasesort ( $dirlist );
+    }
+    return ( $dirlist );
 }
 
 
@@ -743,7 +747,7 @@ function startswith( string $str, string $sub )
  */
 function endswith( string $str, string $sub )
 {
-  return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
+    return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
 
@@ -758,19 +762,19 @@ function endswith( string $str, string $sub )
  */
 function munge_string_to_url(string $alias, bool $tolower = false, bool $withslash = false)
 {
-  if ($tolower == true) $alias = mb_strtolower($alias);
+    if ($tolower == true) $alias = mb_strtolower($alias);
 
-  // remove invalid chars
-  $expr = '/[^\p{L}_\-\.\ \d]/u';
-  if( $withslash ) $expr = '/[^\p{L}_\.\-\ \d\/]/u';
-  $tmp = trim( preg_replace($expr,'',$alias) );
+    // remove invalid chars
+    $expr = '/[^\p{L}_\-\.\ \d]/u';
+    if( $withslash ) $expr = '/[^\p{L}_\.\-\ \d\/]/u';
+    $tmp = trim( preg_replace($expr,'',$alias) );
 
-  // remove extra dashes and spaces.
-  $tmp = str_replace(' ','-',$tmp);
-  $tmp = str_replace('---','-',$tmp);
-  $tmp = str_replace('--','-',$tmp);
+    // remove extra dashes and spaces.
+    $tmp = str_replace(' ','-',$tmp);
+    $tmp = str_replace('---','-',$tmp);
+    $tmp = str_replace('--','-',$tmp);
 
-  return trim($tmp);
+    return trim($tmp);
 }
 
 
@@ -784,36 +788,36 @@ function munge_string_to_url(string $alias, bool $tolower = false, bool $withsla
  * @return string
  */
 function cleanValue(string $val) {
-  if ($val == '') return $val;
-  return filter_var( $val, FILTER_SANITIZE_STRING );
-  //Replace odd spaces with safe ones
-  $val = str_replace(" ", " ", $val);
-  $val = str_replace(chr(0xCA), "", $val);
-  //Encode any HTML to entities (including \n --> <br />)
-  $_cleanHtml = function($string,$remove = false) {
-    if ($remove) {
-      $string = strip_tags($string);
-    } else {
-      $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
-      $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
-      $string = preg_replace($patterns, $replacements, $string);
-    }
-    return $string;
-  };
-  $val = $_cleanHtml($val);
-  //Double-check special chars and remove carriage returns
-  //For increased SQL security
-  $val = preg_replace("/\\\$/", "$", $val);
-  $val = preg_replace("/\r/", "", $val);
-  $val = str_replace("!", "!", $val);
-  $val = str_replace("'", "'", $val);
-  //Allow unicode (?)
-  $val = preg_replace("/&amp;#([0-9]+);/s", "&#\\1;", $val);
-  //Add slashes for SQL
-  //$val = $this->sql($val);
-  //Swap user-inputted backslashes (?)
-  $val = preg_replace("/\\\(?!&amp;#|\?#)/", "\\", $val);
-  return $val;
+    if ($val == '') return $val;
+    return filter_var( $val, FILTER_SANITIZE_STRING );
+    //Replace odd spaces with safe ones
+    $val = str_replace(" ", " ", $val);
+    $val = str_replace(chr(0xCA), "", $val);
+    //Encode any HTML to entities (including \n --> <br />)
+    $_cleanHtml = function($string,$remove = false) {
+        if ($remove) {
+            $string = strip_tags($string);
+        } else {
+            $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
+            $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
+            $string = preg_replace($patterns, $replacements, $string);
+        }
+        return $string;
+    };
+    $val = $_cleanHtml($val);
+    //Double-check special chars and remove carriage returns
+    //For increased SQL security
+    $val = preg_replace("/\\\$/", "$", $val);
+    $val = preg_replace("/\r/", "", $val);
+    $val = str_replace("!", "!", $val);
+    $val = str_replace("'", "'", $val);
+    //Allow unicode (?)
+    $val = preg_replace("/&amp;#([0-9]+);/s", "&#\\1;", $val);
+    //Add slashes for SQL
+    //$val = $this->sql($val);
+    //Swap user-inputted backslashes (?)
+    $val = preg_replace("/\\\(?!&amp;#|\?#)/", "\\", $val);
+    return $val;
 }
 
 
@@ -825,12 +829,12 @@ function cleanValue(string $val) {
  */
 function ini_get_boolean(string $str)
 {
-  $val1 = ini_get($str);
-  $val2 = strtolower($val1);
+    $val1 = ini_get($str);
+    $val2 = strtolower($val1);
 
-  $ret = 0;
-  if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' ) $ret = 1;
-  return $ret;
+    $ret = 0;
+    if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' ) $ret = 1;
+    return $ret;
 }
 
 
@@ -841,16 +845,16 @@ function ini_get_boolean(string $str)
  */
 function stack_trace()
 {
-  $stack = debug_backtrace();
-  foreach( $stack as $elem ) {
-    if( $elem['function'] == 'stack_trace' ) continue;
-    if( isset($elem['file'])  ) {
-      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+    $stack = debug_backtrace();
+    foreach( $stack as $elem ) {
+        if( $elem['function'] == 'stack_trace' ) continue;
+        if( isset($elem['file'])  ) {
+            echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+        }
+        else {
+            echo ' - '.$elem['function'].'<br/>';
+        }
     }
-    else {
-      echo ' - '.$elem['function'].'<br/>';
-    }
-  }
 }
 
 
@@ -864,11 +868,11 @@ function stack_trace()
  */
 function cms_move_uploaded_file( string $tmpfile, string $destination )
 {
-   $config = CmsApp::get_instance()->GetConfig();
+    $config = CmsApp::get_instance()->GetConfig();
 
-   if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
-   @chmod($destination,octdec($config['default_upload_permission']));
-   return true;
+    if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
+    @chmod($destination,octdec($config['default_upload_permission']));
+    return true;
 }
 
 
@@ -889,64 +893,64 @@ function cms_move_uploaded_file( string $tmpfile, string $destination )
 function cms_ipmatches(string $ip,array $checklist)
 {
     $_testip = function($range,$ip) {
-    $result = 1;
+        $result = 1;
 
-    // IP Pattern Matcher
-    // J.Adams <jna@retina.net>
-    //
-    // Matches:
-    //
-    // xxx.xxx.xxx.xxx        (exact)
-    // xxx.xxx.xxx.[yyy-zzz]  (range)
-    // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
-    //
-    // Does not match:
-    // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets nnnnnot supported)
+        // IP Pattern Matcher
+        // J.Adams <jna@retina.net>
+        //
+        // Matches:
+        //
+        // xxx.xxx.xxx.xxx        (exact)
+        // xxx.xxx.xxx.[yyy-zzz]  (range)
+        // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+        //
+        // Does not match:
+        // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets nnnnnot supported)
 
-    $regs = array();
-    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
-      // perform a mask match
-      $ipl = ip2long($ip);
-      $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
+        $regs = array();
+        if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
+            // perform a mask match
+            $ipl = ip2long($ip);
+            $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
 
-      $maskl = 0;
+            $maskl = 0;
 
-      for ($i = 0; $i< 31; $i++) {
-	if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
-      }
+            for ($i = 0; $i< 31; $i++) {
+                if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
+            }
 
-      if (($maskl & $rangel) == ($maskl & $ipl)) {
-	return 1;
-      } else {
-	return 0;
-      }
-    } else {
-      // range based
-      $maskocts = explode('.',$range);
-      $ipocts = explode('.',$ip);
+            if (($maskl & $rangel) == ($maskl & $ipl)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            // range based
+            $maskocts = explode('.',$range);
+            $ipocts = explode('.',$ip);
 
-      if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) return 0;
+            if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) return 0;
 
-      // perform a range match
-      for ($i=0; $i<4; $i++) {
-	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) return 0;
-	}
-	else {
-	  if ($maskocts[$i] != $ipocts[$i]) return 0;
-	}
-      }
+            // perform a range match
+            for ($i=0; $i<4; $i++) {
+                if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+                           if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) return 0;
+                }
+                else {
+                           if ($maskocts[$i] != $ipocts[$i]) return 0;
+                }
+            }
+        }
+        return 1;
+    }; // _testip
+
+    if( !is_array($checklist) ) $checklist = explode(',',$checklist);
+    foreach( $checklist as $one ) {
+        $one = trim($one);
+        if( !$one ) continue;
+        if( $_testip(trim($one),$ip) ) return TRUE;
     }
-    return 1;
-  }; // _testip
-
-  if( !is_array($checklist) ) $checklist = explode(',',$checklist);
-  foreach( $checklist as $one ) {
-    $one = trim($one);
-    if( !$one ) continue;
-    if( $_testip(trim($one),$ip) ) return TRUE;
-  }
-  return FALSE;
+    return FALSE;
 }
 
 
@@ -959,14 +963,14 @@ function cms_ipmatches(string $ip,array $checklist)
 */
 function is_email( string $email, bool $checkDNS=false )
 {
-   if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
-   if ($checkDNS && function_exists('checkdnsrr')) {
-       list($user,$domain) = explode('@',$email,2);
-       if( !$domain ) return FALSE;
-       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
-   }
+    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
+    if ($checkDNS && function_exists('checkdnsrr')) {
+        list($user,$domain) = explode('@',$email,2);
+        if( !$domain ) return FALSE;
+        if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
+    }
 
-   return TRUE;
+    return TRUE;
 }
 
 
@@ -999,11 +1003,11 @@ function get_secure_param()
  */
 function cms_to_bool(string $str)
 {
-  if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
+    if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
-  $str = strtolower($str);
-  if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' || $str === 'on' ) return TRUE;
-  return FALSE;
+    $str = strtolower($str);
+    if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' || $str === 'on' ) return TRUE;
+    return FALSE;
 }
 
 

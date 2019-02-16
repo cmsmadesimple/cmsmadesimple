@@ -50,20 +50,21 @@
  */
 class cms_url
 {
-    /**
-     * @ignore
-     */
-    private $_orig;
 
     /**
      * @ignore
      */
-    private $_parts;
+    private $orig;
 
     /**
      * @ignore
      */
-    private $_query = array();
+    private $parts;
+
+    /**
+     * @ignore
+     */
+    private $query = [];
 
     /**
      * Constructor
@@ -74,9 +75,9 @@ class cms_url
     {
         $url = trim((string) $url);
         if( $url ) {
-            $this->_orig = $url;
-            $this->_parts = parse_url($url);
-			if( isset($this->_parts['query']) ) parse_str($this->_parts['query'],$this->_query);
+            $this->orig = $url;
+            $this->parts = parse_url($url);
+            if( isset($this->parts['query']) ) parse_str($this->parts['query'],$this->query);
         }
     }
 
@@ -86,7 +87,7 @@ class cms_url
     private function _get_part($key)
     {
         $key = trim((string)$key);
-        if( isset($this->_parts[$key]) ) return $this->_parts[$key];
+        if( isset($this->parts[$key]) ) return $this->parts[$key];
     }
 
     /**
@@ -95,11 +96,11 @@ class cms_url
     private function _set_part($key,$value)
     {
         $key = trim((string)$key);
-        if( !strlen($value) && isset($this->_parts[$key]) ) {
-            unset($this->_parts[$key]);
+        if( !strlen($value) && isset($this->parts[$key]) ) {
+            unset($this->parts[$key]);
         }
         else {
-            $this->_parts[$key] = $value;
+            $this->parts[$key] = $value;
         }
     }
 
@@ -108,9 +109,9 @@ class cms_url
      *
      * @return string
      */
-    public function get_orig()
+    public function getorig()
     {
-        return $this->_orig;
+        return $this->orig;
     }
 
     /**
@@ -255,7 +256,7 @@ class cms_url
      */
     public function get_query()
     {
-        if( count($this->_query) ) return http_build_query($this->_query);
+        if( count($this->query) ) return http_build_query($this->query);
     }
 
     /**
@@ -266,7 +267,7 @@ class cms_url
     public function set_query($val)
     {
         $val = (string) $val;
-        if( $val ) parse_str($val,$this->_query);
+        if( $val ) parse_str($val,$this->query);
         return $this->_set_part('query',$val);
     }
 
@@ -300,7 +301,7 @@ class cms_url
      */
     public function queryvar_exists($key)
     {
-        return ($key && isset($this->_query[$key]));
+        return ($key && isset($this->query[$key]));
     }
 
     /**
@@ -313,9 +314,9 @@ class cms_url
     {
         $key = trim((string)$key);
         if( $this->queryvar_exists($key) ) {
-			unset($this->_parts['query']);
-			unset($this->_query[$key]);
-		}
+            unset($this->parts['query']);
+            unset($this->query[$key]);
+        }
     }
 
     /**
@@ -326,7 +327,7 @@ class cms_url
     public function get_queryvar($key)
     {
         $key = trim((string)$key);
-        if( $this->queryvar_exists($key) ) return $this->_query[$key];
+        if( $this->queryvar_exists($key) ) return $this->query[$key];
     }
 
     /**
@@ -337,11 +338,11 @@ class cms_url
      */
     public function set_queryvar($key,$value)
     {
-		$key = trim((string)$key);
-		if( $key ) {
-			unset($this->_parts['query']);
-			$this->_query[$key] = (string) $value;
-		}
+        $key = trim((string)$key);
+        if( $key ) {
+            unset($this->parts['query']);
+            $this->query[$key] = (string) $value;
+        }
     }
 
     /**
@@ -350,29 +351,29 @@ class cms_url
     public function __toString()
     {
         // build the query array back into a string.
-        if( count($this->_query) ) $this->_parts['query'] = http_build_query($this->_query);
+        if( count($this->query) ) $this->parts['query'] = http_build_query($this->query);
 
-        $parts = $this->_parts;
+        $parts = $this->parts;
 
         $path = (isset($parts['path'])) ?$parts['path'] : '';
         if( $path && $path[0] != '/' ) $path = '/'.$path;
 
-		$parts = $this->_parts;
-		$url = ((!empty($parts['scheme'])) ? $parts['scheme'] . '://' : '');
-		if( !empty($parts['user']) ) {
-			$url .= $parts['user'];
-			if( !empty($parts['pass']) ) $url .= ':'.$parts['pass'];
-			$url .= '@';
-		}
-		if( !empty($parts['host']) ) $url .= $parts['host'];
-		if( !empty($params['port']) && $parts['port'] > 0 ) $url .= ':'.$parts['post'];
-		if( !empty($parts['path']) ) {
-			if( !startswith($parts['path'],'/') ) $url .= '/';
-			$url .= $parts['path'];
-		}
-		if( !empty($parts['query']) ) $url .= '?'.$parts['query'];
-		if( !empty($parts['fragment']) ) $url .= '#'.$parts['fragment'];
-		return $url;
+        $parts = $this->parts;
+        $url = ((!empty($parts['scheme'])) ? $parts['scheme'] . '://' : '');
+        if( !empty($parts['user']) ) {
+            $url .= $parts['user'];
+            if( !empty($parts['pass']) ) $url .= ':'.$parts['pass'];
+            $url .= '@';
+        }
+        if( !empty($parts['host']) ) $url .= $parts['host'];
+        if( !empty($params['port']) && $parts['port'] > 0 ) $url .= ':'.$parts['post'];
+        if( !empty($parts['path']) ) {
+            if( !startswith($parts['path'],'/') ) $url .= '/';
+            $url .= $parts['path'];
+        }
+        if( !empty($parts['query']) ) $url .= '?'.$parts['query'];
+        if( !empty($parts['fragment']) ) $url .= '#'.$parts['fragment'];
+        return $url;
     }
 } // end of class
 

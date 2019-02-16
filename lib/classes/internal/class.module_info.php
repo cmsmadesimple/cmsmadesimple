@@ -4,39 +4,41 @@ use \ModuleOperations;
 
 class module_info implements \ArrayAccess
 {
+
     private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
                                   'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable','root_writable',
                                   'description','has_meta','has_custom','notavailable','is_system_module');
+
     private $_data = array();
 
     public function OffsetGet($key)
     {
         if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
         switch( $key ) {
-        case 'about':
-            break;
+            case 'about':
+                break;
 
-        case 'ver_compatible':
-            return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
+            case 'ver_compatible':
+                return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
-        case 'dir':
-            return ModuleOperations::get_instance()->get_module_path( $this->_data['name'] );
+            case 'dir':
+                return ModuleOperations::get_instance()->get_module_path( $this->_data['name'] );
 
-        case 'writable':
-	    $dir = $this['dir'];
-	    if( !$dir || !is_dir( $dir ) ) return false;
-            return is_directory_writable($this['dir']);
+            case 'writable':
+                $dir = $this['dir'];
+                if( !$dir || !is_dir( $dir ) ) return false;
+                return is_directory_writable($this['dir']);
 
-        case 'root_writable':
-            // move this into ModuleManagerModuleInfo
-            return is_writable($this['dir']);
+            case 'root_writable':
+                // move this into ModuleManagerModuleInfo
+                return is_writable($this['dir']);
 
-        case 'is_system_module':
-            return ModuleOperations::get_instance()->IsSystemModule( $this->_data['name'] );
+            case 'is_system_module':
+                return ModuleOperations::get_instance()->IsSystemModule( $this->_data['name'] );
 
-        default:
-            if( isset($this->_data[$key]) ) return $this->_data[$key];
-            break;
+            default:
+                if( isset($this->_data[$key]) ) return $this->_data[$key];
+                break;
         }
     }
 
@@ -184,5 +186,4 @@ class module_info implements \ArrayAccess
         $arr['changelog'] = $mod->GetChangelog();
         return $arr;
     }
-
 } // end of class

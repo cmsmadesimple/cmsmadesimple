@@ -40,27 +40,42 @@ class NavigatorNode
     /**
      * This little function will remove all silly notices in smarty.
      */
-    public function __get($key) { return null; }
+    public function __get($key) { return null;
+    }
 }
 
 final class Navigator extends CMSModule
 {
     const __DFLT_PAGE = '**DFLT_PAGE**';
 
-    function GetName() { return get_class($this); }
-    function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function IsPluginModule() { return true; }
-    function HasAdmin() { return false; }
-    function GetVersion() { return '1.0.9'; }
-    function MinimumCMSVersion() { return '2.1.99'; }
-    function GetAdminDescription() { return $this->Lang('description'); }
-    function GetAdminSection() { return 'layout'; }
-    function LazyLoadFrontend() { return TRUE; }
-    function LazyLoadAdmin() { return TRUE; }
-    function GetHelp($lang='en_US') { return $this->Lang('help'); }
-    function GetAuthor() { return 'Robert Campbell'; }
-    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    function GetName() { return get_class($this);
+    }
+    function GetFriendlyName() { return $this->Lang('friendlyname');
+    }
+    function IsPluginModule() { return true;
+    }
+    function HasAdmin() { return false;
+    }
+    function GetVersion() { return '1.0.9';
+    }
+    function MinimumCMSVersion() { return '2.1.99';
+    }
+    function GetAdminDescription() { return $this->Lang('description');
+    }
+    function GetAdminSection() { return 'layout';
+    }
+    function LazyLoadFrontend() { return TRUE;
+    }
+    function LazyLoadAdmin() { return TRUE;
+    }
+    function GetHelp($lang='en_US') { return $this->Lang('help');
+    }
+    function GetAuthor() { return 'Robert Campbell';
+    }
+    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org';
+    }
+    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc');
+    }
 
     public function InitializeFrontend()
     {
@@ -123,12 +138,12 @@ final class Navigator extends CMSModule
 
         $fn = null;
         switch( $type->get_name() ) {
-        case 'navigation':
-            $fn = 'simple_navigation.tpl';
-            break;
-        case 'breadcrumbs':
-            $fn = 'dflt_breadcrumbs.tpl';
-            break;
+            case 'navigation':
+                $fn = 'simple_navigation.tpl';
+                break;
+            case 'breadcrumbs':
+                $fn = 'dflt_breadcrumbs.tpl';
+                break;
         }
 
         $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
@@ -144,6 +159,4 @@ final class Navigator extends CMSModule
             if( is_file($file) ) return file_get_contents($file);
         }
     }
-
-
 } // End of class

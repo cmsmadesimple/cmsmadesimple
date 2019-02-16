@@ -25,6 +25,7 @@ define( "NON_INDEXABLE_CONTENT", "<!-- pageAttribute: NotSearchable -->" );
 
 class Search extends CMSModule
 {
+
     private $_tools_loaded;
 
     public function __construct()
@@ -42,20 +43,34 @@ class Search extends CMSModule
         }
     }
 
-    public function LazyLoadFrontend() { return FALSE; }
-    public function LazyLoadAdmin() { return FALSE; }
-    public function GetName() { return 'Search'; }
-    public function GetFriendlyName() { return $this->Lang('search'); }
-    public function IsPluginModule() { return true; }
-    public function HasAdmin() { return true; }
-    public function GetVersion() { return '1.51.7.1'; }
-    public function MinimumCMSVersion() { return '1.12-alpha0'; }
-    public function GetAdminDescription() { return $this->Lang('description'); }
-    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
-    public function GetHelp($lang='en_US') { return $this->Lang('help'); }
-    public function GetAuthor() { return 'Ted Kulp'; }
-    public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
-    public function GetChangeLog() { return @file_get_contents(__DIR__.'/changelog.inc'); }
+    public function LazyLoadFrontend() { return FALSE;
+    }
+    public function LazyLoadAdmin() { return FALSE;
+    }
+    public function GetName() { return 'Search';
+    }
+    public function GetFriendlyName() { return $this->Lang('search');
+    }
+    public function IsPluginModule() { return true;
+    }
+    public function HasAdmin() { return true;
+    }
+    public function GetVersion() { return '1.51.7.1';
+    }
+    public function MinimumCMSVersion() { return '1.12-alpha0';
+    }
+    public function GetAdminDescription() { return $this->Lang('description');
+    }
+    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences');
+    }
+    public function GetHelp($lang='en_US') { return $this->Lang('help');
+    }
+    public function GetAuthor() { return 'Ted Kulp';
+    }
+    public function GetAuthorEmail() { return 'ted@cmsmadesimple.org';
+    }
+    public function GetChangeLog() { return @file_get_contents(__DIR__.'/changelog.inc');
+    }
 
     public function InitializeCommon()
     {
@@ -229,10 +244,10 @@ EOT;
     public function HasCapability($capability,$params = array())
     {
         switch( $capability ) {
-        case CmsCoreCapabilities::SEARCH_MODULE:
-        case CmsCoreCapabilities::PLUGIN_MODULE:
-        case 'clicommands':
-            return true;
+            case CmsCoreCapabilities::SEARCH_MODULE:
+            case CmsCoreCapabilities::PLUGIN_MODULE:
+            case 'clicommands':
+                return true;
         }
         return FALSE;
     }
@@ -250,10 +265,10 @@ EOT;
         $mod = cms_utils::get_module('Search');
         if( !is_object($mod) ) return;
         switch( $type->get_name() ) {
-        case 'searchform':
-            return $mod->GetSearchHtmlTemplate();
-        case 'searchresults':
-            return $mod->GetResultsHtmlTemplate();
+            case 'searchform':
+                return $mod->GetSearchHtmlTemplate();
+            case 'searchresults':
+                return $mod->GetResultsHtmlTemplate();
         }
     }
 
@@ -266,5 +281,4 @@ EOT;
         $out[] = new \Search\ReindexCommand( $app );
         return $out;
     }
-
 } // class

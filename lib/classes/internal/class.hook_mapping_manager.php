@@ -6,8 +6,11 @@ use CMSMS\simple_plugin_operations;
 // immutable
 class hook_mapping_manager
 {
+
     private $filename;
+
     private $data;
+
     static $_obj;
 
     public function __construct($filename)
@@ -41,7 +44,7 @@ class hook_mapping_manager
         $filename = TMP_CACHE_LOCATION."/__{$function}.php";
         list($originator,$event_name) = explode('::',$hook_name,2);
         if( !is_file($filename) ) {
-$out = <<<EOT
+            $out = <<<EOT
 <?php
 function $function(\$params) {
      \$mod = \cms_utils::get_module('$module_name');
@@ -73,9 +76,9 @@ EOT;
         if( empty($this->data) ) return;
         $spi = simple_plugin_operations::get_instance();
         array_walk( $this->data, function(hook_mapping $mapping) use ($spi) {
-                if( $mapping->handlers ) {
-                    foreach( $mapping->handlers as $handler_name_name => $handler ) {
-                        switch( $handler['type'] ) {
+            if( $mapping->handlers ) {
+                foreach( $mapping->handlers as $handler_name_name => $handler ) {
+                    switch( $handler['type'] ) {
                         case $mapping::TYPE_SIMPLE:
                             if( $spi->plugin_exists($handler['name']) ) {
                                 HookManager::add_hook($mapping->hook, [get_class($spi), $handler['name'] ]);
@@ -90,9 +93,9 @@ EOT;
                             $function_name = $this->get_module_event_handler_wrapper($mapping->hook, $handler['name']);
                             if( $function_name ) HookManager::add_hook($mapping->hook, $function_name);
                             break;
-                        }
                     }
                 }
+            }
         });
     }
 
@@ -191,5 +194,4 @@ EOT;
             $this->data = $out;
         }
     }
-
 } // class

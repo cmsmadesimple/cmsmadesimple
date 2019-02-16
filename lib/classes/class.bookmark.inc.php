@@ -32,92 +32,91 @@
  */
 class Bookmark
 {
-	/**
-	 * @var int $bookmark_id The bookmark id
-	 */
-	var $bookmark_id;
 
-	/**
-	 * @var int $user_id Admin user (owner) ID
-	 */
-	var $user_id;
+    /**
+     * @var int $bookmark_id The bookmark id
+     */
+    public $bookmark_id;
 
-	/**
-	 * @var string $title The bookmark title
-	 */
-	var $title;
+    /**
+     * @var int $user_id Admin user (owner) ID
+     */
+    public $user_id;
 
-	/**
-	 * @var string $url The bookmark URL
-	 */
-	var $url;
+    /**
+     * @var string $title The bookmark title
+     */
+    public $title;
 
-	/**
-	 * Generic constructor.  Runs the SetInitialValues fuction.
-	 */
-	function __construct()
-	{
-		$this->SetInitialValues();
-	}
+    /**
+     * @var string $url The bookmark URL
+     */
+    public $url;
 
-	/**
-	 * Sets object to some sane initial values
-	 */
-	function SetInitialValues()
-	{
-		$this->bookmark_id = -1;
-		$this->title = '';
-		$this->url = '';
-		$this->user_id = -1;
-	}
+    /**
+     * Generic constructor.  Runs the SetInitialValues fuction.
+     */
+    public function __construct()
+    {
+        $this->SetInitialValues();
+    }
+
+    /**
+     * Sets object to some sane initial values
+     */
+    public function SetInitialValues()
+    {
+        $this->bookmark_id = -1;
+        $this->title = '';
+        $this->url = '';
+        $this->user_id = -1;
+    }
 
 
-	/**
-	 * Saves the bookmark to the database.
-	 *
-	 * If no id is set, then a new record is created.
-	 * Otherwise, the record is updated to all values in the Bookmark object.
-	 *
-	 * @return bool
-	 */
-	function Save()
-	{
-		$result = false;
-		$bookops = cmsms()->GetBookmarkOperations();
+    /**
+     * Saves the bookmark to the database.
+     *
+     * If no id is set, then a new record is created.
+     * Otherwise, the record is updated to all values in the Bookmark object.
+     *
+     * @return bool
+     */
+    public function Save()
+    {
+        $result = false;
+        $bookops = cmsms()->GetBookmarkOperations();
 
-		if ($this->bookmark_id > -1) {
-			$result = $bookops->UpdateBookmark($this);
-		}
-		else {
-			$newid = $bookops->InsertBookmark($this);
-			if ($newid > -1) {
-				$this->bookmark_id = $newid;
-				$result = true;
-			}
+        if ($this->bookmark_id > -1) {
+            $result = $bookops->UpdateBookmark($this);
+        }
+        else {
+            $newid = $bookops->InsertBookmark($this);
+            if ($newid > -1) {
+                $this->bookmark_id = $newid;
+                $result = true;
+            }
 
-		}
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Delete the record for this Bookmark from the database.
-	 * All values in the object are reset to their initial values.
-	 *
-	 * @return bool
-	 */
-	function Delete()
-	{
-		$result = false;
-		$bookops = cmsms()->GetBookmarkOperations();
+    /**
+     * Delete the record for this Bookmark from the database.
+     * All values in the object are reset to their initial values.
+     *
+     * @return bool
+     */
+    public function Delete()
+    {
+        $result = false;
+        $bookops = cmsms()->GetBookmarkOperations();
 
-		if ($this->bookmark_id > -1) {
-			$result = $bookops->DeleteBookmarkByID($this->bookmark_id);
-			if ($result) $this->SetInitialValues();
-		}
+        if ($this->bookmark_id > -1) {
+            $result = $bookops->DeleteBookmarkByID($this->bookmark_id);
+            if ($result) $this->SetInitialValues();
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 }
-
-?>

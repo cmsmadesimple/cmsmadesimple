@@ -3,16 +3,19 @@ namespace CMSMS;
 
 final class simple_plugin_operations
 {
+
     /**
      * @ignore
      */
     private static $_instance;
+
     private $_loaded = [];
 
     /**
      * @ignore
      */
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public static function get_instance()
     {

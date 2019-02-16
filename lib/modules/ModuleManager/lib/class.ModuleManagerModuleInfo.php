@@ -2,9 +2,13 @@
 
 class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
 {
+
     private static $_minfo;
+
     private static $_deprecated = array('CMSMailer','MenuManager');
+
     private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps','deprecated','needs_upgrade');
+
     private $_mmdata = array();
 
     public function __construct($module_name,$can_load = TRUE,$can_check_forge = TRUE)
@@ -85,7 +89,6 @@ class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
             if( !$this['ver_compatible'] ) return FALSE;
             return $this->_check_dependencies();
         }
-
 
         if( $key == 'can_upgrade' ) {
             // see if we can upgrade this module
@@ -180,7 +183,6 @@ class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
         $out = null;
         return $out;
     }
-
 } // end of class
 
 ?>

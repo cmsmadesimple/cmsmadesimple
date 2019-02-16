@@ -36,22 +36,69 @@
 
 final class CMSContentManager extends CMSModule
 {
-    function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '1.2'; }
-    function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help'); }
-    function GetAuthor() { return 'calguy1000'; }
-    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-    function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-    function IsPluginModule() { return FALSE; }
-    function HasAdmin() { return TRUE; }
-    function LazyLoadAdmin() { return TRUE; }
-    function LazyLoadFrontend() { return TRUE; }
-    function GetAdminSection() { return 'content'; }
-    function GetAdminDescription() { return $this->Lang('moddescription'); }
-    function MinimumCMSVersion() { return "1.99-alpha0"; }
-    function InstallPostMessage() { return $this->Lang('postinstall'); }
-    function UninstallPostMessage() { return $this->Lang('postuninstall'); }
-    function UninstallPreMessage() { return $this->Lang('preuninstall'); }
+    public function GetFriendlyName() {
+        return $this->Lang('friendlyname');
+    }
+
+    public function GetVersion() {
+        return '1.2';
+    }
+
+    public function GetHelp() {
+        return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help');
+    }
+
+    public function GetAuthor() {
+        return 'calguy1000';
+    }
+
+    public function GetAuthorEmail() {
+        return 'calguy1000@cmsmadesimple.org';
+    }
+
+    public function GetChangeLog() {
+        return @file_get_contents(dirname(__FILE__).'/changelog.inc');
+    }
+
+    public function IsPluginModule() {
+        return FALSE;
+    }
+
+    public function HasAdmin() {
+        return TRUE;
+    }
+
+    public function LazyLoadAdmin() {
+        return TRUE;
+    }
+
+    public function LazyLoadFrontend() {
+        return TRUE;
+    }
+
+    public function GetAdminSection() {
+        return 'content';
+    }
+
+    public function GetAdminDescription() {
+        return $this->Lang('moddescription');
+    }
+
+    public function MinimumCMSVersion() {
+        return "1.99-alpha0";
+    }
+
+    public function InstallPostMessage() {
+        return $this->Lang('postinstall');
+    }
+
+    public function UninstallPostMessage() {
+        return $this->Lang('postuninstall');
+    }
+
+    public function UninstallPreMessage() {
+        return $this->Lang('preuninstall');
+    }
 
     /**
      * Tests wether the currently logged in user has the ability to edit ANY content page

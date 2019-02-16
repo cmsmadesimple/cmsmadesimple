@@ -41,6 +41,7 @@ namespace CMSMS\Hooks {
      */
     class HookHandler
     {
+
         /**
          * @ignore
          */
@@ -70,14 +71,17 @@ namespace CMSMS\Hooks {
      */
     class HookDefn
     {
+
         /**
          * @ignore
          */
         public $name;
+
         /**
          * @ignore
          */
         public $handlers = [];
+
         /**
          * @ignore
          */
@@ -135,7 +139,8 @@ namespace CMSMS {
         /**
          * @ignore
          */
-        private function __construct() {}
+        private function __construct() {
+        }
 
         /**
          * @ignore
@@ -150,8 +155,6 @@ namespace CMSMS {
         }
 
         /**
-
-
          * Add a handler to a hook
          *
          * @param string $name The hook name.  If the hook does not already exist, it is added.
@@ -212,10 +215,10 @@ namespace CMSMS {
                 if( !self::$_hooks[$name]->sorted ) {
                     if( count(self::$_hooks[$name]->handlers) > 1 ) {
                         usort(self::$_hooks[$name]->handlers,function($a,$b){
-                                if( $a->priority < $b->priority ) return -1;
-                                if( $a->priority > $b->priority ) return 1;
-                                return 0;
-                            });
+                            if( $a->priority < $b->priority ) return -1;
+                            if( $a->priority > $b->priority ) return 1;
+                            return 0;
+                        });
                     }
                     self::$_hooks[$name]->sorted = TRUE;
                 }
@@ -267,10 +270,10 @@ namespace CMSMS {
                 if( !self::$_hooks[$name]->sorted ) {
                     if( count(self::$_hooks[$name]->handlers) > 1 ) {
                         usort(self::$_hooks[$name]->handlers,function($a,$b){
-                                if( $a->priority < $b->priority ) return -1;
-                                if( $a->priority > $b->priority ) return 1;
-                                return 0;
-                            });
+                            if( $a->priority < $b->priority ) return -1;
+                            if( $a->priority > $b->priority ) return 1;
+                            return 0;
+                        });
                     }
                     self::$_hooks[$name]->sorted = TRUE;
                 }
@@ -316,10 +319,10 @@ namespace CMSMS {
             if( !self::$_hooks[$name]->sorted ) {
                 if( count(self::$_hooks[$name]->handlers) > 1 ) {
                     usort(self::$_hooks[$name]->handlers,function($a,$b){
-                            if( $a->priority < $b->priority ) return -1;
-                            if( $a->priority > $b->priority ) return 1;
-                            return 0;
-                        });
+                        if( $a->priority < $b->priority ) return -1;
+                        if( $a->priority > $b->priority ) return 1;
+                        return 0;
+                    });
                 }
                 self::$_hooks[$name]->sorted = TRUE;
             }

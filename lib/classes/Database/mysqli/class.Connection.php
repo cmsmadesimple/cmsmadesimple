@@ -4,12 +4,18 @@ namespace CMSMS\Database\mysqli;
 
 class Connection extends \CMSMS\Database\Connection
 {
+
     private $_mysql;
+
     private $_in_transaction = 0;
+
     private $_in_smart_transaction = 0;
+
     private $_transaction_status = TRUE;
 
-    public function DbType() { return 'mysqli'; }
+    public function DbType() {
+        return 'mysqli';
+    }
 
     public function Connect()
     {
@@ -18,9 +24,9 @@ class Connection extends \CMSMS\Database\Connection
         mysqli_report(MYSQLI_REPORT_STRICT);
         try {
             $this->_mysql = new \mysqli( $this->_connectionSpec->host, $this->_connectionSpec->username,
-                                         $this->_connectionSpec->password,
-                                         $this->_connectionSpec->dbname,
-                                         (int) $this->_connectionSpec->port );
+                                     $this->_connectionSpec->password,
+                                     $this->_connectionSpec->dbname,
+                                     (int) $this->_connectionSpec->port );
             if( $this->_mysql->connect_error ) {
                 $this->_mysql = null;
                 $this->OnError(self::ERROR_CONNECT,mysqli_connect_errno(),mysqli_connect_error());
@@ -90,10 +96,10 @@ class Connection extends \CMSMS\Database\Connection
 
     public function Concat()
     {
-		$arr = func_get_args();
-		$list = implode(', ', $arr);
+        $arr = func_get_args();
+        $list = implode(', ', $arr);
 
-		if (strlen($list) > 0) return "CONCAT($list)";
+        if (strlen($list) > 0) return "CONCAT($list)";
     }
 
     public function IfNull( $field, $ifNull )
@@ -175,9 +181,9 @@ class Connection extends \CMSMS\Database\Connection
         return TRUE;
     }
 
-	function CommitTrans($ok=true)
-	{
-		if (!$ok) return $this->RollbackTrans();
+    public function CommitTrans($ok=true)
+    {
+        if (!$ok) return $this->RollbackTrans();
 
         if( !$this->_in_transaction ) {
             $this->OnError( self::ERROR_TRANSACTION, -1, 'BeginTrans has not been called');
@@ -185,9 +191,9 @@ class Connection extends \CMSMS\Database\Connection
         }
 
         $this->_in_transaction--;
-		$this->Execute('COMMIT');
-		return TRUE;
-	}
+        $this->Execute('COMMIT');
+        return TRUE;
+    }
 
     public function CompleteTrans($autoComplete = true)
     {
@@ -212,7 +218,7 @@ class Connection extends \CMSMS\Database\Connection
         $this->_transaction_status = FALSE;
     }
 
-    function HasFailedTrans()
+    public function HasFailedTrans()
     {
         if( $this->_in_smart_transaction > 0 ) return $this->_transaction_status == FALSE;
         return FALSE;

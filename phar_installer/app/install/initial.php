@@ -1,5 +1,5 @@
 <?php
-fooglobal $admin_user;
+global $admin_user;
 
 
 //

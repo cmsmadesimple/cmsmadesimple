@@ -1,7 +1,8 @@
 <?php
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+}
 
 try {
     if( !$this->CheckPermission('Manage Stylesheets') ) throw new \Exception($this->Lang('error_permission'));
@@ -21,15 +22,15 @@ try {
         $smarty->assign('design_names',$tmp2);
     }
 
-	$css_query = new CmsLayoutStylesheetQuery($filter);
-	$csslist = $css_query->GetMatches();
-	$smarty->assign('stylesheets',$csslist);
-	$css_nav = array();
-	$css_nav['pagelimit'] = $css_query->limit;
-	$css_nav['numpages'] = $css_query->numpages;
-	$css_nav['numrows'] = $css_query->totalrows;
-	$css_nav['curpage'] = (int)($css_query->offset / $css_query->limit) + 1;
-	$smarty->assign('css_nav',$css_nav);
+    $css_query = new CmsLayoutStylesheetQuery($filter);
+    $csslist = $css_query->GetMatches();
+    $smarty->assign('stylesheets',$csslist);
+    $css_nav = array();
+    $css_nav['pagelimit'] = $css_query->limit;
+    $css_nav['numpages'] = $css_query->numpages;
+    $css_nav['numrows'] = $css_query->totalrows;
+    $css_nav['curpage'] = (int)($css_query->offset / $css_query->limit) + 1;
+    $smarty->assign('css_nav',$css_nav);
     $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
     $locks = \CmsLockOperations::get_locks('stylesheet');
     $smarty->assign('have_css_locks',($locks) ? count($locks) : 0 );

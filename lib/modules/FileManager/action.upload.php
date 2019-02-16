@@ -4,52 +4,52 @@ if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) 
 
 class FileManagerUploadHandler extends jquery_upload_handler
 {
-  function __construct($options=null)
-  {
-    if( !is_array($options) ) $options = array();
+    function __construct($options=null)
+    {
+        if( !is_array($options) ) $options = array();
 
-    // remove image handling, we're gonna handle this another way
-    $options['orient_image'] = false;  // turn off auto image rotation
-    $options['image_versions'] = array();
+        // remove image handling, we're gonna handle this another way
+        $options['orient_image'] = false;  // turn off auto image rotation
+        $options['image_versions'] = array();
 
-    $options['upload_dir'] = filemanager_utils::get_full_cwd().'/';
-    $options['upload_url'] = filemanager_utils::get_cwd_url().'/';
+        $options['upload_dir'] = filemanager_utils::get_full_cwd().'/';
+        $options['upload_url'] = filemanager_utils::get_cwd_url().'/';
 
-    // set everything up.
-    parent::__construct($options);
-  }
+        // set everything up.
+        parent::__construct($options);
+    }
 
-  protected function is_file_acceptable( $file )
-  {
-      $config = \cms_config::get_instance();
-      if( !$config['developer_mode'] ) {
-          $ext = strtolower(substr(strrchr($file, '.'), 1));
-          if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
-      }
-      return TRUE;
-  }
+    protected function is_file_acceptable( $file )
+    {
+        $config = \cms_config::get_instance();
+        if( !$config['developer_mode'] ) {
+            $ext = strtolower(substr(strrchr($file, '.'), 1));
+            if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
+        }
+        return TRUE;
+    }
 
-  protected function after_uploaded_file($fileobject)
-  {
-      // here we may do image handling, and other cruft.
-      if( is_object($fileobject) && $fileobject->name != '' ) {
+    protected function after_uploaded_file($fileobject)
+    {
+        // here we may do image handling, and other cruft.
+        if( is_object($fileobject) && $fileobject->name != '' ) {
 
-          $mod = cms_utils::get_module('FileManager');
-          $parms = array();
-          $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
+            $mod = cms_utils::get_module('FileManager');
+            $parms = array();
+            $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
 
-          if( $mod->GetPreference('create_thumbnails') ) {
-              $thumb = filemanager_utils::create_thumbnail($parms['file']);
-              if( $thumb ) $params['thumb'] = $thumb;
-          }
+            if( $mod->GetPreference('create_thumbnails') ) {
+                $thumb = filemanager_utils::create_thumbnail($parms['file']);
+                if( $thumb ) $params['thumb'] = $thumb;
+            }
 
-          $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
-          if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
-          audit('',$mod->GetName(),$str);
+            $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
+            if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
+            audit('',$mod->GetName(),$str);
 
-          \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
-      }
-  }
+            \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
+        }
+    }
 }
 
 $options = array('param_name'=>$id.'files');

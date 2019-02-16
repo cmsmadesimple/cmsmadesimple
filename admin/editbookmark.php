@@ -39,49 +39,49 @@ if (isset($_POST["bookmark_id"])) $bookmark_id = (int)$_POST["bookmark_id"];
 else if (isset($_GET["bookmark_id"])) $bookmark_id = (int)$_GET["bookmark_id"];
 
 if (isset($_POST["cancel"])) {
-  redirect("listbookmarks.php".$urlext);
-  return;
+    redirect("listbookmarks.php".$urlext);
+    return;
 }
 
 $userid = get_userid();
 
 if (isset($_POST["editbookmark"])) {
-  $validinfo = true;
-  if ($title == "") {
-    $validinfo = false;
-    $error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
-  }
-  if ($myurl == "") {
-    $validinfo = false;
-    $error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
-  }
-
-  if ($validinfo) {
-    cmsms()->GetBookmarkOperations();
-    $markobj = new Bookmark();
-    $markobj->bookmark_id = $bookmark_id;
-    $markobj->title = $title;
-    $markobj->url = $myurl;
-    $markobj->user_id = $userid;
-
-    $result = $markobj->save();
-
-    if ($result) {
-      redirect("listbookmarks.php".$urlext);
-      return;
+    $validinfo = true;
+    if ($title == "") {
+        $validinfo = false;
+        $error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
     }
-    else {
-      $error .= "<li>".lang('errorupdatingbookmark')."</li>";
+    if ($myurl == "") {
+        $validinfo = false;
+        $error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
     }
-  }
+
+    if ($validinfo) {
+        cmsms()->GetBookmarkOperations();
+        $markobj = new Bookmark();
+        $markobj->bookmark_id = $bookmark_id;
+        $markobj->title = $title;
+        $markobj->url = $myurl;
+        $markobj->user_id = $userid;
+
+        $result = $markobj->save();
+
+        if ($result) {
+            redirect("listbookmarks.php".$urlext);
+            return;
+        }
+        else {
+            $error .= "<li>".lang('errorupdatingbookmark')."</li>";
+        }
+    }
 }
 else if ($bookmark_id != -1) {
-  $query = "SELECT * from ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
-  $result = $db->Execute($query, array($bookmark_id));
-  $row = $result->FetchRow();
+    $query = "SELECT * from ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
+    $result = $db->Execute($query, array($bookmark_id));
+    $row = $result->FetchRow();
 
-  $myurl = $row["url"];
-  $title = $row["title"];
+    $myurl = $row["url"];
+    $title = $row["title"];
 }
 
 if (strlen($title) > 0) $CMS_ADMIN_SUBTITLE = $title;
@@ -92,32 +92,28 @@ if ($error != "") echo '<div class="pageerrorcontainer"><p class="pageerror">'.$
 ?>
 
 <div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
+    <?php echo $themeObject->ShowHeader('editbookmark'); ?>
 	<form method="post" action="editbookmark.php">
         <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME; ?>" value="<?php echo $_SESSION[CMS_USER_KEY]; ?>" />
         </div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('title')?>:</p>
-			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+			<p class="pagetext"><?php echo lang('title'); ?>:</p>
+			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title; ?>" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('url')?>:</p>
-			<p class="pageinput"><input type="text" name="url" size="80" maxlength="255" value="<?php echo $myurl ?>" /></p>
+			<p class="pagetext"><?php echo lang('url'); ?>:</p>
+			<p class="pageinput"><input type="text" name="url" size="80" maxlength="255" value="<?php echo $myurl; ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id; ?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid; ?>" />
+				<input type="submit" value="<?php echo lang('submit'); ?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>
 </div>
 <?php
-
 include_once("footer.php");
-
-
-?>

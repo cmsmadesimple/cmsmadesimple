@@ -33,79 +33,79 @@ $url = "";
 if (isset($_POST["url"])) $url = trim(cleanValue($_POST["url"]));
 
 if (isset($_POST["cancel"])) {
-	redirect("listbookmarks.php".$urlext);
-	return;
+    redirect("listbookmarks.php".$urlext);
+    return;
 }
 
 $userid = get_userid();
 
 if (isset($_POST["addbookmark"]))
 	{
-	$validinfo = true;
+    $validinfo = true;
 
-	if ( $title == "" )
-		{
-		$error .= lang('nofieldgiven', array(lang('title')));
-		$validinfo = false;
-		}
-		else if ( $url == "" )
-		{
-		$error .= lang('nofieldgiven', array(lang('url')));
-		$validinfo = false;
-		}
+    if ( $title == "" )
+    {
+        $error .= lang('nofieldgiven', array(lang('title')));
+        $validinfo = false;
+    }
+    else if ( $url == "" )
+    {
+        $error .= lang('nofieldgiven', array(lang('url')));
+        $validinfo = false;
+    }
 
-	if ($validinfo)
-		{
-		  $gCms = cmsms();
-		$gCms->GetBookmarkOperations();
-		$markobj = new Bookmark();
-		$markobj->title = $title;
-		$markobj->url = $url;
-		$markobj->user_id=$userid;
+    if ($validinfo)
+    {
+        $gCms = cmsms();
+        $gCms->GetBookmarkOperations();
+        $markobj = new Bookmark();
+        $markobj->title = $title;
+        $markobj->url = $url;
+        $markobj->user_id=$userid;
 
-		$result = $markobj->save();
+        $result = $markobj->save();
 
-		if ($result)
-			{
-			redirect("listbookmarks.php".$urlext);
-			return;
-			}
-		else
-			{
-			$error .= lang('errorinsertingbookmark');
-			}
-		}
-	}
+        if ($result)
+        {
+            redirect("listbookmarks.php".$urlext);
+            return;
+        }
+        else
+        {
+            $error .= lang('errorinsertingbookmark');
+        }
+    }
+}
 
 include_once("header.php");
 
 if ($error != "")
 	{
-		echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-	}
+    echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
+}
 ?>
 
 <div class="pagecontainer">
 	<div class="pageoverflow">
-			<?php echo $themeObject->ShowHeader('addbookmark'); ?>
-			<form method="post" action="addbookmark.php<?php echo $urlext?>">
+    <?php echo $themeObject->ShowHeader('addbookmark'); ?>
+			<form method="post" action="addbookmark.php<?php echo $urlext; ?>">
        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME; ?>" value="<?php echo $_SESSION[CMS_USER_KEY]; ?>" />
         </div>
 				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('title')?>:</p>
-					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+					<p class="pagetext"><?php echo lang('title'); ?>:</p>
+					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title; ?>" /></p>
 				</div>
 				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('url')?>:</p>
-					<p class="pageinput"><input type="text" name="url" size="50" maxlength="255" value="<?php echo $url ?>" class="standard" /></p>
+					<p class="pagetext"><?php echo lang('url'); ?>:</p>
+					<p class="pageinput"><input type="text" name="url" size="50" maxlength="255" value="<?php echo $url; ?>" class="standard" /></p>
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext">&nbsp;</p>
 					<p class="pageinput">
 						<input type="hidden" name="addbookmark" value="true" />
-						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+						<input type="submit" value="<?php echo lang('submit'); ?>" class="pagebutton" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" class="pagebutton" />
 					</p>
 				</div>
 			</form>
@@ -114,6 +114,3 @@ if ($error != "")
 
 <?php
 include_once("footer.php");
-
-
-?>

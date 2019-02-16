@@ -37,9 +37,11 @@
 
 final class modulerep_client
 {
+
     private static $_latest_installed_modules;
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public static function get_repository_version()
     {
@@ -363,9 +365,15 @@ final class modulerep_client
     }
 } // end of class
 
-class ModuleManagerException extends \CmsException {}
-class ModuleNoDataException extends ModuleManagerException {}
-class ModuleNotFoundException extends ModuleManagerException {}
+class ModuleManagerException extends \CmsException
+{
+}
+class ModuleNoDataException extends ModuleManagerException
+{
+}
+class ModuleNotFoundException extends ModuleManagerException
+{
+}
 
 #
 # EOF

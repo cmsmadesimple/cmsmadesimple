@@ -37,13 +37,11 @@ $result = $newmark->save();
 
 if ($result)
 	{
-	header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
-	redirect($link);
-	}
+    header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
+    redirect($link);
+}
 else
 	{
-	include_once("header.php");
-	echo "<h3>". lang('erroraddingbookmark') . "</h3>";
-	}
-
-?>
+    include_once("header.php");
+    echo "<h3>". lang('erroraddingbookmark') . "</h3>";
+}

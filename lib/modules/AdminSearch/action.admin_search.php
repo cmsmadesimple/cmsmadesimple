@@ -23,37 +23,37 @@ if( !$this->VisibleToAdminUser() ) exit;
 
 function status_error($msg)
 {
-  echo '<script type="text/javascript">parent.status_error(\''.$msg.'\')</script>';
+    echo '<script type="text/javascript">parent.status_error(\''.$msg.'\')</script>';
 }
 
 function status_msg($msg)
 {
-  echo '<script type="text/javascript">parent.status_msg(\''.$msg.'\')</script>';
+    echo '<script type="text/javascript">parent.status_msg(\''.$msg.'\')</script>';
 }
 
 function begin_section($id,$txt,$desc = '')
 {
-  $desc = addslashes($desc);
-  echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
+    $desc = addslashes($desc);
+    echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
 }
 
 function add_result($listid,$content,$title,$url,$text = '')
 {
-  $title = addslashes($title);
-  $title = preg_replace( "/\r/", '', $title);
-  $title = preg_replace( "/\n/", '\\n', $title);
-  $content = addslashes($content);
-  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}');";
-  echo '<script type="text/javascript">'.$tmp.'</script>';
+    $title = addslashes($title);
+    $title = preg_replace( "/\r/", '', $title);
+    $title = preg_replace( "/\n/", '\\n', $title);
+    $content = addslashes($content);
+    $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}');";
+    echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 
 function end_section()
 {
-  echo '<script type="text/javascript">parent.end_section()</script>';
+    echo '<script type="text/javascript">parent.end_section()</script>';
 }
 
 if( !isset($params['search_text']) || $params['search_text'] == '' ) {
-  status_error($this->Lang('error_nosearchtext')); return;
+    status_error($this->Lang('error_nosearchtext')); return;
 }
 
 // save the search

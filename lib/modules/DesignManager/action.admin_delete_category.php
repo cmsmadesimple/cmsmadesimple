@@ -24,19 +24,19 @@ if( !$this->CheckPermission('Modify Templates') ) return;
 $this->SetCurrentTab('categories');
 
 if( !isset($params['cat']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $category = CmsLayoutTemplateCategory::load($params['cat']);
-  $category->delete();
-  $this->SetMessage($this->Lang('msg_category_deleted'));
-  $this->RedirectToAdminTab();
+    $category = CmsLayoutTemplateCategory::load($params['cat']);
+    $category->delete();
+    $this->SetMessage($this->Lang('msg_category_deleted'));
+    $this->RedirectToAdminTab();
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 #
 # EOF

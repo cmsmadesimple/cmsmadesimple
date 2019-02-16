@@ -101,7 +101,8 @@ abstract class Resultset
      * @return array
      * @deprecated
      */
-    public function GetRows() { return $this->GetArray(); }
+    public function GetRows() { return $this->GetArray();
+    }
 
     /**
      * An alias for the GetArray method.
@@ -109,7 +110,8 @@ abstract class Resultset
      * @return array
      * @deprecated
      */
-    public function GetAll() { return $this->GetArray(); }
+    public function GetAll() { return $this->GetArray();
+    }
 
     /**
      * Get an associative array from a resultset.
@@ -180,7 +182,8 @@ abstract class Resultset
      * @see RecordCount();
      * @return int
      */
-    public function NumRows() { return $this->RecordCount(); }
+    public function NumRows() { return $this->RecordCount();
+    }
 
     /**
      * Return the fields of the current resultset, or a single field of it.
@@ -215,5 +218,4 @@ abstract class Resultset
         if( $key == 'EOF' ) return $this->EOF();
         if( $key == 'fields' ) return $this->Fields();
     }
-
 }

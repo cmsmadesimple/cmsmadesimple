@@ -3,6 +3,7 @@ class ClearCacheTask implements CmsRegularTask
 {
     const  LASTEXECUTE_SITEPREF   = 'ClearCache_lastexecute';
     const  CACHEDFILEAGE_SITEPREF = 'auto_clear_cache_age';
+
     private $_age_days;
 
     public function get_name()

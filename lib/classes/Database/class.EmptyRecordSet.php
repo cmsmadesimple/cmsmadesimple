@@ -17,44 +17,54 @@ final class EmptyResultset extends Resultset
     /**
      * @ignore
      */
-    public function MoveFirst() {}
+    public function MoveFirst() {
+    }
     /**
      * @ignore
      */
-    public function MoveNext() {}
+    public function MoveNext() {
+    }
 
     /**
      * @ignore
      */
-    public function GetArray() {}
+    public function GetArray() {
+    }
     /**
      * @ignore
      */
-    public function GetRows() {}
+    public function GetRows() {
+    }
     /**
      * @ignore
      */
-    public function GetAll() {}
+    public function GetAll() {
+    }
     /**
      * @ignore
      */
-    public function GetAssoc() {}
+    public function GetAssoc() {
+    }
 
     /**
      * @ignore
      */
-    public function EOF() { return TRUE; }
+    public function EOF() { return TRUE;
+    }
     /**
      * @ignore
      */
-    public function Close() {}
+    public function Close() {
+    }
     /**
      * @ignore
      */
-    public function RecordCount() { return 0; }
+    public function RecordCount() { return 0;
+    }
 
     /**
      * @ignore
      */
-    public function fields() {}
+    public function fields() {
+    }
 } // end of class

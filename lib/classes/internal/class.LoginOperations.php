@@ -23,8 +23,11 @@ namespace CMSMS;
 
 final class LoginOperations
 {
+
     private static $_instance;
+
     private $_loginkey;
+
     private $_data;
 
     protected function __construct()

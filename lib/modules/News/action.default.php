@@ -108,32 +108,32 @@ else {
 $sortrandom = false;
 $sortby = trim(get_parameter_value($params,'sortby','news_date'));
 switch( $sortby ) {
-case 'news_category':
-    if (isset($params['sortasc']) && (strtolower($params['sortasc']) == 'true')) {
-        $query1 .= "ORDER BY mnc.long_name ASC, mn.news_date ";
-    } else {
-        $query1 .= "ORDER BY mnc.long_name DESC, mn.news_date ";
-    }
-    break;
+    case 'news_category':
+        if (isset($params['sortasc']) && (strtolower($params['sortasc']) == 'true')) {
+            $query1 .= "ORDER BY mnc.long_name ASC, mn.news_date ";
+        } else {
+            $query1 .= "ORDER BY mnc.long_name DESC, mn.news_date ";
+        }
+        break;
 
-case 'random':
-    $query1 .= "ORDER BY RAND() ";
-    $sortrandom = true;
-    break;
+    case 'random':
+        $query1 .= "ORDER BY RAND() ";
+        $sortrandom = true;
+        break;
 
-case 'summary':
-case 'news_data':
-case 'news_category':
-case 'news_title':
-case 'end_time':
-case 'start_time':
-case 'news_extra':
-    $query1 .= "ORDER BY mn.$sortby ";
-    break;
+    case 'summary':
+    case 'news_data':
+    case 'news_category':
+    case 'news_title':
+    case 'end_time':
+    case 'start_time':
+    case 'news_extra':
+        $query1 .= "ORDER BY mn.$sortby ";
+        break;
 
-default:
-    $query1 .= "ORDER BY mn.news_date ";
-    break;
+    default:
+        $query1 .= "ORDER BY mn.news_date ";
+        break;
 }
 
 if( $sortrandom == false ) {

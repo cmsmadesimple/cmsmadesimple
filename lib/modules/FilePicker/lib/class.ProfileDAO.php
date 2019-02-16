@@ -3,11 +3,14 @@ namespace FilePicker;
 
 class ProfileDAO
 {
+
     private $_mod;
+
     private $_db;
     const DFLT_PREF = 'ProfileDAO_defaultProfileId';
 
-    public static function table_name() { return CMS_DB_PREFIX.'mod_filepicker_profiles'; }
+    public static function table_name() { return CMS_DB_PREFIX.'mod_filepicker_profiles';
+    }
 
     public function __construct( \FilePicker $mod )
     {

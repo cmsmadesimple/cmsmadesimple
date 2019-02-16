@@ -51,15 +51,16 @@ namespace CMSMS\internal;
  * @abstract
  * @package		CMS
  */
-interface ContentAssistant {
+interface ContentAssistant
+{
 
-  /**
-   * Construct a Contentassistant object
-   *
-   * @abstract
-   * @param ContentBase Specify the object that we are building an assistant for.
-   */
-  public function __construct(ContentBase $content);
+    /**
+     * Construct a Contentassistant object
+     *
+     * @abstract
+     * @param ContentBase Specify the object that we are building an assistant for.
+     */
+    public function __construct(ContentBase $content);
 } // end of class
 
 #

@@ -37,42 +37,42 @@
 final class CmsLangOperations
 {
 
-	/**
-	 * @ignore
-	 */
-	private static $_langdata;
+    /**
+     * @ignore
+     */
+    private static $_langdata;
 
+    /**
+     * @ignore
+     */
+    private static $_do_conversions;
 
-	/**
-	 * @ignore
-	 */
-	private static $_do_conversions;
+    /**
+     * @ignore
+     */
+    private static $_allow_nonadmin_lang;
 
-	/**
-	 * @ignore
-	 */
-	private static $_allow_nonadmin_lang;
+    /**
+     * A constant for the core admin realm.
+     */
+    const CMSMS_ADMIN_REALM = 'admin';
 
-	/**
-	 * A constant for the core admin realm.
-	 */
-	const CMSMS_ADMIN_REALM = 'admin';
+    /**
+     * @ignore
+     */
+    private static $_current_realm = self::CMSMS_ADMIN_REALM;
 
-	/**
-	 * @ignore
-	 */
-	private static $_current_realm = self::CMSMS_ADMIN_REALM;
+    /**
+     * @ignore
+     */
+    private function __construct() {
+    }
 
-	/**
-	 * @ignore
-	 */
-	private function __construct() {}
-
-	/**
-	 * @ignore
-	 */
-	private static function _load_realm($realm)
-	{
+    /**
+     * @ignore
+     */
+    private static function _load_realm($realm)
+    {
         $curlang = CmsNlsOperations::get_current_language();
         if( !$realm ) $realm = self::$_curent_realm;
 
@@ -94,10 +94,10 @@ final class CmsLangOperations
                 $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
             }
             if( is_dir(cms_join_path(CMS_ASSETS_PATH,'modules',$realm)) ) {
-                $is_module = true;
-                $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','en_US.php');
+                  $is_module = true;
+                  $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','en_US.php');
             }
-            $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
+              $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
         }
 
         // now handle other lang files.
@@ -137,13 +137,13 @@ final class CmsLangOperations
             self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
             unset($lang);
         }
-	}
+    }
 
-	/**
-	 * @ignore
-	 */
-	private static function _convert_encoding($str)
-	{
+    /**
+     * @ignore
+     */
+    private static function _convert_encoding($str)
+    {
         return $str;
     }
 
@@ -169,8 +169,8 @@ final class CmsLangOperations
         global $CMS_STYLESHEET;
         global $CMS_INSTALL_PAGE;
         if (self::CMSMS_ADMIN_REALM == $realm && !isset($CMS_ADMIN_PAGE) &&
-            !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
-            !self::$_allow_nonadmin_lang ) {
+          !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
+          !self::$_allow_nonadmin_lang ) {
             trigger_error('Attempt to load admin realm from non admin action');
             return '';
         }
@@ -207,8 +207,8 @@ final class CmsLangOperations
         global $CMS_STYLESHEET;
         global $CMS_INSTALL_PAGE;
         if (self::CMSMS_ADMIN_REALM == $realm && !isset($CMS_ADMIN_PAGE) &&
-            !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
-            !self::$_allow_nonadmin_lang ) {
+          !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
+          !self::$_allow_nonadmin_lang ) {
             trigger_error('Attempt to load admin realm from non admin action');
             return '';
         }

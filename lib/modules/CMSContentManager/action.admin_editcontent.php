@@ -189,9 +189,9 @@ try {
         else if( isset($params['submit']) || isset($params['apply']) ) {
             $content_obj->SetLastModifiedBy(get_userid());
             $content_obj->Save();
-	    if( ! $was_defaultcontent && $content_obj->DefaultContent() ) {
-		$contentops->SetDefaultContent( $content_obj->Id() );
-	    }
+            if( ! $was_defaultcontent && $content_obj->DefaultContent() ) {
+                $contentops->SetDefaultContent( $content_obj->Id() );
+            }
             unset($_SESSION['__cms_copy_obj__']);
             audit($content_obj->Id(),'Content','Edited content item '.$content_obj->Name());
             if( isset($params['submit']) ) {

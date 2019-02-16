@@ -51,40 +51,40 @@ namespace CMSMS\internal;
  */
 class content_assistant
 {
-  /**
-   * A utility function to test if we are allowed to auto create url paths
-   *
-   * @return bool
-   */
-  public static function auto_create_url()
-  {
-    return get_site_preference('content_autocreate_urls',0);
-  }
+    /**
+     * A utility function to test if we are allowed to auto create url paths
+     *
+     * @return bool
+     */
+    public static function auto_create_url()
+    {
+        return get_site_preference('content_autocreate_urls',0);
+    }
 
 
-  /**
-   * A utility function to test if the supplied url path is valid for the supplied content id
-   *
-   * @param string The partial url path to test
-   * @return bool
-   */
-  public static function is_valid_url($url,$content_id = '')
-  {
-    // check for starting or ending slashes
-    if( startswith($url,'/') || endswith($url,'/') ) return FALSE;
+    /**
+     * A utility function to test if the supplied url path is valid for the supplied content id
+     *
+     * @param string The partial url path to test
+     * @return bool
+     */
+    public static function is_valid_url($url,$content_id = '')
+    {
+        // check for starting or ending slashes
+        if( startswith($url,'/') || endswith($url,'/') ) return FALSE;
 
-    // first check for invalid chars.
-	if( munge_string_to_url($url,TRUE,TRUE) != $url ) return FALSE;
+        // first check for invalid chars.
+        if( munge_string_to_url($url,TRUE,TRUE) != $url ) return FALSE;
 
-     // now check for duplicates.
-    cms_route_manager::load_routes();
-    $route = cms_route_manager::find_match($url,TRUE);
-    if( !$route ) return TRUE;
-    if( $route->is_content() ) {
-		if($content_id == '' || ($route->get_content() == $content_id)) return TRUE;
-	}
-    return FALSE;
-  }
+        // now check for duplicates.
+        cms_route_manager::load_routes();
+        $route = cms_route_manager::find_match($url,TRUE);
+        if( !$route ) return TRUE;
+        if( $route->is_content() ) {
+            if($content_id == '' || ($route->get_content() == $content_id)) return TRUE;
+        }
+        return FALSE;
+    }
 } // end of class
 
 ?>

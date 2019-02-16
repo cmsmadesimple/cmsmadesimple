@@ -63,21 +63,21 @@ try {
         if( isset($params['delete_templates']) && $can_delete_templates ) {
             $tpl_id_list = $design->get_templates();
             if( is_array($tpl_id_list) && count($tpl_id_list) ) {
-				$templates = CmsLayoutTemplate::load_bulk($tpl_id_list);
-				if( is_array($templates) && count($templates) ) {
-					foreach( $templates as &$tpl ) {
-						$x = $tpl->get_designs();
-						if( is_array($x) && count($x) == 1 && $x[0] == $design->get_id() ) {
-							// its orphaned
-							$tpl->delete();
-						}
-					}
-				}
+                $templates = CmsLayoutTemplate::load_bulk($tpl_id_list);
+                if( is_array($templates) && count($templates) ) {
+                    foreach( $templates as &$tpl ) {
+                        $x = $tpl->get_designs();
+                        if( is_array($x) && count($x) == 1 && $x[0] == $design->get_id() ) {
+                                  // its orphaned
+                                  $tpl->delete();
+                        }
+                    }
+                }
             }
         }
 
         // done... we 'force' the delete because we loaded the design object
-		// before deleting the templates and stylesheets.
+        // before deleting the templates and stylesheets.
         $design->delete(TRUE);
         $this->SetMessage($this->Lang('msg_design_deleted'));
         $this->RedirectToAdminTab();

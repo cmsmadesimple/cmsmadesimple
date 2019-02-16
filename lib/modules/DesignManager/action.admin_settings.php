@@ -22,15 +22,15 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
 if( isset($params['submit']) ) {
-  $n = (int)$params['lock_timeout'];
-  if( $n != 0 ) $n = max(5,min(480,$n));
-  $this->SetPreference('lock_timeout',$n);
+    $n = (int)$params['lock_timeout'];
+    if( $n != 0 ) $n = max(5,min(480,$n));
+    $this->SetPreference('lock_timeout',$n);
 
-  $n = (int)$params['lock_refresh'];
-  if( $n != 0 ) $n = max(30,min(3540,$n));
-  $this->SetPreference('lock_refresh',$n);
+    $n = (int)$params['lock_refresh'];
+    if( $n != 0 ) $n = max(30,min(3540,$n));
+    $this->SetPreference('lock_refresh',$n);
 
-  echo $this->ShowMessage($this->Lang('msg_options_saved'));
+    echo $this->ShowMessage($this->Lang('msg_options_saved'));
 }
 $smarty->assign('lock_timeout',$this->GetPreference('lock_timeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lock_refresh'));

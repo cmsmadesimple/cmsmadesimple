@@ -27,20 +27,20 @@ $is_admin = UserOperations::get_instance($uid,1);
 
 $type = strtolower($type);
 switch( $type ) {
-case 'tpl':
-case 'templates':
-case 'template':
-    $type = 'template';
-    $this->SetCurrentTab('templates');
-    break;
-case 'css':
-case 'stylesheets':
-case 'stylesheet':
-    $type = 'stylesheet';
-    $this->SetCurrentTab('stylesheets');
-    break;
-default:
-    $this->Redirect($id,'defaultadmin');
+    case 'tpl':
+    case 'templates':
+    case 'template':
+        $type = 'template';
+        $this->SetCurrentTab('templates');
+        break;
+    case 'css':
+    case 'stylesheets':
+    case 'stylesheet':
+        $type = 'stylesheet';
+        $this->SetCurrentTab('stylesheets');
+        break;
+    default:
+        $this->Redirect($id,'defaultadmin');
 }
 
 if( $is_admin ) {

@@ -179,7 +179,3 @@ function cms_autoloader($classname)
 }
 
 spl_autoload_register('cms_autoloader');
-
-#
-# EOF
-#

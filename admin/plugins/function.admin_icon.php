@@ -26,22 +26,22 @@ function smarty_function_admin_icon($params,&$template)
     $tagparms = array('class'=>'systemicon');
     foreach( $params as $key => $value ) {
         switch( $key ) {
-        case 'icon':
-            $icon = trim($value);
-            break;
-        case 'width':
-        case 'height':
-        case 'alt':
-        case 'rel':
-        case 'class':
-        case 'id':
-        case 'name':
-        case 'title':
-        case 'accesskey':
-            $tagparms[$key] = trim($value);
-            break;
-        case 'assign':
-            break;
+            case 'icon':
+                $icon = trim($value);
+                break;
+            case 'width':
+            case 'height':
+            case 'alt':
+            case 'rel':
+            case 'class':
+            case 'id':
+            case 'name':
+            case 'title':
+            case 'accesskey':
+                $tagparms[$key] = trim($value);
+                break;
+            case 'assign':
+                break;
         }
     }
 

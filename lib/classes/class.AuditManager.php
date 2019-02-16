@@ -43,13 +43,18 @@ namespace CMSMS {
 
     final class AuditManager
     {
+
         private static $_instance;
+
         private static $_std_mgr;
+
         private static $_opt_mgr;
 
-        protected function __construct() {}
+        protected function __construct() {
+        }
 
-        public static function init() {} // does nothing... just so we can audoload the thing.
+        public static function init() {
+        } // does nothing... just so we can audoload the thing.
 
         public static function set_auditor( IAuditManager $mgr )
         {
@@ -84,7 +89,6 @@ namespace CMSMS {
         {
             self::get_auditor()->error( $msg, $subject );
         }
-
     } // end of class
 } // namespace
 

@@ -31,46 +31,46 @@ $do_redirect = false;
 
 $template = null;
 if (isset($params['formtemplate'])) {
-  $template = trim($params['formtemplate']);
+    $template = trim($params['formtemplate']);
 }
 else {
-  $tpl = CmsLayoutTemplate::load_dflt_by_type('News::form');
-  if( !is_object($tpl) ) {
-    audit('',$this->GetName(),'No default form template found');
-    return;
-  }
-  $template = $tpl->get_name();
+    $tpl = CmsLayoutTemplate::load_dflt_by_type('News::form');
+    if( !is_object($tpl) ) {
+        audit('',$this->GetName(),'No default form template found');
+        return;
+    }
+    $template = $tpl->get_name();
 }
 
 // handle the page to go to after submit.
 $dest_page = $returnid;
 $tmp = $this->GetPreference('fesubmit_redirect');
 if( !empty($tmp) ) {
-  $manager = $gCms->GetHierarchyManager();
-  $node = $manager->sureGetNodeByAlias($tmp);
-  if (isset($node)) {
-    $dest_page = $node->getID();
-  }
-  else {
-    $node = $manager->sureGetNodeById($tmp);
-    if (isset($node)) $dest_page = $tmp;
-  }
+    $manager = $gCms->GetHierarchyManager();
+    $node = $manager->sureGetNodeByAlias($tmp);
+    if (isset($node)) {
+        $dest_page = $node->getID();
+    }
+    else {
+        $node = $manager->sureGetNodeById($tmp);
+        if (isset($node)) $dest_page = $tmp;
+    }
 }
 
 if( $userid == '' ) {
-  // not logged in to the admin console
-  // see if we're logged into FEU.
-  $module = $this->GetModuleInstance('FrontEndUsers');
-  if( $module ) {
-    $userid = $module->LoggedInId();
-    $userid = $userid * -1;
-  }
+    // not logged in to the admin console
+    // see if we're logged into FEU.
+    $module = $this->GetModuleInstance('FrontEndUsers');
+    if( $module ) {
+        $userid = $module->LoggedInId();
+        $userid = $userid * -1;
+    }
 }
 
 if (isset($params['category'])) {
-  $query = 'SELECT news_category_id FROM '.CMS_DB_PREFIX.'module_news_categories WHERE news_category_name = ?';
-  $tmp = $db->GetOne($query,array($params['category']));
-  if( $tmp ) $category_id = $tmp;
+    $query = 'SELECT news_category_id FROM '.CMS_DB_PREFIX.'module_news_categories WHERE news_category_name = ?';
+    $tmp = $db->GetOne($query,array($params['category']));
+    if( $tmp ) $category_id = $tmp;
 }
 
 $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null,$smarty);
@@ -217,14 +217,14 @@ $dbr = $db->Execute($query);
 $customfields = array();
 $customfieldsbyname = array();
 while( $dbr && ($row = $dbr->FetchRow()) ) {
-  if( $row['type'] == 'linkedfile' ) continue;
-  $obj = new StdClass();
-  $obj->name = $row['name'];
-  $obj->type = $row['type'];
-  $obj->id = $row['id'];
-  $obj->max_length = $row['max_length'];
-  $key = str_replace(' ','_',strtolower($row['name']));
-  $customfieldsbyname[$key] = $obj;
+    if( $row['type'] == 'linkedfile' ) continue;
+    $obj = new StdClass();
+    $obj->name = $row['name'];
+    $obj->type = $row['type'];
+    $obj->id = $row['id'];
+    $obj->max_length = $row['max_length'];
+    $key = str_replace(' ','_',strtolower($row['name']));
+    $customfieldsbyname[$key] = $obj;
 }
 if( count($customfieldsbyname) ) $tpl_ob->assign('customfields',$customfieldsbyname);
 

@@ -44,33 +44,33 @@ $this->SetCurrentTab('pages');
 // validation
 //
 if( !isset($params['page']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 $content_id = (int)$params['page'];
 if( $content_id < 1 ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 //
 // get the data
 //
 if( !$this->CanEditContent($content_id) ) {
-  $this->SetError($this->Lang('error_copy_permission'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_copy_permission'));
+    $this->RedirectToAdminTab();
 }
 
 $hm = cmsms()->GetHierarchyManager();
 $node = $hm->find_by_tag('id',$content_id);
 if( !$node ) {
-  $this->SetError($this->Lang('error_invalidpageid'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_invalidpageid'));
+    $this->RedirectToAdminTab();
 }
 $from_obj = $node->GetContent(FALSE,FALSE,FALSE);
 if( !$from_obj ) {
-  $this->SetError($this->Lang('error_invalidpageid'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_invalidpageid'));
+    $this->RedirectToAdminTab();
 }
 $from_obj->GetAdditionalEditors();
 $from_obj->HasProperty('anything'); // forces properties to be loaded.

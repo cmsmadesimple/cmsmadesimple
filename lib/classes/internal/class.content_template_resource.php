@@ -74,7 +74,6 @@ class content_template_resource extends fixed_smarty_custom_resource
         }
         $source = null;
         $mtime = null;
-        return;
     }
 } // end of class
 

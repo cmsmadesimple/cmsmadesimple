@@ -54,6 +54,7 @@ namespace CMSMS\Database;
  */
 abstract class Statement
 {
+
     /**
      * @ignore
      */
@@ -82,12 +83,12 @@ abstract class Statement
     public function __get($key)
     {
         switch( $key ) {
-        case 'db':
-        case 'conn':
-            return $this->_conn;
+            case 'db':
+            case 'conn':
+                return $this->_conn;
 
-        case 'sql':
-            return $this->_sql;
+            case 'sql':
+                return $this->_sql;
         }
     }
 

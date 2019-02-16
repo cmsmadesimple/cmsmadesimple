@@ -31,8 +31,8 @@ if (isset($params['name'])) $name = trim($params['name']);
 $arr_options = array();
 $options = '';
 if( isset($params['options']) ) {
-  $options = trim($params['options']);
-  $arr_options = news_admin_ops::optionstext_to_array($options);
+    $options = trim($params['options']);
+    $arr_options = news_admin_ops::optionstext_to_array($options);
 }
 
 $type = '';
@@ -48,42 +48,42 @@ $public = 0;
 if( isset($params['public']) ) $public = (int)$params['public'];
 
 if (isset($params['submit'])) {
-  $error = '';
-  if ($name == '') $error = $this->Lang('nonamegiven');
+    $error = '';
+    if ($name == '') $error = $this->Lang('nonamegiven');
 
-  if( !$error ) {
-    $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE name = ? AND id != ?';
-    $tmp = $db->GetOne($query,array($name,$fdid));
-    if( $tmp ) $error = $this->Lang('nameexists');
-  }
+    if( !$error ) {
+        $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE name = ? AND id != ?';
+        $tmp = $db->GetOne($query,array($name,$fdid));
+        if( $tmp ) $error = $this->Lang('nameexists');
+    }
 
-  if( !$error ) {
-    $extra = array('options'=>$arr_options);
-    $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = '.$db->DBTimeStamp(time()).', public = ?, extra = ? WHERE id = ?';
-    $res = $db->Execute($query, array($name, $type, $max_length, $public, serialize($extra), $fdid));
+    if( !$error ) {
+        $extra = array('options'=>$arr_options);
+        $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = '.$db->DBTimeStamp(time()).', public = ?, extra = ? WHERE id = ?';
+        $res = $db->Execute($query, array($name, $type, $max_length, $public, serialize($extra), $fdid));
 
-    if( !$res ) die( $db->ErrorMsg() );
-    // put mention into the admin log
-    audit($name, 'News custom: '.$name, 'Field definition edited');
-    $this->SetMessage($this->Lang('fielddefupdated'));
-    $this->RedirectToAdminTab('customfields','','admin_settings');
-  }
+        if( !$res ) die( $db->ErrorMsg() );
+        // put mention into the admin log
+        audit($name, 'News custom: '.$name, 'Field definition edited');
+        $this->SetMessage($this->Lang('fielddefupdated'));
+        $this->RedirectToAdminTab('customfields','','admin_settings');
+    }
 }
 else {
-   $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE id = ?';
-   $row = $db->GetRow($query, array($fdid));
+    $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE id = ?';
+    $row = $db->GetRow($query, array($fdid));
 
-   if ($row) {
-     $name = $row['name'];
-     $type = $row['type'];
-     $max_length = $row['max_length'];
-     $origname = $row['name'];
-     $public = $row['public'];
-     $extra = unserialize($row['extra']);
-     if( isset($extra['options']) ) {
-       $options = news_admin_ops::array_to_optionstext($extra['options']);
-     }
-   }
+    if ($row) {
+        $name = $row['name'];
+        $type = $row['type'];
+        $max_length = $row['max_length'];
+        $origname = $row['name'];
+        $public = $row['public'];
+        $extra = unserialize($row['extra']);
+        if( isset($extra['options']) ) {
+            $options = news_admin_ops::array_to_optionstext($extra['options']);
+        }
+    }
 }
 
 #Display template

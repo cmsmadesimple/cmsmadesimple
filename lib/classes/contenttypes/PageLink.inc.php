@@ -39,125 +39,135 @@
 class PageLink extends ContentBase
 {
 
-    public function IsCopyable() { return TRUE; }
-    public function IsViewable() { return FALSE; }
-	public function HasSearchableContent() { return FALSE; }
-    public function FriendlyName() { return lang('contenttype_pagelink'); }
-
-	// calguy1000: commented this out so that this page can be seen in cms_selflink
-	// but not sure what it's gonna mess up.
-	//     function HasUsableLink()
-	//     {
-	//       return false;
-	//     }
-
-    function SetProperties()
+    public function IsCopyable()
     {
-		parent::SetProperties();
-		$this->RemoveProperty('cachable',1);
-		//$this->RemoveProperty('showinmenu',1);
-		$this->RemoveProperty('secure',0);
-		$this->AddProperty('page',3,self::TAB_MAIN,TRUE,TRUE);
-		$this->AddProperty('params',4,self::TAB_OPTIONS,TRUE,TRUE);
-
-		//Turn off caching
-		$this->mCachable = false;
+        return TRUE;
     }
 
-    function FillParams(array $params,bool $editing = false)
+    public function IsViewable()
     {
-		parent::FillParams($params,$editing);
-
-		if (isset($params)) {
-			$parameters = array('page', 'params' );
-			foreach ($parameters as $oneparam) {
-				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
-			}
-		}
+        return FALSE;
     }
 
-    function ValidateData()
+    public function HasSearchableContent()
     {
-		$errors = parent::ValidateData();
-		if( $errors === FALSE ) $errors = array();
+        return FALSE;
+    }
 
-		$page = $this->GetPropertyValue('page');
-		if ($page == '-1') {
-			$errors[]= lang('nofieldgiven',array(lang('page')));
-			$result = false;
-		}
+    public function FriendlyName()
+    {
+        return lang('contenttype_pagelink');
+    }
 
-		// get the content type of page.
-		else {
+    // calguy1000: commented this out so that this page can be seen in cms_selflink
+    // but not sure what it's gonna mess up.
+    //     function HasUsableLink()
+    //     {
+    //       return false;
+    //     }
+
+    public function SetProperties()
+    {
+        parent::SetProperties();
+        $this->RemoveProperty('cachable',1);
+        //$this->RemoveProperty('showinmenu',1);
+        $this->RemoveProperty('secure',0);
+        $this->AddProperty('page',3,self::TAB_MAIN,TRUE,TRUE);
+        $this->AddProperty('params',4,self::TAB_OPTIONS,TRUE,TRUE);
+
+        //Turn off caching
+        $this->mCachable = false;
+    }
+
+    public function FillParams(array $params,bool $editing = false)
+    {
+        parent::FillParams($params,$editing);
+
+        if (isset($params)) {
+            $parameters = array('page', 'params' );
+            foreach ($parameters as $oneparam) {
+                if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+            }
+        }
+    }
+
+    public function ValidateData()
+    {
+        $errors = parent::ValidateData();
+        if( $errors === FALSE ) $errors = array();
+
+        $page = $this->GetPropertyValue('page');
+        if ($page == '-1') {
+            $errors[]= lang('nofieldgiven',array(lang('page')));
+            $result = false;
+        }
+
+        // get the content type of page.
+        else {
             $contentops = ContentOperations::get_instance();
-			$destobj = $contentops->LoadContentFromID($page);
-			if( !is_object($destobj) ) {
-				$errors[] = lang('destinationnotfound');
-				$result = false;
-			}
-			else if( $destobj->Type() == 'pagelink' ) {
-				$errors[] = lang('pagelink_circular');
-				$result = false;
-			}
-			else if( $destobj->Alias() == $this->mAlias ) {
-				$errors[] = lang('pagelink_circular');
-				$result = false;
-			}
-		}
-		return (count($errors) > 0?$errors:FALSE);
+            $destobj = $contentops->LoadContentFromID($page);
+            if( !is_object($destobj) ) {
+                $errors[] = lang('destinationnotfound');
+                $result = false;
+            }
+            else if( $destobj->Type() == 'pagelink' ) {
+                $errors[] = lang('pagelink_circular');
+                $result = false;
+            }
+            else if( $destobj->Alias() == $this->mAlias ) {
+                $errors[] = lang('pagelink_circular');
+                $result = false;
+            }
+        }
+        return (count($errors) > 0?$errors:FALSE);
     }
 
-    function TabNames()
+    public function TabNames()
     {
-		$res = array(lang('main'));
-		if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
-		return $res;
+        $res = array(lang('main'));
+        if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
+        return $res;
     }
 
-    function display_single_element($one,$adding)
+    public function display_single_element($one,$adding)
     {
-		switch($one) {
-		case 'page':
-			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
-			if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
-			break;
+        switch($one) {
+            case 'page':
+                $contentops = ContentOperations::get_instance();
+                $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
+                if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
+                break;
 
-		case 'params':
-			$val = cms_htmlentities($this->GetPropertyValue('params'));
-			return array(lang('additional_params').':','<input type="text" name="params" value="'.$val.'" />');
-			break;
+            case 'params':
+                $val = cms_htmlentities($this->GetPropertyValue('params'));
+                return array(lang('additional_params').':','<input type="text" name="params" value="'.$val.'" />');
 
-		default:
-			return parent::display_single_element($one,$adding);
-		}
+            default:
+                return parent::display_single_element($one,$adding);
+        }
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-		switch($tab) {
-		case '0':
-			return $this->display_attributes($adding);
-			break;
-		case '1':
-			return $this->display_attributes($adding,1);
-			break;
-		}
+        switch($tab) {
+            case '0':
+                return $this->display_attributes($adding);
+            case '1':
+                return $this->display_attributes($adding,1);
+        }
     }
 
-    function GetURL(bool $rewrite = true)
+    public function GetURL(bool $rewrite = true)
     {
-		$page = $this->GetPropertyValue('page');
-		$params = $this->GetPropertyValue('params');
+        $page = $this->GetPropertyValue('page');
+        $params = $this->GetPropertyValue('params');
 
-		$contentops = ContentOperations::get_instance();
-		$destcontent = $contentops->LoadContentFromId($page);
-		if( is_object( $destcontent ) ) {
-			$url = $destcontent->GetURL();
-			$url .= $params;
-			return $url;
-		}
+        $contentops = ContentOperations::get_instance();
+        $destcontent = $contentops->LoadContentFromId($page);
+        if( is_object( $destcontent ) ) {
+            $url = $destcontent->GetURL();
+            $url .= $params;
+            return $url;
+        }
     }
-}
-
-?>
+} // class

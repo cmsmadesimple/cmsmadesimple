@@ -4,10 +4,13 @@ namespace AdminLog;
 final class ReduceLogTask implements \CmsRegularTask
 {
     const LASTEXECUTE_SITEPREF = 'ReduceAdminlog_lastexecute';
+
     private $_queue = [];
 
-    public function get_name() { return get_class($this); }
-    public function get_description() { return ''; }
+    public function get_name() { return get_class($this);
+    }
+    public function get_description() { return '';
+    }
 
     public function test($time = '') {
         // do we need to do this task.
@@ -18,9 +21,12 @@ final class ReduceLogTask implements \CmsRegularTask
         return TRUE;
     }
 
-    protected function table() { return \AdminLog\storage::table_name(); }
-    protected function queue_for_deletion($row) { $this->_queue[] = $row; }
-    protected function have_queued() { return (count($this->_queue) > 1); }
+    protected function table() { return \AdminLog\storage::table_name();
+    }
+    protected function queue_for_deletion($row) { $this->_queue[] = $row;
+    }
+    protected function have_queued() { return (count($this->_queue) > 1);
+    }
 
     protected function is_same($a,$b)
     {
@@ -29,12 +35,12 @@ final class ReduceLogTask implements \CmsRegularTask
         // ignore the timestamp
         foreach( $a as $key => $val ) {
             switch( $key ) {
-            case 'timestamp':
-                if( abs($b['timestamp'] - $a['timestamp']) > 3600 ) return FALSE;
-                break;
-            default:
-                if( $a[$key] != $b[$key] ) return FALSE;
-                break;
+                case 'timestamp':
+                    if( abs($b['timestamp'] - $a['timestamp']) > 3600 ) return FALSE;
+                    break;
+                default:
+                    if( $a[$key] != $b[$key] ) return FALSE;
+                    break;
             }
         }
         return TRUE;
@@ -64,7 +70,7 @@ final class ReduceLogTask implements \CmsRegularTask
         $db = \CmsApp::get_instance()->GetDB();
         $sql = "DELETE FROM $table WHERE timestamp = ? AND uid = ? AND username = ? AND item_id = ? AND msg = ? AND ip_addr = ?";
         for( $i = 0; $i < $n; $i++ ) {
-	    $rec = $this->_queue[$i];
+            $rec = $this->_queue[$i];
             $db->Execute($sql,array($rec['timestamp'],$rec['uid'],$rec['username'],
                                     $rec['item_id'],$rec['msg'],$rec['ip_addr']));
         }
@@ -109,5 +115,6 @@ final class ReduceLogTask implements \CmsRegularTask
         \cms_siteprefs::set(self::LASTEXECUTE_SITEPREF,$time);
     }
 
-    public function on_failure($time = '') {}
+    public function on_failure($time = '') {
+    }
 } // end of class

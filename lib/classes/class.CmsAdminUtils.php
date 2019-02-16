@@ -36,10 +36,11 @@
  */
 final class CmsAdminUtils
 {
-   /**
-    * @ignore
-    */
-    private function __construct() {}
+    /**
+     * @ignore
+     */
+    private function __construct() {
+    }
 
     /**
      * A regular expression to use when testing if an item has a valid name.
@@ -143,5 +144,4 @@ final class CmsAdminUtils
             return FALSE;
         }
     }
-
 }

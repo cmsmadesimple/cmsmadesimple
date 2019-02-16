@@ -64,12 +64,12 @@ $load_perms = function() use ($db) {
             $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
-        },\CMSMS\HookManager::PRIORITY_LOW);
+    },\CMSMS\HookManager::PRIORITY_LOW);
 
     HookManager::add_hook('getperminfo',function($perm_source, $perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
-        },\CMSMS\HookManager::PRIORITY_LOW);
+    },\CMSMS\HookManager::PRIORITY_LOW);
 
     $perm_struct = array();
     while($result && $row = $result->FetchRow()) {
@@ -96,7 +96,7 @@ $group_perms = function($in_struct) {
     usort($in_struct,function($a,$b){
             // sort by name
             return strcasecmp($a->name,$b->name);
-        });
+    });
 
     $out = [];;
     foreach( $in_struct as $one ) {
@@ -113,7 +113,7 @@ $group_perms = function($in_struct) {
             if( empty($a) ) return 1;
             if( empty($b) ) return 1;
             return strcmp($a,$b);
-        });
+    });
     return $out;
 };
 

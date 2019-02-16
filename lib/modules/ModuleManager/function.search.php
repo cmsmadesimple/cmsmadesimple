@@ -35,6 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 use \ModuleManager\utils as modmgr_utils;
+
 if( !isset($gCms) ) exit;
 
 global $CMS_VERSION;
@@ -58,10 +59,10 @@ $clear_search = function() use (&$search_data) {
 $instmodules = '';
 {
     $result = modmgr_utils::get_installed_modules();
-    if( ! $result[0] ) {
-        $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
-        return;
-    }
+if( ! $result[0] ) {
+    $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
+    return;
+}
     $instmodules = $result[1];
 }
 
@@ -115,44 +116,44 @@ if( isset($params['submit']) ) {
             $obj->candownload = FALSE;
 
             switch( $row['status'] ) {
-            case 'incompatible':
-                $obj->status = $this->Lang('incompatible');
-                break;
-            case 'uptodate':
-                $obj->status = $this->Lang('uptodate');
-                break;
-            case 'newerversion':
-                $obj->status = $this->Lang('newerversion');
-                break;
-            case 'notinstalled':
-                $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-                if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+                case 'incompatible':
+                    $obj->status = $this->Lang('incompatible');
+                    break;
+                case 'uptodate':
+                    $obj->status = $this->Lang('uptodate');
+                    break;
+                case 'newerversion':
+                    $obj->status = $this->Lang('newerversion');
+                    break;
+                case 'notinstalled':
+                    $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+                    if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
                      ($writable && !file_exists( $mod ) )) && $caninstall ) {
-                    $obj->candownload = TRUE;
-                    $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
+                        $obj->candownload = TRUE;
+                        $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
                                                       $this->Lang('download'),
                                                       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
                                                             'size' => $row['size']));
-                }
-                else {
-                    $obj->status = $this->Lang('cantdownload');
-                }
-                break;
+                    }
+                    else {
+                        $obj->status = $this->Lang('cantdownload');
+                    }
+                    break;
 
-            case 'upgrade':
-                $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-                if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+                case 'upgrade':
+                    $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+                    if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
                      ($writable && !file_exists( $mod ) )) && $caninstall ) {
-                    $obj->candownload = TRUE;
-                    $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
+                        $obj->candownload = TRUE;
+                        $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
                                                       $this->Lang('upgrade'),
                                                       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
                                                             'size' => $row['size']));
-                }
-                else {
-                    $obj->status = $this->Lang('cantdownload');
-                }
-                break;
+                    }
+                    else {
+                        $obj->status = $this->Lang('cantdownload');
+                    }
+                    break;
             } // case
 
             $obj->size = (int)((float) $row['size'] / 1024.0 + 0.5);

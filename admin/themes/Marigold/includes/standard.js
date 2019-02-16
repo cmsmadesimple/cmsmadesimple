@@ -23,7 +23,7 @@
      */
     OE.helper = {
 
-        init : function() {
+        init: function() {
             var _this = this;
 
             // open external links with rel="external" attribute in new window
@@ -46,7 +46,7 @@
          * @param {requestCallback|boolean} arg1
          * @param {requestCallback|boolean} arg2
          */
-        loadScript : function(url, arg1, arg2) {
+        loadScript: function(url, arg1, arg2) {
             var cache = true,
                 callback = null,
                 load = true;
@@ -68,12 +68,12 @@
             if (load) {
                 //didn't find it in the page, so load it
                 $.ajax({
-                    type : 'GET',
-                    url : url,
-                    async : false,
-                    success : callback,
-                    dataType : 'script',
-                    cache : cache
+                    type: 'GET',
+                    url: url,
+                    async: false,
+                    success: callback,
+                    dataType: 'script',
+                    cache: cache
                 });
             } else {
                 //already loaded so just call the callback
@@ -92,7 +92,7 @@
          * @param {string} value
          * @param {number} expires (number in days)
          */
-        setStorageValue : function(key, value, expires) {
+        setStorageValue: function(key, value, expires) {
             var _this = this,
                 expiration = new Date().getTime() + ( expires * 24 * 60 * 60 * 1000 ),
                 obj = {};
@@ -104,13 +104,13 @@
                     if (expires !== null) {
 
                         obj = {
-                            value : value,
-                            timestamp : expiration
+                            value: value,
+                            timestamp: expiration
                         };
                     } else {
                         obj = {
-                            value : value,
-                            timestamp : ''
+                            value: value,
+                            timestamp: ''
                         };
                     }
 
@@ -119,7 +119,7 @@
                 } else {
                     if (expires !== null) {
                         obj = {
-                            expires : expires
+                            expires: expires
                         };
                     }
 
@@ -140,7 +140,7 @@
          * @function getStorageValue(key)
          * @param {string} key
          */
-        getStorageValue : function(key) {
+        getStorageValue: function(key) {
             var _this = this,
                 data = '',
                 value;
@@ -168,7 +168,7 @@
          * @function removeStorageValue(key)
          * @param {string} key
          */
-        removeStorageValue : function(key) {
+        removeStorageValue: function(key) {
             var _this = this;
 
             if (_this._isLocalStorage()) {
@@ -184,7 +184,7 @@
          * @function equalHeight(obj)
          * @param {object}
          */
-        equalHeight : function(obj) {
+        equalHeight: function(obj) {
             var tallest = 0,
                 elHeight;
 
@@ -206,7 +206,7 @@
          * @function _isLocalStorage()
          * @private
          */
-        _isLocalStorage : function() {
+        _isLocalStorage: function() {
             return typeof (Storage) !== 'undefined';
         },
 
@@ -215,7 +215,7 @@
          * @function _isMobileDevice()
          * @private
          */
-        _isMobileDevice : function() {
+        _isMobileDevice: function() {
             var ua = navigator.userAgent.toLowerCase(),
             devices = /(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|WPhone|Windows Mobile|IEMobile9||IEMobile10||IEMobile11|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/i;
 
@@ -231,7 +231,7 @@
      */
     OE.view = {
 
-        init : function() {
+        init: function() {
             var _this = this,
                 $sidebar_toggle = $('.toggle-button'), // object for sidebar toggle
                 $container = $('#oe_container'), // page container
@@ -253,14 +253,14 @@
             _this.showNotifications();
             // apply jQueryUI buttons
             _this.setUIButtons();
-	    // setup alert handlers
-	    _this.setupAlerts();
+            // setup alert handlers
+            _this.setupAlerts();
             // handle updating the display.
             _this.updateDisplay();
-	    // handles the initial state of the sidebar (collapsed or expanded)
-	    _this.handleSidebar($container);
+            // handles the initial state of the sidebar (collapsed or expanded)
+            _this.handleSidebar($container);
             $(window).resize(function() {
-		_this.handleSidebar($container);
+                _this.handleSidebar($container);
                 _this.updateDisplay();
             });
         },
@@ -272,7 +272,7 @@
          * @param {object} container
          * @memberof OE.view
          */
-        handleSidebar : function(container) {
+        handleSidebar: function(container) {
             var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
             if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' || viewportWidth <= 992) {
@@ -282,7 +282,6 @@
             }
         },
 
-
         /**
          * @description Handles toggling of main menu child items
          * @function toggleSubMenu(obj)
@@ -290,21 +289,21 @@
          * @param {number} duration - A positive number for toggle speed control
          * @memberof OE.view
          */
-        toggleSubMenu : function(obj, duration) {
-	    var _this = this;
+        toggleSubMenu: function(obj, duration) {
+            var _this = this;
             obj.find('li.current span').addClass('open-sub');
             obj.find('> li > span').click(function() {
                 var ul = $(this).next();
 
-		var _p = [];
+                var _p = [];
                 if (ul.is(':visible') === false) {
                     _p.push(obj.find('ul').slideUp(duration));
                 }
 
                 _p.push(ul.slideToggle(duration));
-		$.when.apply($,_p).done(function(){
-		    _this.updateDisplay();
-		})
+                $.when.apply($,_p).done(function(){
+                    _this.updateDisplay();
+                })
             });
         },
 
@@ -313,7 +312,7 @@
          * @function showNotification()
          */
         // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html), move messages to global function in cms_admin.js so it can be reused by other themes
-        showNotifications : function() {
+        showNotifications: function() {
 
             $('.pagewarning, .message, .pageerrorcontainer, .pagemcontainer').prepend('<span class="close-warning"></span>');
             $(document).on('click', '.close-warning', function() {
@@ -377,7 +376,7 @@
          * @description Applies jQueryUI button function to input buttons
          * @function setUIButtons()
          */
-        setUIButtons : function() {
+        setUIButtons: function() {
 
             // Standard input buttons
             $('input[type="submit"], :button[data-ui-icon]').each(function() {
@@ -390,9 +389,9 @@
                     if (button.is('[name*=apply]')) {
                         icon = button.data('uiIcon') || 'ui-icon-disk';
                     } else if (button.is('[name*=cancel]')) {
-                        icon = button.data('uiIcon') ||'ui-icon-circle-close';
+                        icon = button.data('uiIcon') || 'ui-icon-circle-close';
                     } else if (button.is('[name*=resettodefault]') || button.attr('id') === 'refresh') {
-                        icon = button.data('uiIcon') ||'ui-icon-refresh';
+                        icon = button.data('uiIcon') || 'ui-icon-refresh';
                     }
                 }
 
@@ -405,10 +404,10 @@
                 });
 
                 $btn.button({
-                    icons : {
-                        primary : icon
+                    icons: {
+                        primary: icon
                     },
-                    label : label
+                    label: label
                 });
                 button.replaceWith($btn);
             });
@@ -429,27 +428,27 @@
          * @memberof OE.view
          * @function updateDisplay()
          */
-        updateDisplay : function() {
-	    var $menu = $('#oe_menu');
-	    var $alert_box = $('#admin-alerts');
-	    var $header = $('header.header');
-	    var offset = $header.outerHeight() + $header.offset().top;
-	    if( $alert_box.length ) offset = $alert_box.outerHeight() + $alert_box.offset().top;
-	    console.debug('menu height = '+$menu.outerHeight()+' offset = '+offset);
+        updateDisplay: function() {
+            var $menu = $('#oe_menu');
+            var $alert_box = $('#admin-alerts');
+            var $header = $('header.header');
+            var offset = $header.outerHeight() + $header.offset().top;
+            if( $alert_box.length ) offset = $alert_box.outerHeight() + $alert_box.offset().top;
+            console.debug('menu height = '+$menu.outerHeight()+' offset = '+offset);
             console.debug('window height = '+$(window).height());
-	    if( $menu.outerHeight() + offset < $(window).height() ) {
+            if( $menu.outerHeight() + offset < $(window).height() ) {
                 console.debug('fixed');
-		$menu.css({ 'position': 'fixed', 'top': offset });
-	    } else {
-		$menu.css({ 'position': '', 'top': '' });
-		console.debug('floating');
-	        if( $menu.offset().top < $(window).scrollTop() ) {
-		    //if the top of the menu is not visible, scroll to it.
-   		   $('html, body').animate({
-		      scrollTop: $("#oe_menu").offset().top
-		   }, 1000);
-		}
-	    }
+                $menu.css({ 'position': 'fixed', 'top': offset });
+            } else {
+                $menu.css({ 'position': '', 'top': '' });
+                console.debug('floating');
+                if( $menu.offset().top < $(window).scrollTop() ) {
+                    //if the top of the menu is not visible, scroll to it.
+                    $('html, body').animate({
+                        scrollTop: $("#oe_menu").offset().top
+                    }, 1000);
+                }
+            }
         },
 
         /**
@@ -459,7 +458,7 @@
          * @params {object} obj
          * @params {object} target
          */
-        _showSidebar : function(obj, target) {
+        _showSidebar: function(obj, target) {
 
             obj.addClass('sidebar-on').removeClass('sidebar-off');
             target.find('li.current ul').show();
@@ -474,7 +473,7 @@
          * @params {object} obj
          * @params {object} target
          */
-        _closeSidebar : function(obj, target) {
+        _closeSidebar: function(obj, target) {
 
             obj.removeClass('sidebar-on').addClass('sidebar-off');
             target.find('li ul').hide();
@@ -482,51 +481,50 @@
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
 
-	_handleAlert : function(target) {
+        _handleAlert: function(target) {
     	        var _row = $(target).closest('.alert-box');
-		var _alert_name = _row.data('alert-name');
-		if( ! _alert_name ) return;
-		return $.ajax({
-		    method: 'POST',
-		    url:  cms_data.ajax_alerts_url,
-		    data: {
-			op: 'delete',
-			alert: _alert_name
-		    }
-		}).done(function(){
-		    _row.slideUp(1000);
-		    var _parent = _row.parent();
-		    if ( _parent.children().length <= 1 ) {
-  		        _row.closest('div.ui-dialog-content').dialog('close');
-			$('#alert-noalerts').show();
-			$('a#alerts').closest('li').remove();
-		    }
-		    _row.remove();
-		}).fail(function(xhr,status,msg){
-		    console.debug('problem deleting an alert: '+msg);
-		})
-	},
+            var _alert_name = _row.data('alert-name');
+            if( ! _alert_name ) return;
+            return $.ajax({
+                method: 'POST',
+                url: cms_data.ajax_alerts_url,
+                data: {
+                    op: 'delete',
+                    alert: _alert_name
+                }
+            }).done(function(){
+                _row.slideUp(1000);
+                var _parent = _row.parent();
+                if ( _parent.children().length <= 1 ) {
+                    _row.closest('div.ui-dialog-content').dialog('close');
+                    $('#alert-noalerts').show();
+                    $('a#alerts').closest('li').remove();
+                }
+                _row.remove();
+            }).fail(function(xhr,status,msg){
+                console.debug('problem deleting an alert: '+msg);
+            })
+        },
 
-
-	/**
-         * @description Handles popping up the notification area
-         * @private
-         * @function _showAlerts()
-         */
-	setupAlerts : function() {
+        /**
+                * @description Handles popping up the notification area
+                * @private
+                * @function _showAlerts()
+                */
+        setupAlerts: function() {
             var _this = this;
-	    $('a#alerts').click(function(ev){
-		ev.preventDefault();
-		$('#alert-dialog').dialog();
-	    })
-	    $('.alert-msg a').click(function(ev){
-		ev.preventDefault();
-		OE.view.handleAlert(ev.target);
-	    })
-	    $('.alert-icon,.alert-remove').click(function(ev){
-		ev.preventDefault();
-		_this._handleAlert(ev.target);
-	    })
-	},
+            $('a#alerts').click(function(ev){
+                ev.preventDefault();
+                $('#alert-dialog').dialog();
+            })
+            $('.alert-msg a').click(function(ev){
+                ev.preventDefault();
+                OE.view.handleAlert(ev.target);
+            })
+            $('.alert-icon,.alert-remove').click(function(ev){
+                ev.preventDefault();
+                _this._handleAlert(ev.target);
+            })
+        },
     };
 } )(this, jQuery);

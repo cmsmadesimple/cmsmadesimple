@@ -20,7 +20,8 @@
 
 final class news_admin_ops
 {
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public static function delete_article($articleid)
     {

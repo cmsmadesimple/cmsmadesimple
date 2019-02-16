@@ -88,10 +88,10 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
     if ($content != "") {
         //Clean up the content
-	$content = html_entity_decode($content);
+        $content = html_entity_decode($content);
         $stemmed_words = $obj->StemPhrase($content);
         $tmp = array_count_values($stemmed_words);
-	if( !is_array($tmp) || !count($tmp) ) return;
+        if( !is_array($tmp) || !count($tmp) ) return;
         $words = array();
         foreach( $tmp as $key => $val ) {
             $words[] = array('word'=>$key,'count'=>$val);
@@ -197,42 +197,42 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
     if ($originator != 'Core') return;
 
     switch ($eventname) {
-    case 'ContentEditPost':
-        $content = $params['content'];
-        if (!is_object($content)) return;
+        case 'ContentEditPost':
+            $content = $params['content'];
+            if (!is_object($content)) return;
 
-        $db = $module->GetDb();
-        $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-        if( $content->Active() && $content->IsSearchable() ) {
+            $db = $module->GetDb();
+            $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+            if( $content->Active() && $content->IsSearchable() ) {
 
-            $text = str_repeat(' '.$content->Name(), 2) . ' ';
-            $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
+                $text = str_repeat(' '.$content->Name(), 2) . ' ';
+                $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
 
-            $props = $content->Properties();
-            if( is_array($props) && count($props) ) {
-                foreach( $props as $k => $v ) {
-                    $text .= $v.' ';
+                $props = $content->Properties();
+                if( is_array($props) && count($props) ) {
+                    foreach( $props as $k => $v ) {
+                        $text .= $v.' ';
+                    }
                 }
+
+                // here check for a string to see
+                // if module content is indexable at all
+                $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
+                $text = trim(strip_tags($text));
+                if( $text && !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
             }
+            break;
 
-            // here check for a string to see
-            // if module content is indexable at all
-            $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
-            $text = trim(strip_tags($text));
-            if( $text && !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
-        }
-        break;
+        case 'ContentDeletePost':
+            $content = $params['content'];
+            if (!isset($content)) return;
+            $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+            break;
 
-    case 'ContentDeletePost':
-        $content = $params['content'];
-        if (!isset($content)) return;
-        $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-        break;
-
-    case 'ModuleUninstalled':
-        $module_name = $params['name'];
-        $module->DeleteWords($module_name);
-        break;
+        case 'ModuleUninstalled':
+            $module_name = $params['name'];
+            $module->DeleteWords($module_name);
+            break;
     }
 }
 

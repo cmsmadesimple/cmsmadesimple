@@ -23,36 +23,36 @@ if( !$this->CheckPermission('Modify Templates') ) return;
 
 $this->SetCurrentTab('categories');
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $category = null;
-  if( !isset($params['cat']) ) {
-    $category = new CmsLayoutTemplateCategory();
-    //$category->set_name('New Category');
-  }
-  else {
-    $category = CmsLayoutTemplateCategory::load(trim($params['cat']));
-  }
+    $category = null;
+    if( !isset($params['cat']) ) {
+        $category = new CmsLayoutTemplateCategory();
+        //$category->set_name('New Category');
+    }
+    else {
+        $category = CmsLayoutTemplateCategory::load(trim($params['cat']));
+    }
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 try {
-  if( isset($params['submit']) ) {
-      $category->set_name(strip_tags($params['name']));
-      $category->set_description(strip_tags($params['description']));
-      $category->save();
-      $this->SetMessage($this->Lang('category_saved'));
-      $this->RedirectToAdminTab();
-  }
+    if( isset($params['submit']) ) {
+        $category->set_name(strip_tags($params['name']));
+        $category->set_description(strip_tags($params['description']));
+        $category->save();
+        $this->SetMessage($this->Lang('category_saved'));
+        $this->RedirectToAdminTab();
+    }
 }
 catch( CmsException $e ) {
-  $this->ShowErrors($e->GetMessage());
+    $this->ShowErrors($e->GetMessage());
 }
 
 $smarty->assign('category',$category);

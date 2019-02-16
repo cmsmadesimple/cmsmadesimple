@@ -6,7 +6,8 @@ namespace FilePicker;
 // note: cwd is stored separately for each instance,  as the profile won't change as we modify directories
 class TemporaryProfileStorage
 {
-    private function __construct() {}
+    private function __construct() {
+    }
 
     public static function set(\CMSMS\FilePickerProfile $profile)
     {

@@ -2,7 +2,9 @@
 namespace CoreAdminLogin;
 if( !isset($gCms) ) exit;
 
-class LoginUserError extends \RuntimeException {}
+class LoginUserError extends \RuntimeException
+{
+}
 
 $username = $password = null;
 $theme_object = \cms_utils::get_theme_object();

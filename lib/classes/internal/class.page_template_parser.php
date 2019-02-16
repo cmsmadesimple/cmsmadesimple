@@ -3,7 +3,9 @@ namespace CMSMS\internal;
 
 class page_template_parser extends \Smarty_Internal_Template
 {
+
     protected $_priority = 100;
+
     protected $_contentBlocks;
 
     private static $_allowed_static_plugins = array('global_content');
@@ -193,7 +195,7 @@ class page_template_parser extends \Smarty_Internal_Template
      */
     public static function _dflt_plugin($params,$smarty)
     {
-		return '';
+        return '';
     }
 
     /**

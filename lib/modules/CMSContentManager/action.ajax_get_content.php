@@ -40,7 +40,8 @@ if( !isset($gCms) ) exit;
 // no permissions checks here.
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+}
 
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));

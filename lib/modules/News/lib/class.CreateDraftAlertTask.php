@@ -62,7 +62,8 @@ class CreateDraftAlertTask implements \CmsRegularTask
         $mod->SetPreference('task1_lastrun',$time);
     }
 
-    public function on_failure($time = '') {}
+    public function on_failure($time = '') {
+    }
 
     public function execute($time = '')
     {

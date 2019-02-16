@@ -58,59 +58,57 @@ class FilePickerProfile
     protected function setValue( $key, $val )
     {
         switch( $key ) {
-        case 'top':
-            $val = trim($val);
-            $this->_data[$key] = $val;
-            break;
-
-        case 'match_prefix':
-        case 'exclude_prefix':
-            $this->_data[$key] = trim($val);
-            break;
-
-        case 'type':
-            $val = trim($val);
-            switch( $val ) {
-            case FileType::TYPE_IMAGE:
-            case FileType::TYPE_AUDIO:
-            case FileType::TYPE_VIDEO:
-            case FileType::TYPE_MEDIA:
-            case FileType::TYPE_XML:
-            case FileType::TYPE_DOCUMENT:
-            case FileType::TYPE_ARCHIVE:
-            case FileType::TYPE_ANY:
+            case 'top':
+                $val = trim($val);
                 $this->_data[$key] = $val;
                 break;
-            case 'file':
-                $this->_data[$key] = FileType::TYPE_ANY;
-                break;
-            default:
-                throw new \CmsInvalidDataException("$val is an invalid value for type in ".__CLASS__);
-                break;
-            }
-            break;
 
-        case 'can_mkdir':
-        case 'can_delete':
-        case 'can_upload':
-            $val = (int) $val;
-            switch( $val ) {
-            case self::FLAG_NONE:
-            case self::FLAG_YES:
-            case self::FLAG_BYGROUP:
-                $this->_data[$key] = $val;
+            case 'match_prefix':
+            case 'exclude_prefix':
+                $this->_data[$key] = trim($val);
                 break;
-            default:
-                die('val is '.$val);
-                throw new \CmsInvalidDataException("$val is an invalid value for $key in ".__CLASS__);
-            }
-            break;
 
-        case 'show_thumbs':
-        case 'show_hidden':
-        case 'sort':
-            $this->_data[$key] = (bool) $val;
-            break;
+            case 'type':
+                $val = trim($val);
+                switch( $val ) {
+                    case FileType::TYPE_IMAGE:
+                    case FileType::TYPE_AUDIO:
+                    case FileType::TYPE_VIDEO:
+                    case FileType::TYPE_MEDIA:
+                    case FileType::TYPE_XML:
+                    case FileType::TYPE_DOCUMENT:
+                    case FileType::TYPE_ARCHIVE:
+                    case FileType::TYPE_ANY:
+                        $this->_data[$key] = $val;
+                        break;
+                    case 'file':
+                        $this->_data[$key] = FileType::TYPE_ANY;
+                        break;
+                    default:
+                        throw new \CmsInvalidDataException("$val is an invalid value for type in ".__CLASS__);
+                }
+                break;
+
+            case 'can_mkdir':
+            case 'can_delete':
+            case 'can_upload':
+                $val = (int) $val;
+                switch( $val ) {
+                    case self::FLAG_NONE:
+                    case self::FLAG_YES:
+                    case self::FLAG_BYGROUP:
+                        $this->_data[$key] = $val;
+                        break;
+                    default:
+                        throw new \CmsInvalidDataException("$val is an invalid value for $key in ".__CLASS__);
+                }
+                break;
+
+            case 'show_thumbs':
+            case 'show_hidden':
+            case 'sort':
+                $this->_data[$key] = (bool) $val;
+                break;
         }
     }
 
@@ -133,21 +131,21 @@ class FilePickerProfile
     public function __get($key)
     {
         switch( $key ) {
-        case 'top':
-        case 'type':
-        case 'match_prefix':
-        case 'exclude_prefix':
-            return trim($this->_data[$key]);
+            case 'top':
+            case 'type':
+            case 'match_prefix':
+            case 'exclude_prefix':
+                return trim($this->_data[$key]);
 
-        case 'can_mkdir':
-        case 'can_upload':
-        case 'can_delete':
-            return (int) $this->_data[$key];
+            case 'can_mkdir':
+            case 'can_upload':
+            case 'can_delete':
+                return (int) $this->_data[$key];
 
-        case 'show_thumbs':
-        case 'show_hidden':
-        case 'sort':
-            return (bool) $this->_data[$key];
+            case 'show_thumbs':
+            case 'show_hidden':
+            case 'sort':
+                return (bool) $this->_data[$key];
         }
     }
 

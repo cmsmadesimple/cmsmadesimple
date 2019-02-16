@@ -17,6 +17,10 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
+namespace CMSMS;
+use cms_utils;
+use CmsNlsOperations;
+use ModuleOperations;
 
 $CMS_ADMIN_PAGE = 1;
 $CMS_STYLESHEET = TRUE;
@@ -27,15 +31,15 @@ require_once("../lib/include.php");
  * Rolf: only used in admin/style.php
  */
 $cms_readfile = function($filename) {
-  @ob_start();
-  echo file_get_contents($filename);
-  $result = @ob_get_contents();
-  @ob_end_clean();
-  if( !empty($result) ) {
-    echo $result;
-    return TRUE;
-  }
-  return FALSE;
+    @ob_start();
+    echo file_get_contents($filename);
+    $result = @ob_get_contents();
+    @ob_end_clean();
+    if( !empty($result) ) {
+        echo $result;
+        return TRUE;
+    }
+    return FALSE;
 };
 
 $themeObject = cms_utils::get_theme_object();
@@ -58,5 +62,3 @@ if( is_array($allmodules) && count($allmodules) ) {
         if( $object->HasAdmin() ) echo $object->AdminStyle();
     }
 }
-
-?>

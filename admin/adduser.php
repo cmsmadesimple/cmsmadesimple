@@ -182,4 +182,3 @@ $smarty->assign('users', $out);
 $smarty->display('adduser.tpl');
 
 include_once ('footer.php');
-?>

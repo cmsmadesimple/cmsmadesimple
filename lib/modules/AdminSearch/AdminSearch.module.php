@@ -22,72 +22,106 @@ if( !isset($gCms) ) exit;
 
 final class AdminSearch extends CMSModule
 {
-  function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-  function GetVersion()  { return '1.0.5'; }
-  function MinimumCMSVersion()  { return '1.12-alpha0';  }
-  function LazyLoadAdmin() { return TRUE; }
-  function LazyLoadFrontend() { return TRUE; }
-  function IsPluginModule() { return FALSE; }
-  function GetAuthor() { return 'Calguy1000'; }
-  function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-  function HasAdmin() { return true; }
-  function GetAdminSection() { return 'extensions'; }
-  function GetHelp() { return $this->Lang('help'); }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-  function GetAdminDescription() { return $this->Lang('moddescription'); }
+    public function GetFriendlyName()
+    {
+        return $this->Lang('friendlyname');
+    }
 
-  function VisibleToAdminUser()
-  {
-    return $this->can_search();
-  }
+    public function GetVersion() {
+        return '1.0.5';
+    }
 
-  protected function can_search()
-  {
-      return $this->CheckPermission('Use Admin Search');
-  }
+    public function MinimumCMSVersion() {
+        return '1.12-alpha0';
+    }
 
-  function InstallPostMessage()
-  {
-    return $this->Lang('postinstall');
-  }
+    public function LazyLoadAdmin() {
+        return TRUE;
+    }
 
-  function UninstallPostMessage()
-  {
-    return $this->Lang('postuninstall');
-  }
+    public function LazyLoadFrontend() {
+        return TRUE;
+    }
 
-  public function DoAction($name,$id,$params,$returnid='')
-  {
-    $smarty = cmsms()->GetSmarty();
-    $smarty->assign('mod',$this);
-    return parent::DoAction($name,$id,$params,$returnid);
-  }
+    public function IsPluginModule() {
+        return FALSE;
+    }
 
-  public function HasCapability($capability,$params=array())
-  {
-    if( $capability == CmsCoreCapabilities::ADMINSEARCH ) return TRUE;
-    return FALSE;
-  }
+    public function GetAuthor()
+    {
+        return 'Calguy1000';
+    }
 
-  public function get_adminsearch_slaves()
-  {
-      $dir = dirname(__FILE__).'/lib/';
-      $files = glob($dir.'/class.AdminSearch*slave.php');
-      if( count($files) ) {
-          $output = array();
-          foreach( $files as $onefile ) {
-              $parts = explode('.',basename($onefile));
-              $classname = implode('.',array_slice($parts,1,count($parts)-2));
-              if( $classname == 'AdminSearch_slave' ) continue;
-              $output[] = $classname;
-          }
-          return $output;
-      }
-  }
+    public function GetAuthorEmail() {
+        return 'calguy1000@cmsmadesimple.org';
+    }
 
+    public function HasAdmin() {
+        return true;
+    }
+
+    public function GetAdminSection() {
+        return 'extensions';
+    }
+
+    public function GetHelp() {
+        return $this->Lang('help');
+    }
+
+    public function GetChangeLog() {
+        return file_get_contents(dirname(__FILE__).'/changelog.inc');
+    }
+
+    public function GetAdminDescription() {
+        return $this->Lang('moddescription');
+    }
+
+    public function VisibleToAdminUser()
+    {
+        return $this->can_search();
+    }
+
+    protected function can_search()
+    {
+        return $this->CheckPermission('Use Admin Search');
+    }
+
+    public function InstallPostMessage()
+    {
+        return $this->Lang('postinstall');
+    }
+
+    public function UninstallPostMessage()
+    {
+        return $this->Lang('postuninstall');
+    }
+
+    public function DoAction($name,$id,$params,$returnid='')
+    {
+        $smarty = cmsms()->GetSmarty();
+        $smarty->assign('mod',$this);
+        return parent::DoAction($name,$id,$params,$returnid);
+    }
+
+    public function HasCapability($capability,$params=array())
+    {
+        if( $capability == CmsCoreCapabilities::ADMINSEARCH ) return TRUE;
+        return FALSE;
+    }
+
+    public function get_adminsearch_slaves()
+    {
+        $dir = dirname(__FILE__).'/lib/';
+        $files = glob($dir.'/class.AdminSearch*slave.php');
+        if( count($files) ) {
+            $output = array();
+            foreach( $files as $onefile ) {
+                $parts = explode('.',basename($onefile));
+                $classname = implode('.',array_slice($parts,1,count($parts)-2));
+                if( $classname == 'AdminSearch_slave' ) continue;
+                $output[] = $classname;
+            }
+            return $output;
+        }
+    }
 } // class
-
-#
-# EOF
-#
-?>

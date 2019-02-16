@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2008 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -40,31 +40,31 @@ $this->SetCurrentTab('modules');
 
 $name = get_parameter_value($params,'name');
 if( !$name ) {
-  $this->SetError($this->Lang('error_insufficientparams'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_insufficientparams'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $version = get_parameter_value($params,'version');
 if( !$version ) {
-  $this->SetError($this->Lang('error_insufficientparams'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_insufficientparams'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $url = $this->GetPreference('module_repository');
 if( !$url ) {
-  $this->SetError($this->Lang('error_norepositoryurl'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_norepositoryurl'));
+    $this->RedirectToAdminTab();
+    return;
 }
 $url .= '/moduleabout';
 
 $xmlfile = get_parameter_value($params,'filename');
 if( !$xmlfile ) {
-  $this->SetError($this->Lang('error_nofilename'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_nofilename'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 //$req = new cms_http_request();
@@ -73,15 +73,15 @@ $req->execute($url,array('name'=>$xmlfile));
 $status = $req->getStatus();
 $result = $req->getResult();
 if( $status != 200 || $result == '' ) {
-  $this->SetError($this->Lang('error_request_problem'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_request_problem'));
+    $this->RedirectToAdminTab();
+    return;
 }
 $about = json_decode($result,true);
 if( !$about ) {
-  $this->SetError($this->Lang('error_nodata'));
-  $this->RedirectToAdminTab();
-  return;
+    $this->SetError($this->Lang('error_nodata'));
+    $this->RedirectToAdminTab();
+    return;
 }
 
 $smarty->assign('title',$this->Lang('abouttxt'));

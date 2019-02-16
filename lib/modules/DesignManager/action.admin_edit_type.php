@@ -24,38 +24,38 @@ if( !$this->CheckPermission('Modify Templates') ) return;
 $this->SetCurrentTab('types');
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 if( !isset($params['type']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $type = CmsLayoutTemplateType::load($params['type']);
+    $type = CmsLayoutTemplateType::load($params['type']);
 
-  if( isset($params['reset']) ) {
-      $type->reset_content_to_factory();
-      $type->save();
-  }
-  else if( isset($params['submit']) ) {
-    if( isset($params['dflt_contents']) ) {
-      $type->set_dflt_contents($params['dflt_contents']);
+    if( isset($params['reset']) ) {
+        $type->reset_content_to_factory();
+        $type->save();
     }
-    $type->set_description($params['description']);
-    $type->save();
+    else if( isset($params['submit']) ) {
+        if( isset($params['dflt_contents']) ) {
+            $type->set_dflt_contents($params['dflt_contents']);
+        }
+        $type->set_description($params['description']);
+        $type->save();
 
-    $this->SetMessage($this->Lang('msg_type_saved'));
-    $this->RedirectToAdminTab();
-  }
-  $smarty->assign('type',$type);
-  echo $this->ProcessTemplate('admin_edit_type.tpl');
+        $this->SetMessage($this->Lang('msg_type_saved'));
+        $this->RedirectToAdminTab();
+    }
+    $smarty->assign('type',$type);
+    echo $this->ProcessTemplate('admin_edit_type.tpl');
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

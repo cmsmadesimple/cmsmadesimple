@@ -18,9 +18,9 @@ if( !$res ) {
 }
 
 if( $state ) {
-  $this->SetMessage($this->Lang('msg_module_activated',$module));
+    $this->SetMessage($this->Lang('msg_module_activated',$module));
 }
 else {
-  $this->SetMessage($this->Lang('msg_module_deactivated',$module));
+    $this->SetMessage($this->Lang('msg_module_deactivated',$module));
 }
 $this->RedirectToAdminTab();

@@ -28,45 +28,45 @@ check_login();
 
 $group_id = -1;
 if (isset($_GET["group_id"])) {
-	$group_id = $_GET["group_id"];
+    $group_id = $_GET["group_id"];
 
-	if( $group_id == 1 ) {
-	    // can't delete this group
-	    redirect("listgroups.php".$urlext);
+    if( $group_id == 1 ) {
+        // can't delete this group
+        redirect("listgroups.php".$urlext);
     }
 
-	$group_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Manage Groups');
+    $group_name = "";
+    $userid = get_userid();
+    $access = check_permission($userid, 'Manage Groups');
 
-	if( !$access ) {
+    if( !$access ) {
         // you can't delete admin group (also admin group it's the first group)
         // no access
         redirect("listgroups.php".$urlext);
-	}
+    }
 
-	$result = false;
+    $result = false;
 
-	$gCms = cmsms();
-	$groupops = $gCms->GetGroupOperations();
-	$userops = $gCms->GetUserOperations();
-	$groupobj = $groupops->LoadGroupByID($group_id);
-	$group_name = $groupobj->name;
+    $gCms = cmsms();
+    $groupops = $gCms->GetGroupOperations();
+    $userops = $gCms->GetUserOperations();
+    $groupobj = $groupops->LoadGroupByID($group_id);
+    $group_name = $groupobj->name;
 
-	if( $userops->UserInGroup($userid,$group_id) ) {
+    if( $userops->UserInGroup($userid,$group_id) ) {
         // check to make sure we're not a member of this group
         // can't delete a group we're a member of.
         redirect("listgroups.php".$urlext);
     }
 
-	// now do the work.
+    // now do the work.
     \CMSMS\HookManager::do_hook('Core::DeleteGroupPre', [ 'group'=>&$groupobj ] );
 
-	if ($groupobj) $result = $groupobj->Delete();
+    if ($groupobj) $result = $groupobj->Delete();
 
     \CMSMS\HookManager::do_hook('Core::DeleteGroupPost', [ 'group'=>&$groupobj ] );
 
-	if ($result == true) {
+    if ($result == true) {
         // put mention into the admin log
         audit($group_id, 'Admin User Group: '.$group_name, 'Deleted');
     }

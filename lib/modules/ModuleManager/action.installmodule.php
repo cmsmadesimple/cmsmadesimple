@@ -35,6 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 use \ModuleManager\utils as modmgr_utils;
+
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('modules');
@@ -99,16 +100,16 @@ try {
         $ops = cmsms()->GetModuleOperations();
         foreach( $modlist as $name => $rec ) {
             switch( $rec['action'] ) {
-            case 'i': // install
-                $res = $ops->InstallModule($name);
-                break;
-            case 'u': // upgrade
-                $res = $ops->UpgradeModule($name,$rec['version']);
-                break;
-            case 'a': // activate
-                $res = $ops->ActivateModule($name);
-                $res = [ $res ];
-                break;
+                case 'i': // install
+                    $res = $ops->InstallModule($name);
+                    break;
+                case 'u': // upgrade
+                    $res = $ops->UpgradeModule($name,$rec['version']);
+                    break;
+                case 'a': // activate
+                    $res = $ops->ActivateModule($name);
+                    $res = [ $res ];
+                    break;
             }
 
             if( !is_array($res) || !$res[0] ) {

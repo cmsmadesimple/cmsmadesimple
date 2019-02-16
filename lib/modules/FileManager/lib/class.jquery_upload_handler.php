@@ -12,6 +12,7 @@
 
 abstract class jquery_upload_handler
 {
+
     private $options;
 
     function __construct($options=null) {
@@ -37,8 +38,7 @@ abstract class jquery_upload_handler
     }
 
     function getFullUrl() {
-      	return
-        		(isset($_SERVER['HTTPS']) ? 'https://' : 'http://').
+        return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').
         		(isset($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
         		(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
         		(isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] === 443 ||
@@ -127,7 +127,8 @@ abstract class jquery_upload_handler
         return $success;
     }
 
-    protected function is_file_acceptable( $filename ) { return TRUE; }
+    protected function is_file_acceptable( $filename ) { return TRUE;
+    }
 
     private function has_error($uploaded_file, $file, $error) {
         if ($error) {
@@ -176,36 +177,38 @@ abstract class jquery_upload_handler
     }
 
     private function orient_image($file_path) {
-      	$exif = exif_read_data($file_path);
-      	$orientation = intval(@$exif['Orientation']);
-      	if (!in_array($orientation, array(3, 6, 8))) {
-      	    return false;
-      	}
-      	$image = @imagecreatefromjpeg($file_path);
-      	switch ($orientation) {
-        	  case 3:
-          	    $image = @imagerotate($image, 180, 0);
-          	    break;
-        	  case 6:
-          	    $image = @imagerotate($image, 270, 0);
-          	    break;
-        	  case 8:
-          	    $image = @imagerotate($image, 90, 0);
-          	    break;
-          	default:
-          	    return false;
-      	}
-      	$success = imagejpeg($image, $file_path);
-      	// Free up memory (imagedestroy does not delete files):
-      	@imagedestroy($image);
-      	return $success;
+        $exif = exif_read_data($file_path);
+        $orientation = intval(@$exif['Orientation']);
+        if (!in_array($orientation, array(3, 6, 8))) {
+            return false;
+        }
+        $image = @imagecreatefromjpeg($file_path);
+        switch ($orientation) {
+            case 3:
+                $image = @imagerotate($image, 180, 0);
+                break;
+            case 6:
+                $image = @imagerotate($image, 270, 0);
+                break;
+            case 8:
+                $image = @imagerotate($image, 90, 0);
+                break;
+            default:
+                return false;
+        }
+        $success = imagejpeg($image, $file_path);
+        // Free up memory (imagedestroy does not delete files):
+        @imagedestroy($image);
+        return $success;
     }
 
     // cmsms
-    protected function after_uploaded_file($fileobject) {}
+    protected function after_uploaded_file($fileobject) {
+    }
 
     // cmsms
-    protected function after_uploaded_files($fileobjects_array) {}
+    protected function after_uploaded_files($fileobjects_array) {
+    }
 
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error) {
         $file = new stdClass();
@@ -215,7 +218,7 @@ abstract class jquery_upload_handler
         $error = $this->has_error($uploaded_file, $file, $error);
         if (!$error && $file->name) {
             $file_path = $this->options['upload_dir'].$file->name;
-	    $tmp = (is_file($file_path))?filesize($file_path):0;
+            $tmp = (is_file($file_path))?filesize($file_path):0;
             $append_file = !$this->options['discard_aborted_uploads'] &&
                 is_file($file_path) && $file->size > filesize($file_path);
             clearstatcache();
@@ -240,16 +243,16 @@ abstract class jquery_upload_handler
             }
             $file_size = filesize($file_path);
             if ($file_size === $file->size) {
-            		if ($this->options['orient_image']) {
-            		    $this->orient_image($file_path);
-            		}
+                if ($this->options['orient_image']) {
+                    $this->orient_image($file_path);
+                }
                     $file->url = $this->options['upload_url'].rawurlencode($file->name);
-                    foreach($this->options['image_versions'] as $version => $options) {
-                        if ($this->create_scaled_image($file->name, $options)) {
-                            $file->{$version.'_url'} = $options['upload_url']
-                                                           .rawurlencode($file->name);
-                        }
+                foreach($this->options['image_versions'] as $version => $options) {
+                    if ($this->create_scaled_image($file->name, $options)) {
+                        $file->{$version.'_url'} = $options['upload_url']
+                                                       .rawurlencode($file->name);
                     }
+                }
             } else if ($this->options['discard_aborted_uploads']) {
                 unlink($file_path);
                 $file->error = 'abort';
@@ -300,7 +303,7 @@ abstract class jquery_upload_handler
                         $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
                     $upload['error'][$index]
                 );
-		$info[] = $res;
+                $info[] = $res;
             }
         } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
             $res = $this->handle_file_upload(
@@ -315,7 +318,7 @@ abstract class jquery_upload_handler
                         isset($upload['type']) : null),
                 isset($upload['error']) ? $upload['error'] : null
             );
-	    $info[] = $res;
+            $info[] = $res;
         }
 
         header('Vary: Accept');
@@ -351,5 +354,4 @@ abstract class jquery_upload_handler
         header('Content-type: application/json');
         echo json_encode($success);
     }
-
 }

@@ -27,17 +27,17 @@ if (isset($params["cancel"])) $this->Redirect($id,"defaultadmin",$returnid,$para
 
 $selall = $params['selall'];
 if( !is_array($selall) ) {
-  $selall = unserialize($selall);
+    $selall = unserialize($selall);
 }
 unset($params['selall']);
 
 if (count($selall)==0) {
-  $params["fmerror"]="nofilesselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="nofilesselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 if (count($selall)>1) {
-  $params["fmerror"]="morethanonefiledirselected";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="morethanonefiledirselected";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
 $config=cmsms()->GetConfig();
@@ -45,27 +45,27 @@ $basedir = $config['root_path'];
 $filename=$this->decodefilename($selall[0]);
 $src = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),$filename);
 if( !file_exists($src) ) {
-  $params["fmerror"]="filenotfound";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="filenotfound";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 $imageinfo = getimagesize($src);
 if( !$imageinfo || !isset($imageinfo['mime']) || !startswith($imageinfo['mime'],'image') ) {
-  $params["fmerror"]="filenotimage";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="filenotimage";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 if( !is_writable($src) ) {
-  $params["fmerror"]="notwritable";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $params["fmerror"]="notwritable";
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 switch( $imageinfo['mime'] ) {
- case 'image/gif':
- case 'image/jpeg':
- case 'image/png':
-   break;
- default:
-   $params['fmerror'] = 'fileimagetype';
-   $this->Redirect($id,"defaultadmin",$returnid,$params);
-   break;
+    case 'image/gif':
+    case 'image/jpeg':
+    case 'image/png':
+        break;
+    default:
+        $params['fmerror'] = 'fileimagetype';
+        $this->Redirect($id,"defaultadmin",$returnid,$params);
+        break;
 }
 $width = $imageinfo[0];
 $height = $imageinfo[1];
@@ -73,95 +73,95 @@ $postrotate = cms_userprefs::get($this->GetName().'rotate_postrotate',1);
 $createthumb = cms_userprefs::get($this->GetName().'rotate_createthumb',0);
 
 if( isset($params['save']) ) {
-  // save prefs.
-  $createthumb = (int)$params['createthumb'];
-  $postrotate = trim($params['postrotate']);
-  cms_userprefs::set($this->GetName().'rotate_postrotate',$postrotate);
-  cms_userprefs::set($this->GetName().'rotate_createthumb',$createthumb);
+    // save prefs.
+    $createthumb = (int)$params['createthumb'];
+    $postrotate = trim($params['postrotate']);
+    cms_userprefs::set($this->GetName().'rotate_postrotate',$postrotate);
+    cms_userprefs::set($this->GetName().'rotate_createthumb',$createthumb);
 
-  // do the work
-  $angle = (int)$params['angle'];
-  $angle = max(-180,min(180,$angle))*-1;
-  $source = imagecreatefromstring(file_get_contents($src));
-  imagealphablending($source, false);
-  imagesavealpha($source, true);
-  $bgcolor = imageColorAllocateAlpha($source, 255, 255, 255, 127);
-  $rotated = imagerotate($source,$angle,$bgcolor);
-  imagealphablending($rotated, false);
-  imagesavealpha($rotated, true);
+    // do the work
+    $angle = (int)$params['angle'];
+    $angle = max(-180,min(180,$angle))*-1;
+    $source = imagecreatefromstring(file_get_contents($src));
+    imagealphablending($source, false);
+    imagesavealpha($source, true);
+    $bgcolor = imagecolorallocatealpha($source, 255, 255, 255, 127);
+    $rotated = imagerotate($source,$angle,$bgcolor);
+    imagealphablending($rotated, false);
+    imagesavealpha($rotated, true);
 
-  if( $postrotate == 'crop' ) {
-    // calculates crop dimensions based on center of image
-    $x2 = (int)($width / 2);
-    $y2 = (int)($height / 2);
-    $new_w = imagesx($rotated);
-    $new_h = imagesy($rotated);
-    $center_x = (int)($new_w / 2);
-    $center_y = (int)($new_h / 2);
-    $x0 = max(0,$center_x - $x2);
-    $y0 = max(0,$center_y - $y2);
-    //die("width = $width, height = $height, new_w = $new_w, new_h = $new_h, x0 = $x0, y0 = $y0");
+    if( $postrotate == 'crop' ) {
+        // calculates crop dimensions based on center of image
+        $x2 = (int)($width / 2);
+        $y2 = (int)($height / 2);
+        $new_w = imagesx($rotated);
+        $new_h = imagesy($rotated);
+        $center_x = (int)($new_w / 2);
+        $center_y = (int)($new_h / 2);
+        $x0 = max(0,$center_x - $x2);
+        $y0 = max(0,$center_y - $y2);
+        //die("width = $width, height = $height, new_w = $new_w, new_h = $new_h, x0 = $x0, y0 = $y0");
 
-    $newimg = imagecreatetruecolor($width,$height);
-    imagealphablending($newimg,FALSE);
-    imagecolortransparent($newimg,$bgcolor);
-    imagefill($newimg,0,0,$bgcolor);
-    imagesavealpha($newimg,TRUE);
-    imagecopy($newimg,$rotated,0,0,$x0,$y0,$width,$height);
-    
-    imagedestroy($rotated);
-    $rotated = $newimg;
-  }
-  else if( $postrotate == 'resize' ) {
-    $src_w = imagesx($rotated);
-    $src_h = imagesy($rotated);
+        $newimg = imagecreatetruecolor($width,$height);
+        imagealphablending($newimg,FALSE);
+        imagecolortransparent($newimg,$bgcolor);
+        imagefill($newimg,0,0,$bgcolor);
+        imagesavealpha($newimg,TRUE);
+        imagecopy($newimg,$rotated,0,0,$x0,$y0,$width,$height);
 
-    if( $width < $height ) {
-      // height is greater... 
-      $new_h = $height;
-      $new_w = round(($new_h / $src_h) * $src_w, 0);
+        imagedestroy($rotated);
+        $rotated = $newimg;
     }
-    else {
-      // width is greater.
-      $new_w = $width;
-      $new_h = round(($new_w / $src_w) * $src_h, 0);
+    else if( $postrotate == 'resize' ) {
+        $src_w = imagesx($rotated);
+        $src_h = imagesy($rotated);
+
+        if( $width < $height ) {
+            // height is greater...
+            $new_h = $height;
+            $new_w = round(($new_h / $src_h) * $src_w, 0);
+        }
+        else {
+            // width is greater.
+            $new_w = $width;
+            $new_h = round(($new_w / $src_w) * $src_h, 0);
+        }
+
+        $x0 = (int)(($src_w - $new_w) / 2);
+        $y0 = (int)(($src_h - $new_h) / 2);
+
+        //die("rotated={$src_w}x{$src_h} orig={$width}x{$height} new={$new_w},{$new_h} offset = $x0,$y0");
+        $newimg = imagecreatetruecolor($new_w,$new_h);
+        imagealphablending($newimg,FALSE);
+        imagecolortransparent($newimg,$bgcolor);
+        imagefill($newimg,0,0,$bgcolor);
+        imagesavealpha($newimg,TRUE);
+
+
+        imagecopyresampled($newimg,$rotated,$x0,$y0,0,0,$new_w,$new_h,$src_w,$src_h);
+
+        imagedestroy($rotated);
+        $rotated = $newimg;
     }
 
-    $x0 = (int)(($src_w - $new_w) / 2);
-    $y0 = (int)(($src_h - $new_h) / 2);
+    // save the thing.
+    $res = null;
+    switch( $imageinfo['mime'] ) {
+        case 'image/gif':
+            $res = imagegif($rotated,$src);
+            break;
+        case 'image/png':
+            $res = imagepng($rotated,$src,9);
+            break;
+        case 'image/jpeg':
+        default:
+            $res = imagejpeg($rotated,$src,100);
+            break;
+    }
 
-    //die("rotated={$src_w}x{$src_h} orig={$width}x{$height} new={$new_w},{$new_h} offset = $x0,$y0");
-    $newimg = imagecreatetruecolor($new_w,$new_h);
-    imagealphablending($newimg,FALSE);
-    imagecolortransparent($newimg,$bgcolor);
-    imagefill($newimg,0,0,$bgcolor);
-    imagesavealpha($newimg,TRUE);
+    if( $createthumb ) $thumb = filemanager_utils::create_thumbnail($src);
 
-
-    imagecopyresampled($newimg,$rotated,$x0,$y0,0,0,$new_w,$new_h,$src_w,$src_h);
-    
-    imagedestroy($rotated);
-    $rotated = $newimg;
-  }
-
-  // save the thing.
-  $res = null;
-  switch( $imageinfo['mime'] ) {
-  case 'image/gif':
-    $res = imagegif($rotated,$src);
-    break;
-  case 'image/png':
-    $res = imagepng($rotated,$src,9);
-    break;
-  case 'image/jpeg':
-  default:
-    $res = imagejpeg($rotated,$src,100);
-    break;
-  }
-
-  if( $createthumb ) $thumb = filemanager_utils::create_thumbnail($src);
-
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
 //

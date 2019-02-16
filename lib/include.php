@@ -23,6 +23,7 @@ use CMSMS\internal\global_cache;
 use CmsApp;
 use cms_siteprefs;
 use ModuleOperations;
+use CmsNlsOperations;
 
 /**
  * This file is included in every page.  It does all setup functions including
@@ -46,16 +47,15 @@ use ModuleOperations;
  * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
  */
 
-$dirname = __DIR__;
-
 define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_k_'); // used for CSRF protection
 define('CMS_USER_KEY','_userkey_'); // used for CSRF protection
 define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
+$dirname = __DIR__;
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
-	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+    $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 }
 
 if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100)) {
@@ -106,7 +106,7 @@ if( isset($CMS_ADMIN_PAGE) ) {
 
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
         // Language shizzle
-        if( !$charset ) $charset = \CmsNlsOperations::get_encoding();
+        if( !$charset ) $charset = CmsNlsOperations::get_encoding();
         header("Content-Type: $content_type; charset=$charset");
     }
 }
@@ -121,48 +121,48 @@ if( isset($_GET['clearme']) ) {
 }
 global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
-                                           function(){
-                                               $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
-                                               return $db->GetOne($query);
-                                  });
+                                            function(){
+                                                $db = \CmsApp::get_instance()->GetDb();
+                                                $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+                                                return $db->GetOne($query);
+                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 $obj = new \CMSMS\internal\global_cachable('latest_content_modification',
-                                           function(){
-                                               $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified_date DESC';
-                                               $tmp = $db->GetOne($query);
-                                               return $db->UnixTimeStamp($tmp);
-                                           });
+                                            function(){
+                                                $db = \CmsApp::get_instance()->GetDb();
+                                                $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified_date DESC';
+                                                $tmp = $db->GetOne($query);
+                                                return $db->UnixTimeStamp($tmp);
+                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 $obj = new \CMSMS\internal\global_cachable('default_content',
-                                           function(){
-                                               $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT content_id FROM '.CmsApp::get_instance()->GetDbPrefix().'content WHERE default_content = 1';
-                                               $tmp = $db->GetOne($query);
-                                               return $tmp;
-                                           });
+                                            function(){
+                                                $db = \CmsApp::get_instance()->GetDb();
+                                                $query = 'SELECT content_id FROM '.CmsApp::get_instance()->GetDbPrefix().'content WHERE default_content = 1';
+                                                $tmp = $db->GetOne($query);
+                                                return $tmp;
+                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 $obj = new \CMSMS\internal\global_cachable('modules',
-                                           function(){
-                                               $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT * FROM '.CmsApp::get_instance()->GetDbPrefix().'modules ORDER BY module_name';
-                                               $tmp = $db->GetArray($query);
-                                               return $tmp;
-                                           });
+                                            function(){
+                                                $db = \CmsApp::get_instance()->GetDb();
+                                                $query = 'SELECT * FROM '.CmsApp::get_instance()->GetDbPrefix().'modules ORDER BY module_name';
+                                                $tmp = $db->GetArray($query);
+                                                return $tmp;
+                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 $obj = new \CMSMS\internal\global_cachable('module_deps',
-                                           function(){
-                                               $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
-                                               $tmp = $db->GetArray($query);
-                                               if( !is_array($tmp) || !count($tmp) ) return '-';  // special value so that we actually return something to cache.
-                                               $out = array();
-                                               foreach( $tmp as $row ) {
-                                                   $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
-                                               }
-                                               return $out;
-                                           });
+                                            function(){
+                                                $db = \CmsApp::get_instance()->GetDb();
+                                                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
+                                                $tmp = $db->GetArray($query);
+                                                if( !is_array($tmp) || !count($tmp) ) return '-';  // special value so that we actually return something to cache.
+                                                $out = array();
+                                                foreach( $tmp as $row ) {
+                                                    $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
+                                                }
+                                                return $out;
+                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 $_app->GetHookMappingManager(); // initialize hook mappings.

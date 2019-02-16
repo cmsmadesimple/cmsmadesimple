@@ -46,7 +46,9 @@
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsLockException extends CmsException {}
+class CmsLockException extends CmsException
+{
+}
 
 /**
  * An exception indicating a uid mismatch wrt a lock (person operating on the lock is not the owner)
@@ -55,7 +57,9 @@ class CmsLockException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsLockOwnerException extends CmsLockException {}
+class CmsLockOwnerException extends CmsLockException
+{
+}
 
 /**
  * An exception indicating an error removing a lock
@@ -64,7 +68,9 @@ class CmsLockOwnerException extends CmsLockException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsUnLockException extends CmsLockException {}
+class CmsUnLockException extends CmsLockException
+{
+}
 
 /**
  * An exception indicating an error loading or finding a lock
@@ -73,7 +79,9 @@ class CmsUnLockException extends CmsLockException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 2.0
  */
-class CmsNoLockException extends CmsLockException {}
+class CmsNoLockException extends CmsLockException
+{
+}
 
 /**
  * A simple class represeinting a lock on a logical object in CMSMS.
@@ -139,18 +147,18 @@ final class CmsLock implements ArrayAccess
     public function OffsetGet($key)
     {
         switch( $key ) {
-        case 'type':
-        case 'oid':
-        case 'uid':
-            return $this->_data[$key];
+            case 'type':
+            case 'oid':
+            case 'uid':
+                return $this->_data[$key];
 
-        case 'id':
-        case 'created':
-        case 'modified':
-        case 'lifetime':
-        case 'expires':
-            if( !isset($this->_data[$key]) ) throw new CmsLogicException('CMSEX_L004');
-            return $this->_data[$key];
+            case 'id':
+            case 'created':
+            case 'modified':
+            case 'lifetime':
+            case 'expires':
+                if( !isset($this->_data[$key]) ) throw new CmsLogicException('CMSEX_L004');
+                return $this->_data[$key];
         }
     }
 
@@ -160,25 +168,25 @@ final class CmsLock implements ArrayAccess
     public function OffsetSet($key,$value)
     {
         switch( $key ) {
-        case 'type':
-        case 'oid':
-            if( isset($this->_data['id']) ) throw new CmsInvalidDataException('CMSEX_G001');
-            $this->_data[$key] = trim($value);
-            $this->_dirty = TRUE;
-            break;
+            case 'type':
+            case 'oid':
+                if( isset($this->_data['id']) ) throw new CmsInvalidDataException('CMSEX_G001');
+                $this->_data[$key] = trim($value);
+                $this->_dirty = TRUE;
+                break;
 
-        case 'uid':
-        case 'id':
-        case 'created':
-        case 'modified':
-        case 'expires':
-            // can't set this.
-            throw new CmsInvalidDataException('CMSEX_G001');
+            case 'uid':
+            case 'id':
+            case 'created':
+            case 'modified':
+            case 'expires':
+                // can't set this.
+                throw new CmsInvalidDataException('CMSEX_G001');
 
-        case 'lifetime':
-            $this->_data[$key] = max(1,(int)$value);
-            $this->_dirty = TRUE;
-            break;
+            case 'lifetime':
+                $this->_data[$key] = max(1,(int)$value);
+                $this->_dirty = TRUE;
+                break;
         }
     }
 
@@ -227,7 +235,7 @@ final class CmsLock implements ArrayAccess
             $query = 'INSERT INTO '.CMS_DB_PREFIX.self::LOCK_TABLE.' (type,oid,uid,created,modified,lifetime,expires)
                 VALUES (?,?,?,?,?,?,?)';
             $dbr = $db->Execute($query,array($this->_data['type'], $this->_data['oid'], $this->_data['uid'],
-                                             time(), time(), $this->_data['lifetime'], $this->_data['expires']));
+                                         time(), time(), $this->_data['lifetime'], $this->_data['expires']));
             $this->_data['id'] = $db->Insert_ID();
         }
         else {
@@ -235,7 +243,7 @@ final class CmsLock implements ArrayAccess
             $query = 'UPDATE '.CMS_DB_PREFIX.self::LOCK_TABLE.' SET lifetime = ?, expires = ?, modified = ?
                 WHERE type = ? AND oid = ? AND uid = ? AND id = ?';
             $dbr = $db->Execute($query,array($this->_data['lifetime'],$this->_data['expires'],time(),
-                                             $this->_data['type'],$this->_data['oid'],$this->_data['uid'],$this->_data['id']));
+                                         $this->_data['type'],$this->_data['oid'],$this->_data['uid'],$this->_data['id']));
         }
         if( !$dbr ) throw new CmsSqlErrorException('CMSEX_SQL001',null,$db->ErrorMsg());
         $this->_dirty = FALSE;
@@ -274,7 +282,7 @@ final class CmsLock implements ArrayAccess
 
         if( $uid != $this->_data['uid'] ) {
             cms_notice(sprintf("Lock %s (%s/%d) owned by uid %s deleted by non owner",
-                                         $this->_data['id'],$this->_data['type'],$this->_data['oid'],$this->_data['uid']));
+                                     $this->_data['id'],$this->_data['type'],$this->_data['oid'],$this->_data['uid']));
         }
 
         $db = CmsApp::get_instance()->GetDb();

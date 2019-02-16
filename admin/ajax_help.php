@@ -28,15 +28,10 @@ $key = 'help';
 $out = 'NO HELP KEY SPECIFIED';
 if( isset($_GET['key']) ) $key = cms_htmlentities(trim($_GET['key']));
 if( strstr($key,'__') !== FALSE ) {
-  list($realm,$key) = explode('__',$key,2);
+    list($realm,$key) = explode('__',$key,2);
 }
 if( strtolower($realm) == 'core' ) $realm = 'admin';
 $out = CmsLangOperations::lang_from_realm($realm,$key);
 
 echo $out;
 exit;
-
-#
-# EOF
-#
-?>

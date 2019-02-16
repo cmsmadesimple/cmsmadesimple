@@ -26,10 +26,3 @@ while( !$result->EOF() ) {
     $result->MoveNext();
 }
 exit;
-
-$sql = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'adminlog';
-$db->Execute( $sql );
-unset($_SESSION['adminlog_filter']);
-audit('','Admin log','Cleared');
-$this->SetMessage($this->Lang('msg_cleared'));
-$this->RedirectToAdminTab();

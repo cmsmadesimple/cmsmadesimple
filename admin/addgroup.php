@@ -38,8 +38,8 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php".$urlext);
-	return;
+    redirect("listgroups.php".$urlext);
+    return;
 }
 
 $userid = get_userid();
@@ -81,42 +81,39 @@ else {
     if ($error != "") {
         echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
     }
-?>
+    ?>
 
 <div class="pagecontainer">
-  <?php echo $themeObject->ShowHeader('addgroup'); ?>
+    <?php echo $themeObject->ShowHeader('addgroup'); ?>
   <form method="post" action="addgroup.php">
   <div>
-    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME; ?>" value="<?php echo $_SESSION[CMS_USER_KEY]; ?>" />
   </div>
      <div class="pagewarning"><?php echo lang('warn_addgroup'); ?></div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="groupname">*<?php echo lang('name')?>:</label></p>
-    <p class="pageinput"><input type="text" id="groupname" name="group" maxlength="255" value="<?php echo $group?>" /></p>
+    <p class="pagetext"><label for="groupname">*<?php echo lang('name'); ?>:</label></p>
+    <p class="pageinput"><input type="text" id="groupname" name="group" maxlength="255" value="<?php echo $group; ?>" /></p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="description"><?php echo lang('description')?>:</label></p>
-    <p class="pageinput"><input type="text" id="description" name="description" maxlength="255" size="80" value="<?php echo $description?>" /></p>
+    <p class="pagetext"><label for="description"><?php echo lang('description'); ?>:</label></p>
+    <p class="pageinput"><input type="text" id="description" name="description" maxlength="255" size="80" value="<?php echo $description; ?>" /></p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="active"><?php echo lang('active')?>:</label></p>
-    <p class="pageinput"><input class="pagecheckbox" type="checkbox" id="active" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+    <p class="pagetext"><label for="active"><?php echo lang('active'); ?>:</label></p>
+    <p class="pageinput"><input class="pagecheckbox" type="checkbox" id="active" name="active" <?php echo ($active == 1?"checked=\"checked\"":""); ?> /></p>
   </div>
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput">
       <input type="hidden" name="addgroup" value="true" />
-      <input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-      <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+      <input type="submit" value="<?php echo lang('submit'); ?>" class="pagebutton" />
+      <input type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" class="pagebutton" />
     </p>
   </div>
   </form>
 </div>
 
-<?php
+    <?php
 }
 
 include_once("footer.php");
-
-
-?>

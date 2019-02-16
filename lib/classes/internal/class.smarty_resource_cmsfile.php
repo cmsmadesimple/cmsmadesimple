@@ -38,35 +38,34 @@ class smarty_resource_cmsfile extends fixed_smarty_custom_resource
 
         $source = null;
         switch( $section ) {
-        case 'top':
-			$pos1 = stripos($content,'<head');
-			$pos2 = stripos($content,'<header');
-			if( $pos1 === FALSE || $pos1 == $pos2 ) return;
-			$source = trim(substr($content,0,$pos1));
-            break;
+            case 'top':
+                $pos1 = stripos($content,'<head');
+                $pos2 = stripos($content,'<header');
+                if( $pos1 === FALSE || $pos1 == $pos2 ) return;
+                $source = trim(substr($content,0,$pos1));
+                break;
 
-        case 'head':
-			$pos1 = stripos($content,'<head');
-			$pos1a = stripos($content,'<header');
-			$pos2 = stripos($content,'</head>');
-			if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
-			$source = trim(substr($content,$pos1,$pos2-$pos1+7));
-            break;
+            case 'head':
+                $pos1 = stripos($content,'<head');
+                $pos1a = stripos($content,'<header');
+                $pos2 = stripos($content,'</head>');
+                if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
+                $source = trim(substr($content,$pos1,$pos2-$pos1+7));
+                break;
 
-        case 'body':
-			$pos = stripos($content,'</head>');
-			if( $pos !== FALSE ) {
-				$source = trim(substr($content,$pos+7));
-			}
-			else {
-				$source = $content;
-			}
-            break;
+            case 'body':
+                $pos = stripos($content,'</head>');
+                if( $pos !== FALSE ) {
+                    $source = trim(substr($content,$pos+7));
+                }
+                else {
+                    $source = $content;
+                }
+                break;
 
-        default:
-            $source = $content;
-            break;
+            default:
+                $source = $content;
+                break;
         }
     } // fetch
-
 } // class

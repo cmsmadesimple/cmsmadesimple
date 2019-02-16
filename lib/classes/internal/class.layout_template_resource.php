@@ -40,28 +40,28 @@ use \CmsLayoutTemplateType;
  */
 class layout_template_resource extends fixed_smarty_custom_resource
 {
-	private function &get_template($name)
-	{
+    private function &get_template($name)
+    {
         $obj = \CmsLayoutTemplate::load($name);
         $ret = new \StdClass;
         $ret->modified = $obj->get_modified();
         $ret->content = $obj->get_content();
-		return $ret;
-	}
+        return $ret;
+    }
 
-	protected function fetch($name,&$source,&$mtime)
-	{
-		if( $name == 'notemplate' ) {
-			$source = '{content}';
-			$mtime = time(); // never cache...
-			return;
-		}
-		else if( startswith($name,'appdata;') ) {
-			$name = substr($name,8);
-			$source = cms_utils::get_app_data($name);
-			$mtime = time();
-			return;
-		}
+    protected function fetch($name,&$source,&$mtime)
+    {
+        if( $name == 'notemplate' ) {
+            $source = '{content}';
+            $mtime = time(); // never cache...
+            return;
+        }
+        else if( startswith($name,'appdata;') ) {
+            $name = substr($name,8);
+            $source = cms_utils::get_app_data($name);
+            $mtime = time();
+            return;
+        }
 
         $parts = explode(';',$name,2);
         $name = $parts[0];
@@ -69,49 +69,48 @@ class layout_template_resource extends fixed_smarty_custom_resource
         $source = '';
         $mtime = null;
 
-		try {
-			$tpl = $this->get_template($name);
-			if( !is_object($tpl) ) return;
-		}
-		catch( Exception $e ) {
-			cms_error('Missing Template: '.$name);
-			return;
-		}
+        try {
+            $tpl = $this->get_template($name);
+            if( !is_object($tpl) ) return;
+        }
+        catch( Exception $e ) {
+            cms_error('Missing Template: '.$name);
+            return;
+        }
 
-		$mtime = $tpl->modified;
+        $mtime = $tpl->modified;
 
-		switch( $section ) {
-		case 'top':
-			$pos1 = stripos($tpl->content,'<head');
-			$pos2 = stripos($tpl->content,'<header');
-			if( $pos1 === FALSE || $pos1 == $pos2 ) return;
-			$source = trim(substr($tpl->content,0,$pos1));
-			return;
+        switch( $section ) {
+            case 'top':
+                $pos1 = stripos($tpl->content,'<head');
+                $pos2 = stripos($tpl->content,'<header');
+                if( $pos1 === FALSE || $pos1 == $pos2 ) return;
+                $source = trim(substr($tpl->content,0,$pos1));
+                return;
 
-		case 'head':
-			$pos1 = stripos($tpl->content,'<head');
-			$pos1a = stripos($tpl->content,'<header');
-			$pos2 = stripos($tpl->content,'</head>');
-			if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
-			$source = trim(substr($tpl->content,$pos1,$pos2-$pos1+7));
-			return;
+            case 'head':
+                $pos1 = stripos($tpl->content,'<head');
+                $pos1a = stripos($tpl->content,'<header');
+                $pos2 = stripos($tpl->content,'</head>');
+                if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
+                $source = trim(substr($tpl->content,$pos1,$pos2-$pos1+7));
+                return;
 
-		case 'body':
-			$pos = stripos($tpl->content,'</head>');
-			if( $pos !== FALSE ) {
-				$source = trim(substr($tpl->content,$pos+7));
-			}
-			else {
-				$source = $tpl->content;
-			}
-			return;
+            case 'body':
+                $pos = stripos($tpl->content,'</head>');
+                if( $pos !== FALSE ) {
+                    $source = trim(substr($tpl->content,$pos+7));
+                }
+                else {
+                    $source = $tpl->content;
+                }
+                return;
 
-		default:
-			$source = trim($tpl->content);
-			return;
-		}
-	}
-
+            default:
+                $source = trim($tpl->content);
+                return;
+        }
+    }
 } // end of class
 
 #

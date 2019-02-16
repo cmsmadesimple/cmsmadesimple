@@ -4,11 +4,17 @@ namespace CMSMS\Database\mysqli;
 
 class ResultSet extends \CMSMS\Database\ResultSet
 {
+
     private $_connection;
+
     private $_resultId;
+
     private $_fields;
+
     private $_nrows;
+
     private $_pos;
+
     private $_sql;
 
     public function __construct(\mysqli $conn, $resultId, $sql = null)
@@ -79,5 +85,4 @@ class ResultSet extends \CMSMS\Database\ResultSet
     {
         if( !$this->EOF() ) $this->_fields = mysqli_fetch_array($this->_resultId, MYSQLI_ASSOC);
     }
-
 } // end of class

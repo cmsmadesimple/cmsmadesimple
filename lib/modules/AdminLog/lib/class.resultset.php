@@ -3,6 +3,7 @@ namespace AdminLog;
 
 class resultset extends \CmsDbQueryBase
 {
+
     private $_db;
 
     public function __construct( \CMSMS\Database\Connection $db, filter $filter )

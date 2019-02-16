@@ -4,16 +4,24 @@ namespace CMSMS\Database\mysqli;
 
 class Statement extends \CMSMS\Database\Statement
 {
+
     private $_data;
 
     // meta...
     private $_bind;
+
     private $_bound;
+
     private $_types;
+
     private $_stmt; // the statement object.
+
     private $_meta; // after first execute
+
     private $_num_rows; // after first execute
+
     private $_row; // updates after each execute for queries with a resultset
+
     private $_pos; // updates after each execute for queries with a resultset
 
     public function __construct(Connection $conn,$sql = null)
@@ -34,14 +42,14 @@ class Statement extends \CMSMS\Database\Statement
     {
         $t = gettype($var);
         switch( $t ) {
-        case 'double':
-            return 'd';
-        case 'boolean':
-        case 'integer':
-            return 'i';
-        case 'string':
-        default:
-            return 's';
+            case 'double':
+                return 'd';
+            case 'boolean':
+            case 'integer':
+                return 'i';
+            case 'string':
+            default:
+                return 's';
         }
     }
 
@@ -63,7 +71,7 @@ class Statement extends \CMSMS\Database\Statement
             // we expect that the data is an associtive array
             $row = $args[0];
             foreach( $row as $key => $val ) {
-            	$this->_types .= $this->get_type_char($val);
+                $this->_types .= $this->get_type_char($val);
             }
             $this->_bind = array_values($row);
             $keys = array_keys($row);
@@ -89,7 +97,7 @@ class Statement extends \CMSMS\Database\Statement
         $conn = $this->db->get_inner_mysql();
         if( !$conn || !$this->db->IsConnected() ) throw new \LogicException('Attempt to create prepared statement when database is not connected');
         $this->_stmt = $conn->prepare( (string) $sql );
-	if( !$this->_stmt ) throw new \LogicException('Could not prepare a statement '.$conn->error);
+        if( !$this->_stmt ) throw new \LogicException('Could not prepare a statement '.$conn->error);
         $this->_row = null;
         $this->_pos = 0;
     }

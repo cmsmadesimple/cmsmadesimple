@@ -13,7 +13,8 @@ class AutoPruneLogTask implements \CmsRegularTask
         return $_mod;
     }
 
-    public function get_name() { return get_class($this); }
+    public function get_name() { return get_class($this);
+    }
 
     public function get_description()
     {
@@ -47,11 +48,11 @@ class AutoPruneLogTask implements \CmsRegularTask
         $mod = \cms_utils::get_module('AdminLog');
         $storage = new \AdminLog\storage( $mod );
         $lifetime = $this->get_lifetime();
-	$oneday = 24 * 3600;
+        $oneday = 24 * 3600;
         $lifetime = max($lifetime,$oneday);
         $the_time = $time - $lifetime;
         $storage->clear_older_than( $the_time );
-	cms_notice( 'Cleared log entries older than '.strftime('%x %X',$the_time), 'AdminLog' );
+        cms_notice( 'Cleared log entries older than '.strftime('%x %X',$the_time), 'AdminLog' );
         return TRUE;
     }
 
@@ -65,5 +66,4 @@ class AutoPruneLogTask implements \CmsRegularTask
     {
         if( !$time ) $time = time();
     }
-
 } // end of class

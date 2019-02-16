@@ -51,59 +51,59 @@
  */
 abstract class cms_cache_driver
 {
-  /**
-   * Clear all cached values in a group.
-   * If the $group parameter is not specified, use the current group
-   *
-   * @param string $group
-   */
-  abstract public function clear($group = '');
+    /**
+     * Clear all cached values in a group.
+     * If the $group parameter is not specified, use the current group
+     *
+     * @param string $group
+     */
+    abstract public function clear($group = '');
 
-  /**
-   * Retrieve a cached value
-   * If the $group parameter is not specified, use the current group
-   *
-   * @param string $key
-   * @param string $group
-   * @return mixed
-   */
-  abstract public function get($key,$group = '');
+    /**
+     * Retrieve a cached value
+     * If the $group parameter is not specified, use the current group
+     *
+     * @param string $key
+     * @param string $group
+     * @return mixed
+     */
+    abstract public function get($key,$group = '');
 
-  /**
-   * Test if a cached value exists
-   * If the $group parameter is not specified, use the current group
-   *
-   * @param string $key
-   * @param string $group
-   * @return bool
-   */
-  abstract public function exists($key,$group = '');
+    /**
+     * Test if a cached value exists
+     * If the $group parameter is not specified, use the current group
+     *
+     * @param string $key
+     * @param string $group
+     * @return bool
+     */
+    abstract public function exists($key,$group = '');
 
-  /**
-   * Erase a cached value.
-   * If the $group parameter is not specified, use the current group
-   *
-   * @param string $key
-   * @param string $group
-   */
-  abstract public function erase($key,$group = '');
+    /**
+     * Erase a cached value.
+     * If the $group parameter is not specified, use the current group
+     *
+     * @param string $key
+     * @param string $group
+     */
+    abstract public function erase($key,$group = '');
 
-  /**
-   * Add a cached value
-   * If the $group parameter is not specified, use the current group
-   *
-   * @param string $key
-   * @param mixed  $value
-   * @param string $group
-   */
-  abstract public function set($key,$value,$group = '');
+    /**
+     * Add a cached value
+     * If the $group parameter is not specified, use the current group
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param string $group
+     */
+    abstract public function set($key,$value,$group = '');
 
-  /**
-   * Set A current group
-   *
-   * @param string $group
-   */
-  abstract public function set_group($group);
+    /**
+     * Set A current group
+     *
+     * @param string $group
+     */
+    abstract public function set_group($group);
 }
 
 ?>

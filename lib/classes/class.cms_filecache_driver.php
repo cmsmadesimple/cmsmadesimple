@@ -77,32 +77,32 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private $_lifetime = 7200;
+    private $lifetime = 7200;
 
     /**
      * @ignore
      */
-    private $_locking = true;
+    private $locking = true;
 
     /**
      * @ignore
      */
-    private $_blocking = false;
+    private $blocking = false;
 
     /**
      * @ignore
      */
-    private $_cache_dir = TMP_CACHE_LOCATION;
+    private $cache_dir = TMP_CACHE_LOCATION;
 
     /**
      * @ignore
      */
-    private $_auto_cleaning = 0;
+    private $auto_cleaning = 0;
 
     /**
      * @ignore
      */
-    private $_group = 'default';
+    private $group = 'default';
 
     /**
      * Constructor
@@ -140,11 +140,11 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function get($key,$group = '')
     {
-        if( !$group ) $group = $this->_group;
+        if( !$group ) $group = $this->group;
 
-        $this->_auto_clean_files();
-        $fn = $this->_get_filename($key,$group);
-        $data = $this->_read_cache_file($fn);
+        $this->auto_clean_files();
+        $fn = $this->get_filename($key,$group);
+        $data = $this->read_cache_file($fn);
         return $data;
     }
 
@@ -158,7 +158,7 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function clear($group = '')
     {
-        return $this->_clean_dir($this->_cache_dir,$group,false);
+        return $this->clean_dir($this->cache_dir,$group,false);
     }
 
 
@@ -172,10 +172,10 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function exists($key,$group = '')
     {
-        if( !$group ) $group = $this->_group;
+        if( !$group ) $group = $this->group;
 
-        $this->_auto_clean_files();
-        $fn = $this->_get_filename($key,$group);
+        $this->auto_clean_files();
+        $fn = $this->get_filename($key,$group);
         clearstatcache(false,$fn);
         if( is_file($fn) ) return TRUE;
         return FALSE;
@@ -192,9 +192,9 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function erase($key,$group = '')
     {
-        if( !$group ) $group = $this->_group;
+        if( !$group ) $group = $this->group;
 
-        $fn = $this->_get_filename($key,$group);
+        $fn = $this->get_filename($key,$group);
         if( is_file($fn) ) {
             @unlink($fn);
             return TRUE;
@@ -214,10 +214,10 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function set($key,$value,$group = '')
     {
-        if( !$group ) $group = $this->_group;
+        if( !$group ) $group = $this->group;
 
-        $fn = $this->_get_filename($key,$group);
-        $res = $this->_write_cache_file($fn,$value);
+        $fn = $this->get_filename($key,$group);
+        $res = $this->write_cache_file($fn,$value);
         return $res;
     }
 
@@ -229,7 +229,7 @@ class cms_filecache_driver extends cms_cache_driver
      */
     public function set_group($group)
     {
-        if( $group ) $this->_group = trim($group);
+        if( $group ) $this->group = trim($group);
     }
 
 
@@ -238,7 +238,7 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _get_filename($key,$group)
     {
-        return $this->_cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
+        return $this->cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
     }
 
 
@@ -247,24 +247,24 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _flock($res,$flag)
     {
-        if( !$this->_locking ) return TRUE;
+        if( !$this->locking ) return TRUE;
         if( !$res ) return FALSE;
 
         $mode = '';
         switch( strtolower($flag) ) {
-        case self::LOCK_READ:
-            $mode = LOCK_SH;
-            break;
+            case self::LOCK_READ:
+                $mode = LOCK_SH;
+                break;
 
-        case self::LOCK_WRITE:
-            $mode = LOCK_EX;
-            break;
+            case self::LOCK_WRITE:
+                $mode = LOCK_EX;
+                break;
 
-        case self::LOCK_UNLOCK:
-            $mode = LOCK_UN;
+            case self::LOCK_UNLOCK:
+                $mode = LOCK_UN;
         }
 
-        if( $this->_blocking ) return flock($res,$mode);
+        if( $this->blocking ) return flock($res,$mode);
 
         // non blocking lock
         $mode = $mode | LOCK_NB;
@@ -283,16 +283,16 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _read_cache_file($fn)
     {
-        $this->_cleanup($fn);
+        $this->cleanup($fn);
         $data = null;
         if( is_file($fn) ) {
             clearstatcache();
             $fp = @fopen($fn,'rb');
             if( $fp ) {
-                if( $this->_flock($fp,self::LOCK_READ) ) {
+                if( $this->flock($fp,self::LOCK_READ) ) {
                     $len = @filesize($fn);
                     if( $len > 0 ) $data = fread($fp,$len);
-                    $this->_flock($fp,self::LOCK_UNLOCK);
+                    $this->flock($fp,self::LOCK_UNLOCK);
                 }
                 @fclose($fp);
 
@@ -310,10 +310,10 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _cleanup($fn)
     {
-        if( is_null($this->_lifetime) ) return;
+        if( is_null($this->lifetime) ) return;
         clearstatcache();
         $filemtime = @filemtime($fn);
-        if( $filemtime < time() - $this->_lifetime ) @unlink($fn);
+        if( $filemtime < time() - $this->lifetime ) @unlink($fn);
     }
 
 
@@ -325,7 +325,7 @@ class cms_filecache_driver extends cms_cache_driver
         @touch($fn);
         $fp = @fopen($fn,'r+');
         if( $fp ) {
-            if( !$this->_flock($fp,self::LOCK_WRITE) ) {
+            if( !$this->flock($fp,self::LOCK_WRITE) ) {
                 @fclose($fp);
                 @unlink($fn);
                 return FALSE;
@@ -335,7 +335,7 @@ class cms_filecache_driver extends cms_cache_driver
                     $data = self::KEY_SERIALIZED.serialize($data);
                 }
                 @fwrite($fp,$data);
-                $this->_flock($fp,self::LOCK_UNLOCK);
+                $this->flock($fp,self::LOCK_UNLOCK);
             }
             @fclose($fp);
             return TRUE;
@@ -349,11 +349,11 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _auto_clean_files()
     {
-        if( $this->_auto_cleaning > 0 ) {
+        if( $this->auto_cleaning > 0 ) {
             // only clean files once per request.
             static $_have_cleaned = FALSE;
             if( !$_have_cleaned ) {
-                $res = $this->_clean_dir($this->_cache_dir);
+                $res = $this->clean_dir($this->cache_dir);
                 if( $res ) $_have_cleaned = TRUE;
                 return $res;
             }
@@ -367,7 +367,7 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _clean_dir($dir,$group = '',$old = true)
     {
-        if( !$group ) $group = $this->_group;
+        if( !$group ) $group = $this->group;
 
         $mask = $dir.'/cache_*_*.cg';
         if( $group == '*' ) $group = null;
@@ -381,8 +381,8 @@ class cms_filecache_driver extends cms_cache_driver
             if( is_file($file) ) {
                 $del = false;
                 if( $old == true ) {
-                    if( !is_null($this->_lifetime) ) {
-                        if( (time() - @filemtime($file)) > $this->_lifetime ) {
+                    if( !is_null($this->lifetime) ) {
+                        if( (time() - @filemtime($file)) > $this->lifetime ) {
                             @unlink($file);
                             $nremoved++;
                         }
@@ -397,7 +397,6 @@ class cms_filecache_driver extends cms_cache_driver
         }
         return $nremoved;
     }
-
 } // end of class
 
 ?>

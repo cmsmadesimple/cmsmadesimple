@@ -22,9 +22,11 @@
 
 final class filemanager_utils
 {
+
     static private $_can_do_advanced = -1;
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public static function is_valid_filename($name)
     {
@@ -284,17 +286,18 @@ final class filemanager_utils
         }
 
         switch($sortby) {
-        case "nameasc" : return strncasecmp($a["name"],$b["name"],strlen($a["name"]));
-        case "namedesc" : return strncasecmp($b["name"],$a["name"],strlen($b["name"]));
-        case "sizeasc" : {
-            if ($a["dir"] && $b["dir"]) return self::_FileManagerCompareFiles($a,$b,"nameasc");
-            return ($a["size"]>$b["size"]);
-        }
-        case "sizedesc" : {
-            if ($a["dir"] && $b["dir"]) return self::_FileManagerCompareFiles($a,$b,"nameasc");
-            return ($b["size"]>$a["size"]);
-        }
-        default : strncasecmp($a["name"],$b["name"],strlen($a["name"]));
+            case "nameasc":
+                return strncasecmp($a["name"],$b["name"],strlen($a["name"]));
+            case "namedesc":
+                return strncasecmp($b["name"],$a["name"],strlen($b["name"]));
+            case "sizeasc":
+                if ($a["dir"] && $b["dir"]) return self::_FileManagerCompareFiles($a,$b,"nameasc");
+                return ($a["size"]>$b["size"]);
+            case "sizedesc":
+                if ($a["dir"] && $b["dir"]) return self::_FileManagerCompareFiles($a,$b,"nameasc");
+                return ($b["size"]>$a["size"]);
+            default:
+                strncasecmp($a["name"],$b["name"],strlen($a["name"]));
         }
         return 0;
     }
@@ -402,12 +405,15 @@ final class filemanager_utils
             if( $last < '<' || $last > 9 ) $val = substr($val,0,-1);
             $val = (int) $val;
             switch($last) {
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
+                case 'g':
+                    $val *= 1024;
+                    // fall though
+                case 'm':
+                    $val *= 1024;
+                    // fall through
+                case 'k':
+                    $val *= 1024;
+                    // fall though
             }
         }
 
@@ -479,7 +485,7 @@ final class filemanager_utils
 
         $i_dest = imagecreatetruecolor($width,$height);
         imagealphablending($i_dest,FALSE);
-        $color = imageColorAllocateAlpha($i_src, 255, 255, 255, 127);
+        $color = imagecolorallocatealpha($i_src, 255, 255, 255, 127);
         imagecolortransparent($i_dest,$color);
         imagefill($i_dest,0,0,$color);
         imagesavealpha($i_dest,TRUE);
@@ -487,15 +493,15 @@ final class filemanager_utils
 
         $res = null;
         switch( $info['mime'] ) {
-        case 'image/gif':
-            $res = imagegif($i_dest,$dest);
-            break;
-        case 'image/png':
-            $res = imagepng($i_dest,$dest,9);
-            break;
-        case 'image/jpeg':
-            $res = imagejpeg($i_dest,$dest,100);
-            break;
+            case 'image/gif':
+                $res = imagegif($i_dest,$dest);
+                break;
+            case 'image/png':
+                $res = imagepng($i_dest,$dest,9);
+                break;
+            case 'image/jpeg':
+                $res = imagejpeg($i_dest,$dest,100);
+                break;
         }
 
         if( !$res ) return FALSE;
@@ -528,35 +534,35 @@ final class filemanager_utils
 
     public static function format_permissions($mode,$style='xxx') {
         switch ($style) {
-        case 'xxx':
-            $owner=0;
-            if ($mode & 0400) $owner+=4;
-            if ($mode & 0200) $owner+=2;
-            if ($mode & 0100) $owner+=1;
-            $group=0;
-            if ($mode & 0040) $group+=4;
-            if ($mode & 0020) $group+=2;
-            if ($mode & 0010) $group+=1;
-            $others=0;
-            if ($mode & 0004) $others+=4;
-            if ($mode & 0002) $others+=2;
-            if ($mode & 0001) $others+=1;
-            return $owner.$group.$others;
+            case 'xxx':
+                $owner=0;
+                if ($mode & 0400) $owner+=4;
+                if ($mode & 0200) $owner+=2;
+                if ($mode & 0100) $owner+=1;
+                $group=0;
+                if ($mode & 0040) $group+=4;
+                if ($mode & 0020) $group+=2;
+                if ($mode & 0010) $group+=1;
+                $others=0;
+                if ($mode & 0004) $others+=4;
+                if ($mode & 0002) $others+=2;
+                if ($mode & 0001) $others+=1;
+                return $owner.$group.$others;
 
-        case 'xxxxxxxxx':
-            $owner="";
-            if ($mode & 0400) $owner.="r"; else $owner.="-";
-            if ($mode & 0200) $owner.="w"; else $owner.="-";
-            if ($mode & 0100) $owner.="x"; else $owner.="-";
-            $group="";
-            if ($mode & 0040) $group.="r"; else $group.="-";
-            if ($mode & 0020) $group.="w"; else $group.="-";
-            if ($mode & 0010) $group.="x"; else $group.="-";
-            $others="";
-            if ($mode & 0004) $others.="r"; else $others.="-";
-            if ($mode & 0002) $others.="w"; else $others.="-";
-            if ($mode & 0001) $others.="x"; else $others.="-";
-            return $owner.$group.$others;
+            case 'xxxxxxxxx':
+                $owner="";
+                if ($mode & 0400) $owner.="r"; else $owner.="-";
+                if ($mode & 0200) $owner.="w"; else $owner.="-";
+                if ($mode & 0100) $owner.="x"; else $owner.="-";
+                $group="";
+                if ($mode & 0040) $group.="r"; else $group.="-";
+                if ($mode & 0020) $group.="w"; else $group.="-";
+                if ($mode & 0010) $group.="x"; else $group.="-";
+                $others="";
+                if ($mode & 0004) $others.="r"; else $others.="-";
+                if ($mode & 0002) $others.="w"; else $others.="-";
+                if ($mode & 0001) $others.="x"; else $others.="-";
+                return $owner.$group.$others;
         }
     }
 } // end of class

@@ -20,8 +20,8 @@ if ($config["debug"] == true) {
 // Pull the stuff out of the buffer...
 $bodycontent = '';
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
-  $bodycontent = @ob_get_contents();
-  @ob_end_clean();
+    $bodycontent = @ob_get_contents();
+    @ob_end_clean();
 }
 // bodycontent should contain what goes in the main content area of the page.
 
@@ -125,5 +125,3 @@ if (!isset($USE_THEME) || $USE_THEME != false) {
         echo '<div style="clear: both;">'.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." queries / Net Memory: {$memory_net} / End: {$memory} / Peak: {$memory_peak}</div>\n";
     }
 }
-
-?>

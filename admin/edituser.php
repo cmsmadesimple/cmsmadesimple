@@ -234,4 +234,3 @@ $smarty->assign('users', $out);
 $smarty->display('edituser.tpl');
 
 include_once ('footer.php');
-?>

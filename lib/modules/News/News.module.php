@@ -21,24 +21,42 @@ if( !isset($gCms) ) exit;
 
 class News extends CMSModule
 {
-    function GetName() { return 'News'; }
-    function GetFriendlyName() { return $this->Lang('news'); }
-    function IsPluginModule() { return true; }
-    function HasAdmin() { return true; }
-    function GetVersion() { return '2.51.5'; }
-    function MinimumCMSVersion() { return '2.1.6'; }
-    function GetAdminDescription() { return $this->Lang('description'); }
-    function GetAdminSection() { return 'content'; }
-    function AllowSmartyCaching() { return TRUE; }
-    function LazyLoadFrontend() { return TRUE; }
-    function LazyLoadAdmin() { return TRUE; }
-    function InstallPostMessage() { return $this->Lang('postinstall');  }
-    function GetHelp() { return $this->Lang('help'); }
-    function GetAuthor() { return 'Ted Kulp'; }
-    function GetAuthorEmail() { return 'wishy@cmsmadesimple.org'; }
-    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-    function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
-    function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
+    function GetName() { return 'News';
+    }
+    function GetFriendlyName() { return $this->Lang('news');
+    }
+    function IsPluginModule() { return true;
+    }
+    function HasAdmin() { return true;
+    }
+    function GetVersion() { return '2.51.5';
+    }
+    function MinimumCMSVersion() { return '2.1.6';
+    }
+    function GetAdminDescription() { return $this->Lang('description');
+    }
+    function GetAdminSection() { return 'content';
+    }
+    function AllowSmartyCaching() { return TRUE;
+    }
+    function LazyLoadFrontend() { return TRUE;
+    }
+    function LazyLoadAdmin() { return TRUE;
+    }
+    function InstallPostMessage() { return $this->Lang('postinstall');
+    }
+    function GetHelp() { return $this->Lang('help');
+    }
+    function GetAuthor() { return 'Ted Kulp';
+    }
+    function GetAuthorEmail() { return 'wishy@cmsmadesimple.org';
+    }
+    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc');
+    }
+    function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname);
+    }
+    function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname);
+    }
 
     function InitializeFrontend()
     {
@@ -326,20 +344,20 @@ class News extends CMSModule
 
         $fn = null;
         switch( $type->get_name() ) {
-        case 'summary':
-            $fn = 'orig_summary_template.tpl';
-            break;
+            case 'summary':
+                $fn = 'orig_summary_template.tpl';
+                break;
 
-        case 'detail':
-            $fn = 'orig_detail_template.tpl';
-            break;
+            case 'detail':
+                $fn = 'orig_detail_template.tpl';
+                break;
 
-        case 'form':
-            $fn = 'orig_form_template.tpl';
-            break;
+            case 'form':
+                $fn = 'orig_form_template.tpl';
+                break;
 
-        case 'browsecat':
-            $fn = 'browsecat.tpl';
+            case 'browsecat':
+                $fn = 'browsecat.tpl';
         }
 
         $fn = cms_join_path(__DIR__,'templates',$fn);
@@ -349,10 +367,10 @@ class News extends CMSModule
     public function HasCapability($capability, $params = array())
     {
         switch( $capability ) {
-        case CmsCoreCapabilities::PLUGIN_MODULE:
-        case CmsCoreCapabilities::ADMINSEARCH:
-        case CmsCoreCapabilities::TASKS:
-            return TRUE;
+            case CmsCoreCapabilities::PLUGIN_MODULE:
+            case CmsCoreCapabilities::ADMINSEARCH:
+            case CmsCoreCapabilities::TASKS:
+                return TRUE;
         }
         return FALSE;
     }

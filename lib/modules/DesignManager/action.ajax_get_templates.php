@@ -1,7 +1,8 @@
 <?php
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+}
 
 try {
     $tmp = get_parameter_value($_REQUEST,'filter');

@@ -25,9 +25,9 @@ $groupops = GroupOperations::get_instance();
 $groups = $groupops->LoadGroups();
 
 if( is_array($groups) && count($groups) ) {
-  foreach( $groups as $one_group ) {
-    $one_group->GrantPermission('Use Admin Search');
-  }
+    foreach( $groups as $one_group ) {
+        $one_group->GrantPermission('Use Admin Search');
+    }
 }
 #
 # EOF

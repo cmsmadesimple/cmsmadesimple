@@ -37,63 +37,78 @@
  */
 class SectionHeader extends ContentBase
 {
-    function FriendlyName() { return lang('contenttype_sectionheader'); }
-
-    function SetProperties()
+    public function FriendlyName()
     {
-		parent::SetProperties();
-		$this->RemoveProperty('secure',0);
-		$this->RemoveProperty('accesskey','');
-		$this->RemoveProperty('cachable',true);
-		$this->RemoveProperty('target','');
-		$this->RemoveProperty('page_url','');
-		$this->SetURL(''); // url will be lost when going back to a content page.
+        return lang('contenttype_sectionheader');
+    }
+
+    public function SetProperties()
+    {
+        parent::SetProperties();
+        $this->RemoveProperty('secure',0);
+        $this->RemoveProperty('accesskey','');
+        $this->RemoveProperty('cachable',true);
+        $this->RemoveProperty('target','');
+        $this->RemoveProperty('page_url','');
+        $this->SetURL(''); // url will be lost when going back to a content page.
 
         // Turn off caching
-		$this->mCachable = false;
+        $this->mCachable = false;
     }
 
-    public function HasUsableLink() { return false; }
-	public function RequiresAlias() { return TRUE; }
-	public function HasSearchableContent() { return FALSE; }
-    public function GetURL(bool $rewrite = true) { return '#'; }
-    public function IsViewable() { return FALSE; }
-
-    function TabNames()
+    public function HasUsableLink()
     {
-		$res = array(lang('main'));
-		if( check_permission(get_userid(),'Manage All Content') ) {
-			$res[] = lang('options');
-		}
-		return $res;
+        return false;
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function RequiresAlias()
     {
-		switch($tab) {
-		case '0':
-			return $this->display_attributes($adding);
-			break;
-		case '1':
-			return $this->display_attributes($adding,1);
-			break;
-		}
+        return TRUE;
     }
 
-    function ValidateData()
+    public function HasSearchableContent()
     {
-		$res = parent::ValidateData();
-		if( is_array($res) && $this->mId < 1 ) {
-			// some error occurred..
-			// reset the menu text
-			// and the alias
-			$this->mName = '';
-			$this->mMenuText = '';
-		}
-		$this->mTemplateId = -1;
-		return $res;
+        return FALSE;
     }
 
-}
+    public function GetURL(bool $rewrite = true)
+    {
+        return '#';
+    }
 
-?>
+    public function IsViewable()
+    {
+        return FALSE;
+    }
+
+    public function TabNames()
+    {
+        $res = array(lang('main'));
+        if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
+        return $res;
+    }
+
+    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+        switch($tab) {
+            case '0':
+                return $this->display_attributes($adding);
+            case '1':
+                return $this->display_attributes($adding,1);
+        }
+    }
+
+    public function ValidateData()
+    {
+        $res = parent::ValidateData();
+        if( is_array($res) && $this->mId < 1 ) {
+            // some error occurred..
+            // reset the menu text
+            // and the alias
+            $this->mName = '';
+            $this->mMenuText = '';
+        }
+        $this->mTemplateId = -1;
+        return $res;
+    }
+} // class

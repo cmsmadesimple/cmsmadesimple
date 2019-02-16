@@ -108,18 +108,18 @@ abstract class Job
     {
         $tkey = '_'.$key;
         switch( $key ) {
-        case 'id':
-        case 'created':
-        case 'start':
-        case 'errors':
-            return (int) $this->$tkey;
+            case 'id':
+            case 'created':
+            case 'start':
+            case 'errors':
+                return (int) $this->$tkey;
 
-        case 'name':
-        case 'module':
-            return trim($this->$tkey);
+            case 'name':
+            case 'module':
+                return trim($this->$tkey);
 
-        default:
-            throw new \LogicException("$key is not a gettable member of ".get_class($this));
+            default:
+                throw new \LogicException("$key is not a gettable member of ".get_class($this));
         }
     }
 
@@ -130,23 +130,23 @@ abstract class Job
     {
         $tkey = '_'.$key;
         switch( $key ) {
-        case 'name':
-        case 'module':
-            $this->$tkey = trim($val);
-            break;
+            case 'name':
+            case 'module':
+                $this->$tkey = trim($val);
+                break;
 
-        case 'force_start':
-            // internal use only.
-            $this->_start = (int) $val;
-            break;
+            case 'force_start':
+                // internal use only.
+                $this->_start = (int) $val;
+                break;
 
-        case 'start':
-        case 'errors':
-            $this->$tkey = (int) $val;
-            break;
+            case 'start':
+            case 'errors':
+                $this->$tkey = (int) $val;
+                break;
 
-        default:
-            throw new \LogicException("$key is not a settable member of ".get_class($this));
+            default:
+                throw new \LogicException("$key is not a settable member of ".get_class($this));
         }
     }
 

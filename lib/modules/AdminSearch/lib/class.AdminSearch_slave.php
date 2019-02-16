@@ -2,6 +2,7 @@
 
 abstract class AdminSearch_slave
 {
+
     private $_params = array();
 
     public function set_text($text) {
@@ -16,13 +17,13 @@ abstract class AdminSearch_slave
     {
         foreach( $params as $key => $value ) {
             switch( $key ) {
-            case 'search_text':
-            case 'search_descriptions':
-                // valid keys
-                break;
+                case 'search_text':
+                case 'search_descriptions':
+                    // valid keys
+                    break;
 
-            default:
-                throw new CmsException('Invalid parameter '.$key.' in search params');
+                default:
+                    throw new CmsException('Invalid parameter '.$key.' in search params');
             }
         }
 
@@ -39,7 +40,8 @@ abstract class AdminSearch_slave
     abstract public function get_name();
     abstract public function get_description();
     abstract public function get_matches();
-    public function get_section_description() {}
+    public function get_section_description() {
+    }
 }
 
 ?>

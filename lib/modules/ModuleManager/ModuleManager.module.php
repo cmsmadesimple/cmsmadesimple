@@ -41,26 +41,45 @@ define('MINIMUM_REPOSITORY_VERSION','1.5');
 class ModuleManager extends CMSModule
 {
     const _dflt_request_url = 'https://www.cmsmadesimple.org/ModuleRepository/request/v2/';
+
     private $_operations;
 
-    function GetName() { return get_class($this); }
-    function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '2.2'; }
-    function GetHelp() { return $this->Lang('help'); }
-    function GetAuthor() { return 'calguy1000'; }
-    function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
-    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-    function IsPluginModule() { return FALSE; }
-    function HasAdmin() { return TRUE; }
-    function IsAdminOnly() { return TRUE; }
-    function GetAdminSection() { return 'siteadmin'; }
-    function GetAdminDescription() { return $this->Lang('admindescription'); }
-    function LazyLoadAdmin() { return TRUE; }
-    function MinimumCMSVersion() { return '2.2.3'; }
-    function InstallPostMessage() { return $this->Lang('postinstall'); }
-    function UninstallPostMessage() { return $this->Lang('postuninstall'); }
-    function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
-    function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
+    function GetName() { return get_class($this);
+    }
+    function GetFriendlyName() { return $this->Lang('friendlyname');
+    }
+    function GetVersion() { return '2.2';
+    }
+    function GetHelp() { return $this->Lang('help');
+    }
+    function GetAuthor() { return 'calguy1000';
+    }
+    function GetAuthorEmail() { return 'calguy1000@hotmail.com';
+    }
+    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc');
+    }
+    function IsPluginModule() { return FALSE;
+    }
+    function HasAdmin() { return TRUE;
+    }
+    function IsAdminOnly() { return TRUE;
+    }
+    function GetAdminSection() { return 'siteadmin';
+    }
+    function GetAdminDescription() { return $this->Lang('admindescription');
+    }
+    function LazyLoadAdmin() { return TRUE;
+    }
+    function MinimumCMSVersion() { return '2.2.3';
+    }
+    function InstallPostMessage() { return $this->Lang('postinstall');
+    }
+    function UninstallPostMessage() { return $this->Lang('postuninstall');
+    }
+    function UninstallPreMessage() { return $this->Lang('really_uninstall');
+    }
+    function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules'));
+    }
 
     /**
      * @internal

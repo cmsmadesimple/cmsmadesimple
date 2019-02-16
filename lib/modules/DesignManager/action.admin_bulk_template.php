@@ -49,82 +49,82 @@ try {
     $bulk_op = null;
     $templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
     switch( $params['bulk_action'] ) {
-    case 'delete':
-        $bulk_op = 'bulk_action_delete';
-        if( isset($params['submit']) ) {
-            if( !isset($params['check1']) || !isset($params['check2']) ) {
-                echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+        case 'delete':
+            $bulk_op = 'bulk_action_delete';
+            if( isset($params['submit']) ) {
+                if( !isset($params['check1']) || !isset($params['check2']) ) {
+                    echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+                }
+                else {
+                    foreach( $templates as $one ) {
+                        if( in_array($one->get_id(),$params['tpl_select']) ) {
+                            $one->delete();
+                        }
+                    }
+
+                    audit('',$this->GetName(),'Deleted '.count($templates).' templates');
+                    $this->SetMessage($this->Lang('msg_bulkop_complete'));
+                    $this->RedirectToAdminTab();
+                }
             }
-            else {
+            break;
+
+        case 'export':
+            $bulk_op = 'bulk_action_export';
+            $first_tpl = $templates[0];
+            $outfile = $first_tpl->get_content_filename();
+            $dn = dirname($outfile);
+            if( !is_dir($dn) || !is_writable($dn) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            if( isset($params['submit']) ) {
+                $n = 0;
                 foreach( $templates as $one ) {
                     if( in_array($one->get_id(),$params['tpl_select']) ) {
-                        $one->delete();
+                        $outfile = $one->get_content_filename();
+                        if( !is_file($outfile) ) {
+                            file_put_contents($outfile,$one->get_content());
+                            $n++;
+                        }
                     }
                 }
+                if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkexport_noneprocessed'));
 
-                audit('',$this->GetName(),'Deleted '.count($templates).' templates');
+                audit('',$this->GetName(),'Exported '.count($templates).' templates');
                 $this->SetMessage($this->Lang('msg_bulkop_complete'));
                 $this->RedirectToAdminTab();
             }
-        }
-        break;
+            break;
 
-    case 'export':
-        $bulk_op = 'bulk_action_export';
-        $first_tpl = $templates[0];
-        $outfile = $first_tpl->get_content_filename();
-        $dn = dirname($outfile);
-        if( !is_dir($dn) || !is_writable($dn) ) {
-            throw new \RuntimeException($this->Lang('error_assets_writeperm'));
-        }
-        if( isset($params['submit']) ) {
-            $n = 0;
-            foreach( $templates as $one ) {
-                if( in_array($one->get_id(),$params['tpl_select']) ) {
-                    $outfile = $one->get_content_filename();
-                    if( !is_file($outfile) ) {
-                        file_put_contents($outfile,$one->get_content());
-                        $n++;
+        case 'import':
+            $bulk_op = 'bulk_action_import';
+            $first_tpl = $templates[0];
+            if( isset($params['submit']) ) {
+                $n=0;
+                foreach( $templates as $one ) {
+                    if( in_array($one->get_id(),$params['tpl_select']) ) {
+                        $infile = $one->get_content_filename();
+                        if( is_file($infile) && is_readable($infile) && is_writable($infile) ) {
+                            $data = file_get_contents($infile);
+                            $one->set_content($data);
+                            $one->save();
+                            unlink($infile);
+                            $n++;
+                        }
                     }
                 }
-            }
-            if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkexport_noneprocessed'));
-
-            audit('',$this->GetName(),'Exported '.count($templates).' templates');
-            $this->SetMessage($this->Lang('msg_bulkop_complete'));
-            $this->RedirectToAdminTab();
-        }
-        break;
-
-    case 'import':
-        $bulk_op = 'bulk_action_import';
-        $first_tpl = $templates[0];
-        if( isset($params['submit']) ) {
-            $n=0;
-            foreach( $templates as $one ) {
-                if( in_array($one->get_id(),$params['tpl_select']) ) {
-                    $infile = $one->get_content_filename();
-                    if( is_file($infile) && is_readable($infile) && is_writable($infile) ) {
-                        $data = file_get_contents($infile);
-                        $one->set_content($data);
-                        $one->save();
-                        unlink($infile);
-                        $n++;
-                    }
+                if( $n == 0 ) {
+                    throw new \RuntimeException($this->Lang('error_bulkimport_noneprocessed'));
                 }
-            }
-            if( $n == 0 ) {
-                throw new \RuntimeException($this->Lang('error_bulkimport_noneprocessed'));
-            }
 
-            audit('',$this->GetName(),'imported '.count($templates).' templates');
-            $this->SetMessage($this->Lang('msg_bulkop_complete'));
-            $this->RedirectToAdminTab();
-        }
-        break;
+                audit('',$this->GetName(),'imported '.count($templates).' templates');
+                $this->SetMessage($this->Lang('msg_bulkop_complete'));
+                $this->RedirectToAdminTab();
+            }
+            break;
 
-    default:
-        throw new \LogicException($this->Lang('error_missingparam'));
+        default:
+            throw new \LogicException($this->Lang('error_missingparam'));
     }
 
     $smarty->assign('bulk_op',$bulk_op);
