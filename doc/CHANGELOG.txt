@@ -1,4 +1,5 @@
-Version 2.2.10
+Version 2.2.10 - Spuzzum
+-------------------------------
 Core - General
   - Fix minor potential authenticated object insertion vulnerability in changegroupperm
   - Fix minor potential uncleaned input vulnerability in siteprefs
