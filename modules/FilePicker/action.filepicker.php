@@ -38,8 +38,8 @@ $clean_str = function( $in ) {
 //
 $sesskey = md5(__FILE__);
 if( isset($_GET['_enc']) ) {
-   $parms = unserialize(base64_decode($_GET['_enc']));
-   $_GET = array_merge($_GET,$parms);
+   $parms = json_decode(base64_decode($_GET['_enc']),TRUE);
+   if( is_array($parms) && count($parms) ) $_GET = array_merge($_GET,$parms);
    unset($_GET['_enc']);
 }
 
@@ -197,7 +197,7 @@ while( false !== ($filename = $dh->read()) ) {
     if( $file['isdir'] ) {
         $parms = [ 'subdir'=>$filename, 'inst'=>$inst, 'sig'=>$sig ];
         //if( $type ) $parms['type'] = $type;
-        $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(serialize($parms));
+        $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(json_encode($parms));
 	$file['chdir_url'] = $url;
     }
     $files[$filename] = $file;
