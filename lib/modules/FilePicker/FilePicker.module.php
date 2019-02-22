@@ -57,7 +57,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return base64_decode($encodedfilename . '==');
     }
 
-    public function VisibleToAdminUser()
+    function VisibleToAdminUser()
     {
         return $this->CheckPermission('Modify Site Preferences');
     }
@@ -73,27 +73,33 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
      * end of private methods
      */
 
-    public function GetFriendlyName() {
+    public function GetFriendlyName()
+    {
         return $this->Lang('friendlyname');
     }
 
-    public function GetVersion() {
-        return '1.0.1';
+    public function GetVersion()
+    {
+        return '1.0.4';
     }
 
-    public function GetHelp() {
+    public function GetHelp()
+    {
         return $this->Lang('help');
     }
 
-    public function IsPluginModule() {
+    public function IsPluginModule()
+    {
         return FALSE;
     }
 
-    public function HasAdmin() {
+    public function HasAdmin()
+    {
         return TRUE;
     }
 
-    public function GetAdminSection() {
+    public function GetAdminSection()
+    {
         return 'extensions';
     }
 
@@ -122,17 +128,6 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $out = $this->get_html($blockName, $value, $profile);
         return $out;
     }
-
-    //  function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
-    //  {
-    //    echo('<br/>:::::::::::::::::::::<br/>');
-    //    debug_display($blockName, '$blockName');
-    //    debug_display($value, '$value');
-    //    debug_display($blockparams, '$blockparams');
-    //    //debug_display($adding, '$adding');
-    //    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
-    //    //die('<br/>RIP!<br/>');
-    //  }
 
     public function GetFileList($path = '')
     {
@@ -226,6 +221,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $filename = trim($filename);
         $filename = basename($filename);  // incase it's a path
         if( !$filename ) return FALSE;
+        if( endswith( $filename, '.' ) ) return FALSE;
 
         if( !$profile->show_hidden && (startswith($filename,'.') || startswith($filename,'_') || $filename == 'index.html') ) return FALSE;
         if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
@@ -259,6 +255,14 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
             case \CMSMS\FileType::TYPE_ARCHIVE:
                 if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
                 return FALSE;
+
+            default:
+                $config = \cms_config::get_instance();
+                if( !$config['developer_mode'] ) {
+                    $ext = strtolower($this->_typehelper->get_extension( $filename ) );
+                    if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
+                }
+                break;
         }
 
         // passed

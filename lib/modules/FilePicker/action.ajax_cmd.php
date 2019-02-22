@@ -11,7 +11,7 @@ try {
 
     $sig = cleanValue(get_parameter_value($_POST,'sig'));
     $cmd = cleanValue(get_parameter_value($_POST,'cmd'));
-    $val = get_parameter_value($_POST,'val');
+    $val = strip_tags(get_parameter_value($_POST,'val'));
     $cwd = strip_tags(get_parameter_value($_POST,'cwd'));
 
     // get the profile.
@@ -39,6 +39,7 @@ try {
 
         case 'del':
             if( !$profile->can_delete ) throw new \LogicException('Internal error: del command executed, but profile says we cannot do this');
+            $val = basename($val);
             if( startswith($val,'.') || startswith($val,'_') ) throw new \RuntimeException($this->Lang('error_ajax_invalidfilename'));
             //if( !is_writable($fullpath) ) throw new \RuntimeException($this->Lang('error_ajax_writepermission'));
             $destpath = $fullpath.'/'.$val;

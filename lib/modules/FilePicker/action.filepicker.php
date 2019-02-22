@@ -28,20 +28,25 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //$handlers = ob_list_handlers();
 //for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
+$clean_str = function( $in ) {
+    $in = cleanValue($in);
+    $in = strip_tags($in);
+    return trim($in);
+};
+
 //
 // initialization
 //
 $sesskey = md5(__FILE__);
 if( isset($_GET['_enc']) ) {
-    $parms = unserialize(base64_decode($_GET['_enc']));
-    $_GET = array_merge($_GET,$parms);
+    $parms = json_decode(base64_decode($_GET['_enc']),TRUE);
+    if( is_array($parms) && count($parms) ) $_GET = array_merge($_GET,$parms);
     unset($_GET['_enc']);
 }
 
 try {
     $inst = get_parameter_value($_GET,'inst');
-    $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
-    $type = trim(cleanValue(get_parameter_value($_GET,'type')));
+    $sig = $clean_str(get_parameter_value($_GET,'sig'));
     $nosub = (int) get_parameter_value($_GET,'nosub');
     $profile = null;
     if( $sig ) $profile = TemporaryProfileStorage::get($sig);
@@ -53,6 +58,11 @@ try {
     if( !$this->CheckPermission('Modify Files') ) {
         $parms = ['can_upload'=>FALSE, 'can_delete'=>FALSE, 'can_mkdir'=>FALSE ];
         $profile = $profile->overrideWith( $parms );
+    }
+    $useprefix = cms_to_bool(get_parameter_value($_GET,'useprefix'));
+    if( $useprefix ) {
+        $prefix = $profile->reltop;
+        $profile = $profile->overrideWith( [ 'prefix'=>$prefix.'/' ] );
     }
 
     $filemanager = cms_utils::get_module('FileManager');
@@ -68,8 +78,13 @@ try {
     if( isset($_SESSION[$sesskey]) ) $cwd = trim($_SESSION[$sesskey]);
     if( !$cwd && $profile->top ) $cwd = $assistant->to_relative($profile->top);
     if( !$nosub && isset($_GET['subdir']) ) {
-        $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
-        $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
+        try {
+            $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
+            $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
+        }
+        catch( \Exception $e ) {
+            // ignore
+        }
     }
     // failsave, if we don't have a valid working directory, set it to the $topdir;
     if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
@@ -115,9 +130,9 @@ try {
     };
 
     /*
-    * A quick check for a file type based on extension
-    * @String $filename
-    */
+     * A quick check for a file type based on extension
+     * @String $filename
+     */
     $get_filetype = function($filename) use (&$is_image,&$is_archive) {
         $ext = strtolower(substr($filename,strrpos($filename,".")+1));
         $filetype = 'file'; // default to all file
@@ -181,8 +196,8 @@ try {
         }
         if( $file['isdir'] ) {
             $parms = [ 'subdir'=>$filename, 'inst'=>$inst, 'sig'=>$sig ];
-            if( $type ) $parms['type'] = $type;
-            $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(serialize($parms));
+            //if( $type ) $parms['type'] = $type;
+            $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(json_encode($parms));
             $file['chdir_url'] = $url;
         }
         $files[$filename] = $file;
@@ -233,6 +248,8 @@ catch( \Exception $e ) {
     audit('','FilePicker',$e->GetMessage());
     echo $smarty->errorConsole( $e, false );
 }
+
+
 #
 # EOF
 #
