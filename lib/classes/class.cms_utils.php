@@ -284,16 +284,12 @@ final class cms_utils
 	 */
 	public static function get_real_ip()
 	{
-		$ip = $_SERVER['REMOTE_ADDR'];
-		if (empty($ip) && !empty($_SERVER['HTTP_CLIENT_IP'])) {
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		}
-		elseif (empty($ip) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
+        $ip = null;
+        if( !empty($_SERVER['REMOTE_ADDR']) ) $ip = $_SERVER['REMOTE_ADDR'];
+		elseif (empty($ip) && !empty($_SERVER['HTTP_CLIENT_IP'])) $ip = $_SERVER['HTTP_CLIENT_IP'];
+		elseif (empty($ip) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 		if( filter_var($ip,FILTER_VALIDATE_IP) ) return $ip;
-
 		return null;
 	}
 

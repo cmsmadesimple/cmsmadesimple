@@ -20,7 +20,7 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
-if( isset($params['allparms']) ) $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
+if( isset($params['allparms']) ) $params = array_merge($params,json_decode(base64_decode($params['allparms']),TRUE));
 $this->SetCurrentTab('templates');
 
 try {
@@ -125,7 +125,7 @@ try {
     }
 
     $smarty->assign('bulk_op',$bulk_op);
-    $allparms = base64_encode(serialize(array('tpl_select'=>$params['tpl_select'], 'bulk_action'=>$params['bulk_action'])));
+    $allparms = base64_encode(json_encode(array('tpl_select'=>$params['tpl_select'], 'bulk_action'=>$params['bulk_action'])));
     $smarty->assign('allparms',$allparms);
     $smarty->assign('templates',$templates);
 

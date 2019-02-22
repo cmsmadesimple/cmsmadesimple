@@ -156,7 +156,7 @@ if ($submitted == 1) {
     $parts = explode('::',$_POST['sel_groups']);
     if( count($parts) == 2 ) {
         if( md5(__FILE__.$parts[1]) == $parts[0] ) {
-            $selected_groups = (array) unserialize(base64_decode($parts[1]));
+            $selected_groups = (array) json_decode(base64_decode($parts[1]),TRUE);
             if( is_array($selected_groups) && count($selected_groups) ) {
                 // clean this array
                 $tmp = array();
@@ -205,9 +205,9 @@ $smarty->assign('disp_group',$disp_group);
 $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
-$tmp = base64_encode(serialize($sel_group_ids));
+$tmp = base64_encode(json_encode($sel_group_ids));
 $sig = md5(__FILE__.$tmp);
-$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.$sig.'::'.base64_encode(serialize($sel_group_ids)).'"/>');
+$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.$sig.'::'.$tmp.'"/>');
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
 $smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').'" class="pagebutton" />');
 $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" />');
