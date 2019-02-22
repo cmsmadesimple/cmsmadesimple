@@ -21,14 +21,26 @@ if( !isset($gCms) ) exit;
 
 class News extends CMSModule
 {
-    function GetName() { return 'News';
+    function GetName()
+    {
+        return 'News';
     }
-    function GetFriendlyName() { return $this->Lang('news');
+
+    function GetFriendlyName()
+    {
+        return $this->Lang('news');
     }
-    function IsPluginModule() { return true;
+
+    function IsPluginModule()
+    {
+        return true;
     }
-    function HasAdmin() { return true;
+
+    function HasAdmin()
+    {
+        return true;
     }
+
     function GetVersion() { return '2.51.5';
     }
     function MinimumCMSVersion() { return '2.1.6';
