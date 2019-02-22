@@ -60,7 +60,7 @@ try {
         // phase one... organize and download
         set_time_limit(9999);
         if( isset($params['modlist']) && $params['modlist'] != '' ) {
-            $modlist = unserialize(base64_decode($params['modlist']));
+            $modlist = json_decode(base64_decode($params['modlist']),TRUE);
             if( !is_array($modlist) || count($modlist) == 0 ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
 
             // cache all of the xml files first... make sure we can download everything, and that it gets cached.
@@ -310,7 +310,7 @@ try {
     $smarty->assign( 'return_url',$this->create_url($id,'defaultadmin',$returnid, ['__activetab'=>'modules']) );
     $parms = [ 'name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size ];
     $smarty->assign('form_start',$this->CreateFormStart($id, 'installmodule', $returnid, 'post', '', FALSE, '', $parms).
-                    $this->CreateInputHidden($id,'modlist',base64_encode(serialize($alldeps))));
+                    $this->CreateInputHidden($id,'modlist',base64_encode(json_encode($alldeps))));
     $smarty->assign('formend',$this->CreateFormEnd());
     $smarty->assign('module_name',$module_name);
     $smarty->assign('module_version',$module_version);

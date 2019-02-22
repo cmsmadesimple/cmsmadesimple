@@ -22,7 +22,7 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 if( isset($params['allparms']) ) {
-    $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
+    $params = array_merge($params,json_decode(base64_decode($params['allparms']),TRUE));
 }
 
 $this->SetCurrentTab('stylesheets');
@@ -120,7 +120,7 @@ try {
     }
 
     $smarty->assign('bulk_op',$bulk_op);
-    $allparms = base64_encode(serialize(array('css_select'=>$params['css_select'],'css_bulk_action'=>$params['css_bulk_action'])));
+    $allparms = base64_encode(json_encode(array('css_select'=>$params['css_select'],'css_bulk_action'=>$params['css_bulk_action'])));
     $smarty->assign('allparms',$allparms);
     $smarty->assign('templates',$stylesheets);
 
