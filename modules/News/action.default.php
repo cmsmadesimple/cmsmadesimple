@@ -60,13 +60,13 @@ if( !$tpl_ob->IsCached() ) {
         $idlist = $params['idlist'];
         if( is_string($idlist) ) {
             $tmp = explode(',',$idlist);
+            $idlist = [];
             for( $i = 0; $i < count($tmp); $i++ ) {
-                $tmp[$i] = (int)$tmp[$i];
-                if( $tmp[$i] < 1 ) unset($tmp[$i]);
+                $val = (int)$tmp[$i];
+                if( $val > 0 && !in_array($val,$idlist) ) $idlist[] = $val;
             }
-            $idlist = array_unique($tmp);
-            $query1 .= ' (mn.news_id IN ('.implode(',',$idlist).')) AND ';
         }
+        if( !empty($idlist) ) $query1 .= ' (mn.news_id IN ('.implode(',',$idlist).')) AND ';
     }
 
     if( isset($params['category_id']) ) {
