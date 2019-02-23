@@ -218,7 +218,7 @@ final class modmgr_utils
             }
             else {
                 $req->clearCache();
-		audit($status,'ModuleManager','Cannot connect to ModuleRepository');
+                audit($status,'ModuleManager','Cannot connect to ModuleRepository');
             }
         }
         $ok = FALSE;
