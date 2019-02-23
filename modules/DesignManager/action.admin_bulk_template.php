@@ -20,6 +20,7 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
+$tmp = json_decode(base64_decode($params['allparms']));
 if( isset($params['allparms']) ) $params = array_merge($params,json_decode(base64_decode($params['allparms']),TRUE));
 $this->SetCurrentTab('templates');
 
