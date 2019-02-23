@@ -10,6 +10,7 @@ News v2.51.5
 
 ModuleManager v2.1.6
   - Fix authenticated object insertion vulnerability in the installmodule action
+  - Improve ordering of the dependencies before installing or upgrading modules.
 
 FilePicker v1.0.4
   - Fix authenticated object insertion vulnerability

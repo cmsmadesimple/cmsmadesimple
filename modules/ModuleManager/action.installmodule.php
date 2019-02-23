@@ -57,7 +57,6 @@ try {
     if( isset($params['submit']) ) {
         // phase one... organize and download
         set_time_limit(9999);
-        echo 'DEBUG: downloading...<br/>';
         if( isset($params['modlist']) && $params['modlist'] != '' ) {
             $modlist = json_decode(base64_decode($params['modlist']),TRUE);
             if( !is_array($modlist) || count($modlist) == 0 ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
@@ -94,6 +93,8 @@ try {
         $modlist = $_SESSION[$key];
         if( !is_array($modlist) || !count($modlist) ) throw new \LogicException('Invalid modlist data found in session');
         unset($_SESSION[$key]);
+
+        // note: by here, the $modlist should represent a set of instructions, in the proper order.
 
         // install/upgrade the modules that need to be installed or upgraded.
         $ops = cmsms()->GetModuleOperations();
@@ -194,7 +195,9 @@ try {
                 if( $child_deps ) {
                     foreach( $child_deps as $child_name => $child_row ) {
                         if( !isset($deps[$child_name]) ) {
-                            $deps[$child_name] = $child_row;
+                            $tmp = [$child_name => $child_row];
+                            $deps = $tmp + $deps;
+                            //$deps[$child_name] = $child_row;
                         } else {
                             if( version_compare($deps[$child_name]['version'],$child_row['version']) < 0 ) $deps[$child_name] = $child_row;
                         }
