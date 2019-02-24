@@ -71,7 +71,7 @@ final class modmgr_cached_request
         $status = '';
         $resutl = '';
         if( (isset($config['developer_mode']) && $mod->GetPreference('disable_caching',0)) ||
-        !file_exists($fn) || filemtime($fn) <= $atime ) {
+            !file_exists($fn) || filemtime($fn) <= $atime ) {
             // execute the request
             $req = new cms_http_request();
             if( $this->_timeout ) $req->setTimeout($this->_timeout);
@@ -88,6 +88,7 @@ final class modmgr_cached_request
             } else {
                 audit('','ModuleManager','Request to module repository resulted in status '.$this_>_status);
             }
+        }
         else {
             // get data from the cache.
             $data = unserialize(file_get_contents($fn));
