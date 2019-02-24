@@ -847,7 +847,7 @@ class CmsLayoutTemplate
      */
     public static function generate_unique_name($prototype,$prefix = null)
     {
-        return self::_mgr()->generate_unique_template_name($prototype,$suffix);
+        return self::_mgr()->generate_unique_template_name($prototype,$prefix);
     }
 
     /**
