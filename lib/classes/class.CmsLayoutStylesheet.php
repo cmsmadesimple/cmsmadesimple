@@ -25,8 +25,6 @@
  * @license GPL
  */
 
-use \CMSMS\internal\TemplateCache;
-
 /**
  * A class to represent a stylesheet.
  *
@@ -491,7 +489,6 @@ class CmsLayoutStylesheet
             }
         }
 
-        TemplateCache::clear_cache();
         cms_notice('Stylesheet '.$this->get_name().' Updated');
         $this->_dirty = FALSE;
     }
@@ -525,7 +522,6 @@ class CmsLayoutStylesheet
         }
 
         $this->_dirty = FALSE;
-        TemplateCache::clear_cache();
         cms_notice('Stylesheet '.$this->get_name().' Created');
     }
 
@@ -575,7 +571,6 @@ class CmsLayoutStylesheet
 
         @unlink($this->get_content_filename());
 
-        TemplateCache::clear_cache();
         cms_notice('Stylesheet '.$this->get_name().' Deleted');
         \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);
