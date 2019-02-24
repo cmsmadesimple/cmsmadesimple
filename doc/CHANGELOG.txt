@@ -182,6 +182,8 @@ Installation Assistant - v1.4
   - no longer change the config file on upgrade.  Though we will for install and freshen.
   - Now install default theme from a zip file into the /assets/simplex directory (hardcoded)
   - Now install default content from an XML file exported by CGCU
+  - The basic installer no longer emails the admin account information
+  - Now write the primary contact email address to the config.php
 
 ModuleManaver v2.2
   - XML import code now lives here.

@@ -210,6 +210,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
     {
         $destconfig = $this->get_wizard()->get_data('config');
         if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        $adminacct = $this->get_wizard()->get_data('adminaccount');
 
         $destdir = \__appbase\get_app()->get_destdir();
         if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
@@ -235,6 +236,9 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $newconfig['db_name'] = trim($destconfig['dbname']);
         $newconfig['db_prefix'] = trim($destconfig['dbprefix']);
         $newconfig['timezone'] = trim($destconfig['timezone']);
+        if( is_array($adminacct) && !empty($adminacct['emailaddr']) ) {
+            $newconfig['primary_contact'] = trim($adminacct['emailaddr']);
+        }
         if( $destconfig['query_var'] ) $newconfig['query_var'] = trim($destconfig['query_var']);
         if( isset($destconfig['dbport']) ) {
             $num = (int)$destconfig['dbport'];

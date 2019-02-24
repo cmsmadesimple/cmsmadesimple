@@ -38,7 +38,7 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
         $this->_adminacct['emailaddr'] = trim(\__appbase\utils::clean_string($_POST['emailaddr']));
         $this->_adminacct['password'] = trim(\__appbase\utils::clean_string($_POST['password']));
         $this->_adminacct['repeatpw'] = trim(\__appbase\utils::clean_string($_POST['repeatpw']));
-        $this->_adminacct['emailaccountinfo'] = 1;
+        $this->_adminacct['emailaccountinfo'] = 0; // do not by default email account info.
         if( isset($_POST['emailaccountinfo']) ) $this->_adminacct['emailaccountinfo'] = (int)$_POST['emailaccountinfo'];
 
         $this->get_wizard()->set_data('adminaccount',$this->_adminacct);
