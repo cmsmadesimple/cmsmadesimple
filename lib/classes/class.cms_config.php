@@ -653,7 +653,8 @@ final class cms_config implements ArrayAccess
             $output .= "\$config['{$key}'] = $outvalue;\n";
         }
 
-        $output .= "?>";
+	// PHP files do not need trailing delimiter normally... and it may be safer not to in this case.
+        // $output .= "?>";
 
         // and write it.
         $fh = fopen($filename,'w');
