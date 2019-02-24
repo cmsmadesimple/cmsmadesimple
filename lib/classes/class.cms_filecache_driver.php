@@ -142,8 +142,8 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $this->_auto_clean_files();
-        $fn = $this->_get_filename($key,$group);
+        $this->clean_files();
+        $fn = $this->get_filename($key,$group);
         $data = $this->read_cache_file($fn);
         return $data;
     }
@@ -174,8 +174,8 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $this->_auto_clean_files();
-        $fn = $this->_get_filename($key,$group);
+        $this->clean_files();
+        $fn = $this->get_filename($key,$group);
         clearstatcache(false,$fn);
         if( is_file($fn) ) return TRUE;
         return FALSE;
@@ -194,7 +194,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $fn = $this->_get_filename($key,$group);
+        $fn = $this->get_filename($key,$group);
         if( is_file($fn) ) {
             @unlink($fn);
             return TRUE;
@@ -216,7 +216,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $fn = $this->_get_filename($key,$group);
+        $fn = $this->get_filename($key,$group);
         $res = $this->write_cache_file($fn,$value);
         return $res;
     }
@@ -236,7 +236,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _get_filename($key,$group)
+    private function get_filename($key,$group)
     {
         return $this->cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
     }
@@ -245,7 +245,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _flock($res,$flag)
+    private function flock($res,$flag)
     {
         if( !$this->locking ) return TRUE;
         if( !$res ) return FALSE;
@@ -281,7 +281,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _read_cache_file($fn)
+    private function read_cache_file($fn)
     {
         $this->cleanup($fn);
         $data = null;
@@ -308,7 +308,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _cleanup($fn)
+    private function cleanup($fn)
     {
         if( is_null($this->lifetime) ) return;
         clearstatcache();
@@ -320,7 +320,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _write_cache_file($fn,$data)
+    private function write_cache_file($fn,$data)
     {
         @touch($fn);
         $fp = @fopen($fn,'r+');
@@ -347,7 +347,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _auto_clean_files()
+    private function clean_files()
     {
         if( $this->auto_cleaning > 0 ) {
             // only clean files once per request.
@@ -365,7 +365,7 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private function _clean_dir($dir,$group = '',$old = true)
+    private function clean_dir($dir,$group = '',$old = true)
     {
         if( !$group ) $group = $this->group;
 
