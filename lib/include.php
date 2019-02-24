@@ -181,7 +181,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
                                             });
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
-$_app->GetHookMappingManager(); // initialize hook mappings.
 
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
@@ -202,6 +201,8 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 }
 
 if (! isset($CMS_INSTALL_PAGE)) {
+    $_app->GetHookMappingManager(); // initialize hook mappings.
+
     // Set a umask
     $global_umask = cms_siteprefs::get('global_umask','');
     if( $global_umask != '' ) umask( octdec($global_umask) );
