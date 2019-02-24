@@ -143,7 +143,7 @@ class cms_filecache_driver extends cms_cache_driver
         if( !$group ) $group = $this->group;
 
         $this->_auto_clean_files();
-        $fn = $this->get_filename($key,$group);
+        $fn = $this->_get_filename($key,$group);
         $data = $this->read_cache_file($fn);
         return $data;
     }
@@ -175,7 +175,7 @@ class cms_filecache_driver extends cms_cache_driver
         if( !$group ) $group = $this->group;
 
         $this->_auto_clean_files();
-        $fn = $this->get_filename($key,$group);
+        $fn = $this->_get_filename($key,$group);
         clearstatcache(false,$fn);
         if( is_file($fn) ) return TRUE;
         return FALSE;
@@ -194,7 +194,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $fn = $this->get_filename($key,$group);
+        $fn = $this->_get_filename($key,$group);
         if( is_file($fn) ) {
             @unlink($fn);
             return TRUE;
@@ -216,7 +216,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $fn = $this->get_filename($key,$group);
+        $fn = $this->_get_filename($key,$group);
         $res = $this->write_cache_file($fn,$value);
         return $res;
     }
