@@ -29,25 +29,27 @@
 	<div class="hidden">
 		<input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
 	</div>
-	
+
 	<div class="pageoverflow">
 		<p class="pageoptions">
 			{$hidden}{$hidden2}
 			{$submit} {$cancel}
 		</p>
 	</div>
-	
+
 	<table class="pagetable scrollable" id="permtable">
-		<thead>
-			<tr>
-				<th>{$title_permission}</th>
-				{foreach from=$group_list item=thisgroup}
-					{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
-				{/foreach}
-			</tr>
-		</thead>
 		<tbody>
+			{$row=0}
 			{foreach $perms as $section => $list}
+			        {if $row == 0 || $row > 20}
+				    <tr>
+				    <th>{$title_permission}</th>
+				    {foreach from=$group_list item=thisgroup}
+				        {if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
+				     {/foreach}
+			            </tr>
+				    {$row=0}
+				{/if}
 				<tr>
 					<td colspan="{count($group_list)+1}"><h3>{$section|upper}</h3></td>
 				</tr>
@@ -65,6 +67,7 @@
 							{/if}
 						{/foreach}
 					</tr>
+					{$row=$row+1}
 				{/foreach}
 			{/foreach}
 		</tbody>
