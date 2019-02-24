@@ -114,7 +114,7 @@ class design_importer
 
         try {
             $tpl = \CmsLayoutTemplate::load( $tpl_name );
-            $tpl->delete();
+            if( $tpl ) $tpl->delete();
         }
         catch( \CmsDataNotFoundException $e ) {
             // not an error.

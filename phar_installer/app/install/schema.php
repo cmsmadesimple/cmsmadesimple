@@ -1,5 +1,7 @@
 <?php
 
+$layoutmgr = cmsms()->get_template_manager();
+
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
   status_msg(ilang('install_dropping_tables'));
@@ -60,9 +62,9 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateCategory::TABLENAME);
   $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME);
+  $sqlarray = $dbdict->DropTableSQL($layoutmgr->template_table_name());
   $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE);
+  $sqlarray = $dbdict->DropTableSQL($layoutmgr->tpl_additional_users_table_name());
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME);
   $dbdict->ExecuteSQLArray($sqlarray);
@@ -458,18 +460,18 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          listable I1 DEFAULT 1,
          created I,
          modified I";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME, $flds,
+	$sqlarray = $dbdict->CreateTableSQL($layoutmgr->template_table_name(), $flds,
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_created_table', CmsLayoutTemplate::TABLENAME, $ado_ret));
+	verbose_msg(ilang('install_created_table', $layoutmgr->template_table_name(), $ado_ret));
 
-	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_1', CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME, 'name',array('UNIQUE'));
+	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_1', $layoutmgr->template_table_name(), 'name',array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_1', $ado_ret));
 
-	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_2', CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME, 'type_id,type_dflt');
+	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_2', $layoutmgr->template_table_name(), 'type_id,type_dflt');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_2', $ado_ret));
@@ -497,10 +499,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          tpl_id I KEY,
          user_id I KEY
         ";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE, $flds,
+	$sqlarray = $dbdict->CreateTableSQL($layoutmgr->tpl_additional_users_table_name(), $flds,
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	verbose_msg(ilang('install_created_table', CmsLayoutTemplate::ADDUSERSTABLE, $ado_ret));
+	verbose_msg(ilang('install_created_table', $layoutmgr->tpl_additional_users_table_name(), $ado_ret));
 
 
 	$flds = "
