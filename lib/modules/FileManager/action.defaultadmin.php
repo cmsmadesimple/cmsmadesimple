@@ -1,6 +1,6 @@
 <?php
 if (!function_exists("cmsms")) exit;
-if (!$this->CheckPermission('Modify Files')) exit;
+if (!$this->AccessAllowed()) exit;
 
 if (isset($params["fmmessage"]) && $params["fmmessage"]!="") {
     // gotta get rid of this stuff.

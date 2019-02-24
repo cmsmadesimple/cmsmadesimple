@@ -98,8 +98,10 @@ Core - General
   - BREAKING: Remove the {cms_jquery} plugin and the cms_get_jquery function in lib/misc.functions.php
     - Users using {cms_jquery} in frontend templates will need to find alternate solutins
     - See {cms_queue_script} and {cms_render_scripts}
-  - FEATURE: Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascripts and rendering them in fewer requests.
+  - FEATURE: Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascript files and rendering them in fewer requests.
   - FEATURE: new Core::PreProcessScripts and Core::PostProcessScripts hooks
+  - FEATURE: Adds {cms_queue_css} and {cms_render_css} plugins to allow combining stylesheet files and rendering them in fewer requests and database queries.
+  - FEATURE: new Core::PreProcessCSS and Core::PostProcessCSS hooks
   - FEATURE: new Core::OnCacheClear hook when CMSMS clears the cache
   - BREAKING: Upgrade the embedded jquery and jquery-ui scripts.
     - some admin side javascript that relies on very old jquery may need changing
@@ -137,6 +139,7 @@ Core - General
   - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
       pretty url determiniation.
   - FEATURE: cms_action_url plugin now supports the 'alias' parameter.
+  - FEATURE: cms_action_url plugin now supports the 'inline' parameter.
   - CHANGE:  use the new assets/configs/hook_mapping.json file to map hooks to handlers.  Can specify modules, simple plugins, or callables
       as handlers to hooks.
   - REMOVE:  Events and Event handlers functionality from the admin panel
@@ -145,13 +148,14 @@ Core - General
   - FEATURE:  Now allow caching most core data using the APC cache, by adding $config['cache_driver'] = 'APC' to the config.php
      If not specified, the old file cache mechanism will be used
   - FEATURE:  Now allow specifying the maximum cache TTL in seconds by adding a $config['cache_ttl'] = <seconds> value to the config.php
-  - FEATURE:  Site administrators (Modify Site Preferences') can clear the cache (including APC cache) by adding ?__clearcache__ to 
+  - FEATURE:  Site administrators (Modify Site Preferences') can clear the cache (including APC cache) by adding ?__clearcache__ to
      the /admin/index.php request.  Only for logged in admins.
   - IMPROVEMENT: Rationalize the CmsLayoutTemplate code to use a manager class, which takes advantage of the cache.
   - IMPROVEMENT: Rationalize the ContentOperations class to better take advantage of a cache
   - IMPROVEMENT: CmsApp now acts more as a service provider module.  Begin to remove singletons
   - IMPROVEMENT: All core functionality that utilizes a cache can now take advantage of the APC cache
-   
+  - CHANGE: remove the php_memory_limit config setting (php.ini, .htaccess, or .user.ini files can handle this).
+
 
 News v2.21.5
   - Minor cleaning of parameters.

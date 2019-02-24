@@ -1,6 +1,6 @@
 <?php
 if (!function_exists("cmsms")) exit;
-if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
+if (!$this->AccessAllowed()) exit;
 
 if(!isset($params["dirname"]) || !isset($params["path"])) {
     $this->Redirect($id, 'defaultadmin');

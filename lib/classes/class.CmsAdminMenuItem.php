@@ -68,7 +68,7 @@ final class CmsAdminMenuItem
                 if( isset($this->_data[$k]) && $this->_data[$k] ) return $this->_data[$k];
                 // url can be dynamically generated... maybe
                 if( $this->module && $this->action ) {
-                      $mod = \cms_utils::get_module($this->module);
+                    $mod = \cms_utils::get_module($this->module);
                     if( $mod ) {
                         $url = $mod->create_url('m1_',$this->action);
                         return $url;
@@ -138,7 +138,7 @@ final class CmsAdminMenuItem
             $obj->description = $mod->GetAdminDescription();
             $obj->priority = 50;
             $obj->action = 'defaultadmin';
-            //$obj->url = $mod->create_url('m1_',$obj->action);
+            $obj->url = $mod->create_url('m1_',$obj->action);
         }
         return $obj;
     }

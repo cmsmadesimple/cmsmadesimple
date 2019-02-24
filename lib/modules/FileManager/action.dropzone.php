@@ -1,6 +1,6 @@
 <?php
 if (!function_exists("cmsms")) exit;
-if (!$this->CheckPermission('Modify Files')) return;
+if (!$this->AccessAllowed()) exit;
 
 if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {
     $smarty->assign('is_ie',1);

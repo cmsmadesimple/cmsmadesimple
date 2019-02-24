@@ -1,6 +1,6 @@
 <?php
 if (!function_exists("cmsms")) exit;
-if (!$this->CheckPermission("Modify Site Preferences") && !$this->AdvancedAccessAllowed()) exit;
+if (!$this->CheckPermission("Modify Site Preferences") ) exit;
 
 $this->SetPreference('advancedmode',(int)$params['advancedmode']);
 $this->SetPreference('showhiddenfiles',(int)$params['showhiddenfiles']);

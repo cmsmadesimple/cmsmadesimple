@@ -271,7 +271,7 @@ abstract class CmsAdminThemeBase
                                 $one->system = TRUE;
                             }
                             else {
-                                  $one->system = FALSE;
+                                $one->system = FALSE;
                             }
                             $key = $one->module.$suffix++;
                             $usermoduleinfo[$key] = $one;
@@ -304,8 +304,8 @@ abstract class CmsAdminThemeBase
     {
         if( is_array($this->_sectionCount) ) return;
 
-        $this->_sectionCount = array();
-        $this->_modulesBySection = array();
+        $this->_sectionCount = [];
+        $this->_modulesBySection = [];
 
         // get the info from the cache
         $usermoduleinfo = $this->_get_user_module_info();
@@ -314,7 +314,7 @@ abstract class CmsAdminThemeBase
             audit(get_userid(FALSE),'Admin Theme','No module information found for user');
         }
         else {
-            // Are there any modules with an admin interface?
+	    // Are there any modules with an admin interface?
             foreach( $usermoduleinfo as $key => $obj ) {
                 if( $obj->section == '' ) $obj->section = 'extensions';
 
@@ -323,7 +323,12 @@ abstract class CmsAdminThemeBase
                 if (! isset($this->_sectionCount[$section])) $this->_sectionCount[$section] = 0;
 
                 // fix up the session key stuff.
-                if( !$obj->url ) { debug_display($obj); die();
+                if( !$obj->url ) {
+                    // an item does not have a URL
+                    // prolly because we couldn't fetch the module to build one
+                    // so we just ignore this item.
+                    cms_warning('Could not build a menu item for '.$obj->module.'//'.$obj->action.' - possibly because the module is unavailable');
+                    continue;
                 }
                 $obj->url = $this->_fix_url_userkey($obj->url);
 
@@ -334,7 +339,7 @@ abstract class CmsAdminThemeBase
                     "modules/{$key}/images/icon.png",
                     "modules/{$key}/icons/icons.png");
                     foreach( $tmp as $one ) {
-                             $fn = cms_join_path(CMS_ROOT_PATH,$one);
+                        $fn = cms_join_path(CMS_ROOT_PATH,$one);
                         if( is_file($fn) ) {
                             $obj->icon = CMS_ROOT_URL.'/'.$one;
                             break;

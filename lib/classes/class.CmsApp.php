@@ -17,10 +17,12 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
-use CMSMS\HookManager;
+use CMSMS\internal\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
+use CMSMS\ScriptManager;
+use CMSMS\StylesheetManager;
 
 /**
  * Global class for easy access to all important variables.
@@ -526,17 +528,32 @@ final class CmsApp
 
     /**
      * Get a handle to the ScriptCombiner stuff
+     *
+     * @since 2.3
      */
-    public function GetScriptManager()
+    public function get_script_manager() : ScriptManager
     {
-        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new \CMSMS\ScriptManager;
+        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new ScriptManager;
         return $this->scriptcombiner;
+    }
+
+    /**
+     * Get a handle to the Stylesheet Combiner stuff
+     *
+     * @since 2.3
+     */
+    public function get_stylesheet_manager() : StylesheetManager
+    {
+        static $_mgr;
+        if( !$_mgr ) $_mgr = new StylesheetManager;
+        return $_mgr;
     }
 
     /**
      * Get the hook mapping manager
      *
      * @final
+     * @since 2.3
      * @internal
      * @return \CMSMS\internal\hook_mapping_manager
      */
@@ -547,16 +564,24 @@ final class CmsApp
         return $_mgr;
     }
 
+    /**
+     * Get the cache driver object.
+     *
+     * @final
+     * @since 2.3
+     * @return \cms_cache_driver
+     */
     public function get_cache_driver()
     {
         static $_driver;
-        if( !$this->_driver ) {
+        if( !$_driver ) {
             $config = $this->GetConfig();
             $ttl = (int) $config['cache_ttl'];
             if( !$ttl ) $ttl = 24 * 3600;
+	    $ttl = max(1,min($ttl,365 * 24 * 3600));
             if( $config['cache_driver'] == 'APC' ) {
                 // get a TTL.
-                $_driver = new apc_cache_driver( $ttl ); // 24 hours
+                $_driver = new apc_cache_driver( $ttl );
             } else {
                 // todo: config options for the filecache driver.
                 $opts = [ 'lifetime'=>$ttl ];
@@ -566,7 +591,26 @@ final class CmsApp
         return $_driver;
     }
 
-    public function get_template_manager()
+    /**
+     * Get the hook manager object
+     *
+     * @since 2.3
+     */
+    public function get_hook_manager() : hook_manager
+    {
+        static $_mgr;
+        if( !$_mgr ) {
+            $_mgr = new hook_manager();
+        }
+        return $_mgr;
+    }
+
+    /**
+     * Get the template manager object (for DesignManager templates)
+     *
+     * @since 2.3
+     */
+    public function get_template_manager() : LayoutTemplateManager
     {
         static $mgr;
         if( !$mgr ) $mgr = new LayoutTemplateManager($this->GetDB(), $this->get_cache_driver());
@@ -578,7 +622,7 @@ final class CmsApp
     *
     * @final
     * @internal
-       * @ignore
+    * @ignore
     * @access private
     */
     public function dbshutdown()
@@ -603,16 +647,18 @@ final class CmsApp
      */
     final public function clear_cached_files($age_days = 0)
     {
-        // clear APC, or file cache separately and completely
-        $this->get_cache_driver()->clear();
+	// clear APC, or file cache separately and completely
+	$config = $this->GetConfig();
+	$this->get_cache_driver()->clear();
 
         // additionall clear cached files that are older than N days old.
         $age_days = max(-1,(int) $age_days);
         global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
         if( !defined('TMP_CACHE_LOCATION') ) return;
         $age_days = max(0,(int)$age_days);
-        HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
+        $this->get_hook_manager()->do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
         $the_time = time() - $age_days * 24*60*60;
+
 
         $dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
         foreach( $dirs as $start_dir ) {
@@ -621,10 +667,11 @@ final class CmsApp
             foreach( $dirContents as $one ) {
                 if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
             }
-            @touch(cms_join_path($start_dir,'index.html'));
+	    @touch(cms_join_path($start_dir,'index.html'));
         }
 
-        HookManager::do_hook( 'Core::OnCacheClear', $the_time );
+	file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
+        $this->get_hook_manager()->do_hook( 'Core::OnCacheClear', $the_time );
     }
 
     /**

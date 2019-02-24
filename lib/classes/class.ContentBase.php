@@ -1750,7 +1750,7 @@ abstract class ContentBase
      * @param bool $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
      * @return string
      */
-    public function GetURL(bool $rewrite = true)
+    public function GetURL($rewrite = true)
     {
         $config = \cms_config::get_instance();
         $url = "";
@@ -1764,7 +1764,7 @@ abstract class ContentBase
             return $url;
         }
 
-        if( $rewrite == true ) {
+        if( $rewrite ) {
             $url_rewriting = $config['url_rewriting'];
             $page_extension = $config['page_extension'];
             if ($url_rewriting == 'mod_rewrite') {

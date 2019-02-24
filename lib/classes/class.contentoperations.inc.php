@@ -96,13 +96,13 @@ class ContentOperations
         // an index of the content pages, by alias
         $obj = new \CMSMS\internal\global_cachable('content_aliasmap',
                                                     function() {
-                                                         $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
-                                                         $out = null;
-                                                        foreach( $flatlist as $row ) {
-                                                            $alias = $row['content_alias'];
-                                                            if( $alias ) $out[$alias] = (int) $row['content_id'];
-                                                        }
-                                                         return $out;
+                                                       $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+                                                       $out = null;
+                                                       foreach( $flatlist as $row ) {
+                                                           $alias = $row['content_alias'];
+                                                           if( $alias ) $out[$alias] = (int) $row['content_id'];
+                                                       }
+                                                       return $out;
                                                     });
 
         // a content tree
@@ -144,7 +144,7 @@ class ContentOperations
         $cached_ids = $this->_cache->get('PAGELIST',__CLASS__);
         $cached_ids[] = $contentobj->Id();
         $cached_ids = array_unique($cached_ids);
-        $this->_cache->set($contentobj->Id(), $contentobj, __CLASS__);
+        $res = $this->_cache->set((int) $contentobj->Id(), $contentobj, __CLASS__);
         $this->_cache->set('PAGELIST',$cached_ids,__CLASS__);
     }
 
@@ -230,16 +230,15 @@ class ContentOperations
     /**
      * Load a specific content type
      *
-     * This method is called from the autoloader.  There is no need to call it internally
-     *
      * @internal
      * @access private
      * @final
      * @since 1.9
-     * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
+     * @param mixed The type.  Either a string type name, class name, or an instance of CmsContentTypePlaceHolder
      */
     final public function LoadContentType($type)
     {
+        die('remove me '.__METHOD__);
         if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 
         $ctph = $this->_get_content_type($type);
@@ -266,7 +265,7 @@ class ContentOperations
         if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
         $result = NULL;
 
-        $ctph = $this->LoadContentType($type);
+        $ctph = $this->_get_content_type($type);
         if( is_object($ctph) && class_exists($ctph->class) ) $result = new $ctph->class;
         return $result;
     }
@@ -284,7 +283,9 @@ class ContentOperations
         $id = (int) $id;
         if( $id < 1 ) $id = $this->GetDefaultContent();
         $obj = $this->get_cached_content($id);
-        if( $obj && is_a($obj,'ContentBase') ) return $obj;
+        if( $obj && is_a($obj,'ContentBase') ) {
+            return $obj;
+        }
 
         $db = CmsApp::get_instance()->GetDb();
         $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
@@ -421,7 +422,7 @@ class ContentOperations
      * @since 1.9
      * @access private
      * @internal
-     * @param string The content type name
+     * @param string The content type name or classname
      * @return CmsContentTypePlaceHolder placeholder object.
      */
     private function _get_content_type(string $name)
@@ -431,6 +432,9 @@ class ContentOperations
         if( is_array($this->_content_types) ) {
             if( isset($this->_content_types[$name]) && $this->_content_types[$name] instanceof CmsContentTypePlaceHolder ) {
                 return $this->_content_types[$name];
+            }
+            foreach( $this->_content_types as $typename => $obj ) {
+                if( $obj instanceof CmsContentTypePlaceHolder && $obj->class == $name ) return $obj;
             }
         }
     }
@@ -447,6 +451,7 @@ class ContentOperations
         $this->_get_content_types();
         if( isset($this->_content_types[$obj->type]) ) return FALSE;
 
+        if( !class_exists( $obj->class ) && file_exists( $obj->filename ) ) require_once $obj->filename;
         $this->_content_types[$obj->type] = $obj;
         return TRUE;
     }

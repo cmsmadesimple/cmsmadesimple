@@ -22,7 +22,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
     // Initials
     // ---------------------------------------------
 
-        $gCms = CmsApp::get_instance();
+    $gCms = CmsApp::get_instance();
     $config = $gCms->GetConfig();
 
     global $CMS_LOGIN_PAGE;
@@ -41,8 +41,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
     // Trivial Exclusion
     // ---------------------------------------------
 
-    if(isset($CMS_LOGIN_PAGE) ) { return;
-    }
+    if (isset($CMS_LOGIN_PAGE)) return;
 
     // ---------------------------------------------
     // Read parameters
@@ -56,17 +55,14 @@ function smarty_function_cms_stylesheet($params, &$smarty)
             $design_id = (int)$params['designid'];
         } else {
             $content_obj = $gCms->get_content_object();
-            if(!is_object($content_obj) ) { return;
-            }
+            if(!is_object($content_obj) ) return;
             $design_id = (int) $content_obj->GetPropertyValue('design_id');
         }
-        if(!$name && $design_id < 1 ) { throw new \RuntimeException('Invalid parameters, or there is no design attached to the content page');
-        }
+        if(!$name && $design_id < 1 ) throw new \RuntimeException('Invalid parameters, or there is no design attached to the content page');
 
         // @todo: change this stuff to just use // instead of protocol specific URL.
 
-        if(isset($params['nocombine']) ) { $combine_stylesheets = !cms_to_bool($params['nocombine']);
-        }
+        if(isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);
 
         if(isset($params['stripbackground']) ) {
             $trimbackground = cms_to_bool($params['stripbackground']);
@@ -80,21 +76,19 @@ function smarty_function_cms_stylesheet($params, &$smarty)
         $query = null;
         if($name != '' ) {
             // stylesheet by name
-            $query = new CmsLayoutStylesheetQuery([ 'fullname'=>$name ]);
+            $query = new CmsLayoutStylesheetQuery([ 'fullname'=>$name ] );
         } else if($design_id > 0 ) {
             // stylesheet by design id
-            $query = new \CmsLayoutStylesheetQuery([ 'design'=>$design_id ]);
+            $query = new \CmsLayoutStylesheetQuery([ 'design'=>$design_id ] );
         }
-        if(!$query ) { throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
-        }
+        if(!$query) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
 
         // ---------------------------------------------
         // Execute
         // ---------------------------------------------
 
         $nrows = $query->TotalMatches();
-        if(!$nrows ) { throw new \RuntimeException('No stylesheets matched the criteria specified');
-        }
+        if(!$nrows ) throw new \RuntimeException('No stylesheets matched the criteria specified');
         $res = $query->GetMatches();
 
         // we have some output, and the stylesheet objects have already been loaded.
@@ -134,8 +128,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
                 if(!file_exists($fn) ) {
                     $list = array();
                     foreach ($res as $one) {
-                        if(in_array($params['media'], $one->get_media_types()) ) { $list[] = $one->get_name();
-                        }
+                        if(in_array($params['media'], $one->get_media_types()) ) $list[] = $one->get_name();
                     }
 
                     cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
@@ -186,8 +179,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
                 $filename = 'stylesheet_'.md5('single'.$one->get_id().$one->get_modified().$fnsuffix).'.css';
                 $fn = cms_join_path($cache_dir, $filename);
 
-                if (!file_exists($fn) ) { cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
-                }
+                if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
 
                 cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
             }
@@ -231,8 +223,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 {
     $_contents = '';
-    if(is_string($list) && !is_array($list) ) { $list = array($list);
-    }
+    if(is_string($list) && !is_array($list) ) $list = array($list);
 
     // Smarty processing
     $smarty->left_delimiter = '[[';
@@ -278,8 +269,7 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 
 function cms_stylesheet_toString($filename, $media_query = '', $media_type = '', $root_url, &$stylesheet, &$params)
 {
-    if(!endswith($root_url, '/') ) { $root_url .= '/';
-    }
+    if(!endswith($root_url, '/') ) $root_url .= '/';
     if(isset($params['nolinks']) ) {
         $stylesheet .= $root_url.$filename.',';
     } else {
@@ -287,10 +277,8 @@ function cms_stylesheet_toString($filename, $media_query = '', $media_type = '',
         if (!empty($media_query)) {
             $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_query.'" />'."\n";
         } elseif (!empty($media_type)) {
-
             $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_type.'" />'."\n";
         } else {
-
             $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" />'."\n";
         }
     }
@@ -313,4 +301,3 @@ function smarty_cms_about_function_cms_stylesheet()
     </ul>
     <?php
 } // end of about
-?>

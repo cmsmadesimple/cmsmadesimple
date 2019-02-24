@@ -20,7 +20,7 @@
 function smarty_function_cms_action_url($params, &$smarty)
 {
     $assign = trim(get_parameter_value($params, 'assign'));
-    $module = $action = $returnid = $mid = null;
+    $module = $action = $returnid = $mid = $inline = null;
     $forjs  = 0;
 
     $actionparms = array();
@@ -31,6 +31,9 @@ function smarty_function_cms_action_url($params, &$smarty)
                 break;
             case 'action':
                 $action = trim($value);
+                break;
+            case 'inline':
+                $inline = cms_to_bool($value);
                 break;
             case 'alias':
                 if(!$returnid ) {
@@ -48,8 +51,7 @@ function smarty_function_cms_action_url($params, &$smarty)
                 }
                 break;
             case 'returnid':
-                if(!$returnid ) { $returnid = (int)trim($value);
-                }
+                if(!$returnid ) $returnid = (int)trim($value);
                 break;
             case 'mid':
                 $mid = trim($value);
@@ -70,30 +72,21 @@ function smarty_function_cms_action_url($params, &$smarty)
         }
     }
 
-    if(!$module ) { $module = $smarty->getTemplateVars('_module');
-    }
-    if(!$returnid ) { $returnid = $smarty->getTemplateVars('returnid');
-    }
-    if(!$action ) { $action = $assign = $urlparms = null;
-    }
-    if(!$mid ) { $mid = $smarty->getTemplateVars('actionid');
-    }
+    if(!$module ) $module = $smarty->getTemplateVars('_module');
+    if(!$returnid ) $returnid = $smarty->getTemplateVars('returnid');
+    if(!$action ) $action = $assign = $urlparms = null;
+    if(!$mid ) $mid = $smarty->getTemplateVars('actionid');
 
     // validate params
     $gCms = CmsApp::get_instance();
-    if($module == '' ) { return;
-    }
+    if($module == '' ) return;
     if($gCms->test_state(CmsApp::STATE_ADMIN_PAGE) && $returnid == '' ) {
-        if($mid == '' ) { $mid = 'm1_';
-        }
-        if($action == '' ) { $action = 'defaultadmin';
-        }
+        if($mid == '' ) $mid = 'm1_';
+        if($action == '' ) $action = 'defaultadmin';
     }
     else if($gCms->is_frontend_request() ) {
-        if($mid == '' ) { $mid = 'cntnt01';
-        }
-        if($action == '' ) { $action = 'default';
-        }
+        if($mid == '' ) $mid = 'cntnt01';
+        if($action == '' ) $action = 'default';
         if($returnid == '' ) {
             $returnid = \cms_utils::get_current_pageid();
             if($returnid < 1 ) {
@@ -102,16 +95,14 @@ function smarty_function_cms_action_url($params, &$smarty)
             }
         }
     }
-    if($action == '' ) { return;
-    }
+    if($action == '' ) return;
 
     $obj = cms_utils::get_module($module);
-    if(!$obj ) { return;
-    }
+    if(!$obj ) return;
 
-    $url = $obj->create_url($mid, $action, $returnid, $actionparms);
-    if(!$url ) { return;
-    }
+    $url = $obj->create_url($mid, $action, $returnid, $actionparms, $inline);
+    if(!$url ) return;
+
 
     if(!empty($urlparms) ) {
         $url_ob = new \cms_url($url);
@@ -121,9 +112,7 @@ function smarty_function_cms_action_url($params, &$smarty)
         $url = (string) $url_ob;
     }
 
-    if($forjs ) {
-        $url = str_replace('&amp;', '&', $url);
-    }
+    if($forjs ) $url = str_replace('&amp;', '&', $url);
 
     if($assign ) {
         $smarty->assign($assign, $url);

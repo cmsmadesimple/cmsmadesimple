@@ -200,7 +200,8 @@ try {
                 if( $child_deps ) {
                     foreach( $child_deps as $child_name => $child_row ) {
                         if( !isset($deps[$child_name]) ) {
-                            $deps[$child_name] = $child_row;
+                            $tmp = [$child_name => $child_row];
+                            $deps = $tmp + $deps;
                         } else {
                             if( version_compare($deps[$child_name]['version'],$child_row['version']) < 0 ) $deps[$child_name] = $child_row;
                         }

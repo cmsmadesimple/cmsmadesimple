@@ -3,11 +3,13 @@ function smarty_function_cms_queue_script( $params, &$template )
 {
     // produces no output.
     if(!isset($params['file']) ) return;
-    $combiner = CmsApp::get_instance()->GetScriptManager();
+    $combiner = CmsApp::get_instance()->get_script_manager();
+    $priority = (int) get_parameter_value($params,'priority',2);
+    $priority = max(1,min(3,$priority));
 
     $file = trim($params['file']);
     if(is_file($file) ) {
-        $combiner->queue_script($file);
+        $combiner->queue_script($file, $priority);
         return;
     }
 
@@ -16,6 +18,6 @@ function smarty_function_cms_queue_script( $params, &$template )
     $config = \cms_config::get_instance();
     $paths = [ CMS_ASSETS_PATH.$file, $config['uploads_path'].$file, CMS_ROOT_PATH.$file ];
     foreach( $paths as $one ) {
-        if(is_file($one) ) $combiner->queue_script($one);
+        if(is_file($one) ) $combiner->queue_script($one, $priority);
     }
 }

@@ -24,51 +24,118 @@ include_once(dirname(__FILE__)."/fileinfo.php");
 final class FileManager extends CMSModule
 {
 
-    public function GetName() { return 'FileManager';
+    public function GetName()
+    {
+        return 'FileManager';
     }
-    public function LazyLoadFrontend() { return TRUE;
+
+    public function LazyLoadFrontend()
+    {
+        return TRUE;
     }
-    public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl');
+
+    public function GetChangeLog()
+    {
+        return $this->ProcessTemplate('changelog.tpl');
     }
-    public function GetHeaderHTML() { return $this->_output_header_javascript();
+
+    public function GetHeaderHTML()
+    {
+        return $this->_output_header_javascript();
     }
-    public function GetFriendlyName() { return $this->Lang('friendlyname');
+
+    public function GetFriendlyName()
+    {
+        return $this->Lang('friendlyname');
     }
-    public function GetVersion() { return '1.6.4';
+
+    public function GetVersion()
+    {
+        return '1.6.5';
     }
-    public function GetHelp() { return $this->Lang('help');
+
+    public function GetHelp()
+    {
+        return $this->Lang('help');
     }
-    public function GetAuthor() { return 'Morten Poulsen (Silmarillion)';
+
+    public function GetAuthor()
+    {
+        return 'Morten Poulsen (Silmarillion)';
     }
-    public function GetAuthorEmail() { return 'morten@poulsen.org';
+
+    public function GetAuthorEmail()
+    {
+        return 'morten@poulsen.org';
     }
-    public function IsPluginModule() { return FALSE;
+
+    public function IsPluginModule()
+    {
+        return FALSE;
     }
-    public function HasAdmin() { return TRUE;
+
+    public function HasAdmin()
+    {
+        return TRUE;
     }
-    public function IsAdminOnly() { return TRUE;
+
+    public function IsAdminOnly()
+    {
+        return TRUE;
     }
-    public function GetAdminSection() { return 'content';
+
+    public function GetAdminSection()
+    {
+        return 'content';
     }
-    public function GetAdminDescription() { return $this->Lang('moddescription');
+
+    public function GetAdminDescription()
+    {
+        return $this->Lang('moddescription');
     }
-    public function MinimumCMSVersion() { return "2.2.2";
+
+    public function MinimumCMSVersion()
+    {
+        return "2.2.2";
     }
-    public function InstallPostMessage() { return $this->Lang('postinstall');
+
+    public function InstallPostMessage()
+    {
+        return $this->Lang('postinstall');
     }
-    public function UninstallPostMessage() { return $this->Lang('uninstalled');
+
+    public function UninstallPostMessage()
+    {
+        return $this->Lang('uninstalled');
     }
-    public function UninstallPreMessage() { return $this->Lang('really_uninstall');
+
+    public function UninstallPreMessage()
+    {
+        return $this->Lang('really_uninstall');
     }
-    public function GetEventDescription($name) { return $this->Lang('eventdesc_'.$name);
+
+    public function GetEventDescription($name)
+    {
+        return $this->Lang('eventdesc_'.$name);
     }
-    public function GetEventHelp($name) { return $this->Lang('eventhelp_'.$name);
+
+    public function GetEventHelp($name)
+    {
+        return $this->Lang('eventhelp_'.$name);
     }
-    public function VisibleToAdminUser() { return $this->AccessAllowed();
+    public function VisibleToAdminUser()
+    {
+        return $this->AccessAllowed();
     }
-    public function AccessAllowed() { return $this->CheckPermission("Modify Files");
+
+    public function AccessAllowed()
+    {
+        return $this->CheckPermission("Modify Files");
     }
-    public function AdvancedAccessAllowed() { return $this->CheckPermission('Use FileManager Advanced',0);
+
+    public function AdvancedAccessAllowed()
+    {
+        return $this->AccessAllowed() && $this->CheckPermission('Use FileManager Advanced');
     }
 
     public function GetFileIcon($extension,$isdir=false) {

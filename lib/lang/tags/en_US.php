@@ -203,6 +203,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
   <li>module - <em>(optional)</em> - The module name to generate a URL for.  This parameter is not necessary if generating a URL from within a module action to an action within the same module.</li>
   <li>action - <strong>(required)</strong> - The action name to generate a URL to.</li>
   <li>alias - <em>(optional)</em>- The alias of an active page.  The pageid of this page will be used to create the url.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
+  <li>inline - <em>(optional)</em>- Whether or not an inline URL should be generated.  Default is false.</li>
   <li>returnid - <em>(optional)</em> - The integer pageid to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
   <li>mid - <em>(optional)</em> - The module action id.  This defaults to &quot;m1_&quot; for admin actions, and &quot;cntnt01&quot; for frontend actions.</li>
   <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in JavaScript.</li>

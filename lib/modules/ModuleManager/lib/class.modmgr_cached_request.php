@@ -85,8 +85,9 @@ final class modmgr_cached_request
                 $fh = fopen($fn,'w');
                 fwrite($fh,serialize(array($this->_status,$this->_result)));
                 fclose($fh);
+            } else {
+                audit('','ModuleManager','Request to module repository resulted in status '.$this_>_status);
             }
-        }
         else {
             // get data from the cache.
             $data = unserialize(file_get_contents($fn));

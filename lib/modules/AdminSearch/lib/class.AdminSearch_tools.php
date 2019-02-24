@@ -3,7 +3,8 @@ use CMSMS\HookManager;
 
 final class AdminSearch_tools
 {
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     public static function get_slave_classes()
@@ -19,7 +20,8 @@ final class AdminSearch_tools
             }
         }
 
-        $data =  cms_cache_handler::get_instance()->get($key);
+        $driver = CmsApp::get_instance()->get_cache_driver();
+        $data = $driver->get($key,__CLASS__);
         if( !$data ) {
             // cache needs refreshing.
             $results = array();
@@ -62,7 +64,7 @@ final class AdminSearch_tools
             }
 
             // store the results into the cache.
-            cms_cache_handler::get_instance()->set($key,serialize($results));
+            $driver->set($key,serialize($results),__CLASS__);
         }
         else {
             $results = unserialize($data);

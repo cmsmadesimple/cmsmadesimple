@@ -115,10 +115,26 @@ require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
-$_app->GetContentOperations();
-if( isset($_GET['clearme']) ) {
-    $_app->get_cache_driver()->clear('*');
+if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
+    // todo: put this into a class, as it is a remote control mechanism
+    // make this secure, but do not document/advertise it.  it's internal only
+    $auth = filter_var($_GET['_auth'],FILTER_SANITIZE_STRING);
+    $fn = TMP_CACHE_LOCATION.'/.f'.$auth;
+    if( is_file($fn) && is_writable($fn) && is_readable($fn) ) {
+        unlink($fn);
+        $op = filter_var($_GET['_op'],FILTER_SANITIZE_STRING);
+        switch( $op ) {
+        case 'clearcache':
+            $_app->clear_cached_files();
+            die('done');
+        }
+    }
+    header("HTTP/1.0 400 Bad Request");
+    header("Status: 400 Bad Request");
+    exit();
 }
+
+$_app->GetContentOperations();
 global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
                                             function(){
@@ -166,9 +182,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 $_app->GetHookMappingManager(); // initialize hook mappings.
-
-// Attempt to override the php memory limit
-if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {

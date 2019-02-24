@@ -3,7 +3,6 @@ namespace CMSMS;
 
 class ScriptManager
 {
-
     private $_scripts = [];
 
     private $_script_priority = 2;
@@ -25,6 +24,7 @@ class ScriptManager
         $sig = md5( $filename );
         if( isset( $this->_scripts[$sig]) ) return;
         if( is_null( $priority ) ) $priority = $this->_script_priority;
+        $priority = max(1,min(3,$priority));
 
         $this->_scripts[$sig] = [
           'file' => $filename,
@@ -36,8 +36,8 @@ class ScriptManager
 
     public function render_scripts( string $output_path, $force = false, $allow_defer = true )
     {
-        if( $this->_scripts && !count($this->_scripts) ) return; // nothing to do
-        if( !is_dir( $output_path ) ) return; // nowhere to put it
+        if( !$this->_scripts && !count($this->_scripts) ) return; // nothing to do
+        if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
 
         // auto append the defer script
         if( $allow_defer ) {
@@ -45,12 +45,11 @@ class ScriptManager
             $this->queue_script( $defer_script, 3 );
         }
 
+        $scripts = $this->_scripts;
         $t_scripts = \CMSMS\HookManager::do_hook( 'Core::PreProcessScripts', $this->_scripts );
         if( $t_scripts ) $scripts = $t_scripts;
 
         // sort the scripts by their priority, then their index (to preserve order)
-        // because module actions can be processed first... we 'lower' their priority
-        $scripts = $this->_scripts;
         usort( $scripts, function( $a, $b ) {
               if( $a['priority'] < $b['priority'] ) return -1;
               if( $a['priority'] > $b['priority'] ) return 1;

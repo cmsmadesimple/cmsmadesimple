@@ -118,8 +118,8 @@ abstract class CMSModule
         global $CMS_INSTALL_PAGE;
 
         if( isset($CMS_FORCELOAD) && $CMS_FORCELOAD ) return;
-        if( cmsms()->is_cli() ) return;
-        if( CmsApp::get_instance()->is_frontend_request() ) {
+        if( $this->app->is_cli() ) return;
+        if( $this->app->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
             $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
@@ -140,6 +140,7 @@ abstract class CMSModule
     {
         switch( $key ) {
             case 'cms':
+            case 'app':
                 return CmsApp::get_instance();
 
             case 'config':
@@ -307,8 +308,7 @@ abstract class CMSModule
             if( isset($CMS_INSTALL_PAGE) ) return TRUE;
 
             // no lazy loading.
-            $gCms = CmsApp::get_instance();
-            $smarty = $gCms->GetSmarty();
+            $smarty = $this->app->GetSmarty();
             $smarty->register_function($this->GetName(), [ $this->GetName(),'function_plugin' ], $cachable );
             return TRUE;
         }
@@ -832,7 +832,7 @@ abstract class CMSModule
      */
     final public function &GetDb()
     {
-        return CmsApp::get_instance()->GetDb();
+        return $this->db;
     }
 
     /**
@@ -963,9 +963,9 @@ abstract class CMSModule
     {
         $filename = $this->GetModulePath().'/method.install.php';
         if (@is_file($filename)) {
-            $gCms = CmsApp::get_instance();
-            $db = $gCms->GetDb();
-            $config = $gCms->GetConfig();
+            $gCms = $this->app;
+            $db = $this->db;
+            $config = $this->config;
             global $CMS_INSTALL_PAGE;
             if( !isset($CMS_INSTALL_PAGE) ) $smarty = $gCms->GetSmarty();
 
@@ -1004,8 +1004,8 @@ abstract class CMSModule
     {
         $filename = $this->GetModulePath().'/method.uninstall.php';
         if (@is_file($filename)) {
-            $gCms = CmsApp::get_instance();
-            $db = $gCms->GetDb();
+            $gCms = $this->app;
+            $db = $gCms->GetDB();
             $config = $gCms->GetConfig();
             $smarty = $gCms->GetSmarty();
 
@@ -1076,7 +1076,7 @@ abstract class CMSModule
     {
         $filename = $this->GetModulePath().'/method.upgrade.php';
         if (@is_file($filename)) {
-            $gCms = CmsApp::get_instance();
+            $gCms = $this->app;
             $db = $gCms->GetDb();
             $config = $gCms->GetConfig();
             $smarty = $gCms->GetSmarty();
@@ -1113,12 +1113,10 @@ abstract class CMSModule
      */
     final public function CheckForDependents()
     {
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
         $result = false;
 
         $query = "SELECT child_module FROM ".CMS_DB_PREFIX."module_deps WHERE parent_module = ? LIMIT 1";
-        $tmp = $db->GetOne($query, [ $this->GetName() ] );
+        $tmp = $this->db->GetOne($query, [ $this->GetName() ] );
         if( $tmp ) $result = true;
         return $result;
     }
@@ -1394,7 +1392,7 @@ abstract class CMSModule
                 $filename = $this->GetModulePath().'/action.' . $name . '.php';
                 if( is_file($filename) ) {
                     // these are included in scope in the included file for convenience.
-                    $gCms = CmsApp::get_instance();
+                    $gCms = $this->app;
                     $db = $gCms->GetDb();
                     $config = $gCms->GetConfig();
                     $smarty = $this->action_tpl; // smarty in scope.
@@ -1467,7 +1465,7 @@ abstract class CMSModule
             \CMSMS\HookManager::do_hook('module_action', $tmp);
         }
 
-        $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
+        $gCms = $this->app; // in scope for compatibility reasons.
         if( $gCms->template_processing_allowed() ) {
             $smarty = $gCms->GetSmarty();
             $tpl = $smarty->createTemplate( 'string:EMPTY MODULE ACTION TEMPLATE', null, null, $parent );
@@ -2268,7 +2266,7 @@ abstract class CMSModule
     {
         if( strpos($tpl_name, '..') !== false ) return;
         $template = $this->action_tpl;
-        if( !$template ) $template = \CmsApp::get_instance()->GetSmarty();
+        if( !$template ) $template = $this->app->GetSmarty();
         return $template->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
@@ -2444,7 +2442,7 @@ abstract class CMSModule
      */
     public function SetContentType(string $contenttype)
     {
-        CmsApp::get_instance()->set_content_type($contenttype);
+        $this->app->set_content_type($contenttype);
     }
 
     /**
@@ -2741,7 +2739,7 @@ abstract class CMSModule
             $filename = $this->GetModulePath().'/event.' . $originator . "." . $eventname . '.php';
 
             if (@is_file($filename)) {
-                $gCms = CmsApp::get_instance();
+                $gCms = $this->app;
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
                 $smarty = $gCms->GetSmarty();

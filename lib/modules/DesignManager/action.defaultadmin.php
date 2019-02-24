@@ -50,11 +50,11 @@ else if( isset($params['submit_create']) ) {
     return;
 }
 else if( isset($params['submit_bulk']) ) {
-    $tmp = array('allparms'=>base64_encode(serialize($params)));
+    $tmp = array('allparms'=>base64_encode(json_encode($params)));
     $this->Redirect($id,'admin_bulk_template',$returnid,$tmp);
 }
 else if( isset($params['submit_bulk_css']) ) {
-    $tmp = array('allparms'=>base64_encode(serialize($params)));
+    $tmp = array('allparms'=>base64_encode(json_encode($params)));
     $this->Redirect($id,'admin_bulk_css',$returnid,$tmp);
 }
 else if( isset($params['design_setdflt']) && $this->CheckPermission('Manage Designs') ) {

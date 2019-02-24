@@ -71,7 +71,7 @@ class SectionHeader extends ContentBase
         return FALSE;
     }
 
-    public function GetURL(bool $rewrite = true)
+    public function GetURL($rewrite = true)
     {
         return '#';
     }

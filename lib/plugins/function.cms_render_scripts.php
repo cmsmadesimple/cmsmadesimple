@@ -1,7 +1,9 @@
 <?php
 function smarty_function_cms_render_scripts( $params, $template )
 {
-    $combiner = CmsApp::get_instance()->GetScriptManager();
+    // output a placeholder
+    // adda hook to replace the placeholder with a <script> tag after render
+    $combiner = CmsApp::get_instance()->get_script_manager();
     $force = (isset($params['force'])) ? cms_to_bool($params['force']) : false;
     $nocache = (isset($params['nocache'])) ? cms_to_bool($params['nocache']) : false;
     $defer = (isset($params['defer'])) ? cms_to_bool($params['defer']) : true;

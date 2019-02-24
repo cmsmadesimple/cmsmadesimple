@@ -137,13 +137,13 @@ class LayoutTemplateManager
             if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
         }
 
-        $query = 'DELETE FROM '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' WHERE tpl_id = ?';
+        $query = 'DELETE FROM '.$this->tpl_additional_users_table_name().' WHERE tpl_id = ?';
         $dbr = $db->Execute($query,array($tpl->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $t = $tpl->get_additional_editors();
         if( is_array($t) && count($t) ) {
-            $query = 'INSERT INTO '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
+            $query = 'INSERT INTO '.$this->tpl_additional_users_table_name().' (tpl_id,user_id) VALUES(?,?)';
             foreach( $t as $one ) {
                 $dbr = $db->Execute($query,array($tpl->get_id(),(int)$one));
             }
@@ -191,7 +191,7 @@ class LayoutTemplateManager
 
         $t = $tpl->get_additional_editors();
         if( is_array($t) && count($t) ) {
-            $query = 'INSERT INTO '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
+            $query = 'INSERT INTO '.$this->tpl_additional_users_table_name().' (tpl_id,user_id) VALUES(?,?)';
             foreach( $t as $one ) {
                 $dbr = $db->Execute($query,array($new_id,(int)$one));
             }
@@ -199,7 +199,7 @@ class LayoutTemplateManager
 
         $t = $tpl->get_designs();
         if( is_array($t) && count($t) ) {
-            $query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
+            $query = 'INSERT INTO '.$this->design_assoc_table_name().' (tpl_id,design_id) VALUES(?,?)';
             foreach( $t as $one ) {
                 $dbr = $db->Execute($query,array($new_id,(int)$one));
             }
@@ -243,6 +243,7 @@ class LayoutTemplateManager
         audit($tpl->get_id(),'CMSMS','Template '.$tpl->get_name().' Deleted');
         HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
         unset($tpl->_data['id']);
+        $this->cache_driver->clear(__CLASS__);
     }
 
     public function load_template($a)
@@ -334,6 +335,28 @@ class LayoutTemplateManager
             $out[] = $this->get_cached_template($tpl_id);
         }
         return $out;
+    }
+
+    public function load_templates_by_type(CmsLayoutTemplateType $type)
+    {
+        // get the template type id => template_id list
+        // see if we have this map in the cache
+        $map = null;
+        $key = 'types_to_tpl_'.$type->get_id();
+        if( $this->cache_driver->exists($key,__CLASS__) ) {
+            $map = $this->cache_driver->get($key,__CLASS__);
+        } else {
+            $sql = 'SELECT id FROm '.$this->template_table_name().' WHERE id = ?';
+            $list = $db->GetCol($sql,$type->get_id());
+            if( is_array($list) && !empty($list) ) {
+                $map = $list;
+                $this->cache_driver->set($key,$list,__CLASS__);
+            }
+        }
+
+        if( empty($map) ) return;
+
+        return $this->load_bulk_templates($map);
     }
 
     public function get_owned_templates($a)

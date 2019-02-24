@@ -154,7 +154,7 @@ while( $trycount < 2 ) {
 
         if( $config['content_processing_mode'] == 2 ) {
             debug_buffer('preprocess module action');
-            $mgr = $_app->GetScriptManager();
+            $mgr = $_app->get_script_manager();
             $pr = $mgr->get_script_priority();
             $mgr->set_script_priority( $pr + 1 );
             \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );

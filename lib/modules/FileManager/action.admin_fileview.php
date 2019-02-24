@@ -1,8 +1,6 @@
 <?php
-
 if (!function_exists("cmsms")) exit;
-
-if (!$this->CheckPermission('Modify Files')) exit;
+if (!$this->AccessAllowed()) exit;
 
 $sortby=$this->GetPreference("sortby","nameasc");
 $path=filemanager_utils::get_cwd();

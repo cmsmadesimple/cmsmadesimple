@@ -32,8 +32,9 @@ class apc_cache_driver extends cms_cache_driver
     public function clear($group = '')
     {
         // clear all, or clear all in group
-        if( !$group || $group == '*' ) {
+	if( !$group || $group == '*' ) {
             apc_clear_cache('user');
+            apc_clear_cache();
             return;
         }
 
