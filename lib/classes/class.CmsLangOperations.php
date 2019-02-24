@@ -222,7 +222,7 @@ final class CmsLangOperations
         if( !isset(self::$_langdata[$curlang][$realm][$key]) ) {
             // put mention into the admin log
             global $CMS_LOGIN_PAGE;
-            if( !isset($CMS_LOGIN_PAGE) ) debug_to_log('Languagestring: "' . $key . '"', 'Is missing in the languagefile: '.  $realm);
+            if( !isset($CMS_LOGIN_PAGE) ) debug_to_log("Realm: \"$realm\", Languagestring: \"$key\"", 'Missing language string');
             return "-- Missing Languagestring: $key --";
         }
 
