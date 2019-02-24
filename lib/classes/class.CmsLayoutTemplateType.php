@@ -41,7 +41,6 @@
  */
 
 use \CMSMS\HookManager;
-use \CMSMS\internal\TemplateCache;
 
 /**
  * A class to manage template types
@@ -439,7 +438,6 @@ class CmsLayoutTemplateType
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $this->_data['id'] = $db->Insert_ID();
-        TemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Created');
         $this->_dirty = null;
     }
@@ -471,7 +469,6 @@ class CmsLayoutTemplateType
                                        $this->get_owner(), $now, $this->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->ErrorMsg());
 
-        TemplateCache::clear_cache();
         $this->_dirty = null;
         audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Updated');
     }
@@ -522,7 +519,6 @@ class CmsLayoutTemplateType
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $this->_dirty = TRUE;
-        TemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
         HookManager::do_hook('Core::DeleteTemplateTypePost', [ get_class($this) => &$this ]);
         unset($this->_data['id']);
