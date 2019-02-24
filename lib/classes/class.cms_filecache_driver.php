@@ -370,8 +370,8 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->_group;
 
-        $mask = $dir.'/cache_*_*.cg';
-        if( $group ) $mask = $dir.'/cache_'.md5(__DIR__.$group).'_*.cg';
+        $mask = $dir.'/cache_*_*.cms';
+        if( $group ) $mask = $dir.'/cache_'.md5(__DIR__.$group).'_*.cms';
 
         $files = glob($mask);
         if( !is_array($files) ) return 0;

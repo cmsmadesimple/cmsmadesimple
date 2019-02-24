@@ -4,6 +4,7 @@ Core - General
   - Fix minor potential authenticated object insertion vulnerability in changegroupperm
   - Fix minor potential uncleaned input vulnerability in siteprefs
   - Minor improvement to get_real_ip()
+  - Fix to clearing cache in cms_filecache_driver
 
 News v2.51.5
   - Fix unauthenticated SQL injection vulnerability with the default action
