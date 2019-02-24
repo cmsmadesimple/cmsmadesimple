@@ -142,7 +142,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $this->auto_clean_files();
+        $this->_auto_clean_files();
         $fn = $this->get_filename($key,$group);
         $data = $this->read_cache_file($fn);
         return $data;
@@ -174,7 +174,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         if( !$group ) $group = $this->group;
 
-        $this->auto_clean_files();
+        $this->_auto_clean_files();
         $fn = $this->get_filename($key,$group);
         clearstatcache(false,$fn);
         if( is_file($fn) ) return TRUE;
