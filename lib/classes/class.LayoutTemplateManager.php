@@ -5,13 +5,15 @@ use cms_cache_driver;
 use CmsLayoutTemplate;
 use CmsLayoutTemplateType;
 use CmsLayoutCollection;
+use CMSMS\internal\hook_manager;
 
 class LayoutTemplateManager
 {
-    public function __construct( Database $db, cms_cache_driver $driver )
+    public function __construct( Database $db, cms_cache_driver $driver, hook_manager $hook_manager )
     {
         $this->db = $db;
         $this->cache_driver = $driver;
+        $this->hook_manager = $hook_manager;
     }
 
     protected function template_name_to_id(string $name)
@@ -215,22 +217,22 @@ class LayoutTemplateManager
     public function save_template( CmsLayoutTemplate $tpl )
     {
         if( $tpl->get_id() ) {
-            HookManager::do_hook('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
+            $this->hook_managerdo_hook('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
             $tpl = $this->_update_template($tpl);
-            HookManager::do_hook('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
+            $this->hook_managerdo_hook('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
             return;
         }
 
-        HookManager::do_hook('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
+        $this->hook_managerdo_hook('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
         $tpl = $this->_insert_template($tpl);
-        HookManager::do_hook('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
+        $this->hook_managerdo_hook('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
     }
 
     public function delete_template( CmsLayoutTemplate $tpl )
     {
         if( !$tpl->get_id() ) return;
 
-        HookManager::do_hook('Core::DeleteTemplatePre', [ get_class($tpl) => &$tpl ] );
+        $this->hook_managerdo_hook('Core::DeleteTemplatePre', [ get_class($tpl) => &$tpl ] );
         $db = $this->db;
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
         $dbr = $db->Execute($query,array($tpl->get_id()));
@@ -241,7 +243,7 @@ class LayoutTemplateManager
         @unlink($tpl->get_content_filename());
 
         audit($tpl->get_id(),'CMSMS','Template '.$tpl->get_name().' Deleted');
-        HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
+        $this->hook_managerdo_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
         unset($tpl->_data['id']);
         $this->cache_driver->clear(__CLASS__);
     }
@@ -258,9 +260,7 @@ class LayoutTemplateManager
 
         // if it exists in the cache, then we're done
         $obj = $this->get_cached_template($id);
-        if( $obj ) {
-            return $obj;
-        }
+        if( $obj ) return $obj;
 
         // load it from the database
         $db = $this->db;
@@ -436,4 +436,5 @@ class LayoutTemplateManager
     public function design_assoc_table_name() {
         return CMS_DB_PREFIX.'layout_design_tplassoc';
     }
+
 } // class

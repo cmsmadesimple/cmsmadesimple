@@ -19,4 +19,21 @@
 #
 #$Id$
 
-use \CMSMS\HooKmanager as HookMgr;
+namespace CMSMS;
+
+$gCms = \CmsApp::get_instance();
+global $CMS_INSTALL_PAGE;
+if( !isset($CMS_INSTALL_PAGE) && !$gCms->is_frontend_request() ) {
+    // admin requests only
+    $hook_manager = $gCms->get_hook_manager();
+
+    // add hooks for after a module install/uninstalled/reinstalled
+    $clear_cache_fn = function( $parms ) use ($gCms) {
+        $gCms->clear_cached_files();
+    };
+
+    $hook_manager->add_hook( 'Core::ModuleUpgraded', $clear_cache_fn );
+    $hook_manager->add_hook( 'Core::ModuleInstalled', $clear_cache_fn );
+    $hook_manager->add_hook( 'Core::ModuleUninstalled', $clear_cache_fn );
+    $hook_manager->add_hook( 'Core::AfterModuleActivated', $clear_cache_fn );
+}

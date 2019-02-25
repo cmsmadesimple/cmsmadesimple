@@ -23,6 +23,7 @@ function smarty_function_metadata($params, &$smarty)
     $gCms = CmsApp::get_instance();
     $config = \cms_config::get_instance();
     $content_obj = $gCms->get_content_object();
+    $hookmanager = $gCms->get_hook_manager();
 
     $result = '';
     $showbase = true;
@@ -36,7 +37,7 @@ function smarty_function_metadata($params, &$smarty)
         if ($params['showbase'] == 'false') $showbase = false;
     }
 
-    \CMSMS\HookManager::do_hook('metadata_prerender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);
+    $hookmanager->do_hook('metadata_prerender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);
 
     if ($showbase) {
         $base = CMS_ROOT_URL;
@@ -53,7 +54,7 @@ function smarty_function_metadata($params, &$smarty)
         $result = $smarty->fetch('string:'.$result);
     }
 
-    \CMSMS\HookManager::do_hook('metadata_postrender', [ 'content_id'=>$content_obj->Id(), 'html'=>&$result ]);
+    $hookmanager->do_hook('metadata_postrender', [ 'content_id'=>$content_obj->Id(), 'html'=>&$result ]);
     if (isset($params['assign']) ) {
         $smarty->assign(trim($params['assign']), $result);
         return;

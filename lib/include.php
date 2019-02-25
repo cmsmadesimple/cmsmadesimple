@@ -86,6 +86,7 @@ debug_buffer('done loading basic files');
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
+$_app->GetModuleOperations();
 \CMSMS\AuditManager::init();
 
 // Set the timezone

@@ -310,7 +310,7 @@ final class CmsApp
      */
     public function GetAvailableModules()
     {
-        return ModuleOperations::get_instance()->get_available_modules();
+        return $this->GetModuleOperations()->get_available_modules();
     }
 
 
@@ -329,7 +329,7 @@ final class CmsApp
      */
     public function &GetModuleInstance($module_name,$version = '')
     {
-        return ModuleOperations::get_instance()->get_module_instance($module_name,$version);
+        return $this->GetModuleOperations()->get_module_instance($module_name,$version);
     }
 
 
@@ -402,9 +402,11 @@ final class CmsApp
     * @see ModuleOperations
     * @return ModuleOperations handle to the ModuleOperations object
     */
-    public function & GetModuleOperations()
+    public function GetModuleOperations()
     {
-        return ModuleOperations::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new ModuleOperations( $this, $this->GetConfig() );
+        return $_obj;
     }
 
 
@@ -441,9 +443,11 @@ final class CmsApp
     * @return ContentOperations handle to the ContentOperations object
        * @deprecated
     */
-    public function & GetContentOperations()
+    public function GetContentOperations()
     {
-        return ContentOperations::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new ContentOperations( $this, $this->get_cache_driver() );
+        return $_obj;
     }
 
     /**
@@ -533,7 +537,7 @@ final class CmsApp
      */
     public function get_script_manager() : ScriptManager
     {
-        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new ScriptManager;
+        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new ScriptManager( $this );
         return $this->scriptcombiner;
     }
 
@@ -545,7 +549,7 @@ final class CmsApp
     public function get_stylesheet_manager() : StylesheetManager
     {
         static $_mgr;
-        if( !$_mgr ) $_mgr = new StylesheetManager;
+        if( !$_mgr ) $_mgr = new StylesheetManager( $this );
         return $_mgr;
     }
 
@@ -560,7 +564,7 @@ final class CmsApp
     public function GetHookMappingManager()
     {
         static $_mgr;
-        if( !$_mgr ) $_mgr = new hook_mapping_manager(CMS_ASSETS_PATH.'/configs/hook_mapping.json');
+        if( !$_mgr ) $_mgr = new hook_mapping_manager($this, CMS_ASSETS_PATH.'/configs/hook_mapping.json');
         return $_mgr;
     }
 
@@ -613,7 +617,10 @@ final class CmsApp
     public function get_template_manager() : LayoutTemplateManager
     {
         static $mgr;
-        if( !$mgr ) $mgr = new LayoutTemplateManager($this->GetDB(), $this->get_cache_driver());
+        if( !$mgr ) $mgr = new LayoutTemplateManager(
+            $this->GetDB(),
+            $this->get_cache_driver(),
+            $this->get_hook_manager());
         return $mgr;
     }
 
@@ -647,9 +654,9 @@ final class CmsApp
      */
     final public function clear_cached_files($age_days = 0)
     {
-	// clear APC, or file cache separately and completely
-	$config = $this->GetConfig();
-	$this->get_cache_driver()->clear();
+        // clear APC, or file cache separately and completely
+        $config = $this->GetConfig();
+        $this->get_cache_driver()->clear();
 
         // additionall clear cached files that are older than N days old.
         $age_days = max(-1,(int) $age_days);
@@ -659,7 +666,6 @@ final class CmsApp
         $this->get_hook_manager()->do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
         $the_time = time() - $age_days * 24*60*60;
 
-
         $dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
         foreach( $dirs as $start_dir ) {
             $dirIterator = new RecursiveDirectoryIterator($start_dir);
@@ -667,10 +673,10 @@ final class CmsApp
             foreach( $dirContents as $one ) {
                 if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
             }
-	    @touch(cms_join_path($start_dir,'index.html'));
+            @touch(cms_join_path($start_dir,'index.html'));
         }
 
-	file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
+        file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
         $this->get_hook_manager()->do_hook( 'Core::OnCacheClear', $the_time );
     }
 
@@ -817,7 +823,6 @@ final class CmsApp
  */
 class CmsContentTypePlaceholder
 {
-
     /**
      * @var string The type name
      */
@@ -863,5 +868,3 @@ function &cmsms()
 function cms_db_prefix() {
     return CMS_DB_PREFIX;
 }
-
-?>

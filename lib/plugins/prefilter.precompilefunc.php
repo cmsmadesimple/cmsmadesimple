@@ -21,19 +21,19 @@ use \CMSMS\HookManager;
 function smarty_prefilter_precompilefunc($tpl_output, $smarty)
 {
     $result = explode(':', $smarty->_current_file);
+    $hookmanager = cmsms()->get_hook_manager();
 
     if (count($result) > 1) {
-        if(startswith($result[0], 'tmp_') ) { $result[0] = 'template';
-        }
+        if(startswith($result[0], 'tmp_') ) $result[0] = 'template';
 
         switch ($result[0]) {
             case 'cms_stylesheet':
             case 'stylesheet':
-                HookManager::do_hook('Core::StylesheetPreCompile', array('stylesheet'=>&$tpl_output));
+                $hookmanager->do_hook('Core::StylesheetPreCompile', array('stylesheet'=>&$tpl_output));
                 break;
 
             case "content":
-                HookManager::do_hook('Core::ContentPreCompile', array('content' => &$tpl_output));
+                $hookmanager->do_hook('Core::ContentPreCompile', array('content' => &$tpl_output));
                 break;
 
             case "cms_template":
@@ -41,7 +41,7 @@ function smarty_prefilter_precompilefunc($tpl_output, $smarty)
             case 'tpl_body':
             case 'tpl_head':
             case "template":
-                HookManager::do_hook('Core::TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
+                $hookmanager->do_hook('Core::TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
                 break;
 
             default:
@@ -49,7 +49,6 @@ function smarty_prefilter_precompilefunc($tpl_output, $smarty)
         }
     }
 
-    HookManager::do_hook('Core::SmartyPreCompile', array('content' => &$tpl_output));
-
+    $hookmanager->do_hook('Core::SmartyPreCompile', array('content' => &$tpl_output));
     return $tpl_output;
 }

@@ -69,7 +69,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    static private $_classmap = null;
+    private $_classmap = null;
 
     /**
      * @ignore
@@ -84,9 +84,37 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function __construct() {
-    }
+    private $_hook_manager;
 
+    /**
+     * @ignore
+     */
+    private $_db;
+
+    /**
+     * @ignore
+     */
+    private $_app;
+
+    /**
+     * @ignore
+     */
+    private $_config;
+
+    /**
+     * @ignore
+     */
+    public function __construct( CmsApp $app, \cms_config $config = null )
+    {
+        if( isset(self::$_instance) ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed per request');
+        self::$_instance = $this;
+
+        $this->_app = $app;
+        $this->_hook_manager = $app->get_hook_manager();
+        $this->_db = $app->GetDb();
+        if( !$config ) $config = $app->GetConfig();
+        $this->_config = $config;
+    }
 
     /**
      * @ignore
@@ -98,11 +126,10 @@ final class ModuleOperations
      *
      * @return ModuleOperations
      */
-    public static function &get_instance()
+    public static function get_instance()
     {
         if( !isset(self::$_instance) ) {
-            $c = __CLASS__;
-            self::$_instance = new $c;
+            throw new \LogicException(__CLASS__.' instance not yet created');
         }
         return self::$_instance;
     }
@@ -112,12 +139,12 @@ final class ModuleOperations
      */
     protected function get_module_classmap()
     {
-        if( !is_array(self::$_classmap) ) {
-            self::$_classmap = [];
+        if( !is_array($this->_classmap) ) {
+            $this->_classmap = [];
             $tmp = \cms_siteprefs::get(self::CLASSMAP_PREF);
-            if( $tmp ) self::$_classmap = unserialize($tmp);
+            if( $tmp ) $this->_classmap = unserialize($tmp);
         }
-        return self::$_classmap;
+        return $this->_classmap;
     }
 
     /**
@@ -132,7 +159,6 @@ final class ModuleOperations
         return $module;
     }
 
-
     /**
      * @ignore
      */
@@ -140,7 +166,7 @@ final class ModuleOperations
     {
         $module = trim($module);
         if( !$module ) return;
-        $config = \cms_config::get_instance();
+        $config = $this->_config;
         $path = CMS_ROOT_PATH.'/lib/modules';
         if( !self::get_instance()->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
         $fn = $path."/$module/$module.module.php";
@@ -170,7 +196,7 @@ final class ModuleOperations
 
         $this->get_module_classmap();
         $this->_classmap[$module] = $classname;
-        \cms_siteprefs::set(self::CLASSMAP_PREF, serialize(self::$_classmap));
+        \cms_siteprefs::set(self::CLASSMAP_PREF, serialize($this->_classmap));
     }
 
     /**
@@ -224,9 +250,7 @@ final class ModuleOperations
     private function _install_module(CmsModule& $module_obj)
     {
         debug_buffer('install_module '.$module_obj->GetName());
-
-        $gCms = CmsApp::get_instance(); // preserve the global.
-        $db = $gCms->GetDb();
+        $db = $this->_db;
 
         $result = $module_obj->Install();
         if( !isset($result) || $result === FALSE) {
@@ -255,10 +279,9 @@ final class ModuleOperations
                 }
             }
             $this->_moduleinfo = array();
-            $gCms->clear_cached_files();
 
+            $this->_hook_manager->do_hook('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             cms_notice('Installed module '.$module_obj->GetName().' version '.$module_obj->GetVersion());
-            \CMSMS\HookManager::do_hook('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             return array(TRUE,$module_obj->InstallPostMessage());
         }
 
@@ -340,8 +363,6 @@ final class ModuleOperations
      */
     private function _load_module(string $module_name,bool $force_load = FALSE,bool $dependents = TRUE)
     {
-        $gCms = CmsApp::get_instance(); // backwards compatibility... set the global.
-
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
             cms_warning("Nothing is known about $module_name... cant load it");
@@ -403,7 +424,7 @@ final class ModuleOperations
 
         $this->_modules[$module_name] = $obj;
 
-        $tmp = $gCms->get_installed_schema_version();
+        $tmp = $this->_app->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
             // schema versions match
             $needs_upgrade = isset($info[$module_name]) && $info[$module_name]['status'] == 'installed';
@@ -450,13 +471,13 @@ final class ModuleOperations
             $obj->InitializeCommon();
             if( isset($CMS_ADMIN_PAGE) ) {
                 $obj->InitializeAdmin();
-            } else if( $gCms->is_frontend_request() ) {
+            } else if( $this->_app->is_frontend_request() ) {
                 $obj->InitializeFrontend();
             }
         }
 
         // we're all done.
-        \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
+        $this->_hook_manager->do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
         return TRUE;
     }
 
@@ -512,7 +533,7 @@ final class ModuleOperations
         global $CMS_STYLESHEET;
         if( isset($CMS_STYLESHEET) ) return;
 
-        $config = \cms_config::get_instance();
+        $config = $this->_config;
         debug_buffer('Loading Modules');
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
@@ -538,8 +559,7 @@ final class ModuleOperations
     private function _upgrade_module( \CMSModule &$module_obj, string $to_version = '' )
     {
         // we can't upgrade a module if the schema is not up to date.
-        $gCms = CmsApp::get_instance();
-        $tmp = $gCms->get_installed_schema_version();
+        $tmp = $this->_app->get_installed_schema_version();
         if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return array(FALSE,lang('error_coreupgradeneeded'));
 
         $info = $this->_get_module_info();
@@ -547,11 +567,9 @@ final class ModuleOperations
         $dbversion = $info[$module_name]['version'];
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
         $dbversion = $info[$module_name]['version'];
-        if( version_compare($dbversion, $to_version) != -1 ) {
-            return array(TRUE); // nothing to do.
-        }
+        if( version_compare($dbversion, $to_version) != -1 ) return array(TRUE); // nothing to do.
 
-        $db = $gCms->GetDb();
+        $db = $this->_db;
         $result = $module_obj->Upgrade($dbversion,$to_version);
         if( !isset($result) || $result === FALSE ) {
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
@@ -576,9 +594,9 @@ final class ModuleOperations
                 }
             }
             $this->_moduleinfo = array();
-            $gCms->clear_cached_files();
+
             cms_notice('Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
-            \CMSMS\HookManager::do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
+            $this->_hook_manager->do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
             return array(TRUE);
         }
 
@@ -616,10 +634,9 @@ final class ModuleOperations
      */
     public function UninstallModule( string $module )
     {
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
+        $db = $this->_app->GetDb();
 
-        $modinstance = cms_utils::get_module($module);
+        $modinstance = $this->get_module_instance($module);
         if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
 
         $cleanup = $modinstance->AllowUninstallCleanup();
@@ -659,7 +676,7 @@ final class ModuleOperations
                     }
                 }
 
-                $jobmgr = \ModuleOperations::get_instance()->get_module_instance('CmsJobManager');
+                $jobmgr = $this->get_module_instance('CmsJobManager');
                 if( $jobmgr ) $jobmgr->delete_jobs_by_module( $module );
 
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
@@ -669,13 +686,12 @@ final class ModuleOperations
             }
 
             // clear the cache.
-            $gCms->clear_cached_files();
 
             // Removing module from info
             $this->_moduleinfo = array();
 
             cms_notice('Uninstalled module '.$module);
-            \CMSMS\HookManager::do_hook('Core::ModuleUninstalled', [ 'name' => $module ] );
+            $this->_hook_manager->do_hook('Core::ModuleUninstalled', [ 'name' => $module ] );
             return array(TRUE);
         }
 
@@ -721,13 +737,13 @@ final class ModuleOperations
             $info[$module_name]['active'] = 0;
         }
         if( $info[$module_name]['active'] != $o_state ) {
-            \CMSMS\HookManager::do_hook( 'Core::BeforeModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
-            $db = CmsApp::get_instance()->GetDb();
+            $this->_hook_manager->do_hook( 'Core::BeforeModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
+            $db = $this->_db;
             $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET active = ? WHERE module_name = ?';
             $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
             $this->_moduleinfo = array();
-            cmsms()->clear_cached_files();
-            \CMSMS\HookManager::do_hook( 'Core::AfterModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
+
+            $this->_hook_manager->do_hook( 'Core::AfterModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
             if( $activate ) {
                 cms_notice("Module $module_name activated");
             }
@@ -929,6 +945,7 @@ final class ModuleOperations
         $obj = null;
         if( !$module_name ) {
             global $CMS_ADMIN_PAGE;
+            // noe: userperefs should not be here... should be in something else
             if( isset($CMS_ADMIN_PAGE) ) $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'syntaxhighlighter');
             if( $module_name ) $module_name = html_entity_decode( $module_name ); // for some reason entities may have gotten in there.
         }
@@ -958,10 +975,11 @@ final class ModuleOperations
     {
         $obj = null;
         if( !$module_name ) {
-            if( CmsApp::get_instance()->is_frontend_request() ) {
+            if( $this->_app->is_frontend_request() ) {
                 $module_name = cms_siteprefs::get('frontendwysiwyg');
             }
             else {
+                // note: userprefs should not be here.  should be somewhere else.
                 $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'wysiwyg');
             }
             if( $module_name ) $module_name = html_entity_decode( $module_name );

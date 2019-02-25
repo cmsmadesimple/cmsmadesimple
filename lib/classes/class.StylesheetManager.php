@@ -1,10 +1,29 @@
 <?php
 namespace CMSMS;
+use CmsApp;
 
 class StylesheetManager
 {
+
+    /**
+     * @ignore
+     */
     private $_files = [];
+
+    /**
+     * @ignore
+     */
     private $_priority = 2;
+
+    /**
+     * @ignore
+     */
+    private $_hook_manager;
+
+    public function __construct( CmsApp $app )
+    {
+        $this->_hook_manager = $app->get_hook_manager();
+    }
 
     public function queue( string $filename, int $priority = null )
     {
@@ -29,8 +48,7 @@ class StylesheetManager
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
 
         $files = $this->_files;
-        $hook_manager = cmsms()->get_hook_manager();
-        $t_files = $hook_manager->do_hook( 'Core::PreProcessCSS', $this->_files );
+        $t_files = $this->_hook_manager->do_hook( 'Core::PreProcessCSS', $this->_files );
         if( $t_files ) $files = $t_files;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -58,7 +76,7 @@ class StylesheetManager
                 $content = file_get_contents($rec['file']);
                 $output .= $content."\n\n";
             }
-            $tmp = $hook_manager->do_hook( 'Core::PostProcessCSS', $output );
+            $tmp = $this->_hook_manager->do_hook( 'Core::PostProcessCSS', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );
         }

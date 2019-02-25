@@ -7,9 +7,6 @@
  * @license GPL
  */
 
-use \CMSMS\HookManager;
-use \CMSMS\internal\TemplateCache;
-
 /**
  * A class to represent a smarty template.
  *

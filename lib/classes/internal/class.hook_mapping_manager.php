@@ -1,7 +1,7 @@
 <?php
 namespace CMSMS\internal;
-use CMSMS\HookManager;
 use CMSMS\simple_plugin_operations;
+use CmsApp;
 
 // immutable
 class hook_mapping_manager
@@ -11,14 +11,17 @@ class hook_mapping_manager
 
     private $data;
 
+    private $hook_manaager;
+
     static $_obj;
 
-    public function __construct($filename)
+    public function __construct(CmsApp $app, $filename)
     {
         if( $this::$_obj ) throw new \LogicException('Only one instance of '.__CLASS__.' is allowed per runtime');
         $this::$_obj = $this;
 
         $this->filename = $filename;
+        $this->hook_manager = $app->get_hook_manager();
         $this->load_mapping($filename);
         $this->add_hooks();
     }
@@ -81,17 +84,17 @@ EOT;
                     switch( $handler['type'] ) {
                         case $mapping::TYPE_SIMPLE:
                             if( $spi->plugin_exists($handler['name']) ) {
-                                HookManager::add_hook($mapping->hook, [get_class($spi), $handler['name'] ]);
+                                $this->hook_manager->add_hook($mapping->hook, [get_class($spi), $handler['name'] ]);
                             }
                             break;
                         case $mapping::TYPE_CALLABLE:
                             if( is_callable($handler['name']) ) {
-                                HookManager::add_hook($mapping->hook, $handler['name']);
+                                $this->hook_manager->add_hook($mapping->hook, $handler['name']);
                             }
                             break;
                         default:
                             $function_name = $this->get_module_event_handler_wrapper($mapping->hook, $handler['name']);
-                            if( $function_name ) HookManager::add_hook($mapping->hook, $function_name);
+                            if( $function_name ) $this->hook_manager->add_hook($mapping->hook, $function_name);
                             break;
                     }
                 }

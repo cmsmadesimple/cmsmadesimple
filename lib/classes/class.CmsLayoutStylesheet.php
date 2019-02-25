@@ -299,7 +299,7 @@ class CmsLayoutStylesheet
         if( !is_array($this->_design_assoc) ) {
             if( !$this->get_id() ) return;
             $this->_design_assoc = null;
-            $db = CmsApp::get_instance()->GetDb();
+            $db = cmsms()->GetDb();
             $query = 'SELECT design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
             $tmp = $db->GetCol($query,array($this->get_id()));
             if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
@@ -412,7 +412,7 @@ class CmsLayoutStylesheet
             throw new CmsInvalidDataException('There are invalid characters in the stylesheet name.');
         }
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $tmp = null;
         if( $this->get_id() ) {
             // double check the name.
@@ -441,7 +441,7 @@ class CmsLayoutStylesheet
               WHERE id = ?';
         $tmp = '';
         if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $dbr = $db->Execute($query,array($this->get_name(),$this->get_content(),$this->get_description(),
                                        $tmp,$this->get_media_query(),time(), $this->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -506,7 +506,7 @@ class CmsLayoutStylesheet
         if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
         $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.' (name,content,description,media_type,media_query, created,modified)
               VALUES (?,?,?,?,?,?,?)';
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $dbr = $db->Execute($query,	array($this->get_name(),$this->get_content(),$this->get_description(),
                                         $tmp,$this->get_media_query(), time(),time()));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -539,15 +539,16 @@ class CmsLayoutStylesheet
      */
     public function save()
     {
+        $app = cmsms();
         if( $this->get_id() ) {
-            \CMSMS\HookManager::do_hook('Core::EditStylesheetPre',array(get_class($this)=>&$this));
+            $app->get_hook_manager()->do_hook('Core::EditStylesheetPre',array(get_class($this)=>&$this));
             $this->_update();
-            \CMSMS\HookManager::do_hook('Core::EditStylesheetPost',array(get_class($this)=>&$this));
+            $app->get_hook_manager()->do_hook('Core::EditStylesheetPost',array(get_class($this)=>&$this));
             return;
         }
-        \CMSMS\HookManager::do_hook('Core::AddStylesheetPre',array(get_class($this)=>&$this));
+        $app->get_hook_manager()->do_hook('Core::AddStylesheetPre',array(get_class($this)=>&$this));
         $this->_insert();
-        \CMSMS\HookManager::do_hook('Core::AddStylesheetPost',array(get_class($this)=>&$this));
+        $app->get_hook_manager()->do_hook('Core::AddStylesheetPost',array(get_class($this)=>&$this));
     }
 
     /**
@@ -561,8 +562,9 @@ class CmsLayoutStylesheet
     {
         if( !$this->get_id() ) return;
 
-        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPre',array(get_class($this)=>&$this));
-        $db = CmsApp::get_instance()->GetDb();
+        $app = cmsms();
+        $app->get_hook_manager()->do_hook('Core::DeleteStylesheetPre',array(get_class($this)=>&$this));
+        $db = cmsms()->GetDb();
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
@@ -572,7 +574,7 @@ class CmsLayoutStylesheet
         @unlink($this->get_content_filename());
 
         cms_notice('Stylesheet '.$this->get_name().' Deleted');
-        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
+        $app->get_hook_manager()->do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }
@@ -661,7 +663,7 @@ class CmsLayoutStylesheet
     public static function &load($a)
     {
         // check the cache first..
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $row = null;
         if( is_numeric($a) && (int)$a > 0 ) {
             $a = (int)$a;
@@ -717,7 +719,7 @@ class CmsLayoutStylesheet
         }
         $ids = array_unique($ids);
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
         if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
 
@@ -779,7 +781,7 @@ class CmsLayoutStylesheet
      */
     public static function get_all($as_list = FALSE)
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
 
         $out = array();
         if( $as_list ) {
@@ -826,7 +828,7 @@ class CmsLayoutStylesheet
     public static function generate_unique_name($prototype,$prefix = null)
     {
         if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
         for( $i = 0; $i < 25; $i++ ) {
             $name = $prefix.$prototype;

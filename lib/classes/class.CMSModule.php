@@ -144,10 +144,10 @@ abstract class CMSModule
                 return CmsApp::get_instance();
 
             case 'config':
-                return \cms_config::get_instance();
+                return $this->app->GetConfig();
 
             case 'db':
-                return CmsApp::get_instance()->GetDb();
+                return $this->app->GetDb();
         }
 
         return null;
@@ -368,7 +368,7 @@ abstract class CMSModule
      */
     final public function GetModulePath()
     {
-        $modops = \ModuleOperations::get_instance();
+        $modops = $this->app->GetModuleOperations();
         return $modops->get_module_path( $this->GetName() );
     }
 
@@ -381,7 +381,7 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
-        $modops = \ModuleOperations::get_instance();
+        $modops = $this->app->GetModuleOperations();
         if( $modops->IsSystemModule( $this->GetName() ) ) {
             return CMS_ROOT_URL . '/lib/modules/' . $this->GetName();
         } else {
@@ -624,7 +624,8 @@ abstract class CMSModule
      * @see InitializeCommon()
      * @deprecated
      */
-    public function SetParameters() {
+    public function SetParameters()
+    {
     }
 
     /**
@@ -637,7 +638,8 @@ abstract class CMSModule
      * @see InitializeFrontend()
      * @see InitializeAdmin()
      */
-    public function InitializeCommon() {
+    public function InitializeCommon()
+    {
     }
 
     /**
@@ -652,7 +654,8 @@ abstract class CMSModule
      * @see RegisterRoute
      * @see RegisterModulePlugin
      */
-    public function InitializeFrontend() {
+    public function InitializeFrontend()
+    {
     }
 
     /**
@@ -667,7 +670,8 @@ abstract class CMSModule
      * @see CreateParameter
      * @see InitializeCommon()
      */
-    public function InitializeAdmin() {
+    public function InitializeAdmin()
+    {
     }
 
 
@@ -820,7 +824,7 @@ abstract class CMSModule
      */
     final public function GetConfig()
     {
-        return \cms_config::get_instance();
+        return $this->app->GetConfig();
     }
 
     /**
@@ -1131,7 +1135,7 @@ abstract class CMSModule
      */
     final public function CreateXMLPackage( &$message, &$filecount )
     {
-        $modops = ModuleOperations::get_instance();
+        $modops = $this->app->GetModuleOperations();
         return $modops->CreateXmlPackage($this, $message, $filecount);
     }
 
@@ -1458,14 +1462,14 @@ abstract class CMSModule
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
+        $gCms = $this->app; // in scope for compatibility reasons.
         if( $returnid != 0 ) {
             $tmp = $params;
             $tmp['module'] = $this->GetName();
             $tmp['action'] = $name;
-            \CMSMS\HookManager::do_hook('module_action', $tmp);
+            $gCms->get_hook_manager()->do_hook('module_action', $tmp);
         }
 
-        $gCms = $this->app; // in scope for compatibility reasons.
         if( $gCms->template_processing_allowed() ) {
             $smarty = $gCms->GetSmarty();
             $tpl = $smarty->createTemplate( 'string:EMPTY MODULE ACTION TEMPLATE', null, null, $parent );
@@ -2046,7 +2050,7 @@ abstract class CMSModule
      */
     static public function &GetModuleInstance(string $module)
     {
-        return cms_utils::get_module($module);
+        return $this->app->GetModuleOperations()->get_module_instance($module);
     }
 
     /**
@@ -2061,7 +2065,7 @@ abstract class CMSModule
     final public function GetModulesWithCapability(string $capability, array $params = [])
     {
         $result = [];
-        $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
+        $tmp = $this->app->GetModuleOperations()->get_modules_with_capability($capability,$params);
         if( is_array($tmp) && count($tmp) ) {
             for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                 if( is_object($tmp[$i]) ) {
@@ -2754,9 +2758,9 @@ abstract class CMSModule
      * This method must be over-ridden if this module created any events.
      *
      * @abstract
+     * @deprecated
      * @param string $eventname The name of the event
      * @return string
-     * @deprecated
      */
     public function GetEventDescription( $eventname )
     {
@@ -2801,8 +2805,8 @@ abstract class CMSModule
      * Note, only events created by this module can be removed.
      *
      * @final
-     * @param string $eventname The name of the event
      * @deprecated
+     * @param string $eventname The name of the event
      */
     final public function RemoveEvent( string $eventname )
     {
@@ -2817,6 +2821,7 @@ abstract class CMSModule
      * Note, only events created by this module can be removed.
      *
      * @final
+     * @deprecated
      * @param string $modulename The module name (or Core)
      * @param string $eventname  The name of the event
      */
@@ -2831,6 +2836,7 @@ abstract class CMSModule
      * This function will call all registered event handlers for the event
      *
      * @final
+     * @deprecated
      * @param string $eventname The name of the event
      * @param array  $params The parameters associated with this event.
      */

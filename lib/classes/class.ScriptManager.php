@@ -1,11 +1,28 @@
 <?php
 namespace CMSMS;
+use CmsApp;
 
 class ScriptManager
 {
+    /**
+     * @ignore
+     */
     private $_scripts = [];
 
+    /**
+     * @ignore
+     */
     private $_script_priority = 2;
+
+    /**
+     * @ignore
+     */
+    private $_hook_manager;
+
+    public function __construct( CmsApp $app )
+    {
+        $this->_hook_manager = $app->get_hook_manager();
+    }
 
     public function get_script_priority()
     {
@@ -46,7 +63,7 @@ class ScriptManager
         }
 
         $scripts = $this->_scripts;
-        $t_scripts = \CMSMS\HookManager::do_hook( 'Core::PreProcessScripts', $this->_scripts );
+        $t_scripts = $this->_hook_manager->do_hook( 'Core::PreProcessScripts', $this->_scripts );
         if( $t_scripts ) $scripts = $t_scripts;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -72,7 +89,7 @@ class ScriptManager
                 $content = file_get_contents( $rec['file'] );
                 $output .= $content."\n\n";
             }
-            $tmp = \CMSMS\HookManager::do_hook( 'Core::PostProcessScripts', $output );
+            $tmp = $this->_hook_manager->do_hook( 'Core::PostProcessScripts', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );
         }

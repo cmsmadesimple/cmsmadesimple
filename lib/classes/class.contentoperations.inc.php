@@ -18,6 +18,8 @@
 #
 #$Id$
 
+use CMSMS\internal\global_cache;
+
 /**
  * Content related functions.
  *
@@ -73,10 +75,29 @@ class ContentOperations
     /**
      * @ignore
      */
-    private function __construct()
+    private $_app;
+
+    /**
+     * @ignore
+     */
+    public function __construct( CmsApp $app, cms_cache_driver $driver )
     {
-        $this->_cache = \CmsApp::get_instance()->get_cache_driver();
+        if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed');
+        $this->_app = $app;
+        $this->_cache = $driver;
         $this->setup_cache();
+        self::$_instance = $this;
+    }
+
+    /**
+     * Return a reference to the only allowed instance of this singleton object
+     *
+     * @return ContentOperations
+     */
+    public static function get_instance()
+    {
+        if( !is_object( self::$_instance) ) throw new \LogicException('Instance of '.__CLASS__.' not yet created');
+        return self::$_instance;
     }
 
     /**
@@ -85,18 +106,19 @@ class ContentOperations
     private function setup_cache()
     {
         // two caches, the flat list, and the tree
+        $db = $this->_app->GetDb();
         $obj = new \CMSMS\internal\global_cachable('content_flatlist',
-                                                    function(){
-                                                         $query = 'SELECT content_id,parent_id,item_order,content_alias,active FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
-                                                         $db = \CmsApp::get_instance()->GetDb();
+                                                   function() use ($db) {
+                                                         $query = 'SELECT content_id,parent_id,item_order,content_alias,active
+                                                                   FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
                                                          return $db->GetArray($query);
                                                     });
-        \CMSMS\internal\global_cache::add_cachable($obj);
+        global_cache::add_cachable($obj);
 
         // an index of the content pages, by alias
         $obj = new \CMSMS\internal\global_cachable('content_aliasmap',
                                                     function() {
-                                                       $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+                                                       $flatlist = global_cache::get('content_flatlist');
                                                        $out = null;
                                                        foreach( $flatlist as $row ) {
                                                            $alias = $row['content_alias'];
@@ -108,22 +130,22 @@ class ContentOperations
         // a content tree
         $obj = new \CMSMS\internal\global_cachable('content_tree',
                                                     function(){
-                                                         $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+                                                         $flatlist = global_cache::get('content_flatlist');
 
                                                          // todo, embed this herer
                                                          $tree = \cms_tree_operations::load_from_list($flatlist);
                                                          return $tree;
                                                     });
-        \CMSMS\internal\global_cache::add_cachable($obj);
+        global_cache::add_cachable($obj);
 
         // a quick index of the content tree, by name
         $obj = new \CMSMS\internal\global_cachable('content_quicklist',
                                                     function(){
-                                                         $tree = \CMSMS\internal\global_cache::get('content_tree');
+                                                         $tree = global_cache::get('content_tree');
                                                          return $tree->getFlatList();
                                                     });
 
-        \CMSMS\internal\global_cache::add_cachable($obj);
+        global_cache::add_cachable($obj);
     }
 
 
@@ -153,7 +175,7 @@ class ContentOperations
      */
     protected function alias_to_id(string $alias)
     {
-        $alias_map = \CMSMS\internal\global_cache::get('content_flatlist');
+        $alias_map = global_cache::get('content_flatlist');
         if( $alias_map ) {
             foreach( $alias_map as $row ) {
                 if( $row['content_alias'] == $alias ) return $row['content_id'];
@@ -179,17 +201,6 @@ class ContentOperations
     }
 
     /**
-     * Return a reference to the only allowed instance of this singleton object
-     *
-     * @return ContentOperations
-     */
-    public static function &get_instance()
-    {
-        if( !is_object( self::$_instance ) ) self::$_instance = new self();
-        return self::$_instance;
-    }
-
-    /**
      * Return a content object for the currently requested page.
      *
      * @since 1.9
@@ -197,7 +208,7 @@ class ContentOperations
      */
     public function getContentObject()
     {
-        return \CmsApp::get_instance()->get_content_object();
+        return $this->_aqp->get_content_object();
     }
 
 
@@ -287,7 +298,7 @@ class ContentOperations
             return $obj;
         }
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
         $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
         $row = $db->GetRow($query, array($id));
         if ($row) {
@@ -344,7 +355,7 @@ class ContentOperations
      */
     public function GetDefaultContent()
     {
-        return \CMSMS\internal\global_cache::get('default_content');
+        return global_cache::get('default_content');
     }
 
 
@@ -568,7 +579,7 @@ class ContentOperations
     public function SetAllHierarchyPositions()
     {
         // load some data about all pages into memory... and convert into a hash.
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
         $sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy';
         $list = $db->GetArray($sql);
         if( !count($list) ) {
@@ -603,7 +614,7 @@ class ContentOperations
      */
     public function GetLastContentModification()
     {
-        return \CMSMS\internal\global_cache::get('latest_content_modification');
+        return global_cache::get('latest_content_modification');
     }
 
     /**
@@ -614,12 +625,12 @@ class ContentOperations
      */
     public function SetContentModified()
     {
-        \CMSMS\internal\global_cache::clear('latest_content_modification');
-        \CMSMS\internal\global_cache::clear('default_content');
-        \CMSMS\internal\global_cache::clear('content_flatlist');
-        \CMSMS\internal\global_cache::clear('content_tree');
-        \CMSMS\internal\global_cache::clear('content_quicklist');
-        \CMSMS\internal\global_cache::clear('content_aliasmap');
+        global_cache::clear('latest_content_modification');
+        global_cache::clear('default_content');
+        global_cache::clear('content_flatlist');
+        global_cache::clear('content_tree');
+        global_cache::clear('content_quicklist');
+        global_cache::clear('content_aliasmap');
         $this->_cache->clear(__CLASS__);
     }
 
@@ -631,7 +642,7 @@ class ContentOperations
      */
     public function GetAllContentAsHierarchy()
     {
-        return \CMSMS\internal\global_cache::get('content_tree');
+        return global_cache::get('content_tree');
     }
 
 
@@ -649,7 +660,7 @@ class ContentOperations
         if( $_loaded == 1 ) return;
         $_loaded = 1;
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
 
         $expr = array();
         $parms = array();
@@ -748,7 +759,7 @@ class ContentOperations
         }
 
         // gotta load it
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
 
         $contentrows = null;
         if( (!is_array($explicit_ids) || !count($explicit_ids)) ) {
@@ -843,7 +854,7 @@ class ContentOperations
      */
     public function SetDefaultContent(int $id)
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
 
         $sql = 'UPDATE '.CMS_DB_PREFIX."content SET default_content=0 WHERE default_content=1";
         $db->Execute( $sql );
@@ -866,7 +877,7 @@ class ContentOperations
     public function GetAllContent()
     {
         debug_buffer('get all content...');
-        $gCms = CmsApp::get_instance();
+        $gCms = $this->_app;
         $tree = $gCms->GetHierarchyManager();
         $list = $tree->getFlatList();
 
@@ -952,7 +963,7 @@ class ContentOperations
      */
     public function GetPageIDFromAlias( string $alias )
     {
-        $hm = CmsApp::get_instance()->GetHierarchyManager();
+        $hm = $this->_app->GetHierarchyManager();
         $node = $hm->sureGetNodeByAlias($alias);
         if( $node ) return $node->get_tag('id');
     }
@@ -966,7 +977,7 @@ class ContentOperations
      */
     public function GetPageIDFromHierarchy( string $position )
     {
-        $gCms = CmsApp::get_instance();
+        $gCms = $this->_app;
         $db = $gCms->GetDb();
 
         $query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE hierarchy = ?";
@@ -1009,7 +1020,7 @@ class ContentOperations
             $query .= " AND content_id != ?";
             $params[] = $content_id;
         }
-        $db = CmsApp::get_instance()->GetDb();
+        $db = $this->_app->GetDb();
         $out = (int) $db->GetOne($query, $params);
         if( $out > 0 ) return TRUE;
     }
@@ -1094,7 +1105,7 @@ class ContentOperations
      */
     public function CheckParentage(int $test_id,int $base_id = null)
     {
-        $gCms = CmsApp::get_instance();
+        $gCms = $this->_app;
         if( !$base_id ) $base_id = $gCms->get_content_id();
         $base_id = (int)$base_id;
         if( $base_id < 1 ) return FALSE;
@@ -1120,7 +1131,7 @@ class ContentOperations
         if( !is_array($this->_ownedpages) ) {
             $this->_ownedpages = array();
 
-            $db = CmsApp::get_instance()->GetDb();
+            $db = $this->_app->GetDb();
             $query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content WHERE owner_id = ? ORDER BY hierarchy';
             $tmp = $db->GetCol($query,array($userid));
             $data = array();
@@ -1161,7 +1172,7 @@ class ContentOperations
             $data = $this->GetOwnedPages($userid);
 
             // Get all of the pages this user has access to.
-            $groups = UserOperations::get_instance()->GetMemberGroups($userid);
+            $groups = $this->_app->GetUserOperations()->GetMemberGroups($userid);
             $list = array($userid);
             if( is_array($groups) && count($groups) ) {
                 foreach( $groups as $group ) {
@@ -1169,7 +1180,7 @@ class ContentOperations
                 }
             }
 
-            $db = CmsApp::get_instance()->GetDb();
+            $db = $this->_app->GetDb();
             $query = "SELECT A.content_id FROM ".CMS_DB_PREFIX."additional_users A
                       LEFT JOIN ".CMS_DB_PREFIX.'content B ON A.content_id = B.content_id
                       WHERE A.user_id IN ('.implode(',',$list).')
@@ -1235,7 +1246,7 @@ class ContentOperations
      */
     public function quickfind_node_by_id(int $id)
     {
-        $list = \CMSMS\internal\global_cache::get('content_quicklist');
+        $list = global_cache::get('content_quicklist');
         if( isset($list[$id]) ) return $list[$id];
     }
 } // end of class

@@ -78,7 +78,7 @@ class HookManager
     {
         $args = [ $name, $callable, $priority ];
         $hook_manager = \CmsApp::get_instance()->get_hook_manager();
-        return call_user_func_array( [ $hook_manager, 'do_hook' ], $args );
+        return call_user_func_array( [ $hook_manager, 'add_hook' ], $args );
     }
 
     /**

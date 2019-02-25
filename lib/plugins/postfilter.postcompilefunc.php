@@ -20,17 +20,18 @@ use \CMSMS\HookManager;
 
 function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
 {
+    $hookmanager = cmsms()->get_hook_manager();
     $result = explode(':', $smarty->_current_file);
 
     if (count($result) > 1) {
         switch ($result[0])    {
             case 'cms_stylesheet':
             case 'stylesheet':
-                HookManager::do_hook('Core::StylesheetPostCompile', array('stylesheet'=>&$tpl_output));
+                $hookmanager->do_hook('Core::StylesheetPostCompile', array('stylesheet'=>&$tpl_output));
                 break;
 
             case "content":
-                HookManager::do_hook('Core::ContentPostCompile', array('content' => &$tpl_output));
+                $hookmanager->do_hook('Core::ContentPostCompile', array('content' => &$tpl_output));
                 break;
 
             case 'cms_template':
@@ -38,7 +39,7 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
             case 'tpl_top':
             case 'tpl_body':
             case 'tpl_head':
-                HookManager::do_hook('Core::TemplatePostCompile', array('template'=>&$tpl_output,'type'=>$result[0]));
+                $hookmanager->do_hook('Core::TemplatePostCompile', array('template'=>&$tpl_output,'type'=>$result[0]));
                 break;
 
             default:
@@ -46,8 +47,7 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
         }
     }
 
-    HookManager::do_hook('Core::SmartyPostCompile', array('content' => &$tpl_output));
-
+    $hookmanager->do_hook('Core::SmartyPostCompile', array('content' => &$tpl_output));
     return $tpl_output;
 }
 ?>

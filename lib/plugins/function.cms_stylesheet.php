@@ -222,6 +222,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 
 function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 {
+    $hookmanager = cmsms()->get_hook_manager();
     $_contents = '';
     if(is_string($list) && !is_array($list) ) $list = array($list);
 
@@ -258,7 +259,7 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
         $_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
     }
 
-    \CMSMS\HookManager::do_hook('Core::StylesheetPostRender', [ 'content' => &$_contents ]);
+    $hookmanager->do_hook('Core::StylesheetPostRender', [ 'content' => &$_contents ]);
 
     // Write file
     $fh = fopen($filename, 'w');

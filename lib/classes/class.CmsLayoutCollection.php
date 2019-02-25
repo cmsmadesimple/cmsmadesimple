@@ -24,8 +24,6 @@
  * @license GPL
  */
 
-use \CMSMS\HookManager;
-
 /**
  * A class to manage a collection (or theme) of Templates and Stylesheets
  *
@@ -496,15 +494,16 @@ class CmsLayoutCollection
      */
     public function save()
     {
+        $app = cmsms();
         if( $this->get_id() ) {
-            HookManager::do_hook('Core::EditDesignPre', [ get_class($this) => &$this ] );
+            $app->get_hook_manager()->do_hook('Core::EditDesignPre', [ get_class($this) => &$this ] );
             $this->_update();
-            HookManager::do_hook('Core::EditDesignPost', [ get_class($this) => &$this ] );
+            $app->get_hook_manager()->do_hook('Core::EditDesignPost', [ get_class($this) => &$this ] );
             return;
         }
-        HookManager::do_hook('Core::AddDesignPre', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->do_hook('Core::AddDesignPre', [ get_class($this) => &$this ] );
         $this->_insert();
-        HookManager::do_hook('Core::AddDesignPost', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->do_hook('Core::AddDesignPost', [ get_class($this) => &$this ] );
     }
 
     /**
@@ -520,8 +519,9 @@ class CmsLayoutCollection
 
         if( !$force && $this->has_templates() ) throw new CmsLogicException('Cannot Delete a Design that has Templates Attached');
 
-        HookManager::do_hook('Core::DeleteDesignPre', [ get_class($this) => &$this ] );
-        $db = CmsApp::get_instance()->GetDb();
+        $app = cmsms();
+        $app->get_hook_manager()->do_hook('Core::DeleteDesignPre', [ get_class($this) => &$this ] );
+        $db = $app->GetDb();
         if( count($this->_css_assoc) ) {
             $query = 'DELETE FROM '.CMS_DB_PREFIX.self::CSSTABLE.' WHERE design_id = ?';
             $dbr = $db->Execute($query,array($this->get_id()));
@@ -540,7 +540,7 @@ class CmsLayoutCollection
         $dbr = $db->Execute($query,array($this->get_id()));
 
         cms_notice('Design '.$this->get_name().' deleted');
-        HookManager::do_hook('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->do_hook('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }
