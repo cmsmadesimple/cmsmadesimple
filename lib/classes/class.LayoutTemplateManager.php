@@ -217,22 +217,22 @@ class LayoutTemplateManager
     public function save_template( CmsLayoutTemplate $tpl )
     {
         if( $tpl->get_id() ) {
-            $this->hook_managerdo_hook('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
+            $this->hook_manager->do_hook('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
             $tpl = $this->_update_template($tpl);
-            $this->hook_managerdo_hook('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
+            $this->hook_manager->do_hook('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
             return;
         }
 
-        $this->hook_managerdo_hook('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
+        $this->hook_manager->do_hook('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
         $tpl = $this->_insert_template($tpl);
-        $this->hook_managerdo_hook('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
+        $this->hook_manager->do_hook('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
     }
 
     public function delete_template( CmsLayoutTemplate $tpl )
     {
         if( !$tpl->get_id() ) return;
 
-        $this->hook_managerdo_hook('Core::DeleteTemplatePre', [ get_class($tpl) => &$tpl ] );
+        $this->hook_manager->do_hook('Core::DeleteTemplatePre', [ get_class($tpl) => &$tpl ] );
         $db = $this->db;
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
         $dbr = $db->Execute($query,array($tpl->get_id()));
@@ -243,7 +243,7 @@ class LayoutTemplateManager
         @unlink($tpl->get_content_filename());
 
         audit($tpl->get_id(),'CMSMS','Template '.$tpl->get_name().' Deleted');
-        $this->hook_managerdo_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
+        $this->hook_manager->do_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
         unset($tpl->_data['id']);
         $this->cache_driver->clear(__CLASS__);
     }
