@@ -174,7 +174,7 @@ class wizard
       $urlmain = explode('?',$url,2);
 
       $parts = null;
-      parse_str($urlmain[1],$parts);
+      if( isset($urlmain[1]) ) parse_str($urlmain[1],$parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
       if( $parts[$this->_stepvar] > $this->num_steps() ) return;
 
