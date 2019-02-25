@@ -24,7 +24,6 @@
  * @package CMS
  */
 use CMSMS\internal\hook_mapping;
-use CmsApp;
 
 /**
  * Class for handling and dispatching system and user defined events.
