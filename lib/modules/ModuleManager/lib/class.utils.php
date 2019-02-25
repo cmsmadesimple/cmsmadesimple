@@ -219,6 +219,10 @@ final class utils
                 }
             }
             else {
+                if( $req->getStatus() == 0 ) {
+                    // could not connect at all, prolly a timeout
+                    cms_error('Could not connect to module server, possible timeout');
+                }
                 $req->clearCache();
             }
         }
