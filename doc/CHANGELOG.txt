@@ -155,7 +155,8 @@ Core - General
   - IMPROVEMENT: CmsApp now acts more as a service provider module.  Begin to remove singletons
   - IMPROVEMENT: All core functionality that utilizes a cache can now take advantage of the APC cache
   - CHANGE: remove the php_memory_limit config setting (php.ini, .htaccess, or .user.ini files can handle this).
-
+  - CHANGE: cms_config class does not output ending php tag when writing the file
+  - CHANGE: Significant code cleanup... start getting rid of singletons, use CmsApp as a service provider
 
 News v2.21.5
   - Minor cleaning of parameters.
@@ -188,6 +189,7 @@ Installation Assistant - v1.4
 ModuleManaver v2.2
   - XML import code now lives here.
   - XML export code now lives here.
+  - Now output an error message to logs when the is_connection_ok test fails
 
 FileManager v1.6.4
   - modified to use CMS_ROOT_URL
