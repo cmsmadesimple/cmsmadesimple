@@ -2050,7 +2050,7 @@ abstract class CMSModule
      */
     static public function &GetModuleInstance(string $module)
     {
-        return $this->app->GetModuleOperations()->get_module_instance($module);
+        return cmsms()->GetModuleOperations()->get_module_instance($module);
     }
 
     /**

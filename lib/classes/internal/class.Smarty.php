@@ -75,6 +75,7 @@ class Smarty extends smarty_base_template
         $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
         $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
+        $config = $app->GetConfig();
         if( $app->is_frontend_request()) {
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
@@ -99,7 +100,6 @@ class Smarty extends smarty_base_template
             //$this->autoloadFilters();
 
             // Enable security object
-            $config = $app->GetConfig();
             if( !$config['permissive_smarty'] ) $this->enableSecurity('\\CMSMS\\internal\\smarty_security_policy');
         }
         else if($app->test_state(CmsApp::STATE_ADMIN_PAGE)) {

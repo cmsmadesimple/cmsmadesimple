@@ -815,7 +815,7 @@ abstract class CmsAdminThemeBase
      */
     protected function get_admin_navigation()
     {
-        $smarty = \Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
         $this->_populate_admin_navigation();
         return $this->_menuItems;

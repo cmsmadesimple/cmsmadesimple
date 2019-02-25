@@ -135,7 +135,7 @@ final class CmsJobManager extends \CMSModule
     private function read_lock()
     {
         if( $this->_lock < 0 ) {
-            $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+            $fn = TMP_CACHE_LOCATION.'/j'.md5(__FILE__.__CLASS__.'1').'.dat';
             $this->_lock = (is_file($fn)) ? filemtime($fn) : 0;
         }
         return $this->_lock;
@@ -143,14 +143,14 @@ final class CmsJobManager extends \CMSModule
 
     protected function lock()
     {
-        $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+        $fn = TMP_CACHE_LOCATION.'/j'.md5(__FILE__.__CLASS__.'1').'.dat';
         touch( $fn );
         $this->_lock = time();
     }
 
     protected function unlock()
     {
-        $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+        $fn = TMP_CACHE_LOCATION.'/j'.md5(__FILE__.__CLASS__.'1').'.dat';
         if( is_file($fn) ) unlink($fn);
         $this->_lock = null;
     }

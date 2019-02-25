@@ -119,7 +119,7 @@ class ModuleManager extends CMSModule
             $this->SetCurrentTab( $tab );
             unset( $params['__activetab'] );
         }
-        $smarty = \Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $smarty->assign($this->GetName(), $this);
         $smarty->assign('mod', $this);
         parent::DoAction( $action, $id, $params, $returnid );

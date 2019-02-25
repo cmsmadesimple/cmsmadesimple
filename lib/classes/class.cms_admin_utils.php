@@ -71,7 +71,7 @@ final class cms_admin_utils
         $theme = cms_utils::get_theme_object();
         if( !is_object($theme) ) return;
 
-        $smarty = \Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $module = $smarty->get_template_vars('actionmodule');
 
         $dirs = array();
@@ -123,7 +123,8 @@ final class cms_admin_utils
      */
     public static function get_help_tag()
     {
-        if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+        $app = cmsms();
+        if( $app->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
         $params = array();
         $args = func_get_args();
@@ -166,7 +167,7 @@ final class cms_admin_utils
         }
 
         if( !$key1 ) {
-            $smarty = \Smarty_CMS::get_instance();
+            $smarty = $app->GetSmarty();
             $module = $smarty->get_template_vars('actionmodule');
             if( $module ) {
                 $key1 = $module;
