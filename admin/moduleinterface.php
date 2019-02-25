@@ -29,7 +29,7 @@ check_login();
 $userid = get_userid();
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-$smarty = \Smarty_CMS::get_instance();
+$smarty = cmsms()->GetSmarty();
 
 $id = 'm1_';
 $module = '';

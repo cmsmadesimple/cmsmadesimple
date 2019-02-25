@@ -32,6 +32,7 @@
  */
 
 namespace CMSMS;
+use CmsApp;
 
 /**
  * A class to manage hooks, and to call hook handlers.
@@ -77,7 +78,7 @@ class HookManager
     public static function add_hook($name,$callable,$priority = self::PRIORITY_NORMAL)
     {
         $args = [ $name, $callable, $priority ];
-        $hook_manager = \CmsApp::get_instance()->get_hook_manager();
+        $hook_manager = CmsApp::get_instance()->get_hook_manager();
         return call_user_func_array( [ $hook_manager, 'add_hook' ], $args );
     }
 
@@ -92,7 +93,7 @@ class HookManager
     public static function do_hook()
     {
         $args = func_get_args();
-        $hook_manager = \CmsApp::get_instance()->get_hook_manager();
+        $hook_manager = CmsApp::get_instance()->get_hook_manager();
         return call_user_func_array( [ $hook_manager, 'do_hook' ], $args );
     }
 
@@ -109,7 +110,7 @@ class HookManager
     public static function do_hook_first_result()
     {
         $args = func_get_args();
-        $hook_manager = \CmsApp::get_instance()->get_hook_manager();
+        $hook_manager = CmsApp::get_instance()->get_hook_manager();
         return call_user_func_array( [ $hook_manager, 'do_hook_first_result' ], $args );
     }
 
@@ -126,7 +127,7 @@ class HookManager
     public static function do_hook_accumulate()
     {
         $args = func_get_args();
-        $hook_manager = \CmsApp::get_instance()->get_hook_manager();
+        $hook_manager = CmsApp::get_instance()->get_hook_manager();
         return call_user_func_array( [ $hook_manager, 'do_hook_accumulate' ], $args );
     }
 } // end of class

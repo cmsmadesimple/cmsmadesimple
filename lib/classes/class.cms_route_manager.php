@@ -64,7 +64,8 @@ final class cms_route_manager
     /**
      * @ignore
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     /**
@@ -209,9 +210,7 @@ final class cms_route_manager
 
         $db = CmsApp::get_instance()->GetDb();
         $dbr = $db->Execute($query,array($route['term'], $route['key1'], $route['key2'], $route['key3'], serialize($route)));
-        if( !$dbr ) {
-            return FALSE;
-        }
+        if( !$dbr ) return FALSE;
 
         self::_clear_cache();
         return TRUE;
@@ -371,7 +370,7 @@ final class cms_route_manager
 
     private static function _get_cache_driver()
     {
-        return \CmsApp::get_instance()->get_cache_driver();
+        return CmsApp::get_instance()->get_cache_driver();
     }
 
     /**

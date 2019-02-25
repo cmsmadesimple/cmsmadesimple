@@ -19,6 +19,8 @@
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
 namespace CMSMS\internal;
+use CmsApp;
+use cms_config;
 
 /**
  * @package CMS
@@ -32,15 +34,12 @@ namespace CMSMS\internal;
  */
 class Smarty extends smarty_base_template
 {
-
-    private static $_instance;
-
     /**
      * Constructor
      *
      * @param array The hash of CMSMS config settings
      */
-    public function __construct()
+    public function __construct( CmsApp $app )
     {
         parent::__construct();
         $this->direct_access_security = TRUE;
@@ -76,9 +75,7 @@ class Smarty extends smarty_base_template
         $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
         $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
-        $_gCms = \CmsApp::get_instance();
-        $config = \cms_config::get_instance();
-        if( $_gCms->is_frontend_request()) {
+        if( $app->is_frontend_request()) {
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
             if(isset($CMS_INSTALL_PAGE)) return;
@@ -102,26 +99,16 @@ class Smarty extends smarty_base_template
             //$this->autoloadFilters();
 
             // Enable security object
+            $config = $app->GetConfig();
             if( !$config['permissive_smarty'] ) $this->enableSecurity('\\CMSMS\\internal\\smarty_security_policy');
         }
-        else if($_gCms->test_state(\CmsApp::STATE_ADMIN_PAGE)) {
+        else if($app->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->addTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');;
         }
-    }
-
-    /**
-     * get_instance method
-     *
-     * @return object $this
-     */
-    public static function &get_instance()
-    {
-        if( !self::$_instance ) self::$_instance = new self;
-        return self::$_instance;
     }
 
     /**
@@ -210,7 +197,7 @@ class Smarty extends smarty_base_template
 
         if( $type != 'function' ) return;
 
-        if( \CmsApp::get_instance()->is_frontend_request() ) {
+        if( CmsApp::get_instance()->is_frontend_request() ) {
             $row = \cms_module_smarty_plugin_manager::load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {

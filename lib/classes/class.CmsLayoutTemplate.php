@@ -59,7 +59,7 @@ class CmsLayoutTemplate
      */
     protected static function _mgr()
     {
-        return \CmsApp::get_instance()->get_template_manager();
+        return CmsApp::get_instance()->get_template_manager();
     }
 
     /**

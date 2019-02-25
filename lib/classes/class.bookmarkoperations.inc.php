@@ -18,6 +18,7 @@
 #
 #$Id$
 
+
 /**
  * Bookmark related functions.
  *
@@ -80,8 +81,7 @@ class BookmarkOperations
      */
     public function LoadBookmarks($user_id)
     {
-        $gCms = \CmsApp::get_instance();
-        $db = $gCms->GetDb();
+        $db = cmsms()->GetDb();
 
         $result = array();
         $query = "SELECT bookmark_id, user_id, title, url FROM ".CMS_DB_PREFIX."admin_bookmarks WHERE user_id = ? ORDER BY title";
@@ -109,7 +109,7 @@ class BookmarkOperations
     public function &LoadBookmarkByID($id)
     {
         $result = null;
-        $db = \CmsApp::get_instance()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
 
         $query = "SELECT bookmark_id, user_id, title, url FROM ".CMS_DB_PREFIX."admin_bookmarks WHERE bookmark_id = ?";
         $dbresult = $db->Execute($query, array($id));
@@ -135,7 +135,7 @@ class BookmarkOperations
     public function InsertBookmark(Bookmark $bookmark)
     {
         $result = -1;
-        $db = \CmsApp::get_instance()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
 
         $bookmark->url = $this->_prep_for_saving($bookmark->url);
         $new_bookmark_id = $db->GenID(CMS_DB_PREFIX."admin_bookmarks_seq");
@@ -155,7 +155,7 @@ class BookmarkOperations
     public function UpdateBookmark(Bookmark $bookmark)
     {
         $result = false;
-        $db = \CmsApp::get_instance()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
 
         $bookmark->url = $this->_prep_for_saving($bookmark->url);
         $query = "UPDATE ".CMS_DB_PREFIX."admin_bookmarks SET user_id = ?, title = ?, url = ? WHERE bookmark_id = ?";
@@ -174,11 +174,11 @@ class BookmarkOperations
     public function DeleteBookmarkByID($id)
     {
         $result = false;
-        $db = \CmsApp::get_instance()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
 
         $query = "DELETE FROM ".CMS_DB_PREFIX."admin_bookmarks where bookmark_id = ?";
         $dbresult = $db->Execute($query, array($id));
         if ($dbresult !== false) $result = true;
         return $result;
     }
-}
+} // class

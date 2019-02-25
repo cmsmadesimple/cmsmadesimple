@@ -138,7 +138,7 @@ if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
 $_app->GetContentOperations();
 global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
-                                            function(){
+                                           function() {
                                                 $db = \CmsApp::get_instance()->GetDb();
                                                 $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
                                                 return $db->GetOne($query);

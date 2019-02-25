@@ -456,7 +456,7 @@ final class cms_config implements ArrayAccess
                       if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
                 }
                 $prefix = 'http://';
-                if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
+                if( cmsms()->is_https_request() ) $prefix = 'https://';
                 $str = $prefix.$this->calculate_request_hostname().$path;
                 $this->_cache[$key] = $str;
                 return $str;

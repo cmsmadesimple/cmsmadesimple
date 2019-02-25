@@ -164,7 +164,7 @@ abstract class CmsAdminThemeBase
     {
         if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
 
-        $this->_cache_driver = \CmsApp::get_instance()->get_cache_driver();
+        $this->_cache_driver = CmsApp::get_instance()->get_cache_driver();
         $this->_url = $_SERVER['SCRIPT_NAME'];
         $this->_query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
         if( $this->_query == '' && isset($_POST['mact']) ) {

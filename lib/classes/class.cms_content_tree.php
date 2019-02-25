@@ -256,7 +256,7 @@ class cms_content_tree extends cms_tree
         if( !$id ) throw new \LogicException('Cannot load content if there is no id');
 
         // if load siblings, get the parent, and it's child ids
-        $ops = \CmsApp::get_instance()->GetContentOperations();
+        $ops = CmsApp::get_instance()->GetContentOperations();
         if( $loadsiblings  ) {
             // get the parent, then load it's children... this will fill any cache.
             $parent = $this->get_parent();

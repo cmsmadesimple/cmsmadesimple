@@ -142,7 +142,7 @@ class MarigoldTheme extends CmsAdminThemeBase
     }
 
     public function do_toppage(string $section_name) {
-        $smarty = Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $otd = $smarty->template_dir;
         $smarty->template_dir = __DIR__ . '/templates';
         if ($section_name) {
@@ -184,7 +184,7 @@ class MarigoldTheme extends CmsAdminThemeBase
 
     public function do_loginpage( string $pageid = null )
     {
-        $smarty = Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $old = $smarty->GetTemplateDir();
         $smarty->SetTemplateDir( __DIR__.'/templates' );
 
@@ -213,22 +213,10 @@ class MarigoldTheme extends CmsAdminThemeBase
     public function do_login(array $params)
     {
         die('not used '.__METHOD__);
-        // by default we're gonna grab the theme name
-        $config = cms_config::get_instance();
-        $smarty = Smarty_CMS::get_instance();
-
-        $smarty->template_dir = __DIR__ . '/templates';
-        global $error,$warningLogin,$acceptLogin,$changepwhash;
-        $fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
-        include($fn);
-
-        $smarty->assign('lang', get_site_preference('frontendlang'));
-        $_contents = $smarty->display('login.tpl');
-        return $_contents;
     }
 
     public function postprocess(string $html) {
-        $smarty = Smarty_CMS::get_instance();
+        $smarty = cmsms()->GetSmarty();
         $otd = $smarty->template_dir;
         $smarty->template_dir = __DIR__ . '/templates';
         $module_help_type = $this->get_value('module_help_type');

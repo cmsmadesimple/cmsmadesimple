@@ -75,8 +75,8 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     {
         if( !is_null($this->_rs) ) return;
 
-	$gCms = \CmsApp::get_instance();
-	$tpl_table_name = $gCms->get_template_manager()->template_table_name();
+        $gCms = CmsApp::get_instance();
+        $tpl_table_name = $gCms->get_template_manager()->template_table_name();
         $query = 'SELECT SQL_CALC_FOUND_ROWS tpl.id FROM '.$tpl_table_name.' tpl
               LEFT JOIN '.$tpl_table_name.' type ON tpl.type_id = type.id';
         $where = array('id'=>array(),'type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());

@@ -924,7 +924,7 @@ abstract class ContentBase
     public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
     {
         $contentops = ContentOperations::get_instance();
-        $config = \cms_config::get_instance();
+        $config = cms_config::get_instance();
         if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
             $alias = trim($this->mMenuText);
             if ($alias == '') $alias = trim($this->mName);
@@ -1294,7 +1294,8 @@ abstract class ContentBase
      */
     public function Save()
     {
-        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
+        $gCms = cmsms();
+        $gCms->get_hook_manager()->do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
 
         if( !is_array($this->_props) ) {
             debug_buffer('save is loading properties');
@@ -1308,10 +1309,10 @@ abstract class ContentBase
             $this->Insert();
         }
 
-        $contentops = ContentOperations::get_instance();
+        $contentops = $gCms->GetContentOperations();
         $contentops->SetContentModified();
         $contentops->SetAllHierarchyPositions();
-        \CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
+        $gCms->get_hook_manager()->do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
     }
 
     /**
@@ -1608,8 +1609,8 @@ abstract class ContentBase
     public function Delete()
     {
         $gCms = CmsApp::get_instance();
-        	\CMSMS\HookManager::do_hook('Core::ContentDeletePre', [ 'content' => &$this ] );
         $db = $gCms->GetDb();
+        $gCms->get_hook_manager()->do_hook('Core::ContentDeletePre', [ 'content' => &$this ] );
         $result = false;
 
         if ($this->mId > 0) {
@@ -1634,7 +1635,7 @@ abstract class ContentBase
             if( $this->mURL != '' ) cms_route_manager::del_static($this->mURL);
         }
 
-        	\CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
+        $gCms->get_hook_manager()->do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
         $this->mId = -1;
         $this->mItemOrder = -1;
     }
@@ -1752,7 +1753,7 @@ abstract class ContentBase
      */
     public function GetURL($rewrite = true)
     {
-        $config = \cms_config::get_instance();
+        $config = cms_config::get_instance();
         $url = "";
         $alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
@@ -1988,7 +1989,7 @@ abstract class ContentBase
     public function GetAdditionalEditors()
     {
         if (!isset($this->mAdditionalEditors)) {
-            $db = \CmsApp::get_instance()->GetDb();
+            $db = CmsApp::get_instance()->GetDb();
             $this->mAdditionalEditors = array();
 
             $query = "SELECT user_id FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";
@@ -2198,7 +2199,7 @@ abstract class ContentBase
      */
     protected function display_single_element(string $one, bool $adding)
     {
-        $config = \cms_config::get_instance();
+        $config = cms_config::get_instance();
 
         switch( $one ) {
             case 'cachable':

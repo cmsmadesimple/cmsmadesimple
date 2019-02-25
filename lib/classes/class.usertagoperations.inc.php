@@ -104,7 +104,7 @@ final class UserTagOperations
      */
     public function UserTagExists($name)
     {
-        $gCms = \CmsApp::get_instance();
+        $gCms = CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
         return $mgr->plugin_exists($name);
     }
@@ -146,7 +146,7 @@ final class UserTagOperations
     */
     public function ListUserTags()
     {
-        $gCms = \CmsApp::get_instance();
+        $gCms = CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
         $tmp = $mgr->get_list();
         if( !$tmp ) return;
@@ -170,7 +170,7 @@ final class UserTagOperations
      */
     public function CallUserTag($name, &$params)
     {
-        $gCms = \CmsApp::get_instance();
+        $gCms = CmsApp::get_instance();
         $mgr = $gCms->GetSimplePluginOperations();
         return $mgr->call_plugin($name,$params,$gCms->GetSmarty());
     }

@@ -307,10 +307,9 @@ function create_file_dropdown(string $name,string $dir,string $value,string $all
  */
 function get_pageid_or_alias_from_url()
 {
-    $gCms = \CmsApp::get_instance();
-    $config = \cms_config::get_instance();
-    $contentops = ContentOperations::get_instance();
-    $smarty = \Smarty_CMS::get_instance();
+    $gCms = cmsms();
+    $config = $gCms->GetConfig();
+    $contentops = $gCms->GetContentOperations();
 
     $page = '';
     $query_var = $config['query_var'];

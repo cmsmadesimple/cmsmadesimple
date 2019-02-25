@@ -19,6 +19,7 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 use CMSMS\internal\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
+use \CMSMS\internal\Smarty;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
 use CMSMS\ScriptManager;
@@ -511,7 +512,9 @@ final class CmsApp
             $out = null;
             return $out;
         }
-        return \CMSMS\internal\Smarty::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new Smarty($this);
+        return $_obj;
     }
 
     /**

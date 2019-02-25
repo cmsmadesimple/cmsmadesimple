@@ -63,9 +63,9 @@ final class cms_utils
     /**
      * @ignore
      */
-    final private function __construct() {
+    final private function __construct()
+    {
     }
-
 
     /**
      * Get data that was stored elsewhere in the application.
@@ -78,7 +78,6 @@ final class cms_utils
     {
         if( is_array( self::$_vars ) && isset(self::$_vars[$key]) ) return self::$_vars[$key];
     }
-
 
     /**
      * Set data for later use.
@@ -97,7 +96,6 @@ final class cms_utils
         self::$_vars[$key] = $value;
     }
 
-
     /**
      * A convenience function to return the object representing an installed module.
      *
@@ -114,9 +112,8 @@ final class cms_utils
      */
     public static function &get_module(string $name,string $version = '')
     {
-        return ModuleOperations::get_instance()->get_module_instance($name,$version);
+        return cmsms()->GetModuleOperations()->get_module_instance($name,$version);
     }
-
 
     /**
      * A convenience function to return an indication if a module is availalbe.
@@ -130,9 +127,8 @@ final class cms_utils
      */
     final public static function module_available(string $name)
     {
-        return ModuleOperations::get_instance()->IsModuleActive($name);
+        return cmsms()->GetModuleOperations()->IsModuleActive($name);
     }
-
 
     /**
      * A convenience function to return the current database instance.
@@ -144,9 +140,8 @@ final class cms_utils
      */
     final public static function & get_db()
     {
-        return \CmsApp::get_instance()->GetDb();
+        return cmsms()->GetDb();
     }
-
 
     /**
      * A convenience function to return a handle to the global CMSMS config.
@@ -157,9 +152,8 @@ final class cms_utils
      */
     final public static function & get_config()
     {
-        return \cms_config::get_instance();
+        return cmsms()->GetConfig();
     }
-
 
     /**
      * A convenience function to return a handle to the CMSMS Smarty object.
@@ -171,9 +165,8 @@ final class cms_utils
      */
     final public static function & get_smarty()
     {
-        return \Smarty_CMS::get_instance();
+        return cmsms()->GetSmarty();
     }
-
 
     /**
      * A convenience functon to return a reference to the current content object.
@@ -186,7 +179,7 @@ final class cms_utils
      */
     final public static function get_current_content()
     {
-        return CmsApp::get_instance()->get_content_object();
+        return cmsms()->get_content_object();
     }
 
 
@@ -201,10 +194,9 @@ final class cms_utils
      */
     final public static function get_current_alias()
     {
-        $obj = CmsApp::get_instance()->get_content_object();
+        $obj = cmsms()->get_content_object();
         if( $obj ) return $obj->Alias();
     }
-
 
     /**
      * A convenience function to return the page id of the current page
@@ -217,9 +209,8 @@ final class cms_utils
      */
     final public static function get_current_pageid()
     {
-        return CmsApp::get_instance()->get_content_id();
+        return cmsms()->get_content_id();
     }
-
 
     /**
      * A convenient method to get the object pointer to the appropriate wysiwyg module.
@@ -234,9 +225,8 @@ final class cms_utils
      */
     public static function &get_wysiwyg_module(string $module_name = null)
     {
-        return ModuleOperations::get_instance()->GetWYSIWYGModule($module_name);
+        return cmsms()->GetModuleOperations()->GetWYSIWYGModule($module_name);
     }
-
 
     /**
      * A convenient method to get the currently selected syntax highlighter.
@@ -248,9 +238,8 @@ final class cms_utils
      */
     public static function &get_syntax_highlighter_module()
     {
-        return ModuleOperations::get_instance()->GetSyntaxHighlighter();
+        return cmsms()->GetModuleOperations()->GetSyntaxHighlighter();
     }
-
 
     /**
      * A convenience method to get the currently selected search module.
@@ -261,7 +250,7 @@ final class cms_utils
      */
     public static function &get_search_module()
     {
-        return ModuleOperations::get_instance()->GetSearchModule();
+        return cmsms()->GetModuleOperations()->GetSearchModule();
     }
 
     /**
@@ -273,7 +262,7 @@ final class cms_utils
      */
     public static function &get_filepicker_module()
     {
-        return ModuleOperations::get_instance()->GetFilePickerModule();
+        return cmsms()->GetModuleOperations()->GetFilePickerModule();
     }
 
     /**
@@ -311,6 +300,5 @@ final class cms_utils
     {
         return CmsAdminThemeBase::GetThemeObject();
     }
-} // end of class
 
-?>
+} // end of class

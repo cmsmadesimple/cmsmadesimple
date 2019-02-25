@@ -38,10 +38,12 @@
 function cms_module_plugin($params,&$smarty)
 {
     //if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
+    $app = cmsms();
+    $modops = $app->GetModuleOperations();
     $modulename = '';
     $action = 'default';
     $inline = false;
-    $returnid = CmsApp::get_instance()->get_content_id();
+    $returnid = $app->get_content_id();
     $id = null;
     if (isset($params['module'])) {
         $modulename = $params['module'];
@@ -91,13 +93,13 @@ function cms_module_plugin($params,&$smarty)
                 // the action is for this instance of the module and we're inline (the results are supposed to replace
                 // the tag, not {content}
                 $action = $mactaction;
-                $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
+                $params = array_merge($params, $modops->GetModuleParameters($id));
             }
         }
     }
 
     class_exists($modulename); // autoload? why
-    $module = cms_utils::get_module($modulename);
+    $module = $modops->get_module_instance($modulename);
     global $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $CMS_INSTALL;
     if( $module && ($module->isPluginModule() || (isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL) && !isset($CMS_LOGIN_PAGE) ) ) ) {
         @ob_start();

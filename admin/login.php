@@ -24,8 +24,9 @@ $CMS_ADMIN_PAGE=1;
 $CMS_LOGIN_PAGE=1;
 
 require_once("../lib/include.php");
-$gCms = \CmsApp::get_instance();
+$gCms = cmsms();
 $db = $gCms->GetDb();
+$smarty = $gCms->GetSmarty();
 
 // if we allow modules to do the login operations
 // module registers itself as 'admin login module' in the constructor
@@ -40,7 +41,6 @@ if( !$auth_module ) throw new \LogicException('FATAL: Could not find a suitable 
 $action = 'admin_login';
 $id = '__';
 $params = [];
-$smarty = \CmsApp::get_instance()->GetSmarty();
 
 if( isset( $_REQUEST['mact'] ) ) {
     $parts = explode(',', cms_htmlentities( $_REQUEST['mact'] ), 4 );

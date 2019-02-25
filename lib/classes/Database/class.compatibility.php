@@ -102,7 +102,7 @@ namespace CMSMS\Database {
             debug_to_log("Database Error: $errtype($error_number) - $error_msg");
             debug_bt_to_log();
             if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-            \CmsApp::get_instance()->add_error(debug_display($error_msg, '', false, true));
+            cmsms()->add_error(debug_display($error_msg, '', false, true));
             throw new Error( $error_msg.' -- '.$conn->ErrorMsg(), $error_number );
         }
 
@@ -151,7 +151,7 @@ namespace {
     {
         // now that our connection object is stateless... this is just a wrapper
         // for our global db instance.... but should not be called.
-        return \CmsApp::get_instance()->GetDb();
+        return cmsms()->GetDb();
     }
 
     /**
