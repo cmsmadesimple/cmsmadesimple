@@ -737,7 +737,7 @@ abstract class CmsAdminThemeBase
             // and build breadcrumbs
             $item =& $this->_menuItems[$selected_key];
             $item['selected'] = TRUE;
-            $this->_title .= $item['title'];
+            $this->_title = $item['title'];
             $this->_active_item = $selected_key;
             $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
             if( $item['parent'] != -1 ) {
