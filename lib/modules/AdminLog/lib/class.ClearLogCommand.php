@@ -11,7 +11,7 @@ class ClearLogCommand extends Command
     public function __construct( App $app )
     {
         parent::__construct( $app, 'adminlog-clear' );
-        $this->setDescription('List installed modules');
+        $this->setDescription('Clear the admin log');
     }
 
     public function handle()
