@@ -22,8 +22,6 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
-
 use CMSMS\Async\Job as Job;
 use CMSMS\Async\CronJobTrait;
 use CmsJobManager\utils;

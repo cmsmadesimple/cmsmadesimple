@@ -142,16 +142,19 @@ final class CmsApp
     {
         switch($key) {
             case 'config':
-                return cms_config::get_instance();
+                return $this->GetConfig();
         }
     }
 
     /**
      * Constructor
      */
-    protected function __construct()
+    public function __construct()
     {
-        register_shutdown_function(array(&$this, 'dbshutdown'));
+        if( self::$_instance ) throw new \LogicException("Only one instance of ".__CLASS__.' is permitted');
+        self::$_instance = $this;
+
+        register_shutdown_function([&$this, 'dbshutdown']);
     }
 
     /**
@@ -161,7 +164,7 @@ final class CmsApp
      */
     public static function &get_instance()
     {
-        if( !isset(self::$_instance)  ) self::$_instance = new CmsApp();
+        if( !isset(self::$_instance)  ) throw new \LogicException('An instance of '.__CLASS__.' has not been created');
         return self::$_instance;
     }
 
@@ -364,7 +367,7 @@ final class CmsApp
         global $DONT_LOAD_DB;
 
         if( !isset($DONT_LOAD_DB) ) {
-            $config = \cms_config::get_instance();
+            $config = $this->GetConfig();
             $this->db = \CMSMS\Database\compatibility::init($config);
         }
 
@@ -391,7 +394,9 @@ final class CmsApp
     */
     final public function GetConfig()
     {
-        return cms_config::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new cms_config($this);
+        return $_obj;
     }
 
 
@@ -585,7 +590,7 @@ final class CmsApp
             $config = $this->GetConfig();
             $ttl = (int) $config['cache_ttl'];
             if( !$ttl ) $ttl = 24 * 3600;
-	    $ttl = max(1,min($ttl,365 * 24 * 3600));
+            $ttl = max(1,min($ttl,365 * 24 * 3600));
             if( $config['cache_driver'] == 'APC' ) {
                 // get a TTL.
                 $_driver = new apc_cache_driver( $ttl );
@@ -628,13 +633,13 @@ final class CmsApp
     }
 
     /**
-    * Disconnect from the database.
-    *
-    * @final
-    * @internal
-    * @ignore
-    * @access private
-    */
+     * Disconnect from the database.
+     *
+     * @final
+     * @internal
+     * @ignore
+     * @access private
+     */
     public function dbshutdown()
     {
         if (isset($this->db)) {
@@ -792,12 +797,12 @@ final class CmsApp
     }
 
     /**
-   * A convenience method to test if the current request is a frontend request.
-   *
-   * @since 1.11.2
-   * @author Robert Campbell
-   * @return bool
-   */
+     * A convenience method to test if the current request is a frontend request.
+     *
+     * @since 1.11.2
+     * @author Robert Campbell
+     * @return bool
+     */
     public function is_frontend_request()
     {
         $tmp = $this->get_states();

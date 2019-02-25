@@ -83,19 +83,22 @@ require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
 debug_buffer('done loading basic files');
 
-#Grab the current configuration
-$_app = CmsApp::get_instance(); // for use in this file only.
+//
+// setup our application
+//
+$_app = new CmsApp;
 $config = $_app->GetConfig();
 $_app->GetModuleOperations();
+$_app->GetContentOperations(); // compatibility
 \CMSMS\AuditManager::init();
-
-// Set the timezone
-if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);
     @error_reporting(E_ALL);
 }
+
+// Set the timezone
+if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
 if( cms_to_bool(ini_get('register_globals')) ) {
     echo 'FATAL ERROR: For security reasons register_globals must not be enabled for any CMSMS install.  Please adjust your PHP configuration settings to disable this feature.';
@@ -114,8 +117,6 @@ if( isset($CMS_ADMIN_PAGE) ) {
 
 require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 
-// new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
-// if the cache is too old, or the cached value has been cleared or not yet been saved.
 if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
     // todo: put this into a class, as it is a remote control mechanism
     // make this secure, but do not document/advertise it.  it's internal only
@@ -135,7 +136,8 @@ if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
     exit();
 }
 
-$_app->GetContentOperations();
+// new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
+// if the cache is too old, or the cached value has been cleared or not yet been saved.
 global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
                                            function() {
@@ -204,12 +206,12 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 if (! isset($CMS_INSTALL_PAGE)) {
     $_app->GetHookMappingManager(); // initialize hook mappings.
 
-    // Set a umask
+    // Set a umask (should prolly go into the CmsApp stuff)
     $global_umask = cms_siteprefs::get('global_umask','');
     if( $global_umask != '' ) umask( octdec($global_umask) );
 
     // Load all eligible modules
-    $modops = ModuleOperations::get_instance();
+    $modops = $_app->GetModuleOperations();
     $modops->LoadStaticModules();
 
     // test for cron.

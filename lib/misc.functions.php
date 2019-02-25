@@ -388,7 +388,7 @@ function debug_display($var, string $title="", bool $echo_to_screen = true, bool
  */
 function debug_output($var, string $title="")
 {
-    $config = \cms_config::get_instance();
+    $config = cmsms()->GetConfig();
     if( $config["debug"] == true) debug_display($var, $title, true);
 }
 
@@ -404,7 +404,7 @@ function debug_output($var, string $title="")
  */
 function debug_to_log($var, string $title='',string $filename = '')
 {
-    $config = \cms_config::get_instance();
+    $config = cmsms()->GetConfig();
     if( $config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
         if( $filename == '' ) {
             $filename = TMP_CACHE_LOCATION . '/debug.log';

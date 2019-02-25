@@ -61,7 +61,7 @@ function check_checksum_data(&$report)
         return false;
     }
 
-    $config = \cms_config::get_instance();
+    $config = cmsms()->GetConfig();
     $salt = md5_file($config['root_path']."/lib/version.php").md5_file($config['root_path']."/index.php");
     $filenotfound = array();
     $notreadable = 0;

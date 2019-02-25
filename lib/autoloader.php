@@ -42,7 +42,8 @@ function __cms_load($filename)
  */
 function cms_autoloader($classname)
 {
-    $gCms = CmsApp::get_instance();
+    static $gCms;
+    if( !$gCms ) $gCms = cmsms(); // for compatibility
 
     if( startswith($classname,'CMSMS\\') ) {
         $path = str_replace('\\','/',substr($classname,6));

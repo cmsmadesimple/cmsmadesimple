@@ -75,7 +75,97 @@ final class cms_config implements ArrayAccess
     /**
      * ignore
      */
-    private function __construct()  {
+    public function __construct( CmsApp $app )
+    {
+        if( self::$_instance ) throw new \LogicException("Only one instance of ".__CLASS__.' is permitted');
+        self::$_instance = $this;
+
+        // now load the config
+        $this->load_config();
+
+        if( !defined('TMP_CACHE_LOCATION') ) {
+            /**
+             * A constant to indicate the location where private cachable files can be written.
+             *
+             * @return string
+             */
+            define('TMP_CACHE_LOCATION',$this['tmp_cache_location']);
+
+            /**
+             * A constant to indicate where public (browsable) cachable files can be written.
+             *
+             * @return string
+             */
+            define('PUBLIC_CACHE_LOCATION',$this['public_cache_location']);
+
+            /**
+             * A constant to indicate the public address for cachable files.
+             *
+             * @return string
+             */
+            define('PUBLIC_CACHE_URL',$this['public_cache_url']);
+
+            /**
+             * A constant containing the smarty template compile directory.
+             *
+             * @return string
+             */
+            define('TMP_TEMPLATES_C_LOCATION',$this['tmp_templates_c_location']);
+
+            /**
+             * A constant indicating if CMSMS is in debug mode.
+             *
+             * @return bool
+             */
+            define('CMS_DEBUG',$this['debug']);
+
+            /**
+             * A constant containing the directory where CMSMS is installed.
+             *
+             * @return string
+             */
+            define('CMS_ROOT_PATH',$this['root_path']);
+
+            /**
+             * A constant containing the directory where CMSMS third party assets are stored.
+             *
+             * @return string
+             */
+            define('CMS_ASSETS_PATH',$this['assets_path']);
+
+            /**
+             * A constant containing the CMSMS root url.
+             * If the root_url variable is not specified in the config file, then
+             * CMSMS will attempt to calculate one.
+             *
+             * @return string
+             */
+            define('CMS_ROOT_URL',$this['root_url']);
+
+            /**
+             * A constant containing the CMSMS uploads url.
+             * If the uploads_url is not specified in the config file, then CMSMS will calculate one from the root url.
+             *
+             * @return string
+             */
+            define('CMS_UPLOADS_URL',$this['uploads_url']);
+
+            /**
+             * A constant containing the CMSMS assets url.
+             * If the assets_url is not specified in the config file, then CMSMS will calculate one from the root url and the assets_dir setting.
+             *
+             * @return string
+             */
+            define('CMS_ASSETS_URL',$this['assets_url']);
+
+            /**
+             * A constant containing the CMSMS database table prefix to be used on all queries.
+             *
+             * @return string
+             */
+            global $CMS_INSTALL_PAGE;
+            if( !isset($CMS_INSTALL_PAGE) ) @define('CMS_DB_PREFIX',$this['db_prefix']);
+        }
     }
 
     /**
@@ -88,8 +178,8 @@ final class cms_config implements ArrayAccess
             $l=strlen($maxFileSize);
             $i=0;$ss='';$x=0;
             while ($i < $l) {
-                if (is_numeric($maxFileSize[$i]))
-                {$ss .= $maxFileSize[$i];
+                if (is_numeric($maxFileSize[$i])) {
+                    $ss .= $maxFileSize[$i];
                 }
                 else {
                     if (strtolower($maxFileSize[$i]) == 'g') $x=1000000000;
@@ -258,100 +348,9 @@ final class cms_config implements ArrayAccess
      *
      * @return cms_config
      */
-    public static function &get_instance()
+    public static function get_instance()
     {
-        if (!isset(self::$_instance)) {
-            $c = __CLASS__;
-            self::$_instance = new $c;
-
-            // now load the config
-            self::$_instance->load_config();
-
-            if( !defined('TMP_CACHE_LOCATION') ) {
-                /**
-                 * A constant to indicate the location where private cachable files can be written.
-                 *
-                 * @return string
-                 */
-                define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
-
-                /**
-                 * A constant to indicate where public (browsable) cachable files can be written.
-                 *
-                 * @return string
-                 */
-                define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
-
-                /**
-                 * A constant to indicate the public address for cachable files.
-                 *
-                 * @return string
-                 */
-                define('PUBLIC_CACHE_URL',self::$_instance['public_cache_url']);
-
-                /**
-                 * A constant containing the smarty template compile directory.
-                 *
-                 * @return string
-                 */
-                define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
-
-                /**
-                 * A constant indicating if CMSMS is in debug mode.
-                 *
-                 * @return bool
-                 */
-                define('CMS_DEBUG',self::$_instance['debug']);
-
-                /**
-                 * A constant containing the directory where CMSMS is installed.
-                 *
-                 * @return string
-                 */
-                define('CMS_ROOT_PATH',self::$_instance['root_path']);
-
-                /**
-                 * A constant containing the directory where CMSMS third party assets are stored.
-                 *
-                 * @return string
-                 */
-                define('CMS_ASSETS_PATH',self::$_instance['assets_path']);
-
-                /**
-                 * A constant containing the CMSMS root url.
-                 * If the root_url variable is not specified in the config file, then
-                 * CMSMS will attempt to calculate one.
-                 *
-                 * @return string
-                 */
-                define('CMS_ROOT_URL',self::$_instance['root_url']);
-
-                /**
-                 * A constant containing the CMSMS uploads url.
-                 * If the uploads_url is not specified in the config file, then CMSMS will calculate one from the root url.
-                 *
-                 * @return string
-                 */
-                define('CMS_UPLOADS_URL',self::$_instance['uploads_url']);
-
-                /**
-                 * A constant containing the CMSMS assets url.
-                 * If the assets_url is not specified in the config file, then CMSMS will calculate one from the root url and the assets_dir setting.
-                 *
-                 * @return string
-                 */
-                define('CMS_ASSETS_URL',self::$_instance['assets_url']);
-
-                /**
-                 * A constant containing the CMSMS database table prefix to be used on all queries.
-                 *
-                 * @return string
-                 */
-                global $CMS_INSTALL_PAGE;
-                if( !isset($CMS_INSTALL_PAGE) ) @define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
-            }
-        }
-
+        if (!self::$_instance) throw new \LogicException("An instance of ".__CLASS__.' has not been created');
         return self::$_instance;
     }
 

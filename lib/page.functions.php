@@ -39,11 +39,12 @@
  */
 function get_userid(bool $redirect = true)
 {
-    if( cmsms()->is_cli() ) return 1;
+    $app = cmsms();
+    if( $app->is_cli() ) return 1;
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
-        $config = \cms_config::get_instance();
+        $config = $app->GetConfig();
         redirect($config['admin_url']."/login.php");
     }
     return $uid;
@@ -62,11 +63,12 @@ function get_userid(bool $redirect = true)
  */
 function get_username(bool $check = true)
 {
-    if( cmsms()->is_cli() ) return '';
+    $app = cmsms();
+    if( $app->is_cli() ) return '';
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
-        $config = \cms_config::get_instance();
+        $config = $app->GetConfig();
         redirect($config['admin_url']."/login.php");
     }
     return $uname;
@@ -99,12 +101,11 @@ function check_login(bool $no_redirect = false)
         if( $do_redirect ) {
             // redirect to the admin login.php
             // use SCRIPT_FILENAME and make sure it validates with the root_path
-            $config = \cms_config::get_instance();
+            $config = cmsms()->GetConfig();
             if( startswith($_SERVER['SCRIPT_FILENAME'],$config['root_path']) ) {
                 $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
             }
             $login_ops->deauthenticate();
-            $config = \cms_config::get_instance();
             redirect($config['admin_url']."/login.php");
         }
     }
