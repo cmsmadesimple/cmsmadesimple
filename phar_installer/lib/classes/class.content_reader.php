@@ -111,8 +111,8 @@ class content_reader
                 $content_obj = $this->node_to_content_obj( $node );
                 if( $content_obj ) {
                     $content_obj->SetParentId($parent_id);
-                    $content_obj->SetOwner(1);
-                    $content_obj->Save();
+		    $content_obj->SetOwner(1);
+		    $this->contentops->save_content($content_obj);
                     $new_parent_id = $content_obj->Id();
                     // see if there are more.
                     $this->import_content($node->firstChild,$new_parent_id);

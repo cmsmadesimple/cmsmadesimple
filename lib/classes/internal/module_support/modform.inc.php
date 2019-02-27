@@ -373,7 +373,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         if( $returnid <= 0 ) $text = $config['admin_url'];
 
         $secureparam = '';
-        if( $returnid <= 0 ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+        if( $returnid <= 0 && isset($_SESSION[CMS_USER_KEY]) ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
         $text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
         if( isset($params['returnid']) && $returnid <= 0 ) unset($params['returnid']);
         foreach ($params as $key=>$value) {
