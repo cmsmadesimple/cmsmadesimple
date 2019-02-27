@@ -157,6 +157,10 @@ Core - General
   - CHANGE: remove the php_memory_limit config setting (php.ini, .htaccess, or .user.ini files can handle this).
   - CHANGE: cms_config class does not output ending php tag when writing the file
   - CHANGE: Significant code cleanup... start getting rid of singletons, use CmsApp as a service provider
+  - CHANGE: refactor the ContentBase and ContentOperations classes such that all DB operations are done from the ContentOperations class
+     some methods were removed from the ContentBase class.  i.e: Delete(), Save(), and some other methods
+  - CHANGE: ContentOperations now ALWAYS loads properties for content operations, thus invalidating the 'deep' or 'loadproperties' options in various
+     methods, and modules.
 
 News v2.21.5
   - Minor cleaning of parameters.

@@ -188,7 +188,7 @@ try {
         }
         else if( isset($params['submit']) || isset($params['apply']) ) {
             $content_obj->SetLastModifiedBy(get_userid());
-            $content_obj->Save();
+            $contentops->save_content($content_obj);
             if( ! $was_defaultcontent && $content_obj->DefaultContent() ) {
                 $contentops->SetDefaultContent( $content_obj->Id() );
             }

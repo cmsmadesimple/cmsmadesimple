@@ -457,15 +457,11 @@ final class ContentListBuilder
         else if( $this->_module->CheckPermission('Reorder Content') && $contentops->CheckPeerAuthorship($this->_userid,$page_id) ) {
             $test = TRUE;
         }
-
         if( !$test ) return FALSE;
 
         $content = $contentops->LoadContentFromId($page_id);
         if( !$content ) return FALSE;
-
-        $content->ChangeItemOrder($direction);
-        $contentops = \ContentOperations::get_instance();
-        $contentops->SetAllHierarchyPositions();
+        $contentops->change_content_order($content,$direction);
         return TRUE;
     }
 
@@ -502,7 +498,7 @@ final class ContentListBuilder
         $content = $node->GetContent(FALSE,FALSE,FALSE);
         if( $content->DefaultContent() ) return $this->_module->Lang('error_delete_defaultcontent');
 
-        $content->Delete();
+        $contentops->delete_content($content);
         audit($page_id,'Core','Deleted content page');
 
         if( $childcount == 1 && $parent_id > -1 ) $this->collapse_section($parent_id);

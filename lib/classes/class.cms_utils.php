@@ -138,7 +138,7 @@ final class cms_utils
      * @since 1.9
      * @return ADOConnection a handle to the ADODB database object
      */
-    final public static function & get_db()
+    final public static function get_db()
     {
         return cmsms()->GetDb();
     }
@@ -150,7 +150,7 @@ final class cms_utils
      * @since 1.9
      * @return cms_config The global configuration object.
      */
-    final public static function & get_config()
+    final public static function get_config()
     {
         return cmsms()->GetConfig();
     }
@@ -163,7 +163,7 @@ final class cms_utils
      * @final
      * @return Smarty_CMS Handle to the Smarty object
      */
-    final public static function & get_smarty()
+    final public static function get_smarty()
     {
         return cmsms()->GetSmarty();
     }

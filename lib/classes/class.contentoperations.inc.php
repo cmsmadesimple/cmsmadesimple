@@ -70,12 +70,12 @@ class ContentOperations
     /**
      * @ignore
      */
-    private $_cache;
+    protected $cache_driver;
 
     /**
      * @ignore
      */
-    private $_app;
+    protected $app;
 
     /**
      * @ignore
@@ -83,8 +83,8 @@ class ContentOperations
     public function __construct( CmsApp $app, cms_cache_driver $driver )
     {
         if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed');
-        $this->_app = $app;
-        $this->_cache = $driver;
+        $this->app = $app;
+        $this->cache_driver = $driver;
         $this->setup_cache();
         self::$_instance = $this;
     }
@@ -106,7 +106,7 @@ class ContentOperations
     private function setup_cache()
     {
         // two caches, the flat list, and the tree
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
         $obj = new \CMSMS\internal\global_cachable('content_flatlist',
                                                    function() use ($db) {
                                                          $query = 'SELECT content_id,parent_id,item_order,content_alias,active
@@ -154,7 +154,7 @@ class ContentOperations
      */
     protected function get_cached_content(int $pageid)
     {
-        if( $this->_cache->exists($pageid,__CLASS__) ) return $this->_cache->get($pageid,__CLASS__);
+        if( $this->cache_driver->exists($pageid,__CLASS__) ) return $this->cache_driver->get($pageid,__CLASS__);
     }
 
 
@@ -163,11 +163,11 @@ class ContentOperations
      */
     protected function put_cached_content(ContentBase $contentobj)
     {
-        $cached_ids = $this->_cache->get('PAGELIST',__CLASS__);
+        $cached_ids = $this->cache_driver->get('PAGELIST',__CLASS__);
         $cached_ids[] = $contentobj->Id();
         $cached_ids = array_unique($cached_ids);
-        $res = $this->_cache->set((int) $contentobj->Id(), $contentobj, __CLASS__);
-        $this->_cache->set('PAGELIST',$cached_ids,__CLASS__);
+        $res = $this->cache_driver->set((int) $contentobj->Id(), $contentobj, __CLASS__);
+        $this->cache_driver->set('PAGELIST',$cached_ids,__CLASS__);
     }
 
     /**
@@ -188,7 +188,7 @@ class ContentOperations
      */
     protected function get_cached_page_ids()
     {
-        return $this->_cache->get('PAGELIST',__CLASS__);
+        return $this->cache_driver->get('PAGELIST',__CLASS__);
     }
 
     /**
@@ -197,7 +197,7 @@ class ContentOperations
     protected function is_cached($id) : bool
     {
         $id = (int) $id;
-        return $this->_cache->content_exists($id);
+        return $this->cache_driver->content_exists($id);
     }
 
     /**
@@ -293,20 +293,31 @@ class ContentOperations
     {
         $id = (int) $id;
         if( $id < 1 ) $id = $this->GetDefaultContent();
-        $obj = $this->get_cached_content($id);
-        if( $obj && is_a($obj,'ContentBase') ) {
-            return $obj;
-        }
 
-        $db = $this->_app->GetDb();
+        $obj = $this->get_cached_content($id);
+        if( $obj && is_a($obj,'ContentBase') ) return $obj;
+
+        $db = $this->app->GetDb();
         $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
-        $row = $db->GetRow($query, array($id));
+        $row = $db->GetRow($query,  [$id]);
         if ($row) {
             $classtype = strtolower($row['type']);
             $contentobj = $this->CreateNewContent($classtype);
-            if ($contentobj) {
+            if( !$contentobj ) {
+                // this is something worth doing something about
+            }
+            else {
+                // get properties
+                $sql = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
+                $props = $db->GetArray($sql, [$id]);
+                if( $props ) $row['_props'] = $props;
+
+                // get additional editors
+                $sql = 'SELECT * FROM '.CMS_DB_PREFIX.'additional_users WHERE content_id = ?';
+                $addt = $db->GetArray($sql, [$id]);
+                if( $addt ) $row['_editors'] = $addt;
+
                 $contentobj->LoadFromData($row, true);
-                $contentobj->HasProperty('junk'); // forces property load.
                 $this->put_cached_content($contentobj);
                 return $contentobj;
             }
@@ -339,11 +350,10 @@ class ContentOperations
     public function LoadContentFromAlias(string $alias, bool $only_active = false)
     {
         $id = (int) $alias;
-        if( !is_numeric($alias) || (int) $alias < 1 ) {
-            $id = $this->alias_to_id($alias);
-        }
-        $obj = $this->get_cached_content($id);
-        if( !$obj ) $obj = $this->LoadContentFromId($id);
+        if( !is_numeric($alias) || (int) $alias < 1 ) $id = $this->alias_to_id($alias);
+        if( $id < 1 ) return;
+
+        $obj = $this->LoadContentFromId($id);
         if( !$only_active || $obj->Active() ) return $obj;
     }
 
@@ -579,7 +589,7 @@ class ContentOperations
     public function SetAllHierarchyPositions()
     {
         // load some data about all pages into memory... and convert into a hash.
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
         $sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy';
         $list = $db->GetArray($sql);
         if( !count($list) ) {
@@ -631,7 +641,7 @@ class ContentOperations
         global_cache::clear('content_tree');
         global_cache::clear('content_quicklist');
         global_cache::clear('content_aliasmap');
-        $this->_cache->clear(__CLASS__);
+        $this->cache_driver->clear(__CLASS__);
     }
 
     /**
@@ -660,7 +670,7 @@ class ContentOperations
         if( $_loaded == 1 ) return;
         $_loaded = 1;
 
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
 
         $expr = array();
         $parms = array();
@@ -672,79 +682,28 @@ class ContentOperations
             $expr[] = 'show_in_menu = ?';
             $parms[] = 1;
         }
-
-        $cached_ids = $this->get_cached_page_ids();
-        if( is_array($cached_ids) && count($cached_ids) ) {
-            $expr[] = 'content_id NOT IN ('.implode(',',$cached_ids).')';
-        }
-
-        $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE ';
+        $query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE ';
         $query .= implode(' AND ',$expr);
-        $dbr = $db->Execute($query,$parms);
 
-        if( $loadprops ) {
-            $child_ids = array();
-            while( !$dbr->EOF() ) {
-                $child_ids[] = $dbr->fields['content_id'];
-                $dbr->MoveNext();
-            }
-            $dbr->MoveFirst();
-
-            $tmp = null;
-            if( count($child_ids) ) {
-                // get all the properties for the child_ids
-                $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-                $tmp = $db->GetArray($query);
-            }
-
-            // re-organize the tmp data into a hash of arrays of properties for each content id.
-            if( $tmp ) {
-                $contentprops = array();
-                for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
-                    $content_id = $tmp[$i]['content_id'];
-                    if( in_array($content_id,$child_ids) ) {
-                        if( !isset($contentprops[$content_id]) ) $contentprops[$content_id] = array();
-                        $contentprops[$content_id][] = $tmp[$i];
-                    }
-                }
-                unset($tmp);
-            }
+        // get the idlist
+        // get a signature from this query and params
+        $sig = md5(__FILE__.$query.json_encode($parms));
+        $idlist = $this->cache_driver->get($sig, __CLASS__);
+        if( !$idlist ) {
+            $idlist = $db->GetArray($query, $parms);
+            if( $idlist ) $this->cache_driver->set($sig, __CLASS__);
         }
+        if( empty($idlist) ) return;
 
-        $content_types = array_keys($this->ListContentTypes());
-        while( !$dbr->EOF() ) {
-            $row = $dbr->fields;
-            $id = $row['content_id'];
-
-            if( in_array($row['type'], $content_types)) {
-                $contentobj = $this->CreateNewContent($row['type']);
-                if ($contentobj) {
-                    $contentobj->LoadFromData($row, false);
-                    if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
-                          // load the properties from local cache.
-                          $props = $contentprops[$id];
-                        foreach( $props as $oneprop ) {
-                            $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
-                        }
-                    }
-
-                    // cache the content objects
-                    $this->put_cached_content($contentobj);
-                }
-            }
-
-            $dbr->MoveNext();
-        }
-        $dbr->Close();
+        // now bulk get these content pages using LoadChildren() ...
+        $this->LoadChildren(null, $loadprops, $inactive, $idlist );
     }
 
     /**
      * Loads additional, active children into a given tree object.
-        *
-        * This is a smart method that determines what needs to be loaded, and adds them to the content cache
-        * the idea is to optimize memory by requests.
-        *
-        * Note: if the cached content object was not loaded deep.. this method will not load its properties.
+     *
+     * This is a smart method that determines what needs to be loaded, and adds them to the content cache
+     * the idea is to optimize memory by requests.
      *
      * @param int $id The parent of the content objects to load into the tree
      * @param bool $loadprops If true, load the properties of all loaded content objects
@@ -759,7 +718,7 @@ class ContentOperations
         }
 
         // gotta load it
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
 
         $contentrows = null;
         if( (!is_array($explicit_ids) || !count($explicit_ids)) ) {
@@ -787,62 +746,67 @@ class ContentOperations
         $expr = 'content_id IN ('.implode(',',$explicit_ids).')';
         if( !$all ) $expr .= ' AND active = 1';
 
-        // note, this is mysql specific...
+        // do the query note, this is mysql specific...
+        $child_ids = null;
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
-        $contentrows = $db->GetArray($query);
+        $dbr = $db->Execute( $query );
 
-        // get the content ids from the returned data
+        // get our content ids as an array
+        while( !$dbr->EOF() ) {
+            $child_ids[] = $dbr->fields['content_id'];
+            $dbr->MoveNext();
+        }
+        $dbr->MoveFirst();
+
+        // get all of the properties for the child ids
         $contentprops = null;
-        if( true /* loadprops */ ) {
-            $child_ids = [];
-            for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
-                $child_ids[] = $contentrows[$i]['content_id'];
-            }
-
-            $tmp = null;
-            if( count($child_ids) ) {
-                // get all the properties for the child_ids
-                $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-                $tmp = $db->GetArray($query);
-            }
-
-            // re-organize the tmp data into a hash of arrays of properties for each content id.
-            if( $tmp ) {
-                $contentprops = array();
-                for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
-                    $content_id = $tmp[$i]['content_id'];
-                    if( in_array($content_id,$child_ids) ) {
-                        if( !isset($contentprops[$content_id]) ) $contentprops[$content_id] = array();
-                        $contentprops[$content_id][] = $tmp[$i];
-                    }
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+        $tmp = $db->GetArray($query);
+        if( $tmp ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
+                $content_id = (int)$tmp[$i]['content_id'];
+                if( in_array($content_id, $child_ids) ) {
+                    $contentprops[$content_id][] = $tmp[$i];
                 }
-                unset($tmp);
             }
+            unset($tmp);
+        }
+
+        // get all of the additional editors for the child ids
+        $addteditors = null;
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.'additional_users WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+        $tmp = $db->GetArray($query);
+        if( $tmp ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
+                $content_id = (int)$tmp[$i]['content_id'];
+                if( in_array($content_id, $child_ids) ) {
+                    $addteditors[$content_id][] = $tmp[$i];
+                }
+            }
+            unset($tmp);
         }
 
         // build the content objects
-        for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
-            $row =& $contentrows[$i];
+        while( !$dbr->EOF() ) {
+            $row = $dbr->fields;
             $id = $row['content_id'];
+            $dbr->MoveNext();
 
-            if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
-            $contentobj = new Content();
-            $contentobj = $this->CreateNewContent($row['type']);
-
-            if ($contentobj) {
-                $contentobj->LoadFromData($row, false);
-                if( $contentprops && isset($contentprops[$id]) ) {
-                    // load properties into the content objects.
-                    foreach( $contentprops[$id] as $oneprop ) {
-                        $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
-                    }
-                    unset($contentprops[$id]);
-                }
-
-                // cache the content objects
-                $this->put_cached_content($contentobj);
-                unset($contentobj);
+            if (!in_array($row['type'], array_keys($this->ListContentTypes()))) {
+                // we should do something about this.
+                continue;
             }
+
+            $contentobj = $this->CreateNewContent($row['type']);
+            if( !$contentobj ) {
+                // we should do something about this
+                continue;
+            }
+
+            if( isset($contentprops[$id]) ) $row['_props'] = $contentprops[$id];
+            if( isset($addtusers[$id]) ) $row['_editors'] = $contentprops[$id];
+            $contentobj->LoadFromData($row);
+            $this->put_cached_content($contentobj);
         }
     }
 
@@ -854,7 +818,7 @@ class ContentOperations
      */
     public function SetDefaultContent(int $id)
     {
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
 
         $sql = 'UPDATE '.CMS_DB_PREFIX."content SET default_content=0 WHERE default_content=1";
         $db->Execute( $sql );
@@ -877,13 +841,13 @@ class ContentOperations
     public function GetAllContent()
     {
         debug_buffer('get all content...');
-        $gCms = $this->_app;
+        $gCms = $this->app;
         $tree = $gCms->GetHierarchyManager();
         $list = $tree->getFlatList();
 
         $this->LoadAllContent($loadprops);
         $output = [];
-        foreach( $list as &$one ) {
+        foreach( $list as $one ) {
             $tmp = $one->GetContent(false,true,true);
             if( is_object($tmp) ) $output[] = $tmp;
         }
@@ -963,7 +927,7 @@ class ContentOperations
      */
     public function GetPageIDFromAlias( string $alias )
     {
-        $hm = $this->_app->GetHierarchyManager();
+        $hm = $this->app->GetHierarchyManager();
         $node = $hm->sureGetNodeByAlias($alias);
         if( $node ) return $node->get_tag('id');
     }
@@ -977,7 +941,7 @@ class ContentOperations
      */
     public function GetPageIDFromHierarchy( string $position )
     {
-        $gCms = $this->_app;
+        $gCms = $this->app;
         $db = $gCms->GetDb();
 
         $query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE hierarchy = ?";
@@ -1020,7 +984,7 @@ class ContentOperations
             $query .= " AND content_id != ?";
             $params[] = $content_id;
         }
-        $db = $this->_app->GetDb();
+        $db = $this->app->GetDb();
         $out = (int) $db->GetOne($query, $params);
         if( $out > 0 ) return TRUE;
     }
@@ -1105,7 +1069,7 @@ class ContentOperations
      */
     public function CheckParentage(int $test_id,int $base_id = null)
     {
-        $gCms = $this->_app;
+        $gCms = $this->app;
         if( !$base_id ) $base_id = $gCms->get_content_id();
         $base_id = (int)$base_id;
         if( $base_id < 1 ) return FALSE;
@@ -1131,7 +1095,7 @@ class ContentOperations
         if( !is_array($this->_ownedpages) ) {
             $this->_ownedpages = array();
 
-            $db = $this->_app->GetDb();
+            $db = $this->app->GetDb();
             $query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content WHERE owner_id = ? ORDER BY hierarchy';
             $tmp = $db->GetCol($query,array($userid));
             $data = array();
@@ -1172,7 +1136,7 @@ class ContentOperations
             $data = $this->GetOwnedPages($userid);
 
             // Get all of the pages this user has access to.
-            $groups = $this->_app->GetUserOperations()->GetMemberGroups($userid);
+            $groups = $this->app->GetUserOperations()->GetMemberGroups($userid);
             $list = array($userid);
             if( is_array($groups) && count($groups) ) {
                 foreach( $groups as $group ) {
@@ -1180,7 +1144,7 @@ class ContentOperations
                 }
             }
 
-            $db = $this->_app->GetDb();
+            $db = $this->app->GetDb();
             $query = "SELECT A.content_id FROM ".CMS_DB_PREFIX."additional_users A
                       LEFT JOIN ".CMS_DB_PREFIX.'content B ON A.content_id = B.content_id
                       WHERE A.user_id IN ('.implode(',',$list).')
@@ -1248,5 +1212,268 @@ class ContentOperations
     {
         $list = global_cache::get('content_quicklist');
         if( isset($list[$id]) ) return $list[$id];
+    }
+
+    protected function save_content_properties(ContentBase $content)
+    {
+        $db = $this->app->GetDb();
+        $existing = [];
+        if( $content->ID() > 0 ) {
+            $sql = 'SELECT prop_name FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
+            $existing = $db->GetCol($sql, [ $content->ID() ] );
+            if( !$existing ) $existing = [];
+        }
+
+        $now = $db->DbTimeStamp(time());
+        $isql = 'INSERT INTO '.CMS_DB_PREFIX."content_props
+                  (content_id,type,prop_name,content,modified_date)
+                  VALUES (????,$now)";
+        $usql = 'UPDATE '.CMS_DB_PREFIX."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
+        $props = $content->Properties();
+        if( $props ) {
+            foreach( $props as $key => $value ) {
+                if( in_array($key,$existing) ) {
+                    $db->Execute( $usql, [ $value, $content->Id(), $key ] );
+                }
+                else {
+                    $db->Execute( $isql, [ $content->Id(), 'string', $key, $value] );
+                }
+            }
+        }
+    }
+
+    protected function save_additional_editors(ContentBase $content)
+    {
+        $db = $this->app->GetDb();
+        $query = "DELETE FROM ".CMS_DB_PREFIX.'additional_users WHERE content_id = ?';
+        $db->Execute($query, $content->Id());
+
+        $addt = $content->GetAdditionalEditors();
+        if( !$addt ) return;
+        foreach( $addt as $oneeditor ) {
+            // ugh, sequence table
+            $new_addt_id = $db->GenID(CMS_DB_PREFIX."additional_users_seq");
+            $query = "INSERT INTO ".CMS_DB_PREFIX."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+            $db->Execute($query, array($new_addt_id, $oneeditor, $content->Id()));
+        }
+    }
+
+    protected function insert_content(ContentBase $content)
+    {
+        # :TODO: Take care bout hierarchy here, it has no value !
+        # :TODO: Figure out proper item_order
+        $db = $this->app->GetDb();
+
+        $dflt_pageid = $this->GetDefaultContent();
+        if( $dflt_pageid < 1 ) $content->SetDefaultContent(TRUE);
+
+        // Figure out the item_order
+        if ($content->ItemOrder() < 1) {
+            $query = "SELECT COALESCE(max(item_order)+1,1) as new_order FROM ".CMS_DB_PREFIX."content WHERE parent_id = ?";
+            $new_order = $db->GetOne($query, [$content->ParentId()]);
+            $content->SetItemOrder($new_order);
+        }
+
+        // note:  it would be nice here to use a transaction
+        // but we cannot because of MyISAM (2.3)
+
+        // ugh, sequence tables
+        $newid = $db->GenID(CMS_DB_PREFIX."content_seq");
+        $content->setInsertedDetails($newid,time()); // set the newid, modified and created date.   also SetModifiedDetails()
+        $query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order,
+                     hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, page_url, menu_text, metadata, titleattribute, accesskey,
+                     tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        $dbresult = $db->Execute($query,
+                                 [
+                                     $newid, $content->Name(), $content->Alias(), $content->Type(),
+                                     $content->Owner(), $content->ParentId(), $content->TemplateId(), $content->ItemOrder(),
+                                     $content->Hierarchy(), $content->IdHierarchy(),
+                                     (bool) $content->Active(), (bool) $content->DefaultContent(),
+                                     (bool) $content->ShowInMenu(), (bool) $content->Cachable(),
+                                     $content->URL(), $content->MenuText(), $content->MetaData(),
+                                     $content->TitleAttribute(), $content->AccessKey(), $content->TabIndex(),
+                                     $content->LastModifiedBy(), $content->ModifiedDate(), $content->CreationDate()
+                                 ]
+            );
+        if (! $dbresult) {
+            // throw an exception
+            die($db->sql.'<br/>'.$db->ErrorMsg());
+        }
+
+        $this->save_content_properties($content);
+        $this->save_additional_editors($content);
+        if( $content->URL() ) {
+            $route = CmsRoute::new_builder($content->URL(),'__CONTENT__',$newId,'',TRUE);
+            cms_route_manager::add_static($route);
+        }
+
+        return $content;
+    }
+
+    protected function update_content(ContentBase $content)
+    {
+        // Figure out the item_order
+        $db = $this->app->GetDb();
+
+        if ($content->ItemOrder() < 1) {
+            $query = "SELECT COALESCE(max(item_order)+1,1) as new_order FROM ".CMS_DB_PREFIX."content WHERE parent_id = ?";
+            $new_order = $db->GetOne($query, [$content->ParentId()]);
+            $content->SetItemOrder($new_order);
+        }
+
+        if( $content->DefaultContent() ) {
+            $sql = 'UPDATE '.CMS_DB_PREFIX.'content SET default_content = 0 WHERE content_id != ?';
+            $db->Execute($sql, $content->Id());
+        }
+
+        $content->setModifiedDetails(time()); // set the newid, modified and created date.   also SetModifiedDetails()
+        $query = "UPDATE ".CMS_DB_PREFIX."content
+              SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?,
+                  show_in_menu = ?, cachable = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?,
+                  accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
+        $dbresult = $db->Execute($query,
+                                 [
+                                     $content->Name(),
+                                     $content->Owner(),
+                                     $content->Type(),
+                                     $content->TemplateId(),
+                                     $content->ParentId(),
+                                     (bool) $content->Active(), (bool) $content->DefaultContent(),
+                                     (bool) $content->ShowInMenu(), (bool) $content->Cachable(),
+                                     $content->URL(), $content->MenuText(), $content->Alias(), $content->MetaData(),
+                                     $content->TitleAttribute(), $content->AccessKey(), $content->TabIndex(),
+                                     $content->ModifiedDate(), $content->ItemOrder(), $content->LastModifiedBy(),
+                                     (int) $content->Id()
+                                 ]
+            );
+        if (! $dbresult) {
+            // throw an exception
+            die($db->sql.'<br/>'.$db->ErrorMsg());
+        }
+
+        $this->save_content_properties($content);
+        $this->save_additional_editors($content);
+
+        cms_route_manager::del_static('','__CONTENT__',$content->Id());
+        if( $content->URL() != '' ) {
+            $route = CmsRoute::new_builder($content->URL(),'__CONTENT__',$content->Id(),null,TRUE);;
+            cms_route_manager::add_static($route);
+        }
+
+        return $content;
+    }
+
+    public function save_content(ContentBase $content)
+    {
+        $this->app->get_hook_manager()->do_hook('Core::ContentEditPre', [ 'content' => &$content ] );
+
+        if( $content->id() < 1) {
+            $content = $this->insert_content($content);
+        }
+        else {
+            $content = $this->update_content($content);
+        }
+
+        $this->SetContentModified();
+        $this->SetAllHierarchyPositions();
+        $this->app->get_hook_manager()->do_hook('Core::ContentEditPost', [ 'content' => &$content ] );
+        return $content;
+    }
+
+    public function delete_content(ContentBase $content)
+    {
+        $this->app->get_hook_manager()->do_hook('Core::ContentDeletePre', [ 'content' => &$content ] );
+        $db = $this->app->GetDb();
+
+        if( $content->Id() ) {
+            // it would be nice to use transactions here
+            $query = "DELETE FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
+            $dbresult = $db->Execute($query, $content->Id());
+
+            // Fix the item_order if necessary
+            $query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+            $result = $db->Execute($query, [$content->ParentId(),$content->ItemOrder()]);
+
+            // DELETE properties
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
+            $result = $db->Execute($query, $content->Id());
+
+            // Delete additional editors.
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'additional_users WHERE content_id = ?';
+            $result = $db->Execute($query, $content->Id());
+
+            // Delete route
+            if( $content->URL() != '' ) cms_route_manager::del_static($content->URL());
+
+            $this->SetContentModified();
+            $this->SetAllHierarchyPositions();
+        }
+    }
+
+    public function change_content_order(ContentBase $content, int $direction)
+    {
+        // this should be in contentops
+        $db = $this->app->GetDb();
+        $time = $db->DBTimeStamp(time());
+        $parentid = $content->ParentId();
+        $order = $content->ItemOrder();
+        if( $direction < 0 && $content->ItemOrder() > 1 ) {
+            // up
+            $query = 'UPDATE '.CMS_DB_PREFIX.'content SET item_order = (item_order + 1), modified_date = '.$time.'
+                  WHERE item_order = ? AND parent_id = ?';
+            $db->Execute($query, [$order-1,$parentid]);
+            $query = 'UPDATE '.CMS_DB_PREFIX.'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+            $db->Execute($query, $content->Id());
+        }
+        else if( $direction > 0 ) {
+            // down.
+            $query = 'UPDATE '.CMS_DB_PREFIX.'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE item_order = ? AND parent_id = ?';
+            $db->Execute($query, [$order+1,$parentid]);
+            $query = 'UPDATE '.CMS_DB_PREFIX.'content SET item_order = (item_order + 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+            $db->Execute($query, $content->Id());
+        }
+        $this->SetContentModified();
+        $this->SetAllHierarchyPositions();
+    }
+
+    public function set_default_content(ContentBase $content)
+    {
+        $content->SetDefaultContent(true);
+        return $this->save_content($content);
+    }
+
+    public function calculate_unused_content_alias(ContentBase $content, string $seed = null) : string
+    {
+        // calculate an unused, valid content alias
+        if( !$seed ) $seed = $content->Alias();
+        if( !$seed ) $seed = trim($content->MenuText());
+        if( !$seed ) $seed = trim($content->Name());
+        if( !$seed ) throw new \LogicException('Cannot calculate seed for an alias from content object');
+
+        // make sure that the seed is valid.
+        $seed = munge_string_to_url($seed,TRUE);
+        $res = false;
+        for( $i = 0; $i < 3 && !$res; $i++ ) {
+            $res = $this->CheckAliasValid($seed);
+            if( !$res ) $seed = 'p'.$seed;
+        }
+        if( !$res ) throw \CmsContentException(lang('invalidalias'));
+
+        // now have a seed alias.
+        $alias = null;
+        for( $i = 1; $i < 100; $i++ ) {
+            $test = $seed;
+            if( $i > 1 ) $test .= '-'.$i;
+            if( !$this->CheckAliasUsed($test,$content->Id()) ) {
+                $alias = $test;
+                break;
+            }
+        }
+        if( !$alias || $i >= 100 ) throw new \CmsContentException(lang('aliasalreadyused'));
+        return $alias;
     }
 } // end of class

@@ -32,13 +32,13 @@ class apc_cache_driver extends cms_cache_driver
     public function clear($group = '')
     {
         // clear all, or clear all in group
-	if( !$group || $group == '*' ) {
+        if( !$group || $group == '*' ) {
             apc_clear_cache('user');
             apc_clear_cache();
             return;
         }
 
-        $prefix = $this->get_prefix($group);
+        $prefix = $this->get_prefix($group).'_';
         foreach( new APCIterator('user','/^'.$prefix.'/') as $item ) {
             apc_delete($item['key']);
         }
