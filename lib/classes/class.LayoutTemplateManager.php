@@ -76,7 +76,7 @@ class LayoutTemplateManager
     {
         if( is_numeric($a) && $a > 0 ) return $a;
         if( is_string($a) && strlen($a) ) {
-            $ops = UserOperations::get_instance();
+            $ops = cmsms()->GetUserOperations();
             $ob = $ops->LoadUserByUsername($a);
             if( is_object($a) && is_a($a,'User') ) return $a->id;
         }
