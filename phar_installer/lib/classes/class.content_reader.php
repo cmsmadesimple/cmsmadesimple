@@ -112,9 +112,9 @@ class content_reader
                 if( $content_obj ) {
                     $content_obj->SetParentId($parent_id);
 		    $content_obj->SetOwner(1);
-		    $this->contentops->save_content($content_obj);
+		    $content_obj = $this->contentops->save_content($content_obj);
                     $new_parent_id = $content_obj->Id();
-                    // see if there are more.
+                    // see if there are more (recursive)
                     $this->import_content($node->firstChild,$new_parent_id);
                 }
             }

@@ -330,7 +330,14 @@ class ContentOperations
         $id = (int) $alias;
         if( !is_numeric($alias) || (int) $alias < 1 ) {
             $id = $this->alias_to_id($alias);
-        }
+	    if( !$id ) {
+		    cms_notice('could not find an id for alias '.$alias);
+		    return;
+	    }
+	}
+	if( !$id ) {
+	   throw new \LogicException('invalid id passed to '.__METHOD__);
+	}
 
         // get this page's node and call getcontent
         // this causes loadChildren to be called with the parent id
@@ -1216,18 +1223,17 @@ class ContentOperations
 
     protected function save_content_properties(ContentBase $content)
     {
-        $db = $this->app->GetDb();
-        $existing = [];
-        if( $content->ID() > 0 ) {
-            $sql = 'SELECT prop_name FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
-            $existing = $db->GetCol($sql, [ $content->ID() ] );
-            if( !$existing ) $existing = [];
-        }
+	$db = $this->app->GetDb();
+
+	$existing = [];
+        $sql = 'SELECT prop_name FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
+        $existing = $db->GetCol($sql, [ $content->ID() ] );
+        if( !$existing ) $existing = [];
 
         $now = $db->DbTimeStamp(time());
         $isql = 'INSERT INTO '.CMS_DB_PREFIX."content_props
                   (content_id,type,prop_name,content,modified_date)
-                  VALUES (????,$now)";
+                  VALUES (?,?,?,?,$now)";
         $usql = 'UPDATE '.CMS_DB_PREFIX."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
         $props = $content->Properties();
         if( $props ) {
@@ -1278,8 +1284,8 @@ class ContentOperations
         // but we cannot because of MyISAM (2.3)
 
         // ugh, sequence tables
-        $newid = $db->GenID(CMS_DB_PREFIX."content_seq");
-        $content->setInsertedDetails($newid,time()); // set the newid, modified and created date.   also SetModifiedDetails()
+	$newid = $db->GenID(CMS_DB_PREFIX."content_seq");
+	$content->setInsertedDetails($newid,time()); // set the newid, modified and created date.   also SetModifiedDetails()
         $query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order,
                      hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, page_url, menu_text, metadata, titleattribute, accesskey,
                      tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

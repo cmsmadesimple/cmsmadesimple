@@ -23,6 +23,9 @@ use CmsApp;
 use ContentOperations;
 use CmsNlsOperations;
 use cms_config;
+use CmsError403Exception;
+use CmsError404Exception;
+use CmsError503Exception;
 
 $starttime = microtime();
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
@@ -99,8 +102,8 @@ while( $trycount < 2 ) {
     $trycount++;
     try {
         // todo: if we have no $page, throw an error
-        if( $trycount < 2 && is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new \CmsError503Exception('Site down for maintenance');
-        if( $trycount < 2 && is_sitedown() ) throw new \CmsError503Exception('Site down for maintenance');
+        if( $trycount < 2 && is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new CmsError503Exception('Site down for maintenance');
+        if( $trycount < 2 && is_sitedown() ) throw new CmsError503Exception('Site down for maintenance');
 
         // preview
         if( $page == -100) {

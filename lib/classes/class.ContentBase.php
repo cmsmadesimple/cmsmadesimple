@@ -1979,9 +1979,9 @@ abstract class ContentBase
     public function setInsertedDetails(int $newID, int $ts)
     {
         $str = strftime('%Y-%m-%d %H:%M:%S',$ts);
-        $this->mID = $newID;
+        $this->mId = $newID;
         $this->mCreationDate = $str;
-        $this->mModifiedDate = $str;
+	$this->mModifiedDate = $str;
     }
 
     /**

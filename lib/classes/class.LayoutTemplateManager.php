@@ -244,7 +244,6 @@ class LayoutTemplateManager
 
         audit($tpl->get_id(),'CMSMS','Template '.$tpl->get_name().' Deleted');
         $this->hook_manager->do_hook('Core::DeleteTemplatePost', [ get_class($tpl) => &$tpl ] );
-        unset($tpl->_data['id']);
         $this->cache_driver->clear(__CLASS__);
     }
 
