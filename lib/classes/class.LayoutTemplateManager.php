@@ -372,18 +372,19 @@ class LayoutTemplateManager
     public function get_editable_templates($a)
     {
         $n = $this->_resolve_user($a);
-        if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+	if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+	$db = $this->db;
 
         $sql = 'SELECT id FROM '.self::template_table_name();
         $parms = $where = null;
-        if( !UserOperations::get_instance()->CheckPermission($n,'Modify Templates') ) {
+        if( !cmsms()->GetUserOperations()->CheckPermission($n,'Modify Templates') ) {
             $sql .= ' WHERE owner_id = ?';
             $parms[] = $n;
         }
         $list = $db->GetCol($sql, $parms);
         if( !$list ) $list = [];
 
-        $sql = 'SELECT tpl_id  FROM '.$this->template_users_table_name().' WHERE user_id = ?';
+        $sql = 'SELECT tpl_id  FROM '.$this->tpl_additional_users_table_name().' WHERE user_id = ?';
         $list2 = $db->GetCol($sql,[$n]);
         if( !$list2 ) $list2 = [];
 
