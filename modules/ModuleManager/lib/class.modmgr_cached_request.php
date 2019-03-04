@@ -82,7 +82,7 @@ final class modmgr_cached_request
             fwrite($fh,serialize(array($this->_status,$this->_result)));
             fclose($fh);
         } else {
-            audit('','ModuleManager','Request to module repository resulted in status '.$this_>_status);
+            audit('','ModuleManager','Request to module repository resulted in status '.$this->_status);
         }
     }
     else {
