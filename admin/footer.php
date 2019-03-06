@@ -1,4 +1,6 @@
 <?php
+use CMSMS\HookManager;
+
 // $USE_THEME inherited from parent scope.
 if (! isset($USE_THEME) || $USE_THEME ) {
     // if using the theme... echo the footer to stdout
@@ -99,7 +101,7 @@ if( is_array($list) && count($list) ) {
     }
 }
 
-$out = \CMSMS\HookManager::do_hook_accumulate('admin_add_footertext');
+$out = HookManager::do_hook_accumulate('admin_add_footertext');
 if( $out && count($out) ) {
     foreach( $out as $one ) {
         $one = trim($one);
@@ -108,13 +110,11 @@ if( $out && count($out) ) {
 }
 
 $bodycontent = $themeObject->postprocess($bodycontent);
-echo $bodycontent;
 
 if (!isset($USE_THEME) || $USE_THEME != false) {
+    HookManager::do_hook('admin_content_postrender', ['content'=>&$bodycontent] );
+    echo $bodycontent;
     if( strpos($bodycontent,'</body') === FALSE ) echo '</body></html>';
-}
-
-if (!isset($USE_THEME) || $USE_THEME != false) {
     if( isset($config['show_performance_info']) ) {
         $db = \Cmsapp::get_instance()->GetDb();
         $endtime = microtime();
@@ -124,4 +124,7 @@ if (!isset($USE_THEME) || $USE_THEME != false) {
         $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
         echo '<div style="clear: both;">'.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." queries / Net Memory: {$memory_net} / End: {$memory} / Peak: {$memory_peak}</div>\n";
     }
+}
+else {
+    echo $bodycontent;
 }

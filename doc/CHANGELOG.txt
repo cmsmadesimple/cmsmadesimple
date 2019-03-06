@@ -161,9 +161,12 @@ Core - General
      some methods were removed from the ContentBase class.  i.e: Delete(), Save(), and some other methods
   - CHANGE: ContentOperations now ALWAYS loads properties for content operations, thus invalidating the 'deep' or 'loadproperties' options in various
      methods, and modules.
+  - IMPROVEMENT: Adds new classes for working with cookies.  Including a signed cookie manager that signs all cookie values and obfuscates keys.
+  - CHANGE: cms_cookies now uses the AutoCookie manager which allows storing extracting simple objects arrays and strings from the cookies.
+  - REMOVED: News is no longer distributed with he core, and is no longer considered a system/core module.
 
-News v2.21.5
-  - Minor cleaning of parameters.
+News2 v1.0
+  - New core module that is similar to, but not directly compatible with News.
 
 CMSContentManager - 1.2
   - REMOVED: Gets rid of secure options, flag output and bulk functionaltiy

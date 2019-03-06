@@ -679,8 +679,6 @@ abstract class CMSModule
      * A method to indicate that the system should drop and optionally
      * generate an error about unknown parameters on frontend actions.
      *
-     * This functionality was removed in 2.4
-     *
      * @see SetParameterType
      * @see CreateParameter
      * @deprecated

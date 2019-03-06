@@ -20,6 +20,9 @@
 #$Id: class.user.inc.php 2961 2006-06-25 04:49:31Z wishy $
 
 namespace CMSMS;
+use cms_siteprefs;
+use cms_config;
+use CmsApp;
 
 final class LoginOperations
 {
@@ -30,9 +33,12 @@ final class LoginOperations
 
     private $_data;
 
+    private $_cookie_manager;
+
     protected function __construct()
     {
         $this->_loginkey = '_'.sha1( CMS_VERSION.$this->_get_salt() );
+        $this->_cookie_manager = CmsApp::get_instance()->get_cookie_manager();
     }
 
     public static function &get_instance()
@@ -43,17 +49,17 @@ final class LoginOperations
 
     public function deauthenticate()
     {
-        \cms_cookies::erase($this->_loginkey);
+        $this->_cookie_manager->erase($this->_loginkey);
         unset($_SESSION[$this->_loginkey],$_SESSION[CMS_USER_KEY]);
     }
 
     protected function _get_salt()
     {
         // if we do not have a presaved salt.. we generate one
-        $salt = \cms_siteprefs::get(__CLASS__);
+        $salt = cms_siteprefs::get(__CLASS__);
         if( !$salt ) {
             $salt = sha1( rand().__FILE__.rand().time() );
-            \cms_siteprefs::set(__CLASS__,$salt);
+            cms_siteprefs::set(__CLASS__,$salt);
         }
         return $salt;
     }
@@ -91,7 +97,7 @@ final class LoginOperations
         $enc = base64_encode( json_encode( $private_data ) );
         $hash = sha1( $this->_get_salt() . $enc );
         $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
-        \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
+        $this->_cookie_manager->set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
         // this is for CSRF stuff, doesn't technically belong here.
         $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $user->id );
@@ -113,7 +119,7 @@ final class LoginOperations
         if( isset($_SESSION[$this->_loginkey]) ) {
             $private_data = $_SESSION[$this->_loginkey];
         }
-        else if( ($private_data = \cms_cookies::get($this->_loginkey)) ) {
+        else if( ($private_data = $this->_cookie_manager->get($this->_loginkey)) ) {
             $_SESSION[$this->_loginkey] = $private_data;
         }
         if( !$private_data ) return;
@@ -155,7 +161,7 @@ final class LoginOperations
 
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {
-            $config = \cms_config::get_instance();
+            $config = cms_config::get_instance();
             if( !isset($config['stupidly_ignore_xss_vulnerability']) ) return FALSE;
         }
         return TRUE;

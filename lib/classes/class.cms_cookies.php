@@ -56,58 +56,25 @@
 final class cms_cookies
 {
 
-    /**
-     * @ignore
-     */
-    private static $parts;
+    private static $_mgr;
 
     /**
      * @ignore
      */
-    final private function __construct() {
-    }
-
-    /**
-     * @ignore
-     */
-    private static function __path()
+    final private function __construct()
     {
-        if( !is_array(self::$parts) ) {
-            self::$parts = parse_url(CMS_ROOT_URL);
-        }
-        if( !isset(self::$parts['path']) || self::$parts['path'] == '' ) {
-            self::$parts['path'] = '/';
-        }
-        return self::$parts['path'];
-    }
-
-    /**
-     * @ignore
-     */
-    private static function __domain()
-    {
-        if( !is_array(self::$parts) ) {
-            self::$parts = parse_url(CMS_ROOT_URL);
-        }
-        if( !isset(self::$parts['host']) || self::$parts['host'] == '' ) {
-            self::$parts['host'] = CMS_ROOT_URL;
-        }
-        return self::$parts['host'];
     }
 
 
     /**
      * @ignore
      */
-    private static function __setcookie($key,$value,$expire)
+    final private function __mgr()
     {
-        $res = setcookie($key,$value,$expire,
-        self::__path(),
-        self::__domain(),
-                     CmsApp::get_instance()->is_https_request(),
-        TRUE);
+        static $_mgr;
+        if( !$_mgr ) $_mgr = CmsApp::get_instance()->get_cookie_manager();
+        return $_mgr;
     }
-
 
     /**
      * Set a cookie
@@ -117,9 +84,9 @@ final class cms_cookies
      * @param int    $expire Unix timestamp of the time the cookie will expire.   By default cookies that expire when the browser closes will be created.
      * @return bool
      */
-    public static function set($key,$value,$expire = 0)
+    public static function set($key,$value,$expire = 0) : bool
     {
-        return self::__setcookie($key,$value,$expire);
+        return self::_mgr()->set($key,$value,$expire);
     }
 
 
@@ -127,11 +94,11 @@ final class cms_cookies
      * Get the value of a cookie
      *
      * @param string $key The cookie name
-     * @return mixed.  Null if the cookie does not exist, otherwise a string containing the cookie value.
+     * @return mixed.  Null if the cookie does not exist, otherwise the data stored.
      */
     public static function get($key)
     {
-        if( isset($_COOKIE[$key]) ) return $_COOKIE[$key];
+        return self::_mgr()->get($kkey)
     }
 
 
@@ -142,9 +109,9 @@ final class cms_cookies
      * @param string $key The cookie name.
      * @return bool
      */
-    public static function exists($key)
+    public static function exists($key) : bool
     {
-        return isset($_COOKIE[$key]);
+        return self::_mgr()->exists($key);
     }
 
 
@@ -155,12 +122,11 @@ final class cms_cookies
      */
     public static function erase($key)
     {
-        unset($_COOKIE[$key]);
-        self::__setcookie($key,null,time()-3600);
+        return self::_mgr()->erase($key);
     }
+
 } // end of class
 
 #
 # EOF
 #
-?>

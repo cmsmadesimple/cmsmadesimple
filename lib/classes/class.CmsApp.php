@@ -24,6 +24,8 @@ use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
 use CMSMS\ScriptManager;
 use CMSMS\StylesheetManager;
+use CMSMS\ICookieManager;
+use CMSMS\AutoCookieManager;
 
 /**
  * Global class for easy access to all important variables.
@@ -629,6 +631,18 @@ final class CmsApp
             $this->GetDB(),
             $this->get_cache_driver(),
             $this->get_hook_manager());
+        return $mgr;
+    }
+
+    /**
+     * Get the cookie manager.
+     *
+     * @since 2.3
+     */
+    public function get_cookie_manager() : ICookieManager
+    {
+        static $mgr;
+        if( !$mgr ) $mgr = new AutoCookieManager($this);
         return $mgr;
     }
 

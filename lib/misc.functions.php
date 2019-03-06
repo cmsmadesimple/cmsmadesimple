@@ -1048,6 +1048,7 @@ function setup_session(bool $cachable = FALSE)
         @ini_set('session.use_trans_sid', 0);
     }
 
+    // note: we cannot use the app cookie manager here.
     if( isset($_COOKIE[$session_name]) ) {
         // validate the contents of the cookie.
         if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
