@@ -808,7 +808,7 @@ final class ContentListBuilder
         $columns = $this->get_display_columns();
         $userid = $this->_userid;
 
-        if( !$config['page_template_llist'] ) {
+        if( !$config['page_template_list'] ) {
             // preload the templates.
             $tpl_list = array();
             foreach( $page_list as $page_id ) {
