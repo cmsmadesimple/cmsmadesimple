@@ -240,12 +240,13 @@ function is_sitedown()
     $uid = get_userid(FALSE);
     if( $uid && cms_siteprefs::get('sitedownexcludeadmins') ) return FALSE;
 
-    if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+    $ip = cms_utils::get_real_ip();
+    if( !$ip ) return TRUE;
     $excludes = cms_siteprefs::get('sitedownexcludes','');
     if( empty($excludes) ) return TRUE;
 
     $tmp = explode(',',$excludes);
-    $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+    $ret = cms_ipmatches($ip, $excludes);
     if( $ret ) return FALSE;
     return TRUE;
 }

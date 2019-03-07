@@ -97,15 +97,15 @@ $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
 $tmp[0]['query_var'] = testConfig('query_var', 'query_var');
-
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
-$tmp[1]['ssl_url'] = testConfig('ssl_url', 'ssl_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
+$tmp[1]['assets_path'] = testConfig('assets_path', 'assets_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
+$tmp[1]['public_cache_location'] = testConfig('public_cache_location', 'public_cache_location', 'testDirWrite' );
+$tmp[1]['public_cache_url'] = testConfig('public_cache_url', 'public_cache_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
-$tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
 $tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[0]['locale'] = testConfig('locale', 'locale');
 //$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
@@ -294,6 +294,7 @@ $tmp[0]['session_use_cookies'] = testBoolean(0, 'session.use_cookies', 'session.
 
 $tmp[0]['xml_function'] = testBoolean(1, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 $tmp[0]['xmlreader_class'] = testBoolean(1,'xmlreader_class',class_exists('XMLReader',false),'',false,false,'class_xmlreader_unavailable');
+$tmp[0]['apc_function'] = testBoolean(0, 'apc_function', function_exists('apc_store'), '', false, false, 'apc_not_available');
 
 #$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
 
@@ -397,7 +398,7 @@ $tmp[0]['tmp_cache'] = testDirWrite(0, $dir, $dir);
 $dir = TMP_TEMPLATES_C_LOCATION;
 $tmp[0]['templates_c'] = testDirWrite(0, $dir, $dir);
 
-$dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
+$dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'modules';
 $tmp[0]['modules'] = testDirWrite(0, $dir, $dir);
 
 $dir = $config['uploads_path'];

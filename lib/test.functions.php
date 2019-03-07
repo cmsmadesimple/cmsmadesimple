@@ -974,6 +974,7 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
     }
 
     $test->res = 'red';
+    if( !$required ) $test->res = 'yellow';
     global $lang_fn;
     getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir.')');
     return $test;

@@ -597,7 +597,7 @@ final class cms_config implements ArrayAccess
     {
         global $CMS_INSTALL_PAGE;
         if( !isset($CMS_INSTALL_PAGE) ) {
-            trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+            trigger_error('Modification of config variables is not permitted',E_USER_ERROR);
             return;
         }
         $this->_data[$key] = $value;
