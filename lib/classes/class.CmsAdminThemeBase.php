@@ -679,7 +679,7 @@ abstract class CmsAdminThemeBase
         $pending_selected_key = null;
         $req_url = new cms_url($_SERVER['REQUEST_URI']);
         $req_vars = array();
-        if( $_REQUEST['mact'] ) {
+        if( !empty($_REQUEST['mact']) ) {
             // if mact is available
             // can get the mact from the query
             $req_url->set_queryvar('mact',$_REQUEST['mact']);
