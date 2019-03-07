@@ -1050,9 +1050,11 @@ $lang['help_function_cms_module'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>It's just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_module module="somemodulename"}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>There is only one required parameter.  All other parameters are passed on to the module.</p>
+	<p>There is only one required parameter.  Other parameters that are not described below are passed on to the module.</p>
 	<ul>
 		<li>module - Name of the module to insert.  This is not case sensitive.</li>
+        <li>idprefix - A unique (per page) prefix to use on all input elements, and request variables.  if not specified, a unique id is generated</li>
+        <li>action - The name of the action to call.  If not specified, then the default action will be called for frontend requests.</li>
 	</ul>
 EOT;
 
