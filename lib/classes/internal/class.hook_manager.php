@@ -85,16 +85,15 @@ class hook_manager
         $args = func_get_args();
         $name = array_shift($args);
         $name = trim($name);
-
-        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return; // nothing to do.
-
-        // note: $args is an array
         $value = $args;
-        self::$_in_process[] = $name;
-
         if( is_array($value) && count($value) == 1 && isset($value[0]) ) {
             $value = $value[0];
         }
+
+        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return $value; // nothing to do
+
+        // note: $args is an array
+        self::$_in_process[] = $name;
 
         if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
             // sort the handlers.
@@ -144,10 +143,11 @@ class hook_manager
         $args = func_get_args();
         $name = array_shift($args);
         $name = trim($name);
-        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
+        $value = $args;
+
+        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return $value; // nothing to do.
 
         // note $args is an array
-        $value = $args;
         self::$_in_process[] = $name;
         $res = null;
 
@@ -198,8 +198,9 @@ class hook_manager
         $args = func_get_args();
         $name = array_shift($args);
         $name = trim($name);
+        $value = $args;
 
-        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return; // nothing to do.
+        if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return $value; // nothing to do.
 
         // sort the handlers.
         if( !self::$_hooks[$name]->sorted ) {
@@ -214,7 +215,6 @@ class hook_manager
         }
 
         $out = [];
-        $value = $args;
         self::$_in_process[] = $name;
 
         foreach( self::$_hooks[$name]->handlers as $obj ) {
