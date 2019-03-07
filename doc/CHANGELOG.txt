@@ -168,6 +168,7 @@ Core - General
   - CHANGE: Refactor the generation of mact urls.
   - CHANGE: Now, by default, when pretty urls are not enabled... generate a signed, encoded LONGER request that is forgery resistant.
   - CHANGE: New config entries to enable generation of old style mact URLs, and to allow processing of old style mact urls.
+  - CHANGE: By default, internal url_rewriting is enabled.  It can be disabled by changing the url_rewriting config entry to 'none'
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.

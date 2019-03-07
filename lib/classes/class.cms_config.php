@@ -542,7 +542,7 @@ final class cms_config implements ArrayAccess
                 return true;
 
             case 'url_rewriting':
-                return 'none';
+                return 'internal';
 
             case 'page_extension':
                 return '';
