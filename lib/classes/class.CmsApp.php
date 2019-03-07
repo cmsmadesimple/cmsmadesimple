@@ -723,6 +723,7 @@ final class CmsApp
     {
         // clear APC, or file cache separately and completely
         $config = $this->GetConfig();
+        \CMSMS\internal\global_cache::clear_all();
         $this->get_cache_driver()->clear();
 
         // additionall clear cached files that are older than N days old.
