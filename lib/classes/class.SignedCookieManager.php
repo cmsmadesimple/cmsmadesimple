@@ -25,7 +25,7 @@ class SignedCookieManager implements ICookieManager
 
     protected function get_key(string $key) : string
     {
-        return 'c'.sha1(__FILE__.$key);
+        return 'c'.sha1(__FILE__.$key.CMS_VERSION);
     }
 
     protected function cookie_path() : string
@@ -49,20 +49,20 @@ class SignedCookieManager implements ICookieManager
         return $res;
     }
 
-    public function get(string $key)
+    public function get(string $okey)
     {
-        $key = $this->get_key($key);
+        $key = $this->get_key($okey);
         if( isset($_COOKIE[$key]) ) {
             list($sig,$val) = explode(':::',$_COOKIE[$key],2);
-            if( sha1($val.__FILE__.$key) == $sig ) return $val;
+            if( sha1($val.__FILE__.$okey.CMS_VERSION) == $sig ) return $val;
         }
     }
 
-    public function set(string $key, $value, int $expires = 0) : bool
+    public function set(string $okey, $value, int $expires = 0) : bool
     {
         if( !is_string($value) ) throw new \LogicException('Cookie value passed to '.__METHOD__.' must be a string');
-        $key = $this->get_key($key);
-        $sig = sha1($value.__FILE__.$key);
+        $key = $this->get_key($okey);
+        $sig = sha1($value.__FILE__.$okey.CMS_VERSION);
         return $this->set_cookie($key,$sig.':::'.$value,$expires);
     }
 
