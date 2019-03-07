@@ -7,7 +7,7 @@
           {$pages=$articles->pageList()}
 	  {$mod->Lang('lbl_page')};
 	  {foreach $pages as $pagenum}
-	     <a href="{cms_action_url args=$params_str news_page=$pagenum}"/>{$pagenum}</a>
+	     <a {if $pagenum == $articles->page}class="active"{/if} href="{cms_action_url args=$params_str news_page=$pagenum inline=1}"/>{$pagenum}</a>
 	  {/foreach}
        </div>
    {/if}

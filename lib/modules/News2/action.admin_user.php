@@ -1,6 +1,7 @@
 <?php
 namespace News2;
 if( !isset($gCms) ) exit;
+if( !$this->VisibleToAdminUser() ) exit;
 
 $uid = (int) get_parameter_value( $params, 'uid' );
 if( $uid < 1 ) return;
