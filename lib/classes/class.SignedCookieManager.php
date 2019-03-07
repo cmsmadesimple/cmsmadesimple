@@ -43,7 +43,7 @@ class SignedCookieManager implements ICookieManager
         return $this->_secure;
     }
 
-    protected function set_cookie(string $key, string $encoded, int $expire) : bool
+    protected function set_cookie(string $key, string $encoded = null, int $expire) : bool
     {
         $res = setcookie($key, $encoded, $expire, $this->cookie_path(), $this->cookie_domain(), $this->cookie_secure(), TRUE);
         return $res;

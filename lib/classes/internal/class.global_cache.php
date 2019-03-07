@@ -31,9 +31,9 @@ class global_cache
 
     public static function get ($type)
     {
-        if (!isset (self::$_types[$type])) return;
-        if (!is_array (self::$_cache))
-        self::_load ();
+        if (!isset(self::$_types[$type])) return;
+        if (!is_array(self::$_cache))
+        self::_load();
 
         if (!isset (self::$_cache[$type])) {
             self::$_cache[$type] = self::$_types[$type]->fetch ();
@@ -52,9 +52,9 @@ class global_cache
     public static function clear ($type)
     {
         // clear it from the cache
-        $driver = self::_get_driver ();
-        $driver->erase ($type);
         unset (self::$_cache[$type]);
+        $driver = self::_get_driver ();
+        $driver->clear($type,__CLASS__);
     }
 
     public static function save ()
@@ -66,7 +66,7 @@ class global_cache
         $keys = array_keys (self::$_types);
         foreach ($keys as $key) {
             if (!empty (self::$_dirty[$key]) && isset (self::$_cache[$key])) {
-                $driver->set ($key, self::$_cache[$key]);
+                $driver->set ($key, self::$_cache[$key], __CLASS__);
                 unset (self::$_dirty[$key]);
             }
         }
@@ -91,11 +91,11 @@ class global_cache
     private static function _load ()
     {
         $driver = self::_get_driver ();
-        $keys = array_keys (self::$_types);
+        $keys = array_keys(self::$_types);
         self::$_cache =[];
         foreach ($keys as $key) {
-            if ($driver->exists ($key)) {
-                $tmp = $driver->get ($key);
+            if ($driver->exists ($key,__CLASS__)) {
+                $tmp = $driver->get($key,__CLASS__);
                 self::$_cache[$key] = $tmp;
             }
             unset ($tmp);
@@ -104,7 +104,7 @@ class global_cache
 
     public static function clear_all ()
     {
-        self::_get_driver ()->clear ();
-        self::$_cache = array ();
+        self::_get_driver()->clear(__CLASS__);
+        self::$_cache = [];
     }
 } // end of class
