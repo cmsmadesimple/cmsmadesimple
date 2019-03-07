@@ -90,7 +90,7 @@ $smarty->assign('installed_modules', $modules);
 clearstatcache();
 $tmp = array(0=>array(), 1=>array());
 
-$tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
+//$tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
@@ -113,6 +113,18 @@ $tmp[0]['locale'] = testConfig('locale', 'locale');
 $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 $tmp[0]['timezone'] = testConfig('timezone', 'timezone');
 $tmp[0]['permissive_smarty'] = testConfig('permissive_smarty','permissive_smarty');
+$test = new CmsInstallTest;
+$test->title = 'cache_driver';
+$test->value = ($config['cache_driver']) ? $config['cache_driver'] : lang('default');
+$test->secondvalue = ($config['cache_driver']) ? null : 'files';
+if( $config['cache_driver'] && $config['cache_driver'] <= 3600 ) $test->res = 'yellow';
+$tmp[0]['cache_driver'] = $test;
+$test = new CmsInstallTest;
+$test->title = 'cache_ttl';
+$test->value = ($config['cache_ttl']) ? $config['cache_ttl'] : lang('default');
+$test->secondvalue = ($config['cache_ttl']) ? $config['cache_ttl'] : 24 * 3600;
+$test->message = lang('info_cache_ttl');
+$tmp[0]['cache_ttl'] = $test;
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
@@ -123,6 +135,60 @@ $res = get_site_preference('allow_browser_cache',0);
 $tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'), FALSE);
 $res = get_site_preference('browser_cache_expiry',60);
 $tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
+
+if( $config['allow_old_mact'] ) {
+    $test = new CmsInstallTest;
+    $test->title = 'allow_old_mact';
+    $test->res = 'yellow';
+    $test->value = lang('on');
+    $test->secondvalue = lang('true');
+    $test->message = lang('test_allow_old_mact');
+    $test->display_value = false;
+    $tmp[0]['allow_old_mact'] = $test;
+}
+else {
+    $test = new CmsInstallTest;
+    $test->title = 'allow_old_mact';
+    $test->res = 'green';
+    $test->value = lang('off');
+    $test->secondvalue = lang('false');
+    $test->display_value = false;
+    $tmp[0]['allow_old_mact'] = $test;
+}
+if( $config['generate_old_mact'] ) {
+    $test = new CmsInstallTest;
+    $test->title = 'generate_old_mact';
+    $test->res = 'yellow';
+    $test->value = lang('on');
+    $test->secondvalue = lang('true');
+    $test->display_value = false;
+    $tmp[0]['generate_old_mact'] = $test;
+} else {
+    $test = new CmsInstallTest;
+    $test->title = 'generate_old_mact';
+    $test->res = 'green';
+    $test->value = lang('off');
+    $test->secondvalue = lang('false');
+    $test->display_value = false;
+    $tmp[0]['generate_old_mact'] = $test;
+}
+if( $config['debug_to_log'] ) {
+    $test = new CmsInstallTest;
+    $test->title = 'debug_to_log';
+    $test->res = 'yellow';
+    $test->value = lang('on');
+    $test->secondvalue = lang('true');
+    $test->display_value = false;
+    $tmp[0]['debug_to_log'] = $test;
+} else {
+    $test = new CmsInstallTest;
+    $test->title = 'debug_to_log';
+    $test->res = 'green';
+    $test->value = lang('off');
+    $test->secondvalue = lang('false');
+    $test->display_value = false;
+    $tmp[0]['debug_to_log'] = $test;
+}
 
 if( version_compare(phpversion(),'5.5') >= 0 ) {
     $opcache = ini_get('opcache.enable');
