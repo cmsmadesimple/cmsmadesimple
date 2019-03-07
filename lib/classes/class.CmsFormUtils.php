@@ -327,6 +327,161 @@ final class CmsFormUtils
         $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,CmsNlsOperations::get_encoding()).'</textarea>';
         return $result;
     }
-} // end of class
 
-?>
+    public static function create_form_start(array $params)
+    {
+        $gCms = cmsms();
+
+        // setup default mactparms and tagparms
+        $tagparms = $mactparms = [];
+        $mactparms['module'] = $mactparms['action'] = $mactparms['mid'] = $mactparms['inline'] = $mactparms['returnid'] = null;
+        $tagparms['method'] = 'post';
+        $tagparms['enctype'] = 'multipart/form-data';
+        if($gCms->test_state(CmsApp::STATE_LOGIN_PAGE) ) {
+            $tagparms['action'] = 'login.php';
+        }
+        else if($gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+            // check if it's a module action
+            if($mactparms['module'] ) {
+                $tagparms['action'] = 'moduleinterface.php';
+                if(!isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
+
+                $mactparms['returnid'] = '';
+                if(!$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
+            }
+        }
+        else if($gCms->is_frontend_request() ) {
+            if($mactparms['module'] ) {
+                $tagparms['action'] = 'index.php'; // default page
+                if(!$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();
+                $hm = $gCms->GetHierarchyManager();
+                $node = $hm->sureGetNodeById($mactparms['returnid']);
+                if($node ) {
+                    $content_obj = $node->getContent();
+                    if($content_obj ) $tagparms['action'] = $content_obj->GetURL();
+                }
+            }
+        }
+
+        // prcess arguments
+        $extra_str = null;
+        $parms = array();
+        foreach( $params as $key => $value ) {
+            switch( $key ) {
+            case 'module':
+            case 'action':
+            case 'mid':
+            case 'returnid':
+                $mactparms[$key] = trim($value);
+                break;
+
+            case 'inline':
+                $mactparms[$key] = cms_to_bool($value);
+                break;
+
+            case 'prefix':
+                $mactparms['mid'] = trim($value);
+                break;
+
+            case 'method':
+                $tagparms[$key] = strtolower(trim($value));
+                break;
+
+            case 'url':
+                $key = 'action';
+                if(dirname($value) == '.' ) {
+                    $config = $gCms->GetConfig();
+                    $value = $config['admin_url'].'/'.trim($value);
+                }
+                $tagparms[$key] = trim($value);
+                break;
+
+            case 'enctype':
+            case 'id':
+            case 'class':
+                $tagparms[$key] = trim($value);
+                break;
+
+            case 'extraparms':
+                if(is_array($value) && count($value) ) {
+                    foreach( $value as $key=>$value2 ) {
+                        $parms[$key] = $value2;
+                    }
+                }
+                break;
+
+            case 'extra_str':
+                $extra_str = trim($value);
+                break;
+
+            case 'assign':
+                break;
+
+            default:
+                if(startswith($key, 'form-') ) {
+                    $key = substr($key, 5);
+                    $tagparms[$key] = $value;
+                } else {
+                    $parms[$key] = $value;
+                }
+                break;
+            }
+        }
+
+        // make sure we have all the data in mactparms and tagparams, and extraparms
+        $extraparms = null;
+        if( !$gCms->is_frontend_request() ) {
+            if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
+            if( $mactparms['module'] ) {
+                if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
+                if( !$mactparms['action'] ) $mactparms['action'] = 'default';
+                if( !$mactparms['mid'] ) $mactparms['mid'] = 'cntnt01';
+                if( $mactparms['returnid'] > 0 ) {
+                    $hm = $gCms->GetHierarchyManager();
+                    $node = $hm->sureGetNodeById($mactparms['returnid']);
+                    if($node ) {
+                        $content_obj = $node->getContent();
+                        if($content_obj ) $tagparms['action'] = $content_obj->GetURL();
+                    }
+                }
+            }
+            if(!isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
+                // not frontend request, not linking to a frontend url.
+                if( isset($_SESSION[CMS_USER_KEY]) ) $extraparms[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+            }
+        }
+        else {
+            if( !$tagparms['action'] ) {
+                if( !isset($mactparms['module']) ) {
+                    cms_error('Call to CmsFormUtils::create_form_start for admin form does not have a module or tag action');
+                    return;
+                }
+                $tagparms['action'] = 'm.php';
+                if( !$mactparms['action'] ) $mactparms['action'] = 'defaultadmin';
+                if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
+                $mactparms['returnid'] = '';
+            }
+        }
+
+        if( $mactparms['module'] && $mactparms['action'] ) {
+            $encoder = $gCms->get_mact_encoder();
+            $mact = $encoder->create_mactinfo($mactparms['module'], $mactparms['mid'], $mactparms['action'], $mactparms['inline'], $parms);
+            $tagparms['action'] .= '?' . $encoder->encode_to_url($mact,$extraparms);
+            // we may want to take thie encoded URL and convert it into POST vars.
+            // but that is optional.
+        }
+
+        // assemble the output
+        $out = '<form';
+        foreach( $tagparms as $key => $value ) {
+            if($value ) {
+                $out .= " $key=\"$value\"";
+            } else {
+                $out .= " $key";
+            }
+        }
+        if( $extra_str ) $out .= ' '.$extra_str;
+        $out .= '>'."\n"; // end the form tag
+        return $out;
+    }
+} // end of class

@@ -152,9 +152,9 @@ class MactEncoder
         $json = json_encode($mact);
         $sig = sha1($json.$this->get_salt());
         $str = self::KEY.'='.base64_encode($sig.':::'.$json);
-        if( !empty($extraparams) ) {
-            foreach( $extraparams as $key => $val ) {
-                '&amp;'.$key.'='.rawurlencode(cms_htmlentities($val));
+        if( !empty($extraparms) ) {
+            foreach( $extraparms as $key => $val ) {
+                $str .= '&amp;'.$key.'='.rawurlencode(cms_htmlentities($val));
             }
         }
         return $str;

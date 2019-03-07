@@ -1523,6 +1523,7 @@ abstract class CMSModule
     /**
      * Returns the start of a module form
      *
+     * @deprecated
      * @param string $id The id given to the module on execution
      * @param string $action The action that this form should do when the form is submitted
      * @param string $returnid The page id to eventually return to when the module is finished it's task
@@ -1536,8 +1537,23 @@ abstract class CMSModule
      */
     public function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = [], $extra='')
     {
-        $this->_loadFormMethods();
-        return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
+        static $_formcount;
+        $parms =
+            [
+                'module'=>$this->GetName(), 'mid'=>$id, 'returnid'=>$returnid, 'action'=>$action, 'inline'=>$inline,
+                'method'=>$method, 'enctype'=>$method, 'extra_str'=>$extra
+            ];
+
+        // this is for compatibility, not really required
+        if( !$idsuffix ) $idsuffix = $_formcount++;
+        $parms['id'] = $id.'moduleform_'.$idsuffix;
+        $parms = array_merge($params, $parms);
+        // this prolly should go into the formutils class
+        $str = CmsFormUtils::create_form_start($parms);
+        return $str;
+
+        //$this->_loadFormMethods();
+        //return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
     }
 
     /**
@@ -1962,7 +1978,7 @@ abstract class CMSModule
         if( empty($params) ) $params = [];
         if( $tab != '' ) $this->SetCurrentTab($tab);
         if( empty($action) ) $action = 'defaultadmin';
-        $this->Redirect('m1_',$action,'',$params,FALSE);
+        $this->Redirect('m1_',$action,'',$params);
     }
 
     /**
@@ -1992,7 +2008,12 @@ abstract class CMSModule
     public function Redirect($id, $action, $returnid='', $params=[], $inline=false)
     {
         $url = $this->create_url($id, $action, $returnid, $params, $inline);
-        if( $url ) redirect($url);
+        if( $url ) {
+            // create_url has already encoded the url to entities for display... but params are urlencoded.
+            // so we have to decode the &amp; stuff
+            $url = str_replace('&amp;','&',$url);
+            redirect($url);
+        }
     }
 
     /**

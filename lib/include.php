@@ -91,12 +91,6 @@ $config = $_app->GetConfig();
 $_app->GetModuleOperations();
 $_app->GetContentOperations(); // compatibility
 \CMSMS\AuditManager::init();
-$_mact_encoder = $_app->get_mact_encoder();
-if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
-    // somebody is making a request using an old mact.
-    $_mact_encoder->remove_old_mact_params();
-}
-$_mact_encoder->expand_secure_mact();  // expands the secure MACT stuff into $_REQUEST
 
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);
@@ -190,6 +184,14 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
                                             });
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
+
+// note: the mact encoder reads a preference, so must happen afer siteprefs and global cache are setup.
+$_mact_encoder = $_app->get_mact_encoder();
+if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
+    // somebody is making a request using an old mact.
+    $_mact_encoder->remove_old_mact_params();
+}
+$_mact_encoder->expand_secure_mact(false);  // expands the secure MACT stuff into $_REQUEST
 
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {

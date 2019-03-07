@@ -31,6 +31,7 @@
  */
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
+    die('should not be called '.__FUNCTION__);
     $gCms = CmsApp::get_instance();
     static $_formcount = 1;
 
@@ -43,6 +44,9 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
     if ($idsuffix == '') $idsuffix = $_formcount++;
 
+    // use create_url, but create an ugly url for the form action.
+    $goto = $modinstance->create_url($id,$action,$returnid, $inline, false, ':NOPRETTY:');
+    /*
     $goto = 'moduleinterface.php';
     if( $returnid > 0 ) {
         $goto = 'index.php';
@@ -50,13 +54,17 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
         if( $content_obj ) $goto = $content_obj->GetURL();
     }
     if( CmsApp::get_instance()->is_https_request() && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
+    */
+
     $goto = ' action="'.$goto.'"';
 
     $text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
     $text .= ' class="cms_form"';
     if ($enctype != '') $text .= ' enctype="'.$enctype.'"';
     if ($extra != '') $text .= ' '.$extra;
-    $text .= '>'."\n".'<div class="hidden">'."\n".'<input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />'."\n";
+    $text .= '>'."\n".'<div class="hidden">'."\n";
+    // $text .= '<input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />'."\n";
+
     if ($returnid > 0 ) {
         $text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
         if ($inline) $text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
@@ -360,7 +368,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         $text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
     }
     else {
-        $extraparms = null;
+        $extraparams = null;
         $text = $base_url.'/index.php';
         if( $returnid <= 0 ) {
             $id = 'm1_';
@@ -368,12 +376,12 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
             if( isset($_SESSION[CMS_USER_KEY]) ) $extraparams[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
         } else if( $targetcontentonly || !$inline || !$id ) {
             $id = 'cntnt01';
-            $extraparms[$config['query_var']] = $returnid;
+            $extraparams[$config['query_var']] = $returnid;
         }
 
         // now we do the encoding of parameters.
         $mact = $mact_assistant->create_mactinfo($modinstance,$id,$action,$inline,$params);
-        $text .= '?'.$mact_assistant->encode_to_url($mact,$extraparms);
+        $text .= '?'.$mact_assistant->encode_to_url($mact,$extraparams);
     }
 
     return $text;
