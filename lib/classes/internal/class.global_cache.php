@@ -81,7 +81,7 @@ class global_cache
     private static function _get_driver ()
     {
         if (!self::$_driver) {
-            $self::$_driver =
+            self::$_driver =
             new \
             cms_filecache_driver([ 'lifetime' =>self::TIMEOUT, 'autocleaning' =>1, 'group' =>__CLASS__ ]);
         }
