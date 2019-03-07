@@ -296,6 +296,7 @@ class cms_filecache_driver extends cms_cache_driver
                 }
                 @fclose($fp);
 
+                // here we could check signatures.
                 if( $data && startswith($data,self::KEY_SERIALIZED) ) {
                     $data = unserialize(substr($data,strlen(self::KEY_SERIALIZED)));
                 }
@@ -334,6 +335,7 @@ class cms_filecache_driver extends cms_cache_driver
                 if( is_array($data) || is_object($data) ) {
                     $data = self::KEY_SERIALIZED.serialize($data);
                 }
+                // here we could sign the data
                 @fwrite($fp,$data);
                 $this->flock($fp,self::LOCK_UNLOCK);
             }
