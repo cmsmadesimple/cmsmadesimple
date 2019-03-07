@@ -69,7 +69,7 @@ final class cms_cookies
     /**
      * @ignore
      */
-    final private function __mgr()
+    final private function _mgr()
     {
         static $_mgr;
         if( !$_mgr ) $_mgr = CmsApp::get_instance()->get_cookie_manager();
@@ -98,7 +98,7 @@ final class cms_cookies
      */
     public static function get($key)
     {
-        return self::_mgr()->get($kkey)
+        return self::_mgr()->get($key);
     }
 
 

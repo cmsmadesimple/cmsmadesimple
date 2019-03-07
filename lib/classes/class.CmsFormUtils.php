@@ -335,6 +335,7 @@ final class CmsFormUtils
         // setup default mactparms and tagparms
         $tagparms = $mactparms = [];
         $mactparms['module'] = $mactparms['action'] = $mactparms['mid'] = $mactparms['inline'] = $mactparms['returnid'] = null;
+        $tagparms['action'] = null;
         $tagparms['method'] = 'post';
         $tagparms['enctype'] = 'multipart/form-data';
         if($gCms->test_state(CmsApp::STATE_LOGIN_PAGE) ) {
