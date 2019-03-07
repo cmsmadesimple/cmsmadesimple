@@ -679,8 +679,8 @@ abstract class CmsAdminThemeBase
         $pending_selected_key = null;
         $req_url = new cms_url($_SERVER['REQUEST_URI']);
         $req_vars = array();
-        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
-            // if mact is available via post and not via get we fake it, so that comparisons
+        if( $_REQUEST['mact'] ) {
+            // if mact is available
             // can get the mact from the query
             $req_url->set_queryvar('mact',$_REQUEST['mact']);
             $req_url = new cms_url((string)$req_url);
@@ -689,27 +689,27 @@ abstract class CmsAdminThemeBase
 
         foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
             if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
-            isset($_REQUEST['mact']) &&
-            isset($sectionArray['module']) && $sectionArray['module'] ) {
+                isset($req_vars['mact']) &&
+                isset($sectionArray['module']) && $sectionArray['module'] ) {
 
-                    // note, this is kludgy
-                    // we compare each and every menu item against the request.
-                    // if the mact is set for both, and the module portion of the mact
-                    // are the same, we add a reference to the option to our 'matches'
-                    // list.  at the end, we re-compare
+                // note, this is kludgy
+                // we compare each and every menu item against the request.
+                // if the mact is set for both, and the module portion of the mact
+                // are the same, we add a reference to the option to our 'matches'
+                // list.  at the end, we re-compare
                 $u1 = new cms_url(cms_html_entity_decode($sectionArray['url']));
                 $v1 = array();
                 parse_str($u1->get_query(),$v1);
                 if( $u1->get_path() == $req_url->get_path() &&
-                isset($v1['mact']) && isset($req_vars['mact']) ) {
+                    isset($v1['mact']) && isset($req_vars['mact']) ) {
 
-                          $t1 = explode(',',$v1['mact']);
-                          $t2 = explode(',',$req_vars['mact']);
+                    $t1 = explode(',',$v1['mact']);
+                    $t2 = explode(',',$req_vars['mact']);
                     if( $t1[0] == $t2[0] ) {
                         if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
-                               // requested action is for the same module and same action, we're done.
-                               $selected_key = $sectionKey;
-                               break;
+                            // requested action is for the same module and same action, we're done.
+                            $selected_key = $sectionKey;
+                            break;
                         }
                         else if( !$pending_selected_key ) {
                             // requested action is for the same module, but different actions

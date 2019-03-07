@@ -46,7 +46,9 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
  */
 function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=array(), $inline=false)
 {
+    die('no longer used');
     $name = $modinstance->GetName();
+    $returnid = (int) $returnid;
 
     // Suggestion by Calguy to make sure 2 actions don't get sent
     if (isset($params['action']))unset($params['action']);
@@ -54,40 +56,34 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
     if (isset($params['module'])) unset($params['module']);
     if (!$inline && $returnid != '') $id = 'cntnt01';
 
+    $mact = $this->get_mact_encoder()->create_mactinfo($name,$id,$action,$inline);
+    if( !$mact ) return;
+
     $text = '';
-    if ($returnid != '') {
+    if ($returnid > 0) {
         $contentops = ContentOperations::get_instance();
         $content = $contentops->LoadContentFromId($returnid);
-        if( !is_object($content) ) {
-            // no destination content object
-            return;
-        }
+        if( !is_object($content) ) return;  // no destination content object
         $text .= $content->GetURL();
 
         $parts = parse_url($text);
         if( isset($parts['query']) && $parts['query'] != '?' ) {
-            $text .= '&';
+            $text .= '&amp;';
         }
         else {
             $text .= '?';
         }
+        $config = cmsms()->GetConfig();
+        $text .= $config['query_var']."={$returnid}&smp;";
     }
     else {
-        $text .= 'moduleinterface.php?';
+        $text .= 'moduleinterface.php?CMS_SECURE_PARAM_NAME='.$_SESSION['CMS_USER_KEY'].'&amp;';
     }
 
-    $text .= 'mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
-    if ($returnid != '') {
-        $text .= '&'.$id.'returnid='.$returnid;
-    }
-    else {
-        $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-    }
+    $text .= cmsms()->get_mact_encoder()->encode_to_url($mact);
 
     foreach ($params as $key=>$value) {
         if( $key !== '' && $value !== '' ) $text .= '&'.$id.$key.'='.rawurlencode($value);
     }
     redirect($text);
 }
-
-?>

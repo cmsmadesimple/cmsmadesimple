@@ -164,6 +164,10 @@ Core - General
   - IMPROVEMENT: Adds new classes for working with cookies.  Including a signed cookie manager that signs all cookie values and obfuscates keys.
   - CHANGE: cms_cookies now uses the AutoCookie manager which allows storing extracting simple objects arrays and strings from the cookies.
   - REMOVED: News is no longer distributed with he core, and is no longer considered a system/core module.
+  - CHANGE: The CMSModule::CreateReturnLink() method is deprecated, and now ignores the params array (don't think it ever did work)
+  - CHANGE: Refactor the generation of mact urls.
+  - CHANGE: Now, by default, when pretty urls are not enabled... generate a signed, encoded LONGER request that is forgery resistant.
+  - CHANGE: New config entries to enable generation of old style mact URLs, and to allow processing of old style mact urls.
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.

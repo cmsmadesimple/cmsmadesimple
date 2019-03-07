@@ -1921,25 +1921,10 @@ abstract class CMSModule
     }
 
     /**
-     * Returns the xhtml equivalent of an href link for content links.	This is basically a nice
-     * little wrapper to make sure that we go back to where we want and that it's xhtml complient
-     *
-     * @param int $pageid the page id of the page we want to direct to
-     * @param string $contents The optional text or XHTML contents of the generated link
-     * @return string
-     * @deprecated
-     */
-    public function CreateContentLink($pageid, $contents='')
-    {
-        $this->_loadFormMethods();
-        return cms_module_CreateContentLink($this, $pageid, $contents);
-    }
-
-
-    /**
      * Returns the xhtml equivalent of an href link for Content links.	This is basically a nice little wrapper
      * to make sure that we go back to where we want to and that it's xhtml compliant.
      *
+     * @deprecated
      * @param string $id The id given to the module on execution
      * @param string $returnid The id to return to when the module is finished it's task
      * @param string $contents The text that will have to be clicked to follow the link
@@ -1949,6 +1934,7 @@ abstract class CMSModule
      */
     public function CreateReturnLink($id, $returnid, $contents='', $params=[], $onlyhref=false)
     {
+        die(__METHOD__.' should not be used');
         $this->_loadFormMethods();
         return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
     }
@@ -2005,20 +1991,8 @@ abstract class CMSModule
      */
     public function Redirect($id, $action, $returnid='', $params=[], $inline=false)
     {
-        $this->_loadRedirectMethods();
-        return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
-    }
-
-    /**
-     * Redirects to an admin page
-     * @param string $page php script to redirect to
-     * @param array  $params optional array of url parameters
-     * @deprecated
-     */
-    public function RedirectToAdmin($page,$params = [])
-    {
-        $this->_loadRedirectMethods();
-        return cms_module_RedirectToAdmin($this,$page,$params);
+        $url = $this->create_url($id, $action, $returnid, $params, $inline);
+        if( $url ) redirect($url);
     }
 
     /**

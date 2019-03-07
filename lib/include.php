@@ -91,6 +91,12 @@ $config = $_app->GetConfig();
 $_app->GetModuleOperations();
 $_app->GetContentOperations(); // compatibility
 \CMSMS\AuditManager::init();
+$_mact_encoder = $_app->get_mact_encoder();
+if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
+    // somebody is making a request using an old mact.
+    $_mact_encoder->remove_old_mact_params();
+}
+$_mact_encoder->expand_secure_mact();  // expands the secure MACT stuff into $_REQUEST
 
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);

@@ -19,7 +19,8 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 use CMSMS\internal\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
-use \CMSMS\internal\Smarty;
+use CMSMS\internal\MactEncoder;
+use CMSMS\internal\Smarty;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
 use CMSMS\ScriptManager;
@@ -644,6 +645,50 @@ final class CmsApp
         static $mgr;
         if( !$mgr ) $mgr = new AutoCookieManager($this);
         return $mgr;
+    }
+
+    /**
+     * Get the mact encoder/decoder
+     *
+     * @internal
+     * @since 2.3
+     */
+    public function get_mact_encoder() : MactEncoder
+    {
+        static $obj;
+        if( !$obj ) $obj = new MactEncoder( $this );
+        return $obj;
+    }
+
+    /**
+     * If we have a secure MACT request, this will expand it into the old form inside $_REQUEST
+     *
+     * @internal
+     * @since 2.3
+     */
+    public function expand_secure_mact()
+    {
+        $this->get_mact_encoder()->expand_secure_mact();
+    }
+
+    /**
+     * Get a randmoized string to uniquely identify this site
+     * can be used as a salt for other hashes.
+     *
+     * @since 2.3
+     * @return string
+     */
+    public function get_site_identifier()
+    {
+        static $val;
+        if( !$val ) {
+            $val = cms_siteprefs::get(__CLASS__.'mask');
+            if( !$val ) {
+                $val = sha1(__FILE__.time().rand().__CLASS__);
+                cms_siteprefs::set(__CLASS__.'mask', $val);
+            }
+        }
+        return $val;
     }
 
     /**

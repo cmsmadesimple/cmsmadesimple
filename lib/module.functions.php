@@ -37,7 +37,6 @@
  */
 function cms_module_plugin($params,&$smarty)
 {
-    //if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
     $app = cmsms();
     $modops = $app->GetModuleOperations();
     $modulename = '';
@@ -58,11 +57,13 @@ function cms_module_plugin($params,&$smarty)
         $id = $params['idprefix'];
         unset($params['idprefix']);
     } else {
+        // no id/prefix ... so lets generate one based on the params of this call.
+        // it is reproducable... so same request will geneate the same idprefix.
         $mid_cache = cms_utils::get_app_data('mid_cache');
         if( empty($mid_cache) ) $mid_cache = [];
-        $tmp = serialize( $params );
+        $tmp = json_encode( $params );
         for( $i = 0; $i < 10; $i++ ) {
-            $id = 'm'.substr(md5($tmp.$i),0,5);
+            $id = 'm'.substr(md5($tmp.__FILE__.$i),0,5);
             if( !isset($mid_cache[$id]) ) {
                 $mid_cache[$id] = $id;
                 break;
@@ -77,28 +78,20 @@ function cms_module_plugin($params,&$smarty)
         unset( $params['action']);
     }
 
-    if (isset($_REQUEST['mact'])) {
+    $mactinfo = $app->get_mact_encoder()->decode();
+    if ($mactinfo) {
         // we're handling an action.  check if it is for this call.
         // we may be calling module plugins multiple times in the template,  but a POST or GET mact
-        // canx only be for one of them.
-        $checkid = null;
-        $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
-        $mactmodulename = (isset($ary[0])?$ary[0]:'');
-        if( 0 == strcasecmp($mactmodulename,$modulename) ) {
-            $checkid = (isset($ary[1])?$ary[1]:'');
-            $mactaction = (isset($ary[2])?$ary[2]:'');
-            $inline = (isset($ary[3]) && $ary[3] == 1?true:false);
-
-            if ($checkid == $id && $inline == true ) {
-                // the action is for this instance of the module and we're inline (the results are supposed to replace
-                // the tag, not {content}
-                $action = $mactaction;
-                $params = array_merge($params, $modops->GetModuleParameters($id));
-            }
+        // can only be for one of them.
+        $inline = false;
+        if( 0 == strcasecmp($mactinfo->module, $modulename) && $id == $mactinfo->id) {
+            $action = $mactinfo->action;
+            $inline = $mactinfo->inline;
+            $params = array_merge($params, $mactinfo->params);
         }
     }
 
-    class_exists($modulename); // autoload? why
+    // class_exists($modulename); // autoload?
     $module = $modops->get_module_instance($modulename);
     global $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $CMS_INSTALL;
     if( $module && ($module->isPluginModule() || (isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL) && !isset($CMS_LOGIN_PAGE) ) ) ) {

@@ -337,7 +337,8 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
-    $config = \cms_config::get_instance();
+    $config = cmsms()->GetConfig();
+    $mact_assistant = cmsms()->get_mact_encoder();
 
     $text = '';
     if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {
@@ -351,7 +352,6 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
     $base_url = CMS_ROOT_URL;
 
     // get the destination content object
-    if( $returnid > 0 ) $content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
 
     if ($prettyurl && $prettyurl != ':NOPRETTY:' && $config['url_rewriting'] == 'mod_rewrite') {
         $text = $base_url . '/' . $prettyurl . $config['page_extension'];
@@ -360,30 +360,20 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         $text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
     }
     else {
-        $text = '';
-        $goto = 'index.php';
+        $extraparms = null;
+        $text = $base_url.'/index.php';
         if( $returnid <= 0 ) {
             $id = 'm1_';
-            $goto = 'moduleinterface.php';
-        } else if( $targetcontentonly || !$inline ) {
+            $text = $config['admin_url'] .'/moduleinterface.php';
+            if( isset($_SESSION[CMS_USER_KEY]) ) $extraparams[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+        } else if( $targetcontentonly || !$inline || !$id ) {
             $id = 'cntnt01';
+            $extraparms[$config['query_var']] = $returnid;
         }
 
-        $text = $base_url;
-        if( $returnid <= 0 ) $text = $config['admin_url'];
-
-        $secureparam = '';
-        if( $returnid <= 0 && isset($_SESSION[CMS_USER_KEY]) ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-        $text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
-        if( isset($params['returnid']) && $returnid <= 0 ) unset($params['returnid']);
-        foreach ($params as $key=>$value) {
-            $key = cms_htmlentities($key);
-            if( startswith($key,'__') ) continue;  // 2.3
-            if( in_array($key,array('assign','id','returnid','action','module')) ) continue;
-            $value = cms_htmlentities($value);
-            $text .= '&amp;'.$id.$key.'='.rawurlencode($value);
-        }
-        if( $returnid > 0 ) $text .= '&amp;'.$config['query_var'].'='.$returnid;
+        // now we do the encoding of parameters.
+        $mact = $mact_assistant->create_mactinfo($modinstance,$id,$action,$inline,$params);
+        $text .= '?'.$mact_assistant->encode_to_url($mact,$extraparms);
     }
 
     return $text;
@@ -391,78 +381,25 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 
 /**
  * @access private
- */
-function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
-{
-    $pageid = cms_htmlentities($pageid);
-    $contents = cms_htmlentities($contents);
-
-    $gCms = CmsApp::get_instance();
-    $config = $gCms->GetConfig();
-    $text = '<a href="';
-    if ($config["url_rewriting"] == 'mod_rewrite') {
-        // mod_rewrite
-        $contentops = $gCms->GetContentOperations();
-        $alias = $contentops->GetPageAliasFromID( $pageid );
-        if( $alias == false ) {
-            return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
-        }
-        else {
-            $text .= CMS_ROOT_URL."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.shtml');
-        }
-    }
-    else {
-        // not mod rewrite
-        $text .= CMS_ROOT_URL."/index.php?".$config["query_var"]."=".$pageid;
-    }
-    $text .= '">'.$contents.'</a>';
-    return $text;
-}
-
-/**
- * @access private
+ * @deprecated
  */
 function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents='', $params=array(), $onlyhref=false)
 {
-    $id = cms_htmlentities($id);
-    $returnid = cms_htmlentities($returnid);
-    $contents = $contents;
+    // as of 2.3 this method ignores the params array, and is deprecated.
+    $id = trim($id);
+    $returnid = (int) $returnid;
+    $contents = cms_htmlentities($contents);
 
-    $text = '';
     $gCms = CmsApp::get_instance();
-    $config = $gCms->GetConfig();
     $manager = $gCms->GetHierarchyManager();
     $node = $manager->sureGetNodeById($returnid);
-    if (isset($node)) {
-        $content = $node->GetContent();
+    if( !$node ) return;
+    $content = $node->GetContent();
+    if( !$content ) return;
+    $url = $content->GetURL();
+    if( !$url ) return;
+    if( $onlyhref ) return $url;
 
-        if (isset($content)) {
-            if ($content->GetURL() != '') {
-                if (!$onlyhref) $text .= '<a href="';
-                $text .= $content->GetURL();
-                $count = 0;
-                foreach ($params as $key=>$value) {
-                    $key = cms_htmlentities($key);
-                    $value = cms_htmlentities($value);
-                    if ($count == 0) {
-                        if ($config["url_rewriting"] != 'none')
-                        $text .= '?';
-                        else
-                        $text .= '&amp;';
-                    }
-                    else {
-                        $text .= '&amp;';
-                    }
-                    $text .= $id.$key.'='.$value;
-                    $count++;
-                }
-                if (!$onlyhref) {
-                    $text .= "\"";
-                    $text .= '>'.$contents.'</a>';
-                }
-            }
-        }
-    }
-
-    return $text;
+    $fmt = '<a href="%s">%s</a>';
+    return sprintf($fmt,$url,$contents);
 }
