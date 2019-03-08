@@ -345,6 +345,7 @@ class LayoutTemplateManager
         if( $this->cache_driver->exists($key,__CLASS__) ) {
             $map = $this->cache_driver->get($key,__CLASS__);
         } else {
+	    $db = $this->db;
             $sql = 'SELECT id FROm '.$this->template_table_name().' WHERE id = ?';
             $list = $db->GetCol($sql,$type->get_id());
             if( is_array($list) && !empty($list) ) {
