@@ -18,25 +18,25 @@ namespace CMSMS {
             $ip_addr = null;
             if( $userid < 1 ) $userid = null;
 
-            $out = "CMSMS MSG: ADMINUSER=$username ($userid), ITEMID=$itemid: SUBJECT=$subject, MSG=$msg";
+            $out = "CMSMS MSG: ADMINUSER=$username ($userid), ITEMID=$itemid: SUBJECT=$subject, MSG=$msg\n";
             $this->notice( $out );
         }
 
         public function notice( $msg, $subject = null )
         {
-            $msg = "CMSMS NOTICE: SUBJECT=$subject, $msg";
+            $msg = "CMSMS NOTICE: SUBJECT=$subject, $msg\n";
             @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
         public function warning( $msg, $subject = null )
         {
-            $msg = "CMSMS WARNING: SUBJECT=$subject, $msg";
+            $msg = "CMSMS WARNING: SUBJECT=$subject, $msg\n";
             @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
         public function error( $msg, $subject = null )
         {
-            $msg = "CMSMS ERROR: SUBJECT=$subject, $msg";
+            $msg = "CMSMS ERROR: SUBJECT=$subject, $msg\n";
             @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
     }

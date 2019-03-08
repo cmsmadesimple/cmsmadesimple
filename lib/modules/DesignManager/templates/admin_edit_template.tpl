@@ -62,12 +62,15 @@ $(function(){
     $(document).on('click', '#applybtn', function(e){
         e.preventDefault();
         data = $('#form_edittemplate').serializeArray();
+	data.push({ name: '{$actionid}apply', value: 1 })
+	/*
 	data.forEach((item) => {
 	    if( item.name == 'mact' ) {
 	       let prefix = item.value.split(',')[1]
 	       data.push({ name: prefix+'apply', value: 1 })
             }
         })
+	*/
         var url = $('#form_edittemplate').attr('action')+'?showtemplate=false'
 
         $.post(url, data, function(data,textStatus,jqXHR) {

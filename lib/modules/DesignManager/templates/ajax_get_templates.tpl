@@ -87,7 +87,7 @@ $('#tpl_selall').cmsms_checkall();
 	  {* design column *}
 	  <td class="col_design">
 	    {assign var='t1' value=$template->get_designs()}
-	    {if count($t1) == 1}
+	    {if !empty($t1) && count($t1) == 1}
 	      {assign var='t1' value=$t1[0]}
 	      {assign var='hn' value=$design_names.$t1}
 	      {if $manage_designs}
@@ -96,7 +96,7 @@ $('#tpl_selall').cmsms_checkall();
 	      {else}
 		{$hn}
 	      {/if}
-	    {elseif count($t1) == 0}
+	    {elseif empty($t1)}
 	      <span title="{$mod->Lang('help_template_no_designs')}">{$mod->Lang('prompt_none')}</span>
    	    {else}
 	      <span title="{$mod->Lang('help_template_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>

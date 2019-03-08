@@ -464,12 +464,16 @@ final class CmsFormUtils
             }
         }
 
+        // encode the secure params, and the mact into an array of variables to attach to the form.
+        $formdata = null;
         if( $mactparms['module'] && $mactparms['action'] ) {
             $encoder = $gCms->get_mact_encoder();
             $mact = $encoder->create_mactinfo($mactparms['module'], $mactparms['mid'], $mactparms['action'], $mactparms['inline'], $parms);
-            $tagparms['action'] .= '?' . $encoder->encode_to_url($mact,$extraparms);
-            // we may want to take thie encoded URL and convert it into POST vars.
-            // but that is optional.
+            $formdata = $encoder->encode_mact($mact);
+        }
+        if( !empty($extraparms) ) {
+            if( empty($formdata) ) $formdata = [];
+            $formdata = array_merge($formdata,$extraparms);
         }
 
         // assemble the output
@@ -483,6 +487,16 @@ final class CmsFormUtils
         }
         if( $extra_str ) $out .= ' '.$extra_str;
         $out .= '>'."\n"; // end the form tag
+
+        if( !empty($formdata) ) {
+            $out .= '<div class="hidden">';
+            $fmt = '<input type="hidden" name="%s" value="%s"/>';
+            foreach( $formdata as $key => $val ) {
+                $out .= sprintf($fmt,$key,$val);
+            }
+            $out .= '</div>';
+        }
+
         return $out;
     }
 } // end of class

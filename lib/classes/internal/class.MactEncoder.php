@@ -198,6 +198,14 @@ class MactEncoder
         return $out;
     }
 
+    public function encode_mact(MactInfo $mact)
+    {
+        $json = json_encode($mact);
+        $sig = sha1($json.$this->get_salt());
+        $arr = [ self::KEY => base64_encode($sig.':::'.$json)];
+        return $arr;
+    }
+
     public function encode_to_url(MactInfo $mact, array $extraparms = null)
     {
         if( $this->generate_old_mact ) return $this->encode_to_mact_url($mact, $extraparms);
