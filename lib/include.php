@@ -100,6 +100,12 @@ if ($config["debug"] == true) {
 // Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
+#Fix for IIS (and others) to make sure REQUEST_URI is filled in
+if (!isset($_SERVER['REQUEST_URI'])) {
+    $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+    if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+}
+
 if( cms_to_bool(ini_get('register_globals')) ) {
     echo 'FATAL ERROR: For security reasons register_globals must not be enabled for any CMSMS install.  Please adjust your PHP configuration settings to disable this feature.';
     die();
@@ -185,14 +191,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 
-// note: the mact encoder reads a preference, so must happen afer siteprefs and global cache are setup.
-$_mact_encoder = $_app->get_mact_encoder();
-if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
-    // somebody is making a request using an old mact.
-    $_mact_encoder->remove_old_mact_params();
-}
-$_mact_encoder->expand_secure_mact(false);  // expands the secure MACT stuff into $_REQUEST
-
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
     try {
@@ -205,13 +203,15 @@ if (!isset($DONT_LOAD_DB)) {
     }
 }
 
-#Fix for IIS (and others) to make sure REQUEST_URI is filled in
-if (!isset($_SERVER['REQUEST_URI'])) {
-    $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-    if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
-}
-
 if (! isset($CMS_INSTALL_PAGE)) {
+    // note: the mact encoder reads a preference, so must happen afer siteprefs and global cache are setup.
+    $_mact_encoder = $_app->get_mact_encoder();
+    if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
+        // somebody is making a request using an old mact.
+        $_mact_encoder->remove_old_mact_params();
+    }
+    $_mact_encoder->expand_secure_mact(false);  // expands the secure MACT stuff into $_REQUEST
+
     $_app->GetHookMappingManager(); // initialize hook mappings.
 
     // Set a umask (should prolly go into the CmsApp stuff)

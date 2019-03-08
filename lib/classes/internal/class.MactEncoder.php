@@ -215,7 +215,7 @@ class MactEncoder
         $arr['action'] = trim($action);
         $arr['id'] = trim($id);
         $arr['inline'] = $inline;
-        if( !$inline || !$arr['id'] ) $arr['id'] = MactInfo::CNTNT01;
+        if( !$arr['id'] ) $arr['id'] = MactInfo::CNTNT01;
         if( !empty($params) ) {
             $excluded = ['assign','id','returnid','action','module'];
             $tmp = null;

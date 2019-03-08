@@ -681,13 +681,8 @@ final class CmsApp
     public function get_site_identifier()
     {
         static $val;
-        if( !$val ) {
-            $val = cms_siteprefs::get(__CLASS__.'mask');
-            if( !$val ) {
-                $val = sha1(__FILE__.time().rand().__CLASS__);
-                cms_siteprefs::set(__CLASS__.'mask', $val);
-            }
-        }
+        if( !$val ) $val = cms_siteprefs::get('site_signature');
+        if( !$val ) cms_error('site_signature preference is empty... hopefully a development issue');
         return $val;
     }
 
