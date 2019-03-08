@@ -60,7 +60,7 @@ try {
             $article->category_id = (int) get_parameter_value($_POST,'category_id');
             $article->summary = $_POST['summary'] ?? null;
             $article->content = $_POST['content'];
-            $article->status = $_POST['status'];
+            $article->status = filter_var( $_POST['status'], FILTER_SANITIZE_STRING );
             $article->searchable = cms_to_bool( $_POST['searchable']);
             $article->url_slug = filter_var( $_POST['url_slug'], FILTER_SANITIZE_STRING );
             $article->news_date = $mktime( $_POST, 'newsdate_', true );

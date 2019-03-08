@@ -37,8 +37,8 @@ $(function(){
 
 {tab_start name='content'}
 <div class="c_full cf">
-  <label for="fld_title" class="grid_3">{$mod->Lang('lbl_title')}</label>
-  <input id="fld_title" class="grid_8" name="title" value="{$article->title}" required/>
+  <label for="fld_title" class="grid_3">{$mod->Lang('lbl_title')}*</label>
+  <input id="fld_title" class="grid_8 required" name="title" value="{$article->title}" required/>
 </div>
 
 {if $settings->editor_summary_enabled}
@@ -51,17 +51,20 @@ $(function(){
 {/if}
 
 <div class="c_full cf">
-  <label for="fld_content" class="grid_3">{$mod->Lang('lbl_content')}</label>
+  <label for="fld_content" class="grid_3">{$mod->Lang('lbl_content')}*</label>
   <div class="grid_8">
-      {cms_textarea name=content enablewysiwyg=1 id="fld_content" rows="10" value=$article->content}
+      {cms_textarea name=content enablewysiwyg=1 id="fld_content" required=1 rows="10" value=$article->content}
   </div>
 </div>
+
+{if !empty($category_tree_list)}
 <div class="c_full cf">
   <label for="fld_category_id" class="grid_3">{$mod->Lang('lbl_category')}</label>
   <select id="fld_category_id" class="grid_8" name="category_id">
      {html_options options=$category_tree_list selected=$article->category_id}
   </select>
 </div>
+{/if}
 
 {if !empty($fielddef_list)}
   {tab_start name=fields}
