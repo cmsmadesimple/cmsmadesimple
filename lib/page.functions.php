@@ -271,26 +271,26 @@ function create_file_dropdown(string $name,string $dir,string $value,string $all
                               bool $allownone=false,string $extratext='',
                               string $fileprefix='',bool $excludefiles=true,bool $sortresults = false)
 {
-  $files = array();
-  $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
-  if( $files === false ) return false;
-  $out = "<select name=\"{$name}\" id=\"{$name}\" {$extratext}>\n";
-  if( $allownone ) {
-    $txt = '';
-    if( empty($value) ) $txt = 'selected="selected"';
-    $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
-  }
+    $files = array();
+    $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
+    if( $files === false ) return false;
+    $out = "<select name=\"{$name}\" id=\"{$name}\" {$extratext}>\n";
+    if( $allownone ) {
+        $txt = '';
+        if( empty($value) ) $txt = 'selected="selected"';
+        $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
+    }
 
-  if( $sortresults ) natcasesort($files);
-  foreach( $files as $file ) {
-    $txt = '';
-    $opt = $file;
-    if( !empty($optprefix) ) $opt = $optprefix.'/'.$file;
-    if( $opt == $value ) $txt = 'selected="selected"';
-    $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
-  }
-  $out .= "</select>";
-  return $out;
+    if( $sortresults ) natcasesort($files);
+    foreach( $files as $file ) {
+        $txt = '';
+        $opt = $file;
+        if( !empty($optprefix) ) $opt = $optprefix.'/'.$file;
+        if( $opt == $value ) $txt = 'selected="selected"';
+        $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
+    }
+    $out .= "</select>";
+    return $out;
 }
 
 

@@ -27,7 +27,7 @@
  * @return string converted
  */
 function __code_to_utf8($num) {
-  if ($num <= 0x7F) {
+    if ($num <= 0x7F) {
         $ord = $ord[1];
         if (preg_match('/^x([0-9a-f]+)$/i', $ord, $match)) {
             $ord = hexdec($match[1]);
@@ -79,7 +79,7 @@ function __code_to_utf8($num) {
         }
 
         return $ret;
-  }
+    }
 }
 
 /**
@@ -90,7 +90,7 @@ function __code_to_utf8($num) {
  * @return string converted
  */
 function cms_html_entity_decode($text_to_convert) {
-  $htmlentities_table = array (
+    $htmlentities_table = array (
     "&Aacute;" => "".chr(195).chr(129)."",
     "&aacute;" => "".chr(195).chr(161)."",
     "&Acirc;" => "".chr(195).chr(130)."",
@@ -344,21 +344,21 @@ function cms_html_entity_decode($text_to_convert) {
     "&quot;" => '"',
     "&gt;" => ">",
     "&lt;" => "<"
-  );
+    );
 
-  $return_text = html_entity_decode($text_to_convert, (ENT_QUOTES | ENT_HTML5), 'UTF-8');
+    $return_text = html_entity_decode($text_to_convert, (ENT_QUOTES | ENT_HTML5), 'UTF-8');
 
-  # just to be on the safe side if html_entity_decode still missed something
-  # and also converts &nbsp; to chr(32) which seems correct (Jo Morg)
-  $return_text = strtr($return_text, $htmlentities_table);
+    # just to be on the safe side if html_entity_decode still missed something
+    # and also converts &nbsp; to chr(32) which seems correct (Jo Morg)
+    $return_text = strtr($return_text, $htmlentities_table);
 
-  // convert hex, and numeric entities to their character values.
-  $return_text = preg_replace_callback('~&#x([0-9a-f]+);~i', function( array $matches ) {
+    // convert hex, and numeric entities to their character values.
+    $return_text = preg_replace_callback('~&#x([0-9a-f]+);~i', function( array $matches ) {
           return __code_to_utf8( $matches[1] );
-  }, $return_text );
-  $return_text = preg_replace_callback('~&#([0-9]+);~', function( array $matches ) {
+    }, $return_text );
+    $return_text = preg_replace_callback('~&#([0-9]+);~', function( array $matches ) {
           return __code_to_utf8( $matches[1] );
-  }, $return_text );
+    }, $return_text );
 
-  return $return_text;
+    return $return_text;
 }

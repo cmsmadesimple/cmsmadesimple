@@ -132,9 +132,9 @@ if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
         unlink($fn);
         $op = filter_var($_GET['_op'],FILTER_SANITIZE_STRING);
         switch( $op ) {
-        case 'clearcache':
-            $_app->clear_cached_files();
-            die('done');
+            case 'clearcache':
+                $_app->clear_cached_files();
+                die('done');
         }
     }
     header("HTTP/1.0 400 Bad Request");
@@ -146,7 +146,7 @@ if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
 global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
-                                           function() {
+                                            function() {
                                                 $db = \CmsApp::get_instance()->GetDb();
                                                 $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
                                                 return $db->GetOne($query);
