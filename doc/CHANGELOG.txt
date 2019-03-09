@@ -6,6 +6,8 @@ Core - General
   - Upgrade PHPMailer to v6.0.5 and now use composer
   - BREAKING: Any third party functionality that uses PHPMailer directly may now break due to namespace changes
   - CHANGE: Add more functions to the smarty security policy, and fix incorrect initialization of members.
+  - REMOVED: CMSMailer is no longer distributed with CMSMS Core.  And it is no longer considered a system module.
+    (will be distributed via the forge for backwards compatibility for some time)
   - REMOVED: MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
     (note: as of 2.3 it is still operational, just no longer distributed.)
   - BREAKING: Remove secure option from content pages
@@ -30,12 +32,12 @@ Core - General
   - BREAKING: Removed many deprecated and seldom used methods from the core API
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
   - CHANGE: Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
-  - Improved error message if there was an error parsing the template (or a duplicate content block).
-  - Fixes content blocks, image blocks, module blocks containing whitespace in the name.
-  - Minor fix to {cms_filepicker} plugin.
-  - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
-  - Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
-  - Increase the maxlength attribute for password input boxes in myaccount.
+  - IMPROVE: Improved error message if there was an error parsing the template (or a duplicate content block).
+  - FIX: Problem with content blocks, image blocks, module blocks containing whitespace in the name.
+  - FIX: Minor fix to {cms_filepicker} plugin.
+  - IMPROVE: Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
+  - CHANGE: Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
+  - CHANGE: Increase the maxlength attribute for password input boxes in myaccount.
   - CHANGE: Move system modules to /lib/modules
   - CHANGE: Now look for third party modules in /assets/modules
   - Remove un-necessary moduleinterface.php from the root directory.
@@ -43,9 +45,9 @@ Core - General
   - CHANGE: refactor changegroupperm localization technique.
   - FEATURE: Adds new root functions cms_notice, cms_warning, and cms_notice
   - FEATURE: Adds new AuditManager class that is enabled within include.php allows for swapping out auditing methods
-    With no audit manager installed, audit messages will be output to the HTTP error log.
-  - Revise many places where audit() was being called to call the new methods.
-  - audit() method now uses the AuditManager class
+        With no audit manager installed, audit messages will be output to the HTTP error log.
+  - CHANGE: Revise many places where audit() was being called to call the new methods.
+  - CHANGE: audit() method now uses the AuditManager class
   - CMSModule::SetError() and CMSModule::SetMessage() now set session variables, and the strings will no longer be on the array
   - FEATURE: Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
   - Renames a bunch of classes into namespaces, and cleans up a bunch of old, commented out code.
@@ -68,8 +70,8 @@ Core - General
     The invoke method is sent an array of parameters.
     - Adds CMSModule::get_controller() protected method to allow specifying custom controller mechanisms.
   - REMOVE: content.functions.php (last remaining function moved to page.functions.php)
-  - Refactor the cms_module_plugin function for performance).
-  - Refactor the route-lookup functionality for performance.
+  - IMPROVE: Refactor the cms_module_plugin function for performance).
+  - IMPROVE: Refactor the route-lookup functionality for performance.
   - FEATURE: The database connection class now accepts a single scalar for an argument when only one parameter is required in functions like GetOne()
   - CHANGE:
     - Remove the startup_mact_processing config entry, and replace it with content_processing_mode config entry that supports 3 values
@@ -79,7 +81,7 @@ Core - General
       This config entry controls only when in the rendering, the default content block will be processed.
   - FEATURE: Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
   - REMOVED: all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
-  - All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
+  - CHANGE: All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
     and destroy it when the action is complete.   This allowes ProcessTemplateFromDatabase and ProcessTemplate and other related methods to be un-deprecated.
   - CHANGE: Convert admin passwords to use PHP's builtin password_hash and password_verify methods.
     - Still backwards compatible with older style for upgrades and resetting lost passwords.
@@ -91,9 +93,9 @@ Core - General
   - FEATURE: Adds new {theme_root} plugin for admin templates
   - FEATURE: Adds new {admin_headtext} block plugin for admin templates
   - CHANGE: Module actions can now return output rather than echoing it.
-  - Allow login via a module (CoreAdminLogin) now is core admin module
+  - FEATURE: Allow login via a module (CoreAdminLogin) now is core admin module
   - FEATURE: Adds a new hook for password strength
-  - cms_mailer class now throws an exception if attempting to send an email without setting preferences first.
+  - CHANGE: cms_mailer class now throws an exception if attempting to send an email without setting preferences first.
   - BREAKING: New methods and minor cleanup to admin themes (may introduce some breakage)
   - BREAKING: Remove the {cms_jquery} plugin and the cms_get_jquery function in lib/misc.functions.php
     - Users using {cms_jquery} in frontend templates will need to find alternate solutins
@@ -110,8 +112,8 @@ Core - General
   - CHANGE: Fix lib/nls files so that UTF-8 locales are searched first.
   - FEATURE: cms_admin_utils::get_icon() and {admin_icon} can now find icons without specifying an extension.
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
-  - Improvement to contentoperations::SetDefaultContent()
-  - Improve input checking to cms_ipmatches.
+  - CHANGE: Performance Improvement to contentoperations::SetDefaultContent()
+  - IMPROVE: Improve input checking to cms_ipmatches.
   - FEATURE: Adds the cmsfile: smarty resource which is similar to the file resource but more restrictive
      (templates must exist BELOW one of the allowed template directories).  This resource also supports the ;top ;head and ;body
      suffixes to allow parsing a subset of the template.
@@ -164,6 +166,7 @@ Core - General
   - IMPROVEMENT: Adds new classes for working with cookies.  Including a signed cookie manager that signs all cookie values and obfuscates keys.
   - CHANGE: cms_cookies now uses the AutoCookie manager which allows storing extracting simple objects arrays and strings from the cookies.
   - REMOVED: News is no longer distributed with he core, and is no longer considered a system/core module.
+    (will be distributed via the forge for some time)
   - CHANGE: The CMSModule::CreateReturnLink() method is deprecated, and now ignores the params array (don't think it ever did work)
   - CHANGE: Refactor the generation of mact urls.
   - CHANGE: Now, by default, when pretty urls are not enabled... generate a signed, encoded LONGER request that is forgery resistant.
@@ -190,7 +193,7 @@ CMSContentManager - 1.2
 Installation Assistant - v1.4
   - Now require at least version 2.0.1 to upgrade
   - Now test the default character set
-  - Now require at least PHP 7.0 and recommend 7.1
+  - Now require at least PHP 7.1 and recommend 7.2+
   - Upgrade to smarty v3.1.32
   - CURL is now a requirement
   - ZipArchive is now a requirement (at least for the installer)
