@@ -6,8 +6,11 @@ use CMSMS\HookManager;
 
 class CommonHookHandler
 {
+
     private $mod;
+
     private $settings;
+
     private $artm;
 
     public function __construct( News2 $mod, Settings $settings, ArticleManager $artm )
@@ -43,5 +46,4 @@ class CommonHookHandler
         $alert = new NeedsApprovalArticlesAlert( $this->mod, count($articles) );
         $alert->save();
     }
-
 } // class

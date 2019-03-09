@@ -142,7 +142,6 @@ if( count( $data ) ) {
                 $onerow->status = $this->Lang('newerversion');
                 break;
             case 'notinstalled':
-            {
                 $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
                 if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
                  ($writable && !file_exists( $mod ) )) && $caninstall ) {
@@ -156,9 +155,7 @@ if( count( $data ) ) {
                     $onerow->status = $this->Lang('cantdownload');
                 }
                 break;
-            }
             case 'upgrade':
-            {
                 $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
                 if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
                  ($writable && !file_exists( $mod ) )) && $caninstall ) {
@@ -172,7 +169,6 @@ if( count( $data ) ) {
                     $onerow->status = $this->Lang('cantdownload');
                 }
                 break;
-            }
         }
 
         $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);

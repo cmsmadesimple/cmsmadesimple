@@ -6,6 +6,7 @@ use News2;
 
 class NumberFieldType extends FieldType
 {
+
     private $mod;
 
     public function __construct( News2 $mod )

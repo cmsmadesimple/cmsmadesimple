@@ -474,6 +474,7 @@ class Content extends ContentBase
                 return array('<label for="id_searchable">'.lang('searchable').':</label>'.$help,
                     '<input type="hidden" name="searchable" value="0"/>
                     <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>');
+            // phpcs shut up
 
             case 'defaultcontent':
                 if( $this->IsDefaultPossible() && check_permission( get_userid(), 'Manage All Content') ) {
@@ -493,6 +494,7 @@ class Content extends ContentBase
                         ];
                     }
                 }
+		              break;
 
             case 'disable_wysiwyg':
                 $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
@@ -501,6 +503,7 @@ class Content extends ContentBase
                 return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
                 '<input type="hidden" name="disable_wysiwyg" value="0" />
                           <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
+            // phpcs shut up
 
             case 'wantschildren':
                 $showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
@@ -514,8 +517,8 @@ class Content extends ContentBase
                 break;
 
             default:
-                    // check if it's content block
-                    $blocks = $this->get_content_blocks();
+                // check if it's content block
+                $blocks = $this->get_content_blocks();
                 if( isset($blocks[$one]) ) {
                       // its a content block
                       $block = $blocks[$one];

@@ -21,52 +21,52 @@ if (!$this->VisibleToAdminUser()) return;
 $this->SetCurrentTab('settings');
 
 try {
-  $name = trim(get_parameter_value($params,'profile'));
-  if( !$name ) throw new Exception($this->Lang('error_missingparam'));
+    $name = trim(get_parameter_value($params,'profile'));
+    if( !$name ) throw new Exception($this->Lang('error_missingparam'));
 
-  if( isset($params['cancel']) ) {
-    // handle cancel
-    $this->SetMessage($this->Lang('msg_cancelled'));
-    $this->RedirectToAdminTab();
-  }
-
-  // load the profile
-  $profile = microtiny_profile::load($name);
-
-  if( isset($params['submit']) ) {
-    //
-    // handle submit
-    //
-
-    foreach( $params as $key => $value ) {
-      if( startswith($key,'profile_') ) {
-	$key = substr($key,strlen('profile_'));
-	$profile[$key] = $value;
-      }
+    if( isset($params['cancel']) ) {
+        // handle cancel
+        $this->SetMessage($this->Lang('msg_cancelled'));
+        $this->RedirectToAdminTab();
     }
 
-    // check if name changed, and if object is a system object, puke
-    if( isset($profile['system']) && $profile['system'] && $profile['name'] != $name ) {
-      throw new CmsInvalidDataException($this->lang('error_cantchangesysprofilename'));
+    // load the profile
+    $profile = microtiny_profile::load($name);
+
+    if( isset($params['submit']) ) {
+        //
+        // handle submit
+        //
+
+        foreach( $params as $key => $value ) {
+            if( startswith($key,'profile_') ) {
+                $key = substr($key,strlen('profile_'));
+                $profile[$key] = $value;
+            }
+        }
+
+        // check if name changed, and if object is a system object, puke
+        if( isset($profile['system']) && $profile['system'] && $profile['name'] != $name ) {
+            throw new CmsInvalidDataException($this->lang('error_cantchangesysprofilename'));
+        }
+
+        $profile->save();
+        $this->RedirectToAdminTab();
     }
 
-    $profile->save();
-    $this->RedirectToAdminTab();
-  }
+    // display data, strange formatting but it works...
+    $smarty->assign('profile',$name);
+    $smarty->assign('data',$profile);
 
-  // display data, strange formatting but it works...
-  $smarty->assign('profile',$name);
-  $smarty->assign('data',$profile);
+    $stylesheets = CmsLayoutStylesheet::get_all(TRUE);
+    $stylesheets = array('-1'=>$this->Lang('none')) + $stylesheets;
+    $smarty->assign('stylesheets',$stylesheets);
 
-  $stylesheets = CmsLayoutStylesheet::get_all(TRUE);
-  $stylesheets = array('-1'=>$this->Lang('none')) + $stylesheets;
-  $smarty->assign('stylesheets',$stylesheets);
-
-  echo $this->ProcessTemplate('admin_editprofile.tpl');
+    echo $this->ProcessTemplate('admin_editprofile.tpl');
 }
 catch( Exception $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

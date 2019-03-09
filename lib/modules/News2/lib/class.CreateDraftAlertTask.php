@@ -5,6 +5,7 @@ use CmsRegularTask;
 
 class CreateDraftAlertTask implements CmsRegularTask
 {
+
     private $mod;
 
     public function __construct( News2 $mod )
@@ -45,7 +46,8 @@ class CreateDraftAlertTask implements CmsRegularTask
         $mod->SetPreference('task1_lastrun',$time);
     }
 
-    public function on_failure($time = '') {}
+    public function on_failure($time = '') {
+    }
 
     public function execute($time = '')
     {

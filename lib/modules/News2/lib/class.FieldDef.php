@@ -12,7 +12,8 @@ class FieldDef
 
     private $_data = [ 'id'=>null, 'name'=>null, 'type'=>null, 'item_order'=>null, 'extra'=>null ];
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     protected function _parseOptionsText( $str )
     {
@@ -35,30 +36,30 @@ class FieldDef
     public function __get( string $key )
     {
         switch( $key ) {
-        case 'id':
-            return (int) $this->_data[$key];
-        case 'name':
-            return trim($this->_data[$key]);
-        case 'label':
-            if( isset($this->_data['extra'][$key]) ) $val = trim($this->_data['extra'][$key]);
-            if( empty($val) ) $val = $this->name;
-            return $val;
-        case 'raw_label':
-            if( isset($this->_data['extra'][$key]) ) return trim($this->_data['extra'][$key]);
-            break;
-        case 'short_type':
-            $val = str_replace('\\','/',$this->type);
-            return basename($val);
-        case 'type':
-            return trim($this->_data[$key]);
-        case 'item_order':
-            return (int) $this->_data[$key];
-        case 'options':
-            $str = $this->getExtra('optionsText');
-            if( $str ) return $this->_parseOptionsText( $str );
-            return;
-        default:
-            throw new \InvalidArgumentException("$key is not a gettable member of ".get_class($this));
+            case 'id':
+                return (int) $this->_data[$key];
+            case 'name':
+                return trim($this->_data[$key]);
+            case 'label':
+                if( isset($this->_data['extra'][$key]) ) $val = trim($this->_data['extra'][$key]);
+                if( empty($val) ) $val = $this->name;
+                return $val;
+            case 'raw_label':
+                if( isset($this->_data['extra'][$key]) ) return trim($this->_data['extra'][$key]);
+                break;
+            case 'short_type':
+                $val = str_replace('\\','/',$this->type);
+                return basename($val);
+            case 'type':
+                return trim($this->_data[$key]);
+            case 'item_order':
+                return (int) $this->_data[$key];
+            case 'options':
+                $str = $this->getExtra('optionsText');
+                if( $str ) return $this->_parseOptionsText( $str );
+                return;
+            default:
+                throw new \InvalidArgumentException("$key is not a gettable member of ".get_class($this));
         }
     }
 
@@ -66,26 +67,26 @@ class FieldDef
     {
         // only a fiew of the proeprties are settable.
         switch( $key ) {
-        case 'name':
-            $val = trim($val);
-            if( !$val ) throw new \InvalidArgumentException("Attempt to set invalid field name");
-            $this->_data[$key] = $val;
-            break;
+            case 'name':
+                $val = trim($val);
+                if( !$val ) throw new \InvalidArgumentException("Attempt to set invalid field name");
+                $this->_data[$key] = $val;
+                break;
 
-        case 'label':
-            $this->_data['extra'][$key] = trim($val);
-            break;
+            case 'label':
+                $this->_data['extra'][$key] = trim($val);
+                break;
 
-        case 'type':
-            $this->_data[$key] = $val;
-            break;
+            case 'type':
+                $this->_data[$key] = $val;
+                break;
 
-        case 'item_order':
-            $this->_data[$key] = max(1,(int)$val);
-            break;
+            case 'item_order':
+                $this->_data[$key] = max(1,(int)$val);
+                break;
 
-        default:
-            throw new \InvalidArgumentException("$key is not a settable proeprty of ".get_class($this));
+            default:
+                throw new \InvalidArgumentException("$key is not a settable proeprty of ".get_class($this));
         }
     }
 
@@ -132,5 +133,4 @@ class FieldDef
     {
         if( !empty($this->_data['extra']) ) return json_encode( $this->_data['extra'] );
     }
-
 } // class

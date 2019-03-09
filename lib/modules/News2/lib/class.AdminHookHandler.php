@@ -6,8 +6,11 @@ use CMSMS\HookManager;
 
 class AdminHookHandler
 {
+
     private $mod;
+
     private $settings;
+
     private $artm;
 
     public function __construct( News2 $mod, Settings $settings, ArticleManager $artm )
@@ -26,14 +29,14 @@ class AdminHookHandler
     {
         if( $source != $this->mod->GetName() ) return;
         switch( $name ) {
-        case News2::MANAGE_PERM:
-            return $this->mod->Lang('perm_manageperm' );
-        case News2::OWN_PERM:
-            return $this->mod->Lang('perm_ownperm' );
-        case News2::DELOWN_PERM:
-            return $this->mod->Lang('perm_delownperm' );
-        case News2::APPROVE_PERM:
-            return $this->mod->Lang('perm_approveperm' );
+            case News2::MANAGE_PERM:
+                return $this->mod->Lang('perm_manageperm' );
+            case News2::OWN_PERM:
+                return $this->mod->Lang('perm_ownperm' );
+            case News2::DELOWN_PERM:
+                return $this->mod->Lang('perm_delownperm' );
+            case News2::APPROVE_PERM:
+                return $this->mod->Lang('perm_approveperm' );
         }
     }
 
@@ -41,14 +44,14 @@ class AdminHookHandler
     {
         if( $source != $this->mod->GetName() ) return;
         switch( $name ) {
-        case News2::MANAGE_PERM:
-            return $this->mod->Lang('permdesc_manageperm' );
-        case News2::OWN_PERM:
-            return $this->mod->Lang('permdesc_ownperm' );
-        case News2::DELOWN_PERM:
-            return $this->mod->Lang('permdesc_delownperm' );
-        case News2::APPROVE_PERM:
-            return $this->mod->Lang('permdesc_approveperm' );
+            case News2::MANAGE_PERM:
+                return $this->mod->Lang('permdesc_manageperm' );
+            case News2::OWN_PERM:
+                return $this->mod->Lang('permdesc_ownperm' );
+            case News2::DELOWN_PERM:
+                return $this->mod->Lang('permdesc_delownperm' );
+            case News2::APPROVE_PERM:
+                return $this->mod->Lang('permdesc_approveperm' );
         }
     }
 
@@ -81,5 +84,4 @@ class AdminHookHandler
         $tmp['object'] = $obj;
         return $tmp;
     }
-
 } // class

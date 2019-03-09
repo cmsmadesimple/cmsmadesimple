@@ -19,42 +19,57 @@
 
 class MicroTiny extends CMSModule
 {
-  const PROFILE_FRONTEND = '__frontend__';
-  const PROFILE_ADMIN = '__admin__';
+    const PROFILE_FRONTEND = '__frontend__';
+    const PROFILE_ADMIN = '__admin__';
 
-  public function __construct() { parent::__construct(); }
-  public function GetName() { return 'MicroTiny'; }
-  public function GetFriendlyName() { return $this->Lang("friendlyname"); }
-  public function GetVersion(){ return '2.2.2'; }
-  public function HasAdmin() { return TRUE; }
-  public function IsPluginModule() { return TRUE; }
-  public function LazyLoadFrontend() { return TRUE; }
-  public function LazyLoadAdmin() { return TRUE; }
-  public function MinimumCMSVersion() { return "1.99-alpha0"; }
-  public function GetDependencies() { return array('FileManager'=>'1.5'); }
-  public function GetHelp() { return $this->Lang('help'); }
-  public function GetAuthor() { return 'Morten Poulsen'; }
-  public function GetAuthorEmail() { return '&lt;morten@poulsen.org&gt;'; }
-  public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
-  public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
-  public function GetAdminDescription() { return $this->Lang('admindescription'); }
+    public function __construct() { parent::__construct();
+    }
+    public function GetName() { return 'MicroTiny';
+    }
+    public function GetFriendlyName() { return $this->Lang("friendlyname");
+    }
+    public function GetVersion(){ return '2.2.2';
+    }
+    public function HasAdmin() { return TRUE;
+    }
+    public function IsPluginModule() { return TRUE;
+    }
+    public function LazyLoadFrontend() { return TRUE;
+    }
+    public function LazyLoadAdmin() { return TRUE;
+    }
+    public function MinimumCMSVersion() { return "1.99-alpha0";
+    }
+    public function GetDependencies() { return array('FileManager'=>'1.5');
+    }
+    public function GetHelp() { return $this->Lang('help');
+    }
+    public function GetAuthor() { return 'Morten Poulsen';
+    }
+    public function GetAuthorEmail() { return '&lt;morten@poulsen.org&gt;';
+    }
+    public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl');
+    }
+    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences');
+    }
+    public function GetAdminDescription() { return $this->Lang('admindescription');
+    }
 
-  public function WYSIWYGGenerateHeader($selector = null,$cssname = null) {
-    return microtiny_utils::WYSIWYGGenerateHeader($selector, $cssname);
-  }
+    public function WYSIWYGGenerateHeader($selector = null,$cssname = null) {
+        return microtiny_utils::WYSIWYGGenerateHeader($selector, $cssname);
+    }
 
-  public function HasCapability($capability, $params=array()) {
-    if ($capability==CmsCoreCapabilities::WYSIWYG_MODULE) return true;
-    return false;
-  }
-
+    public function HasCapability($capability, $params=array()) {
+        if ($capability==CmsCoreCapabilities::WYSIWYG_MODULE) return true;
+        return false;
+    }
 } // end of module class
 
 function mt_jsbool($val)
 {
-  $val = cms_to_bool($val);
-  if( $val ) return 'true';
-  return 'false';
+    $val = cms_to_bool($val);
+    if( $val ) return 'true';
+    return 'false';
 }
 #
 # EOF

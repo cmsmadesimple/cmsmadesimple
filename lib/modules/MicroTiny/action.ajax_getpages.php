@@ -20,7 +20,8 @@ if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+}
 
 $out = null;
 $term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));

@@ -127,7 +127,6 @@ final class cms_cookies
     {
         return self::_mgr()->erase($key);
     }
-
 } // end of class
 
 #

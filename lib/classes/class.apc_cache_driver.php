@@ -21,6 +21,7 @@ use \APCIterator;
  */
 class apc_cache_driver extends cms_cache_driver
 {
+
     /**
      * @var The number of seconds before cached items expire.
      */

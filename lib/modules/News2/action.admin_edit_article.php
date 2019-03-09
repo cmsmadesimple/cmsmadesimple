@@ -16,13 +16,13 @@ try {
 
     $get_config_status = function($val) {
         switch( $val ) {
-        case Article::STATUS_PUBLISHED:
-        case Article::STATUS_DRAFT:
-        case Article::STATUS_NEEDSAPPROVAL:
-        case Article::STATUS_DISABLED:
-            return $val;
-        default:
-            return Article::STATUS_DRAFT;
+            case Article::STATUS_PUBLISHED:
+            case Article::STATUS_DRAFT:
+            case Article::STATUS_NEEDSAPPROVAL:
+            case Article::STATUS_DISABLED:
+                return $val;
+            default:
+                return Article::STATUS_DRAFT;
         }
     };
 

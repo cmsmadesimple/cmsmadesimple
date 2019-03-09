@@ -103,7 +103,7 @@ class hook_manager
                             if( $a->priority < $b->priority ) return -1;
                             if( $a->priority > $b->priority ) return 1;
                             return 0;
-                        });
+                    });
                 }
                 self::$_hooks[$name]->sorted = TRUE;
             }
@@ -159,7 +159,7 @@ class hook_manager
                             if( $a->priority < $b->priority ) return -1;
                             if( $a->priority > $b->priority ) return 1;
                             return 0;
-                        });
+                    });
                 }
                 self::$_hooks[$name]->sorted = TRUE;
             }
@@ -209,7 +209,7 @@ class hook_manager
                         if( $a->priority < $b->priority ) return -1;
                         if( $a->priority > $b->priority ) return 1;
                         return 0;
-                    });
+                });
             }
             self::$_hooks[$name]->sorted = TRUE;
         }
@@ -229,5 +229,4 @@ class hook_manager
         array_pop(self::$_in_process);
         return $out;
     }
-
 } // class

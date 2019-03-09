@@ -27,7 +27,6 @@
 
 use CMSMS\internal\global_cache;
 
-
 /**
  * Class for static methods related to content
  *
@@ -105,7 +104,7 @@ class ContentOperations
         // two caches, the flat list, and the tree
         $db = $this->app->GetDb();
         $obj = new \CMSMS\internal\global_cachable('content_flatlist',
-                                                   function() use ($db) {
+                                                    function() use ($db) {
                                                          $query = 'SELECT content_id,parent_id,item_order,content_alias,active
                                                                    FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
                                                          return $db->GetArray($query);
@@ -115,13 +114,13 @@ class ContentOperations
         // an index of the content pages, by alias
         $obj = new \CMSMS\internal\global_cachable('content_aliasmap',
                                                     function() {
-                                                       $flatlist = global_cache::get('content_flatlist');
-                                                       $out = null;
-                                                       foreach( $flatlist as $row ) {
-                                                           $alias = $row['content_alias'];
-                                                           if( $alias ) $out[$alias] = (int) $row['content_id'];
-                                                       }
-                                                       return $out;
+                                                        $flatlist = global_cache::get('content_flatlist');
+                                                        $out = null;
+                                                        foreach( $flatlist as $row ) {
+                                                            $alias = $row['content_alias'];
+                                                            if( $alias ) $out[$alias] = (int) $row['content_id'];
+                                                        }
+                                                        return $out;
                                                     });
 
         // a content tree

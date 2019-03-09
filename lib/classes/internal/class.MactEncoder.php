@@ -6,7 +6,9 @@ use CmsApp;
 class MactEncoder
 {
     const KEY = '_R';
+
     private $salt;
+
     private $generate_old_mact;
 
     public function __construct( CmsApp $app )

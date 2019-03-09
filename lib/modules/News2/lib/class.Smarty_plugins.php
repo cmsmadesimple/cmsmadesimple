@@ -4,7 +4,9 @@ use News2;
 
 class Smarty_plugins
 {
+
     private $catm;
+
     private $artm;
 
     public function __construct( CategoriesManager $catm, ArticleManager $artm, $smarty )

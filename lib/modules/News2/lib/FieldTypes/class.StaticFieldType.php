@@ -6,6 +6,7 @@ use News2;
 
 class StaticFieldType extends FieldType
 {
+
     private $mod;
 
     public function __construct( News2 $mod )
@@ -46,7 +47,6 @@ class StaticFieldType extends FieldType
 
     public function handleForArticle( FieldDef $def, array $formdata )
     {
-        return;
+        // nothing here
     }
-
 } // class

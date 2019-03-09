@@ -30,16 +30,16 @@ $field = trim(get_parameter_value($_GET,'field'));
 $type = 'any';
 $filemanager = cms_utils::get_module('FileManager');
 if( isset($_GET['type']) ) {
-  $tmp = strtolower(trim($_GET['type']));
-  if( $tmp == 'image' ) $type = 'image';
-  if( $tmp == 'media' ) $type = 'media';
+    $tmp = strtolower(trim($_GET['type']));
+    if( $tmp == 'image' ) $type = 'image';
+    if( $tmp == 'media' ) $type = 'media';
 }
 
 $cwd = filemanager_utils::get_cwd();
 if( isset($_GET['subdir']) ) {
-  // todo, make sure this can't go above /uploads
-  $cwd .= '/' . trim($_GET['subdir']);
-  filemanager_utils::set_cwd($cwd);
+    // todo, make sure this can't go above /uploads
+    $cwd .= '/' . trim($_GET['subdir']);
+    filemanager_utils::set_cwd($cwd);
 }
 $cwd = filemanager_utils::get_cwd();
 
@@ -47,49 +47,49 @@ $starturl = CMS_ROOT_URL.'/'.$cwd;
 $startdir = filemanager_utils::join_path($config['root_path'],$cwd);
 
 $is_image = function($filename) {
-  $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-  if( in_array($ext,array('jpg','jpeg','bmp','wbmp','gif','png','webp')) ) return TRUE;
-  return FALSE;
+    $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
+    if( in_array($ext,array('jpg','jpeg','bmp','wbmp','gif','png','webp')) ) return TRUE;
+    return FALSE;
 };
 
 $is_media = function($filename) {
-  $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-  if( in_array($ext,array('swf','dcr','mov','qt','mpg','mp3','mp4','ogg','mpeg','wmp','avi','wmv',
+    $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
+    if( in_array($ext,array('swf','dcr','mov','qt','mpg','mp3','mp4','ogg','mpeg','wmp','avi','wmv',
 			  'wm','asf','asx','wmx','rm','ra','ram')) ) {
-    return TRUE;
-  }
-  return FALSE;
+        return TRUE;
+    }
+    return FALSE;
 };
 
 $sortfiles = function($file1,$file2) {
-  if ($file1["isdir"] && !$file2["isdir"]) return -1;
-  if (!$file1["isdir"] && $file2["isdir"]) return 1;
-  return strnatcasecmp($file1["name"],$file2["name"]);
+    if ($file1["isdir"] && !$file2["isdir"]) return -1;
+    if (!$file1["isdir"] && $file2["isdir"]) return 1;
+    return strnatcasecmp($file1["name"],$file2["name"]);
 };
 
 $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_image,&$is_media) {
-  if( $filename == '.' ) return FALSE;
-  if( $filename == '..' ) {
-    if( $cwd == filemanager_utils::get_default_cwd() ) return FALSE;
-    return TRUE;
-  }
-  if( (startswith($filename,'.') || startswith($filename,'_')) && !$filemanager->GetPreference('showhiddenfiles') ) return FALSE;
-  if( is_dir(cms_join_path($path,$filename)) ) return TRUE;
+    if( $filename == '.' ) return FALSE;
+    if( $filename == '..' ) {
+        if( $cwd == filemanager_utils::get_default_cwd() ) return FALSE;
+        return TRUE;
+    }
+    if( (startswith($filename,'.') || startswith($filename,'_')) && !$filemanager->GetPreference('showhiddenfiles') ) return FALSE;
+    if( is_dir(cms_join_path($path,$filename)) ) return TRUE;
 
-  switch( $type ) {
-    case 'image':
-      if( $is_image($filename) ) return TRUE;
-      return FALSE;
+    switch( $type ) {
+        case 'image':
+            if( $is_image($filename) ) return TRUE;
+            return FALSE;
 
-    case 'media':
-      if( $is_media($filename) ) return TRUE;
-      return FALSE;
+        case 'media':
+            if( $is_media($filename) ) return TRUE;
+            return FALSE;
 
-    case 'file':
-    case 'any':
-    default:
-      return TRUE;
-  }
+        case 'file':
+        case 'any':
+        default:
+            return TRUE;
+    }
 };
 
 /*
@@ -98,24 +98,24 @@ $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_imag
  */
 function set_filetype($ext) {
 
-	$ext = strtolower($ext);
-	$filetype = 'file'; // default to all file
-	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'); // images
-	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt', 'ogg'); // videos
-	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'wav'); // audio
-	$archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
+    $ext = strtolower($ext);
+    $filetype = 'file'; // default to all file
+    $imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'); // images
+    $videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt', 'ogg'); // videos
+    $audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'wav'); // audio
+    $archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
 
-	if(in_array($ext, $imgext)) {
-		$filetype = 'image';
-	} elseif(in_array($ext, $videoext)) {
-		$filetype = 'video';
-	} elseif(in_array($ext, $audioext)) {
-		$filetype = 'audio';
-	} elseif(in_array($ext, $archiveext)) {
-		$filetype = 'archive';
-	}
+    if(in_array($ext, $imgext)) {
+        $filetype = 'image';
+    } elseif(in_array($ext, $videoext)) {
+        $filetype = 'video';
+    } elseif(in_array($ext, $audioext)) {
+        $filetype = 'audio';
+    } elseif(in_array($ext, $archiveext)) {
+        $filetype = 'archive';
+    }
 
-	return $filetype;
+    return $filetype;
 }
 
 
@@ -125,36 +125,36 @@ function set_filetype($ext) {
 $files = array();
 $dh = dir($startdir);
 while( false !== ($filename = $dh->read()) ) {
-  if( !$accept_file( $type, $cwd, $startdir, $filename ) ) continue;
-  $fullname = cms_join_path($startdir,$filename);
+    if( !$accept_file( $type, $cwd, $startdir, $filename ) ) continue;
+    $fullname = cms_join_path($startdir,$filename);
 
-  $file = array();
-  $file['name'] = $filename;
-  $file['fullpath'] = $fullname;
-  $file['fullurl'] = $starturl.'/'.$filename;
-  $file['isdir'] = is_dir($fullname);
-  $file['ext'] = strtolower(substr($filename,strrpos($filename,".")+1));
-  $file['is_image'] = $is_image($filename);
-  $file['icon'] = $filemanager->GetFileIcon('.'.$file['ext'],$file['isdir']);
-  $file['filetype'] = set_filetype($file['ext']);
-  $file['dimensions'] = '';
-  if( $file['is_image'] ) {
-    $file['thumbnail'] = microtiny_utils::GetThumbnailFile($filename,$startdir,$starturl);
-    $imgsize = @getimagesize($fullname);
-    if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
-  }
-  $info = @stat($fullname);
-  $filesizename = array(" Bytes", " KB", " MB");
-  if( $info && $info['size'] > 0) {
-  	$file['size'] = round($info['size']/pow(1024, ($i = floor(log($info['size'], 1024)))), 2) . $filesizename[$i];
-  } else {
-  	$file['size'] = null;
-  }
-  if( $file['isdir'] ) {
-    $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&subdir=$filename&type=$type&field=$field";
-    $file['chdir_url'] = str_replace('&amp;','&',$url);
-  }
-  $files[] = $file;
+    $file = array();
+    $file['name'] = $filename;
+    $file['fullpath'] = $fullname;
+    $file['fullurl'] = $starturl.'/'.$filename;
+    $file['isdir'] = is_dir($fullname);
+    $file['ext'] = strtolower(substr($filename,strrpos($filename,".")+1));
+    $file['is_image'] = $is_image($filename);
+    $file['icon'] = $filemanager->GetFileIcon('.'.$file['ext'],$file['isdir']);
+    $file['filetype'] = set_filetype($file['ext']);
+    $file['dimensions'] = '';
+    if( $file['is_image'] ) {
+        $file['thumbnail'] = microtiny_utils::GetThumbnailFile($filename,$startdir,$starturl);
+        $imgsize = @getimagesize($fullname);
+        if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
+    }
+    $info = @stat($fullname);
+    $filesizename = array(" Bytes", " KB", " MB");
+    if( $info && $info['size'] > 0) {
+        $file['size'] = round($info['size']/pow(1024, ($i = floor(log($info['size'], 1024)))), 2) . $filesizename[$i];
+    } else {
+        $file['size'] = null;
+    }
+    if( $file['isdir'] ) {
+        $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&subdir=$filename&type=$type&field=$field";
+        $file['chdir_url'] = str_replace('&amp;','&',$url);
+    }
+    $files[] = $file;
 }
 // done the loop, now sort
 usort($files,$sortfiles);

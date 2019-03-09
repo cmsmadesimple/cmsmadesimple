@@ -6,8 +6,11 @@ use cms_cache_driver;
 
 class CategoriesManager
 {
+
     private $db;
+
     private $mod;
+
     private $cache_driver;
 
     public function __construct( Database $db, News2 $mod, cms_cache_driver $driver = null )
@@ -74,13 +77,13 @@ class CategoriesManager
 
     public function cacheCategory( Category $obj )
     {
-	if( !$this->cache_driver ) return;
+        if( !$this->cache_driver ) return;
         if( $obj->alias ) {
             $map = $this->cache_driver->get('alias_map',__CLASS__);
             if( !$map ) $map = [];
             $map[$obj->alias] = $obj->id;
             $this->cache_driver->set('alias_map',$map,__CLASS__);
-	}
+        }
         $this->cache_driver->set($obj->id, $obj, __CLASS__);
     }
 
@@ -258,14 +261,14 @@ class CategoriesManager
                 // $obj = Category::from_row( $node );
                 // $this->save( $obj );
                 return $node;
-            });
+        });
 
         // now save the damned thing.
         $this->db->StartTrans();
         $walkTreeTD( $tree, function( $node ){
                 $this->_updateRow( $node );
                 return $node;
-            });
+        });
         $this->db->CompleteTrans();
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
     }
@@ -297,6 +300,8 @@ class CategoriesManager
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
     }
 
-    public static function articles_table() { return CMS_DB_PREFIX.'mod_news2_articles'; }
-    public static function table_name() { return CMS_DB_PREFIX.'mod_news2_categories'; }
+    public static function articles_table() { return CMS_DB_PREFIX.'mod_news2_articles';
+    }
+    public static function table_name() { return CMS_DB_PREFIX.'mod_news2_categories';
+    }
 } // class

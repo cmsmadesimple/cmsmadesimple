@@ -20,6 +20,7 @@ use CmsApp;
  */
 class SignedCookieManager implements ICookieManager
 {
+
     /**
      * @ignore
      */
@@ -166,5 +167,4 @@ class SignedCookieManager implements ICookieManager
         unset($_COOKIE[$key]);
         $this->set_cookie($key,null,time()-3600);
     }
-
 } // class

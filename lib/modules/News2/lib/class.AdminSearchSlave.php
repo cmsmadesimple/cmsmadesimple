@@ -6,7 +6,9 @@ use AdminSearch_tools;
 
 final class AdminSearchSlave extends AdminSearch_slave
 {
+
     private $mod;
+
     private $artm;
 
     public function __construct( News2 $mod, ArticleManager $artm )

@@ -6,6 +6,7 @@ use News2;
 
 class SelectFieldType extends FieldType
 {
+
     protected $mod;
 
     public function __construct( News2 $mod )

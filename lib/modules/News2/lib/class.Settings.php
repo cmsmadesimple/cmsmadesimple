@@ -3,6 +3,7 @@ namespace News2;
 
 class Settings
 {
+
     private $_data =
         [
             'editor_summary_enabled'=>true, 'editor_summary_wysiwyg'=>true,
@@ -16,7 +17,8 @@ class Settings
             'alert_needsapproval'=>true
         ];
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public function __get( $key )
     {
@@ -34,25 +36,24 @@ class Settings
         $obj = new self;
         foreach( $in as $key => $val ) {
             switch( $key ) {
-            case 'editor_summary_enabled':
-            case 'editor_summary_wysiwyg':
-            case 'editor_urlslug_required':
-            case 'editor_own_editpublished':
-            case 'editor_own_setpublished':
-            case 'expired_searchable':
-            case 'detail_show_expired':
-            case 'alert_draft':
-            case 'alert_needsapproval':
-                if( !empty($val) ) {
-                    $obj->_data[$key] = cms_to_bool( $val );
-                }
-                break;
-            case 'detailpage':
-                $obj->_data[$key] = trim($val);
-                break;
+                case 'editor_summary_enabled':
+                case 'editor_summary_wysiwyg':
+                case 'editor_urlslug_required':
+                case 'editor_own_editpublished':
+                case 'editor_own_setpublished':
+                case 'expired_searchable':
+                case 'detail_show_expired':
+                case 'alert_draft':
+                case 'alert_needsapproval':
+                    if( !empty($val) ) {
+                        $obj->_data[$key] = cms_to_bool( $val );
+                    }
+                    break;
+                case 'detailpage':
+                    $obj->_data[$key] = trim($val);
+                    break;
             }
         }
         return $obj;
     }
-
 } // class

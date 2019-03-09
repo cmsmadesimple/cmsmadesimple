@@ -49,7 +49,7 @@ class operations
      * @param bool $brief If set to true, less checking is done and no errors are returned
      * @return array A hash of details about the installed module
      */
-    function expand_xml_package( $xmluri, $overwrite = 0, $brief = 0 )
+    public function expand_xml_package( $xmluri, $overwrite = 0, $brief = 0 )
     {
         // first make sure that we can actually write to the module directory
         $dir = CMS_ASSETS_PATH.'/modules';
@@ -157,7 +157,6 @@ class operations
                             if( !isset( $moduledetails['name'] ) || !isset( $moduledetails['version'] ) ||
                              !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
                                  throw new \CmsInvalidDataException($this->Lang('err_xml_invalid'));
-                                 return false;
                             }
 
                              // ready to go
@@ -166,13 +165,11 @@ class operations
                             if( !file_exists( $moduledir ) ) {
                                 if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
                                       throw new \CmsFileSystemException(lang('errorcantcreatefile').': '.$moduledir);
-                                      break;
                                 }
                             }
                             else if( $moduledetails['isdir'] ) {
                                 if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
                                     throw new \CmsFileSystemException(lang('errorcantcreatefile').': '.$filename);
-                                    break;
                                 }
                             }
                             else {
@@ -188,7 +185,7 @@ class operations
                             unset( $moduledetails['isdir'] );
                             break;
                     }
-				                break;
+		                  break;
             }
         } // while
 
@@ -205,7 +202,7 @@ class operations
         return $moduledetails;
     }
 
-    function create_xml_package( \CMSModule $modinstance, &$message, &$filecount )
+    public function create_xml_package( \CMSModule $modinstance, &$message, &$filecount )
     {
         // get a file list
         $filecount = 0;

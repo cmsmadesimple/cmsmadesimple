@@ -3,6 +3,7 @@ namespace News2;
 
 final class Smarty_Tools
 {
+
     private $catm;
 
     public function __construct( CategoriesManager $catm )

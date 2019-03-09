@@ -122,5 +122,4 @@ class StylesheetManager
         }
         return $css_file;
     }
-
 } // class

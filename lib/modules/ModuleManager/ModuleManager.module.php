@@ -44,41 +44,94 @@ class ModuleManager extends CMSModule
 
     private $_operations;
 
-    function GetName() { return get_class($this);
+    public function GetName()
+    {
+        return get_class($this);
     }
-    function GetFriendlyName() { return $this->Lang('friendlyname');
+
+    public function GetFriendlyName()
+    {
+        return $this->Lang('friendlyname');
     }
-    function GetVersion() { return '2.2';
+
+    public function GetVersion()
+    {
+        return '2.2';
     }
-    function GetHelp() { return $this->Lang('help');
+
+    public function GetHelp()
+    {
+        return $this->Lang('help');
     }
-    function GetAuthor() { return 'calguy1000';
+
+    public function GetAuthor()
+    {
+        return 'calguy1000';
     }
-    function GetAuthorEmail() { return 'calguy1000@hotmail.com';
+
+    public function GetAuthorEmail()
+    {
+        return 'calguy1000@hotmail.com';
     }
-    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc');
+
+    public function GetChangeLog()
+    {
+        return file_get_contents(dirname(__FILE__).'/changelog.inc');
     }
-    function IsPluginModule() { return FALSE;
+
+    public function IsPluginModule()
+    {
+        return FALSE;
     }
-    function HasAdmin() { return TRUE;
+
+    public function HasAdmin()
+    {
+        return TRUE;
     }
-    function IsAdminOnly() { return TRUE;
+
+    public function IsAdminOnly()
+    {
+        return TRUE;
     }
-    function GetAdminSection() { return 'siteadmin';
+
+    public function GetAdminSection()
+    {
+        return 'siteadmin';
     }
-    function GetAdminDescription() { return $this->Lang('admindescription');
+
+    public function GetAdminDescription()
+    {
+        return $this->Lang('admindescription');
     }
-    function LazyLoadAdmin() { return TRUE;
+
+    public function LazyLoadAdmin()
+    {
+        return TRUE;
     }
-    function MinimumCMSVersion() { return '2.2.3';
+
+    public function MinimumCMSVersion()
+    {
+        return '2.2.3';
     }
-    function InstallPostMessage() { return $this->Lang('postinstall');
+
+    public function InstallPostMessage()
+    {
+        return $this->Lang('postinstall');
     }
-    function UninstallPostMessage() { return $this->Lang('postuninstall');
+
+    public function UninstallPostMessage()
+    {
+        return $this->Lang('postuninstall');
     }
-    function UninstallPreMessage() { return $this->Lang('really_uninstall');
+
+    public function UninstallPreMessage()
+    {
+        return $this->Lang('really_uninstall');
     }
-    function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules'));
+
+    public function VisibleToAdminUser()
+    {
+        return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules'));
     }
 
     /**
@@ -101,17 +154,17 @@ class ModuleManager extends CMSModule
         $tpl->display();
     }
 
-    function Install()
+    public function Install()
     {
         $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
     }
 
-    function Upgrade($oldversion, $newversion)
+    public function Upgrade($oldversion, $newversion)
     {
         $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
     }
 
-    function DoAction($action, $id, $params, $returnid=-1)
+    public function DoAction($action, $id, $params, $returnid=-1)
     {
         @set_time_limit(9999);
         if( isset( $params['__activetab'] ) ) {

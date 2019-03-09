@@ -2004,5 +2004,4 @@ abstract class ContentBase
         $str = strftime('%Y-%m-%d %H:%M:%S',$ts);
         $this->mModifiedDate = $str;
     }
-
 } // end of class

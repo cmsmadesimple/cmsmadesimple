@@ -43,18 +43,36 @@ class Search extends CMSModule
         }
     }
 
-    public function LazyLoadFrontend() { return FALSE;
+    public function LazyLoadFrontend()
+    {
+        return FALSE;
     }
-    public function LazyLoadAdmin() { return FALSE;
+
+    public function LazyLoadAdmin()
+    {
+        return FALSE;
     }
-    public function GetName() { return 'Search';
+
+    public function GetName()
+    {
+        return 'Search';
     }
-    public function GetFriendlyName() { return $this->Lang('search');
+
+    public function GetFriendlyName()
+    {
+        return $this->Lang('search');
     }
-    public function IsPluginModule() { return true;
+
+    public function IsPluginModule()
+    {
+        return true;
     }
-    public function HasAdmin() { return true;
+
+    public function HasAdmin()
+    {
+        return true;
     }
+
     public function GetVersion() { return '1.51.7.1';
     }
     public function MinimumCMSVersion() { return '1.12-alpha0';

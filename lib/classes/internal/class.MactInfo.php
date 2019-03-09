@@ -7,32 +7,36 @@ final class MactInfo implements JsonSerializable
     const CNTNT01 = 'cntnt01';
 
     private $_module;
+
     private $_action;
+
     private $_id;
+
     private $_inline;
+
     private $_params = [];
 
     public function __get( string $key )
     {
         switch( $key ) {
-        case 'module':
-            return $this->_module;
+            case 'module':
+                return $this->_module;
 
-        case 'action':
-            return $this->_action;
+            case 'action':
+                return $this->_action;
 
-        case 'id':
-            return $this->_id;
+            case 'id':
+                return $this->_id;
 
-        case 'inline':
-            if( $this->_id == self::CNTNT01 || !$this->_inline ) return 0;
-            return 1;
+            case 'inline':
+                if( $this->_id == self::CNTNT01 || !$this->_inline ) return 0;
+                return 1;
 
-        case 'params':
-            return $this->_params;
+            case 'params':
+                return $this->_params;
 
-        default:
-            throw new \LogicException("$key is not a gettable property of ".__CLASS__);
+            default:
+                throw new \LogicException("$key is not a gettable property of ".__CLASS__);
         }
     }
 
@@ -44,21 +48,21 @@ final class MactInfo implements JsonSerializable
         $obj = new self;
         foreach( $in as $key => $val ) {
             switch( $key ) {
-            case 'module':
-                $obj->_module = trim($val);
-                break;
-            case 'id':
-                $obj->_id = trim($val);
-                break;
-            case 'action':
-                $obj->_action = trim($val);
-                break;
-            case 'inline':
-                $obj->_inline = is_null($val) ? false : cms_to_bool($val);
-                break;
-            case 'params':
-                if( is_array($val) && !empty($val) ) $obj->_params = $val;
-                break;
+                case 'module':
+                    $obj->_module = trim($val);
+                    break;
+                case 'id':
+                    $obj->_id = trim($val);
+                    break;
+                case 'action':
+                    $obj->_action = trim($val);
+                    break;
+                case 'inline':
+                    $obj->_inline = is_null($val) ? false : cms_to_bool($val);
+                    break;
+                case 'params':
+                    if( is_array($val) && !empty($val) ) $obj->_params = $val;
+                    break;
             }
         }
         return $obj;

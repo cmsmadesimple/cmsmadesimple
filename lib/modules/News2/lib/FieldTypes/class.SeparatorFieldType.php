@@ -6,6 +6,7 @@ use News2;
 
 class SeparatorFieldType extends FieldType
 {
+
     private $mod;
 
     public function __construct( News2 $mod )
@@ -20,7 +21,7 @@ class SeparatorFieldType extends FieldType
 
     public function renderForEditor( FieldDef $def )
     {
-        return;
+        // nothing here
     }
 
     public function handleEditorResponse( FieldDef $def, array $params ) : FieldDef
@@ -39,7 +40,6 @@ class SeparatorFieldType extends FieldType
 
     public function handleForArticle( FieldDef $def, array $formdata )
     {
-        return;
+        // nothing here
     }
-
 } // class

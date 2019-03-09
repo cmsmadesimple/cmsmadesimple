@@ -4,7 +4,9 @@ use News2;
 
 class FieldTypeManager
 {
+
     private $types;
+
     private $mod;
 
     public function __construct( News2 $mod )

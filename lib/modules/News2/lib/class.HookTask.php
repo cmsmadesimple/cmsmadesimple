@@ -5,7 +5,9 @@ use CMSMS\HookManager;
 
 class HookTask implements CmsRegularTask
 {
+
     private $_hookname;
+
     private $_data;
 
     public function __construct( string $hook_name, array $data = null )
@@ -14,9 +16,12 @@ class HookTask implements CmsRegularTask
         $this->_data = $data;
     }
 
-    public function get_name() { return $this->_hookname; }
-    public function get_description() {}
-    public function test($time = '') { return true; }
+    public function get_name() { return $this->_hookname;
+    }
+    public function get_description() {
+    }
+    public function test($time = '') { return true;
+    }
 
     public function execute($time = '')
     {
@@ -26,8 +31,9 @@ class HookTask implements CmsRegularTask
         return TRUE;
     }
 
-    public function on_success($time = '') {}
+    public function on_success($time = '') {
+    }
 
-    public function on_failure($time = '') {}
-
+    public function on_failure($time = '') {
+    }
 } // class

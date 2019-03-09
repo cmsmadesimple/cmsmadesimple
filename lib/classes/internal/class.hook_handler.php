@@ -3,6 +3,7 @@ namespace CMSMS\internal;
 
 class hook_handler
 {
+
     /**
      * @ignore
      */
@@ -22,5 +23,4 @@ class hook_handler
         $this->priority = max(hook_manager::PRIORITY_HIGH,min(hook_manager::PRIORITY_LOW,(int)$priority));
         $this->callable = $callable;
     }
-
 } // class

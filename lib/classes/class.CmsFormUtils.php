@@ -400,63 +400,63 @@ final class CmsFormUtils
         $parms = array();
         foreach( $params as $key => $value ) {
             switch( $key ) {
-            case 'module':
-            case 'action':
-            case 'mid':
-            case 'returnid':
-                $mactparms[$key] = trim($value);
-                break;
+                case 'module':
+                case 'action':
+                case 'mid':
+                case 'returnid':
+                    $mactparms[$key] = trim($value);
+                    break;
 
-            case 'inline':
-                $mactparms[$key] = cms_to_bool($value);
-                break;
+                case 'inline':
+                    $mactparms[$key] = cms_to_bool($value);
+                    break;
 
-            case 'prefix':
-                $mactparms['mid'] = trim($value);
-                break;
+                case 'prefix':
+                    $mactparms['mid'] = trim($value);
+                    break;
 
-            case 'method':
-                $tagparms[$key] = strtolower(trim($value));
-                break;
+                case 'method':
+                    $tagparms[$key] = strtolower(trim($value));
+                    break;
 
-            case 'url':
-                $key = 'action';
-                if(dirname($value) == '.' ) {
-                    $config = $gCms->GetConfig();
-                    $value = $config['admin_url'].'/'.trim($value);
-                }
-                $tagparms[$key] = trim($value);
-                break;
-
-            case 'enctype':
-            case 'id':
-            case 'class':
-                $tagparms[$key] = trim($value);
-                break;
-
-            case 'extraparms':
-                if(is_array($value) && count($value) ) {
-                    foreach( $value as $key=>$value2 ) {
-                        $parms[$key] = $value2;
+                case 'url':
+                    $key = 'action';
+                    if(dirname($value) == '.' ) {
+                        $config = $gCms->GetConfig();
+                        $value = $config['admin_url'].'/'.trim($value);
                     }
-                }
-                break;
+                    $tagparms[$key] = trim($value);
+                    break;
 
-            case 'extra_str':
-                $extra_str = trim($value);
-                break;
+                case 'enctype':
+                case 'id':
+                case 'class':
+                    $tagparms[$key] = trim($value);
+                    break;
 
-            case 'assign':
-                break;
+                case 'extraparms':
+                    if(is_array($value) && count($value) ) {
+                        foreach( $value as $key=>$value2 ) {
+                            $parms[$key] = $value2;
+                        }
+                    }
+                    break;
 
-            default:
-                if(startswith($key, 'form-') ) {
-                    $key = substr($key, 5);
-                    $tagparms[$key] = $value;
-                } else {
-                    $parms[$key] = $value;
-                }
-                break;
+                case 'extra_str':
+                    $extra_str = trim($value);
+                    break;
+
+                case 'assign':
+                    break;
+
+                default:
+                    if(startswith($key, 'form-') ) {
+                        $key = substr($key, 5);
+                        $tagparms[$key] = $value;
+                    } else {
+                        $parms[$key] = $value;
+                    }
+                    break;
             }
         }
 

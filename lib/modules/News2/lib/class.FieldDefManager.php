@@ -6,10 +6,15 @@ use cms_cache_driver;
 
 class FieldDefManager
 {
+
     private $_list;
+
     private $db;
+
     private $mod;
+
     private $ftm;
+
     private $cache_driver;
 
     public function __construct( Database $db, News2 $mod, FieldTypeManager $ftm, cms_cache_driver $driver )
@@ -158,7 +163,8 @@ class FieldDefManager
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
     }
 
-    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_news2_fieldvals'; }
-    public static function table_name() { return CMS_DB_PREFIX.'mod_news2_fielddefs'; }
-
+    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_news2_fieldvals';
+    }
+    public static function table_name() { return CMS_DB_PREFIX.'mod_news2_fielddefs';
+    }
 } // class

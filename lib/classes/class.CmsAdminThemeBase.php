@@ -314,7 +314,7 @@ abstract class CmsAdminThemeBase
             audit(get_userid(FALSE),'Admin Theme','No module information found for user');
         }
         else {
-	    // Are there any modules with an admin interface?
+            // Are there any modules with an admin interface?
             foreach( $usermoduleinfo as $key => $obj ) {
                 if( $obj->section == '' ) $obj->section = 'extensions';
 

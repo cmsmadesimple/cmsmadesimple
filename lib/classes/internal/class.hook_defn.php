@@ -3,6 +3,7 @@ namespace CMSMS\internal;
 
 class hook_defn
 {
+
     /**
      * @ignore
      */
@@ -25,5 +26,4 @@ class hook_defn
     {
         $this->name = $name;
     }
-
 } // class

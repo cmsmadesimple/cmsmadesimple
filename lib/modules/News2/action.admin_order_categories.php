@@ -43,7 +43,7 @@ try {
                 $t2 = $a['item_order'] - $b['item_order'];
                 if( $t1 != 0 ) return $t1;
                 return $t2;
-            });   // converts to flat list.
+        });   // converts to flat list.
 
         $db->StartTrans();
         foreach( $flat_hash as $row ) {

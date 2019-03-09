@@ -17,7 +17,7 @@ try {
     $items = explode(',', $items_str);
     array_walk( $items, function( &$item ){
             $item = (int) $item;
-        });
+    });
     $items = array_unique($items);
     if( !count($items) ) throw new \LogicException('Missing/Invalid bulk_items (2)');
     // this is to help ensure performance, and reduce the possibility of memory isues.
@@ -62,61 +62,61 @@ try {
     if( !count($articles) ) throw new \LogicException('Could not find requested articles' );
 
     switch( $action ) {
-    case 'del':
-        if( !$can_delete ) throw new \RuntimeException( $this->Lang('err_permission') );
-        $db->StartTrans();
-        foreach( $articles as $article ) {
-            HookManager::do_hook( 'News2::beforeDeleteArticle', $article );
-            $artm->delete( $article );
-            HookManager::do_hook( 'News2::afterDeleteArticle', $article );
-        }
-        $db->CompleteTrans();
-        audit('', $this->GetName(),'Bulk delete of '.count($articles).' articles');
-        break;
-    case 'status_published':
-        $db->StartTrans();
-        foreach( $articles as $article ) {
-            $article->status = $article::STATUS_PUBLISHED;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
-            $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
-        }
-        $db->CompleteTrans();
-        audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to published');
-        break;
-    case 'status_draft':
-        $db->StartTrans();
-        foreach( $articles as $article ) {
-            $article->status = $article::STATUS_DRAFT;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
-            $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
-        }
-        $db->CompleteTrans();
-        audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to draft');
-        break;
-    case 'status_approve':
-        $db->StartTrans();
-        foreach( $articles as $article ) {
-            $article->status = $article::STATUS_NEEDSAPPROVAL;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
-            $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
-        }
-        $db->CompleteTrans();
-        audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to needsapproval');
-        break;
-    case 'status_disabled':
-        $db->StartTrans();
-        foreach( $articles as $article ) {
-            $article->status = $article::STATUS_DISABLED;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
-            $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
-        }
-        $db->CompleteTrans();
-        audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to disabled');
-        break;
+        case 'del':
+            if( !$can_delete ) throw new \RuntimeException( $this->Lang('err_permission') );
+            $db->StartTrans();
+            foreach( $articles as $article ) {
+                HookManager::do_hook( 'News2::beforeDeleteArticle', $article );
+                $artm->delete( $article );
+                HookManager::do_hook( 'News2::afterDeleteArticle', $article );
+            }
+            $db->CompleteTrans();
+            audit('', $this->GetName(),'Bulk delete of '.count($articles).' articles');
+            break;
+        case 'status_published':
+            $db->StartTrans();
+            foreach( $articles as $article ) {
+                $article->status = $article::STATUS_PUBLISHED;
+                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $artm->save( $article );
+                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            }
+            $db->CompleteTrans();
+            audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to published');
+            break;
+        case 'status_draft':
+            $db->StartTrans();
+            foreach( $articles as $article ) {
+                $article->status = $article::STATUS_DRAFT;
+                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $artm->save( $article );
+                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            }
+            $db->CompleteTrans();
+            audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to draft');
+            break;
+        case 'status_approve':
+            $db->StartTrans();
+            foreach( $articles as $article ) {
+                $article->status = $article::STATUS_NEEDSAPPROVAL;
+                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $artm->save( $article );
+                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            }
+            $db->CompleteTrans();
+            audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to needsapproval');
+            break;
+        case 'status_disabled':
+            $db->StartTrans();
+            foreach( $articles as $article ) {
+                $article->status = $article::STATUS_DISABLED;
+                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $artm->save( $article );
+                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            }
+            $db->CompleteTrans();
+            audit('', $this->GetName(),'Bulk status change of '.count($articles).' articles to disabled');
+            break;
     }
 
     $this->SetMessage( $this->Lang('msg_bulkdone', count($articles)) );

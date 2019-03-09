@@ -48,5 +48,4 @@ interface ICookieManager
      * @param string $key The name of the cookie
      */
     public function erase(string $key);
-
 } // interface

@@ -43,23 +43,23 @@ if( ($sortby = get_parameter_value( $params, 'sortby')) ) {
         $sortby = substr($sortby,0,-4);
     }
     switch( $sortby ) {
-    case ArticleFilter::SORT_MODIFIEDDATE;
-    case ArticleFilter::SORT_CREATEDATE:
-    case ArticleFilter::SORT_TITLE:
-    case ArticleFilter::SORT_STATUS:
-    case ArticleFilter::SORT_NEWSDATE:
-        $filter_opts['sortby'] = $sortby;
-        break;
-    case ArticleFilter::SORT_FIELD:
-        $sortdata = get_parameter_value( $params, 'sortdata' );
-        if( $sortdata ) {
+        case ArticleFilter::SORT_MODIFIEDDATE:
+        case ArticleFilter::SORT_CREATEDATE:
+        case ArticleFilter::SORT_TITLE:
+        case ArticleFilter::SORT_STATUS:
+        case ArticleFilter::SORT_NEWSDATE:
             $filter_opts['sortby'] = $sortby;
-            // todo: check if the field name actually exists
-            $filter_opts['sortdata'] = $sortdata;
-        }
-        break;
-    default:
-        break;
+            break;
+        case ArticleFilter::SORT_FIELD:
+            $sortdata = get_parameter_value( $params, 'sortdata' );
+            if( $sortdata ) {
+                $filter_opts['sortby'] = $sortby;
+                // todo: check if the field name actually exists
+                $filter_opts['sortdata'] = $sortdata;
+            }
+            break;
+        default:
+            break;
     }
 }
 $tmp_idlist = get_parameter_value( $params, 'idlist' );

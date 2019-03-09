@@ -8,13 +8,13 @@ class SearchItemCollection
 
     var $maxweight;
 
-    function __construct()
+    public function __construct()
     {
         $this->_ary = array();
         $this->maxweight = 1;
     }
 
-    function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
+    public function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
     {
         if( $txt == '' ) $txt = $url;
         $exists = false;
@@ -41,14 +41,14 @@ class SearchItemCollection
         }
     }
 
-    function CalculateWeights()
+    public function CalculateWeights()
     {
         foreach ($this->_ary as $oneitem) {
             $oneitem->weight = intval(($oneitem->intweight / $this->maxweight) * 100);
         }
     }
 
-    function Sort()
+    public function Sort()
     {
         $fn = function($a,$b) {
             if ($a->urltxt == $b->urltxt) return 0;

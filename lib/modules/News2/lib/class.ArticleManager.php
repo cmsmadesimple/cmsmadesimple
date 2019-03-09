@@ -8,11 +8,17 @@ use CmsRoute;
 
 class ArticleManager
 {
+
     private $db;
+
     private $_cache; // cache of loaded articles for this request
+
     private $mod;
+
     private $fdmgr;
+
     private $catm;
+
     private $cache_driver;
 
     public function __construct( Database $db, News2 $mod, FieldDefManager $fdmgr, CategoriesManager $catm, cms_cache_driver $driver = null )
@@ -235,7 +241,7 @@ class ArticleManager
                 $pos_a = array_search( $a['id'], $idlist);
                 $pos_b = array_search( $b['id'], $idlist);
                 return $pos_a - $pos_b;
-            });
+        });
 
         // build objects
         $out = null;
@@ -347,25 +353,25 @@ class ArticleManager
         }
 
         switch( $filter->useperiod ) {
-        case -1: // no period filtering (anything)
-            break;
-        case 2: // started articles, independent of end time.
-            $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
-            break;
-        case 3: // expired articles only.
-            $where[] = 'A.end_time IS NOT NULL AND A.end_time < UNIX_TIMESTAMP()';
-            break;
-        case 4: // unstarted articles.
-            $where[] = 'A.start_time IS NOT NULL AND A.start_time >= UNIX_TIMESTAMP()';
-            break;
-        case 5: // articles with no start time or end time
-            $where[] = 'A.start_time IS NULL AND A.end_time IS NULL';
-            break;
-        case 1:  // articles that either have no period, or within the time window to display.
-        default:
-            $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
-            $where[] = 'COALESCE(A.end_time,UNIX_TIMESTAMP()+3600) > UNIX_TIMESTAMP()';
-            break;
+            case -1: // no period filtering (anything)
+                break;
+            case 2: // started articles, independent of end time.
+                $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
+                break;
+            case 3: // expired articles only.
+                $where[] = 'A.end_time IS NOT NULL AND A.end_time < UNIX_TIMESTAMP()';
+                break;
+            case 4: // unstarted articles.
+                $where[] = 'A.start_time IS NOT NULL AND A.start_time >= UNIX_TIMESTAMP()';
+                break;
+            case 5: // articles with no start time or end time
+                $where[] = 'A.start_time IS NULL AND A.end_time IS NULL';
+                break;
+            case 1:  // articles that either have no period, or within the time window to display.
+            default:
+                $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
+                $where[] = 'COALESCE(A.end_time,UNIX_TIMESTAMP()+3600) > UNIX_TIMESTAMP()';
+                break;
         }
         if( $filter->category_id > 0 ) {
             if( $filter->withchildren ) {
@@ -402,31 +408,31 @@ class ArticleManager
         if( count($joins) ) $sql .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
         if( count($where) ) $sql .= ' WHERE '.implode(' AND ',$where);
         switch( $filter->sortby ) {
-        case $filter::SORT_TITLE:
-            $sql .= ' ORDER BY A.title';
-            break;
-        case $filter::SORT_STATUS:
-            $sql .= ' ORDER BY A.status';
-            break;
-        case $filter::SORT_FIELD:
-            $sql .= ' ORDER BY F.value';
-            break;
-        case $filter::SORT_NEWSDATE:
-            $sql .= ' ORDER BY A.news_date';
-            break;
-        case $filter::SORT_CREATEDATE:
-            $sql .= ' ORDER BY A.create_date';
-            break;
-        case $filter::SORT_STARTDATE:
-            $sql .= ' ORDER BY A.start_time';
-            break;
-        case $filter::SORT_ENDDATE:
-            $sql .= ' ORDER BY A.end_time';
-            break;
-        case $filter::SORT_MODIFIEDDATE:
-        default:
-            $sql .= ' ORDER BY COALESCE(A.modified_date,A.create_date)';
-            break;
+            case $filter::SORT_TITLE:
+                $sql .= ' ORDER BY A.title';
+                break;
+            case $filter::SORT_STATUS:
+                $sql .= ' ORDER BY A.status';
+                break;
+            case $filter::SORT_FIELD:
+                $sql .= ' ORDER BY F.value';
+                break;
+            case $filter::SORT_NEWSDATE:
+                $sql .= ' ORDER BY A.news_date';
+                break;
+            case $filter::SORT_CREATEDATE:
+                $sql .= ' ORDER BY A.create_date';
+                break;
+            case $filter::SORT_STARTDATE:
+                $sql .= ' ORDER BY A.start_time';
+                break;
+            case $filter::SORT_ENDDATE:
+                $sql .= ' ORDER BY A.end_time';
+                break;
+            case $filter::SORT_MODIFIEDDATE:
+            default:
+                $sql .= ' ORDER BY COALESCE(A.modified_date,A.create_date)';
+                break;
         }
         $sql .= ' '.$filter->sortorder;
         return [ $sql, $parms ];
@@ -597,7 +603,8 @@ class ArticleManager
         if( $article->url_slug ) cms_route_manager::del_static('',__NAMESPACE__,$article->id);
     }
 
-    public static function news_table() { return CMS_DB_PREFIX.'mod_news2_articles'; }
-    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_news2_fieldvals'; }
-
+    public static function news_table() { return CMS_DB_PREFIX.'mod_news2_articles';
+    }
+    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_news2_fieldvals';
+    }
 } // class

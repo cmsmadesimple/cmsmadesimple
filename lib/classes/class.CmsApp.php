@@ -889,6 +889,7 @@ final class CmsApp
  */
 class CmsContentTypePlaceholder
 {
+
     /**
      * @var string The type name
      */

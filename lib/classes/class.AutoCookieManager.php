@@ -76,5 +76,4 @@ class AutoCookieManager extends SignedCookieManager
             return $val;
         }
     }
-
 } // class

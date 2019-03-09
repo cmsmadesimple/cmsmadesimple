@@ -54,16 +54,50 @@ class News2 extends CMSModule
     /**#@+
      * @ignore
      */
-    public function GetVersion() { return '0.0.6'; }
+    public function GetVersion()
+    {
+        return '0.0.6';
+    }
 
-    public function MinimumCMSVersion() { return '2.2.900'; }
-    public function IsPluginModule() { return true; }
-    public function HasAdmin() { return true; }
-    public function GetAdminSection() { return 'content'; }
-    public function GetAuthor() { return 'Robert Campbell'; }
-    public function GetAuthorEmail() { return 'calguy1000@gmail.com'; }
-    public function GetHelp() { return file_get_contents(__DIR__.'/doc/help.inc'); }
-    public function GetChangelog() { return file_get_contents(__DIR__.'/doc/changelog.txt'); }
+    public function MinimumCMSVersion()
+    {
+        return '2.2.900';
+    }
+
+    public function IsPluginModule()
+    {
+        return true;
+    }
+
+    public function HasAdmin()
+    {
+        return true;
+    }
+
+    public function GetAdminSection()
+    {
+        return 'content';
+    }
+
+    public function GetAuthor()
+    {
+        return 'Robert Campbell';
+    }
+
+    public function GetAuthorEmail()
+    {
+        return 'calguy1000@gmail.com';
+    }
+
+    public function GetHelp()
+    {
+        return file_get_contents(__DIR__.'/doc/help.inc');
+    }
+
+    public function GetChangelog()
+    {
+        return file_get_contents(__DIR__.'/doc/changelog.txt');
+    }
 
     /**
      * @ignore
@@ -75,19 +109,20 @@ class News2 extends CMSModule
             $this->CheckPermission( self::APPROVE_PERM );
     }
 
-    function InitializeAdmin()
+    public function InitializeAdmin()
     {
         $this->initializeAdminHooks();
         return parent::InitializeAdmin();
     }
 
-    function InitializeFrontend()
+    public function InitializeFrontend()
     {
         $this->RegisterModulePlugin();
         return parent::InitializeFrontend();
     }
 
-    function SetParameters()
+    // initializecommon??
+    public function SetParameters()
     {
         // executed from both initializeadmin and initializefrontend
         // may be called multiple times.
@@ -230,10 +265,10 @@ class News2 extends CMSModule
     public function HasCapability($capability, $params = array())
     {
         switch( $capability ) {
-        case CmsCoreCapabilities::PLUGIN_MODULE:
-        case CmsCoreCapabilities::ADMINSEARCH:
-        case CmsCoreCapabilities::TASKS:
-            return TRUE;
+            case CmsCoreCapabilities::PLUGIN_MODULE:
+            case CmsCoreCapabilities::ADMINSEARCH:
+            case CmsCoreCapabilities::TASKS:
+                return TRUE;
         }
         return FALSE;
     }
@@ -354,7 +389,7 @@ class News2 extends CMSModule
     protected function categoriesManager() : CategoriesManager
     {
         static $_obj;
-	if( !$_obj ) $_obj = new CategoriesManager( $this->GetDb(), $this,
+        if( !$_obj ) $_obj = new CategoriesManager( $this->GetDb(), $this,
        	      $this->app->get_cache_driver() );
         return $_obj;
     }
@@ -367,8 +402,8 @@ class News2 extends CMSModule
         static $_obj;
         if( !$_obj ) {
             $db = $this->GetDb();
-	    $_obj = new FielddefManager( $db, $this, $this->fieldTypeManager(),
-	   	 $this->app->get_cache_driver() );
+            $_obj = new FielddefManager( $db, $this, $this->fieldTypeManager(),
+            $this->app->get_cache_driver() );
         }
         return $_obj;
     }
@@ -427,5 +462,4 @@ class News2 extends CMSModule
         if( $article && $article->author_id > 0 && get_userid(false) == $article->author_id ) return TRUE;
         return FALSE;
     }
-
 } // class

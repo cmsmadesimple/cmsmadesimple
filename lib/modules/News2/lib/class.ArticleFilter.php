@@ -22,43 +22,44 @@ class ArticleFilter
         'limit'=>1000, 'offset'=>0
         ];
 
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     public function __get( $key )
     {
         switch( $key ) {
-        case 'usefields':
-        case 'withchildren':
-        case 'searchable':
-            return (bool) $this->_data[$key];
+            case 'usefields':
+            case 'withchildren':
+            case 'searchable':
+                return (bool) $this->_data[$key];
 
-        case 'status':
-        case 'sortby':
-        case 'sortdata':
-        case 'sortorder':
-            return trim( $this->_data[$key] );
+            case 'status':
+            case 'sortby':
+            case 'sortdata':
+            case 'sortorder':
+                return trim( $this->_data[$key] );
 
-        case 'id_list':
-            return $this->_data[$key];
+            case 'id_list':
+                return $this->_data[$key];
 
-        case 'title_substr':
-        case 'textmatch':
-            return trim($this->_data[$key]);
+            case 'title_substr':
+            case 'textmatch':
+                return trim($this->_data[$key]);
 
-        case 'useperiod':
-        case 'not_category_id':
-        case 'category_id':
-        case 'author_id':
-            return (int) $this->_data[$key];
+            case 'useperiod':
+            case 'not_category_id':
+            case 'category_id':
+            case 'author_id':
+                return (int) $this->_data[$key];
 
-        case 'limit':
-            return (int) max(1,$this->_data[$key]);
+            case 'limit':
+                return (int) max(1,$this->_data[$key]);
 
-        case 'offset':
-            return (int) max(0,$this->_data[$key]);
+            case 'offset':
+                return (int) max(0,$this->_data[$key]);
 
-        default:
-            throw new \InvalidArgumentException("$key is not a gettable property of ".get_class($this));
+            default:
+                throw new \InvalidArgumentException("$key is not a gettable property of ".get_class($this));
         }
     }
 
@@ -83,43 +84,42 @@ class ArticleFilter
         $obj = new self;
         foreach( $in as $key => $val ) {
             switch( $key ) {
-            case 'usefields':
-            case 'withchildren':
-            case 'searchable':
-                $obj->_data[$key] = cms_to_bool($val);
-                break;
+                case 'usefields':
+                case 'withchildren':
+                case 'searchable':
+                    $obj->_data[$key] = cms_to_bool($val);
+                    break;
 
-            case 'status':
-            case 'sortby':
-            case 'sortdata':
-            case 'sortorder':
-                $obj->_data[$key] = trim($val);
-                break;
+                case 'status':
+                case 'sortby':
+                case 'sortdata':
+                case 'sortorder':
+                    $obj->_data[$key] = trim($val);
+                    break;
 
-            case 'id_list':
-                if( is_array($val) && count($val) ) $obj->_data[$key] = $val;
-                break;
+                case 'id_list':
+                    if( is_array($val) && count($val) ) $obj->_data[$key] = $val;
+                    break;
 
-            case 'title_substr':
-            case 'textmatch':
-                $obj->_data[$key] = trim($val);
-                break;
+                case 'title_substr':
+                case 'textmatch':
+                    $obj->_data[$key] = trim($val);
+                    break;
 
-            case 'useperiod':
-            case 'not_category_id':
-            case 'category_id':
-            case 'author_id':
-                $obj->_data[$key] = (int) $val;
-                break;
+                case 'useperiod':
+                case 'not_category_id':
+                case 'category_id':
+                case 'author_id':
+                    $obj->_data[$key] = (int) $val;
+                    break;
 
-            case 'limit':
-            case 'offset':
-                $obj->_data[$key] = (int) $val;
-                break;
+                case 'limit':
+                case 'offset':
+                    $obj->_data[$key] = (int) $val;
+                    break;
             }
         }
 
         return $obj;
     }
-
 } // class

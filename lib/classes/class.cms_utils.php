@@ -301,5 +301,4 @@ final class cms_utils
     {
         return CmsAdminThemeBase::GetThemeObject();
     }
-
 } // end of class

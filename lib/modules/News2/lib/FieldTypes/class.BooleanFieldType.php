@@ -6,6 +6,7 @@ use News2;
 
 class BooleanFieldType extends FieldType
 {
+
     private $mod;
 
     public function __construct( News2 $mod )
@@ -20,7 +21,7 @@ class BooleanFieldType extends FieldType
 
     public function renderForEditor( FieldDef $def )
     {
-        return;
+        // nothing here
     }
 
     public function handleEditorResponse( FieldDef $def, array $params ) : FieldDef
@@ -44,5 +45,4 @@ class BooleanFieldType extends FieldType
         $val = cms_to_bool($val);
         return $val;
     }
-
 } // class

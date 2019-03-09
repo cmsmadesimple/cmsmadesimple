@@ -2,7 +2,6 @@
 namespace News2;
 use News2;
 
-
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
 const FILTER_KEY = 'News2-defaultadmin-filter';
