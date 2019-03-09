@@ -87,8 +87,8 @@ function cms_module_plugin($params,&$smarty)
         if( 0 == strcasecmp($mactinfo->module, $modulename) && $id == $mactinfo->id) {
             $action = $mactinfo->action;
             $inline = $mactinfo->inline;
-	    // note: we mrege in mact params... but anything in the {cms_module} tag takes precidence
-	    // this also allows us to pass in other parameters and smarty variables on the module call
+            // note: we mrege in mact params... but anything in the {cms_module} tag takes precidence
+            // this also allows us to pass in other parameters and smarty variables on the module call
             // i.e:  {cms_module module=News2 foo=bar stuff=something}
             $params = array_merge($mactinfo->params, $params);
         }
