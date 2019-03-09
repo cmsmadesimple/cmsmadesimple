@@ -1,6 +1,22 @@
 <?php
+
+/**
+ * A class for working with simple plugins
+ * @package CMS
+ * @license GPL
+ */
 namespace CMSMS;
 
+/**
+ * This operations class handles reading and writing simple plugins.
+ *
+ * this is a singleton class.
+ *
+ * @package CMS
+ * @license GPL
+ * @since 2.3
+ * @author Robert Campbell
+ */
 final class simple_plugin_operations
 {
 
@@ -9,15 +25,25 @@ final class simple_plugin_operations
      */
     private static $_instance;
 
+    /**
+     * @ignore
+     */
     private $_loaded = [];
 
     /**
      * @ignore
      */
-    protected function __construct() {
+    protected function __construct()
+    {
+        // nothing here
     }
 
-    public static function get_instance()
+    /**
+     * Get the single instance
+     *
+     * @return simple_plugin_operations
+     */
+    public static function get_instance() : simple_plugin_operations
     {
         if( !self::$_instance ) self::$_instance = new self();
         return self::$_instance;
@@ -46,13 +72,25 @@ final class simple_plugin_operations
         return $out;
     }
 
-    protected function get_plugin_filename( string $name )
+    /**
+     * Get the filename where a plugin should be stored or read from.
+     *
+     * @param string $name The plugin name
+     * @return string
+     */
+    protected function get_plugin_filename( string $name ) : string
     {
         $config = \cms_config::get_instance();
         $name = $config['assets_path'].'/simple_plugins/'.$name.'.php';
         return $name;
     }
 
+    /**
+     * Test if a plugin exists
+     *
+     * @param string $name The plugin name
+     * @return bool
+     */
     public function plugin_exists( string $name )
     {
         if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
@@ -60,7 +98,13 @@ final class simple_plugin_operations
         if( is_file($filename) ) return TRUE;
     }
 
-    public function is_valid_plugin_name($name)
+    /**
+     * Test whether a name is a suitable plugin name
+     *
+     * @param string $name The plugin name
+     * @return bool
+     */
+    public function is_valid_plugin_name($name) : bool
     {
         $name = trim($name);
         if( !$name ) return FALSE;
@@ -68,6 +112,12 @@ final class simple_plugin_operations
         return TRUE;
     }
 
+    /**
+     * Load a plugin
+     *
+     * @param string $name The plugin name
+     * @return string The name of the callable that this plugin is loaded into.
+     */
     public function load_plugin(string $name)
     {
         // test if the simple plugin exists
@@ -87,11 +137,21 @@ final class simple_plugin_operations
         return $this->_loaded[$name];
     }
 
+    /**
+     * Call a user plugin
+     *
+     * @param string $name The plugin name to call
+     * @param array $args Optional plugin arguments
+     * @return mixed
+     */
     public function call_plugin( string $name, array $args = [] )
     {
-        self::__callStatic( $name, [ $args, cmsms()->GetSmarty() ] );
+        return self::__callStatic( $name, [ $args, cmsms()->GetSmarty() ] );
     }
 
+    /**
+     * @ignore
+     */
     public static function __callStatic(string $name,array $args = null)
     {
         // invoking simple_plugin_operations::call_abcdefg
@@ -107,7 +167,3 @@ final class simple_plugin_operations
         include( $fn );
     }
 } // end of filex
-
-/*
-{my_foo1}
- */

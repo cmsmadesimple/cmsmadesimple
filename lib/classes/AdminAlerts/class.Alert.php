@@ -221,6 +221,9 @@ abstract class Alert
         return self::get_fixed_prefname( $name );
     }
 
+    /**
+     * @ignore
+     */
     protected static function get_fixed_prefname( $name )
     {
         return 'adminalert_'.md5($name);
@@ -265,9 +268,10 @@ abstract class Alert
      * @throws InvalidArgumentException
      * @throws LogicException
      * @param string $name The preference name
+     * @param bool $throw Whether or not to throw exceptions.
      * @return Alert
      */
-    public static function load_by_name($name, $throw = true )
+    public static function load_by_name($name, bool $throw = true )
     {
         $name = trim($name);
         if( !$name ) throw new \InvalidArgumentException('Invalid alert name passed to '.__METHOD__);

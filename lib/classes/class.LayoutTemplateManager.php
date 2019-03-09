@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * Tools for interacting with template objects and the database
+ *
+ * @package CMS
+ * @license GPL
+ */
+
 namespace CMSMS;
 use CMSMS\Database\Connection as Database;
 use cms_cache_driver;
@@ -7,8 +15,25 @@ use CmsLayoutTemplateType;
 use CmsLayoutCollection;
 use CMSMS\internal\hook_manager;
 
+/**
+ * A class that manages the storage of CmsLayoutTemplate objects in the database.
+ *
+ * This class also supports caching, and sending hooks at various levels
+ *
+ * @since 2.3
+ * @package CMS
+ * @license GPL
+ * @author Robert Campbell
+ */
 class LayoutTemplateManager
 {
+    /**
+     * Constructor
+     *
+     * @param Database $db The database
+     * @param cms_cache_driver $driver The Cache driver
+     * @param hook_manager $hook_manager The hook manager
+     */
     public function __construct( Database $db, cms_cache_driver $driver, hook_manager $hook_manager )
     {
         $this->db = $db;
@@ -16,6 +41,15 @@ class LayoutTemplateManager
         $this->hook_manager = $hook_manager;
     }
 
+    /**
+     * Given a template name, generate an id.
+     *
+     * This method uses a cached mapping of template names to id.
+     * If the item does not exist in the cache, then the cache item is built from the database.
+     *
+     * @param string $name The template name
+     * @return int|null
+     */
     protected function template_name_to_id(string $name)
     {
         $map = $this->cache_driver->get(__METHOD__,__CLASS__);
@@ -31,6 +65,14 @@ class LayoutTemplateManager
         if( $map && isset($map[$name]) ) return $map[$name];
     }
 
+    /**
+     * Given a type id, return its type id
+     *
+     * This method uses a cache that is built from the database if necessary.
+     *
+     * @param int $type_id
+     * @return int|null The default template id, if any.
+     */
     protected function get_default_template_by_type(int $type_id)
     {
         $map = $this->cache_driver->get(__METHOD__,__CLASS__);
@@ -46,11 +88,24 @@ class LayoutTemplateManager
         if( $map && isset($map[$type_id]) ) return $map[$type_id];
     }
 
-    protected function get_cached_template($tpl_id)
+    /**
+     * Test if a template exists in the cache, by it's id.
+     *
+     * @internal
+     * @param int $tpl_id The template id
+     * @return CmsLayoutTemplate|null
+     */
+    protected function get_cached_template(int $tpl_id)
     {
         return $this->cache_driver->get($tpl_id,__CLASS__);
     }
 
+    /**
+     * Adds or overwrites a template into the cache
+     *
+     * @internal
+     * @param CmsLayoutTemplate $tpl The template to store.
+     */
     protected function set_template_cached(\CmsLayoutTemplate $tpl)
     {
         if( !$tpl->get_id() ) throw new \InvalidArgumentException('Cannot cache a template with no id');
@@ -62,6 +117,12 @@ class LayoutTemplateManager
         $this->cache_driver->set('cached_index',__CLASS__);
     }
 
+    /**
+     * Get an index of all of the cached templates.
+     *
+     * @internal
+     * @return int[]|null
+     */
     protected function get_cached_templates()
     {
         $idx = $this->cache_driver->get('cached_index',__CLASS__);
@@ -84,6 +145,13 @@ class LayoutTemplateManager
         throw new \CmsLogicException('Could not resolve '.$a.' to a user id');
     }
 
+    /**
+     * Generate a unique template name
+     *
+     * @param string $prototype The input prototype
+     * @param string $prefix A prefix to apply to all output
+     * @return string
+     */
     public function generate_unique_template_name(string $prototype, string $prefix = null)
     {
         if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
@@ -99,6 +167,13 @@ class LayoutTemplateManager
         throw new CmsLogicException('Could not generate a template name for '.$prototype);
     }
 
+    /**
+     * Validate a template to ensure that it is suitable for storage.
+     *
+     * This method throws exceptions if validation cannot be assured.
+     *
+     * @param CmsLayoutTemplate $tpl
+     */
     public function validate_template( CmsLayoutTemplate $tpl )
     {
         $tpl->validate();
@@ -117,6 +192,13 @@ class LayoutTemplateManager
         if( $tmp ) throw new CmsInvalidDataException('Template with the same name already exists.');
     }
 
+    /**
+     * Update the template object into the database.
+     *
+     * @internal
+     * @param CmsLayoutTemplate $tpl
+     * @returns CmsLayoutTemplate
+     */
     protected function _update_template( CmsLayoutTemplate $tpl ) : CmsLayoutTemplate
     {
         $this->validate_template($tpl);
@@ -167,6 +249,12 @@ class LayoutTemplateManager
         return $tpl;
     }
 
+    /**
+     * Insert a template into the database
+     *
+     * @param CmsLayoutTemplate $tpl
+     * @return CmsLayoutTemplate
+     */
     protected function _insert_template( CmsLayoutTemplate $tpl ) : CmsLayoutTemplate
     {
         $this->validate_template($tpl);
@@ -214,6 +302,13 @@ class LayoutTemplateManager
         return $tpl;
     }
 
+    /**
+     * Save a template into the database.
+     *
+     * This method takes an existing template object and either updates it into the database, or inserts it.
+     *
+     * @param CmsLayoutTemplate $tpl The template object.
+     */
     public function save_template( CmsLayoutTemplate $tpl )
     {
         if( $tpl->get_id() ) {
@@ -228,6 +323,14 @@ class LayoutTemplateManager
         $this->hook_manager->do_hook('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
     }
 
+    /**
+     * Delete a template from the database
+     *
+     * This method removes a template object from the database and any caches.
+     * it does not modify the template object, so care must be taken with the id.
+     *
+     * @param CmsLayoutTemplate $tpl
+     */
     public function delete_template( CmsLayoutTemplate $tpl )
     {
         if( !$tpl->get_id() ) return;
@@ -247,6 +350,12 @@ class LayoutTemplateManager
         $this->cache_driver->clear(__CLASS__);
     }
 
+    /**
+     * Load a template
+     *
+     * @param mixed $a  The template id or name to load.
+     * @return CmsLayoutTemplate|null
+     */
     public function load_template($a)
     {
         $id = null;
@@ -279,6 +388,12 @@ class LayoutTemplateManager
         return $obj;
     }
 
+    /**
+     * Load multiple templates
+     *
+     * @param array $list An array of integer template ids.
+     * @return CmsLayoutTemplate[]
+     */
     public function load_bulk_templates(array $list)
     {
         if( !is_array($list) || count($list) == 0 ) return;
@@ -336,6 +451,12 @@ class LayoutTemplateManager
         return $out;
     }
 
+    /**
+     * Load all templates of a given type
+     *
+     * @param CmsLayoutTemplateType $type
+     * @return CmsLayoutTemplate[]
+     */
     public function load_templates_by_type(CmsLayoutTemplateType $type)
     {
         // get the template type id => template_id list
@@ -359,6 +480,12 @@ class LayoutTemplateManager
         return $this->load_bulk_templates($map);
     }
 
+    /**
+     * Get all of the templates owned by a specific user
+     *
+     * @param mixed $a Either the integer uid or the username of a user.
+     * @return CmsLayoutTemplate[]
+     */
     public function get_owned_templates($a)
     {
         $n = $this->_resolve_user($a);
@@ -369,11 +496,17 @@ class LayoutTemplateManager
         return $this->load_bulk_templates($tmp);
     }
 
+    /**
+     * Get all of the templates that a user owns or can otherwise edit.
+     *
+     * @param mixed $a Either the integer uid or a username
+     * @param CmsLayoutTemplate[]
+     */
     public function get_editable_templates($a)
     {
         $n = $this->_resolve_user($a);
-	if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
-	$db = $this->db;
+        if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+        $db = $this->db;
 
         $sql = 'SELECT id FROM '.self::template_table_name();
         $parms = $where = null;
@@ -395,6 +528,12 @@ class LayoutTemplateManager
         return $this->load_bulk_templates($tpl_list);
     }
 
+    /**
+     * Given a template type, get all templates
+     *
+     * @param CmsLayoutTemplateType $type
+     * @return CmsLayoutTemplate[]|null
+     */
     public function load_all_templates_by_type(CmsLayoutTemplateType $type)
     {
         $sql = 'SELECT id FROM '.$this->template_table_name().' WHERE type_id = ?';
@@ -404,6 +543,12 @@ class LayoutTemplateManager
         return $this->load_bulk_templates($tmp);
     }
 
+    /**
+     * Given a template type, get the default template of that type
+     *
+     * @param mixed $t A type name, a type id, or a CmsLayoutTemplateType object
+     * @param CmsLayoutTemplate
+     */
     public function load_default_template_by_type($t)
     {
         $t2 = null;
@@ -422,18 +567,30 @@ class LayoutTemplateManager
         if( $tpl_id ) return $this->load_template($tpl_id);
     }
 
+    /**
+     * @ignore
+     */
     public function template_table_name() {
         return CMS_DB_PREFIX.'layout_templates';
     }
 
+    /**
+     * @ignore
+     */
     public function designs_table_name() {
         return CMS_DB_PREFIX.'layout_designs';
     }
 
+    /**
+     * @ignore
+     */
     public function tpl_additional_users_table_name() {
         return CMS_DB_PREFIX.'layout_tpl_addusers';
     }
 
+    /**
+     * @ignore
+     */
     public function design_assoc_table_name() {
         return CMS_DB_PREFIX.'layout_design_tplassoc';
     }
