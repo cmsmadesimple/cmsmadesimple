@@ -18,8 +18,6 @@
 #
 #$Id$
 
-use CMSMS\internal\global_cache;
-
 /**
  * Content related functions.
  *
@@ -27,9 +25,8 @@ use CMSMS\internal\global_cache;
  * @license GPL
  */
 
-/**
- * Include the content class definition
- */
+use CMSMS\internal\global_cache;
+
 
 /**
  * Class for static methods related to content
@@ -325,25 +322,34 @@ class ContentOperations
     }
 
 
+    /**
+     * Given an id or an alias, return the content object.
+     *
+     * Uses various optimization routines to increase performance.
+     * This method will generate notices or errors if the input is invalid.
+     *
+     * @param mixed $alias Either an integer id OR a string alias
+     * @return ContentBase|null
+     */
     public function SmartLoadContentFromAlias(string $alias)
     {
         $id = (int) $alias;
         if( !is_numeric($alias) || (int) $alias < 1 ) {
             $id = $this->alias_to_id($alias);
-	    if( !$id ) {
-		    cms_notice('could not find an id for alias '.$alias);
-		    return;
-	    }
-	}
-	if( !$id ) {
-	   throw new \LogicException('invalid id passed to '.__METHOD__);
-	}
+            if( !$id ) {
+                cms_notice('could not find an id for alias '.$alias);
+                return;
+            }
+        }
+        if( !$id ) {
+            throw new \LogicException('invalid id passed to '.__METHOD__);
+        }
 
         // get this page's node and call getcontent
         // this causes loadChildren to be called with the parent id
         // which forces all properties to load, and caches all siblings as well.
         $node = $this->quickfind_node_by_id($id);
-        if( !$node ) trigger_error('could not get node for id '.$id);
+        if( !$node ) cms_error('could not get node for id '.$id);
         return $node->getContent(true,true);
     }
 
@@ -1210,7 +1216,7 @@ class ContentOperations
 
     /**
      * A convenience function to find a hierarchy node given the page id
-        * This method will be moved to cms_content_tree at a later date.
+     * This method will be moved to cms_content_tree at a later date.
      *
      * @param int $id The page id
      * @return cms_content_tree
@@ -1221,11 +1227,14 @@ class ContentOperations
         if( isset($list[$id]) ) return $list[$id];
     }
 
+    /**
+     * @ignore
+     */
     protected function save_content_properties(ContentBase $content)
     {
-	$db = $this->app->GetDb();
+        $db = $this->app->GetDb();
 
-	$existing = [];
+        $existing = [];
         $sql = 'SELECT prop_name FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
         $existing = $db->GetCol($sql, [ $content->ID() ] );
         if( !$existing ) $existing = [];
@@ -1248,6 +1257,9 @@ class ContentOperations
         }
     }
 
+    /**
+     * @ignore
+     */
     protected function save_additional_editors(ContentBase $content)
     {
         $db = $this->app->GetDb();
@@ -1264,6 +1276,9 @@ class ContentOperations
         }
     }
 
+    /**
+     * @ignore
+     */
     protected function insert_content(ContentBase $content)
     {
         # :TODO: Take care bout hierarchy here, it has no value !
@@ -1284,8 +1299,8 @@ class ContentOperations
         // but we cannot because of MyISAM (2.3)
 
         // ugh, sequence tables
-	$newid = $db->GenID(CMS_DB_PREFIX."content_seq");
-	$content->setInsertedDetails($newid,time()); // set the newid, modified and created date.   also SetModifiedDetails()
+        $newid = $db->GenID(CMS_DB_PREFIX."content_seq");
+        $content->setInsertedDetails($newid,time()); // set the newid, modified and created date.   also SetModifiedDetails()
         $query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order,
                      hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, page_url, menu_text, metadata, titleattribute, accesskey,
                      tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -1317,6 +1332,9 @@ class ContentOperations
         return $content;
     }
 
+    /**
+     * @ignore
+     */
     protected function update_content(ContentBase $content)
     {
         // Figure out the item_order
@@ -1370,6 +1388,13 @@ class ContentOperations
         return $content;
     }
 
+    /**
+     * Save a content object to the database.
+     *
+     * This method also will clear caches, and update content heirarchies.
+     *
+     * @param ContentBase $content
+     */
     public function save_content(ContentBase $content)
     {
         $this->app->get_hook_manager()->do_hook('Core::ContentEditPre', [ 'content' => &$content ] );
@@ -1387,6 +1412,18 @@ class ContentOperations
         return $content;
     }
 
+    /**
+     * Delete a content object from the database.
+     *
+     * This method assumes that the input content object has an id.  If it does then the database
+     * record will be removed.  This method also deletes all associated data, calls hooks, and
+     * updates hierarchy positions of other content items as appropriate.
+     *
+     * This method does not alter the input content object, so users must exercise caution
+     * with the content object after it has been removed.
+     *
+     * @param ContentBase $content The object to delete.
+     */
     public function delete_content(ContentBase $content)
     {
         $this->app->get_hook_manager()->do_hook('Core::ContentDeletePre', [ 'content' => &$content ] );
@@ -1417,6 +1454,14 @@ class ContentOperations
         }
     }
 
+    /**
+     * Move a content object up, or down amongst its peers.
+     *
+     * This method will also update content hierarchy positions as is a appropriate.
+     *
+     * @param ContentBase $content The content object to modify
+     * @param int $direction A negative value indicates to move the item up, a positive value indicates to move the item down amongst its peers.
+     */
     public function change_content_order(ContentBase $content, int $direction)
     {
         // this should be in contentops
@@ -1446,12 +1491,26 @@ class ContentOperations
         $this->SetAllHierarchyPositions();
     }
 
+    /**
+     * Set the content object as the default.
+     *
+     * This method does not alter the input content object, it merely modifies the database.
+     *
+     * @param ContentBase $content
+     */
     public function set_default_content(ContentBase $content)
     {
         $content->SetDefaultContent(true);
         return $this->save_content($content);
     }
 
+    /**
+     * Given a content object, and a seed string, calculate a suitable unsed content alias
+     *
+     * @param ContentBase $content The content object to use when generating an alias
+     * @param string $seed an optional seed string.  If not used, look at the content object.
+     * @return string
+     */
     public function calculate_unused_content_alias(ContentBase $content, string $seed = null) : string
     {
         // calculate an unused, valid content alias
