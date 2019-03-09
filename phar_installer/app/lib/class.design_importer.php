@@ -122,10 +122,14 @@ class design_importer
 
         $type_str = $type_ob = null;
         $type_str = (isset($section['type'])) ? $section['type'] : 'Core::Page';
-        $type_ob = \CmsLayoutTemplateType::load( $type_str );
-        if( !$type_ob ) {
-            $type_ob = \CmsLayoutTemplateType::load( 'Core::Generic' );
+	$type_ob = null;
+        try {
+            $type_ob = \CmsLayoutTemplateType::load( $type_str );
         }
+        catch( \CmsDataNotFoundException $e ) {
+	    // not an error
+	}
+        if( !$type_ob ) $type_ob = \CmsLayoutTemplateType::load( 'Core::Generic' );
         $tpl = new \CmsLayoutTemplate();
         $tpl->set_name( $tpl_name );
         $tpl->set_type( $type_ob );
@@ -134,9 +138,7 @@ class design_importer
         if( isset( $section['description']) && !empty($section['description']) ) {
             $tpl->set_description( $section['description'] );
         }
-        if( isset( $section['listable']) ) {
-            $tpl->set_listable( $section['listable'] );
-        }
+        if( isset( $section['listable']) ) $tpl->set_listable( $section['listable'] );
         $tpl->save();
         return $tpl;
     }

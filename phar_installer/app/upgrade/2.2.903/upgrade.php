@@ -43,6 +43,21 @@ if( is_dir( $fr ) && !is_dir( $to ) ) {
    rename( $fr, $to );
 }
 
+// 2b. Move News, which is no longer a distributed module,  to /Assets/Plugins
+$fr = "$destdir/modules/News";
+$to = "$destdir/assets/modules/News";
+if( is_dir( $fr ) && !is_dir( $to ) ) {
+   rename( $fr, $to );
+}
+
+// 2c. Move CMSMailer, which is no longer a distributed module,  to /Assets/Plugins
+$fr = "$destdir/modules/CMSMailer";
+$to = "$destdir/assets/modules/CMSMailer";
+if( is_dir( $fr ) && !is_dir( $to ) ) {
+   rename( $fr, $to );
+}
+status_msg('Moved modules that are no longer considered -core- to assets/modules');
+
 //  3.  convert events table stuff to the new hook_mapping.json file
 $t_events = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'events ORDER BY event_id');
 $events = null;
@@ -83,11 +98,7 @@ status_msg('Converted events to hooks... and use the new assets/configs/hook_map
 
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY username VARCHAR(80)' );
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY password VARCHAR(128)' );
-
-verbose_msg(ilang('upgrading_schema',203));
-$query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 203';
-$db->Execute($query);
-
+status_msg('Added some size to the password and username columns of the users table');
 
 // tweak callbacks for page and generic layout templatet types.
 $page_type = \CmsLayoutTemplateType::load('__CORE__::page');
@@ -100,3 +111,13 @@ $generic_type = \CmsLayoutTemplateType::load('__CORE__::generic');
 $generic_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::generic_type_lang_callback');
 $generic_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
 $generic_type->save();
+
+$tmp = cms_siteprefs::get('site_signature');
+if( !$tmp ) {
+    cms_siteprefs::set('site_signature',sha1(bin2hex(random_bytes(256)))); // a unique signature to identify this site.  Useful for some signatures too.
+    status_msg('created a random size signature');
+}
+
+verbose_msg(ilang('upgrading_schema',203));
+$query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 203';
+$db->Execute($query);

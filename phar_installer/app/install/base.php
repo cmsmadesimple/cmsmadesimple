@@ -17,6 +17,7 @@ cms_siteprefs::set('auto_clear_cache_age',60); // cache files for only 60 days b
 cms_siteprefs::set('adminlog_lifetime',3600*24*31); // admin log entries only live for 60 days.
 cms_siteprefs::set('allow_browser_cache',1); // allow browser to cache cachable pages
 cms_siteprefs::set('browser_cache_expiry',60); // browser can cache pages for 60 minutes.
+cms_siteprefs::set('site_signature',sha1(bin2hex(random_bytes(256)))); // a unique signature to identify this site.  Useful for some signatures too.
 
 //
 // permissions

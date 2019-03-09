@@ -119,7 +119,8 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $this->verbose(\__appbase\lang('install_setsitename'));
             \cms_siteprefs::set('sitename',$siteinfo['sitename']);
 
-            $this->write_config();
+            // hwere we add in any config settings we want to forcibly set in the new file.
+            $this->write_config(['url_rewriting'=>'internal']);
 
             // todo: install default preferences
             \cms_siteprefs::set('global_umask','022');
@@ -206,7 +207,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         }
     }
 
-    private function write_config()
+    private function write_config($extra = null)
     {
         $destconfig = $this->get_wizard()->get_data('config');
         if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
@@ -243,6 +244,12 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         if( isset($destconfig['dbport']) ) {
             $num = (int)$destconfig['dbport'];
             if( $num > 0 ) $newconfig['db_port'] = $num;
+        }
+        if( is_array($extra) && count($extra) ) {
+            // cannot use array_merge (I do not think) because $newconfig is an object
+            foreach( $extra as $key => $val ) {
+                $newconfig[$key] = $val;
+            }
         }
         $newconfig->save();
     }
