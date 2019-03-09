@@ -1,3 +1,22 @@
+<script>
+var base = '{uploads_url}'
+function do_category_thumb(el,src) {
+   if( typeof el == 'undefined' || !el ) return;
+   if( typeof src == 'undefined' || !src ) {
+      el.hide().prop('src','')
+   } else {
+      el.prop('src',base + '/'+src).show()
+   }
+}
+$(function(){
+   var img = $('#category_img');
+   do_category_thumb(img, '{$obj->image_url}')
+   var input = $('input[name="image_url"]').change(function(){
+       do_category_thumb(img ,$(this).val());
+   })
+})
+</script>
+
 <h3>{$mod->Lang('add_category')}</h3>
 
 {if empty($category_tree_list)}
@@ -20,9 +39,7 @@
 <div class="c_full cf">
    <label for="fld_alias" class="grid_3">{$mod->Lang('lbl_image')}</label>
    <div class="grid_8">
-      {if $obj->image_url}
-          <img class="grid_4" src="{uploads_url}/{$obj->image_url}" width="200"/><br/>
-      {/if}
+      <img class="grid_4" id='category_img' width="200"/ id="category_img" style="display: none;"><br/>
       <div class="grid_12">
           {cms_filepicker type='image' name='image_url' value=$obj->image_url}
       </div>
