@@ -16,11 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-use \FilePicker\TemporaryInstanceStorage;
-use \FilePicker\TemporaryProfileStorage;
-use \FilePicker\PathAssistant;
-use \FilePicker\utils;
-use \CMSMS\FileType;
+use FilePicker\TemporaryInstanceStorage;
+use FilePicker\TemporaryProfileStorage;
+use FilePicker\PathAssistant;
+use FilePicker\utils;
+use CMSMS\FileType;
+use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
@@ -242,7 +243,10 @@ try {
     $lang['error_problem_upload'] = $this->Lang('error_problem_upload');
     $lang['error_failed_ajax'] = $this->Lang('error_failed_ajax');
     $smarty->assign('lang_js',json_encode($lang));
-    echo $this->ProcessTemplate('filepicker.tpl');
+    $bodycontent = $this->ProcessTemplate('filepicker.tpl');
+    HookManager::do_hook('admin_content_postrender', ['content'=>&$bodycontent] );
+    echo $bodycontent;
+
 }
 catch( \Exception $e ) {
     audit('','FilePicker',$e->GetMessage());
