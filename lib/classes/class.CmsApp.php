@@ -208,7 +208,7 @@ final class CmsApp
     /**
      * Add an error to the list
      *
-        * @ignore
+     * @ignore
      * @since 1.9
      * @internal
      * @access private

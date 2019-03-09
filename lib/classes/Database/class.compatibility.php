@@ -42,6 +42,9 @@
 
 namespace CMSMS\Database {
 
+    /**
+     * #ignore
+     */
     class Error extends \Exception
     {
     }
@@ -97,6 +100,15 @@ namespace CMSMS\Database {
             return $obj;
         }
 
+        /**
+         * Builtin handler for errors.
+         *
+         * @internal
+         * @param Connection $conn
+         * @param string $errtype;
+         * @param int $error_number
+         * @param string $error_msg
+         */
         public static function on_error( Connection $conn, $errtype, $error_number, $error_msg )
         {
             debug_to_log("Database Error: $errtype($error_number) - $error_msg");

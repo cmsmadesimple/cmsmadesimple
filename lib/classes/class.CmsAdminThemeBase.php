@@ -1416,7 +1416,7 @@ abstract class CmsAdminThemeBase
      * An abstract function to output the content for a login page.
      *
      * @since 2.3
-     * @pram string $pageid ignored.
+     * @param string $pageid ignored.
      * @return string html contents
      */
     abstract public function do_loginpage( string $pageid = null );

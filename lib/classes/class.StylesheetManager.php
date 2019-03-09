@@ -1,7 +1,22 @@
 <?php
+/**
+ * A class to manage the queuing and output of stylesheets.
+ *
+ * @package CMSMS
+ * @license GPL
+ */
 namespace CMSMS;
 use CmsApp;
 
+/**
+ * This class is the backend behind the {cms_queue_css} and {cms_render_css} plugins.
+ * It handles queueing CSS files, and then concatenating them all on output, and generating the
+ * appropriate HTML meta tag.
+ *
+ * @package CMS
+ * @license GPL
+ * @since 2.3
+ */
 class StylesheetManager
 {
 
@@ -20,11 +35,20 @@ class StylesheetManager
      */
     private $_hook_manager;
 
+    /**
+     * @ignore
+     */
     public function __construct( CmsApp $app )
     {
         $this->_hook_manager = $app->get_hook_manager();
     }
 
+    /**
+     * enqueue a CSS file.
+     *
+     * @param string $filename The absolute path to the CSS file
+     * @param int $priority An optional priroity, this is useful in sorting on render.
+     */
     public function queue( string $filename, int $priority = null )
     {
         if( !is_file($filename) ) return;
@@ -42,7 +66,23 @@ class StylesheetManager
         ];
     }
 
-    public function render( string $output_path, $force = false )
+    /**
+     * Process queued CSS files, and render the appropriate meta tag.
+     * This method will sort the CSS files by their priority and the order added.
+     * Then call hooks on each file to preprocess them.
+     * Then concatenate the processed output.
+     * Call a hook on the resulting concatenated file to post process it
+     * Then output the file to the specified directory
+     * And return the filename.
+     *
+     * This method is intelligent in that it will not perform CSS processing IF the input files have not changed
+     * since the last time the output file was generated.
+     *
+     * @param string $output_path The name of the directory where the output CSS file should be written.
+     * @param bool $force Force the output stylesheet to be regenerated.
+     * @return string The output CSS filename.
+     */
+    public function render( string $output_path, bool $force = false )
     {
         if( !$this->_files && !count($this->_files) ) return; // nothing to do
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
