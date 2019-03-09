@@ -4,7 +4,7 @@ if (!$this->AccessAllowed()) exit;
 
 class FileManagerUploadHandler extends jquery_upload_handler
 {
-    function __construct($options=null)
+    public function __construct($options=null)
     {
         if( !is_array($options) ) $options = array();
 

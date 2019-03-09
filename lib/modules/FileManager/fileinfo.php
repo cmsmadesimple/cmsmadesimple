@@ -109,13 +109,10 @@ function GetFileInfo($filename,$ext,$dir=false) {
         switch (strtolower($ext)) {
             case "png":
             case "gif":
-            case "jpg" : {
+            case "jpg" :
                 $imginfo=image_info($filename);
-                if ($imginfo) {
-                    $result=$imginfo["width"]."x".$imginfo["height"]."x".$imginfo["bits"];
-                }
+                if ($imginfo) $result=$imginfo["width"]."x".$imginfo["height"]."x".$imginfo["bits"];
                 break;
-            }
             default:
                 $result="&nbsp;";
         }
