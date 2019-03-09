@@ -7,6 +7,8 @@ class ArticleFilter
     const SORT_MODIFIEDDATE = 'modified_date';
     const SORT_CREATEDATE = 'create_date';
     const SORT_NEWSDATE = 'news_date';
+    const SORT_STARTDATE = 'start_date';
+    const SORT_ENDDATE = 'end_date';
     const SORT_TITLE = 'title';
     const SORT_STATUS = 'status';
     const SORT_FIELD = 'field';

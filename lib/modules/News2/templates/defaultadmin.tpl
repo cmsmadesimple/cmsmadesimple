@@ -41,7 +41,7 @@ $(function(){
 </script>
 
 <fieldset id="filter_zone" style="display: none;">
-   <legend>{$mod->Lang('lbl_articlefilter')} XXDX</legend>
+   <legend>{$mod->Lang('lbl_articlefilter')}</legend>
    {form_start}
    <div class="c_full cf">
        <label class="grid_3" for="filter_title">{$mod->Lang('lbl_title')}</label>
@@ -71,6 +71,7 @@ $(function(){
           {html_options options=$filter_periods_list selected=$filter_opts.useperiod|default:1}
        </select>
    </div>
+   <hr/>
    <div class="c_full cf">
        <label class="grid_3" for="filter_limit">{$mod->Lang('lbl_pagelimit')}</label>
        {$opts=[5=>5,10=>10,25=>25,50=>50,100=>100,250=>250,500=>500]}
@@ -82,6 +83,12 @@ $(function(){
        <label class="grid_3" for="filter_sortby">{$mod->Lang('lbl_sortby')}</label>
        <select class="grid_8" id="filter_sortby" name="filter_sortby">
           {html_options options=$sort_list selected=$filter_opts.sortby|default:''}
+       </select>
+   </div>
+   <div class="c_full cf">
+       <label class="grid_3" for="filter_sortorder">{$mod->Lang('lbl_sortorder')}</label>
+       <select class="grid_8" id="filter_sortorder" name="filter_sortorder">
+          {html_options options=$sortorder_list selected=$filter_opts.sortorder|default:'DESC'}
        </select>
    </div>
    <div class="c_full cf">

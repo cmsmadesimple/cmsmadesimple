@@ -417,6 +417,12 @@ class ArticleManager
         case $filter::SORT_CREATEDATE:
             $sql .= ' ORDER BY A.create_date';
             break;
+        case $filter::SORT_STARTDATE:
+            $sql .= ' ORDER BY A.start_time';
+            break;
+        case $filter::SORT_ENDDATE:
+            $sql .= ' ORDER BY A.end_time';
+            break;
         case $filter::SORT_MODIFIEDDATE:
         default:
             $sql .= ' ORDER BY COALESCE(A.modified_date,A.create_date)';

@@ -26,6 +26,8 @@ if( !empty($_POST) ) {
         $my_filter_opts['status'] = trim(get_parameter_value($_POST,'filter_status'));
         $my_filter_opts['useperiod'] = (int) get_parameter_value($_POST,'filter_useperiod');
         $my_filter_opts['limit'] = max(1,min(1000,(int)get_parameter_value($_POST, 'filter_limit')));
+        $my_filter_opts['sortby'] = trim(get_parameter_value($_POST,'filter_sortby'));
+        $my_filter_opts['sortorder'] = trim(get_parameter_value($_POST,'filter_sortorder'));
         $my_filter_opts['offset'] = 0;
         $_SESSION[FILTER_KEY] = $my_filter_opts;
         unset( $_POST['page'] );
@@ -102,8 +104,15 @@ if( $this->CheckPermission( News2::MANAGE_PERM ) ) {
 $sorting_list = [
     ArticleFilter::SORT_MODIFIEDDATE => $this->Lang('sort_modifieddate'),
     ArticleFilter::SORT_CREATEDATE => $this->Lang('sort_createdate'),
+    ArticleFilter::SORT_NEWSDATE => $this->Lang('sort_newsdate'),
+    ArticleFilter::SORT_STARTDATE => $this->Lang('sort_startdate'),
+    ArticleFilter::SORT_ENDDATE => $this->Lang('sort_enddate'),
     ArticleFilter::SORT_TITLE => $this->Lang('sort_title'),
-    ArticleFilter::SORT_STATUS => $this->Lang('sort_status')
+    ArticleFilter::SORT_STATUS => $this->Lang('sort_status'),
+    ];
+$sortorder_list = [
+    ArticleFilter::ORDER_ASC => $this->Lang('sort_order_asc'),
+    ArticleFilter::ORDER_DESC => $this->Lang('sort_order_desc')
     ];
 $tpl = $smarty->CreateTemplate( $this->GetTemplateResource('defaultadmin.tpl'), null, null, $smarty );
 $tpl->assign('articles',$articles);
@@ -113,6 +122,7 @@ $tpl->assign('filter_status_list',$filter_status_list);
 $tpl->assign('filter_periods_list',$filter_periods_list);
 $tpl->assign('category_list', $this->categoriesManager()->getCategoryList( [-1 => $this->Lang('none')] ) );
 $tpl->assign('sort_list',$sorting_list);
+$tpl->assign('sortorder_list',$sortorder_list);
 $tpl->assign('bulk_list',$bulk_list);
 $tpl->assign('filter_opts',$my_filter_opts);
 $tpl->assign('filter_applied',($my_filter_opts != $orig_filter_opts));
