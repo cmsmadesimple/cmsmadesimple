@@ -1,4 +1,14 @@
 <?php
+$lang['lbl_info'] = 'Info';
+$lang['lbl_expired'] = 'Expired';
+$lang['lbl_notstarted'] = 'Not yet started';
+$lang['lbl_usedates'] = 'Article dates';
+$lang['period_any'] = 'Any';
+$lang['period_displayable'] = 'Displayable';
+$lang['period_started'] = 'Started';
+$lang['period_unstarted'] = 'Unstarted';
+$lang['period_expired'] = 'Expired';
+$lang['period_nodates'] = 'No dates set';
 $lang['create_tpltypes'] = 'Create Template Types';
 $lang['tab_dmstuff'] = 'DesignManager Integration';
 $lang['info_reorder_categories'] = 'Re-organize categories by dragging them into the correct position.';

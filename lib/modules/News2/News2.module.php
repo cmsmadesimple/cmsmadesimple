@@ -98,6 +98,7 @@ class News2 extends CMSModule
         if( $_smarty_plugins ) return;
         $_smarty_plugins = new \News2\Smarty_plugins( $this->categoriesManager(), $this->articleManager(), $smarty, $this->app->get_cache_driver() );
 
+        $smarty->assign('News2Tools', new \News2\Smarty_Tools( $this->categoriesManager()) );
         $this->initializeCommonHooks();
 
         // register field definitions
@@ -426,4 +427,5 @@ class News2 extends CMSModule
         if( $article && $article->author_id > 0 && get_userid(false) == $article->author_id ) return TRUE;
         return FALSE;
     }
+
 } // class

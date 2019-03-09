@@ -31,8 +31,8 @@ if( isset($filter_opts['category_id']) ) {
     $tmp = cms_to_bool( get_parameter_value( $params, 'withchildren') );
     $filter_opts['withchildren'] = $tmp;
 }
-if( ($useperiod = (int) get_parameter_value( $params, 'useperiod') ) > 0 ) {
-    $filter_opts['useperiod'] = max(2,min(0,$useperiod));
+if( ($useperiod = (int) get_parameter_value( $params, 'useperiod') ) >= 0 ) {
+    $filter_opts['useperiod'] = min(2,max(0,$useperiod));
 }
 if( ($showall = (int) get_parameter_value( $params, 'showall') ) ) {
     unset( $filter_opts['status'] );

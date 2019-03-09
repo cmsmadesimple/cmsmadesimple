@@ -347,11 +347,21 @@ class ArticleManager
         }
 
         switch( $filter->useperiod ) {
-        case 0: // past, future or present (no more conditions)
+        case -1: // no period filtering (anything)
             break;
-        case 2: // past or present
+        case 2: // started articles, independent of end time.
             $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
             break;
+        case 3: // expired articles only.
+            $where[] = 'A.end_time IS NOT NULL AND A.end_time < UNIX_TIMESTAMP()';
+            break;
+        case 4: // unstarted articles.
+            $where[] = 'A.start_time IS NOT NULL AND A.start_time >= UNIX_TIMESTAMP()';
+            break;
+        case 5: // articles with no start time or end time
+            $where[] = 'A.start_time IS NULL AND A.end_time IS NULL';
+            break;
+        case 1:  // articles that either have no period, or within the time window to display.
         default:
             $where[] = 'COALESCE(A.start_time,0) < UNIX_TIMESTAMP()';
             $where[] = 'COALESCE(A.end_time,UNIX_TIMESTAMP()+3600) > UNIX_TIMESTAMP()';
@@ -367,6 +377,20 @@ class ArticleManager
             else {
                 $where[] = 'A.category_id = ?';
                 $parms[] = $filter->category_id;
+            }
+        }
+        if( $filter->not_category_id > 0 ) {
+            if( $filter->category_id < 1 || $filter->category_id != $filter->not_category_id ) {
+                if( $filter->withchildren ) {
+                    $cat = $this->catm->loadByID( $filter->not_category_id );
+                    $joins[] = $this->catm->table_name().' C ON C.id = A.category_id';
+                    $where[] = 'upper(C.long_name) NOT LIKE ?';
+                    $parms[] = strtoupper($cat->long_name.'%');
+                }
+                else {
+                    $where[] = 'A.category_id != ?';
+                    $parms[] = $filter->not_category_id;
+                }
             }
         }
         if( !is_null($filter->searchable) && !empty($filter->searchable) ) {
@@ -406,8 +430,8 @@ class ArticleManager
     {
         $idlist = $total_rows = $cache_key1 = $cachekey_2 = null;
         if( $this->cache_driver ) {
-            $cache_key1 = md5('2idlist'.__FILE__.serialize($filter));
-            $cache_key2 = md5('2idlist2'.__FILE__.serialize($filter));
+            $cache_key1 = md5('filter_idlist'.__FILE__.serialize($filter));
+            $cache_key2 = md5('filter_idlist2'.__FILE__.serialize($filter));
             if( $this->cache_driver->exists($cache_key1,__CLASS__) ) {
                 $idlist = $this->cache_driver->get($cache_key1,__CLASS__);
                 $total_rows = $this->cache_driver->get($cache_key2,__CLASS__);

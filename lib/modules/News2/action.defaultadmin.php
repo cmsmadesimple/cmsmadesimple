@@ -10,7 +10,7 @@ $artm = $this->articleManager();
 $uid = get_userid();
 
 // create our filter options
-$orig_filter_opts = $my_filter_opts = [ 'limit'=>50 ];
+$orig_filter_opts = $my_filter_opts = [ 'limit'=>50, 'useperiod'=>-1 ];
 if( isset($_SESSION[FILTER_KEY]) ) $my_filter_opts = $_SESSION[FILTER_KEY];
 if( !empty($_POST) ) {
     if( isset( $_POST['filter_reset']) ) {
@@ -24,6 +24,7 @@ if( !empty($_POST) ) {
         $my_filter_opts['category_id'] = (int) get_parameter_value($_POST,'filter_category');
         $my_filter_opts['withchildren'] = cms_to_bool(get_parameter_value($_POST,'filter_categorychildren'));
         $my_filter_opts['status'] = trim(get_parameter_value($_POST,'filter_status'));
+        $my_filter_opts['useperiod'] = (int) get_parameter_value($_POST,'filter_useperiod');
         $my_filter_opts['limit'] = max(1,min(1000,(int)get_parameter_value($_POST, 'filter_limit')));
         $my_filter_opts['offset'] = 0;
         $_SESSION[FILTER_KEY] = $my_filter_opts;
@@ -75,6 +76,14 @@ $status_list = [
     Article::STATUS_NEEDSAPPROVAL => $this->Lang('status_needsapproval')
     ];
 $filter_status_list = array_merge( [ ''=>$this->Lang('any') ], $status_list );
+$filter_periods_list = [
+    -1 => $this->Lang('period_any'),
+    1 => $this->Lang('period_displayable'),
+    2 => $this->Lang('period_started'),
+    4 => $this->Lang('period_unstarted'),
+    3 => $this->Lang('period_expired'),
+    5 => $this->Lang('period_nodates')
+    ];
 $bulk_list = [];
 if( $this->CheckPermission( News2::MANAGE_PERM ) ) {
     $bulk_list['del'] = $this->Lang('delete');
@@ -101,6 +110,7 @@ $tpl->assign('articles',$articles);
 $tpl->assign('metadata',$metadata);
 $tpl->assign('status_list',$status_list);
 $tpl->assign('filter_status_list',$filter_status_list);
+$tpl->assign('filter_periods_list',$filter_periods_list);
 $tpl->assign('category_list', $this->categoriesManager()->getCategoryList( [-1 => $this->Lang('none')] ) );
 $tpl->assign('sort_list',$sorting_list);
 $tpl->assign('bulk_list',$bulk_list);

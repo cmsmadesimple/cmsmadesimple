@@ -22,6 +22,7 @@ class Smarty_plugins
         $article_id = (int) get_parameter_value( $params, 'id' );
         $article_id = (int) get_parameter_value( $params, 'from', $article_id );
 
+        // note: we don't handle category filtering here because of category hierarchies
         $out = null;
         if( $article_id > 0 ) {
             $article = $this->artm->loadByID( $article_id );
@@ -41,6 +42,8 @@ class Smarty_plugins
         $article_id = (int) get_parameter_value( $params, 'id' );
         $article_id = (int) get_parameter_value( $params, 'from', $article_id );
 
+        // note: we don't handle category filtering here because of category hierarchies making the problem more complex
+        //       and the article query and resultset classes modified.
         $out = null;
         if( $article_id > 0 ) {
             $article = $this->artm->loadByID( $article_id );

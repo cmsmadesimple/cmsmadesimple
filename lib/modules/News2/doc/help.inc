@@ -20,29 +20,50 @@
    <li>More...</li>
 </ul>
 
+<!--
 <h3>History:</h3>
 <p>This module is a completely new module based on the functionality of the previous CMSMS News module.  It uses a different database schema, and therefore the data cannot be trivially converted from the older News module to the News2 module.</p>
 <p>This module was written because the old News module had reached a point where it was very difficult to maintain, or to enhance.  As well, writing this module allowed us to drop functionality that we felt were no longer inline with the goals of CMSMS, And to add or change features that required changes in the data model.</p>
 <p>Some of the changes include:</p>
 <ul>
-   <li>No frontend editing functionality
-       <p>This is a news module, not a blogging module, and frontend editing functionality was determined to be seldom used and not essential.  Additionally, Frontend editing introduces different security and other concerns.  If it is to be developed it should be done as a separate module.  The dev team does not in any way guarantee that they will write such a module.</p>
-   </li>
    <li>File based templates
        <p>This module uses file based templates by default. This allows developers to store their templates in VCS and use their favorite editors.  The data is still stored in the database.</p>
    </li>
    <li>Settings are stored in the CMSMS config file and there is no interface.  This also allows for changes to settings to be stored and tracked in VCS.</li>
    <li>There is no way to specify the detailtemplate or detailpage in the summary call.
-       <p>Pretty URLs are for SEO optimization.  Putting ancillary data on them such as a detailtemplate just makes another form of ugly URL.  Therefore this module does not provide the capability to pass a detailtemplate parameter or detailpage to the detail links of a summary view.   The detailtemplate must be determined using either logic in a parent template, template inheritance, or via use of the {cms_module_hint} parameter.</li>
+       <p>Pretty URLs are for SEO optimization.  Putting ancillary data on them such as a detailtemplate just makes another form of ugly URL.  Therefore this module does not provide the capability to pass a detailtemplate parameter or detailpage to the detail links of a summary view.   The detailtemplate must be determined using either logic in a parent template, template inheritance, or via use of the {cms_module_hint} plugin.</li>
        <p>A detailpage can no longer be specified as an argument on the module call for summary views.  You can specify a destination page (when not using URL slugs) by passing a returnid argument to the call to {cms_action_url} in the summary template.</p>
    </li>
-   <li>Detailpages do not contain return links.
+   <li>Default Detail view templates do not contain return links.
        <p>This is because in many situations, there may be many different paths that visitors can take to display a News2 article.  i.e: from a category view, from one or more summary views, or from the Search module.  Therefore, it is up to the developer to control navigation out of a detail view from within the detail template.</p>
    </li>
-   <li>This module takes advantage of the power of Smarty and its plugins to implement features
+   <li>This module takes advantage of the power of Smarty and its plugins to implement features, rather than putting them into PHP code.</li>
    <li>Extended categories</p>
+   <li>No frontend editing functionality
+       <p>This is a news module, not a blogging module, and frontend editing functionality was determined to be seldom used and not essential.  Additionally, Frontend editing introduces different security and other concerns.  If it is to be developed it should be done as a separate module.  The dev team does not in any way guarantee that they will write such a module.</p>
+   </li>
 </ul>
+-->
 
+<h3>About Dates and Times</h3>
+<p>This module keeps three different dates with each article:</p>
+<ul>
+     <li>The post date</li>
+     <li>The display start date/time</li>
+     <li>The display end date/time</li>
+</ul>
+<p>These dates are essentially mutually exclusive.  The start and end fields are used to control the visibility of the article, along with the status field.  The rules for displaying articles are as follows:</p>
+<ul>
+      <li>If the start time is specified in an article
+          <p>The article cannot be displayed until that time.</p>
+      </li>
+      <li>If the end time is specified in an article
+          <p>The article cannot be displayed after that time.</p>
+      </li>
+<ul>
+<p>If either value is set to January 1, 1970 that is the same as turning it &quot;off&quot;</p>
+<p>The end time if specified, cannot be earlier than the start time, if specified.</p>
+<p>The post date is primarily only used for sorting in summary views, and for display purposes. It is NOT used to indicate whether an article can or cannot be displayed.</p>
 <h3>Permissions:</h3>
 <p>On installation, this module creates four new permissons:</p>
 <ul>
@@ -81,7 +102,7 @@
            <li>Calling a summary view<br/>
 	       <pre><code>{News2 [summarytemplate=string] [limit=int]...}</code></pre>
 	   </li>
-	   <li>Creating a link to a summary view
+	   <li>Creating a link to a summary view<br/>
 	       <pre><code>{cms_action_url module=News2 action=default [summarytemplate=string] [limit=int] ...}</code></pre>
 	   </li>
        </ul>
@@ -93,7 +114,7 @@
            <li>Creating a detail view<br/>
 	       <pre><code>{News2 action=detail article=int [detailtemplate=string]}</code></pre>
            </li>
-           <li>Creating a link to a detail view
+           <li>Creating a link to a detail view<br/>
 	       <pre><code>{cms_action_url module=News2 action=detail article=int [detailtemplate=string] ...}</code></pre>
 	       <p><strong>Note:</strong> - See above for the discussion about pretty URLS and URL slugs.</p>
 	   </li>
@@ -103,10 +124,10 @@
    <li>showcategories
        <p>This action is used to display a nested view of News2 categories with links to articles within that category. Optional parameters allow specifying a starting point in the category tree, and a maximum number of levels.</p>
        <ul>
-	   <li>Creating a showcategories view
+	   <li>Creating a showcategories view<br/>
 	       <pre><code>{News2 action=showcategories [categorytemplate=string] [alias=string|from=int] [maxdepth=int]}</code></pre>
 	   </li>
-	   <li>Creating a link to a showcategories view
+	   <li>Creating a link to a showcategories view<br/>
 	       <pre><code>{cms_action_url module=News2 action=showcategories [categorytemplate=string] [alias=string|from=int] [maxdepth=int] ...}</code></pre>
 	   </li>
        </ul>
@@ -144,7 +165,7 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
 <p><strong>Note:</strong> - File based templates MUST end with the .tpl extension, or CMSMS may interpret the parameter on a module call as a database template.</p>
 
 <h3>Smarty Plugins:</h3>
-<p>The news2 module registers the following smarty plugins:</p>
+<p>The News2 module registers the following smarty plugins:</p>
 <ul>
     <li><code>{news2_category catid=number|alias=string [long=bool] [assign=string]}</code>
         <p><strong>Description:</strong> Return a category given it's id or alias.</p>
@@ -191,9 +212,35 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
     </li>
 </ul>
 
+<h3>Smarty Tools</h3>
+<p>This module provides the $News2Tools object to Smarty to aide in templating. It has several methods:</p>
+<ul>
+    <li><code>$News2Tools->get_category(mixed $in)</code>
+       <p><strong>Description:</strong> Given a category id or alias, get the category object.</p>
+       <p><strong>Returns:</strong> Either the category object, or null.</p>
+       <p><strong>Example:</strong>
+       <pre><code>{$cat = $News2Tools->get_category($article->category_id)}</code></pre>
+    </li>
+    <li><code>News2Tools->category_childof(mixed $a, mixed $b)</code>
+       <p><strong>Description:</strong> Given a category id or alias, get the category object.</p>
+       <p><strong>Returns:</strong> boolean.  TRUE if $a is a child of $b.  FALSE otherwise.</p>
+       <p><strong>Example:</strong>
+       <pre><code>{if $News2Tools->category_childof($article->category_id,'events')}...{/if}</code></pre>
+    </li>
+</ul>
+
 <h3>Config variables:</h3>
 <p>The News2 module can read from the following variables in the CMSMS config file:</p>
 <ul>
+    <li><code>news2_dflt_status</code> - string
+       <p>This entry determines the default status for ALL new articles.  Possible values are: draft, published, disabled and needsapproval.</p>
+    </li>
+    <li><code>news2_dflt_useendtime</code> - bool
+       <p>This entry determines whether, by default, new articles will use the end time field.</p>
+    </li>
+    <li><code>news2_dflt_searchable</code> - bool
+       <p>This entry determines whether, by default, new articles will be indexed in the search endgine
+    </li>
     <li><code>news2_summary_enabled</code> - bool
        <p>This entry determines whether or not a summary field should be displayed when adding or editing an article.</p>
     </li>
@@ -316,7 +363,7 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
     <li>sortdata:
         <p><strong>View:</strong> summary</p>
 	<p><strong>Default:</strong> n/a</p>
-	<p><strong>Description:</strong> An integer value representing the page of results to display.</p>
+	<p><strong>Description:</strong> Only useful when the sortby parameter is set to "field", this parameter should indicate the name of the field to use in the sorting.</p>
     </li>
     <li>args:
         <p><strong>View:</strong> summary</p>
@@ -460,14 +507,25 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
       <p>This can be done using sub-detail templates and the smarty {include} tag.</p>
       <p>First, you must create as many detail templates as is required, including one as the 'master' template.</p>
       <p>Next, based on the category id that an article is in, include the desired sub template. i.e:</p>
-<pre><code>{if $article->category_id == 2}
-  {include file='module_file_tpl:News2;sub-detailtemplate_2.tpl}
+<pre><code>{if $News2Tools->category_childof($article->category_id,'events')}
+  {include file='module_file_tpl:News2;sub-detailtemplate_events.tpl'}
 {elseif $article->category_id == 3}
-  {include file='module_file_tpl:News2;sub-detailtemplate_5.tpl}
+  {include file='module_file_tpl:News2;sub-detailtemplate_3.tpl'}
 {else}
-  {include file='module_file_tpl:News2;sub-detailtemplate_dflt.tpl}
+  {include file='module_file_tpl:News2;sub-detailtemplate_dflt.tpl'}
 {/if}
+      <p><strong>Tip:<strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cms_file, cms_template, and others.</p>
 </code></pre>
       <p>This is basically the same as multiple if statements, but is cleaner, and allows the use of template inheritance in the sub-detail templates.</p>
+   </li>
+
+   <li>How do I make further changes to the edit article form:
+       <p>Many behavioral changes can be done to the form provided when adding or editing an article, beyond what is available in config files. This can be accomplished by overriding the admin_edit_article.tpl template.</p>
+       <p><strong>Overriding admin templates</strong></p>
+       <p>The steps for this are identical to the steps for creating a new summary or detail template.</p>
+       <ol>
+          <li>Copy the <code>lib/modules/News2/templates/admin_edit_article.tpl</li> file to <code>assets/module_custom/News2/templates/admin_edit_article.tpl</code>
+	  <li>Adjust the smarty template as you see fit.</li>
+       </ol>
    </li>
 </ul>

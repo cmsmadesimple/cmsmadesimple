@@ -41,7 +41,7 @@ $(function(){
 </script>
 
 <fieldset id="filter_zone" style="display: none;">
-   <legend>{$mod->Lang('lbl_articlefilter')}</legend>
+   <legend>{$mod->Lang('lbl_articlefilter')} XXDX</legend>
    {form_start}
    <div class="c_full cf">
        <label class="grid_3" for="filter_title">{$mod->Lang('lbl_title')}</label>
@@ -63,6 +63,12 @@ $(function(){
        <label class="grid_3" for="filter_status">{$mod->Lang('lbl_status')}</label>
        <select class="grid_8" id="filter_status" name="filter_status">
           {html_options options=$filter_status_list selected=$filter_opts.status|default:''}
+       </select>
+   </div>
+   <div class="c_full cf">
+       <label class="grid_3" for="filter_useperiod">{$mod->Lang('lbl_usedates')}</label>
+       <select class="grid_8" id="filter_useperiod" name="filter_useperiod">
+          {html_options options=$filter_periods_list selected=$filter_opts.useperiod|default:1}
        </select>
    </div>
    <div class="c_full cf">
@@ -117,6 +123,7 @@ $(function(){
 	     <th>{$mod->Lang('lbl_endtime')}</th>
 	     <th>{$mod->Lang('lbl_category')}</th>
 	     <th>{$mod->Lang('lbl_status')}</th>
+	     <th>{$mod->Lang('lbl_info')}</th>
 	     <th class="pageicon"></th>
 	     <th class="pageicon"></th>
 	     <th class="pageicon">
@@ -154,6 +161,13 @@ $(function(){
 		        <strong>{$status_list[$art->status]|ucwords}</strong>
 		    {else}
 		        {$status_list[$art->status]|ucwords}
+		    {/if}
+		</td>
+		<td>
+		    {if $art->end_time > 0 && $art->end_time < time()}
+		        <span style="color: red;">{$mod->Lang('lbl_expired')}</span>
+		    {elseif $art->start_time > 0 && $art->start_time > time()}
+		        <span style="color: orange;">{$mod->Lang('lbl_notstarted')}</span>
 		    {/if}
 		</td>
 		<td>

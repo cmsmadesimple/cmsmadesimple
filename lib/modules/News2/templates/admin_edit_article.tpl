@@ -53,7 +53,7 @@ $(function(){
 <div class="c_full cf">
   <label for="fld_content" class="grid_3">{$mod->Lang('lbl_content')}*</label>
   <div class="grid_8">
-      {cms_textarea name=content enablewysiwyg=1 id="fld_content" required=1 rows="10" value=$article->content}
+      {cms_textarea name=content enablewysiwyg=1 id="fld_content" rows="10" value=$article->content}
   </div>
 </div>
 
@@ -81,7 +81,7 @@ $(function(){
 </div>
 <div class="c_full cf">
    <label class="grid_3">{$mod->Lang('lbl_autohide')}</label>
-   {$val=0}{if $article->start_time || $article->end_time}{$val=1}{/if}
+   {$val=0}{if $article->start_time > 0 || $article->end_time > 0}{$val=1}{/if}
    <select class="grid_2" name="use_endtime">
       {cms_yesno selected=$val}
    </select>
@@ -90,7 +90,7 @@ $(function(){
    <div class="c_full cf">
       <label class="grid_3">{$mod->Lang('lbl_starttime')}</label>
       <div class="grid_8">
-         {html_select_date prefix=starttime_ start_year='1970' time=$article->start_time}
+         {html_select_date prefix=starttime_ start_year='1970' end_year='+10' time=$article->start_time}
          @ {html_select_time prefix=starttime_ time=$article->start_time display_seconds=false}
       </div>
    </div>
@@ -98,8 +98,7 @@ $(function(){
       <label class="grid_3">{$mod->Lang('lbl_endtime')}</label>
       <div class="grid_8">
          {$endtime=$article->end_time}
-         {if empty($endtime) && $article->id > 0}{$endtime=strtotime('+1 year 23:59')}{/if}
-         {html_select_date prefix=endtime_ start_year='1970' time=$endtime end_year='+20'}
+         {html_select_date prefix=endtime_ start_year='1970' end_year='+10' time=$endtime end_year='+20'}
          @ {html_select_time prefix=endtime_ time=$article->end_time display_seconds=false}
       </div>
    </div>

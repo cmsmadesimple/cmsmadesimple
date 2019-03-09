@@ -15,7 +15,7 @@ class ArticleFilter
 
     private $_data = [
         'id_list'=>null, 'title_substr'=>null, 'useperiod'=>1, 'textmatch'=>null,
-        'category_id'=>null, 'withchildren'=>false, 'usefields'=>false, 'author_id'=>null,
+        'category_id'=>null, 'not_category_id'=>null, 'withchildren'=>false, 'usefields'=>false, 'author_id'=>null,
         'status'=>null, 'searchable'=>null, 'sortby'=>self::SORT_CREATEDATE, 'sortdata'=>null, 'sortorder'=>self::ORDER_DESC,
         'limit'=>1000, 'offset'=>0
         ];
@@ -26,7 +26,6 @@ class ArticleFilter
     {
         switch( $key ) {
         case 'usefields':
-        case 'useperiod':
         case 'withchildren':
         case 'searchable':
             return (bool) $this->_data[$key];
@@ -44,6 +43,8 @@ class ArticleFilter
         case 'textmatch':
             return trim($this->_data[$key]);
 
+        case 'useperiod':
+        case 'not_category_id':
         case 'category_id':
         case 'author_id':
             return (int) $this->_data[$key];
@@ -81,7 +82,6 @@ class ArticleFilter
         foreach( $in as $key => $val ) {
             switch( $key ) {
             case 'usefields':
-            case 'useperiod':
             case 'withchildren':
             case 'searchable':
                 $obj->_data[$key] = cms_to_bool($val);
@@ -103,6 +103,8 @@ class ArticleFilter
                 $obj->_data[$key] = trim($val);
                 break;
 
+            case 'useperiod':
+            case 'not_category_id':
             case 'category_id':
             case 'author_id':
                 $obj->_data[$key] = (int) $val;

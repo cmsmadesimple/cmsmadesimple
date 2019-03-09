@@ -14,15 +14,30 @@ try {
     $fielddefs = $fdm->loadAllAsHash();
     $fieldtypes = $this->fieldTypeManager()->getAll();
 
+    $get_config_status = function($val) {
+        switch( $val ) {
+        case Article::STATUS_PUBLISHED:
+        case Article::STATUS_DRAFT:
+        case Article::STATUS_NEEDSAPPROVAL:
+        case Article::STATUS_DISABLED:
+            return $val;
+        default:
+            return Article::STATUS_DRAFT;
+        }
+    };
+
     $opts =
         [
             'author_id' => get_userid(),
-            'news_date' => strtotime('00:00'),
-            'use_endtime' => false,
-            'start_time' => strtotime('-1 day 00:00'),
-            'end_time' => strtotime('+1 year 00:00'),
-            'searchable' => true
+            'news_date' => strtotime('00:00'), // start of today
+            'status' => $get_config_status($config['news2_dflt_status']),
+            'use_endtime' => cms_to_bool(get_parameter_value($config,'news2_dflt_useendtime',0)),
+            'searchable' => isset($config['news2_dflt_searchable']) ? cms_to_bool($config['news2_dflt_searchable']) : true
         ];
+    if( $opts['use_endtime'] ) {
+        $opts['start_time'] = strtotime('-1 day 00:00'); // starts tomorrow
+        $opts['end_time'] = strtotime('+1 year 00:00');  // ends in one year
+    }
 
     $article = $artm->createNew( $opts );
     $news_id = get_parameter_value( $params, 'news_id' );
@@ -53,6 +68,8 @@ try {
                 $mm = (int) $in[$prefix.'Minute'];
                 $ss = $is_start ? 00 : 59;
 
+                // if the date is before jan-1-1970 ... that's no date.
+                if( $yr <= 1970 && $mo == 1 && $dd == 1 ) return;
                 return mktime( $hh, $mm, $ss, $mo, $dd, $yr );
             };
 

@@ -117,7 +117,6 @@ class CategoriesManager
         $obj = $this->getFromCacheByID($id);
         if( $obj ) return $obj;
 
-	debug_buffer(__METHOD__);
         $sql = 'SELECT * FROM '.self::table_name().' WHERE id = ?';
         $row = $this->db->GetRow( $sql, $id );
         if( !$row ) return;
