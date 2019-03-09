@@ -35,8 +35,8 @@ _recompile=0
 while [ $# -gt 0 ]; do
   if [ $1 = '-r' ]; then 
     _recompile=1; 
-    shift; 
   fi
+  shift; 
 done
 
 if [ $_recompile ]; then
@@ -47,7 +47,7 @@ fi
 cp ${_config} phpdoc.dist.xml
 
 # execute phpdoc
-phpdoc | tee tmp/phpdoc.log
+phpdoc $* | tee tmp/phpdoc.log
 
 # cleanup
 cleanup;
