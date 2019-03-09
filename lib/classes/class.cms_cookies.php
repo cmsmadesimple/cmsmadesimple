@@ -56,6 +56,9 @@
 final class cms_cookies
 {
 
+    /**
+     * @ignore
+     */
     private static $_mgr;
 
     /**

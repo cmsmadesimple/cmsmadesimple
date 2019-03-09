@@ -73,7 +73,13 @@ final class cms_config implements ArrayAccess
 
 
     /**
-     * ignore
+     * This class represents and manages the various CMSMS Config options.  It also creates some convenient
+     * defines, and has som I/O capabilities.
+     *
+     * This is a singleton class and it can only be instantiated once.  It is instantiated in the primary
+     * CMSMS bootstrapping procedure.
+     *
+     * @param CmsApp $app The application instance.
      */
     public function __construct( CmsApp $app )
     {

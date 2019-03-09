@@ -1404,13 +1404,27 @@ abstract class CmsAdminThemeBase
      */
     abstract public function do_toppage(string $section_name);
 
+    /**
+     * An abstract function to output the content for an authenticated page
+     *
+     * @since 2.3
+     * @return string html contents
+     */
     abstract public function do_authenticated_page();
 
+    /**
+     * An abstract function to output the content for a login page.
+     *
+     * @since 2.3
+     * @pram string $pageid ignored.
+     * @return string html contents
+     */
     abstract public function do_loginpage( string $pageid = null );
 
     /**
      * Set the HTML for the primary content for the page.
      *
+     * @param string $content
      * @see do_minimal()
      */
     public function set_content( string $content )

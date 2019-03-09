@@ -18,14 +18,14 @@
 #
 #$Id$
 
-use \CMSMS\internal\module_meta;
-
 /**
  * Classes and utilities for operationg on and with modules
  *
  * @package CMS
  * @license GPL
  */
+
+use \CMSMS\internal\module_meta;
 
 /**
  * A singleton utility class to allow for working with modules.
@@ -204,7 +204,7 @@ final class ModuleOperations
      * Generate a moduleinfo.ini file for a module.
      *
      * @since 2.3
-     * @param CMSModule $modinstance;
+     * @param CMSModule $modinstance The module to generate an info.ini file for.
      * @return string
      */
     public function generate_moduleinfo( CMSModule $modinstance )
@@ -918,14 +918,25 @@ final class ModuleOperations
     }
 
 
-    public function RegisterAdminAuthenticationModule( \CMSModule $mod )
+    /**
+     * Register a non-core admin authentication module.
+     * This method can only be called once per request.
+     *
+     * @param CMSModule $mod The new authentication module.  It must implement the CMSMS\IAuthModuleInterface.
+     */
+    public function RegisterAdminAuthenticationModule( CMSModule $mod )
     {
         if( $this->_auth_module ) throw new \LogicException( 'Sorry, only one non standard auth module is supported' );
         if( ! $mod instanceof \CMSMS\IAuthModuleInterface ) throw new \LogicException('Sorry. '.$mod->GetName().' is not a valid authentication module');
         $this->_auth_module = $mod;
     }
 
-    public function &GetAdminLoginModule()
+    /**
+     * Return an instance to the current admin authentication module
+     *
+     * @return CMSModule|null
+     */
+    public function GetAdminLoginModule()
     {
         if( $this->_auth_module ) return $this->_auth_module;
         return $this->get_module_instance( self::STD_AUTH_MODULE, '', TRUE );

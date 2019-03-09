@@ -368,6 +368,9 @@ final class cms_route_manager
         }
     }
 
+    /**
+     * @ignore
+     */
     private static function _get_cache_driver()
     {
         return CmsApp::get_instance()->get_cache_driver();

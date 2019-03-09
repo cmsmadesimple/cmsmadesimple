@@ -497,6 +497,12 @@ abstract class ContentBase
         return $this->mTitleAttribute;
     }
 
+    /**
+     * Return the creation date (as a string)
+     *
+     * @since 2.3
+     * @return string
+     */
     public function CreationDate()
     {
         return $this->mCreationDate;
@@ -512,6 +518,12 @@ abstract class ContentBase
         return strtotime($this->mCreationDate);
     }
 
+    /**
+     * Return the modification date (as a string)
+     *
+     * @since 2.3
+     * @return string
+     */
     public function ModifiedDate()
     {
         return $this->mModifiedDate;
@@ -1981,7 +1993,7 @@ abstract class ContentBase
         $str = strftime('%Y-%m-%d %H:%M:%S',$ts);
         $this->mId = $newID;
         $this->mCreationDate = $str;
-	$this->mModifiedDate = $str;
+        $this->mModifiedDate = $str;
     }
 
     /**

@@ -1331,6 +1331,23 @@ abstract class CMSModule
      * ------------------------------------------------------------------
      */
 
+    /**
+     * Retrieve the callable controller for the current action.
+     *
+     * This method will return a class name, or the name of a callable that can be used as a controller class for an action
+     * instaad of using action.xxxx.php files.
+     *
+     * This method wil look for a param named controller that can specify the class name.
+     * Failing that, it will use the action name, and look for a class called __NAMESPACE__\Controllers\ACTION_NAME_action
+     *
+     * @since 2.3
+     * @see IModuleActionController
+     * @param string $action_name The action name
+     * @param string $actionid The actionid/prefix
+     * @param array $params An associative array of action parameters
+     * @param int $returnid The page id
+     * @return object An instance of the class determined.
+     */
     protected function get_controller( $action_name, $actionid, array $params, $returnid )
     {
         $ctrl = null;
@@ -1344,8 +1361,8 @@ abstract class CMSModule
         }
         if( is_string($ctrl) && class_exists( $ctrl ) ) {
             $ctrl = new $ctrl( $this, $actionid, $returnid );
+            if( is_callable( $ctrl ) ) return $ctrl;
         }
-        if( is_callable( $ctrl ) ) return $ctrl;
     }
 
     /**

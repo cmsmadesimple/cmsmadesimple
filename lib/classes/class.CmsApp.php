@@ -17,6 +17,16 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+
+/**
+ * Global class representing the CMSMS application instance.
+ *
+ * This is a singleton class, that can only be instantiated once.  It also acts as a service provider.
+ *
+ * @package CMS
+ * @license GPL
+ */
+
 use CMSMS\internal\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
 use CMSMS\internal\MactEncoder;
@@ -27,13 +37,6 @@ use CMSMS\ScriptManager;
 use CMSMS\StylesheetManager;
 use CMSMS\ICookieManager;
 use CMSMS\AutoCookieManager;
-
-/**
- * Global class for easy access to all important variables.
- *
- * @package CMS
- * @license GPL
- */
 
 /**
  * Simple singleton class that contains various functions and states
