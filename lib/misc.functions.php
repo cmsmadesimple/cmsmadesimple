@@ -491,7 +491,7 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
  * @param string $session_key
  * @return mixed
  */
-function get_parameter_value(array $parameters, string $value, $default_value = '', string $session_key = '')
+function get_parameter_value($parameters, string $value, $default_value = '', string $session_key = '')
 {
     if($session_key != '') {
         if(isset($_SESSION['parameter_values'][$session_key])) $default_value = $_SESSION['parameter_values'][$session_key];
