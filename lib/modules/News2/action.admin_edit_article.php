@@ -129,7 +129,7 @@ try {
                 $data = serialize($article);
                 $sig = sha1('news2_preview_'.$data);
                 $_SESSION[$sig] = serialize($article);
-                $detail_pageid = $gCms->GetContentOperations()->GetDefaultContent(); // change me.
+                $detail_pageid = $this->GetDefaultDetailPage();
                 $preview_url = $this->create_url('cntnt01','detail', $detail_pageid, ['preview_key'=>$sig] );
                 $ajax_out = ['status'=>'ok', 'preview_url'=>$preview_url];
             }

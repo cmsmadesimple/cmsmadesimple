@@ -10,8 +10,11 @@ $article = null;
 $preview_key = get_parameter_value($params,'preview_key');
 if( $preview_key ) {
     if( !isset($_SESSION[$preview_key]) ) throw new Exception('Preview key not found 2',400);
+    $sig = sha1('news2_preview_'.$_SESSION[$preview_key]);
+    if( $preview_key != $sig ) throw new Exception('Preview key invalid',400);
     $article = unserialize($_SESSION[$preview_key]);
     if( ! $article instanceof Article ) throw new Exception('Preview data not available',400);
+    unset($_SESSION[$preview_key]);
 }
 else {
     $article_id = (int) get_parameter_value($params,'article');

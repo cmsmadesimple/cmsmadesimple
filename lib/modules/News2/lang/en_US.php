@@ -72,6 +72,7 @@ $lang['set_status_draft'] = 'Set as draft';
 $lang['set_status_published'] = 'Set as published';
 $lang['err_permission'] = 'You do not have permission to perform the action on this item';
 $lang['lbl_page'] = 'Page';
+$lang['tab_preview'] = 'Preview';
 $lang['tab_content'] = 'Content';
 $lang['tab_fields'] = 'Fields';
 $lang['tab_more'] = 'More';
