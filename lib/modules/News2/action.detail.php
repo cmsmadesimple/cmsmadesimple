@@ -5,17 +5,25 @@ $artm = $this->articleManager();
 $fielddefs = $this->fielddefManager()->loadAllAsHash();
 
 $template = get_parameter_value($params,'detailtemplate','detail.tpl');
-$article_id = (int) get_parameter_value($params,'article');
-
 $article = null;
-if( $article_id < 0 ) {
-    // get latest valid article
-    $article = $artm->loadLatestValid();
-} else if( $article_id == 0 ) {
-    // invalid param
-} else {
-    // get specified article
-    $article = $artm->loadByID( $article_id );
+
+$preview_key = get_parameter_value($params,'preview_key');
+if( $preview_key ) {
+    if( !isset($_SESSION[$preview_key]) ) throw new Exception('Preview key not found 2',400);
+    $article = unserialize($_SESSION[$preview_key]);
+    if( ! $article instanceof Article ) throw new Exception('Preview data not available',400);
+}
+else {
+    $article_id = (int) get_parameter_value($params,'article');
+    if( $article_id < 0 ) {
+        // get latest valid article
+        $article = $artm->loadLatestValid();
+    } else if( $article_id == 0 ) {
+        // invalid param
+    } else {
+        // get specified article
+        $article = $artm->loadByID( $article_id );
+    }
 }
 
 if( !$article ) throw new \CmsError404Exception('Article '.$articleid.' not found, or is otherwise unavailable');

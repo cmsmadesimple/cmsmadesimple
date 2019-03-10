@@ -6,6 +6,20 @@
 
 <script>
 $(function(){
+   $('[name$=apply],[name$=submit]').hide();
+   $('#edit_news').dirtyForm({
+       onDirty : function () {
+           $('[name$=apply],[name$=submit]').show('slow');
+       }
+   });
+   $(document).on('cmsms_textchange', function (event) {
+       // editor text change, set the form dirty.
+       $('#edit_news').dirtyForm('option', 'dirty', true);
+   });
+   $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function () {
+       $('#edit_news').dirtyForm('option', 'disabled', true);
+   });
+
    $('[name=use_endtime]').change(function(ev) {
       var val = $(this).val();
       if( val == 1 ) {
@@ -14,6 +28,33 @@ $(function(){
          $('#endtime_cont').hide();
       }
    }).trigger('change')
+
+   $('#preview').click(function(ev){
+      // gonna submit this article via ajax
+      ev.preventDefault();
+      if( typeof tinyMCE != 'undefined' ) tinyMCE.triggerSave()
+
+      let url = $('form').attr('action');
+      let data = $('form').find('input:not([type=submit]), select, textarea').serializeArray()
+      data.push({ 'name': '__ajax', 'value': 1 });
+      data.push({ 'name': '__preview', 'value': 1 });
+      data.push({ 'name': 'showtemplate', 'value': 'false' });
+
+      cms_busy()
+      $.post(url,data).then(function(data){
+         cms_busy(false)
+         return data;
+      }).done(function(data){
+          let url = null
+	  if( typeof data.preview_url != 'undefined' ) url = data.preview_url
+	  if( !url ) cms_alert('an unknown error occurred')
+	  $('#previewframe').prop('src',url);
+      }).fail(function(data){
+          let msg = 'An unknown error occurred'
+	  if( typeof data.message != 'undefined' && data.message.length > 0 ) msg = data.message;
+	  cms_alert(msg);
+      })
+   })
 })
 </script>
 
@@ -23,14 +64,14 @@ $(function(){
   <h3>{$mod->Lang('add_article')}</h3>
 {/if}
 
-{form_start news_id=$article->id}
+{form_start news_id=$article->id id='edit_news'}
 
 <div class="c_full cf">
   <input type="submit" name="submit" value="{$mod->Lang('submit')}"/>
   {if $article->id > 0}
   <input type="submit" name="apply" value="{$mod->Lang('apply')}"/>
   {/if}
-  <input type="submit" name="cancel" value="{$mod->Lang('cancel')}"/>
+  <input type="submit" name="cancel" value="{$mod->Lang('cancel')}" novalidate/>
 </div>
 
 {tab_header name='content' label=$mod->Lang('tab_content')}
@@ -38,6 +79,7 @@ $(function(){
   {tab_header name='fields' label=$mod->Lang('tab_fields')}
 {/if}
 {tab_header name='more' label=$mod->Lang('tab_more')}
+{tab_header name='preview' label=$mod->Lang('tab_preview')}
 
 {tab_start name='content'}
 <div class="c_full cf">
@@ -138,6 +180,10 @@ $(function(){
       <span class="grid_8">{$author_name}</span>
    </div>
 {/if}
+
+{tab_start name='preview'}
+   {* uses an IFRAME *}
+    <iframe id="previewframe" style="height: 800px; width: 100%; border: 1px solid black; overflow: auto;"></iframe>
 
 {tab_end}
 {form_end}

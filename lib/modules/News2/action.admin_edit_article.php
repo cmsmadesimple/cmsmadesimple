@@ -123,22 +123,42 @@ try {
                 }
             }
 
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+            $ajax_out = null;
+            if( isset($_POST['__preview']) && isset($_POST['__ajax']) ) {
+                // we're serializing this thing to the session
+                $data = serialize($article);
+                $sig = sha1('news2_preview_'.$data);
+                $_SESSION[$sig] = serialize($article);
+                $detail_pageid = $gCms->GetContentOperations()->GetDefaultContent(); // change me.
+                $preview_url = $this->create_url('cntnt01','detail', $detail_pageid, ['preview_key'=>$sig] );
+                $ajax_out = ['status'=>'ok', 'preview_url'=>$preview_url];
+            }
+            else {
+                // save the thing
+                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $article_id = $artm->save( $article );
+                // this will update the search and stuff
+                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article_id );
 
-            // save the thing
-            $article_id = $artm->save( $article );
-
-            // this will update the search and stuff
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article_id );
-
-            if( $article->id ) {
-                audit($article->id,$this->GetName(),'Edited article: '.$article->title);
-            } else {
-                audit($article->id,$this->GetName(),'Created article: '.$article->title);
+                if( $article->id ) {
+                    audit($article->id,$this->GetName(),'Edited article: '.$article->title);
+                } else {
+                    audit($article->id,$this->GetName(),'Created article: '.$article->title);
+                }
             }
 
             // done
-            if( !isset( $_POST['apply']) ) {
+            if( isset($_POST['__ajax']) ) {
+                // do nothing.  just return
+                $handlers = ob_list_handlers();
+                for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) {
+                    ob_end_clean();
+                }
+                header('Content-Type: application/json');
+                echo json_encode($ajax_out);
+                exit;
+            }
+            else if( !isset( $_POST['apply']) ) {
                 $this->SetMessage( $this->Lang('msg_saved') );
                 $this->RedirectToAdminTab();
             } else {
@@ -146,6 +166,18 @@ try {
             }
         }
         catch( \Exception $e ) {
+            if( isset($_POST['__ajax']) ) {
+                $json_out = [ 'status'=>'error', 'message'=>$e->GetMessage() ];
+                $handlers = ob_list_handlers();
+                for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) {
+                    ob_end_clean();
+                }
+                header("HTTP/1.0 500 ".$e->GetMessage());
+                header('Content-Type: application/json');
+                echo json_encode($json_out);
+                exit;
+            }
+
             echo $this->ShowErrors( $e->GetMessage() );
         }
     }
