@@ -17,7 +17,11 @@ $(function(){
 })
 </script>
 
-<h3>{$mod->Lang('add_category')}</h3>
+{if $obj->id > 0}
+    <h3>{$mod->Lang('edit_category')}</h3>
+{else}
+    <h3>{$mod->Lang('add_category')}</h3>
+{/if}
 
 {if empty($category_tree_list)}
     <div class="warning">{$mod->Lang('warn_nocategories')}</div>

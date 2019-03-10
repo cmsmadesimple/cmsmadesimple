@@ -17,7 +17,11 @@ $(function(){
 })
 </script>
 
-<h3>{$mod->Lang('add_article')}</h3>
+{if $article->id > 0}
+  <h3>{$mod->Lang('edit_article')}</h3>
+{else}
+  <h3>{$mod->Lang('add_article')}</h3>
+{/if}
 
 {form_start news_id=$article->id}
 
@@ -121,6 +125,19 @@ $(function(){
       {cms_yesno selected=$article->searchable}
    </select>
 </div>
+{if !empty($author_list)}
+   <div class="c_full cf">
+      <label class="grid_3">{$mod->Lang('lbl_author')}</label>
+      <select class="grid_8" name="author_id">
+         {html_options options=$author_list selected=$article->author_id}
+      </select>
+   </div>
+{elseif !empty($author_name)}
+   <div class="c_full cf">
+      <label class="grid_3">{$mod->Lang('lbl_author')}</label>
+      <span class="grid_8">{$author_name}</span>
+   </div>
+{/if}
 
 {tab_end}
 {form_end}

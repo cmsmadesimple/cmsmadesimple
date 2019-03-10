@@ -93,6 +93,14 @@ try {
                 $value = $fldtype->handleForArticle( $fd, $_POST );
                 $article->setFieldVal( $fd->name, $value );
             }
+            if( $this->CheckPermission( News2::MANAGE_PERM ) ) {
+                // only managers can adjust an article's author.
+                if( isset($_POST['author_id']) ) {
+                    $val = (int) $_POST['author_id'];
+                    if( $val == -1000000 ) $val = 0;
+                    $article->author_id = $val;
+                }
+            }
 
             // do validations
             if( ! $article->content ) throw new \RuntimeException( $this->Lang('err_contentrequired') );
@@ -155,9 +163,33 @@ try {
             $status_list[$article::STATUS_PUBLISHED] = $this->Lang('status_published');
         }
     }
+
+    $author_list = $author_name = null;
+    if( $this->CheckPermission( News2::MANAGE_PERM )) {
+        $users = $gCms->GetUserOperations()->LoadUsers();
+        if( !empty($users) ) {
+            $author_list['-1000000'] = $this->Lang('none');
+            array_walk($users, function($user) use (&$author_list){
+                    if( check_permission( $user->id, News2::MANAGE_PERM) || check_permission($user->id, News2::OWN_PERM ) ) {
+                        $author_list[$user->id] = $user->username;
+                    }
+                });
+        }
+        // owner list should be an array of uids => usernames
+        // FOR active admin users WHO have either the News2::MANAGE_PERM OR the News2::OWN_PERM
+    }
+    if( empty($author_list) && $article->author_id > 0 ) {
+        // user can own perms, AND can approve them
+        // so we will display the users username.
+        $user = $gCms->GetUserOperations()->LoadUsersByID( $article->author_id );
+        if( $user ) $author_name = $user->username;
+    }
+
     $category_tree_list = $catm->getCategoryList( [-1 => $this->Lang('none')] );
     $tpl = $smarty->CreateTemplate( $this->GetTemplateResource('admin_edit_article.tpl'), null, null, $smarty );
     $tpl->assign('article',$article);
+    $tpl->assign('author_list',$author_list);
+    $tpl->assign('author_name',$author_name);
     $tpl->assign('fieldtypes',$fieldtypes);
     $tpl->assign('fielddef_list',$fielddefs);
     $tpl->assign('category_tree_list',$category_tree_list);

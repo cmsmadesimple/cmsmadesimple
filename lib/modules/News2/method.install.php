@@ -51,16 +51,16 @@ $flds = "
 	title C(255) NOTNULL,
 	summary X,
 	content X2 NOTNULL,
-        news_date I NOTNULL,
+    news_date I NOTNULL,
 	start_time I,
 	end_time I,
 	status C(25) NOTNULL,
 	create_date I,
 	modified_date i,
 	author_id I,
-        extra X,
-        url_slug C(255),
-        searchable I1
+    extra X,
+    url_slug C(255),
+    searchable I1
 "; // icon is no longer used.
 $sqlarray = $dict->CreateTableSQL( $news_table, $flds, $taboptarray );
 $dict->ExecuteSQLArray( $sqlarray );
