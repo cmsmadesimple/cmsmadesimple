@@ -28,7 +28,6 @@ $userid = get_userid();
 
 if (!check_permission($userid, 'Manage Users')) {
     die('Permission Denied');
-    return;
 }
 
 /*--------------------

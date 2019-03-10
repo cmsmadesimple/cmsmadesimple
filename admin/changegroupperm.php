@@ -38,7 +38,6 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Manage Groups');
 if (!$access) {
-    die('Permission Denied');
     return;
 }
 

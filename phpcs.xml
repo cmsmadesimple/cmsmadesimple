@@ -18,7 +18,7 @@
 <rule ref="PSR2.Namespaces.UseDeclaration"/>
 <rule ref="Squiz.PHP.CommentedOutCode">
     <properties>
-        <property name="maxPercentage" value="50"/>
+        <property name="maxPercentage" value="70"/>
     </properties>
 </rule>
 <rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
