@@ -364,6 +364,10 @@ class LayoutTemplateManager
         }
         else if( is_string($a) && strlen($a) > 0 ) {
             $id = $this->template_name_to_id($a);
+            if( !$id ) {
+                cms_warning('could not find a template id for template named '.$a);
+                return;
+            }
         }
 
         // if it exists in the cache, then we're done

@@ -422,6 +422,7 @@ class UserOperations
      */
     public function GetMemberGroups($uid)
     {
+        $uid = (int) $uid;
         if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
             $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT group_id FROM '.CMS_DB_PREFIX.'user_groups WHERE user_id = ?';
@@ -464,14 +465,19 @@ class UserOperations
      */
     public function CheckPermission($userid,$permname)
     {
-        if( $userid <= 0 ) return FALSE;
+        $userid = (int) $userid;
+        $username = trim($permname);
+        if( $userid < 1 ) return FALSE;
+        if( !$permname ) return FALSE;
+
         $groups = $this->GetMemberGroups($userid);
         if( !is_array($groups) ) return FALSE;
         if( in_array(1,$groups) ) return TRUE; // member of admin group
 
         try {
+            $groupops = GroupOperations::get_instance();
             foreach( $groups as $gid ) {
-                if( GroupOperations::get_instance()->CheckPermission($gid,$permname) ) return TRUE;
+                if( $groupops->CheckPermission($gid,$permname) ) return TRUE;
             }
         }
         catch( CmsException $e ) {
