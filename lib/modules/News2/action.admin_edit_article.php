@@ -123,6 +123,7 @@ try {
                 }
             }
 
+            // save the data somewhere
             $ajax_out = null;
             if( isset($_POST['__preview']) && isset($_POST['__ajax']) ) {
                 // we're serializing this thing to the session
@@ -134,7 +135,6 @@ try {
                 $ajax_out = ['status'=>'ok', 'preview_url'=>$preview_url];
             }
             else {
-                // save the thing
                 HookManager::do_hook( 'News2::beforeSaveArticle', $article );
                 $article_id = $artm->save( $article );
                 // this will update the search and stuff

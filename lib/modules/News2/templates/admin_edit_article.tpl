@@ -7,8 +7,19 @@
 <script>
 $(function(){
    $('[name$=apply],[name$=submit]').hide();
+   $('[name=use_endtime]').change(function(ev) {
+      var val = $(this).val();
+      if( val == 1 ) {
+         $('#endtime_cont').show();
+      } else {
+         $('#endtime_cont').hide();
+      }
+   }).trigger('change')
+
+   // note: this is done afer triggering the use_endtime stuff
+   // so that dirtyform is not auto triggered
    $('#edit_news').dirtyForm({
-       onDirty : function () {
+       onDirty: function () {
            $('[name$=apply],[name$=submit]').show('slow');
        }
    });
@@ -19,15 +30,6 @@ $(function(){
    $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function () {
        $('#edit_news').dirtyForm('option', 'disabled', true);
    });
-
-   $('[name=use_endtime]').change(function(ev) {
-      var val = $(this).val();
-      if( val == 1 ) {
-         $('#endtime_cont').show();
-      } else {
-         $('#endtime_cont').hide();
-      }
-   }).trigger('change')
 
    $('#preview').click(function(ev){
       // gonna submit this article via ajax
