@@ -69,7 +69,10 @@ namespace CMSMS {
             $ip_addr = null;
             if( $userid < 1 ) $userid = null;
 
-            $out = "CMSMS MSG: ADMINUSER=$username ($userid), ITEMID=$itemid: SUBJECT=$subject, MSG=$msg\n";
+            $out = "CMSMS MSG: ADMINUSER=$username ($userid)";
+            if( $itemid ) $out .= ", ITEMID=$itemid,";
+            if( $subject ) $out .= ", SUBJECT=$subject,";
+            $out .= " MSG=$msg\n";
             $this->notice( $out );
         }
 
@@ -78,8 +81,10 @@ namespace CMSMS {
          */
         public function notice( $msg, string $subject = null )
         {
-            $msg = "CMSMS NOTICE: SUBJECT=$subject, $msg\n";
-            @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
+            $out = "CMSMS NOTICE: ";
+            if( $subject ) $out .= "SUBJECT=$subject,";
+            $out .= " $msg\n";
+            @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
         /**
@@ -87,8 +92,10 @@ namespace CMSMS {
          */
         public function warning( $msg, $subject = null )
         {
-            $msg = "CMSMS WARNING: SUBJECT=$subject, $msg\n";
-            @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
+            $out = "CMSMS WARNING: ";
+            if( $subject ) $out .= "SUBJECT=$subject,";
+            $out .= " $msg\n";
+            @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
         /**
@@ -96,8 +103,10 @@ namespace CMSMS {
          */
         public function error( $msg, $subject = null )
         {
-            $msg = "CMSMS ERROR: SUBJECT=$subject, $msg\n";
-            @error_log( $msg, 0, TMP_CACHE_LOCATION.'/audit_log' );
+            $out = "CMSMS ERROR: ";
+            if( $subject ) $out .= "SUBJECT=$subject,";
+            $out .= " $msg\n";
+            @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
     }
 
@@ -128,6 +137,7 @@ namespace CMSMS {
          */
         protected function __construct()
         {
+            // nothing here
         }
 
         /**
