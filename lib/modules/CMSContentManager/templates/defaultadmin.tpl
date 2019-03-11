@@ -1,9 +1,3 @@
-<style>
-tr.selected td {
-   background-color: lightcyan;
-}
-</style>
-
 {if $ajax == 0}
   <script type="text/javascript">
   //<![CDATA[
