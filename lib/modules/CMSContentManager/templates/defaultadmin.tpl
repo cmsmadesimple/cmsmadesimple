@@ -1,3 +1,9 @@
+<style>
+tr.selected td {
+   background-color: lightcyan;
+}
+</style>
+
 {if $ajax == 0}
   <script type="text/javascript">
   //<![CDATA[
@@ -219,7 +225,7 @@
   //]]>
   </script>
 
-	<div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
+    <div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
     {form_start action='defaultadmin' id='myoptions_form'}
 		<div class="c_full cf">
 			<input type="hidden" name="{$actionid}setoptions" value="1"/>
