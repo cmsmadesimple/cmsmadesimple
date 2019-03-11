@@ -18,6 +18,7 @@
 
 /**
  * This file contains the class that manages the CMSMS config.php file
+ * test
  *
  * @package CMS
  * @license GPL
