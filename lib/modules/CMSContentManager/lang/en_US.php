@@ -200,6 +200,7 @@ $lang['prompt_editsettings']= 'Edit Settings';
 $lang['prompt_expandall'] = 'Expand all content pages';
 $lang['prompt_filter_type'] = 'Filter Type';
 $lang['prompt_general'] = 'General';
+$lang['prompt_info'] = 'Info';
 $lang['prompt_inactive'] = 'Inactive';
 $lang['prompt_locktimeout'] = 'Locking Expiration Time-out (minutes)';
 $lang['prompt_lockrefresh'] = 'Locking Refresh Interval (seconds)';

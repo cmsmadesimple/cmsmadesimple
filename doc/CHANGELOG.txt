@@ -189,6 +189,7 @@ CMSContentManager - 1.2
   - FEATURE: Allow setting the default content page from within the page edit form (for pages where it is possible, and permission allows)
   - FEATURE: New bulk action for when page_template_list is correctly defined in the config to allow setting bulk pages to a template resource.
   - FEATURE: When page_template_list is defined hide the set design and template bulk action
+  - FEATURE: Each page can now display some info in the dynamic tooltip that is displayed.
 
 Installation Assistant - v1.4
   - Now require at least version 2.0.1 to upgrade

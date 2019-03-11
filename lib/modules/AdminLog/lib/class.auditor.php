@@ -38,10 +38,10 @@ class auditor implements \CMSMS\IAuditManager
         switch( $severity ) {
             case event::TYPE_WARNING:
                 $sevmsg = 'WARNING';
-		              break;
+		break;
             case event::TYPE_ERROR:
                 $sevmsg = 'ERROR';
-		              break;
+		break;
             case event::TYPE_NOTICE:
             default:
                 $sevmsg = 'NOTICE';

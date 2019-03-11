@@ -58,6 +58,7 @@ final class LoginOperations
         // if we do not have a presaved salt.. we generate one
         $salt = cms_siteprefs::get(__CLASS__);
         if( !$salt ) {
+	    trigger_error('CMSMS LOGIN: no salt for login key');
             $salt = sha1( rand().__FILE__.rand().time() );
             cms_siteprefs::set(__CLASS__,$salt);
         }

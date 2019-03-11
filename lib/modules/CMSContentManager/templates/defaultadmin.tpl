@@ -73,9 +73,11 @@
 	  }
       });
 
+      /*
       $('#selectall').cmsms_checkall({
           target: '#contenttable'
       });
+      */
 
       cms_CMtoggleState('#multiaction'),
       cms_CMtoggleState('#multisubmit'),
@@ -177,7 +179,7 @@
       })
 
       $(document).ajaxComplete(function () {
-      	  $('#selectall').cmsms_checkall();
+      	  //$('#selectall').cmsms_checkall();
           $('tr.selected').css('background', 'yellow');
       });
 

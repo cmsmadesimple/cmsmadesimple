@@ -1102,6 +1102,19 @@ abstract class ContentBase
         return FALSE;
     }
 
+    /**
+     * Get general info that is displayable about this particular content item
+     * at various times in the admin.
+     *
+     * @since 2.3
+     * @abstract
+     * @return string default null
+     */
+    public function GetAdminInfo()
+    {
+        // nothing here
+    }
+
     /************************************************************************/
     /* The rest																*/
     /************************************************************************/

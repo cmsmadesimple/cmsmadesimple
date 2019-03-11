@@ -1,3 +1,8 @@
+<script>
+$(function(){
+    $('#selectall').cmsms_checkall();
+})
+</script>
 <div class="row c_full cf">
   <div class="pageoptions grid_8" style="margin-top: 8px;">
       {if $can_add_content}
@@ -93,6 +98,10 @@
 	        <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{lang('wantschildren')}:</strong> {if $row.wantschildren|default:1}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}
+		{if $row.admin_info}
+		<hr/>
+		<strong>{$mod->Lang('prompt_info')}:</strong> {$row.admin_info}<br/>
+		{/if}
 	      {/strip}{/capture}
 
 	      <a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|cms_htmlentities}'>{$row.page|default:''}</a>
@@ -233,8 +242,8 @@
       <tr>
         {foreach from=$columns key='column' item='flag'}
 	{if $flag}
-	  <th class="col_{$column}" {if $flag=='icon'}pageicon{/if}">
-	  {if $flag == 'icon'}
+	  <th class="col_{$column} {if $flag=='icon'}pageicon{/if}">
+	  {if $flag == 'icon' && $column != 'multiselect'}
             <span>&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}
 	    <input type="checkbox" id="selectall" value="1" title="{$mod->Lang('select_all')}"/>

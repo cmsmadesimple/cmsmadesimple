@@ -600,7 +600,6 @@ final class ContentListBuilder
         }
         else if( $this->_use_perms && $modify_any_page ) {
             // we can display anything
-
             $is_opened = function( $node, $opened_array ) {
                 while( $node && $node->get_tag('id') > 0 ) {
                     if( $node && $node->get_tag('id') > 0 ) {
@@ -635,6 +634,7 @@ final class ContentListBuilder
                     }
                 }
             }
+
         }
         else {
             //
@@ -844,6 +844,7 @@ final class ContentListBuilder
             $rec['showinmenu'] = $content->ShowInMenu();
             $rec['wantschildren'] = $content->WantsChildren();
             $rec['viewable'] = $content->IsViewable();
+            $rec['admin_info'] = $content->GetAdminInfo();
             if( $this->_is_locked($page_id) ) {
                 $lock = $this->_locks[$page_id];
                 $rec['lockuser'] = $users[$lock['uid']]->username;
@@ -912,7 +913,7 @@ final class ContentListBuilder
                         break;
 
                     case 'friendlyname':
-                          $rec[$column] = $content->FriendlyName();
+                        $rec[$column] = $content->FriendlyName();
                         break;
 
                     case 'owner':
@@ -920,7 +921,7 @@ final class ContentListBuilder
                         break;
 
                     case 'active':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( $mod->CheckPermission('Manage All Content') && !$content->IsSystemPage() && !$this->_is_locked($page_id) ) {
                             if( $content->Active() ) {
                                   $rec[$column] = 'active';
@@ -932,14 +933,14 @@ final class ContentListBuilder
                         break;
 
                     case 'default':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) && !$this->_is_default_locked() ) {
                             if( $content->IsDefaultPossible() && $content->Active() ) $rec[$column] = ($content->DefaultContent())?'yes':'no';
                         }
                         break;
 
                     case 'move':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( !$this->have_locks() && $this->_check_peer_authorship($content->Id()) && ($nsiblings = $node->count_siblings()) > 1 ) {
                             if( $content->ItemOrder() == 1 ) {
                                   $rec[$column] = 'down';
@@ -954,12 +955,12 @@ final class ContentListBuilder
                         break;
 
                     case 'view':
-                          $rec[$column] = '';
-                          if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) $rec[$column] = $content->GetURL();
+                        $rec[$column] = '';
+                        if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) $rec[$column] = $content->GetURL();
                         break;
 
                     case 'copy':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
                             if( ($rec['can_edit'] && $mod->CheckPermission('Add Pages')) || $mod->CheckPermission('Manage All Content') ) {
                                   $rec[$column] = 'yes';
@@ -968,14 +969,14 @@ final class ContentListBuilder
                         break;
 
                     case 'addchild':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( ($rec['can_edit'] && $mod->CheckPermission('Add Pages')) || $mod->CheckPermission('Manage All Content') ) {
                             $rec[$column] = 'yes';
                         }
                         break;
 
                     case 'edit':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( $rec['can_edit'] ) {
                             $rec[$column] = 'yes';
                         }
@@ -985,14 +986,14 @@ final class ContentListBuilder
                         break;
 
                     case 'delete':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( $rec['can_delete'] && !$content->DefaultContent() && !$node->has_children() && !$this->_is_locked($content->Id()) ) {
                             $rec[$column] = 'yes';
                         }
                         break;
 
                     case 'multiselect':
-                          $rec[$column] = '';
+                        $rec[$column] = '';
                         if( !$content->IsSystemPage() && !$this->_is_locked($content->Id()) ) {
                             if( $mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Modify Any Page') ) {
                                   $rec[$column] = 'yes';
