@@ -54,7 +54,7 @@ class global_cache
         // clear it from the cache
         unset (self::$_cache[$type]);
         $driver = self::_get_driver ();
-        $driver->clear($type,__CLASS__);
+        $driver->erase($type,__CLASS__);
     }
 
     public static function save ()

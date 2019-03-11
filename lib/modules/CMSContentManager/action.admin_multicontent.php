@@ -35,6 +35,7 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 
+
 //
 // init
 //

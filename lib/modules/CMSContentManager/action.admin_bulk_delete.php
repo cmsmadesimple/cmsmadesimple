@@ -36,7 +36,7 @@
 if( !isset($gCms) ) exit;
 $this->SetCurrentTab('pages');
 
-if( !isset($params['multicontent']) || !isset($params['action']) || $params['action'] != 'admin_bulk_delete' ) {
+if( !isset($params['multicontent']) ) {
     $this->SetError($this->Lang('error_missingparam'));
     $this->RedirectToAdminTab();
 }
@@ -96,7 +96,7 @@ if( isset($params['submit']) ) {
                 $content = $node->getContent(FALSE,FALSE,TRUE);
                 if( !is_object($content) ) continue;
                 if( $content->DefaultContent() ) continue;
-                $content->Delete();
+                $contentops->delete_content($content);
                 $i++;
             }
             if( $i > 0 ) {

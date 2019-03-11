@@ -87,6 +87,10 @@ class apc_cache_driver extends cms_cache_driver
         }
 
         $prefix = $this->get_prefix($group).'_';
+        $regex = '/^'.$prefix.'_/';
+        foreach( new APCIterator('user',$regex) as $item ) {
+            apc_delete($item['key']);
+        }
     }
 
     /**
