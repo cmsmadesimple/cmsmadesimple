@@ -22,17 +22,14 @@ if(!function_exists('__cms_function_output_var') ) {
     {
         // $ptype is the parent type
         // $key is the current key we are trying to output
-        if($depth == 0 ) { return "\${$key}";
-        }
+        if($depth == 0 ) return "\${$key}";
         switch( strtolower($ptype) ) {
             case 'object':
                 return "-&gt;{$key}";
 
             case 'array':
-                if(is_numeric($key) ) { return "[{$key}]";
-                }
-                if(strpos($key, ' ') !== false ) { return "['{$key}']";
-                }
+                if(is_numeric($key) ) return "[{$key}]";
+                if(strpos($key, ' ') !== false ) return "['{$key}']";
                 return ".{$key}";
 
             default:
@@ -53,10 +50,13 @@ if(!function_exists('__cms_function_output_var') ) {
 
             $out .= str_repeat($depth_str, $depth);
             $out .= "{$acc} <em>(object of type: ".get_class($val).")</em> = {";
-            if(count($o_items) ) { $out .= '<br/>';
-            }
-            foreach( $o_items as $o_key => $o_val ) {
-                $out .= __cms_function_output_var($o_key, $o_val, $type, $depth+1);
+            if( !empty($o_items) ) {
+                $out .= '<br/>';
+                foreach( $o_items as $o_key => $o_val ) {
+                    $out .= __cms_function_output_var($o_key, $o_val, $type, $depth+1);
+                }
+            } else {
+                $out .= '<br/>  - no public properties -<br/>';
             }
             $out .= str_repeat($depth_str, $depth)."}<br/>";
         }
@@ -87,7 +87,18 @@ if(!function_exists('__cms_function_output_var') ) {
 
 function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-    $tpl_vars = $smarty->getTemplateVars();
+    $tpl_vars = null;
+    if( isset($params['var']) ) {
+        $var = $params['var'];
+        if( is_string($var) ){
+            $tpl_vars = [ $var => $smarty->getTemplateVars($var) ];
+        }
+        if( empty($tpl_vars) ) $tpl_vars = [ 'user_supplied_variable'=>$var ];
+    }
+    else {
+        $tpl_vars = $smarty->getTemplateVars($var);
+    }
+
     $str = '<pre>';
     foreach( $tpl_vars as $key => $value ) {
         $str .= __cms_function_output_var($key, $value);
