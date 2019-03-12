@@ -304,7 +304,9 @@ final class modulerep_client
         $status = $req->getStatus();
         $result = $req->getResult();
         if( $status != 200 ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
-        if( $status == 400 || !$result ) throw new ModuleNoDataException();
+        if( !$result ) {
+            throw new ModuleNoDataException();
+	}
 
         $data = json_decode($result,true);
         if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));

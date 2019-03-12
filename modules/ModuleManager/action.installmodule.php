@@ -177,10 +177,18 @@ try {
 
             if( $uselatest ) {
                 // we want the latest of all of the dependencies.
-                $latest = modulerep_client::get_modulelatest($dep_module_names);
-                if( !$latest ) throw new CmsInvalidDataException($this->Lang('error_dependencynotfound'));
-                $latest = $array_to_hash($latest,'name');
-                $deps = $update_latest_deps($deps,$latest);
+		$latest = null;
+		try {
+                    $latest = modulerep_client::get_modulelatest($dep_module_names);
+                    if( $latest ) {
+                        // throw new CmsInvalidDataException($this->Lang('error_dependencynotfound'));
+                        $latest = $array_to_hash($latest,'name');
+                        $deps = $update_latest_deps($deps,$latest);
+	            }
+		}
+                catch( ModuleNoDataException $e ) {
+		    // nothing here
+                }
             } else {
                 $info = modulerep_client::get_multiple_moduleinfo($deps);
                 $info = $array_to_hash($info,'name');
@@ -322,7 +330,9 @@ try {
     return;
 }
 catch( Exception $e ) {
-    $this->SetError($e->GetMessage());
+    $msg = $e->GetMessage();
+    if( !$msg ) $msg = get_class($e);
+    $this->SetError($msg);
     $this->RedirectToAdminTab();
 }
 #
