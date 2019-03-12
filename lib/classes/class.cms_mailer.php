@@ -56,10 +56,10 @@ class cms_mailer
      *
      * @param bool $exceptions Optionally disable exceptions, and rely on error strings.
      */
-    public function __construct($exceptions = true)
+    public function __construct($exceptions = true, $reset = true)
     {
         $this->mailer = new PHPMailer($exceptions);
-        $this->reset();
+        if( $reset ) $this->reset();
     }
 
     /**
@@ -80,6 +80,8 @@ class cms_mailer
      */
     public function reset()
     {
+        // note: should be passsing in preferences in the constructor.
+        // but that would break existing modules that construct this object directly
         $prefs = unserialize(cms_siteprefs::get('mailprefs'));
         if( !$prefs ) throw new \RuntimeException( 'CMS Mailer has not been configured' );
         $this->mailer->Mailer = get_parameter_value($prefs,'mailer','mail');

@@ -184,7 +184,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo'] && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
             try {
                 $this->message(\__appbase\lang('send_admin_email'));
-                $mailer = new \cms_mailer();
+                $mailer = new \cms_mailer(true,false);
                 $mailer->AddAddress($adminacct['emailaddr']);
                 $mailer->SetSubject(\__appbase\lang('email_accountinfo_subject'));
                 $body = null;
