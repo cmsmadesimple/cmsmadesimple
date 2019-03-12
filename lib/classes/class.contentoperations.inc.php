@@ -702,7 +702,7 @@ class ContentOperations
         $sig = md5(__FILE__.$query.json_encode($parms));
         $idlist = $this->cache_driver->get($sig, __CLASS__);
         if( !$idlist ) {
-            $idlist = $db->GetArray($query, $parms);
+            $idlist = $db->GetCol($query, $parms);
             if( $idlist ) $this->cache_driver->set($sig, __CLASS__);
         }
         if( empty($idlist) ) return;
@@ -755,6 +755,7 @@ class ContentOperations
         if( !is_array($explicit_ids) || !count($explicit_ids) ) return;
 
         // there is stuff we gotta load
+        $tmp = implode(',',$explicit_ids);
         $expr = 'content_id IN ('.implode(',',$explicit_ids).')';
         if( !$all ) $expr .= ' AND active = 1';
 
@@ -857,7 +858,7 @@ class ContentOperations
         $tree = $gCms->GetHierarchyManager();
         $list = $tree->getFlatList();
 
-        $this->LoadAllContent($loadprops);
+        $this->LoadAllContent();
         $output = [];
         foreach( $list as $one ) {
             $tmp = $one->GetContent(false,true,true);
