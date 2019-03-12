@@ -690,6 +690,17 @@ final class CmsApp
     }
 
     /**
+     * Create a new instance of the mailer
+     *
+     * @since 2.3
+     * @return cms_mailer
+     */
+    public function create_new_mailer() : cms_mailer
+    {
+        return new cms_mailer;
+    }
+
+    /**
      * Disconnect from the database.
      *
      * @final
