@@ -1,0 +1,4 @@
+# Simple plugin distributed with CMSMS for apache servers
+# to not allow direct access to php files by browsers
+RedirectMatch 404 ^/.*\.php$
+
