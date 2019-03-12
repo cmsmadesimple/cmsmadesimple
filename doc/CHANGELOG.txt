@@ -176,6 +176,7 @@ Core - General
   - CHANGE: Improvements to the is_sitedown() stuff, and the get_real_ip() function.
   - REMOVED: the dump plugin because it relied on smart internals, and was problematic.
   - IMPROVED: Add some minor functionality to the get_template_vars plugin.
+  - FEATURE: Now add simple .htaccess file to the lib directory to prevent direct php browsing
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.

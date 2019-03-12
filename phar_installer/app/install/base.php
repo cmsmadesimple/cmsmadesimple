@@ -90,7 +90,7 @@ $admin_user->Save();
 UserOperations::get_instance()->AddMemberGroup($admin_user->id,$admin_group->id);
 cms_userprefs::set_for_user($admin_user->id,'wysiwyg','MicroTiny'); // the one, and only user preference we need.
 
-$create_private_dir = function($relative_dir) {
+$create_private_dir = function($relative_dir, $htaccess_txt = null) {
     $app = \__appbase\get_app();
     $destdir = $app->get_destdir();
     $relative_dir = trim($relative_dir);
@@ -101,6 +101,9 @@ $create_private_dir = function($relative_dir) {
         @mkdir($dir,0777,true);
     }
     @touch($dir.'/index.html');
+    if( $htaccess_txt ) {
+	file_put_contents($dir.'/.htaccess',$htaccess_txt);
+    }
 };
 
 // create the assets directory structure
@@ -110,7 +113,7 @@ $create_private_dir('assets/configs');
 $create_private_dir('assets/admin_custom');
 $create_private_dir('assets/module_custom');
 $create_private_dir('assets/modules');
-$create_private_dir('assets/plugins');
-$create_private_dir('assets/simple_plugins');
+$create_private_dir('assets/plugins','RedirectMatch 404 ^/.*$');
+$create_private_dir('assets/simple_plugins','RedirectMatch 404 ^/.*$');
 $create_private_dir('assets/images');
 $create_private_dir('assets/css');

@@ -12,6 +12,7 @@ if( count($udt_list) ) {
     if( !is_dir($destdir) ) @mkdir( $destdir, 0777, true );
     if( !is_dir($destdir) ) throw new \LogicException("Could not create $destdir directory");
     if( !is_file($destdir.'/index.html') ) @touch( $destdir.'/index.html' );
+    if( !is_file($destdir.'/.htaccess') ) file_put_contents($destdir.'/.htaccess','RedirectMatch 404 ^/.*$');
 
     $create_simple_plugin = function( array $row, $destdir ) {
         $fn = $destdir.'/'.$row['userplugin_name'].'.cmsplugin';

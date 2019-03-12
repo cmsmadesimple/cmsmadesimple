@@ -59,6 +59,8 @@ RedirectMatch 403 ^.*/uploads/.*\.php$
 RedirectMatch 403 ^.*/assets/.*\.php$
 RedirectMatch 403 ^.*/assets/.*\.tpl$
 RedirectMatch 403 ^.*/assets/.*\.cmsplugin$
+RedirectMatch 403 ^.*/assets/configs/.*$
+RedirectMatch 403 ^.*/assets/templates/.*$
 
 #
 # The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.

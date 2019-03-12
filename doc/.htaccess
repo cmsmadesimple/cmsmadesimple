@@ -1,5 +1,8 @@
 # To deny public access
+RedirectMatch 404 ^/.*$
 <Files ~ "\.(php|php3|php4|php5|phtml|pl|cgi|txt|pdf)$">                                                                           
   order deny,allow                                                                                                            
   deny from all                                                                                                               
-</Files>
+</Files># Simple plugin distributed with CMSMS for apache servers
+# to not allow direct access to php files by browsers
+
