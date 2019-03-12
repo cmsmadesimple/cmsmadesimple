@@ -124,7 +124,7 @@ Core - General
       Note: when using this, implementing {cms_stylesheet} in the file based templates will be problematic.
   - IMPROVE: Organize and refactor the template parsing code.
   - FEATURE: Added the ability to stop processing content, via an exception.  This is useful in situations where output is retrieved from a cache.
-  - FEATURE: Added the {content_text} plugin to alloa adding simple static text instructions for editors on the edit content page.
+  - FEATURE: Added the {content_text} plugin to allow adding simple static text instructions for editors on the edit content page.
       text must be hardcoded.  i.e {content_text text='This is a test'}
   - FEATURE: Added the {assets_url} plugin to provide the complete URL to the assets folder.
   - FEATURE: New cleaned up simplex theme on initial install demonstrates template inheritance and other techniques
@@ -136,7 +136,7 @@ Core - General
   - IMPROVE: {cms_action_url} will now use the default content page for frontend links IF a returnid is not specified or cannot be inferred
   - IMPROVE: get_page_id_or_alias_from_url() can now throw an exception and improve the way that parameters are merged and cleaned.
   - CHANGE:  RestrictUnknownParams is now OFF by default, AND cleaning is only done if RestrictUnknownParams() is enabled
-  - BREAKING: Modules that register content types cannot be lazy loaded.
+  - BREAKING: Modules that register content types cannot be lazy loaded or adminonly
   - CHANGE: LazyLoadAdmin() and LazyLoadFrontend() methods.  Modules should not be lazy loaded anymore, however class files should be kept small
   - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
       pretty url determiniation.
@@ -161,16 +161,16 @@ Core - General
   - CHANGE: Significant code cleanup... start getting rid of singletons, use CmsApp as a service provider
   - CHANGE: refactor the ContentBase and ContentOperations classes such that all DB operations are done from the ContentOperations class
      some methods were removed from the ContentBase class.  i.e: Delete(), Save(), and some other methods
-  - CHANGE: ContentOperations now ALWAYS loads properties for content operations, thus invalidating the 'deep' or 'loadproperties' options in various
-     methods, and modules.
+  - CHANGE: ContentOperations now ALWAYS loads properties for content operations, thus invalidating the 'deep' or 'loadproperties' options in various methods, and modules.
   - IMPROVEMENT: Adds new classes for working with cookies.  Including a signed cookie manager that signs all cookie values and obfuscates keys.
   - CHANGE: cms_cookies now uses the AutoCookie manager which allows storing extracting simple objects arrays and strings from the cookies.
-  - REMOVED: News is no longer distributed with he core, and is no longer considered a system/core module.
+  - REMOVED: News is no longer distributed with the core, and is no longer considered a system/core module.
     (will be distributed via the forge for some time)
   - CHANGE: The CMSModule::CreateReturnLink() method is deprecated, and now ignores the params array (don't think it ever did work)
   - CHANGE: Refactor the generation of mact urls.
   - CHANGE: Now, by default, when pretty urls are not enabled... generate a signed, encoded LONGER request that is forgery resistant.
   - CHANGE: New config entries to enable generation of old style mact URLs, and to allow processing of old style mact urls.
+    - OLD style mact URL's can be processed by default, but this may change in later versions
   - CHANGE: Add and remove some tests from the systeminfo page.
   - CHANGE: Minor improvements to the test functions
   - CHANGE: Improvements to the is_sitedown() stuff, and the get_real_ip() function.
@@ -244,7 +244,7 @@ Navigator v1.0.9
  - Adds the title property to each node.
 
 CmsJobManager v0.3
- - Now uses CURL initiate asynchronous requests
+ - Now uses CURL to initiate asynchronous requests
  - Removes all support for events, now uses hooks
 
 Version 2.2.6 - NO NAME SET
