@@ -207,7 +207,7 @@ if( isset($_POST['testmail']) ) {
         else {
             // we got an email, and we have settings.
             try {
-                $mailer = new cms_mailer();
+                $mailer = $gCms->create_new_mailer();
                 $mailer->AddAddress($addr);
                 $mailer->IsHTML(TRUE);
                 $mailer->SetBody(lang('mail_testbody','siteprefs'));

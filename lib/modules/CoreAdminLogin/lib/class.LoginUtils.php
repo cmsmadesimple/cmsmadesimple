@@ -40,7 +40,7 @@ class LoginUtils
         $config = $gCms->GetConfig();
         $userops = $gCms->GetUserOperations();
 
-        $obj = new \cms_mailer;
+        $obj = $gCms->create_new_mailer();
         $obj->IsHTML(TRUE);
         $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
         // remember email subjects cannot contain entities.
