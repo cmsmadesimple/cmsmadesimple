@@ -18,8 +18,5 @@
 
 function smarty_function_redirect_url($params, &$smarty)
 {
-    if(isset($params['to']) ) { redirect(trim($params['to']));
-    }
+    if(isset($params['to']) ) redirect(trim($params['to']));
 }
-
-?>

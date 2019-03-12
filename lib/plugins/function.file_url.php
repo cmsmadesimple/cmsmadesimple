@@ -1,7 +1,7 @@
 <?php
 function smarty_function_file_url($params,&$template)
 {
-    $config = \cms_config::get_instance();
+    $config = cmsms()->GetConfig();
     $dir = $config['uploads_path'];
     $file = trim(get_parameter_value($params, 'file'));
     $add_dir = trim(get_parameter_value($params, 'dir'));
@@ -22,8 +22,6 @@ function smarty_function_file_url($params,&$template)
     }
 
     $out = null;
-    if($file ) {
-    }
     $fullpath = $dir.'/'.$file;
     if(!is_file($fullpath) || !is_readable($fullpath) ) {
         // no error log here.
@@ -32,8 +30,7 @@ function smarty_function_file_url($params,&$template)
 
     // convert it to a url
     $out = CMS_UPLOADS_URL.'/';
-    if($add_dir ) { $out .= $add_dir.'/';
-    }
+    if($add_dir ) $out .= $add_dir.'/';
     $out .= $file;
 
     if($assign ) {

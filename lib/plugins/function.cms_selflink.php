@@ -37,7 +37,7 @@
 
 function smarty_function_cms_selflink($params, &$smarty)
 {
-    $gCms = \CmsApp::get_instance();
+    $gCms = cmsms();
     $manager = $gCms->GetHierarchyManager();
     $url = '';
     $urlparam = '';
@@ -49,8 +49,7 @@ function smarty_function_cms_selflink($params, &$smarty)
     $pageid = null;
 
     $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
-    if (isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) { $urlparam = trim($params['urlparam']);
-    }
+    if (isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) $urlparam = trim($params['urlparam']);
 
     if (isset($params['page']) or isset($params['href'])) {
         $page = null;
@@ -69,18 +68,15 @@ function smarty_function_cms_selflink($params, &$smarty)
             else {
                 $page = cms_html_entity_decode($page); // decode entities (alias may be encoded if entered in WYSIWYG)
                 $node = $manager->find_by_tag('alias', $page);
-                if($node ) { $pageid = $node->get_tag('id');
-                }
+                if($node ) $pageid = $node->get_tag('id');
             }
         }
     }
 
     else if(isset($params['dir']) ) {
         $startpage = null;
-        if($pageid ) { $startpage = $pageid;
-        }
-        if(!$startpage ) { $startpage = $gCms->get_content_id();
-        }
+        if($pageid ) $startpage = $pageid;
+        if(!$startpage ) $startpage = $gCms->get_content_id();
         $dir = strtolower(trim($params['dir']));
 
         switch( $dir ) {
@@ -93,10 +89,8 @@ function smarty_function_cms_selflink($params, &$smarty)
                     for( $j = $i + 1; $j < count($flatcontent); $j++ ) {
                         $k = $indexes[$j];
                         $content = $flatcontent[$k]->getContent();
-                        if(!is_object($content) ) { continue;
-                        }
-                        if(!$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) { continue;
-                        }
+                        if(!is_object($content) ) continue;
+                        if(!$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
                         $pageid = $content->Id();
                         $label = CmsLangOperations::lang_from_realm('cms_selflink', 'next_label');
                         break;
@@ -108,24 +102,19 @@ function smarty_function_cms_selflink($params, &$smarty)
             case 'nextsibling':
                 // next valid peer page.
                 $node = $manager->find_by_tag('id', $startpage);
-                if(!$node ) { return;
-                }
+                if(!$node ) return;
                 $parent = $node->get_parent();
-                if(!$parent ) { $parent = $manager;
-                }
+                if(!$parent ) $parent = $manager;
                 $children = $parent->get_children();
                 for( $i = 0; $i < count($children); $i++ ) {
                     $id = $children[$i]->get_tag('id');
-                    if($id == $startpage ) { break;
-                    }
+                    if($id == $startpage ) break;
                 }
                 if($i < count($children) ) {
                     for( $j = $i + 1; $j < count($children); $j++ ) {
                         $content = $children[$j]->getContent();
-                        if(!is_object($content) ) { continue;
-                        }
-                        if(!$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) { continue;
-                        }
+                        if(!is_object($content) ) continue;
+                        if(!$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
                         $pageid = $content->Id();
                         $label = CmsLangOperations::lang_from_realm('cms_selflink', 'next_label');
                         break;
@@ -143,8 +132,7 @@ function smarty_function_cms_selflink($params, &$smarty)
                     for( $j = $i - 1; $j >= 0; $j-- ) {
                         $k = $indexes[$j];
                         $content = $flatcontent[$k]->getContent();
-                        if(!is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) { continue;
-                        }
+                        if(!is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
                         $pageid = $content->Id();
                         $label = CmsLangOperations::lang_from_realm('cms_selflink', 'prev_label');
                         break;
@@ -156,22 +144,18 @@ function smarty_function_cms_selflink($params, &$smarty)
             case 'prevsibling':
                 // previous valid peer page.
                 $node = $manager->find_by_tag('id', $startpage);
-                if(!$node ) { return;
-                }
+                if(!$node ) return;
                 $parent = $node->get_parent();
-                if(!$parent ) { $parent = $manager;
-                }
+                if(!$parent ) $parent = $manager;
                 $children = $parent->get_children();
                 for( $i = 0; $i < count($children); $i++ ) {
                     $id = $children[$i]->get_tag('id');
-                    if($id == $startpage ) { break;
-                    }
+                    if($id == $startpage ) break;
                 }
                 if($i < count($children) ) {
                     for( $j = $i - 1; $j >= 0; $j-- ) {
                         $content = $children[$j]->getContent();
-                        if(!is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) { continue;
-                        }
+                        if(!is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
                         $pageid = $content->Id();
                         $label = CmsLangOperations::lang_from_realm('cms_selflink', 'prev_label');
                         break;
@@ -181,21 +165,18 @@ function smarty_function_cms_selflink($params, &$smarty)
 
             case 'start':
                 // default home page
-                $contentops = ContentOperations::get_instance();
+                $contentops = $gCms->GetContentOperations();
                 $pageid = $contentops->GetDefaultPageId();
                 break;
 
             case 'up':
                 // parent page.
                 $node = $manager->find_by_tag('id', $startpage);
-                if(!$node ) { return;
-                }
+                if(!$node ) return;
                 $node = $node->get_parent();
-                if(!$node ) { return;
-                }
+                if(!$node ) return;
                 $content = $node->GetContent();
-                if(!$content ) { return;
-                }
+                if(!$content ) return;
                 $pageid = $content->Id();
                 break;
 
@@ -342,5 +323,3 @@ function smarty_cms_help_function_cms_selflink()
 {
     echo lang_by_realm('tags', 'help_function_cms_selflink');
 }
-
-?>

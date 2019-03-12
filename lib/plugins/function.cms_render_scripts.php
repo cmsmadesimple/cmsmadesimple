@@ -17,7 +17,7 @@ function smarty_function_cms_render_scripts( $params, $template )
     $on_postrender = function(array $parms) use ($magic_string,$force,$nocache,$prefix,$defer) {
         if( !isset($parms['content']) ) return;
         $out = null;
-        $combiner = CmsApp::get_instance()->get_script_manager();
+        $combiner = cmsms()->get_script_manager();
         $filename = $combiner->render_scripts(PUBLIC_CACHE_LOCATION, $force);
         if($filename ) {
             if($nocache ) $filename .= '?t='.time();

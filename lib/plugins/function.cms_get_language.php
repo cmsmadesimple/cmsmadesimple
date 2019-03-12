@@ -25,4 +25,3 @@ function smarty_function_cms_get_language($params, &$smarty)
     }
     return $lang;
 }
-?>

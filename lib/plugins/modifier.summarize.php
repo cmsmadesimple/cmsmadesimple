@@ -47,4 +47,3 @@ function smarty_modifier_summarize($string,$numwords='5',$etc='...')
     $tmp = implode(' ', $tmp).$etc;
     return $tmp;
 }
-?>

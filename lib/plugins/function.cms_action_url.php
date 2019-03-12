@@ -78,7 +78,7 @@ function smarty_function_cms_action_url($params, &$smarty)
     if(!$mid ) $mid = $smarty->getTemplateVars('actionid');
 
     // validate params
-    $gCms = CmsApp::get_instance();
+    $gCms = cmsms();
     if($module == '' ) return;
     if($gCms->test_state(CmsApp::STATE_ADMIN_PAGE) && $returnid == '' ) {
         if($mid == '' ) $mid = 'm1_';
@@ -120,5 +120,3 @@ function smarty_function_cms_action_url($params, &$smarty)
     }
     return $url;
 }
-
-?>

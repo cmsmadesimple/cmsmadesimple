@@ -21,12 +21,10 @@
 function smarty_cms_function_current_date($params, &$smarty)
 {
     $format = '%b %c, %Y';
-    if(isset($params['format']) && !empty($params['format']) ) { $format = trim($params['format']);
-    }
+    if(isset($params['format']) && !empty($params['format']) ) $format = trim($params['format']);
 
     $string = strftime($format, time());
-    if(isset($params['ucwords']) && $params['ucwords'] != '') { $string = ucwords($string);
-    }
+    if(isset($params['ucwords']) && $params['ucwords'] != '') $string = ucwords($string);
 
     $out = cms_htmlentities($string);
     if(isset($params['assign']) ) {

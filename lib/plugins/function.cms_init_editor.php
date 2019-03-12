@@ -35,14 +35,12 @@ function smarty_cms_function_cms_init_editor($params, &$smarty)
         $wysiwyg = $tmp[0]; // first wysiwyg only, for now.
     }
 
-    $mod = ModuleOperations::get_instance()->GetWYSIWYGModule($wysiwyg);
-    if(!is_object($mod) ) { return;
-    }
+    $mod = cmsms()->GetModuleOperations()->GetWYSIWYGModule($wysiwyg);
+    if(!is_object($mod) ) return;
 
     // get the output
     $output = $mod->WYSIWYGGenerateHeader($selector);
-    if(!$output ) { return;
-    }
+    if(!$output ) return;
 
     if(isset($params['assign']) ) {
         $smarty->assign(trim($params['assign']).$output);

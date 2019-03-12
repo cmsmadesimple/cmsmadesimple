@@ -20,8 +20,8 @@
 
 function smarty_function_metadata($params, &$smarty)
 {
-    $gCms = CmsApp::get_instance();
-    $config = \cms_config::get_instance();
+    $gCms = cmsms();
+    $config = $gCms->GetConfig();
     $content_obj = $gCms->get_content_object();
     $hookmanager = $gCms->get_hook_manager();
 

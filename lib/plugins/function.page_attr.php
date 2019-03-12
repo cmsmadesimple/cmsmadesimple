@@ -18,6 +18,7 @@
 
 function smarty_function_page_attr($params, &$smarty)
 {
+    $gCms = cmsms();
     $key = trim(get_parameter_value($params, 'key'));
     $page = trim(get_parameter_value($params, 'page'));
     $assign = trim(get_parameter_value($params, 'assign'));
@@ -28,14 +29,13 @@ function smarty_function_page_attr($params, &$smarty)
         // gotta find it by id or alias
         if(is_numeric($page) && (int) $page > 0 ) {
             // it's an id
-            $hm = CmsApp::get_instance()->GetHierarchyManager();
+            $hm = $gCms->GetHierarchyManager();
             $node = $hm->find_by_tag('id', $page);
-            if($node ) { $contentobj = $node->getContent(true, true, $inactive);
-            }
+            if($node ) $contentobj = $node->getContent(true, true, $inactive);
         }
         else {
             // this is quicker if using an alias
-            $content_ops = ContentOperations::get_instance();
+            $content_ops = $gCms->GetContentOperations();
             $contentobj = $content_ops->LoadContentFromAlias($page, !$inactive);
         }
     }

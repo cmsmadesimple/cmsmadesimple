@@ -26,5 +26,3 @@ function smarty_function_repeat($params, &$smarty)
     }
     return $out;
 }
-
-?>

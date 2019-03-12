@@ -18,7 +18,7 @@
 
 function smarty_function_title($params, &$smarty)
 {
-    $contentobj = CmsApp::get_instance()->get_content_object();
+    $contentobj = cmsms()->get_content_object();
     $result = '';
 
     if (!is_object($contentobj)) {

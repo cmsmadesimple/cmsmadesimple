@@ -18,13 +18,13 @@
 
 function smarty_function_image($params, &$smarty)
 {
-    $gCms = CmsApp::get_instance();
+    $config = cmsms()->GetConfig();
     $text = '';
     $imgstart = '<img src=';
     $imgend = '/>';
     if(!empty($params['src']) ) {
-        $text = $imgstart .= '"'.$gCms->config['image_uploads_url'].'/'.$params['src'].'"';
-        $size = @getimagesize($gCms->config['image_uploads_path'].'/'.$params['src']);
+        $text = $imgstart .= '"'.$config['image_uploads_url'].'/'.$params['src'].'"';
+        $size = @getimagesize($config['image_uploads_path'].'/'.$params['src']);
 
         if(!empty($params['width']) ) {
             $text .= ' width="'.$params['width'].'"';
@@ -51,10 +51,8 @@ function smarty_function_image($params, &$smarty)
             $text .= ' title="'.$alt.'"';
         }
 
-        if(!empty($params['class']) ) {    $text .= ' class="'.$params['class'].'"';
-        }
-        if(!empty($params['addtext']) ) { $text .= ' ' . $params['addtext'];
-        }
+        if(!empty($params['class']) ) $text .= ' class="'.$params['class'].'"';
+        if(!empty($params['addtext']) ) $text .= ' ' . $params['addtext'];
         $text .= $imgend;
     } else {
         $text = '<!-- empty results from image plugin -->';

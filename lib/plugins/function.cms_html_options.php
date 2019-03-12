@@ -24,10 +24,8 @@ function smarty_function_cms_html_options($params, &$smarty)
             $opt = array();
             $opt['label'] = $params['label'];
             $opt['value'] = $params['value'];
-            if(isset($params['title']) ) { $opt['title'] = $params['title'];
-            }
-            if(isset($params['class']) ) { $opt['class'] = $params['class'];
-            }
+            if(isset($params['title']) ) $opt['title'] = $params['title'];
+            if(isset($params['class']) ) $opt['class'] = $params['class'];
             $options = $opt;
         }
         else {
@@ -43,8 +41,7 @@ function smarty_function_cms_html_options($params, &$smarty)
         $selected = null;
         if(isset($params['selected']) ) {
             $selected = $params['selected'];
-            if(!is_array($selected) ) { $selected = explode(',', $selected);
-            }
+            if(!is_array($selected) ) $selected = explode(',', $selected);
         }
         $out = CmsFormUtils::create_option($params['options'], $selected);
     }

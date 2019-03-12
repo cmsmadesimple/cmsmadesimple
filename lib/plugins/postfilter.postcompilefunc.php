@@ -50,4 +50,3 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
     $hookmanager->do_hook('Core::SmartyPostCompile', array('content' => &$tpl_output));
     return $tpl_output;
 }
-?>

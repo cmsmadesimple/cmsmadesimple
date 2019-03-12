@@ -112,4 +112,3 @@ function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'ut
             return $string;
     }
 }
-?>

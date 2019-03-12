@@ -18,7 +18,7 @@
 
 function smarty_function_description($params, &$smarty)
 {
-    $gCms = CmsApp::get_instance();
+    $gCms = cmsms();
     $content_obj = $gCms->get_content_object();
 
     if (!is_object($content_obj) || $content_obj->Id() == -1) {

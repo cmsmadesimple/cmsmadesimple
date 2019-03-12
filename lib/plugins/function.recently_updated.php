@@ -19,16 +19,13 @@
 function smarty_function_recently_updated($params, &$smarty)
 {
     $number = 10;
-    if(!empty($params['number'])) { $number = min(100, max(1, (int) $params['number']));
-    }
+    if(!empty($params['number'])) $number = min(100, max(1, (int) $params['number']));
 
     $leadin = "Modified: ";
-    if(!empty($params['leadin'])) { $leadin = $params['leadin'];
-    }
+    if(!empty($params['leadin'])) $leadin = $params['leadin'];
 
     $showtitle='true';
-    if(!empty($params['showtitle'])) { $showtitle = $params['showtitle'];
-    }
+    if(!empty($params['showtitle'])) $showtitle = $params['showtitle'];
 
     $dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m";
     $css_class = isset($params['css_class']) ? $params['css_class'] : "";
@@ -53,8 +50,7 @@ function smarty_function_recently_updated($params, &$smarty)
         // @todo: throw an exception here
         echo 'DB error: '. $db->ErrorMsg()."<br/>";
     }
-    while ($dbresult && $updated_page = $dbresult->FetchRow())
-    {
+    while ($dbresult && $updated_page = $dbresult->FetchRow()) {
         $curnode = $hm->getNodeById($updated_page['content_id']);
         $curcontent = $curnode->GetContent();
         $output .= '<li>';
@@ -70,8 +66,7 @@ function smarty_function_recently_updated($params, &$smarty)
     }
 
     $output .= '</ul>';
-    if (isset($params['css_class'])) { $output .= '</div>';
-    }
+    if (isset($params['css_class'])) $output .= '</div>';
 
     if(isset($params['assign']) ) {
         $smarty->assign(trim($params['assign']), $output);

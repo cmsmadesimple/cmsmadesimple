@@ -18,15 +18,12 @@
 
 function smarty_function_cms_version($params, $smarty)
 {
-
-    global $CMS_VERSION;
-
     if(isset($params['assign']) ) {
-        $smarty->assign(trim($params['assign']), $CMS_VERSION);
+        $smarty->assign(trim($params['assign']), CMS_VERSION);
         return;
     }
 
-    return $CMS_VERSION;
+    return CMS_VERSION;
 }
 
 function smarty_cms_about_function_cms_version()

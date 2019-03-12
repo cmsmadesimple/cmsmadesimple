@@ -20,18 +20,13 @@ function smarty_function_setlist($params, &$smarty)
 {
     $newlist = array();
 
-    if (!isset($params['var'])) {
-        $params['var']='var';
-    }
+    if (!isset($params['var'])) $params['var']='var';
 
-    if (substr($params['value'], 0, 1) != '{') {
-        $params['value'] = '{'.$params['value'];
-    }
+    if (substr($params['value'], 0, 1) != '{') $params['value'] = '{'.$params['value'];
 
     $opens = substr_count($params['value'], '{');
     $closes =  substr_count($params['value'], '}');
-    while ($closes < $opens)
-    {
+    while ($closes < $opens) {
         $params['value'] = $params['value'].'}';
         $closes += 1;
     }

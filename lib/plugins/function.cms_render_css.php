@@ -13,7 +13,7 @@ function smarty_function_cms_render_css( $params, $template )
     $on_postrender = function(array $parms) use ($magic_string,$force,$nocache,$prefix) {
         if( !isset($parms['content']) ) return;
         $out = null;
-        $combiner = CmsApp::get_instance()->get_stylesheet_manager();
+        $combiner = cmsms()->get_stylesheet_manager();
         $filename = $combiner->render(PUBLIC_CACHE_LOCATION, $force);
         if($filename ) {
             if($nocache ) $filename .= '?t='.time();

@@ -18,17 +18,14 @@
 
 function smarty_function_cms_pageoptions($params, &$smarty)
 {
-    if(!isset($params['numpages']) ) { return;
-    }
+    if(!isset($params['numpages']) ) return;
     $numpages = (int)$params['numpages'];
-    if($numpages < 1 ) { return;
-    }
+    if($numpages < 1 ) return;
     $curpage = get_parameter_value($params, 'curpage', 1);
     $curpage = (int)$curpage;
     $curpage = max(1, min($numpages, $curpage));
     $surround = 3;
-    if(isset($params['surround']) ) { $surround = (int)$params['surround'];
-    }
+    if(isset($params['surround']) ) $surround = (int)$params['surround'];
     $surrund = max(1, min(20, $surround));
     $elipsis = get_parameter_value($params, 'elipsis', '');
     $bare = cms_to_bool(get_parameter_value($params, 'bare', 0));
@@ -56,8 +53,7 @@ function smarty_function_cms_pageoptions($params, &$smarty)
         if($elipsis ) {
             $out = array();
             for( $i = 1; $i < count($list); $i++ ) {
-                if($list[$i-1] != $list[$i] - 1 ) { $out[] = $elipsis;
-                }
+                if($list[$i-1] != $list[$i] - 1 ) $out[] = $elipsis;
                 $out[] = $list[$i];
             }
         }

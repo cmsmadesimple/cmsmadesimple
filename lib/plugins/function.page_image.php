@@ -19,10 +19,8 @@
 function smarty_function_page_image($params, &$smarty)
 {
     $get_bool = function (array $params,$key,$dflt) {
-        if(!isset($params[$key]) ) { return (bool) $dflt;
-        }
-        if(empty($params[$key]) ) { return (bool) $dflt;
-        }
+        if(!isset($params[$key]) ) return (bool) $dflt;
+        if(empty($params[$key]) ) return (bool) $dflt;
         return (bool) cms_to_bool($params[$key]);
     };
 
@@ -33,25 +31,21 @@ function smarty_function_page_image($params, &$smarty)
     unset($params['full'], $params['thumbnail'], $params['tag'], $params['assign']);
 
     $propname = 'image';
-    if($thumbnail ) { $propname = 'thumbnail';
-    }
-    if($tag ) { $full = true;
-    }
+    if($thumbnail ) $propname = 'thumbnail';
+    if($tag ) $full = true;
 
     $contentobj = cms_utils::get_current_content();
     $val = null;
     if(is_object($contentobj) ) {
         $val = $contentobj->GetPropertyValue($propname);
-        if($val == -1 ) { $val = null;
-        }
+        if($val == -1 ) $val = null;
     }
 
     $out = null;
     if($val ) {
         $orig_val = $val;
-        $config = \cms_config::get_instance();
-        if($full ) { $val = $config['image_uploads_url'].'/'.$val;
-        }
+        $config = cmsms()->GetConfig();
+        if($full ) $val = $config['image_uploads_url'].'/'.$val;
         if(! $tag ) {
             $out = $val;
         } else {

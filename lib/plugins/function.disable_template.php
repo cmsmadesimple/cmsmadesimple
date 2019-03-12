@@ -17,5 +17,5 @@
 
 function smarty_function_disable_template( $params, $smarty )
 {
-    \CmsApp::get_instance()->disable_template_processing();
+    cmsms()->disable_template_processing();
 }

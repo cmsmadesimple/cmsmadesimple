@@ -19,21 +19,16 @@
 function smarty_function_anchor($params, &$smarty)
 {
     $content = cms_utils::get_current_content();
-    if(!is_object($content) ) { return;
-    }
+    if(!is_object($content) ) return;
 
     $class="";
     $title="";
     $tabindex="";
     $accesskey="";
-    if (isset($params['class'])) { $class = ' class="'.$params['class'].'"';
-    }
-    if (isset($params['title'])) { $title = ' title="'.$params['title'].'"';
-    }
-    if (isset($params['tabindex'])) { $tabindex = ' tabindex="'.$params['tabindex'].'"';
-    }
-    if (isset($params['accesskey'])) { $accesskey = ' accesskey="'.$params['accesskey'].'"';
-    }
+    if (isset($params['class'])) $class = ' class="'.$params['class'].'"';
+    if (isset($params['title'])) $title = ' title="'.$params['title'].'"';
+    if (isset($params['tabindex'])) $tabindex = ' tabindex="'.$params['tabindex'].'"';
+    if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
 
     $url = $content->GetURL().'#'.trim($params['anchor']);
     $url = str_replace('&amp;', '***', $url);
@@ -53,4 +48,3 @@ function smarty_function_anchor($params, &$smarty)
     }
     echo $tmp;
 }
-?>

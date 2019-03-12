@@ -18,7 +18,7 @@
 
 function smarty_function_last_modified_by($params, &$smarty)
 {
-    $gCms = CmsApp::get_instance();
+    $gCms = cmsms();
     $content_obj = $gCms->get_content_object();
     $id = "";
 
@@ -29,12 +29,10 @@ function smarty_function_last_modified_by($params, &$smarty)
     }
 
     $format = "id";
-    if(!empty($params['format'])) { $format = $params['format'];
-    }
-    $userops = UserOperations::get_instance();
+    if(!empty($params['format'])) $format = $params['format'];
+    $userops = $gCms->GetUserOperations();
     $thisuser = $userops->LoadUserByID($id);
-    if(!$thisuser ) { return; // could not find user record.
-    }
+    if(!$thisuser ) return; // could not find user record.
 
     $output = '';
     if($format==="id") {

@@ -18,7 +18,6 @@
 
 function smarty_function_form_end($params, &$smarty)
 {
-
     $out = '</form>';
     if(isset($params['assign']) ) {
         $smarty->assign($params['assign'], $out);
@@ -26,4 +25,3 @@ function smarty_function_form_end($params, &$smarty)
     }
     return $out;
 }
-?>
