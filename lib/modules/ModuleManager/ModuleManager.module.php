@@ -111,7 +111,7 @@ class ModuleManager extends CMSModule
 
     public function MinimumCMSVersion()
     {
-        return '2.2.3';
+        return '2.2.903';
     }
 
     public function InstallPostMessage()

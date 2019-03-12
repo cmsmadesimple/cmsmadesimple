@@ -208,6 +208,7 @@ try {
                     }
                 }
             }
+
         }
 
         return $deps;
@@ -324,6 +325,10 @@ try {
     $smarty->assign('dependencies',$alldeps);
     echo $this->ProcessTemplate('installinfo.tpl');
     return;
+}
+catch( \ModuleNoDataException $e ) {
+    $this->SetError( $this->Lang('error_dependencynotfound'));
+    $this->RedirectToAdminTab();
 }
 catch( Exception $e ) {
     $this->SetError($e->GetMessage());
