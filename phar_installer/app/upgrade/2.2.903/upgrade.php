@@ -11,9 +11,10 @@ if( count($udt_list) ) {
     $destdir .= '/assets/simple_plugins';
     if( !is_dir($destdir) ) @mkdir( $destdir, 0777, true );
     if( !is_dir($destdir) ) throw new \LogicException("Could not create $destdir directory");
+    if( !is_file($destdir.'/index.html') ) @touch( $destdir.'/index.html' );
 
     $create_simple_plugin = function( array $row, $destdir ) {
-        $fn = $destdir.'/'.$row['userplugin_name'];
+        $fn = $destdir.'/'.$row['userplugin_name'].'.cmsplugin';
         if( is_file($fn) ) {
             verbose_msg('simple plugin with name '.$row['userplugin_name'].' already exists');
             return;
