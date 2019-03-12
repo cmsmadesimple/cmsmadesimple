@@ -60,7 +60,7 @@ final class simple_plugin_operations
     {
         $config = \cms_config::get_instance();
         $dir = $config['assets_path'].'/simple_plugins';
-        $files = glob($dir.'/*.php');
+        $files = glob($dir.'/*.cmsplugin');
         if( !count($files) ) return null;
 
         $out = null;
@@ -81,7 +81,7 @@ final class simple_plugin_operations
     protected function get_plugin_filename( string $name ) : string
     {
         $config = \cms_config::get_instance();
-        $name = $config['assets_path'].'/simple_plugins/'.$name.'.php';
+        $name = $config['assets_path'].'/simple_plugins/'.$name.'.cmsplugin';
         return $name;
     }
 
