@@ -163,6 +163,7 @@ final class simple_plugin_operations
         // these variables are created for plugins to use in scope.
         $params = $args[0];
         $smarty = null;
+	$gCms = cmsms();
         if( isset($args[1]) ) $smarty = $args[1];
         include( $fn );
     }
