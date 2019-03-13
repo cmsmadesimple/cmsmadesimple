@@ -68,9 +68,10 @@ final class AdminSearch_template_slave extends AdminSearch_slave
     public function get_matches()
     {
         $db = cmsms()->GetDb();
+        $mgr = cmsms()->get_template_manager();
         $mod = $this->get_mod();
         // get all of the template ids
-        $sql = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.' ORDER BY name ASC';
+        $sql = 'SELECT id FROM '.$mgr->template_table_name().' ORDER BY name ASC';
         $all_ids = $db->GetCol($sql);
         $output = [];
         if( count($all_ids) ) {
