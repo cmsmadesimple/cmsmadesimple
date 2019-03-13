@@ -273,6 +273,13 @@ class News2 extends CMSModule
         return FALSE;
     }
 
+    public function get_adminsearch_slaves()
+    {
+        $out = null;
+        $out[] = new AdminSearchSlave($this, $this->articleManager());
+        return $out;
+    }
+
     public function get_tasks()
     {
         $out = null;

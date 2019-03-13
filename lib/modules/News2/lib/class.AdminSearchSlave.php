@@ -2,19 +2,16 @@
 namespace News2;
 use News2;
 use AdminSearch_slave;
-use AdminSearch_tools;
 
 final class AdminSearchSlave extends AdminSearch_slave
 {
-
     private $mod;
+    private $mgr;
 
-    private $artm;
-
-    public function __construct( News2 $mod, ArticleManager $artm )
+    public function __construct( News2 $mod, ArticleManager $mgr )
     {
         $this->mod = $mod;
-        $this->artm = $artm;
+        $this->mgr = $mgr;
     }
 
     public function get_name()
@@ -34,58 +31,58 @@ final class AdminSearchSlave extends AdminSearch_slave
 
     public function get_matches()
     {
-        $filter = $this->artm->createFilter( [ 'textmatch'=>$this->get_text(), 'useperiod'=>0, 'limit'=>100 ] );
-        $articles = $this->artm->loadByFilter( $filter );
-        if( !count($articles) ) return;
-
-        $create_search_text = function( Article $article, string $search_text ) {
-
-            $get_text = function( $text, $search_text ) {
-                $search_text = cms_htmlentities($search_text);
-                $text = cms_htmlentities($text);
-                $pos = strpos($text, $search_text);
-                if( $pos === FALSE ) return;
-
-                // the text we return will be 5 chars around the search text
-                // and put a span around the matching text.
-                // and collapse newlines.
-                $start = max(0, $pos - 50);
-                $end = min(strlen($text ), $pos+50);
-                $text = substr($text, $start, $end-$start );
-                $text = str_replace($this->get_text(), '<span class="search-oneresult">'.$search_text.'</span>', $text);
-                $text = str_replace("\r", '', $text);
-                $text = str_replace("\n", '', $text);
-                return $text;
-            };
-
-            // find the first occurance of keyword, in summary, content, or in a field
-            if( ($tmp = $get_text($article->summary, $search_text)) ) return $tmp;
-            if( ($tmp = $get_text($article->content, $search_text)) ) return $tmp;
-
-            foreach( $article->fields as $fdid => $content ) {
-                if( is_array( $content ) ) continue;
-                if( ($tmp = $get_text($content, $search_text)) ) return $tmp;
-            }
+        $hilight_contents = function( string $in, string $searchtext ) {
+            // note: we don't strip tags, we convert them to entities.
+            $searchtext = cms_htmlentities($searchtext);
+            $text = cms_htmlentities($in);
+            $text = str_replace("\r",' ',$text);
+            $text = str_replace("\n",' ',$text);
+            $text = str_replace($searchtext,'<span class="search_oneresult">'.$searchtext.'</span>',$text);
+            return $text;
         };
 
+        // outputs an array of associative array elements
+        // each element has a title, a description, An edit_url, and a text field
+
+        $searchtext = $this->get_text();
+        $opts = ['textmatch'=>$searchtext, 'useperiod'=>-1, 'usefields'=>true, 'sortby'=>ArticleFilter::SORT_MODIFIEDDATE, 'sortorder'=>ARticleFilter::ORDER_DESC ];
+        $filter = $this->mgr->createFilter( $opts );
+        $articles = $this->mgr->loadByFilter( $filter );
+        if( empty($articles) ) return;
+
         $out = null;
-        debug_to_log('searching for '.$this->get_text());
         foreach( $articles as $article ) {
-            debug_to_log($article);
-            $text = $create_search_text( $article, $this->get_text() );
+            $rec = null;
+            $rec['title'] = $article->title;
+            $rec['description'] = substr(strip_tags($article->summary),0,255);
+            if( !$rec['description'] ) {
+                $rec['description'] = substr(strip_tags($article->content),0,255);
+            }
+            $rec['edit_url'] = $this->mod->create_url( 'm1_', 'admin_edit_article', '', [ 'news_id'=>$article->id ]);
+
+            // now, find the text that has this content in it.
+            $text = null;
+            if( strpos($article->summary,$searchtext) !== FALSE) {
+                $text = $hilight_contents($article->summary,$searchtext);
+            }
+            else if( strpos($article->content,$searchtext) !== FALSE) {
+                $text = $hilight_contents($article->content,$searchtext);
+            }
+            else {
+                foreach( $article->fields as $key => $val ) {
+                    if( strpos($val,$searchtext) !== FALSE ) {
+                        $text = $hilight_contents($val,$searchtext);
+                        break;
+                    }
+                }
+            }
             if( $text ) {
-                $url = $this->mod->create_url('m1_', 'admin_edit_article', '', [ 'article'=> $article->id ]);
-                $tmp =
-                    [
-                        'title' => $article->title,
-                        'description' => AdminSearch_tools::summarize($article->summary ?? $article_content),
-                        'edit_url' => $url,
-                        'text' => $create_search_text( $article, $this->get_text() )
-                        ];
-                $out[] = $tmp;
+                $rec['text'] = $text;
+                $out[] = $rec;
             }
         }
-        debug_to_log($out,'after adminsearch');
         return $out;
     }
-} // class
+} // end of class
+
+?>

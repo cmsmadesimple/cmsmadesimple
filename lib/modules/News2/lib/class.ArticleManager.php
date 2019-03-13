@@ -332,16 +332,16 @@ class ArticleManager
             $or = null;
             $str = $wildcard( $filter->textmatch );
             $or[] = 'A.title LIKE ?';
-            $or[] = 'A.content LIKE ?';
+            $or[] = 'A.summary LIKE ?';
             $or[] = 'A.content LIKE ?';
             $orparms = [ $str, $str, $str ];
             if( $filter->usefields ) {
-                $fielddefs = $this->fdm->loadAll();
+                $fielddefs = $this->fdmgr->loadAll();
                 for( $i = 0; $i < count($fielddefs); $i++ ) {
                     $fdid = $fielddefs[$i]->id;
                     $tmp = 'FV'.$i;
                     // $fields[] = "$tmp.value";
-                    $joins[] = self::fieldvals_table()." $tmp ON N.id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
+                    $joins[] = self::fieldvals_table()." $tmp ON A.id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
                     $or[] = "$tmp.value LIKE ?";
                     $orparms[] = $str;
                 }

@@ -1,4 +1,6 @@
 <?php
+$lang['lbl_adminsearch'] = 'Search News2 Articles';
+$lang['desc_adminsearch'] = 'Search all News2 articles (regardless of status or expiry)';
 $lang['lbl_info'] = 'Info';
 $lang['lbl_expired'] = 'Expired';
 $lang['lbl_notstarted'] = 'Not yet started';
