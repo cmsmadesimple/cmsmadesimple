@@ -306,20 +306,21 @@ namespace CMSMS\Database {
                         $sql .= $sqlarr[$i];
                         switch(gettype($v)){
                             case 'string':
-                                $sql .= $this->qstr($v);
-							                         break;
+                                $t = $this->qstr($v);
+                                $sql .= $t;
+                                break;
                             case 'double':
                                 $sql .= str_replace(',', '.', $v);
-							                         break;
+                                break;
                             case 'boolean':
                                 $sql .= $v ? 1 : 0;
-							                         break;
+                                break;
                             case 'integer':
                                 $sql .= $v;
                                 break;
                             default:
                                 if ($v === null) $sql .= 'NULL';
-                                else $sql .=$this->qstr( (string) $v );
+                                else $sql .= $this->qstr( (string) $v );
                         }
                         $i += 1;
                     }

@@ -1,6 +1,6 @@
 <?php
-
 namespace CMSMS\Database\mysqli;
+use mysqli;
 
 class Connection extends \CMSMS\Database\Connection
 {
@@ -19,11 +19,11 @@ class Connection extends \CMSMS\Database\Connection
 
     public function Connect()
     {
-        if( !class_exists('\mysqli') ) throw new \LogicException("Configuration error... mysqli functions are not available");
+        if( !class_exists('mysqli') ) throw new \LogicException("Configuration error... mysqli functions are not available");
 
-        mysqli_report(MYSQLI_REPORT_STRICT);
         try {
-            $this->_mysql = new \mysqli( $this->_connectionSpec->host, $this->_connectionSpec->username,
+            mysqli_report(MYSQLI_REPORT_STRICT);
+            $this->_mysql = new mysqli( $this->_connectionSpec->host, $this->_connectionSpec->username,
                                      $this->_connectionSpec->password,
                                      $this->_connectionSpec->dbname,
                                      (int) $this->_connectionSpec->port );
