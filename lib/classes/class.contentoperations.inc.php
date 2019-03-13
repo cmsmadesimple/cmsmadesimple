@@ -484,7 +484,7 @@ class ContentOperations
         $this->_get_content_types();
         if( isset($this->_content_types[$obj->type]) ) return FALSE;
 
-        if( !class_exists( $obj->class ) && file_exists( $obj->filename ) ) require_once $obj->filename;
+        if( !class_exists( $obj->class ) && is_file( $obj->filename ) ) require_once $obj->filename;
         $this->_content_types[$obj->type] = $obj;
         return TRUE;
     }
