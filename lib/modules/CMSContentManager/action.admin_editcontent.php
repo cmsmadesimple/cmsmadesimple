@@ -249,8 +249,9 @@ catch( ContentException $e ) {
 if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
     try {
         $lock_id = null;
-        for( $i = 0; $i < 3; $i++ ) {
-            // check if this thing is already locked.
+        for( $i = 0; $i < 6; $i++ ) {
+            // check if this thing is already locked...
+            // but wait for other operations, as it may be being unlocked asynchronously.
             $lock_id = CmsLockOperations::is_locked('content',$content_id);
             if( $lock_id == 0 ) break;
             usleep(500);
