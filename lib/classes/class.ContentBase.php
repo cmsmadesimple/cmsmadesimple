@@ -1800,7 +1800,7 @@ abstract class ContentBase
 		if (isset($params['accesskey'])) $this->mAccessKey = strip_tags($params['accesskey']);
 
 		// tab index
-		if (isset($params['tabindex'])) $this->mTabIndex = (empty($params['tabIndex'])) ? '' : (int) $params['tabindex'];
+		if (isset($params['tabindex'])) $this->mTabIndex = (empty($params['tabindex'])) ? '' : (int) $params['tabindex'];
 
 		// cachable
 		if (isset($params['cachable'])) {

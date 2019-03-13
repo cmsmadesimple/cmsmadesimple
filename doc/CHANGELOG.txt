@@ -2,6 +2,7 @@ Version 2.2.11 -
 -------------------------------
 Core - General
   - Fix minor bug in copying content objects
+  - Minor fix to array indexes when filling params in ContentBase
 
 ModuleManager v2.1.7
   - Minor exception handling improvements.
