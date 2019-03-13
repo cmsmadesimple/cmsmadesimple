@@ -45,6 +45,7 @@ use CmsNlsOperations;
  * CMS_PHAR_INSTALLER - Indicates that the file was included from the CMSMS PHAR based installer (note: CMS_INSTALL_PAGE will also be set).
  * CMS_ADMIN_PAGE - Indicates that the file was included from an admin side request.
  * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
+ * CMS_NO_ASYNC - Indicates that async processing should be disabled
  */
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
@@ -52,7 +53,7 @@ define('CMS_SECURE_PARAM_NAME','_k_'); // used for CSRF protection
 define('CMS_USER_KEY','_userkey_'); // used for CSRF protection
 define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 $dirname = __DIR__;
-global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
+global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY,$CMS_NO_ASYNC;
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
     $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
@@ -123,7 +124,7 @@ if( isset($CMS_ADMIN_PAGE) ) {
 
 require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 
-if( isset($_GET['_auth']) && isset($_GET['_op']) ) {
+if( $_app->is_frontend_request() && isset($_GET['_auth']) && isset($_GET['_op']) ) {
     // todo: put this into a class, as it is a remote control mechanism
     // make this secure, but do not document/advertise it.  it's internal only
     $auth = filter_var($_GET['_auth'],FILTER_SANITIZE_STRING);
@@ -223,8 +224,7 @@ if (! isset($CMS_INSTALL_PAGE)) {
     $modops->LoadStaticModules();
 
     // test for cron.
-    // we hardcode CmsJobManager here until such a point as we need to abstract it.
-    \CMSMS\Async\JobManager::get_instance()->trigger_async_processing();
+    if( !isset($CMS_NO_ASYNC) ) \CMSMS\Async\JobManager::get_instance()->trigger_async_processing();
 }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)

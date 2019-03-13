@@ -19,10 +19,12 @@
 #$Id: moduleinterface.php 8558 2012-12-10 00:59:49Z calguy1000 $
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) {
+    ob_end_clean();
 }
 
 $CMS_ADMIN_PAGE=1;
+$CMS_NO_ASYNC=1;  // disable async processing for this request.
 require_once("../lib/include.php");
 $ruid = get_userid(FALSE);
 if( !$ruid ) return;
@@ -97,15 +99,15 @@ try {
             break;
 
         case 'touch':
-              if( !$type || !$oid || !$uid || $lock_id < 1 ) throw new CmsInvalidDataException(lang('missingparams'));
-              if( $uid != $ruid ) throw new CmsLockOwnerException(lang('CMSEX_L006'));
-              $out['lock_expires'] = CmsLockOperations::touch($lock_id,$type,$oid);
+            if( !$type || !$oid || !$uid || $lock_id < 1 ) throw new CmsInvalidDataException(lang('missingparams'));
+            if( $uid != $ruid ) throw new CmsLockOwnerException(lang('CMSEX_L006'));
+            $out['lock_expires'] = CmsLockOperations::touch($lock_id,$type,$oid);
             break;
 
         case 'unlock':
-              if( !$type || !$oid || !$uid || $lock_id < 1 ) throw new CmsInvalidDataException(lang('missingparams'));
-              if( $uid != $ruid ) throw new CmsLockOwnerException(lang('CMSEX_L006'));
-              CmsLockOperations::delete($lock_id,$type,$oid);
+            if( !$type || !$oid || !$uid || $lock_id < 1 ) throw new CmsInvalidDataException(lang('missingparams'));
+            if( $uid != $ruid ) throw new CmsLockOwnerException(lang('CMSEX_L006'));
+            CmsLockOperations::delete($lock_id,$type,$oid);
             break;
     }
 }
