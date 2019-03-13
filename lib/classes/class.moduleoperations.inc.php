@@ -596,7 +596,7 @@ final class ModuleOperations
             }
             $this->_moduleinfo = array();
 
-            cms_notice('Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
+            cms_notice('Upgraded module '.$module_obj->GetName().' from version '.$dbversion.' to version '.$module_obj->GetVersion());
             $this->_hook_manager->do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
             return array(TRUE);
         }
