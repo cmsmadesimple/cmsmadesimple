@@ -177,6 +177,7 @@ Core - General
   - REMOVED: the dump plugin because it relied on smart internals, and was problematic.
   - IMPROVED: Add some minor functionality to the get_template_vars plugin.
   - FEATURE: Now add simple .htaccess file to the lib directory to prevent direct php browsing
+  - FEATURE: New config entry "disable_locking" to disable all locking in Content Manager and Design Manager
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.
@@ -193,6 +194,8 @@ CMSContentManager - 1.2
   - FEATURE: New bulk action for when page_template_list is correctly defined in the config to allow setting bulk pages to a template resource.
   - FEATURE: When page_template_list is defined hide the set design and template bulk action
   - FEATURE: Each page can now display some info in the dynamic tooltip that is displayed.
+  - FEATURE: Now display a warning in editcontent when locking is disabled
+  - FEATURE: Now set the subtitle properly, which helps with the admin theme's title tag
 
 Installation Assistant - v1.4
   - Now require at least version 2.0.1 to upgrade
@@ -242,6 +245,7 @@ DesignManager v1.1.6
  - Now only reads {Navigator} tags, will not read {cms_module module=Navigator} tags (for a bit).
  - PHP 7 fixes
  - Minor template fixes in design list.
+ - FEATURE: Now display a warning in edit template and css when locking is disabled
 
 Navigator v1.0.9
  - Adds the title property to each node.
