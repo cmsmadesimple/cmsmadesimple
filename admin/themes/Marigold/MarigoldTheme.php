@@ -227,8 +227,7 @@ class MarigoldTheme extends CmsAdminThemeBase
             if (!$module_help_type) {
                 // if not doing module help, translate the string.
                 $extra = $this->get_value('extra_lang_params');
-                if (!$extra)
-                 $extra = array();
+                if (!$extra) $extra = array();
                 $title = lang($title, $extra);
             }
         } else {

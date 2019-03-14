@@ -6,12 +6,15 @@ $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     beforeUnload: function(is_dirty) {
-      if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
-         console.log('after dirtyform unlock');
-      });
+      console.log('dirtyform beforeUnload')
     },
     unloadCancel: function(){
-      if( do_locking ) $('#Edit_Content').lockManager('relock');
+      console.log('in unloadCancel')
+    },
+    onUnload: function(){
+      if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
+         console.log('onUnload after unlock');
+      });
     }
   });
 
@@ -207,6 +210,10 @@ $(document).ready(function(){
     <h3>{$mod->Lang('prompt_editpage_addcontent')}</h3>
 {else}
     <h3>{$mod->Lang('prompt_editpage_editcontent')}&nbsp;<em>({$content_id})</em></h3>
+{/if}
+
+{if $lock_timeout < 1}
+   <div class="warning" style="width: 95%; text-align: center;">{lang('warn_lockingdisabled')}</div>
 {/if}
 
 {function submit_buttons}

@@ -133,11 +133,10 @@ try {
     // BUILD THE DISPLAY
     //
     if (!$apply && $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
-        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
+        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout') && !$config['disable_locking']);
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
         try {
             $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
-            $lock = null;
             if( $lock_id > 0 ) {
                 // it's locked... by somebody, make sure it's expired before we allow stealing it.
                 $lock = CmsLock::load('template',$tpl_obj->get_id());

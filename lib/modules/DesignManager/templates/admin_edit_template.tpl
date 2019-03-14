@@ -44,9 +44,9 @@ $(function(){
         $('#form_edittemplate').dirtyForm('option','dirty',false);
     });
 
-/*
     $(document).on('click', '#submitbtn, #cancelbtn, #importbtn, #exportbtn', function(ev){
        if( ! do_locking ) return;
+
        // unlock the item, and submit the form
        var self = this;
        ev.preventDefault();
@@ -57,7 +57,6 @@ $(function(){
            form.submit();
        });
     });
-*/
 
     $(document).on('click', '#applybtn', function(e){
         e.preventDefault();
@@ -118,7 +117,9 @@ $(function(){
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
 
-{if isset($get_lock)}
+{if $lock_timeout < 1}
+   <div class="warning lock-warning" style="width: 95%; text-align: center;">{lang('warn_lockingdisabled')}</div>
+{elseif isset($get_lock)}
 	<div class="warning lock-warning">
 		{$mod->Lang('lock_warning')}
 	</div>

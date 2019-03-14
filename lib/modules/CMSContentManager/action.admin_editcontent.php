@@ -248,14 +248,7 @@ catch( ContentException $e ) {
 //
 if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
     try {
-        $lock_id = null;
-        for( $i = 0; $i < 6; $i++ ) {
-            // check if this thing is already locked...
-            // but wait for other operations, as it may be being unlocked asynchronously.
-            $lock_id = CmsLockOperations::is_locked('content',$content_id);
-            if( $lock_id == 0 ) break;
-            usleep(500);
-        }
+        $lock_id = CmsLockOperations::is_locked('content',$content_id);
         if( $lock_id > 0 ) {
             // it's locked... by somebody, make sure it's expired before we allow stealing it.
             $lock = CmsLock::load('content',$content_id);
@@ -327,12 +320,19 @@ if( $this->GetPreference('template_list_mode','designpage') != 'all')  {
     $smarty->assign('designchanged_ajax_url',$tmp);
 }
 
+if( $content_id > 0 ) {
+    \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('prompt_editpage_editcontent').': '.$content_obj->Name()." ({$content_id})");
+} else {
+    \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('prompt_editpage_addconent'));
+}
+
+
 $parms = array();
 if( $content_id > 0 ) $parms['content_id']=$content_id;
 $url = str_replace('&amp','&',$this->create_url($id,'admin_editcontent',$returnid,$parms)).'&showtemplate=false';
 $smarty->assign('apply_ajax_url',$url);
 $smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
-$smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
+$smarty->assign('lock_timeout',$this->GetPreference('locktimeout') && !$config['disable_locking']);
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
 $smarty->assign('options_tab_name',$content_obj::TAB_OPTIONS);
 $smarty->assign('active_tab',$active_tab);

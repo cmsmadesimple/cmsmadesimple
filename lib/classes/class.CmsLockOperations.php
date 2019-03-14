@@ -109,13 +109,17 @@ final class CmsLockOperations
     public static function is_locked($type,$oid)
     {
         try {
-            $lock = CmsLock::load($type,$oid);
-            sleep(1); // wait for potential asynhronous requests to complete.
-            $lock = CmsLock::load($type,$oid);
-            return $lock['id'];
+            $lock_id = null;
+            $n = 10;
+            for( $i = 0; $i < $n; $i++ ) {
+                $lock = CmsLock::load($type,$oid);
+                $lock_id = $lock['id'];
+                if( $i < $n - 1 ) usleep(500);
+            }
+            return $lock_id;
         }
         catch( CmsNoLockException $e ) {
-            return FALSE;
+            // nothing here.
         }
     }
 

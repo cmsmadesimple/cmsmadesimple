@@ -1668,6 +1668,7 @@ $lang['view_page'] = "View this page in a new window";
 
 ## W
 $lang['wantschildren'] = 'Wants Children';
+$lang['warn_lockingdisabled'] = 'Locking is currently not in effect.  This means that changes can be done to this item while you are editing it';
 $lang['warning_mail_settings'] = 'Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages. You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.';
 $lang['warning_safe_mode'] = "<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.";
 $lang['warning_upgrade'] = "<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade!";
