@@ -175,7 +175,7 @@ class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
         return self::$_minfo;
     }
 
-    public static function &get_module_info($module)
+    public static function get_module_info($module)
     {
         $tmp = self::get_all_module_info();
         if( isset($tmp[$module]) ) return $tmp[$module];

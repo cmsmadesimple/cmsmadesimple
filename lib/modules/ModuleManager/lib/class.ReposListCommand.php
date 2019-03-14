@@ -16,12 +16,12 @@ class ReposListCommand extends Command
         $this->addOption( Option::Create('v','verbose')->setDescription('Return only the latest version') );
     }
 
-    protected function getShortDescription()
+    public function getShortDescription()
     {
         return 'List available versions of a module;';
     }
 
-    protected function getLongDescription()
+    public function getLongDescription()
     {
         return 'This command will return a list of all versions of a specific module that are compatible with your CMSMS installation.';
     }

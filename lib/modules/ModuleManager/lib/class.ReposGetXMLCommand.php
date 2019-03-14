@@ -15,12 +15,12 @@ class ReposGetXMLCommand extends Command
         $this->addOption( Option::create(null,'xmlver', GetOpt::REQUIRED_ARGUMENT )->setDescription('Download a specific version') );
     }
 
-    protected function getShortDescription()
+    public function getShortDescription()
     {
         return 'Download a module XML file from the repository';
     }
 
-    protected function getLongDescription()
+    public function getLongDescription()
     {
         return <<<EOT
 This command will download a single module XML file to the local machine for later import.  No dependency checks are performed.

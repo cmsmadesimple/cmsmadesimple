@@ -14,12 +14,12 @@ class ReposDependsCommand extends Command
         $this->addOperand( new Operand( 'filename', Operand::REQUIRED ) );
     }
 
-    protected function getShortDescription()
+    public function getShortDescription()
     {
         return 'List the dependencies of a specific repository XML file';
     }
 
-    protected function getLongDescription()
+    public function getLongDescription()
     {
         return 'This command will return a list of all dependencies of a specific repository XML file';
     }

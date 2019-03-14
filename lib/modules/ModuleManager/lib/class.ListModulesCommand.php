@@ -66,13 +66,20 @@ class ListModulesCommand extends Command
 
         $get_statuses = function( \ModuleManagerModuleInfo $info ) {
             $out = [];
-            if( $info['has_custom'] ) $out[] = 'Has odule custom!';
+            if( $info['installed']) {
+                $out[] = 'Installed';
+                if( !$info['active'] ) $out[] = 'Deactivated';
+                if( $info['needs_upgrade'] ) $out[] = 'Needs upgrade';
+            }
+            else {
+                $out[] = 'Not installed';
+            }
             // if( !$info['has_meta'] ) $out[] = 'No meta file!';
-            if( !$info['root_writable'] ) $out[] = 'Not writable';
             if( $info['notavailable'] ) $out[] = 'Not available';
-            if( $info['missingdeps'] ) $out[] = 'Missing dependencies';
-            if( $info['needs_upgrade'] ) $out[] = 'Needs upgrade';
+            if( $info['missing_deps'] ) $out[] = 'Missing dependencies';
             if( $info['e_status'] == 'db_newer' ) $out[] = 'Database version ('.$info['installed_version'].') is newer';
+            if( $info['has_custom'] ) $out[] = 'Has module custom!';
+            if( !$info['root_writable'] ) $out[] = 'Not writable';
 
             sort($out);
             return $out;
@@ -165,6 +172,7 @@ class ListModulesCommand extends Command
             }
             throw new \RuntimeException('Could not find module information for '.$module);
         }
+
         if( $verbose ) {
             $this->do_verbose_report( $allmoduleinfo );
             return;

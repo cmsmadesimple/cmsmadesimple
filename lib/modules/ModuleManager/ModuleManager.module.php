@@ -193,9 +193,11 @@ class ModuleManager extends CMSModule
         $out[] = new \ModuleManager\ModuleExistsCommand( $app );
         $out[] = new \ModuleManager\ModuleExportCommand( $app );
         $out[] = new \ModuleManager\ModuleImportCommand( $app );
-        $out[] = new \ModuleManager\ModuleInstallCommand( $app );
-        $out[] = new \ModuleManager\ModuleUninstallCommand( $app );
+        $out[] = new \ModuleManager\ModuleInstallCommand( $app, $this->app );
+        $out[] = new \ModuleManager\ModuleUninstallCommand( $app, $this->app );
+        $out[] = new \ModuleManager\ModuleUpgradeCommand( $app, $this->app );
         $out[] = new \ModuleManager\ModuleRemoveCommand( $app );
+        // $out[] = new \ModuleManager\ModuleStatusCommand( $app );
         $out[] = new \ModuleManager\ListModulesCommand( $app );
         $out[] = new \ModuleManager\ReposListCommand( $app );
         $out[] = new \ModuleManager\ReposDependsCommand( $app );
