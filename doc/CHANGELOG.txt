@@ -178,6 +178,8 @@ Core - General
   - IMPROVED: Add some minor functionality to the get_template_vars plugin.
   - FEATURE: Now add simple .htaccess file to the lib directory to prevent direct php browsing
   - FEATURE: New config entry "disable_locking" to disable all locking in Content Manager and Design Manager
+  - CHANGE: Removes public static methods from the CmsAdminThemeBase class
+  - CHANGE: Adds an AdminThemeManager class to handle iterating and loading admin themes.
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.

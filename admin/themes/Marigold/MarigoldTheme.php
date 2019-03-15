@@ -39,6 +39,11 @@ class MarigoldTheme extends CmsAdminThemeBase
 
     private $_messages = array();
 
+    public function __construct(CmsApp $app, int $uid)
+    {
+        parent::__construct($app,$uid);
+    }
+
     public function ShowErrors($errors, string $get_var = null) {
         // cache errors for use in the template.
         if ($get_var != '' && isset($_GET[$get_var]) && !empty($_GET[$get_var])) {
@@ -84,7 +89,7 @@ class MarigoldTheme extends CmsAdminThemeBase
         $this->set_value('module_help_type', $module_help_type);
 
         // get the image url.
-        $config = cms_config::get_instance();
+        $config = cmsms()->GetConfig();
         if ($module_help_type) {
             // help for a module.
             $module = '';
@@ -154,7 +159,7 @@ class MarigoldTheme extends CmsAdminThemeBase
             $smarty->assign('nodes', $nodes);
         }
 
-        $config = \cms_config::get_instance();
+        $config = \cmsms()->GetConfig();
         $smarty->assign('config', $config );
         $smarty->assign('theme', $this);
         $smarty->assign('theme_path',__DIR__);
@@ -171,7 +176,7 @@ class MarigoldTheme extends CmsAdminThemeBase
 
     public function do_minimal()
     {
-        $config = \cms_config::get_instance();
+        $config = \cmsms()->GetConfig();
         $smarty->assign('content',$this->get_content());
         $smarty->assign('title',$this->title);
         $smarty->assign('subtitle',$this->subtitle);
@@ -188,7 +193,7 @@ class MarigoldTheme extends CmsAdminThemeBase
         $old = $smarty->GetTemplateDir();
         $smarty->SetTemplateDir( __DIR__.'/templates' );
 
-        $config = \cms_config::get_instance();
+        $config = \cmsms()->GetConfig();
         $smarty->assign('content',$this->get_content());
         $smarty->assign('title',$this->title);
         $smarty->assign('subtitle',$this->subtitle);
@@ -281,7 +286,7 @@ class MarigoldTheme extends CmsAdminThemeBase
         $smarty->assign('footertext',$this->get_footertext());
 
         // and some other common variables
-        $config = \cms_config::get_instance();
+        $config = \cmsms()->GetConfig();
         $smarty->assign('content', str_replace('</body></html>', '', $html));
         $smarty->assign('config', $config );
         $smarty->assign('theme', $this);
@@ -303,7 +308,8 @@ class MarigoldTheme extends CmsAdminThemeBase
         $smarty->assign('messages', $this->_messages);
 
         // is the website set down for maintenance?
-        if( get_site_preference('enablesitedownmessage') == '1' )  { $smarty->assign('is_sitedown', 'true');
+        if( get_site_preference('enablesitedownmessage') == '1' )  {
+            $smarty->assign('is_sitedown', 'true');
         }
 
         $_contents = $smarty->fetch('pagetemplate.tpl');

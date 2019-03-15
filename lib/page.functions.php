@@ -41,7 +41,7 @@ function get_userid(bool $redirect = true)
 {
     $app = cmsms();
     if( $app->is_cli() ) return 1;
-    $login_ops = \CMSMS\LoginOperations::get_instance();
+    $login_ops = $app->get_login_operations();
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
         $config = $app->GetConfig();
@@ -65,7 +65,7 @@ function get_username(bool $check = true)
 {
     $app = cmsms();
     if( $app->is_cli() ) return '';
-    $login_ops = \CMSMS\LoginOperations::get_instance();
+    $login_ops = $app->get_login_operations();
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
         $config = $app->GetConfig();
@@ -88,24 +88,24 @@ function get_username(bool $check = true)
  */
 function check_login(bool $no_redirect = false)
 {
+    $app = cmsms();
     $do_redirect = !$no_redirect;
     $uid = get_userid(!$no_redirect);
     $res = false;
     if( $uid > 0 ) {
         $res = true;
-        $login_ops = \CMSMS\LoginOperations::get_instance();
-        $res = $login_ops->validate_requestkey();
+        $res = $app->get_login_operations()->validate_requestkey();
     }
     if( !$res ) {
         // logged in, but no url key on the request
         if( $do_redirect ) {
             // redirect to the admin login.php
             // use SCRIPT_FILENAME and make sure it validates with the root_path
-            $config = cmsms()->GetConfig();
+            $config = $app->GetConfig();
             if( startswith($_SERVER['SCRIPT_FILENAME'],$config['root_path']) ) {
                 $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
             }
-            $login_ops->deauthenticate();
+            $app->get_login_operations()->deauthenticate();
             redirect($config['admin_url']."/login.php");
         }
     }
@@ -125,7 +125,7 @@ function check_login(bool $no_redirect = false)
  */
 function check_permission(int $userid = null, string $permname)
 {
-    return UserOperations::get_instance()->CheckPermission($userid,$permname);
+    return cmsms()->GetUserOperations()->CheckPermission($userid,$permname);
 }
 
 
@@ -142,7 +142,7 @@ function check_permission(int $userid = null, string $permname)
  */
 function check_authorship(int $userid = null, int $contentid = null)
 {
-    return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
+    return cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$contentid);
 }
 
 
@@ -156,7 +156,7 @@ function check_authorship(int $userid = null, int $contentid = null)
  */
 function author_pages(int $userid = null)
 {
-    return ContentOperations::get_instance()->GetPageAccessForUser($userid);
+    return cmsms()->GetContentOperations()->GetPageAccessForUser($userid);
 }
 
 

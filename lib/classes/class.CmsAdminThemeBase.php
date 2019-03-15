@@ -145,6 +145,16 @@ abstract class CmsAdminThemeBase
     /**
      * @ignore
      */
+    private $_app;
+
+    /**
+     * @ignore
+     */
+    private $_uid;
+
+    /**
+     * @ignore
+     */
     private $_cache_driver;
 
     /**
@@ -157,14 +167,18 @@ abstract class CmsAdminThemeBase
      */
     private $_primary_content;
 
+
     /**
      * @ignore
      */
-    protected function __construct()
+    protected function __construct( CmsApp $app, int $uid )
     {
         if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
+        self::$_instance = $this;
 
-        $this->_cache_driver = CmsApp::get_instance()->get_cache_driver();
+        $this->_app = $app;
+        $this->_uid = $uid;
+        $this->_cache_driver = $app->get_cache_driver();
         $this->_url = $_SERVER['SCRIPT_NAME'];
         $this->_query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
         if( $this->_query == '' && isset($_POST['mact']) ) {
@@ -192,7 +206,7 @@ abstract class CmsAdminThemeBase
             if( endswith($class,'Theme') ) $class = substr($class,0,strlen($class)-5);
             return $class;
         }
-        if( $key == 'userid' ) return get_userid();
+        if( $key == 'userid' ) return $this->_uid;
         if( $key == 'title' ) return $this->_title;
         if( $key == 'subtitle' ) return $this->_subtitle;
         if( $key == 'root_url' ) {
@@ -250,7 +264,7 @@ abstract class CmsAdminThemeBase
      */
     private function _get_user_module_info()
     {
-        $uid = get_userid(FALSE);
+        $uid = $this->_uid;
         if( ($data = $this->_cache_driver->get('themeinfo'.$uid)) ) {
             $data = base64_decode($data);
             $data = @unserialize($data);
@@ -311,7 +325,7 @@ abstract class CmsAdminThemeBase
         $usermoduleinfo = $this->_get_user_module_info();
         if( !is_array($usermoduleinfo) ) {
             // put mention into the admin log
-            audit(get_userid(FALSE),'Admin Theme','No module information found for user');
+            audit($this->_uid,'Admin Theme','No module information found for user');
         }
         else {
             // Are there any modules with an admin interface?
@@ -815,7 +829,7 @@ abstract class CmsAdminThemeBase
      */
     protected function get_admin_navigation()
     {
-        $smarty = cmsms()->GetSmarty();
+        $smarty = $this->_app->GetSmarty();
         $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
         $this->_populate_admin_navigation();
         return $this->_menuItems;
@@ -928,7 +942,7 @@ abstract class CmsAdminThemeBase
      */
     public function get_bookmarks(bool $pure = FALSE)
     {
-        $bookops = CmsApp::get_instance()->GetBookmarkOperations();
+        $bookops = $this->_app->GetBookmarkOperations();
         $marks = array_reverse($bookops->LoadBookmarks($this->userid));
 
         if( !$pure ) {
@@ -1095,90 +1109,6 @@ abstract class CmsAdminThemeBase
      * @param mixed  $module_help_type Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
      */
     abstract public function ShowHeader(string $title_name,array $extra_lang_params = [],string $link_text = null,$module_help_type = FALSE);
-
-
-    /**
-     * A function to return the name of the default admin theme.
-     *
-     * @returns string
-     */
-    static public function GetDefaultTheme()
-    {
-        $tmp = self::GetAvailableThemes();
-        if( is_array($tmp) && count($tmp) ) {
-            $tmp = array_keys($tmp);
-            $logintheme = get_site_preference('logintheme');
-            if( $logintheme && in_array($logintheme,$tmp) )	return $logintheme;
-            return $tmp[0];
-        }
-    }
-
-
-    /**
-     * Retrieve a list of the available admin themes.
-     *
-     * @return array A hash of strings.
-     */
-    static public function GetAvailableThemes()
-    {
-        $config = \cms_config::get_instance();
-
-        $files = glob(cms_join_path($config['admin_path'],'themes').'/*');
-        if( is_array($files) && count($files) ) {
-            $res = array();
-            foreach( $files as $file ) {
-                if( !is_dir($file) ) continue;
-                $name = basename($file);
-                if( !is_readable(cms_join_path($file,"{$name}Theme.php")) ) continue;
-                $res[$name] = $name;
-            }
-            return $res;
-        }
-    }
-
-
-    /**
-     * A function to retrieve the global admin theme object.
-     * This method will create the admin theme object if has not yet been created.  It will read the cms preferences and cross reference with available themes.
-     *
-     * @param string $name optional theme name.
-     * @return CmsAdminThemeBase Reference to the initialized admin theme.
-     */
-    static public function GetThemeObject(string $name = null)
-    {
-        if( is_object(self::$_instance) ) return self::$_instance;
-
-        if( !$name ) $name = cms_userprefs::get_for_user(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
-        if( class_exists($name) ) {
-            self::$_instance = new $name;
-        }
-        else {
-            $gCms = CmsApp::get_instance();
-            $config = $gCms->GetConfig();
-            $themeObjName = $name."Theme";
-            $fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";
-            if( file_exists($fn) ) {
-                include_once($fn);
-                self::$_instance = new $themeObjName($gCms,get_userid(FALSE),$name);
-            }
-            else {
-                // theme not found... use default
-                $name = self::GetDefaultTheme();
-                $themeObjName = $name."Theme";
-                $fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";
-                if( file_exists($fn) ) {
-                    include_once($fn);
-                    self::$_instance = new $themeObjName($gCms,get_userid(FALSE),$name);
-                }
-                else {
-                    // still not found
-                    $res = null;
-                    return $res;
-                }
-            }
-        }
-        return self::$_instance;
-    }
 
 
     /**

@@ -40,7 +40,9 @@ class NavigatorNode
     /**
      * This little function will remove all silly notices in smarty.
      */
-    public function __get($key) { return null;
+    public function __get($key)
+    {
+        return null;
     }
 }
 

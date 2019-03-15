@@ -47,17 +47,19 @@ final class UserTagOperations
     /**
      * @ignore
      */
-    protected function __construct()
+    public function __construct()
     {
+        if( self::$_instance ) throw new \LogicException("Only one instance of ".__CLASS__." is permitted");
+        self::$_instance = $this;
     }
 
     /**
      * Get a reference to thie only allowed instance of this class
      * @return UserTagOperations
      */
-    public static function &get_instance()
+    public static function &get_instance() : UserTagOperations
     {
-        if( !isset(self::$_instance) ) self::$_instance = new UserTagOperations();
+        if( ! self::$_instance ) throw new \LogicException("No instance of ".__CLASS__." has been created");
         return self::$_instance;
     }
 

@@ -86,7 +86,7 @@ function redirect(string $to)
     // so cannot use constants.
     $debug = false;
     if( class_exists('CmsApp') ) {
-        $config = CmsApp::get_instance()->GetConfig();
+        $config = cmsms()->GetConfig();
         $debug = $config['debug'];
     }
 
@@ -105,7 +105,7 @@ function redirect(string $to)
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
             echo '<div id="DebugFooter">';
-            foreach (CmsApp::get_instance()->get_errors() as $error) {
+            foreach (cmsms()->get_errors() as $error) {
                 echo $error;
             }
             echo '</div> <!-- end DebugFooter -->';
@@ -128,7 +128,7 @@ function redirect(string $to)
  */
 function redirect_to_alias(string $alias)
 {
-    $manager = CmsApp::get_instance()->GetHierarchyManager();
+    $manager = cmsms()->GetHierarchyManager();
     $node = $manager->sureGetNodeByAlias($alias);
     if( !$node ) {
         // put mention into the admin log
@@ -246,7 +246,7 @@ function cms_htmlentities(string $val = null, string $param=ENT_QUOTES, string $
  */
 function debug_bt_to_log()
 {
-    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
+    if( cmsms()->GetConfig()['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
         $bt=debug_backtrace();
         $file = $bt[0]['file'];
         $line = $bt[0]['line'];
@@ -429,7 +429,7 @@ function debug_to_log($var, string $title='',string $filename = '')
 function debug_buffer($var, string $title="")
 {
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-    CmsApp::get_instance()->add_error(debug_display($var, $title, false, true));
+    cmsms()->add_error(debug_display($var, $title, false, true));
 }
 
 
@@ -868,7 +868,7 @@ function stack_trace()
  */
 function cms_move_uploaded_file( string $tmpfile, string $destination )
 {
-    $config = CmsApp::get_instance()->GetConfig();
+    $config = cmsms()->GetConfig();
 
     if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
     @chmod($destination,octdec($config['default_upload_permission']));

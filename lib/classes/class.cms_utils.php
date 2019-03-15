@@ -299,6 +299,6 @@ final class cms_utils
      */
     public static function get_theme_object()
     {
-        return CmsAdminThemeBase::GetThemeObject();
+        return cmsms()->get_admin_theme();
     }
 } // end of class

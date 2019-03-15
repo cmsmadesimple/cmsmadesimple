@@ -52,7 +52,9 @@ final class CmsLockOperations
     /**
      * @ignore
      */
-    private function __construct($type,$id) {
+    protected function __construct($type,$id)
+    {
+        // nothing here.
     }
 
     /**

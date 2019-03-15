@@ -31,12 +31,15 @@ use CMSMS\internal\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
 use CMSMS\internal\MactEncoder;
 use CMSMS\internal\Smarty;
+use CMSMS\internal\AdminThemeManager;
+use CMSMS\LoginOperations;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
 use CMSMS\ScriptManager;
 use CMSMS\StylesheetManager;
 use CMSMS\ICookieManager;
 use CMSMS\AutoCookieManager;
+use CMSMS\simple_plugin_operations;
 
 /**
  * Simple singleton class that contains various functions and states
@@ -114,32 +117,10 @@ final class CmsApp
     private $db;
 
     /**
-     * An override for the database prefix.  If specified, this will be used instead of config value.
-     * @ignore
-     */
-    private $dbprefix;
-
-    /**
-     * @ignore
-     */
-    private $hrinstance;
-
-    /**
      * Internal error array - So functions/modules can store up debug info and spit it all out at once
      * @ignore
      */
     private $errors = [];
-
-    /**
-     * Get the simple plugin operations class
-     * @ignore
-     */
-    private $simple_plugin_manager;
-
-    /**
-     * @ignore
-     */
-    private $scriptcombiner;
 
     /**
      * @ignore
@@ -147,8 +128,10 @@ final class CmsApp
     public function __get(string $key)
     {
         switch($key) {
-            case 'config':
-                return $this->GetConfig();
+        case 'db':
+            return $this->GetDb();
+        case 'config':
+            return $this->GetConfig();
         }
     }
 
@@ -168,7 +151,7 @@ final class CmsApp
      *
      * @since 1.10
      */
-    public static function &get_instance()
+    public static function get_instance()
     {
         if( !isset(self::$_instance)  ) throw new \LogicException('An instance of '.__CLASS__.' has not been created');
         return self::$_instance;
@@ -184,7 +167,7 @@ final class CmsApp
     {
         if( self::test_state(self::STATE_INSTALL) ) {
             $db = $this->GetDb();
-            $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+            $query = 'SELECT version FROM '.CMS_DB_PREFIX.'version';
             return $db->GetOne($query);
         }
         return \CMSMS\internal\global_cache::get('schema_version');
@@ -335,9 +318,8 @@ final class CmsApp
      * @param string $module_name The module name.
      * @param string $version (optional) version number for a check.
      * @return CMSModule Reference to the module object, or null.
-     * @deprecated
      */
-    public function &GetModuleInstance($module_name,$version = '')
+    public function GetModuleInstance($module_name,$version = '')
     {
         return $this->GetModuleOperations()->get_module_instance($module_name,$version);
     }
@@ -364,7 +346,7 @@ final class CmsApp
     * @final
     * @return ADOConnection a handle to the ADODB database object
     */
-    final public function &GetDb()
+    final public function GetDb()
     {
         /* Check to see if we have a valid instance.
         * If not, build the connection
@@ -429,7 +411,9 @@ final class CmsApp
      */
     public function GetSimplePluginOperations()
     {
-        return \CMSMS\simple_plugin_operations::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new simple_plugin_operations();
+        return $_obj;
     }
 
     /**
@@ -439,11 +423,12 @@ final class CmsApp
     * @final
     * @see UserOperations
     * @return UserOperations handle to the UserOperations object
-       * @deprecated
     */
-    public function & GetUserOperations()
+    public function GetUserOperations()
     {
-        return UserOperations::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new UserOperations( $this->GetDb() );
+        return $_obj;
     }
 
     /**
@@ -453,7 +438,6 @@ final class CmsApp
     * @final
     * @see ContentOperations::get_instance()
     * @return ContentOperations handle to the ContentOperations object
-       * @deprecated
     */
     public function GetContentOperations()
     {
@@ -469,12 +453,12 @@ final class CmsApp
     * @final
     * @see BookmarkOperations
     * @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
-       * @deprecated
     */
-    public function & GetBookmarkOperations()
+    public function GetBookmarkOperations()
     {
-        if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
-        return $this->bookmarkoperations;
+        static $_obj;
+        if( !$_obj ) $_obj = new BookmarkOperations();
+        return $_obj;
     }
 
 
@@ -485,11 +469,12 @@ final class CmsApp
     * @final
     * @see GroupOperations
     * @return GroupOperations handle to the GroupOperations object
-       * @deprecated
     */
-    public function & GetGroupOperations()
+    public function GetGroupOperations()
     {
-        return GroupOperations::get_instance();
+        static $_obj;
+        if( !$_obj ) $_obj = new GroupOperations( $this->GetDb() );
+        return $_obj;
     }
 
     /**
@@ -499,11 +484,13 @@ final class CmsApp
     * @final
     * @see UserTagOperations
     * @return UserTagOperations handle to the UserTagOperations object
-       * @deprecated
+    * @deprecated
     */
-    public function & GetUserTagOperations()
+    public function GetUserTagOperations()
     {
-        return UserTagOperations::get_instance();
+        static $_obj;
+        if( !$_obj ) $obj = new UserTagOperations();
+        return $_obj;
     }
 
     /**
@@ -515,13 +502,12 @@ final class CmsApp
     * @link http://www.smarty.net/manual/en/
     * @return Smarty_CMS handle to the Smarty object
     */
-    public function & GetSmarty()
+    public function GetSmarty()
     {
         global $CMS_PHAR_INSTALLER;
         if( isset($CMS_PHAR_INSTALLER) ) {
             // we can't load the CMSMS version of smarty during the installation.
-            $out = null;
-            return $out;
+            return;
         }
         static $_obj;
         if( !$_obj ) $_obj = new Smarty($this);
@@ -536,12 +522,13 @@ final class CmsApp
     * @see HierarchyManager
     * @return HierarchyManager handle to the HierarchyManager object
     */
-    public function & GetHierarchyManager()
+    public function GetHierarchyManager()
     {
         /* Check to see if a HierarchyManager has been instantiated yet,
         and, if not, go ahead an create the instance. */
-        if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
-        return $this->_hrinstance;
+        static $_obj;
+        if( !$_obj ) $_obj = \CMSMS\internal\global_cache::get('content_tree');
+        return $_obj;
     }
 
     /**
@@ -551,8 +538,9 @@ final class CmsApp
      */
     public function get_script_manager() : ScriptManager
     {
-        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new ScriptManager( $this );
-        return $this->scriptcombiner;
+        static $_obj;
+        if( !$_obj ) $_obj = new ScriptManager( $this );
+        return $_obj;
     }
 
     /**
@@ -578,7 +566,8 @@ final class CmsApp
     public function GetHookMappingManager()
     {
         static $_mgr;
-        if( !$_mgr ) $_mgr = new hook_mapping_manager($this, CMS_ASSETS_PATH.'/configs/hook_mapping.json');
+        if( !$_mgr ) $_mgr = new hook_mapping_manager($this->get_hook_manager(), $this->GetSimplePluginOperations(),
+                                                      CMS_ASSETS_PATH.'/configs/hook_mapping.json');
         return $_mgr;
     }
 
@@ -701,6 +690,72 @@ final class CmsApp
     }
 
     /**
+     * Get login operations object
+     *
+     * @internal
+     * @since 2.3
+     * @return LoginOperations
+     */
+    public function get_login_operations() : LoginOperations
+    {
+        static $_obj;
+        if( !$_obj ) {
+            $flag = (bool) $this->GetConfig()['stupidly_ignore_xss_vulnerability'];
+            $_obj = new LoginOperations( $this->GetUserOperations(), $this->get_cookie_manager(), $flag );
+        }
+        return $_obj;
+    }
+
+    /**
+     * Get a theme manager object
+     *
+     * @since 2.3
+     * @internal
+     * @return AdminThemeManager
+     */
+    public function get_theme_manager() : AdminThemeManager
+    {
+        static $_obj;
+        if( !$_obj ) {
+            $path = $this->GetConfig()['admin_path'].'/themes';
+            $_obj = new AdminThemeManager( $path );
+        }
+        return $_obj;
+    }
+
+    /**
+     * Get the admin theme object
+     *
+     * @since 2.3
+     * @return CmsAdminThemeBase
+     */
+    public function get_admin_theme() : CmsAdminThemeBase
+    {
+        global $CMS_ADMIN_PAGE;
+        if( !isset($CMS_ADMIN_PAGE) ) throw new \LogicException(__METHOD__.' cannot be called from non admin pages');
+
+        static $_obj;
+        if( !$_obj ) {
+            // get the defalt theme
+            $uid = get_userid(FALSE);
+            $theme_manager = $this->get_theme_manager();
+            $theme_name = null;
+            $usertheme = cms_userprefs::get_for_user($uid,'admintheme');
+            if( $usertheme ) $_obj = $theme_manager->load_theme($usertheme, $this, $uid);
+            if( !$_obj ) {
+                $logintheme = cms_siteprefs::get('logintheme');
+                if( $logintheme ) $_obj = $theme_manager->load_theme($logintheme, $this, $uid);
+            }
+            if( !$_obj ) {
+                $dflttheme = $theme_manager->get_default_themename();
+                if( $dflttheme ) $_obj = $theme_manager->load_theme($dflttheme, $this, $uid);
+            }
+            if( !$_obj ) throw new \RuntimeException("Could not find an admin theme to instantiate");
+        }
+        return $_obj;
+    }
+
+    /**
      * Disconnect from the database.
      *
      * @final
@@ -761,7 +816,6 @@ final class CmsApp
      * Set all known states from global variables.
      *
      * @since 1.11.2
-     * @deprecated
      * @ignore
      */
     private function set_states()
@@ -930,9 +984,11 @@ class CmsContentTypePlaceholder
  * @return CmsApp
  * @see CmsApp::get_instance()
  */
-function &cmsms()
+function cmsms()
 {
-    return CmsApp::get_instance();
+    static $_obj;
+    if( !$_obj ) $_obj = CmsApp::get_instance();
+    return $_obj;
 }
 
 

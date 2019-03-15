@@ -1,5 +1,6 @@
 <?php
 namespace CMSMS\internal;
+use CMSMS\internal\hook_manager;
 use CMSMS\simple_plugin_operations;
 use CmsApp;
 
@@ -13,15 +14,18 @@ class hook_mapping_manager
 
     private $hook_manaager;
 
+    private $ops;
+
     static $_obj;
 
-    public function __construct(CmsApp $app, $filename)
+    public function __construct(hook_manager $hook_manager, simple_plugin_operations $ops, string $filename)
     {
         if( $this::$_obj ) throw new \LogicException('Only one instance of '.__CLASS__.' is allowed per runtime');
         $this::$_obj = $this;
 
         $this->filename = $filename;
-        $this->hook_manager = $app->get_hook_manager();
+        $this->ops = $ops;
+        $this->hook_manager = $hook_manager;
         $this->load_mapping($filename);
         $this->add_hooks();
     }
@@ -77,7 +81,7 @@ EOT;
     protected function add_hooks()
     {
         if( empty($this->data) ) return;
-        $spi = simple_plugin_operations::get_instance();
+        $spi = $this->ops;
         array_walk( $this->data, function(hook_mapping $mapping) use ($spi) {
             if( $mapping->handlers ) {
                 foreach( $mapping->handlers as $handler_name_name => $handler ) {

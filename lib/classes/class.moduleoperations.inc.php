@@ -127,7 +127,7 @@ final class ModuleOperations
      *
      * @return ModuleOperations
      */
-    public static function get_instance()
+    public static function get_instance() : ModuleOperations
     {
         if( !isset(self::$_instance) ) {
             throw new \LogicException(__CLASS__.' instance not yet created');
@@ -169,7 +169,7 @@ final class ModuleOperations
         if( !$module ) return;
         $config = $this->_config;
         $path = CMS_ROOT_PATH.'/lib/modules';
-        if( !self::get_instance()->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
+        if( !$this->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
         $fn = $path."/$module/$module.module.php";
         if( is_file($fn) ) return $fn;
     }

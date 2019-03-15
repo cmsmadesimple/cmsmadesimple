@@ -79,10 +79,10 @@ class ContentOperations
     public function __construct( CmsApp $app, cms_cache_driver $driver )
     {
         if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed');
+        self::$_instance = $this;
         $this->app = $app;
         $this->cache_driver = $driver;
         $this->setup_cache();
-        self::$_instance = $this;
     }
 
     /**
@@ -90,7 +90,7 @@ class ContentOperations
      *
      * @return ContentOperations
      */
-    public static function get_instance()
+    public static function get_instance() : ContentOperations
     {
         if( !is_object( self::$_instance) ) throw new \LogicException('Instance of '.__CLASS__.' not yet created');
         return self::$_instance;

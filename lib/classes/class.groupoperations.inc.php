@@ -24,6 +24,8 @@
  * @license GPL
  */
 
+use CMSMS\Database\Connection as Database;
+
 /**
  * Include group class definition
  */
@@ -42,12 +44,6 @@ final class GroupOperations
     /**
      * @ignore
      */
-    protected function __construct() {
-    }
-
-    /**
-     * @ignore
-     */
     private static $_instance;
 
     /**
@@ -56,13 +52,28 @@ final class GroupOperations
     private $_perm_cache;
 
     /**
+     * @ignore
+     */
+    private $_db;
+
+    /**
+     * @ignore
+     */
+    public function __construct(Database $db)
+    {
+        if( self::$_instance ) throw new \LogicException('Only one intance of '.__CLASS__.' is permitted');
+        self::$_instance = $this;
+        $this->_db = $db;
+    }
+
+    /**
      * Retrieve the single instance of this class
      *
      * @return GroupOperations
      */
-    public static function &get_instance()
+    public static function get_instance() : GroupOperations
     {
-        if( !is_object(self::$_instance) ) self::$_instance = new GroupOperations();
+        if( !self::$_instance ) throw new \LogicException("No instance of ".__CLASS__.' has been created');
         return self::$_instance;
     }
 
@@ -145,9 +156,8 @@ final class GroupOperations
         if( $groupid == 1 ) return TRUE;
 
         if( !isset($this->_perm_cache) || !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
-            $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT permission_id FROM '.CMS_DB_PREFIX.'group_perms WHERE group_id = ?';
-            $dbr = $db->GetCol($query,array((int)$groupid));
+            $dbr = $this->_db->GetCol($query,array((int)$groupid));
             if( is_array($dbr) && count($dbr) ) $this->_perm_cache[$groupid] = $dbr;
         }
 
@@ -166,15 +176,13 @@ final class GroupOperations
         if( $permid < 1 ) return;
         if( $groupid <= 1 ) return;
 
-        $db = CmsApp::get_instance()->GetDb();
-
-        $new_id = $db->GenId(CMS_DB_PREFIX.'group_perms_seq');
+        $new_id = $this->_db->GenId(CMS_DB_PREFIX.'group_perms_seq');
         if( !$new_id ) return;
 
-        $now = $db->DbTimeStamp(time());
+        $now = $this->_db->DbTimeStamp(time());
         $query = 'INSERT INTO '.CMS_DB_PREFIX."group_perms (group_perm_id,group_id,permission_id,create_date,modified_date)
                   VALUES (?,?,?,$now,$now)";
-        $dbr = $db->Execute($query,array($new_id,$groupid,$permid));
+        $dbr = $this->_db->Execute($query,array($new_id,$groupid,$permid));
         unset($this->_perm_cache);
     }
 
@@ -191,9 +199,7 @@ final class GroupOperations
         if( $groupid <= 1 ) return;
 
         $query = 'DELETE FROM '.CMS_DB_PREFIX.'group_perms WHERE group_id = ? AND perm_id = ?';
-        $dbr = $db->Execute($query,array($groupid,$permid));
+        $dbr = $this->_db->Execute($query,[$groupid,$permid]);
         unset($this->_perm_cache);
     }
 }
-
-?>

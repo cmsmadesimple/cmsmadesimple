@@ -23,14 +23,6 @@
  * @ignore
  */
 
-/*
-function __cms_load($filename)
-{
-  $gCms = CmsApp::get_instance(); // wierd, but this is required.
-  require_once($filename);
-}
-*/
-
 /**
  * A function for auto-loading classes.
  *
@@ -123,7 +115,7 @@ function cms_autoloader($classname)
     // if requesting a module..
     // note, if force loading we include the file.
     // if not forceloading.  we load the module.
-    $modops = \ModuleOperations::get_instance();
+    $modops = $gCms->GetModuleOperations();
     if( ($fn = $modops->get_module_filename( $classname )) ) {
         if( is_file( $fn ) ) {
             require_once($fn);

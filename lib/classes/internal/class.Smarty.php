@@ -35,6 +35,16 @@ use cms_config;
 class Smarty extends smarty_base_template
 {
     /**
+     * @ignore
+     */
+    private $_is_frontend_request;
+
+    /**
+     * @ignore
+     */
+    private $_simple_plugin_ops;
+
+    /**
      * Constructor
      *
      * @param array The hash of CMSMS config settings
@@ -42,6 +52,8 @@ class Smarty extends smarty_base_template
     public function __construct( CmsApp $app )
     {
         parent::__construct();
+        $this->_is_frontend_request = $app->is_frontend_request();
+        $this->_simple_plugin_ops = $app->GetSimplePluginOperations();
         $this->direct_access_security = TRUE;
 
         global $CMS_INSTALL_PAGE;
@@ -197,7 +209,7 @@ class Smarty extends smarty_base_template
 
         if( $type != 'function' ) return;
 
-        if( CmsApp::get_instance()->is_frontend_request() ) {
+        if( $this->_is_frontend_request ) {
             $row = \cms_module_smarty_plugin_manager::load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
@@ -207,7 +219,7 @@ class Smarty extends smarty_base_template
             }
 
             // see if it is a simple plugin
-            $plugin = \CMSMS\simple_plugin_operations::get_instance()->load_plugin( $name );
+            $plugin = $this->_simple_plugin_ops->load_plugin( $name );
             if( $plugin ) {
                 $callback = $plugin;
                 $cachable = FALSE;

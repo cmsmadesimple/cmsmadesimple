@@ -29,6 +29,9 @@
 /**
  * Include user class definition
  */
+
+use CMSMS\Database\Connection as Database;
+
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
 
 /**
@@ -44,18 +47,17 @@ class UserOperations
     /**
      * @ignore
      */
-    protected function __construct() {
-    }
-
-    /**
-     * @ignore
-     */
     private static $_instance;
 
     /**
      * @ignore
      */
     private static $_user_groups;
+
+    /**
+     * @ignore
+     */
+    private $_db;
 
     /**
      * @ignore
@@ -68,13 +70,23 @@ class UserOperations
     private $_saved_users = array();
 
     /**
+     * Constructor
+     */
+    public function __construct( Database $db )
+    {
+        if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' is permitted');
+        self::$_instance = $this;
+        $this->_db = $db;
+    }
+
+    /**
      * Get the reference to the only instance of this object
      *
      * @return UserOperations
      */
-    public static function &get_instance()
+    public static function get_instance() : UserOperations
     {
-        if( !is_object(self::$_instance) ) self::$_instance = new UserOperations();
+        if( !self::$_instance ) throw new \LogicException('No instance of '.__CLASS__.' has been created');
         return self::$_instance;
     }
 
@@ -90,13 +102,11 @@ class UserOperations
     public function LoadUsers($limit = 10000,$offset = 0)
     {
         if( !is_array($this->_users) ) {
-            $gCms = CmsApp::get_instance();
-            $db = $gCms->GetDb();
             $result = array();
 
             $query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access
                       FROM ".CMS_DB_PREFIX."users ORDER BY username";
-            $dbresult = $db->SelectLimit($query,$limit,$offset);
+            $dbresult = $this->_db->SelectLimit($query,$limit,$offset);
 
             while( $dbresult && !$dbresult->EOF ) {
                 $row = $dbresult->fields;
@@ -128,12 +138,10 @@ class UserOperations
      */
     public function LoadUsersInGroup($groupid)
     {
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
         $result = array();
 
         $query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".CMS_DB_PREFIX."users u, ".CMS_DB_PREFIX."groups g, ".CMS_DB_PREFIX."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
-        $dbresult = $db->Execute($query, array($groupid));
+        $dbresult = $this->_db->Execute($query, array($groupid));
 
         while ($dbresult && $row = $dbresult->FetchRow()) {
             $oneuser = new User();
@@ -166,9 +174,6 @@ class UserOperations
     {
         // note: does not use cache
         $result = null;
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
-
         $params = array();
         $where = array();
         $joins = array();
@@ -189,7 +194,7 @@ class UserOperations
         if( !empty($joins) ) $query .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
         if( !empty($where) ) $query .= ' WHERE '.implode(' AND ',$where);
 
-        $id = $db->GetOne($query,$params);
+        $id = $this->_db->GetOne($query,$params);
         if( $id ) $result = self::LoadUserByID($id);
 
         return $result;
@@ -209,11 +214,8 @@ class UserOperations
         if( isset($this->_saved_users[$id]) ) return $this->_saved_users[$id];
 
         $result = false;
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
-
         $query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".CMS_DB_PREFIX."users WHERE user_id = ?";
-        $dbresult = $db->Execute($query, array($id));
+        $dbresult = $this->_db->Execute($query, array($id));
 
         while ($dbresult && $row = $dbresult->FetchRow()) {
             $oneuser = new User();
@@ -243,18 +245,15 @@ class UserOperations
     {
         $result = -1;
 
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
-
         // check for conflict in username
         $query = 'SELECT user_id FROM '.CMS_DB_PREFIX.'users WHERE username = ?';
-        $tmp = $db->GetOne($query,array($user->username));
+        $tmp = $this->_db->GetOne($query,array($user->username));
         if( $tmp ) return $result;
 
-        $time = $db->DBTimeStamp(time());
-        $new_user_id = $db->GenID(CMS_DB_PREFIX."users_seq");
+        $time = $this->_db->DBTimeStamp(time());
+        $new_user_id = $this->_db->GenID(CMS_DB_PREFIX."users_seq");
         $query = "INSERT INTO ".CMS_DB_PREFIX."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
-        $dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
+        $dbresult = $this->_db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
         if ($dbresult !== false) $result = $new_user_id;
 
         return $result;
@@ -270,18 +269,16 @@ class UserOperations
     public function UpdateUser($user)
     {
         $result = false;
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
 
         // check for username conflict
         $query = 'SELECT user_id FROM '.CMS_DB_PREFIX.'users WHERE username = ? and user_id != ?';
-        $tmp = $db->GetOne($query,array($user->username,$user->id));
+        $tmp = $this->_db->GetOne($query,array($user->username,$user->id));
         if( $tmp ) return $result;
 
-        $time = $db->DBTimeStamp(time());
+        $time = $this->_db->DBTimeStamp(time());
         $query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
-        #$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
-        $dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
+        #$dbresult = $this->_db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
+        $dbresult = $this->_db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
         if ($dbresult !== false) $result = true;
 
         return $result;
@@ -300,20 +297,18 @@ class UserOperations
         if( !check_permission(get_userid(),'Manage Users') ) return false;
 
         $result = false;
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
 
         $query = "DELETE FROM ".CMS_DB_PREFIX."user_groups where user_id = ?";
-        $db->Execute($query, array($id));
+        $this->_db->Execute($query, array($id));
 
         $query = "DELETE FROM ".CMS_DB_PREFIX."additional_users where user_id = ?";
-        $db->Execute($query, array($id));
+        $this->_db->Execute($query, array($id));
 
         $query = "DELETE FROM ".CMS_DB_PREFIX."users where user_id = ?";
-        $dbresult = $db->Execute($query, array($id));
+        $dbresult = $this->_db->Execute($query, array($id));
 
         $query = "DELETE FROM ".CMS_DB_PREFIX."userprefs where user_id = ?";
-        $dbresult = $db->Execute($query, array($id));
+        $dbresult = $this->_db->Execute($query, array($id));
 
         if ($dbresult !== false) $result = true;
         return $result;
@@ -329,11 +324,9 @@ class UserOperations
     public function CountPageOwnershipByID($id)
     {
         $result = 0;
-        $gCms = CmsApp::get_instance();
-        $db = $gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".CMS_DB_PREFIX."content WHERE owner_id = ?";
-        $dbresult = $db->Execute($query, array($id));
+        $dbresult = $this->_db->Execute($query, array($id));
 
         if ($dbresult && $dbresult->RecordCount() > 0) {
             $row = $dbresult->FetchRow();
@@ -424,9 +417,8 @@ class UserOperations
     {
         $uid = (int) $uid;
         if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
-            $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT group_id FROM '.CMS_DB_PREFIX.'user_groups WHERE user_id = ?';
-            $col = $db->GetCol($query,array((int)$uid));
+            $col = $this->_db->GetCol($query,array((int)$uid));
             if( !is_array(self::$_user_groups) ) self::$_user_groups = array();
             self::$_user_groups[$uid] = $col;
         }
@@ -445,12 +437,11 @@ class UserOperations
         $gid = (int)$gid;
         if( $uid < 1 || $gid < 1 ) return;
 
-        $db = CmsApp::get_instance()->GetDb();
-        $now = $db->DbTimeStamp(time());
+        $now = $this->_db->DbTimeStamp(time());
         $query = 'INSERT INTO '.CMS_DB_PREFIX."user_groups
                   (group_id,user_id,create_date,modified_date)
                   VALUES (?,?,$now,$now)";
-        $dbr = $db->Execute($query,array($gid,$uid));
+        $dbr = $this->_db->Execute($query,array($gid,$uid));
         if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
     }
 

@@ -20,6 +20,7 @@
 #$Id: class.user.inc.php 2961 2006-06-25 04:49:31Z wishy $
 
 namespace CMSMS;
+use UserOperations;
 use cms_siteprefs;
 use cms_config;
 use CmsApp;
@@ -35,15 +36,23 @@ final class LoginOperations
 
     private $_cookie_manager;
 
-    protected function __construct()
+    private $_userops;
+
+    private $_ignore_xss_vulnerability;
+
+    public function __construct( UserOperations $userops, ICookieManager $cookiemgr, bool $ignore_xss_vulnerability = false )
     {
+        if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' is permitted');
+        self::$_instance = $this;
+        $this->_userops = $userops;
+        $this->_cookie_manager = $cookiemgr;
         $this->_loginkey = '_'.sha1( CMS_VERSION.$this->_get_salt() );
-        $this->_cookie_manager = CmsApp::get_instance()->get_cookie_manager();
+        $this->_ignore_xss_vulnerability = $ignore_xss_vulnerability;
     }
 
-    public static function &get_instance()
+    public static function get_instance() : LoginOperatios
     {
-        if( !self::$_instance ) self::$_instance = new self();
+        if( !self::$_instance ) throw new \LogicException("Instance of ".__CLASS__." has not been created");
         return self::$_instance;
     }
 
@@ -69,8 +78,7 @@ final class LoginOperations
     {
         // we already validated that payload was not corrupt
         // now we validate that the user is valid.
-        $userops = \UserOperations::get_instance();
-        $oneuser = $userops->LoadUserByID((int) $uid);
+        $oneuser = $this->_userops->LoadUserByID((int) $uid);
         if( !$oneuser ) return FALSE;
         if( !$oneuser->active ) return FALSE;
         $checksum = (string) $checksum;
@@ -137,7 +145,7 @@ final class LoginOperations
 
         // now authenticate the passhash
         // requires a database query
-        if( !\CmsApp::get_instance()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['hash']) ) return;
+        if( !cmsms()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['hash']) ) return;
 
         // if we get here, the user is authenticated.
         // if we don't have a user key.... we generate a new csrf token.
@@ -162,8 +170,7 @@ final class LoginOperations
 
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {
-            $config = cms_config::get_instance();
-            if( !isset($config['stupidly_ignore_xss_vulnerability']) ) return FALSE;
+            if( !$this->_ignore_xss_vulnerability ) return FALSE;
         }
         return TRUE;
     }
@@ -186,7 +193,7 @@ final class LoginOperations
     {
         $uid = $this->get_loggedin_uid();
         if( $uid < 1 ) return;
-        $user = \UserOperations::get_instance()->LoadUserByID($uid);
+        $user = $this->_userops->LoadUserByID($uid);
         return $user;
     }
 

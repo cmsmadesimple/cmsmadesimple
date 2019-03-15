@@ -42,7 +42,7 @@ $cms_readfile = function($filename) {
     return FALSE;
 };
 
-$themeObject = cms_utils::get_theme_object();
+$themeObject = cmsms()->get_admin_theme();
 $theme = $themeObject->themeName;
 $style="style";
 cms_admin_sendheaders('text/css');

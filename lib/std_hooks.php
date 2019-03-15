@@ -21,7 +21,7 @@
 
 namespace CMSMS;
 
-$gCms = \CmsApp::get_instance();
+$gCms = cmsms();
 global $CMS_INSTALL_PAGE;
 if( !isset($CMS_INSTALL_PAGE) && !$gCms->is_frontend_request() ) {
     // admin requests only

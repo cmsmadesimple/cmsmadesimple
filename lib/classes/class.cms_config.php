@@ -356,7 +356,7 @@ final class cms_config implements ArrayAccess
      *
      * @return cms_config
      */
-    public static function get_instance()
+    public static function get_instance() : cms_config
     {
         if (!self::$_instance) throw new \LogicException("An instance of ".__CLASS__.' has not been created');
         return self::$_instance;

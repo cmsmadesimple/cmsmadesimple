@@ -6,6 +6,7 @@
  * @license GPL
  */
 namespace CMSMS;
+use cms_config;
 
 /**
  * This operations class handles reading and writing simple plugins.
@@ -31,11 +32,12 @@ final class simple_plugin_operations
     private $_loaded = [];
 
     /**
-     * @ignore
+     * Constructor
      */
-    protected function __construct()
+    public function __construct()
     {
-        // nothing here
+        if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' is permitted');
+        self::$_instance = $this;
     }
 
     /**
@@ -45,7 +47,7 @@ final class simple_plugin_operations
      */
     public static function get_instance() : simple_plugin_operations
     {
-        if( !self::$_instance ) self::$_instance = new self();
+        if( !self::$_instance ) throw new \LogicException('An instance of '.__CLASS__.' has not been created yet');
         return self::$_instance;
     }
 
@@ -58,8 +60,7 @@ final class simple_plugin_operations
      */
     public function get_list()
     {
-        $config = \cms_config::get_instance();
-        $dir = $config['assets_path'].'/simple_plugins';
+        $dir = CMS_ASSETS_PATH.'/simple_plugins';
         $files = glob($dir.'/*.cmsplugin');
         if( !count($files) ) return null;
 
@@ -80,8 +81,7 @@ final class simple_plugin_operations
      */
     protected function get_plugin_filename( string $name ) : string
     {
-        $config = \cms_config::get_instance();
-        $name = $config['assets_path'].'/simple_plugins/'.$name.'.cmsplugin';
+        $name = CMS_ASSETS_PATH.'/simple_plugins/'.$name.'.cmsplugin';
         return $name;
     }
 
@@ -163,7 +163,7 @@ final class simple_plugin_operations
         // these variables are created for plugins to use in scope.
         $params = $args[0];
         $smarty = null;
-	$gCms = cmsms();
+        $gCms = cmsms(); // put this in scope.
         if( isset($args[1]) ) $smarty = $args[1];
         include( $fn );
     }

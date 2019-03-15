@@ -7,8 +7,9 @@ use \cms_siteprefs;
 $starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) @ob_start();
 
-$userid = get_userid();
-$smarty = cmsms()->GetSmarty();
+$_app = cmsms();
+$userid = get_userid(); // does authentication too.
+$smarty = $_app->GetSmarty();
 
 if (isset($USE_THEME) && $USE_THEME == false) {
     //echo '<!-- admin theme disabled -->';
@@ -16,7 +17,7 @@ if (isset($USE_THEME) && $USE_THEME == false) {
 else {
     cms_admin_sendheaders();
     debug_buffer('before theme load');
-    $themeObject = cms_utils::get_theme_object();
+    $themeObject = $_app->get_admin_theme();
     $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
     debug_buffer('after theme load');
 
