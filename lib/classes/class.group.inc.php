@@ -84,7 +84,7 @@ class Group
     public function validate()
     {
         if( !$this->name ) throw new \LogicException('No name specified for this group');
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $sql = 'SELECT group_id FROM '.CMS_DB_PREFIX.'groups WHERE group_name = ? AND group_id != ?';
         $tmp = $db->GetOne($sql,array($this->name,$this->id));
         if( $tmp ) throw new \CmsInvalidDataException(lang('errorgroupexists'));
@@ -95,7 +95,7 @@ class Group
      */
     protected function update()
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $sql = 'UPDATE '.CMS_DB_PREFIX.'groups SET group_name = ?, group_desc = ?, active = ?, modified_date = NOW() WHERE group_id = ?';
         $dbresult = $db->Execute($sql,array($this->name,$this->description,$this->active,$this->id));
         if( $dbresult !== false ) return TRUE;
@@ -107,7 +107,7 @@ class Group
      */
     protected function insert()
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $this->data['id'] = $db->GenID(CMS_DB_PREFIX."groups_seq");
         $time = $db->DBTimeStamp(time());
         $query = "INSERT INTO ".CMS_DB_PREFIX."groups (group_id, group_name, group_desc, active, create_date, modified_date)
@@ -142,7 +142,7 @@ class Group
     {
         if( $this->id < 1 ) return FALSE;
         if( $this->id == 1 ) throw new \LogicException(lang('error_deletespecialgroup'));
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'DELETE FROM '.CMS_DB_PREFIX.'user_groups where group_id = ?';
         $dbresult = $db->Execute($query, array($this->id));
         $query = "DELETE FROM ".CMS_DB_PREFIX."group_perms where group_id = ?";
@@ -165,7 +165,7 @@ class Group
         $id = (int) $id;
         if( $id < 1 ) throw new \CmsInvalidDataException(lang('missingparams'));
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = "SELECT group_id, group_name, group_desc, active FROM ".CMS_DB_PREFIX."groups WHERE group_id = ? ORDER BY group_id";
         $row = $db->GetRow($query, array($id));
 
@@ -184,7 +184,7 @@ class Group
      */
     public static function load_all()
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $result = array();
         $query = "SELECT group_id, group_name, group_desc, active FROM ".CMS_DB_PREFIX."groups ORDER BY group_id";
         $list = $db->GetArray($query);
@@ -215,7 +215,7 @@ class Group
     public function HasPermission($perm)
     {
         if( $this->id <= 0 ) return FALSE;
-        $groupops = GroupOperations::get_instance();
+        $groupops = cmsms()->GetGroupOperations();
         return $groupops->CheckPermission($this->id,$perm);
     }
 
@@ -233,7 +233,7 @@ class Group
     {
         if( $this->id < 1 ) return;
         if( $this->HasPermission($perm) ) return;
-        $groupops = GroupOperations::get_instance();
+        $groupops = cmsms()->GetGroupOperations();
         return $groupops->GrantPermission($this->id,$perm);
     }
 
@@ -251,9 +251,7 @@ class Group
     {
         if( $this->id <= 0 ) return;
         if( !$this->HasPermission($perm) ) return;
-        $groupops = GroupOperations::get_instance();
+        $groupops = cmsms()->GetGroupOperations();
         return $groupops->RemovPermission($this->id,$perm);
     }
 }
-
-?>
