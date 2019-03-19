@@ -21,7 +21,7 @@
 
 $this->CreatePermission('Use Admin Search','Use Admin Search');
 
-$groupops = GroupOperations::get_instance();
+$groupops = cmsms()->GetGroupOperations();  // can use $this->app or $this->cms too
 $groups = $groupops->LoadGroups();
 
 if( is_array($groups) && count($groups) ) {
