@@ -87,11 +87,13 @@ try {
                 $article->start_time = $mktime( $_POST, 'starttime_', true );
                 $article->end_time = $mktime( $_POST, 'endtime_' );
             }
-            foreach( $fielddefs as $fd ) {
-                if( !isset($fieldtypes[$fd->type]) ) continue;
-                $fldtype = $fieldtypes[$fd->type];
-                $value = $fldtype->handleForArticle( $fd, $_POST );
-                $article->setFieldVal( $fd->name, $value );
+            if( !empty($fielddefs) ) {
+                foreach( $fielddefs as $fd ) {
+                    if( !isset($fieldtypes[$fd->type]) ) continue;
+                    $fldtype = $fieldtypes[$fd->type];
+                    $value = $fldtype->handleForArticle( $fd, $_POST );
+                    $article->setFieldVal( $fd->name, $value );
+                }
             }
             if( $this->CheckPermission( News2::MANAGE_PERM ) ) {
                 // only managers can adjust an article's author.

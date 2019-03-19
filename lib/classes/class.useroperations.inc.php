@@ -466,7 +466,7 @@ class UserOperations
         if( in_array(1,$groups) ) return TRUE; // member of admin group
 
         try {
-            $groupops = GroupOperations::get_instance();
+            $groupops = cmsms()->GetGroupOperations();
             foreach( $groups as $gid ) {
                 if( $groupops->CheckPermission($gid,$permname) ) return TRUE;
             }
