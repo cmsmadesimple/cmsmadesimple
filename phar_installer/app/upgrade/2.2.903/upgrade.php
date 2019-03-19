@@ -24,7 +24,7 @@ if( count($udt_list) ) {
         if( $row['description'] ) {
             $code = "/*\n";
             $code .= $row['description'];
-            $code .= "*/\n\n";
+            $code .= "\n*/\n\n";
         }
         $code .= "// for security purposes, we ensure that this file cannot be directly requested by browsers\n";
         $code .= "if !defined('CMS_VERSION\)) exit;\n\n";
