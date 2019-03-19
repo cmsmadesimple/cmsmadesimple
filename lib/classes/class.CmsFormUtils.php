@@ -465,7 +465,7 @@ final class CmsFormUtils
         if( !$gCms->is_frontend_request() ) {
             if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
             if( $mactparms['module'] ) {
-                if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
+                //if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
                 if( !$mactparms['action'] ) $mactparms['action'] = 'default';
                 if( !$mactparms['mid'] ) $mactparms['mid'] = 'cntnt01';
                 if( $mactparms['returnid'] > 0 ) {
@@ -477,7 +477,7 @@ final class CmsFormUtils
                     }
                 }
             }
-            if(!isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
+            if(!isset($mactparms['returnid']) || $mactparms['returnid'] < 1 ) {
                 // not frontend request, not linking to a frontend url.
                 if( isset($_SESSION[CMS_USER_KEY]) ) $extraparms[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
             }

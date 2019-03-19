@@ -32,6 +32,7 @@ use CMSMS\internal\hook_mapping_manager;
 use CMSMS\internal\MactEncoder;
 use CMSMS\internal\Smarty;
 use CMSMS\internal\AdminThemeManager;
+use CMSMS\internal\global_cache;
 use CMSMS\LoginOperations;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
@@ -40,6 +41,8 @@ use CMSMS\StylesheetManager;
 use CMSMS\ICookieManager;
 use CMSMS\AutoCookieManager;
 use CMSMS\simple_plugin_operations;
+use CMSMS\Database\Connection as Database;
+use CMSMS\Database\compatibility as DBCompatibility;
 
 /**
  * Simple singleton class that contains various functions and states
@@ -170,7 +173,7 @@ final class CmsApp
             $query = 'SELECT version FROM '.CMS_DB_PREFIX.'version';
             return $db->GetOne($query);
         }
-        return \CMSMS\internal\global_cache::get('schema_version');
+        return global_cache::get('schema_version');
     }
 
     /**
@@ -274,7 +277,7 @@ final class CmsApp
      *
      * @since 2.0
      */
-    public function get_content_object()
+    public function get_content_object() : ContentBase
     {
         return $this->_current_content_page;
     }
@@ -283,6 +286,7 @@ final class CmsApp
      * Get the ID of the current content page
      *
      * @since 2.0
+     * @return int|null
      */
     public function get_content_id()
     {
@@ -333,7 +337,7 @@ final class CmsApp
      * @ignore
      * @param ADOConnection $connection
      */
-    final public function _setDb(\CMSMS\Database\Connection $conn)
+    final public function _setDb(Database $conn)
     {
         $this->db = $conn;
     }
@@ -356,7 +360,7 @@ final class CmsApp
 
         if( !isset($DONT_LOAD_DB) ) {
             $config = $this->GetConfig();
-            $this->db = \CMSMS\Database\compatibility::init($config);
+            $this->db = DBCompatibility::init($config);
         }
 
         return $this->db;
@@ -367,7 +371,7 @@ final class CmsApp
      *
      * @return string
      */
-    public function GetDbPrefix()
+    public function GetDbPrefix() : string
     {
         return CMS_DB_PREFIX;
     }
@@ -380,7 +384,7 @@ final class CmsApp
     * @final
     * @return cms_config The configuration object.
     */
-    final public function GetConfig()
+    final public function GetConfig() : cms_config
     {
         static $_obj;
         if( !$_obj ) $_obj = new cms_config($this);
@@ -396,7 +400,7 @@ final class CmsApp
     * @see ModuleOperations
     * @return ModuleOperations handle to the ModuleOperations object
     */
-    public function GetModuleOperations()
+    public function GetModuleOperations() : ModuleOperations
     {
         static $_obj;
         if( !$_obj ) $_obj = new ModuleOperations( $this, $this->GetConfig() );
@@ -409,7 +413,7 @@ final class CmsApp
      *
      * @return \CMSMS\simple_plugin_operations
      */
-    public function GetSimplePluginOperations()
+    public function GetSimplePluginOperations() : simple_plugin_operations
     {
         static $_obj;
         if( !$_obj ) $_obj = new simple_plugin_operations();
@@ -424,7 +428,7 @@ final class CmsApp
     * @see UserOperations
     * @return UserOperations handle to the UserOperations object
     */
-    public function GetUserOperations()
+    public function GetUserOperations() : UserOperations
     {
         static $_obj;
         if( !$_obj ) $_obj = new UserOperations( $this->GetDb() );
@@ -439,7 +443,7 @@ final class CmsApp
     * @see ContentOperations::get_instance()
     * @return ContentOperations handle to the ContentOperations object
     */
-    public function GetContentOperations()
+    public function GetContentOperations() : ContentOperations
     {
         static $_obj;
         if( !$_obj ) $_obj = new ContentOperations( $this, $this->get_cache_driver() );
@@ -454,7 +458,7 @@ final class CmsApp
     * @see BookmarkOperations
     * @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
     */
-    public function GetBookmarkOperations()
+    public function GetBookmarkOperations() : BookmarkOperations
     {
         static $_obj;
         if( !$_obj ) $_obj = new BookmarkOperations();
@@ -470,7 +474,7 @@ final class CmsApp
     * @see GroupOperations
     * @return GroupOperations handle to the GroupOperations object
     */
-    public function GetGroupOperations()
+    public function GetGroupOperations() : GroupOperations
     {
         static $_obj;
         if( !$_obj ) $_obj = new GroupOperations( $this->GetDb() );
@@ -486,10 +490,10 @@ final class CmsApp
     * @return UserTagOperations handle to the UserTagOperations object
     * @deprecated
     */
-    public function GetUserTagOperations()
+    public function GetUserTagOperations() : UserTagOperations
     {
         static $_obj;
-        if( !$_obj ) $obj = new UserTagOperations();
+        if( !$_obj ) $obj = new UserTagOperations( $this->GetSimplePluginOperations() );
         return $_obj;
     }
 
@@ -500,7 +504,7 @@ final class CmsApp
     * @final
     * @see Smarty_CMS
     * @link http://www.smarty.net/manual/en/
-    * @return Smarty_CMS handle to the Smarty object
+    * @return mixed Smarty_CMS handle to the Smarty object.  Null if called from the phar installer
     */
     public function GetSmarty()
     {
@@ -527,7 +531,7 @@ final class CmsApp
         /* Check to see if a HierarchyManager has been instantiated yet,
         and, if not, go ahead an create the instance. */
         static $_obj;
-        if( !$_obj ) $_obj = \CMSMS\internal\global_cache::get('content_tree');
+        if( !$_obj ) $_obj = global_cache::get('content_tree');
         return $_obj;
     }
 
@@ -563,7 +567,7 @@ final class CmsApp
      * @internal
      * @return \CMSMS\internal\hook_mapping_manager
      */
-    public function GetHookMappingManager()
+    public function GetHookMappingManager() : hook_mapping_manager
     {
         static $_mgr;
         if( !$_mgr ) $_mgr = new hook_mapping_manager($this->get_hook_manager(), $this->GetSimplePluginOperations(),
@@ -578,7 +582,7 @@ final class CmsApp
      * @since 2.3
      * @return \cms_cache_driver
      */
-    public function get_cache_driver()
+    public function get_cache_driver() : cms_cache_driver
     {
         static $_driver;
         if( !$_driver ) {
@@ -670,7 +674,7 @@ final class CmsApp
      * @since 2.3
      * @return string
      */
-    public function get_site_identifier()
+    public function get_site_identifier() : string
     {
         static $val;
         if( !$val ) $val = cms_siteprefs::get('site_signature');
@@ -787,7 +791,7 @@ final class CmsApp
     {
         // clear APC, or file cache separately and completely
         $config = $this->GetConfig();
-        \CMSMS\internal\global_cache::clear_all();
+        global_cache::clear_all();
         $this->get_cache_driver()->clear();
 
         // additionall clear cached files that are older than N days old.
@@ -845,7 +849,7 @@ final class CmsApp
 	 * @param string $state A valid state name (see the state list above).  It is recommended that the class constants be used.
 	 * @return bool
 	 */
-    public function test_state($state)
+    public function test_state($state) : bool
     {
         if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
         $this->set_states();
@@ -914,7 +918,7 @@ final class CmsApp
      * @author Robert Campbell
      * @return bool
      */
-    public function is_cli()
+    public function is_cli() : bool
     {
         return (php_sapi_name() == 'cli');
     }
@@ -926,7 +930,7 @@ final class CmsApp
      * @author Robert Campbell
      * @return bool
      */
-    public function is_frontend_request()
+    public function is_frontend_request() : bool
     {
         $tmp = $this->get_states();
         if( !is_array($tmp) || count($tmp) == 0 ) return TRUE;
@@ -939,7 +943,7 @@ final class CmsApp
 	 * @author Robert Campbell
 	 * @return bool
 	 */
-    public function is_https_request()
+    public function is_https_request() : bool
     {
         if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
         return FALSE;
@@ -984,7 +988,7 @@ class CmsContentTypePlaceholder
  * @return CmsApp
  * @see CmsApp::get_instance()
  */
-function cmsms()
+function cmsms() : CmsApp
 {
     static $_obj;
     if( !$_obj ) $_obj = CmsApp::get_instance();

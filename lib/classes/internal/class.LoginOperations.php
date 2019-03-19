@@ -50,7 +50,7 @@ final class LoginOperations
         $this->_ignore_xss_vulnerability = $ignore_xss_vulnerability;
     }
 
-    public static function get_instance() : LoginOperatios
+    public static function get_instance() : LoginOperations
     {
         if( !self::$_instance ) throw new \LogicException("Instance of ".__CLASS__." has not been created");
         return self::$_instance;
@@ -167,7 +167,6 @@ final class LoginOperations
         $v = '<no$!tgonna!$happen>';
         if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) $v = $_GET[CMS_SECURE_PARAM_NAME];
         if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) $v = $_POST[CMS_SECURE_PARAM_NAME];
-
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {
             if( !$this->_ignore_xss_vulnerability ) return FALSE;

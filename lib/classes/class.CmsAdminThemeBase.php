@@ -171,7 +171,7 @@ abstract class CmsAdminThemeBase
     /**
      * @ignore
      */
-    protected function __construct( CmsApp $app, int $uid )
+    protected function __construct( CmsApp $app, int $uid = null )
     {
         if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
         self::$_instance = $this;
@@ -210,7 +210,7 @@ abstract class CmsAdminThemeBase
         if( $key == 'title' ) return $this->_title;
         if( $key == 'subtitle' ) return $this->_subtitle;
         if( $key == 'root_url' ) {
-            $config = \cms_config::get_instance();
+            $config = $this->_app->GetConfig();
             return $config['admin_url']."/themes/".$this->themeName;
         }
     }
@@ -271,17 +271,18 @@ abstract class CmsAdminThemeBase
         }
         if( !$data ) {
             // data doesn't exist.. gotta build it.
-            $allmodules = ModuleOperations::get_instance()->GetInstalledModules();
+            $ops = $this->_app->GetModuleOperations();
+            $allmodules = $ops->GetInstalledModules();
             $usermoduleinfo = array();
             foreach( $allmodules as $key ) {
-                $object = ModuleOperations::get_instance()->get_module_instance($key);
+                $object = $ops->get_module_instance($key);
                 if( is_object($object) && $object->HasAdmin() ) {
                     $recs = $object->GetAdminMenuItems();
                     $suffix = 1;
                     if( is_array($recs) && count($recs) ) {
                         foreach( $recs as $one ) {
                             if( !$one->valid() ) continue;
-                            if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) {
+                            if( $ops->IsSystemModule($object->GetName()) ) {
                                 $one->system = TRUE;
                             }
                             else {
@@ -575,7 +576,7 @@ abstract class CmsAdminThemeBase
         debug_buffer('before system modules');
 
         // add in all of the 'system' modules next
-        $moduleops = ModuleOperations::get_instance();
+        $moduleops = $this->_app->GetModuleOperations();
         // todo: cleanup
         foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
             if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
@@ -1057,7 +1058,7 @@ abstract class CmsAdminThemeBase
                 $imageName = substr($imageName,strrpos($imageName,'/')+1);
             }
 
-            $config = \cms_config::get_instance();
+            $config = $this->_app->GetConfig();
             $str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
             if (file_exists("{$str}/{$imageName}")) {
                 $str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";

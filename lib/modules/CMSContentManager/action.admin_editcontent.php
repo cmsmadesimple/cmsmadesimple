@@ -321,9 +321,9 @@ if( $this->GetPreference('template_list_mode','designpage') != 'all')  {
 }
 
 if( $content_id > 0 ) {
-    \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('prompt_editpage_editcontent').': '.$content_obj->Name()." ({$content_id})");
+    $gCms->get_admin_theme()->SetSubTitle($this->Lang('prompt_editpage_editcontent').': '.$content_obj->Name()." ({$content_id})");
 } else {
-    \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('prompt_editpage_addconent'));
+    $gCms->get_admin_theme()->SetSubTitle($this->Lang('prompt_editpage_addconent'));
 }
 
 

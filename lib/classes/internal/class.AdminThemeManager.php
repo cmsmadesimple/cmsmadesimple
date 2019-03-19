@@ -39,7 +39,7 @@ class AdminThemeManager
         return $themes[0]['theme'];
     }
 
-    public function load_theme(string $theme_name, CmsApp $app, int $uid)
+    public function load_theme(string $theme_name, CmsApp $app, int $uid = null)
     {
         $themes = $this->list_themes();
         $found = null;

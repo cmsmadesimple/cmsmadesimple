@@ -670,7 +670,7 @@ abstract class ContentBase
     public function Hierarchy()
     {
         // todo: fix me (no contentops dependency)
-        $contentops = ContentOperations::get_instance();
+        $contentops = cmsms()->GetContentOperations();
         return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
     }
 
@@ -986,7 +986,7 @@ abstract class ContentBase
      */
     public function ChildCount()
     {
-        $hm = CmsApp::get_instance()->GetHierarchyManager();
+        $hm = cmsms()->GetHierarchyManager();
         $node = $hm->getNodeById($this->mId);
         if( $node ) return $node->count_children();
     }
@@ -1285,7 +1285,7 @@ abstract class ContentBase
                 }
                 else {
                     // if it don't explicitly say 'flat' we're creating a hierarchical url.
-                    $gCms = CmsApp::get_instance();
+                    $gCms = cmsms();
                     $tree = $gCms->GetHierarchyManager();
                     $node = $tree->find_by_tag('id',$this->ParentId());
                     $stack = array($this->mAlias);
@@ -1667,9 +1667,10 @@ abstract class ContentBase
 	 */
     static public function GetAdditionalEditorOptions()
     {
-        $opts = array();
-        $userops = UserOperations::get_instance();
-        $groupops = GroupOperations::get_instance();
+        $opts = [];
+        $gCms = cmsms();
+        $userops = $gCms->GetUserOperations();
+        $groupops = $gCms->GetGroupOperations();
         $allusers = $userops->LoadUsers();
         $allgroups = $groupops->LoadGroups();
         foreach ($allusers as $oneuser) {
@@ -1977,9 +1978,9 @@ abstract class ContentBase
             case 'owner':
                 $showadmin = cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(), $this->Id());
                 if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
-                           $userops = UserOperations::get_instance();
-                        $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
-                        return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
+                    $userops = cmsms()->GetUserOPerations();
+                    $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
+                    return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
                 }
                 break;
 

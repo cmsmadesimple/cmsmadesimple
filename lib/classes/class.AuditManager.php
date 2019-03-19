@@ -27,7 +27,7 @@ namespace CMSMS {
          * @param string $msg The message content
          * @param mixed  $item_id The specific item, if applicable, being adjusted.
          */
-        public function audit( $subject, $msg, $item_id = null );
+        public function audit( string $subject, string $msg, $item_id = null );
 
         /**
          * Generate a low priority message (but highter than audit) that indicates that something has occurred.
@@ -35,7 +35,7 @@ namespace CMSMS {
          * @param string $msg The message content
          * @param string $subject An optional subject
          */
-        public function notice( $msg, string $subject = null );
+        public function notice( string $msg, string $subject = null );
 
         /**
          * Generate a warning message that indicates that something has occurred.
@@ -43,7 +43,7 @@ namespace CMSMS {
          * @param string $msg The message content
          * @param string $subject An optional subject
          */
-        public function warning( $msg, string $subject = null );
+        public function warning( string $msg, string $subject = null );
 
         /**
          * Generate an error message that indicates that something has occurred.
@@ -51,7 +51,7 @@ namespace CMSMS {
          * @param string $msg The message content
          * @param string $subject An optional subject
          */
-        public function error( $msg, string $subject = null );
+        public function error( string $msg, string $subject = null );
     }
 
     /**
@@ -62,7 +62,7 @@ namespace CMSMS {
         /**
          * @ignore
          */
-        public function audit( $subject, $msg, $itemid = null )
+        public function audit( string $subject, string $msg, $itemid = null )
         {
             $userid = get_userid(FALSE);
             $username = get_username(FALSE);
@@ -79,7 +79,7 @@ namespace CMSMS {
         /**
          * @ignore
          */
-        public function notice( $msg, string $subject = null )
+        public function notice( string $msg, string $subject = null )
         {
             $out = "CMSMS NOTICE: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
@@ -90,7 +90,7 @@ namespace CMSMS {
         /**
          * @ignore
          */
-        public function warning( $msg, $subject = null )
+        public function warning( string $msg, string $subject = null )
         {
             $out = "CMSMS WARNING: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
@@ -101,7 +101,7 @@ namespace CMSMS {
         /**
          * @ignore
          */
-        public function error( $msg, $subject = null )
+        public function error( string $msg, string $subject = null )
         {
             $out = "CMSMS ERROR: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
@@ -215,7 +215,7 @@ namespace CMSMS {
          * @param string $msg
          * @param string $subject
          */
-        public static function error( $msg, $subject = null )
+        public static function error( string $msg, string $subject = null )
         {
             self::get_auditor()->error( $msg, $subject );
         }

@@ -39,7 +39,7 @@ class MarigoldTheme extends CmsAdminThemeBase
 
     private $_messages = array();
 
-    public function __construct(CmsApp $app, int $uid)
+    public function __construct(CmsApp $app, int $uid = null)
     {
         parent::__construct($app,$uid);
     }
