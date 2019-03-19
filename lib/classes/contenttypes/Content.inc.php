@@ -68,7 +68,9 @@ class Content extends ContentBase
         return ($this->GetPropertyValue('searchable') == 0)?FALSE:TRUE;
     }
 
-    public function HasSearchableContent() { return TRUE;
+    public function HasSearchableContent()
+    {
+        return TRUE;
     }
 
     /**
@@ -506,7 +508,7 @@ class Content extends ContentBase
             // phpcs shut up
 
             case 'wantschildren':
-                $showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
+                $showadmin = cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(), $this->Id());
                 if ( check_permission(get_userid(),'Manage All Content') || $showadmin ) {
                              $wantschildren = $this->WantsChildren();
                              $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_wantschildren',lang('help_title_page_wantschildren'));
@@ -553,13 +555,13 @@ class Content extends ContentBase
         $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
-            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            $res = cmsms()->GetUserOperations()->UserInGroup($uid,1);
             if( !$res ) return;
         }
         $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
-            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            $res = cmsms()->GetUserOperations()->UserInGroup($uid,1);
             if( !$res ) return;
         }
         if( $this->Id() < 1 && empty($value) ) {
@@ -620,7 +622,7 @@ class Content extends ContentBase
         $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
-            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            $res = cmsms()->GetUserOperations()->UserInGroup($uid,1);
             if( !$res ) return;
         }
         $config = \cms_config::get_instance();
@@ -666,7 +668,7 @@ class Content extends ContentBase
         $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
-            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            $res = cmsms()->GetUserOperations()->UserInGroup($uid,1);
             if( !$res ) return;
         }
 

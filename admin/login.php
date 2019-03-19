@@ -33,10 +33,11 @@ $smarty = $gCms->GetSmarty();
 // getloginModule
 // call the module's getLoginForm() action
 //
-$login_ops = \CMSMS\LoginOperations::get_instance();
+$login_ops = $gCms->get_login_operations(); // needed ??
+$mod_ops = $gCms->GetModuleOperations();
 $params = [];
 
-$auth_module = \ModuleOperations::get_instance()->GetAdminLoginModule();
+$auth_module = $mod_ops->GetAdminLoginModule();
 if( !$auth_module ) throw new \LogicException('FATAL: Could not find a suitable authentication module');
 $action = 'admin_login';
 $id = '__';
@@ -49,13 +50,13 @@ if( isset( $_REQUEST['mact'] ) ) {
     $action = (isset($parts[2])?trim($parts[2]):$action);
 
     if( $module != $auth_module->GetName() ) throw new \RuntimeException('Invalid module in MACT from login module');
-    $params = \ModuleOperations::get_instance()->GetModuleParameters( $id );
+    $params = $mod_ops->GetModuleParameters( $id );
 }
 
 cms_admin_sendheaders();
 header("Content-Language: " . \CmsNlsOperations::get_current_language());
 $content = $auth_module->DoActionBase( $action, $id, $params, null, $smarty );
-$theme_object = \cms_utils::get_theme_object();
+$theme_object = $gCms->get_admin_theme();
 $theme_object->SetTitle( lang('logintitle') );
 $theme_object->set_content( $content );
 echo $theme_object->do_loginpage( 'login' );
