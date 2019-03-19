@@ -185,6 +185,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             try {
                 $this->message(\__appbase\lang('send_admin_email'));
                 $mailer = new \cms_mailer(true,false);
+		$mailer->SetFrom('root@localhost.localdomain');
+		$mailer->SetFromName('CMSMS Installer');
                 $mailer->AddAddress($adminacct['emailaddr']);
                 $mailer->SetSubject(\__appbase\lang('email_accountinfo_subject'));
                 $body = null;
