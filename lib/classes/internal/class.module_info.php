@@ -1,6 +1,5 @@
 <?php
 namespace CMSMS\internal;
-use \ModuleOperations;
 
 class module_info implements \ArrayAccess
 {
@@ -22,7 +21,7 @@ class module_info implements \ArrayAccess
                 return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
             case 'dir':
-                return ModuleOperations::get_instance()->get_module_path( $this->_data['name'] );
+                return cmsms()->GetModuleOperations()->get_module_path( $this->_data['name'] );
 
             case 'writable':
                 $dir = $this['dir'];
@@ -34,7 +33,7 @@ class module_info implements \ArrayAccess
                 return is_writable($this['dir']);
 
             case 'is_system_module':
-                return ModuleOperations::get_instance()->IsSystemModule( $this->_data['name'] );
+                return cmsms()->GetModuleOperations()->IsSystemModule( $this->_data['name'] );
 
             default:
                 if( isset($this->_data[$key]) ) return $this->_data[$key];
@@ -67,14 +66,14 @@ class module_info implements \ArrayAccess
 
     private function _get_module_meta_file( $module_name )
     {
-        $modops = \ModuleOperations::get_instance();
+        $modops = cmsms()->GetModuleOperations();
         $path = $modops->get_module_path( $module_name );
         return $path;
     }
 
     private function _get_module_file( $module_name )
     {
-        $modops = \ModuleOperations::get_instance();
+        $modops = cmsms()->GetModuleOperations();
         $fn = $modops->get_module_filename( $module_name );
         return $fn;
     }
@@ -130,7 +129,7 @@ class module_info implements \ArrayAccess
 
     private function _read_from_module_meta($module_name)
     {
-        $dir = \ModuleOperations::get_instance()->get_module_path( $module_name );
+        $dir = cmsms()->GetModuleOperations()->get_module_path( $module_name );
         $fn = $this->_get_module_meta_file( $module_name );
         if( !is_file($fn) ) return;
         $inidata = @parse_ini_file($fn,TRUE);
@@ -168,7 +167,9 @@ class module_info implements \ArrayAccess
     {
         // load the module... this is more likely to result in fatal errors than exceptions
         // so we don't bother to read
-        $mod = ModuleOperations::get_instance()->get_module_instance($module_name,'',TRUE);
+	$ops = cmsms()->GetModuleOperations();
+	$mod = $ops->get_module_instance($module_name);
+	if( !is_object($mod) ) $mod = $ops->get_module_instance($module_name,'',TRUE);
         if( !is_object($mod) ) return;
 
         $arr = [];

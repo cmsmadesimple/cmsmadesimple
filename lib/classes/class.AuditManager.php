@@ -72,7 +72,7 @@ namespace CMSMS {
             $out = "CMSMS MSG: ADMINUSER=$username ($userid)";
             if( $itemid ) $out .= ", ITEMID=$itemid,";
             if( $subject ) $out .= ", SUBJECT=$subject,";
-            $out .= " MSG=$msg\n";
+            $out .= " $msg\n";
             $this->notice( $out );
         }
 
