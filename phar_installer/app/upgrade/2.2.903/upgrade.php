@@ -75,7 +75,7 @@ foreach( $t_events as $row ) {
     $events[$row['event_id']] = $row;
 }
 $table_str = "'Search','CmsJobManager'";
-$db->Exeute( 'DELETE FROM '.CMS_DB_PREFIX.'event_handlers WHERE module_name IN ('.$table_str.')' );
+$db->Execute( 'DELETE FROM '.CMS_DB_PREFIX.'event_handlers WHERE module_name IN ('.$table_str.')' );
 $t_event_handlers = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'event_handlers ORDER BY event_id, handler_order');
 foreach( $t_event_handlers as $row ) {
     $event_id = $row['event_id'];
