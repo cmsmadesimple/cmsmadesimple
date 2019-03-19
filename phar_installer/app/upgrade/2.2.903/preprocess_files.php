@@ -11,7 +11,8 @@
 
 $dest_dir = "$destdir/assets/modules";
 $src_dir = "$destdir/modules";
-$cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'DesignManager', 'CMSContentManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
+$cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'DesignManager', 'CMSContentManager', 'FileManager', 'ModuleManager', 'Search',
+		       'News2', 'MicroTiny',
                        'Navigator', 'CmsJobManager', 'FilePicker', 'CoreAdminLogin' ];
 
 // move any directory that a:  Contains a xxxxx.module.php file,   and b: is not in the above list from /modules to /assets/modules
