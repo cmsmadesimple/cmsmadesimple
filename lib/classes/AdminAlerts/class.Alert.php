@@ -247,7 +247,7 @@ abstract class Alert
         } else {
             $obj = unserialize($tmp['data']);
         }
-        return $obj;
+        if( is_object($obj) && get_class($obj) != '__PHP_Incomplete_Class' ) return $obj;
     }
 
     /**

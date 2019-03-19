@@ -1001,7 +1001,7 @@ function get_secure_param()
  * @param string $str Input string to test.
  * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
-function cms_to_bool(string $str)
+function cms_to_bool(string $str = null)
 {
     if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
