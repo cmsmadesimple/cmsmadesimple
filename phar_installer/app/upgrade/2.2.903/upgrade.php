@@ -87,7 +87,12 @@ unset($t_events,$t_event_handlers);
 $mapping_data = null;
 foreach( $events as $evt ) {
     if( !isset($evt['handlers']) || !count($evt['handlers']) ) continue;
-    $hook = $evt['originator'].'::'.$evt['event_name'];
+    if( strpos($evt['event_name'],'::') !== FALSE ) {
+        $hook = $evt['event_name'];
+    }
+    else {
+        $hook = $evt['originator'].'::'.$evt['event_name'];
+    }
     $rec = [ 'hook'=>$hook, 'handlers'=>null ];
     foreach( $evt['handlers'] as $evt_handler ) {
         if( $evt_handler['tag_name'] ) {
