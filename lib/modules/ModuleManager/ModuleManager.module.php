@@ -167,10 +167,11 @@ class ModuleManager extends CMSModule
     public function DoAction($action, $id, $params, $returnid=-1)
     {
         @set_time_limit(9999);
-        if( isset( $params['__activetab'] ) ) {
-            $tab = filter_var( $params['__activetab'], FILTER_SANITIZE_STRING );
+        if( isset( $params['activetab'] ) ) {
+            die('here');
+            $tab = filter_var( $params['activetab'], FILTER_SANITIZE_STRING );
             $this->SetCurrentTab( $tab );
-            unset( $params['__activetab'] );
+            unset( $params['activetab'] );
         }
         $smarty = cmsms()->GetSmarty();
         $smarty->assign($this->GetName(), $this);

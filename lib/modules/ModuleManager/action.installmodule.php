@@ -309,7 +309,7 @@ try {
         $this->RedirectToAdminTab();
     }
 
-    $smarty->assign( 'return_url',$this->create_url($id,'defaultadmin',$returnid, ['__activetab'=>'modules']) );
+    $smarty->assign( 'return_url',$this->create_url($id,'defaultadmin',$returnid, ['activetab'=>'modules']) );
     $parms = [ 'name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size ];
     $smarty->assign('form_start',$this->CreateFormStart($id, 'installmodule', $returnid, 'post', '', FALSE, '', $parms).
                     $this->CreateInputHidden($id,'modlist',base64_encode(json_encode($alldeps))));
