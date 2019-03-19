@@ -91,7 +91,7 @@ foreach( $events as $evt ) {
     $rec = [ 'hook'=>$hook, 'handlers'=>null ];
     foreach( $evt['handlers'] as $evt_handler ) {
         if( $evt_handler['tag_name'] ) {
-            $rec['handlers'][] = [ 'type'=>'simple', 'name'=>$evt_handler['tag_name'] ];
+            $rec['handlers'][] = [ 'type'=>'simple_plugin', 'name'=>$evt_handler['tag_name'] ];
         } else if( $evt_handler['module_name'] ) {
             $rec['handlers'][] = [ 'type'=>'module', 'name'=>$evt_handler['module_name'] ];
         }
