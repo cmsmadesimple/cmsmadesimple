@@ -180,6 +180,9 @@ Core - General
   - FEATURE: New config entry "disable_locking" to disable all locking in Content Manager and Design Manager
   - CHANGE: Removes public static methods from the CmsAdminThemeBase class
   - CHANGE: Adds an AdminThemeManager class to handle iterating and loading admin themes.
+  - CHANGE: Internal pretty urls are now ON by default.  To disable it you set url_rewriting to none in the config.php
+  - CHANGE: enable browser caching by default
+  - REMOVED: preference for automatic clearing of cache from siteprefs.  This is now handled by a config entry.
 
 News2 v1.0
   - New core module that is similar to, but not directly compatible with News.
@@ -203,14 +206,14 @@ Installation Assistant - v1.4
   - Now require at least version 2.0.1 to upgrade
   - Now test the default character set
   - Now require at least PHP 7.1 and recommend 7.2+
-  - Upgrade to smarty v3.1.32
+  - Upgrade to smarty v3.1.33
   - CURL is now a requirement
   - ZipArchive is now a requirement (at least for the installer)
-  - no longer change the config file on upgrade.  Though we will for install and freshen.
   - Now install default theme from a zip file into the /assets/simplex directory (hardcoded)
   - Now install default content from an XML file exported by CGCU
   - The basic installer no longer emails the admin account information
   - Now write the primary contact email address to the config.php
+  - Now enable browser caching by default
 
 ModuleManaver v2.2
   - XML import code now lives here.

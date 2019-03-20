@@ -111,7 +111,6 @@ $frontendwysiwyg = '';
 $global_umask = '022';
 $logintheme = "default";
 $backendwysiwyg = '';
-$auto_clear_cache_age = 0;
 $allow_browser_cache = 0;
 $browser_cache_expiry = 60;
 $content_autocreate_urls = 0;
@@ -124,7 +123,6 @@ $content_cssnameisblockname = 1;
 $contentimage_path = '';
 $adminlog_lifetime = (3600*24*31);
 $search_module = 'Search';
-$use_smartycompilecheck = 1;
 $mailprefs = array('mailer'=>'mail',
 		   'host'=>'localhost',
 		   'port'=>25,
@@ -148,7 +146,6 @@ if (isset($_POST["cancel"])) {
  */
 $allow_browser_cache = cms_siteprefs::get('allow_browser_cache',$allow_browser_cache);
 $browser_cache_expiry = cms_siteprefs::get('browser_cache_expiry',$browser_cache_expiry);
-$auto_clear_cache_age = cms_siteprefs::get('auto_clear_cache_age',$auto_clear_cache_age);
 $thumbnail_width = cms_siteprefs::get('thumbnail_width',$thumbnail_width);
 $thumbnail_height = cms_siteprefs::get('thumbnail_height',$thumbnail_height);
 $global_umask = cms_siteprefs::get('global_umask',$global_umask);
@@ -178,7 +175,6 @@ $content_cssnameisblockname = cms_siteprefs::get('content_cssnameisblockname',$c
 $contentimage_path = cms_siteprefs::get('contentimage_path',$contentimage_path);
 $adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
 $search_module = cms_siteprefs::get('searchmodule',$search_module);
-$use_smartycompilecheck = cms_siteprefs::get('use_smartycompilecheck',$use_smartycompilecheck);
 $tmp = cms_siteprefs::get('mailprefs');
 if( $tmp ) $mailprefs = unserialize($tmp);
 
@@ -396,22 +392,10 @@ if (isset($_POST["editsiteprefs"])) {
                      $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
                      cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
                 }
-                if( isset($_POST['auto_clear_cache_age']) ) {
-                     $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
-                     cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
-                }
                 if (isset($_POST["adminlog_lifetime"])) {
                      $adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
                      cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
                 }
-                break;
-
-            case 'smarty':
-                if( isset($_POST['use_smartycompilecheck']) ) {
-                     $use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
-                     cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
-                }
-                $gCms->clear_cached_files();
                 break;
         }
 
@@ -521,7 +505,6 @@ $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('allow_browser_cache',$allow_browser_cache);
 $smarty->assign('browser_cache_expiry',$browser_cache_expiry);
-$smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
 $smarty->assign('content_autocreate_urls',$content_autocreate_urls);
 $smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
 $smarty->assign('content_mandatory_urls',$content_mandatory_urls);
@@ -531,11 +514,10 @@ $smarty->assign('content_cssnameisblockname',$content_cssnameisblockname);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
-$smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
 
 $tmp = array(
-         60*60*24=>lang('adminlog_1day'),
-         60*60*24*7=>lang('adminlog_1week'),
+     60*60*24=>lang('adminlog_1day'),
+     60*60*24*7=>lang('adminlog_1week'),
 	 60*60*24*14=>lang('adminlog_2weeks'),
 	 60*60*24*31=>lang('adminlog_1month'),
 	 60*60*24*31*3=>lang('adminlog_3months'),

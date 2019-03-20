@@ -1,5 +1,7 @@
 <?php
 namespace AdminLog;
+use cms_utils;
+use cms_siteprefs;
 
 class AutoPruneLogTask implements \CmsRegularTask
 {
@@ -9,11 +11,13 @@ class AutoPruneLogTask implements \CmsRegularTask
     protected static function &mod()
     {
         static $_mod;
-        if( !$_mod ) $_mod = \cms_utils::get_module('AdminLog');
+        if( !$_mod ) $_mod = cms_utils::get_module('AdminLog');
         return $_mod;
     }
 
-    public function get_name() { return get_class($this);
+    public function get_name() 
+    { 
+	return get_class($this);
     }
 
     public function get_description()
@@ -26,7 +30,7 @@ class AutoPruneLogTask implements \CmsRegularTask
         $oneday = 24 * 60 * 60;
         $onemonth = $oneday * 30;
 
-        $lifetime = (int) \cms_siteprefs::get(self::LIFETIME_SITEPREF,$onemonth);
+        $lifetime = (int) cms_siteprefs::get(self::LIFETIME_SITEPREF,$onemonth);
         if( $lifetime < 1 ) return;
         return $lifetime;
     }
@@ -38,14 +42,14 @@ class AutoPruneLogTask implements \CmsRegularTask
         $lifetime = $this->get_lifetime();
         if( $lifetime < 1 ) return FALSE;
 
-        $last_execute = \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
+        $last_execute = (int) cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
         IF( $last_execute < $time - $oneday ) return TRUE;
     }
 
     public function execute($time = '')
     {
         if( !$time ) $time = time();
-        $mod = \cms_utils::get_module('AdminLog');
+        $mod = cms_utils::get_module('AdminLog');
         $storage = new \AdminLog\storage( $mod );
         $lifetime = $this->get_lifetime();
         $oneday = 24 * 3600;
@@ -59,7 +63,7 @@ class AutoPruneLogTask implements \CmsRegularTask
     public function on_success($time = '')
     {
         if( !$time ) $time = time();
-        \cms_siteprefs::set(self::LASTEXECUTE_SITEPREF,$time);
+        cms_siteprefs::set(self::LASTEXECUTE_SITEPREF, $time);
     }
 
     public function on_failure($time = '')

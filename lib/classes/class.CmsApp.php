@@ -787,22 +787,17 @@ final class CmsApp
      * @ignore
      * @access private
      */
-    final public function clear_cached_files($age_days = 0)
+    final public function clear_cached_files()
     {
+        $this->get_hook_manager()->do_hook('Core::BeforeClearCache');
+
         // clear APC, or file cache separately and completely
         $config = $this->GetConfig();
         global_cache::clear_all();
         $this->get_cache_driver()->clear();
 
-        // additionall clear cached files that are older than N days old.
-        $age_days = max(-1,(int) $age_days);
-        global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
-        if( !defined('TMP_CACHE_LOCATION') ) return;
-        $age_days = max(0,(int)$age_days);
-        $this->get_hook_manager()->do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
-        $the_time = time() - $age_days * 24*60*60;
-
-        $dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
+        $the_time = time();
+        $dirs = array(TMP_CACHE_LOCATION, PUBLIC_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION);
         foreach( $dirs as $start_dir ) {
             $dirIterator = new RecursiveDirectoryIterator($start_dir);
             $dirContents = new RecursiveIteratorIterator($dirIterator);
@@ -813,7 +808,7 @@ final class CmsApp
         }
 
         file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
-        $this->get_hook_manager()->do_hook( 'Core::OnCacheClear', $the_time );
+        $this->get_hook_manager()->do_hook('Core::AfterClearCache');
     }
 
     /**

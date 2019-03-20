@@ -325,7 +325,6 @@ final class cms_config implements ArrayAccess
                 }
             }
             unset($config['max_upload_size']);
-            unset($config['upload_max_filesize']);
         }
 
         $this->_data = $config;
@@ -540,7 +539,6 @@ final class cms_config implements ArrayAccess
                 return '';
 
             case 'max_upload_size':
-            case 'upload_max_filesize':
                 $this->_cache[$key] = $this->get_upload_size();
                 return $this->_cache[$key];
 

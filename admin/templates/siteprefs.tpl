@@ -16,7 +16,6 @@ $(document).ready(function(){
 {tab_header name='sitedown' label=lang('sitedown_settings') active=$tab}
 {tab_header name='mail' label=lang('mail_settings') active=$tab}
 {tab_header name='setup' label=lang('setup') active=$tab}
-{tab_header name='smarty' label=lang('smarty_settings') active=$tab}
 
 {* +++++++++++++++++++++++++++++++++++++++++++ *}
 {tab_start name='general'}
@@ -483,15 +482,6 @@ $(document).ready(function(){
 		</fieldset>
 
 		<fieldset>
-			<legend>{'server_cache_settings'|lang}:&nbsp;</legend>
-				<div class="pageoverflow">
-					<p class="pagetext"><label for="autoclearcache2">{'autoclearcache2'|lang}:</label></p>
-					<p class="pageinput">
-						<input id="autoclearcache2" type="text" name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>&nbsp;{cms_help key2='settings_autoclearcache' title='autoclearcache2'|lang}
-					</p>
-				</div>
-		</fieldset>
-		<fieldset>
 			<legend>{'general_operation_settings'|lang}:&nbsp;</legend>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="umask">{lang('global_umask')}:</label></p>
@@ -543,30 +533,6 @@ $(document).ready(function(){
 	</form>
 
 {* +++++++++++++++++++++++++++++++++++++++++++ *}
-{tab_start name='smarty'}
-	<form id="siteprefform_smarty" method="post" action="{$formurl}">
-		<div>
-			<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-			<input type="hidden" name="active_tab" value="smarty" />
-			<input type="hidden" name="editsiteprefs" value="true" />
-		</div>
-		<div class="pageoverflow">
-			<p class="pageinput">
-				<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-				<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-			</p>
-			<br />
-		</div>
-
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="compilecheck">{lang('prompt_smarty_compilecheck')}:</label></p>
-			<p class="pageinput">
-				<select for="compilecheck" name="use_smartycompilecheck">
-					{html_options options=$yesno selected=$use_smartycompilecheck}
-				</select>&nbsp;{cms_help key2='settings_smartycompilecheck' title=lang('prompt_smarty_compilecheck')}
-			</p>
-		</div>
-	</form>
 {tab_end}
 
 </div>

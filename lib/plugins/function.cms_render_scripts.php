@@ -14,11 +14,12 @@ function smarty_function_cms_render_scripts( $params, $template )
     if($defer ) $defer = 'defer';
     $prefix = get_parameter_value($params,'prefix',PUBLIC_CACHE_URL);
 
-    $on_postrender = function(array $parms) use ($magic_string,$force,$nocache,$prefix,$defer) {
+    $on_postrender = function(array $parms) use ($magic_string,$force,$nocache,$prefix,$defer,$params) {
         if( !isset($parms['content']) ) return;
         $out = null;
         $combiner = cmsms()->get_script_manager();
-        $filename = $combiner->render_scripts(PUBLIC_CACHE_LOCATION, $force);
+        $entropy = sha1(__FILE__.json_encode($params));
+        $filename = $combiner->render_scripts(PUBLIC_CACHE_LOCATION, $entropy, $force);
         if($filename ) {
             if($nocache ) $filename .= '?t='.time();
             $fmt = "<script src=\"%s\" $defer></script>";
