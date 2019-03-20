@@ -82,7 +82,7 @@ class StylesheetManager
      * @param bool $force Force the output stylesheet to be regenerated.
      * @return string The output CSS filename.
      */
-    public function render( string $output_path, bool $force = false )
+    public function render( string $output_path, string $entropy = null, bool $force = false )
     {
         if( !$this->_files && !count($this->_files) ) return; // nothing to do
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
@@ -106,7 +106,7 @@ class StylesheetManager
             $t_sig .= $sig;
             $t_mtime = max( $rec['mtime'], $t_mtime );
         }
-        $sig = md5( __FILE__.$t_sig.$t_mtime );
+        $sig = md5( __FILE__.$t_sig.$t_mtime.$entropy );
 
         $css_file = "cms_$sig.css";
         $output_file = "$output_path/$css_file";

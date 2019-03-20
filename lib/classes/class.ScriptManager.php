@@ -51,7 +51,7 @@ class ScriptManager
           ];
     }
 
-    public function render_scripts( string $output_path, $force = false, $allow_defer = true )
+    public function render_scripts( string $output_path, string $entropy = null, $force = false, $allow_defer = true )
     {
         if( !$this->_scripts && !count($this->_scripts) ) return; // nothing to do
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
@@ -80,7 +80,7 @@ class ScriptManager
             $t_sig .= $sig;
             $t_mtime = max( $rec['mtime'], $t_mtime );
         }
-        $sig = md5( __FILE__.$t_sig.$t_mtime );
+        $sig = md5( __FILE__.$t_sig.$t_mtime.$entropy );
         $js_filename = "cms_$sig.js";
         $output_file = "$output_path/$js_filename";
         if( $force || !is_file($output_file) || filemtime($output_file) < $t_mtime ) {
