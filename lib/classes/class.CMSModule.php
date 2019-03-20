@@ -33,12 +33,12 @@ use \CMSMS\internal\bulkcontentoperations;
  * All modules should inherit and extend this class with their functionality.
  *
  * @package     CMS
- * @release     2.0
+ * @release     2.3
  * @since		0.9
- * @property    CmsApp $cms A reference to the application object (deprecated)
- * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
- * @property    cms_config $config A reference to the global app configuration object (deprecated)
- * @property    ADOConnection $db  A reference to the global database configuration object (deprecated)
+ * @property    CmsApp $cms A reference to the application object
+ * @property    Smarty_CMS $smarty A reference to the global smarty object
+ * @property    cms_config $config A reference to the global app configuration object
+ * @property    CMSMS\Database\Connection $db  A reference to the global database configuration object
  */
 abstract class CMSModule
 {
@@ -50,12 +50,6 @@ abstract class CMSModule
      * @ignore
      */
     private $params = [];
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $modinstall = false;
 
     /**
      * @access private
@@ -626,6 +620,7 @@ abstract class CMSModule
      */
     public function SetParameters()
     {
+        // nothing here
     }
 
     /**
@@ -640,6 +635,7 @@ abstract class CMSModule
      */
     public function InitializeCommon()
     {
+        // nothing here
     }
 
     /**
@@ -656,6 +652,7 @@ abstract class CMSModule
      */
     public function InitializeFrontend()
     {
+        // nothing here
     }
 
     /**
@@ -672,6 +669,7 @@ abstract class CMSModule
      */
     public function InitializeAdmin()
     {
+        // nothing here
     }
 
 
@@ -817,7 +815,6 @@ abstract class CMSModule
      * Returns the cms->config object as a reference
      *
      * @final
-     * @deprecated
      * @return array The config hash.
      */
     final public function GetConfig()
@@ -829,7 +826,6 @@ abstract class CMSModule
      * Returns the cms->db object as a reference
      *
      * @final
-     * @deprecated
      * @return ADOConnection Adodb Database object.
      */
     final public function &GetDb()
