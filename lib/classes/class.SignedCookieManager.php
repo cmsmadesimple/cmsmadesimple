@@ -45,6 +45,9 @@ class SignedCookieManager implements ICookieManager
         if( !isset($this->_parts['path']) || $this->_parts['path'] == '' ) {
             $this->_parts['path'] = '/';
         }
+	if( $this->_parts['path'] && !endswith($this->_parts['path'],'/') ) {
+	    $this->_parts['path'] .= '/';
+	}
         $this->_secure = $app->is_https_request();
     }
 
@@ -98,7 +101,7 @@ class SignedCookieManager implements ICookieManager
      * @param int $expire The expiry timestamp.  0 may be provided to indicate a session cookie, a timestamp earlier than now may be
      *    provided to indicate that the cookie can be removed.
      */
-    protected function set_cookie(string $key, string $encoded = null, int $expire) : bool
+    protected function set_cookie(string $key, string $encoded = null, int $expire = 0) : bool
     {
         $res = setcookie($key, $encoded, $expire, $this->cookie_path(), $this->cookie_domain(), $this->cookie_secure(), TRUE);
         return $res;

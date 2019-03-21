@@ -1041,7 +1041,8 @@ function setup_session(bool $cachable = FALSE)
     }
 
     #Setup session with different id and start it
-    $session_name = 'CMSSESSID'.substr(md5(__DIR__.CMS_VERSION), 0, 12);
+    $_setup_already = true;
+    $session_name = 'CMSSESSID'.substr(sha1(__FILE__.CMS_VERSION), 0, 16);
     if( !isset($CMS_INSTALL_PAGE) ) {
         @session_name($session_name);
         @ini_set('url_rewriter.tags', '');
@@ -1058,7 +1059,6 @@ function setup_session(bool $cachable = FALSE)
         }
     }
     if(!@session_id()) session_start();
-    $_setup_already = true;
 }
 
 /**
