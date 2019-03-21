@@ -1382,12 +1382,14 @@ abstract class CMSModule
      */
     public function DoAction($name, $id, $params, $returnid = null)
     {
+        // note: we don't want to change the prototype of this method
+        // so we have to do things with the $action_tpl member etc.
         if( $returnid == '' ) {
             $errors = $messages = null;
             $t_key = $this->GetName().'::activetab';
             $e_key = $this->GetName().'_errors';
             $m_key = $this->GetName().'_messages';
-            if( isset( $_SESSION[$t_key] ) ) $this->SetCurrentTab( $_SESSION[$t_key] );
+            if( isset( $_SESSION[$t_key]) ) $this->SetCurrentTab( $_SESSION[$t_key] );
             if( isset( $_SESSION[$e_key]) ) $errors = $_SESSION[$e_key];
             if( isset( $_SESSION[$m_key]) ) $messages = $_SESSION[$m_key];
             unset( $_SESSION[$t_key], $_SESSION[$e_key], $_SESSION[$m_key] );
@@ -1400,8 +1402,9 @@ abstract class CMSModule
             //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
             $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 
-            if( ($controller = $this->get_controller( $name, $id, $params, $returnid )) ) {
-                if( is_callable( $controller ) ) return $controller( $params );
+            $smarty = $this->action_tpl; // smarty in scope.
+            if( ($controller = $this->get_controller( $name, $id, $params, $returnid)) ) {
+                if( is_callable( $controller ) ) return $controller( $params, $smarty );
             }
             else {
                 $filename = $this->GetModulePath().'/action.' . $name . '.php';
@@ -1410,7 +1413,6 @@ abstract class CMSModule
                     $gCms = $this->app;
                     $db = $gCms->GetDb();
                     $config = $gCms->GetConfig();
-                    $smarty = $this->action_tpl; // smarty in scope.
                     $out = include($filename);
                     if( $out === 1 ) $out = null;
                     return $out;
@@ -1439,8 +1441,11 @@ abstract class CMSModule
      */
     final public function DoActionBase(string $name, string $id, array $params, int $returnid = null, &$parent )
     {
+        $id = cms_htmlentities($id);
+        $name = cms_htmlentities($name);
+
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-        if( $returnid != '' ) {
+        if( $returnid > 0 ) {
 
             // merge in params from module hints.
             $hints = cms_utils::get_app_data('__CMS_MODULE_HINT__'.$this->GetName());
@@ -1469,12 +1474,8 @@ abstract class CMSModule
             }
         }
 
-        $returnid = (int) $returnid;
-        $id = cms_htmlentities($id);
-        $name = cms_htmlentities($name);
-
         $gCms = $this->app; // in scope for compatibility reasons.
-        if( $returnid != 0 ) {
+        if( $returnid > 0 ) {
             $tmp = $params;
             $tmp['module'] = $this->GetName();
             $tmp['action'] = $name;
@@ -1482,6 +1483,8 @@ abstract class CMSModule
         }
 
         if( $gCms->template_processing_allowed() ) {
+            // creates a new template that can be used as the parent template inside module actions.
+            // we set it into the action_tpl member so that we don't need to change the prototype of the DoAction method.
             $smarty = $gCms->GetSmarty();
             $tpl = $smarty->createTemplate( 'string:EMPTY MODULE ACTION TEMPLATE', null, null, $parent );
             $tpl->assign('_action',$name);
@@ -1491,12 +1494,10 @@ abstract class CMSModule
             $tpl->assign('returnid',$returnid);
             $tpl->assign('mod',$this);
 
-            $this->action_tpl = $tpl; // parent smarty template,  which is the global smarty object if this is called directly from a template
+            $this->action_tpl = $tpl;
         }
         $output = $this->DoAction($name, $id, $params, $returnid);
-        if( $gCms->template_processing_allowed() ) {
-            $this->action_tpl = null;
-        }
+        if( $gCms->template_processing_allowed() ) $this->action_tpl = null;
 
         if( isset($params['assign']) ) {
             $smarty->assign(cms_htmlentities($params['assign']),$output);

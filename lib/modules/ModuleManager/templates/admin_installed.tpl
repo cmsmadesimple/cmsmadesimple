@@ -163,13 +163,15 @@ $(document).ready(function(){
             {/if}
 	  {/if}
         {else}
-          {if $item.e_status == 'need_upgrade' }
+	  {if !$item.missing_deps}
+            {if $item.e_status == 'need_upgrade'}
               {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}
 	      {$ops[]=$op}
-          {/if}
-	  {if $item.can_uninstall}
-            {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
-              {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$ModuleManager->Lang('title_uninstall')}">{$ModuleManager->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
+            {/if}
+	    {if $item.can_uninstall}
+              {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
+                {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$ModuleManager->Lang('title_uninstall')}">{$ModuleManager->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
+	      {/if}
 	    {/if}
 	  {/if}
         {/if}
