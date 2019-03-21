@@ -59,5 +59,7 @@ $content = $auth_module->DoActionBase( $action, $id, $params, null, $smarty );
 $theme_object = $gCms->get_admin_theme();
 $theme_object->SetTitle( lang('logintitle') );
 $theme_object->set_content( $content );
-echo $theme_object->do_loginpage( 'login' );
+$content = $theme_object->do_loginpage( 'login' );
+HookManager::do_hook('admin_content_postrender', ['content'=>&$content] );
+echo $content;
 return;

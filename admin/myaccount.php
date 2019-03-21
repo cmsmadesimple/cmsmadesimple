@@ -30,13 +30,14 @@ $CMS_TOP_MENU = 'admin';
 $CMS_ADMIN_TITLE = 'myaccount';
 require_once ("../lib/include.php");
 check_login();
+$gCms = cmsms();
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $thisurl = basename(__FILE__) . $urlext;
 $userid = get_userid(); // Checks also login
 if( !check_permission($userid,'Manage My Settings') && !check_permission($userid,'Manage My Account') ) return;
 
-$userobj = UserOperations::get_instance()->LoadUserByID($userid); // <- Safe to do, cause if $userid fails, it redirects automatically to login.
-$db = cmsms()->GetDb();
+$userobj = $gCms->GetUserOperations()->LoadUserByID($userid); // <- Safe to do, cause if $userid fails, it redirects automatically to login.
+$db = $gCms->GetDb();
 $error = '';
 $message = '';
 
@@ -49,7 +50,7 @@ $ce_navdisplay = cms_userprefs::get_for_user($userid,'ce_navdisplay');
 $syntaxhighlighter = cms_userprefs::get_for_user($userid, 'syntaxhighlighter');
 $default_cms_language = cms_userprefs::get_for_user($userid, 'default_cms_language');
 $old_default_cms_lang = $default_cms_language;
-$admintheme = cms_userprefs::get_for_user($userid, 'admintheme', CmsAdminThemeBase::GetDefaultTheme());
+$admintheme = cms_userprefs::get_for_user($userid, 'admintheme', $gCms->get_theme_manager()->get_default_themename());
 $bookmarks = cms_userprefs::get_for_user($userid, 'bookmarks', 0);
 $indent = cms_userprefs::get_for_user($userid, 'indent', true);
 $paging = cms_userprefs::get_for_user($userid, 'paging', 0);
@@ -158,7 +159,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
     $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
     $indent = (isset($_POST['indent']) ? true : false);
     $paging = (isset($_POST['paging']) ? 1 : 0);
-    $date_format_string = clearnValue($_POST['date_format_string']);
+    $date_format_string = cleanValue($_POST['date_format_string']);
     $default_parent = '';
     if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
     $homepage = cleanValue($_POST['homepage']);
@@ -221,7 +222,12 @@ for ($i = 0; $i < count($tmp); $i++) {
 $smarty->assign('syntax_opts', $tmp2);
 
 # Admin themes
-$smarty->assign('themes_opts',CmsAdminThemeBase::GetAvailableThemes());
+$tmp = $gCms->get_theme_manager()->list_themes();
+$themes = null;
+foreach( $tmp as $one ) {
+    $themes[$one['theme']] = $one['theme'];
+}
+$smarty->assign('themes_opts', $themes);
 
 # Modules
 $allmodules = ModuleOperations::get_instance()->GetInstalledModules();

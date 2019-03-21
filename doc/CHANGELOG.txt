@@ -21,11 +21,11 @@ Core - General
   - FEATURE: added new define in cms_config class: CMS_UPLOADS_URL
   - FEATURE: added new define in cms_config class: CMS_ADMIN_PATH
   - FEATURE: added the CMS_ASSETS_URL define and assets_url config entry.
-  - CHANGE: Impement new simple_plugin API. Simple plugins are stored in /assets/plugins and must contain the <?php tag.
+  - CHANGE: Implement new simple_plugin API. Simple plugins are stored in /assets/plugins and must contain the <?php tag.
     (we will try to auto add it on upgrade)
   - REMOVED: GUI functionality for managing UDT's (udt's are replaced by simple_plugins)
-  - UserTagOperations class is now merely a compatibility stub
-  - Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
+  - CHANGE: UserTagOperations class is now merely a compatibility stub and is deprecated
+  - CHANGE: Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
   - FEATURE: Sitedown mode now throws a 503 exception and outputs a 503 error code
   - FEATURE: The 503 error handler (maintenance mode) is now an Error Page.
   - BREAKING: Removed many previously deprecated and seldom used methods from the module API
@@ -40,7 +40,7 @@ Core - General
   - CHANGE: Increase the maxlength attribute for password input boxes in myaccount.
   - CHANGE: Move system modules to /lib/modules
   - CHANGE: Now look for third party modules in /assets/modules
-  - Remove un-necessary moduleinterface.php from the root directory.
+  - REMOVE: Remove un-necessary moduleinterface.php from the root directory.
   - FEATURE: Adds a new hook method to the HookManager class to allow returning the first nonempty value.
   - CHANGE: refactor changegroupperm localization technique.
   - FEATURE: Adds new root functions cms_notice, cms_warning, and cms_notice
@@ -48,10 +48,10 @@ Core - General
         With no audit manager installed, audit messages will be output to the HTTP error log.
   - CHANGE: Revise many places where audit() was being called to call the new methods.
   - CHANGE: audit() method now uses the AuditManager class
-  - CMSModule::SetError() and CMSModule::SetMessage() now set session variables, and the strings will no longer be on the array
+  - CHANGE: CMSModule::SetError() and CMSModule::SetMessage() now set session variables, and the strings will no longer be on the array
   - FEATURE: Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
   - Renames a bunch of classes into namespaces, and cleans up a bunch of old, commented out code.
-  - Replaces old "admin log" functionality with a new core module that has extra functionality.
+  - CHANGE: Replaces old "admin log" functionality with a new core module that has extra functionality.
   - CHANGE: Refactor mact processing.  get rid of un-necessary variables and duplicated code.
   - CHANGE: Autoloader will now try to load modules.  Modules can still only be instantiated once.
   - Improved autoloader now handles namespaced module classes if the module is already loaded.
