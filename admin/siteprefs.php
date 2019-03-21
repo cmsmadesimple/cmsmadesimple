@@ -354,11 +354,11 @@ if (isset($_POST["editsiteprefs"])) {
                     if( $mailprefs['host'] == '' ) {
                         $error .= '<li>'.lang('error_hostrequired').'</li>';
                     }
-                     if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
+                    if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
                     if( $mailprefs['port'] < 1 || $mailprefs['port'] > 10240 ) {
                         $error .= '<li>'.lang('error_portinvalid').'</li>';
                     }
-                     if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
+                    if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
                     if( $mailprefs['timeout'] < 1 || $mailprefs['timeout'] > 3600 ) {
                         $error .= '<li>'.lang('error_timeoutinvalid').'</li>';
                     }

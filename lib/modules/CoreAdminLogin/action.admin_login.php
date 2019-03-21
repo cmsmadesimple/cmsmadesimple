@@ -139,12 +139,14 @@ else if( isset( $params['submit'] ) ) {
     }
 }
 else if( isset( $params['cancel'] ) ) {
-    debug_buffer("Login cancelled.  Returning to login.");
+    debug_buffer("Login cancelled.  Returning to root page.");
     $login_ops->deauthenticate(); // just in case
     redirect( $config['root_url'].'/index.php', true );
 }
 
 // display the login form
+
+$login_ops->deauthenticate(); // cannot be logged in when we get here.
 $tpl = $smarty->CreateTemplate( $this->GetTemplateResource( 'admin_login.tpl' ), null, null, $smarty );
 $tpl->assign( 'error', $error );
 $tpl->assign( 'warning', $warning );

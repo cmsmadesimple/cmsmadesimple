@@ -865,7 +865,7 @@ $lang['help_function_get_template_vars'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{get_template_vars}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p><em>(optional)</em> var (mixed) - The variable to output.  If a string is supplied, it is assumed that the string is a variable name. Otherwise, data can be passed in.  i.e: <code>{get_template_vars var=$item}</code>.</p>
+	<p><em>(optional)</em> var (mixed) - The variable to output.  If a string is supplied, it is assumed that the string is a variable name. Otherwise, data can be passed in.  i.e: <code>{get_template_vars var=\$item}</code>.</p>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 

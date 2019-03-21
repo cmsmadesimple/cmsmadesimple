@@ -39,7 +39,9 @@ final class cms_siteprefs
     /**
      * @ignore
      */
-    private function __construct() {
+    private function __construct()
+    {
+        // nothing here
     }
 
     /**
@@ -139,8 +141,8 @@ final class cms_siteprefs
             $key .= '%';
         };
         $db = CmsApp::get_instance()->GetDb();
-        	$db->Execute($query,array($key));
-        	global_cache::clear(__CLASS__);
+        $db->Execute($query,array($key));
+        global_cache::clear(__CLASS__);
     }
 
     /**
