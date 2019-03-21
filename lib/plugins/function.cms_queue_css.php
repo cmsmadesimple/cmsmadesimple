@@ -19,6 +19,6 @@ function smarty_function_cms_queue_css( $params, &$template )
     $config = $gCms->GetConfig();
     $paths = [ CMS_ASSETS_PATH.$file, $config['uploads_path'].$file, CMS_ROOT_PATH.$file ];
     foreach( $paths as $one ) {
-        if(is_file($one) ) $combiner->queue($one);
+        if(is_file($one) ) $combiner->queue($one,$priority);
     }
 }
