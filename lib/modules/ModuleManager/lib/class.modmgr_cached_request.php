@@ -42,7 +42,7 @@ final class modmgr_cached_request
 
     private $_result;
 
-    private $_timeout;
+    private $_timeout = 3;
 
     private $_signature;
 
@@ -62,7 +62,7 @@ final class modmgr_cached_request
         if( $age ) $age = max(1,(int)$age);
 
         // build a signature
-        $this->_signature = md5(serialize(array($target,$data)));
+        $this->_signature = md5(__FILE__.serialize(array($target,$data)));
         $fn = $this->_getCacheFile();
         if( !$fn ) return;
 

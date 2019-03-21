@@ -107,7 +107,7 @@ final class modulerep_client
     {
         $mod = cms_utils::get_module('ModuleManager');
         $url = $mod->GetPreference('module_repository');
-        if( !$url )	return array(false,$mod->Lang('error_norepositoryurl'));
+        if( !$url ) return array(false,$mod->Lang('error_norepositoryurl'));
         $url .= '/moduledetailsgetall';
 
         global $CMS_VERSION;
@@ -117,6 +117,7 @@ final class modulerep_client
         $data['clientcmsversion'] = $CMS_VERSION;
 
         $req = new modmgr_cached_request();
+	// $req->setTimeout(5);
         $req->execute($url,$data);
         $status = $req->getStatus();
         $result = $req->getResult();

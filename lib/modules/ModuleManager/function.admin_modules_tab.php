@@ -60,10 +60,10 @@ else if (isset($_SESSION['mm_curletter'])) {
 $repmodules = '';
 {
     $result = modulerep_client::get_repository_modules($curletter);
-if( ! $result[0] ) {
-    $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
-    return;
-}
+    if( ! $result[0] ) {
+        $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
+        return;
+    }
     $repmodules = $result[1];
 }
 
