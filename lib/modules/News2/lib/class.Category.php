@@ -5,7 +5,7 @@ class Category
 {
 
     private $_data = [
-        'id'=>null, 'name'=>null, 'alias'=>null, 'parent_id'=>null, 'item_order'=>null,
+        'id'=>null, 'name'=>null, 'alias'=>null, 'parent_id'=>-1, 'item_order'=>null,
         'hierarchy'=>null, 'long_name'=>null, 'image_url'=>null
         ];
 

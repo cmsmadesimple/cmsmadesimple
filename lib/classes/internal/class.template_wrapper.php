@@ -10,6 +10,12 @@ use CmsApp;
  */
 class template_wrapper extends \Smarty_Internal_Template
 {
+    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
+    {
+        if( is_null($parent) ) $parent = $this;
+        return parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
+    }
+
     public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null)
     {
         // send an event before fetching...this allows us to change template stuff.

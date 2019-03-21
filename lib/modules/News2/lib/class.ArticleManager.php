@@ -603,8 +603,13 @@ class ArticleManager
         if( $article->url_slug ) cms_route_manager::del_static('',__NAMESPACE__,$article->id);
     }
 
-    public static function news_table() { return CMS_DB_PREFIX.'mod_news2_articles';
+    public static function news_table()
+    {
+        return CMS_DB_PREFIX.'mod_news2_articles';
     }
-    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_news2_fieldvals';
+
+    public static function fieldvals_table()
+    {
+        return CMS_DB_PREFIX.'mod_news2_fieldvals';
     }
 } // class

@@ -28,9 +28,10 @@ class CategoriesManager
         if( $tmp ) return true;
     }
 
-    public function createNew() : Category
+    public function createNew( array $in = null ) : Category
     {
-        return Category::from_row( [] );
+        if( is_null($in) ) $in = [];
+        return Category::from_row( $in );
     }
 
     /**
@@ -167,6 +168,7 @@ class CategoriesManager
         // and insert the bugger
         $sql = 'INSERT INTO '.self::table_name().' (name, alias, image_url, parent_id, item_order) VALUES (?,?,?,?,?)';
         $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $item_order] );
+        return $this->db->Insert_ID();
     }
 
     protected function _update( Category $obj )
@@ -206,6 +208,7 @@ class CategoriesManager
                        hierarchy = null, long_name = null
                 WHERE id = ? ORDER BY parent_id';
         $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $item_order , $obj->id ] );
+        return $obj->id;
     }
 
     protected function _updateRow( array $row )
@@ -217,10 +220,12 @@ class CategoriesManager
     protected function _arrayToTree( $flat, $parent_id = -1 )
     {
         // build arrays of rows grouped by parent id.
+        debug_display($flat);
         $grouped = [];
         foreach( $flat as $row ) {
             $grouped[$row['parent_id']][] = $row;
         }
+        debug_display($grouped,'grouped');
 
         $fnBuilder = function( $siblings ) use (&$fnBuilder, $grouped) {
             foreach( $siblings as $key => $sibling ) {
@@ -290,18 +295,26 @@ class CategoriesManager
 
     public function save( Category $obj )
     {
+        $id = $obj->id;
         if( $obj->id > 0 ) {
             $this->_update( $obj );
         } else {
-            $this->_insert( $obj );
+            $id = $this->_insert( $obj );
         }
 
         $this->updateHierarchyPositions();
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
+        return $id;
     }
 
-    public static function articles_table() { return CMS_DB_PREFIX.'mod_news2_articles';
+    public static function articles_table()
+    {
+        return CMS_DB_PREFIX.'mod_news2_articles';
     }
-    public static function table_name() { return CMS_DB_PREFIX.'mod_news2_categories';
+
+    public static function table_name()
+    {
+        return CMS_DB_PREFIX.'mod_news2_categories';
     }
+
 } // class

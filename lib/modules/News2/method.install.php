@@ -91,3 +91,23 @@ $this->CreatePermission( News2::MANAGE_PERM, News2::MANAGE_PERM );   // do anyth
 $this->CreatePermission( News2::OWN_PERM, News2::OWN_PERM );         // add articles, can edit own articles, cannot delete articles
 $this->CreatePermission( News2::DELOWN_PERM, News2::DELOWN_PERM );   // can delete My arciles
 $this->CreatePermission( News2::APPROVE_PERM, News2::APPROVE_PERM ); // can approve articles for display.
+
+// create a new category
+$arr = [
+    'name'=>'General',
+    'alias'=>'general'
+    ];
+$category = $this->categoriesManager()->createNew($arr);
+$category_id = $this->categoriesManager()->save( $category );
+
+// create a new article in this new category.
+$arr = [
+    'category_id'=>$category_id,
+    'status'=>Article::STATUS_PUBLISHED,
+    'news_date'=>time(),
+    'title'=>'News2 module installed',
+    'summary'=>'News2 is installed',
+    'content'=>'<p>The News2 moedule has been installed. <strong>Exciting!</strong></p>'
+    ];
+$article = $this->articleManager()->createNew( $arr );
+$this->articleManager()->save( $article );

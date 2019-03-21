@@ -39,10 +39,8 @@ use \ModuleManager\utils as modmgr_utils;
 if( !isset($gCms) ) exit;
 
 global $CMS_VERSION;
-$dir = CMS_ASSETS_PATH.'/modules';
-$caninstall = (is_dir($dir) && is_writable($dir));
-$moduledir = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
-$writable = is_writable( $moduledir );
+$moduledir = CMS_ASSETS_PATH.'/modules';
+$caninstall = $writable = (is_dir($moduledir) && is_writable($moduledir));
 $results = array();
 
 if( !empty($newversions) ) {
@@ -95,8 +93,10 @@ if( !empty($newversions) ) {
                 if( isset( $row['description'] ) ) $onerow->description=$row['description'];
                 $onerow->txt= $this->Lang('upgrade_available',$row['version'],$mver);
                 $moddir = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
-                if( (($writable && is_dir($moddir) && is_directory_writable( $moddir )) ||
-                  ($writable && !file_exists( $moddir ) )) && $caninstall ) {
+                if( (is_dir($moddir) && is_directory_writable( $moddir )) ||
+                    ($writable && !file_exists( $moddir ) ) ) {
+                    // module directory doesn't exist, but parent is writable OR
+                    // module directory exists AND is writable.
                     if( (!empty($row['maxcmsversion']) && version_compare($CMS_VERSION,$row['maxcmsversion']) > 0) ||
                         (!empty($row['mincmsversion']) && version_compare($CMS_VERSION,$row['mincmsversion']) < 0) ) {
                            $onerow->status = 'incompatible';
