@@ -168,7 +168,6 @@ class ModuleManager extends CMSModule
     {
         @set_time_limit(9999);
         if( isset( $params['activetab'] ) ) {
-            die('here');
             $tab = filter_var( $params['activetab'], FILTER_SANITIZE_STRING );
             $this->SetCurrentTab( $tab );
             unset( $params['activetab'] );
