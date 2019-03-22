@@ -132,6 +132,7 @@ try {
     //
     // BUILD THE DISPLAY
     //
+    $smarty->assign('lock_timeout',0);
     if (!$apply && $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
         $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout') && !$config['disable_locking']);
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));

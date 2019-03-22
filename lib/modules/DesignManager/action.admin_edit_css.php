@@ -103,6 +103,7 @@ try {
     //
     // prepare to display.
     //
+    $smarty->assign('lock_timeout',0);
     if (!$apply && $css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
         $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout') && !$config['disable_locking']);
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
