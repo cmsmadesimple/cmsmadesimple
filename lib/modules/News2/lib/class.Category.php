@@ -59,7 +59,7 @@ class Category
         }
     }
 
-    public function from_row( array $row ) : Category
+    public static function from_row( array $row ) : Category
     {
         $obj = new self;
         foreach( $row as $key => $val ) {
