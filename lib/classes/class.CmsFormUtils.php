@@ -369,26 +369,26 @@ final class CmsFormUtils
         $tagparms['action'] = null;
         $tagparms['method'] = 'post';
         $tagparms['enctype'] = 'multipart/form-data';
-        if($gCms->test_state(CmsApp::STATE_LOGIN_PAGE) ) {
+        if ($gCms->test_state(CmsApp::STATE_LOGIN_PAGE)) {
             $tagparms['action'] = 'login.php';
         }
-        else if($gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+        else if ($gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             // check if it's a module action
-            if($mactparms['module'] ) {
+            if ($mactparms['module']) {
                 $tagparms['action'] = 'moduleinterface.php';
                 if(!isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
 
                 $mactparms['returnid'] = '';
-                if(!$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
+                if (!$mactparms['mid']) $mactparms['mid'] = 'm1_';
             }
         }
-        else if($gCms->is_frontend_request() ) {
-            if($mactparms['module'] ) {
+        else if ($gCms->is_frontend_request()) {
+            if ($mactparms['module']) {
                 $tagparms['action'] = 'index.php'; // default page
                 if(!$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();
                 $hm = $gCms->GetHierarchyManager();
                 $node = $hm->sureGetNodeById($mactparms['returnid']);
-                if($node ) {
+                if ($node) {
                     $content_obj = $node->getContent();
                     if($content_obj ) $tagparms['action'] = $content_obj->GetURL();
                 }
@@ -421,7 +421,7 @@ final class CmsFormUtils
 
                 case 'url':
                     $key = 'action';
-                    if(dirname($value) == '.' ) {
+                    if( dirname($value) == '.' ) {
                         $config = $gCms->GetConfig();
                         $value = $config['admin_url'].'/'.trim($value);
                     }
@@ -435,7 +435,7 @@ final class CmsFormUtils
                     break;
 
                 case 'extraparms':
-                    if(is_array($value) && count($value) ) {
+                    if( is_array($value) && count($value) ) {
                         foreach( $value as $key=>$value2 ) {
                             $parms[$key] = $value2;
                         }
@@ -450,7 +450,7 @@ final class CmsFormUtils
                     break;
 
                 default:
-                    if(startswith($key, 'form-') ) {
+                    if( startswith($key, 'form-') ) {
                         $key = substr($key, 5);
                         $tagparms[$key] = $value;
                     } else {
@@ -462,7 +462,7 @@ final class CmsFormUtils
 
         // make sure we have all the data in mactparms and tagparams, and extraparms
         $extraparms = null;
-        if( !$gCms->is_frontend_request() ) {
+        if (!$gCms->is_frontend_request()) {
             // admin request
             if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
             if( $mactparms['module'] ) {
@@ -478,7 +478,7 @@ final class CmsFormUtils
                     }
                 }
             }
-            if(!isset($mactparms['returnid']) || $mactparms['returnid'] < 1 ) {
+            if( !isset($mactparms['returnid']) || $mactparms['returnid'] < 1 ) {
                 // not frontend request, not linking to a frontend url.
                 if( isset($_SESSION[CMS_USER_KEY]) ) $extraparms[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
             }

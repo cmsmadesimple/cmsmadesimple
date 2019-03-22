@@ -1557,6 +1557,7 @@ abstract class CMSModule
                 'module'=>$this->GetName(), 'mid'=>$id, 'returnid'=>$returnid, 'action'=>$action, 'inline'=>$inline,
                 'method'=>$method, 'enctype'=>$method, 'extra_str'=>$extra
             ];
+        if( !empty($params) ) $parms['extraparms'] = $params;
 
         // this is for compatibility, not really required
         if( !$idsuffix ) $idsuffix = $_formcount++;
