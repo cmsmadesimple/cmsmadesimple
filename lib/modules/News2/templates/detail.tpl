@@ -11,9 +11,8 @@
 
 	 {if $article->summary}
 	     <div class="news2-article-summary">{$article->summary}</div>
-	 {else}
-	     <div class="news2-article-summary">{$article->content|strip_tags|nl2br}</div>
 	 {/if}
+	 <div class="news2-article-summary">{$article->content|strip_tags|nl2br}</div>
 
 	 <div class="news2-article-postdate">
 	      <span class="news2-prompt">{$mod->Lang('lbl_newsdate')}:</span>
