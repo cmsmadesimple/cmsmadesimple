@@ -87,9 +87,9 @@ try {
     }
 
     if( $design->get_id() > 0 ) {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_design').': '.$design->get_name()." ({$design->get_id()})");
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('edit_design').': '.$design->get_name()." ({$design->get_id()})");
     } else {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_design'));
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('create_design'));
     }
 
     $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));

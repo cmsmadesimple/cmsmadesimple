@@ -142,9 +142,9 @@ try {
     }
 
     if( $css_ob->get_id() > 0 ) {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_stylesheet').': '.$css_ob->get_name()." ({$css_ob->get_id()})");
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('edit_stylesheet').': '.$css_ob->get_name()." ({$css_ob->get_id()})");
     } else {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_stylesheet'));
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('create_stylesheet'));
     }
 
     $smarty->assign('has_designs_right', $this->CheckPermission('Manage Designs'));

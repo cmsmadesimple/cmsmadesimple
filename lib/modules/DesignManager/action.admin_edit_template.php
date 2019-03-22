@@ -158,9 +158,9 @@ try {
     }
 
     if( ($tpl_id = $tpl_obj->get_id()) > 0 ) {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template').': '.$tpl_obj->get_name()." ($tpl_id)");
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('edit_template').': '.$tpl_obj->get_name()." ($tpl_id)");
     } else {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_template'));
+        $this->cms->get_admin_theme()->SetSubTitle($this->Lang('create_template'));
     }
 
     $smarty->assign('type_obj', $type_obj);
