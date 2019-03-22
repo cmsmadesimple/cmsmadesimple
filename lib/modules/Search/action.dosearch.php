@@ -1,63 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-
-class SearchItemCollection
-{
-
-    var $_ary;
-
-    var $maxweight;
-
-    public function __construct()
-    {
-        $this->_ary = array();
-        $this->maxweight = 1;
-    }
-
-    public function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
-    {
-        if( $txt == '' ) $txt = $url;
-        $exists = false;
-
-        foreach ($this->_ary as $oneitem) {
-            if ($url == $oneitem->url) {
-                $exists = true;
-                break;
-            }
-        }
-
-        if (!$exists) {
-            $newitem = new StdClass();
-            $newitem->url = $url;
-            $newitem->urltxt = search_CleanupText($txt);
-            $newitem->title = $title;
-            $newitem->intweight = intval($weight);
-            if (intval($weight) > $this->maxweight) $this->maxweight = intval($weight);
-            if (!empty($module) ) {
-                $newitem->module = $module;
-                if( intval($modulerecord) > 0 )	$newitem->modulerecord = $modulerecord;
-            }
-            $this->_ary[] = $newitem;
-        }
-    }
-
-    public function CalculateWeights()
-    {
-        foreach ($this->_ary as $oneitem) {
-            $oneitem->weight = intval(($oneitem->intweight / $this->maxweight) * 100);
-        }
-    }
-
-    public function Sort()
-    {
-        $fn = function($a,$b) {
-            if ($a->urltxt == $b->urltxt) return 0;
-            return ($a->urltxt < $b->urltxt ? -1 : 1);
-        };
-
-        usort($this->_ary, $fn);
-    }
-} // end of class
+use Search\SearchItemCollection;
 
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,7 +18,7 @@ else {
 }
 $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null);
 
-if ($params['searchinput'] != '') {
+if (isset($params['searchinput']) && $params['searchinput'] != '') {
     // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
     $params['searchinput'] = cms_html_entity_decode($params['searchinput'],ENT_COMPAT,'UTF-8');
     $params['searchinput'] = strip_tags($params['searchinput']);
@@ -129,7 +72,7 @@ if ($params['searchinput'] != '') {
         }
     }
 
-    $val = 100 * 100 * 100 * 100 * 25;
+    // $val = 100 * 100 * 100 * 100 * 25;
     $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND (COALESCE(i.expires,NOW()) >= NOW())";
     if( isset( $params['modules'] ) ) {
         $modules = explode(",",$params['modules']);
