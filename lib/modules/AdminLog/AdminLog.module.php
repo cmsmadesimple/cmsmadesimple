@@ -68,19 +68,44 @@ final class AdminLog extends \CMSModule
         }
     }
 
-    public function GetFriendlyName() { return $this->Lang('friendlyname');
+    public function GetFriendlyName()
+    {
+        return $this->Lang('friendlyname');
     }
-    public function GetVersion() { return '1.0';
+
+    public function GetVersion()
+    {
+        return '1.0';
     }
-    public function GetHelp() { return $this->Lang('help');
+
+    public function MinimumCMSVersion()
+    {
+        return '2.2.900';
     }
-    public function IsPluginModule() { return FALSE;
+
+    public function GetHelp()
+    {
+        return $this->Lang('help');
     }
-    public function HasAdmin() { return TRUE;
+
+    public function IsPluginModule()
+    {
+        return FALSE;
     }
-    public function GetAdminSection() { return 'siteadmin';
+
+    public function HasAdmin()
+    {
+        return TRUE;
     }
-    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences');
+
+    public function GetAdminSection()
+    {
+        return 'siteadmin';
+    }
+
+    public function VisibleToAdminUser()
+    {
+        return $this->CheckPermission('Modify Site Preferences');
     }
 
     public function HasCapability($capability, $params = array())

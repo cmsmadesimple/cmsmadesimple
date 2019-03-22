@@ -95,7 +95,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                     $q2 = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME.' WHERE originator = ?';
                     $typelist = $db->GetCol($q2,array($second));
                     if( !count($typelist) ) $typelist = array(-999);
-                    $where['type'][] = 'type_id IN ('.implode(',',$typelist).')';
+                    $where['type'][] = 'type.id IN ('.implode(',',$typelist).')';
                     break;
 
                 case 'l':
@@ -121,7 +121,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                 case 't': // type
                 case 'type':
                     $second = (int)$second;
-                    $where['type'][] = 'type_id = '.$db->qstr($second);
+                    $where['type'][] = 'type.id = '.$db->qstr($second);
                     break;
 
                 case 'c': // category

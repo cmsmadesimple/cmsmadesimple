@@ -85,7 +85,7 @@ final class CMSContentManager extends CMSModule
     }
 
     public function MinimumCMSVersion() {
-        return "1.99-alpha0";
+        return '2.2.900';
     }
 
     public function InstallPostMessage() {

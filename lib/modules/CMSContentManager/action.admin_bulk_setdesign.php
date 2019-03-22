@@ -35,6 +35,7 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 $this->SetCurrentTab('pages');
+
 if( $config['page_template_list'] ) {
     $this->SetError($this->Lang('error_action_invalid'));
     $this->RedirectToAdminTab();
@@ -73,7 +74,8 @@ if( isset($params['submit']) ) {
     // do the real work
     try {
         @set_time_limit(9999);
-        ContentOperations::get_instance()->LoadChildren(-1,FALSE,FALSE,$pagelist);
+        $ops = $gCms->GetContentOperations();
+        $ops->LoadChildren(-1,FALSE,FALSE,$pagelist);
 
         $i = 0;
         foreach( $pagelist as $pid ) {
@@ -85,7 +87,7 @@ if( isset($params['submit']) ) {
             $content->SetTemplateId((int)$params['template']);
             $content->SetPropertyValue('design_id',$params['design']);
             $content->SetLastModifiedBy(get_userid());
-            $content->Save();
+            $ops->save_content($content);
             $i++;
         }
         if( $i != count($pagelist) ) {

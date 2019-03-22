@@ -21,67 +21,83 @@
 
 final class DesignManager extends CMSModule
 {
-    public function GetFriendlyName()  {
+    public function GetFriendlyName()
+    {
         return $this->Lang('friendlyname');
     }
 
-    public function GetVersion()  {
+    public function GetVersion()
+    {
         return '1.1.7';
     }
 
-    public function MinimumCMSVersion()  {
-        return '2.1';
+    public function MinimumCMSVersion()
+    {
+        return '2.2.903';
     }
 
-    public function LazyLoadAdmin() {
+    public function LazyLoadAdmin()
+    {
         return TRUE;
     }
 
-    public function LazyLoadFrontend() {
+    public function LazyLoadFrontend()
+    {
         return TRUE;
     }
 
-    public function IsPluginModule() {
+    public function IsPluginModule()
+    {
         return FALSE;
     }
 
-    public function GetAuthor() {
+    public function GetAuthor()
+    {
         return 'Calguy1000';
     }
 
-    public function GetAuthorEmail() {
+    public function GetAuthorEmail()
+    {
         return 'calguy1000@cmsmadesimple.org';
     }
 
-    public function HasAdmin() {
+    public function HasAdmin()
+    {
         return true;
     }
 
-    public function GetAdminSection() {
+    public function GetAdminSection()
+    {
         return 'layout';
     }
 
-    public function AllowAutoInstall() {
+    public function AllowAutoInstall()
+    {
         return TRUE;
     }
 
-    public function GetHelp() {
+    public function GetHelp()
+    {
         return CmsLangOperations::lang_from_realm('help','help_designmanager_help');
     }
 
-    public function GetChangeLog() {
+    public function GetChangeLog()
+    {
         return file_get_contents(__DIR__.'/changelog.inc');
     }
 
-    public function GetAdminDescription() {
+    public function GetAdminDescription()
+    {
         return $this->Lang('moddescription');
     }
 
-    public function InstallPostMessage() {
+    public function InstallPostMessage()
+    {
         return $this->Lang('postinstall');
     }
 
-    public function UninstallPostMessage() {
+    public function UninstallPostMessage()
+    {
         return $this->Lang('postuninstall');
     }
 
@@ -160,8 +176,3 @@ final class DesignManager extends CMSModule
         return false;
     }
 } // class
-
-#
-# EOF
-#
-?>
