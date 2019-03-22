@@ -463,6 +463,7 @@ final class CmsFormUtils
         // make sure we have all the data in mactparms and tagparams, and extraparms
         $extraparms = null;
         if( !$gCms->is_frontend_request() ) {
+            // admin request
             if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
             if( $mactparms['module'] ) {
                 //if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
@@ -483,12 +484,13 @@ final class CmsFormUtils
             }
         }
         else {
+            // frontend request
             if( !$tagparms['action'] ) {
                 if( !isset($mactparms['module']) ) {
                     cms_error('Call to CmsFormUtils::create_form_start for admin form does not have a module or tag action');
                     return;
                 }
-                $tagparms['action'] = 'm.php';
+                $tagparms['action'] = 'index.php';
                 if( !$mactparms['action'] ) $mactparms['action'] = 'defaultadmin';
                 if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
                 $mactparms['returnid'] = '';
