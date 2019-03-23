@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function search_StemPhrase(&$module,$phrase)
+function search_StemPhrase(&$module,$phrase,$filter_stopwords, $do_stemming)
 {
     // strip out smarty tags
     $phrase = preg_replace('/{.*?}/', ' ', $phrase);
@@ -51,12 +51,13 @@ function search_StemPhrase(&$module,$phrase)
     $words = array_filter($words, '__search_stemphrase_filter');
 
     // ignore stop words
-    $words = $module->RemoveStopWordsFromArray($words);
+    if( $filter_stopwords ) $words = $module->RemoveStopWordsFromArray($words);
 
     // stem words
+    if( !$do_stemming ) return $words;
+
     $stemmed_words = array();
-    $stemmer = null;
-    if( $module->GetPreference('usestemming', 'false') != 'false' ) $stemmer = new PorterStemmer();
+    $stemmer = new PorterStemmer();
 
     foreach ($words as $word) {
         $word = trim($word);
@@ -65,12 +66,7 @@ function search_StemPhrase(&$module,$phrase)
         if (strlen($word) < 3) continue;
 
         //trim words get rid of wrapping quotes
-        if (is_object($stemmer)) {
-            $stemmed_words[] = $stemmer->stem($word, true);
-        }
-        else {
-            $stemmed_words[] = $word;
-        }
+        $stemmed_words[] = $stemmer->stem($word, true);
     }
     return $stemmed_words;
 }
@@ -78,6 +74,8 @@ function search_StemPhrase(&$module,$phrase)
 
 function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
 {
+    $do_stopwords = true;
+    $do_stemming = cms_to_bool($obj->GetPreference('usesstemming','false'));
     $db = $obj->GetDb();
     $obj->DeleteWords($module, $id, $attr);
 
@@ -89,7 +87,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
     if ($content != "") {
         //Clean up the content
         $content = html_entity_decode($content);
-        $stemmed_words = $obj->StemPhrase($content);
+        $stemmed_words = $obj->StemPhrase($content, $do_stopwords, $do_stemming);
         $tmp = array_count_values($stemmed_words);
         if( !is_array($tmp) || !count($tmp) ) return;
         $words = array();

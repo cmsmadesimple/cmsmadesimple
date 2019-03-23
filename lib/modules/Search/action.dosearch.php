@@ -18,16 +18,23 @@ else {
 }
 $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null);
 
-if (isset($params['searchinput']) && $params['searchinput'] != '') {
+$use_like = false;
+if( isset($_REQUEST['use_like']) ) $use_like = cms_to_bool($_REQUEST['use_like']);
+if( isset($params['use_like']) ) $use_like = cms_to_bool($params['use_like']);
+$searchinput = null;
+if( isset($_REQUEST['term']) ) $searchinput = filter_var($_REQUEST['term'],FILTER_SANITIZE_STRING);
+if( isset($params['searchinput']) ) $searchinput = $params['searchinput'];
+if( $searchinput ) {
     // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
-    $params['searchinput'] = cms_html_entity_decode($params['searchinput'],ENT_COMPAT,'UTF-8');
-    $params['searchinput'] = strip_tags($params['searchinput']);
-    \CMSMS\HookManager::do_hook('Search::SearchInitiated', [ trim($params['searchinput'])] );
+    $searchinput = trim(strip_tags(cms_html_entity_decode($searchinput, ENT_COMPAT, 'UTF-8')));
 
     $searchstarttime = microtime(true);
+    $filter_stopwords = true;  // if there are stopwords set, or default stop words... this will filter them.
+    $do_stemming = cms_to_bool($this->GetPreference('usesstemming','false'));
 
-    $tpl_ob->assign('phrase', $params['searchinput']);
-    $words = array_values($this->StemPhrase($params['searchinput']));
+    $tpl_ob->assign('phrase', $searchinput);
+    $words = array_values($this->StemPhrase($searchinput,$filter_stopwords,$do_stemming));
+    $words = \CMSMS\HookManager::do_hook('Search::SearchFilterWords', $words );
     $nb_words = count($words);
     $max_weight = 1;
 
@@ -37,38 +44,40 @@ if (isset($params['searchinput']) && $params['searchinput'] != '') {
         $ary = array();
         foreach ($words as $word) {
             $word = trim($word);
-            // $ary[] = "word = " . $db->qstr(htmlentities($word, ENT_COMPAT, 'UTF-8'));
-            $ary[] = "word = " . $db->qstr($word);
+            if( $use_like && strpos($word,'%') === FALSE ) {
+                $ary[] = 'word LIKE ' . $db->qstr($word.'%');
+            } else {
+                $ary[] = "word = " . $db->qstr($word);
+            }
         }
         $searchphrase = implode(' OR ', $ary);
-    }
 
-    // Update the search words table
-    if( $this->GetPreference('savephrases','false') == 'false' ) {
-        foreach( $words as $word ) {
+        // Update the search words table
+        if( $this->GetPreference('savephrases','false') == 'false' ) {
+            foreach( $words as $word ) {
+                $q = 'SELECT count FROM '.CMS_DB_PREFIX.'module_search_words WHERE word = ?';
+                $tmp = $db->GetOne($q,array($word));
+                if( $tmp ) {
+                    $q = 'UPDATE '.CMS_DB_PREFIX.'module_search_words SET count=count+1 WHERE word = ?';
+                    $db->Execute($q,array($word));
+                }
+                else {
+                    $q = 'INSERT INTO '.CMS_DB_PREFIX.'module_search_words (word,count) VALUES (?,1)';
+                    $db->Execute($q,array($word));
+                }
+            }
+        }
+        else {
             $q = 'SELECT count FROM '.CMS_DB_PREFIX.'module_search_words WHERE word = ?';
-            $tmp = $db->GetOne($q,array($word));
+            $tmp = $db->GetOne($q,array($searchinput));
             if( $tmp ) {
                 $q = 'UPDATE '.CMS_DB_PREFIX.'module_search_words SET count=count+1 WHERE word = ?';
-                $db->Execute($q,array($word));
+                $db->Execute($q,array($searchinput));
             }
             else {
                 $q = 'INSERT INTO '.CMS_DB_PREFIX.'module_search_words (word,count) VALUES (?,1)';
-                $db->Execute($q,array($word));
+                $db->Execute($q,array($searchinput));
             }
-        }
-    }
-    else {
-        $term = trim($params['searchinput']);
-        $q = 'SELECT count FROM '.CMS_DB_PREFIX.'module_search_words WHERE word = ?';
-        $tmp = $db->GetOne($q,array($term));
-        if( $tmp ) {
-            $q = 'UPDATE '.CMS_DB_PREFIX.'module_search_words SET count=count+1 WHERE word = ?';
-            $db->Execute($q,array($term));
-        }
-        else {
-            $q = 'INSERT INTO '.CMS_DB_PREFIX.'module_search_words (word,count) VALUES (?,1)';
-            $db->Execute($q,array($term));
         }
     }
 
@@ -82,10 +91,12 @@ if (isset($params['searchinput']) && $params['searchinput'] != '') {
         $query .= ' AND i.module_name IN ('.implode(',',$modules).')';
     }
     $query .= " GROUP BY i.module_name, i.content_id, i.extra_attr";
+    /*
     if( !isset($params['use_or']) || $params['use_or'] == 0 ) {
         //This makes it an AND query
-        $query .= " HAVING count(*) >= $nb_words";
+        $query .= " HAVING nb >= $nb_words";
     }
+    */
     $query .= " ORDER BY nb DESC, total_weight DESC";
 
     $result = $db->Execute($query);
@@ -183,11 +194,11 @@ if (isset($params['searchinput']) && $params['searchinput'] != '') {
     }
     $col->_ary = $newresults;
 
-    \CMSMS\HookManager::do_hook( 'Search::SearchCompleted', [ &$params['searchinput'], &$col->_ary ] );
+    \CMSMS\HookManager::do_hook( 'Search::SearchCompleted', [ &$searchinput, &$col->_ary ] );
 
     $tpl_ob->assign('searchwords',$words);
     $tpl_ob->assign('results', $col->_ary);
-    $tpl_ob->assign('itemcount', count($col->_ary));
+    $tpl_ob->assign('itemcount', (!empty($col->ary)) ? count($col->_ary) : 0);
 
     $searchendtime = microtime(true);
     $tpl_ob->assign('timetook', ($searchendtime - $searchstarttime));

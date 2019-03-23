@@ -25,21 +25,13 @@ define( "NON_INDEXABLE_CONTENT", "<!-- pageAttribute: NotSearchable -->" );
 
 class Search extends CMSModule
 {
-
-    private $_tools_loaded;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->_tools_loaded = false;
-    }
-
     private function load_tools()
     {
-        if( !$this->_tools_loaded ) {
+        static $_loaded;
+        if( !$_loaded ) {
             $fn = __DIR__.'/search.tools.php';
             include_once($fn);
-            $this->_tools_loaded = true;
+            $_loaded = TRUE;
         }
     }
 
@@ -73,21 +65,44 @@ class Search extends CMSModule
         return true;
     }
 
-    public function GetVersion() { return '1.51.7.1';
+    public function GetVersion()
+    {
+        return '1.52';
     }
-    public function MinimumCMSVersion() { return '1.12-alpha0';
+
+    public function MinimumCMSVersion()
+    {
+        return '2.2.903';
     }
-    public function GetAdminDescription() { return $this->Lang('description');
+
+    public function GetAdminDescription()
+    {
+        return $this->Lang('description');
     }
-    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences');
+
+    public function VisibleToAdminUser()
+    {
+        return $this->CheckPermission('Modify Site Preferences');
     }
-    public function GetHelp($lang='en_US') { return $this->Lang('help');
+
+    public function GetHelp($lang='en_US')
+    {
+        return file_get_contents(__DIR__.'/help.inc');
     }
-    public function GetAuthor() { return 'Ted Kulp';
+
+    public function GetAuthor()
+    {
+        return 'Ted Kulp';
     }
-    public function GetAuthorEmail() { return 'ted@cmsmadesimple.org';
+
+    public function GetAuthorEmail()
+    {
+        return 'ted@cmsmadesimple.org';
     }
-    public function GetChangeLog() { return @file_get_contents(__DIR__.'/changelog.inc');
+
+    public function GetChangeLog()
+    {
+        return @file_get_contents(__DIR__.'/changelog.inc');
     }
 
     public function InitializeCommon()
@@ -106,13 +121,18 @@ class Search extends CMSModule
         $this->CreateParameter('searchtext','null',$this->Lang('param_searchtext'));
         $this->CreateParameter('detailpage','null',$this->Lang('param_detailpage'));
         $this->CreateParameter('submit',$this->Lang('searchsubmit'),$this->Lang('param_submit'));
-        $this->CreateParameter('action','default',$this->Lang('param_action'));
-        $this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
-        $this->CreateParameter('count','null',$this->Lang('param_count'));
-        $this->CreateParameter('use_or','true',$this->Lang('param_useor'));
+        //$this->CreateParameter('action','default',$this->Lang('param_action'));
+        //$this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
+        //$this->CreateParameter('count','null',$this->Lang('param_count'));
+        $this->CreateParameter('use_like',false,$this->Lang('param_uselike'));
         $this->CreateParameter('search_method','get',$this->Lang('search_method'));
         $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
         $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
+    }
+
+    public function InitiaslizeFrontend()
+    {
+        $this->RegisterRoute('/[Ss]earch\/(?P<returnid>[0-9]+)$/',['action'=>'dosearch']);
     }
 
     public function hook_ContentEditPost($params)
@@ -159,7 +179,7 @@ class Search extends CMSModule
 
     public function InitializeFrontend()
     {
-        $this->RestrictUnknownParams();
+        // $this->RestrictUnknownParams();
 
         $this->SetParameterType('inline',CLEAN_STRING);
         $this->SetParameterType(CLEAN_REGEXP.'/passthru_.*/',CLEAN_STRING);
@@ -172,7 +192,7 @@ class Search extends CMSModule
         $this->SetParameterType('origreturnid',CLEAN_INT);
         $this->SetParameterType('pageid',CLEAN_INT);
         $this->SetParameterType('count',CLEAN_INT);
-        $this->SetParameterType('use_or',CLEAN_INT);
+        $this->SetParameterType('use_like',CLEAN_INT);
         $this->SetParameterType('search_method',CLEAN_STRING);
         $this->SetParameterType('formtemplate',CLEAN_STRING);
         $this->SetParameterType('resulttemplate',CLEAN_STRING);
@@ -180,40 +200,12 @@ class Search extends CMSModule
 
     protected function GetSearchHtmlTemplate()
     {
-        return '
-{$startform}
-<label for="{$search_actionid}searchinput">{$searchprompt}:&nbsp;</label><input type="text" class="search-input" id="{$search_actionid}searchinput" name="{$search_actionid}searchinput" size="20" maxlength="50" placeholder="{$searchtext}"/>
-{*
-<br/>
-<input type="checkbox" name="{$search_actionid}use_or" value="1"/>
-*}
-<input class="search-button" name="submit" value="{$submittext}" type="submit" />
-{if isset($hidden)}{$hidden}{/if}
-{$endform}';
+        return file_get_contents($this->GetModulePath().'/templates/orig_searchform.tpl');
     }
 
     protected function GetResultsHtmlTemplate()
     {
-        $text = <<<EOT
-<h3>{\$searchresultsfor} &quot;{\$phrase}&quot;</h3>
-{if \$itemcount > 0}
-<ul>
-  {foreach from=\$results item=entry}
-  <li>{\$entry->title} - <a href="{\$entry->url}">{\$entry->urltxt}</a> ({\$entry->weight}%)</li>
-  {*
-     You can also instantiate custom behaviour on a module by module basis by looking at
-     the \$entry->module and \$entry->modulerecord fields in \$entry
-      ie: {if \$entry->module == 'News'}{News action='detail' article_id=\$entry->modulerecord detailpage='News'}
-  *}
-  {/foreach}
-</ul>
-
-<p>{\$timetaken}: {\$timetook}</p>
-{else}
-  <p><strong>{\$noresultsfound}</strong></p>
-{/if}
-EOT;
-        return $text;
+        return file_get_contents($this->GetModulePath().'/templates/orig_resultlist.tpl');
     }
 
     protected function DefaultStopWords()
@@ -227,10 +219,10 @@ EOT;
         return array_diff($words, $stop_words);
     }
 
-    public function StemPhrase($phrase)
+    public function StemPhrase($phrase, $filter_stopwords, $do_stemming)
     {
         $this->load_tools();
-        return search_StemPhrase($this,$phrase);
+        return search_StemPhrase($this, $phrase, $filter_stopwords, $do_stemming);
     }
 
     public function AddWords($module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)

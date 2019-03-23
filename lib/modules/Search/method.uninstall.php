@@ -28,7 +28,7 @@ try {
             $templates = $type->get_template_list();
             if( is_array($templates) && count($templates) ) {
                 foreach( $templates as $template ) {
-                       $template->delete();
+                    $template->delete();
                 }
             }
             $type->delete();
@@ -39,5 +39,3 @@ catch( Exception $e ) {
     // log it
     audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
 }
-
-?>
