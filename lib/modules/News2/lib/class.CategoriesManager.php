@@ -220,12 +220,10 @@ class CategoriesManager
     protected function _arrayToTree( $flat, $parent_id = -1 )
     {
         // build arrays of rows grouped by parent id.
-        debug_display($flat);
         $grouped = [];
         foreach( $flat as $row ) {
             $grouped[$row['parent_id']][] = $row;
         }
-        debug_display($grouped,'grouped');
 
         $fnBuilder = function( $siblings ) use (&$fnBuilder, $grouped) {
             foreach( $siblings as $key => $sibling ) {
