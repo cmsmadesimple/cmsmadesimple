@@ -64,7 +64,14 @@ try {
         $this->SetError($this->Lang('error_missingparam'));
         $this->RedirectToAdminTab();
     }
-    $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+    try {
+        $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+    }
+    catch( \CmsDataNotFoundException $e ) {
+	// assume it's a generic template.
+	$type_obj = CmsLayoutTemplateType::load('Core::Generic');
+	echo $this->ShowErrors('Could not load template type specified with this template');
+    }
 
     try {
         if ( isset($params['submit']) || $apply ) {

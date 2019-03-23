@@ -869,8 +869,13 @@ class CmsLayoutTemplate
      */
     public function get_usage_string()
     {
-        $type = $this->get_type();
-        return $type->get_usage_string($this->get_name());
+	try {
+            $type = $this->get_type();
+            return $type->get_usage_string($this->get_name());
+        }
+        catch( CmsDataNotFoundException $e ) {
+	    // nothing here.
+	}
     }
 
     /**

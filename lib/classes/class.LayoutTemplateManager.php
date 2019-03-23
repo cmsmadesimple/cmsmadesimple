@@ -14,6 +14,7 @@ use CmsLayoutTemplate;
 use CmsLayoutTemplateType;
 use CmsLayoutCollection;
 use CMSMS\internal\hook_manager;
+use CmsInvalidDataException;
 
 /**
  * A class that manages the storage of CmsLayoutTemplate objects in the database.
@@ -471,7 +472,7 @@ class LayoutTemplateManager
             $map = $this->cache_driver->get($key,__CLASS__);
         } else {
             $db = $this->db;
-            $sql = 'SELECT id FROm '.$this->template_table_name().' WHERE id = ?';
+            $sql = 'SELECT id FROm '.$this->template_table_name().' WHERE type_id = ?';
             $list = $db->GetCol($sql,$type->get_id());
             if( is_array($list) && !empty($list) ) {
                 $map = $list;

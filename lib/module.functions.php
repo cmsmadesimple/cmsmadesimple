@@ -84,7 +84,7 @@ function cms_module_plugin($params,&$smarty)
         // we may be calling module plugins multiple times in the template,  but a POST or GET mact
         // can only be for one of them.
         $inline = false;
-        if( 0 == strcasecmp($mactinfo->module, $modulename) && $id == $mactinfo->id) {
+        if( 0 == strcasecmp($mactinfo->module, $modulename) && $id == $mactinfo->id && $mactinfo->inline) {
             $action = $mactinfo->action;
             $inline = $mactinfo->inline;
             // note: we mrege in mact params... but anything in the {cms_module} tag takes precidence

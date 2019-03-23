@@ -1562,7 +1562,7 @@ abstract class CMSModule
         // this is for compatibility, not really required
         if( !$idsuffix ) $idsuffix = $_formcount++;
         $parms['id'] = $id.'moduleform_'.$idsuffix;
-        $parms = array_merge($params, $parms);
+        if( is_array($params) && !empty($params) )  $parms = array_merge($params, $parms);
         // this prolly should go into the formutils class
         $str = CmsFormUtils::create_form_start($parms);
         return $str;

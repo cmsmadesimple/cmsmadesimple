@@ -465,10 +465,10 @@ final class CmsFormUtils
         if (!$gCms->is_frontend_request()) {
             // admin request
             if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
+            if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
             if( $mactparms['module'] ) {
                 //if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
                 if( !$mactparms['action'] ) $mactparms['action'] = 'default';
-                if( !$mactparms['mid'] ) $mactparms['mid'] = 'cntnt01';
                 if( $mactparms['returnid'] > 0 ) {
                     $hm = $gCms->GetHierarchyManager();
                     $node = $hm->sureGetNodeById($mactparms['returnid']);
@@ -492,7 +492,7 @@ final class CmsFormUtils
                 }
                 $tagparms['action'] = 'index.php';
                 if( !$mactparms['action'] ) $mactparms['action'] = 'defaultadmin';
-                if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
+                if( !$mactparms['mid'] ) $mactparms['mid'] = 'cntnt01';
                 $mactparms['returnid'] = '';
             }
         }
