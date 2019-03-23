@@ -241,6 +241,10 @@ Search  - v1.52
   - FEATURE: Now exports a command for cmscli
   - The search results now contain _content_ and the page id for content pages.
   - Removes all support for events, now uses hooks
+  - Adds the use_like parameter
+  - Removes the useor parameter.
+  - Adds the ajax_getwords action for jquery-ui-autocomplete usage
+  - more... 
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
