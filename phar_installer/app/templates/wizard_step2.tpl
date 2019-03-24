@@ -8,13 +8,18 @@
 {block name='contents'}
 
 <script type="text/javascript">
-$(document).ready(function(){
+$(function(){
   $('#upgrade_info .link').css('cursor','pointer').click(function(){
      var e = '#'+$(this).data('content');
      $(e).dialog({
        minWidth: 500,
        modal: 'true'
      })
+  });
+
+  $('#retry').click(function(ev){
+    ev.preventDefault();
+    window.location.reload(false);
   });
 });
 </script>
@@ -97,7 +102,7 @@ $(document).ready(function(){
         {/if}
 
 	<div id="bottom_nav">
-        {if isset($retry_url)}<a class="action-button orange" href="{$retry_url}" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>{/if}
+        {if isset($retry_url)}<a id="retry" class="action-button orange" href="{$retry_url}" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>{/if}
         {if !isset($cmsms_info)}
             <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}" />
         {else}
