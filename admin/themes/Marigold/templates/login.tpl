@@ -1,6 +1,6 @@
 {extends file='minimal.tpl'}
 {block name='css'}
-    <link rel="stylesheet" href="loginstyle.php" />
+    {* <link rel="stylesheet" href="loginstyle.php" /> *}
 {/block}
 {block name='js' append}
     {cms_queue_script file="{$theme_path}/includes/login.js"}

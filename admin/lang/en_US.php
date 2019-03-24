@@ -4,6 +4,9 @@
 $lang['403description'] = 'Page Forbidden';
 $lang['404description'] = "Page Not Found";
 
+## 5
+$lang['503Description'] = 'Not Available';
+
 ## A
 $lang['aa_main_tab__'] = "Main";
 $lang['about'] = "About";
