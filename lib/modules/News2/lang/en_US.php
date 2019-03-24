@@ -1,4 +1,10 @@
 <?php
+$lang['tpltype_News2'] = 'News2';
+$lang['tpltype_detail'] = 'Detail View';
+$lang['tpltype_summary'] = 'Summary View';
+$lang['tpltype_showcategories'] = 'ShowCategories View';
+$lang['info_dmstuff1'] = 'This module does not by default uses file based templates.  You can create suitable template types in DesignManager to allow using database teemplates by clicking below.';
+$lang['info_dmstuff2'] = 'Design Manager template types exist for this module';
 $lang['lbl_adminsearch'] = 'Search News2 Articles';
 $lang['desc_adminsearch'] = 'Search all News2 articles (regardless of status or expiry)';
 $lang['lbl_info'] = 'Info';
@@ -132,7 +138,7 @@ $lang['cancel'] = 'Cancel';
 $lang['add_fielddef'] = 'Create a new custom field';
 $lang['tab_fielddefs'] = 'Custom Fields';
 $lang['tab_categories'] = 'Categories';
-$lang['title_news_settings'] = 'News2 Settings';
+$lang['title_news_settings'] = 'Settings - News2';  // don't really like this.
 $lang['desc_news_settings'] = 'Configure fields and categories for News2';
 $lang['fieldtype_text'] = 'Text';
 $lang['fieldtype_textarea'] = 'Text area';

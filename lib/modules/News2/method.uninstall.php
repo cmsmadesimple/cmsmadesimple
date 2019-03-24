@@ -16,7 +16,9 @@ foreach( $tables as $table ) {
     $dict->ExecuteSQLArray( $sqlarr );
 }
 
-$this->CreatePermission(News2::MANAGE_PERM);
-$this->CreatePermission(News2::OWN_PERM);
-$this->CreatePermission(News2::DELOWN_PERM);
-$this->CreatePermission(News2::APPROVE_PERM);
+$this->RemovePermission(News2::MANAGE_PERM);
+$this->RemovePermission(News2::OWN_PERM);
+$this->RemovePermission(News2::DELOWN_PERM);
+$this->RemovePermission(News2::APPROVE_PERM);
+
+TemplateTypeAssistant::remove_dm_templates();

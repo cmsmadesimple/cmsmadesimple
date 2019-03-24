@@ -9,7 +9,7 @@
   <div class="c_full cf">
   <br/>
   {form_start action=admin_settings_dmstuff_tab}
-     <button>{$mod->Lang('create_tpltypes')}</button>
+     <button name="create">{$mod->Lang('create_tpltypes')}</button>
   {form_end}
   </div>
 
