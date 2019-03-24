@@ -135,7 +135,7 @@ $(function(){
 	      <span class="text-red">{$row.url}</span>
 	    {/if}
 	  {elseif $column == 'template'}
-	    {if isset($row.template) && $row.template != ''}
+	    {if !empty($row.template) && !empty($row.template_id)}
 	      {if $row.can_edit_tpl}
 	        <a href="{cms_action_url module='DesignManager' action='admin_edit_template' tpl=$row.template_id}" class="page_template" title="{$mod->Lang('prompt_page_template')}">
 		  {$row.template}
@@ -144,7 +144,11 @@ $(function(){
 	        {$row.template}
 	      {/if}
 	    {elseif $row.viewable}
-	      <span class="text-red" title="{$mod->Lang('error_template_notavailable')}">{$mod->Lang('critical_error')}</span>
+	       {if !empty($row.template_rsrc)}
+	          <span style="color: orange;">{$row.tpl_rsrc}</span>
+	       {else}
+	         <span class="text-red" title="{$mod->Lang('error_template_notavailable')}">{$mod->Lang('critical_error')}</span>
+	       {/if}
 	    {/if}
 	  {elseif $column == 'friendlyname'}
 	    {$row.friendlyname}

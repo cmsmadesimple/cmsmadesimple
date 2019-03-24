@@ -34,6 +34,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 namespace CMSContentManager;
+use CmsLayoutTemplate;
 
 /**
  * @package CMS
@@ -835,8 +836,6 @@ final class ContentListBuilder
             $rec['hastemplate'] = $content->HasTemplate();
             $rec['menutext'] = strip_tags($content->MenuText());
             $rec['title'] = strip_tags($content->Name());
-            $rec['template_id'] = $content->TemplateId();
-            $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
             $rec['id'] = $content->Id();
             $rec['lastmodified'] = $content->GetModifiedDate();
             $rec['created'] = $content->GetCreationDate();
@@ -859,6 +858,30 @@ final class ContentListBuilder
             $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
                                $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
             $rec['can_delete'] = $rec['can_edit'] && $mod->CheckPermission('Remove Pages');
+            $rec['template'] = $rec['template_id'] = $rec['template_rsrc'] = null;
+            $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
+            if( $rec['can_edit_tpl'] ) {
+                // sets the template related fields.
+                $rsrc = $content->TemplateResource();
+                if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
+                    $rec['can_edit_tpl'] = false;
+                } else {
+                    $rec['template_rsrc'] = $rsrc;
+                    $tpl_id = (int) substr($rsrc,strlen('cms_template:'));
+                    if( $tpl_id > 0 ) {
+                        try {
+                            $tpl_ob = CmsLayoutTemplate::load($tpl_id);
+                            $rec['template'] = $tpl_ob->get_name();
+                            $rec['template_id'] = $tpl_id;
+                        }
+                        catch( \Exception $e ) {
+                          // can't edit this content object, cuz we can't get the template associated with it.
+                          $rec['can_edit'] = false;
+                          $rec['can_edit_tpl'] = false;
+                        }
+                    }
+                }
+            }
 
             foreach( $columns as $column => $displayable ) {
                 switch( $column ) {
@@ -891,25 +914,6 @@ final class ContentListBuilder
                     case 'url':
                           $rec[$column] = '';
                           if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = strip_tags($content->URL());
-                        break;
-
-                    case 'template':
-                        if( $content->IsViewable() ) {
-                            try {
-                                  $rsrc = $content->TemplateResource();
-                                  $rec[$column] = $rsrc;
-                                if( !$config['page_template_list'] && startswith($rsrc, 'cms_template') ) {
-                                    $template = \CmsLayoutTemplate::load($content->TemplateId());
-                                    $rec[$column] = $template->get_name();
-                                } else {
-                                    $rec['can_edit_tpl'] = false;
-                                }
-                            }
-                            catch( Exception $e ) {
-                                  // can't edit this content object, cuz we can't get the template associated with it.
-                                  $rec['can_edit'] = false;
-                            }
-                        }
                         break;
 
                     case 'friendlyname':
