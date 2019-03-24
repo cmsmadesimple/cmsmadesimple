@@ -4,7 +4,8 @@ if( !isset($gCms) ) exit;
 $artm = $this->articleManager();
 $fielddefs = $this->fielddefManager()->loadAllAsHash();
 
-$template = get_parameter_value($params,'detailtemplate','detail.tpl');
+$template = get_parameter_value($params,'detailtemplate');
+$template = $this->ResolveTemplate('detail',$template,'detail.tpl');
 $article = null;
 
 $preview_key = get_parameter_value($params,'preview_key');

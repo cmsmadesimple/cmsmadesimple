@@ -469,4 +469,23 @@ class News2 extends CMSModule
         if( $article && $article->author_id > 0 && get_userid(false) == $article->author_id ) return TRUE;
         return FALSE;
     }
+
+    /**
+     * @internal
+     */
+    protected function ResolveTemplate(string $type_suffix, string $template, string $dflt = null)
+    {
+        $tempate = trim($template);
+        if( !$template ) {
+            $template = $dflt;
+            try {
+                $tpl = CmsLayoutTemplate::load_dflt_by_type('News2::'.$type_suffix);
+                if( !is_object($tpl) ) $template = $tpl->get_name();
+            }
+            catch( CmsDataNotFoundException $e ) {
+                // nothing here.
+            }
+        }
+        return $template;
+    }
 } // class

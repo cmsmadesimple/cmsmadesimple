@@ -14,7 +14,8 @@ if( isset($params['args']) ) {
         $params = array_merge( $params, $tmp );
     }
 }
-$template = get_parameter_value($params,'summarytemplate','default.tpl');
+$template = get_parameter_value($params,'summarytemplate');
+$template = $this->ResolveTemplate('summary',$template,'default.tpl');
 
 $filter_opts = [ 'limit' => 50 , 'status'=>Article::STATUS_PUBLISHED, 'useperiod'=> 1, 'sortby'=>'news_date' ];
 if( ($limit = (int)get_parameter_value( $params, 'limit')) ) {

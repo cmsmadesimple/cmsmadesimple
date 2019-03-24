@@ -5,7 +5,8 @@ $artm = $this->articleManager();
 
 $start_id = $start_category = $output_list = null;
 $catm = $this->categoriesManager();
-$template = trim(get_parameter_value($params, 'categorytemplate', 'showcategories.tpl'));
+$template = trim(get_parameter_value($params, 'categorytemplate'));
+$template = $this->ResolveTemplate('showcategories',$template,'showcategories.tpl');
 $alias = trim(get_parameter_value($params, 'alias'));
 $start_id = (int) get_parameter_value($params, 'from');
 $maxdepth = (int) get_parameter_value($params, 'maxdepth', 1000000);

@@ -92,6 +92,9 @@ $this->CreatePermission( News2::OWN_PERM, News2::OWN_PERM );         // add arti
 $this->CreatePermission( News2::DELOWN_PERM, News2::DELOWN_PERM );   // can delete My arciles
 $this->CreatePermission( News2::APPROVE_PERM, News2::APPROVE_PERM ); // can approve articles for display.
 
+// routes
+$this->CreateStaticRoutes();
+
 // create a new category
 $arr = [
     'name'=>'General',
