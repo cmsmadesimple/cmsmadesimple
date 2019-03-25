@@ -619,7 +619,7 @@ abstract class ContentBase
      */
     public function TemplateResource()
     {
-        die('this method must be overridden for displayable content pages');
+        // nothing here
     }
 
     /**
