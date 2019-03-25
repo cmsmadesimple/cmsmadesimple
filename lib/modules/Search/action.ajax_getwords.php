@@ -17,7 +17,7 @@ try {
 
     $term = str_replace('_','\_',$term);
     if( strpos($term,'%') === FALSE ) $term = "{$term}%";
-    $sql = 'SELECT word FROM '.CMS_DB_PREFIX.'module_search_index WHERE word LIKE ? ORDER BY count DESC';
+    $sql = 'SELECT DISTINCT word FROM '.CMS_DB_PREFIX.'module_search_index WHERE word LIKE ? ORDER BY count DESC';
     $dbr = $db->SelectLimit( $sql, $limit, 0, [ $term ] );
 
     $out = null;
