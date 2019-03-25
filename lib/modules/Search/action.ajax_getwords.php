@@ -15,6 +15,7 @@ try {
     if( $limit < 1 ) $limit = 10;
     $limit = max(1,min(50,$limit));
 
+    $term = str_replace('_','\_',$term);
     if( strpos($term,'%') === FALSE ) $term = "{$term}%";
     $sql = 'SELECT word FROM '.CMS_DB_PREFIX.'module_search_index WHERE word LIKE ? ORDER BY count DESC';
     $dbr = $db->SelectLimit( $sql, $limit, 0, [ $term ] );

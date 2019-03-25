@@ -45,6 +45,7 @@ if( $searchinput ) {
         foreach ($words as $word) {
             $word = trim($word);
             if( $use_like && strpos($word,'%') === FALSE ) {
+		$word = str_replace('_','\_',$word);
                 $ary[] = 'word LIKE ' . $db->qstr($word.'%');
             } else {
                 $ary[] = "word = " . $db->qstr($word);
