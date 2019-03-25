@@ -96,7 +96,7 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
         if( empty($tpl_vars) ) $tpl_vars = [ 'user_supplied_variable'=>$var ];
     }
     else {
-        $tpl_vars = $smarty->getTemplateVars($var);
+        $tpl_vars = $smarty->getTemplateVars();
     }
 
     $str = '<pre>';
