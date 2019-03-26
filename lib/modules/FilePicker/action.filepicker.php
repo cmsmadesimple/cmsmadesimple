@@ -24,7 +24,7 @@ use CMSMS\FileType;
 use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
-if( !check_login(FALSE) ) exit; // admin only.... but any admin
+if( !get_userid(FALSE) ) exit; // admin only.... but any admin
 
 //$handlers = ob_list_handlers();
 //for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }

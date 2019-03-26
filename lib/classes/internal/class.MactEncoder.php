@@ -52,7 +52,6 @@ class MactEncoder
             if( is_array($data) && isset($data['action']) && isset($data['module']) && isset($data['id']) ) {
                 return MactInfo::from_array($data);
             }
-            return $mact;
         }
     }
 

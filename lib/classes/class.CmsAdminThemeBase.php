@@ -237,7 +237,7 @@ abstract class CmsAdminThemeBase
     {
         $newurl = $url;
         if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
-            $from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16,19}/i';
+            $from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16,20}/i';
             $to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
             $newurl = preg_replace($from,$to,$url);
         }

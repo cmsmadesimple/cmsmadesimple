@@ -67,7 +67,7 @@ final class LoginOperations
         // if we do not have a presaved salt.. we generate one
         $salt = cms_siteprefs::get(__CLASS__);
         if( !$salt ) {
-	    trigger_error('CMSMS LOGIN: no salt for login key');
+            trigger_error('CMSMS LOGIN: no salt for login key');
             $salt = sha1( rand().__FILE__.rand().time() );
             cms_siteprefs::set(__CLASS__,$salt);
         }
@@ -93,30 +93,46 @@ final class LoginOperations
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
 
+        $nonce = bin2hex(random_bytes(20));
+        $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $nonce );
+
+        // note: we store the csrf key in the cookie so that it can seemlessly be restored
+        // when the session times out.
         $private_data = array();
         $private_data['uid'] = $user->id;
+        $private_data['csrf_key'] = $_SESSION[CMS_USER_KEY];
         $private_data['username'] = $user->username;
         $private_data['eff_uid'] = null;
         $private_data['eff_username'] = null;
+        $private_data['nonce'] = $nonce;
         $private_data['hash'] = password_hash( $user->id.$user->password.__FILE__, PASSWORD_BCRYPT );
         if( $effective_user && $effective_user->id > 0 && $effective_user->id != $user->id ) {
             $private_data['eff_uid'] = $effective_user->id;
             $private_data['eff_username'] = $effective_user->username;
         }
         $enc = base64_encode( json_encode( $private_data ) );
-        $hash = sha1( $this->_get_salt() . $enc );
-        $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
-        $this->_cookie_manager->set($this->_loginkey,$_SESSION[$this->_loginkey]);
+        $sig = sha1( $this->_get_salt() . $enc ); // sign it
+        $val = $sig.'::'.$enc; // append signature
+        // note: depending on the cookie manager, this may be signed again...
+        $this->_cookie_manager->set($this->_loginkey,$val);
 
         // this is for CSRF stuff, doesn't technically belong here.
-        $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $user->id );
         unset($this->_data);
         return true;
     }
 
-    protected function _create_csrf_token( $uid )
+    protected function _verify_csrf_token( string $token, string $nonce )
     {
-        return substr(str_shuffle(sha1(__DIR__.$uid.time().session_id())),-19);
+        $test = substr(sha1($nonce.__FILE__.$this->_get_salt()),0,20);
+        return $token === $test;
+    }
+
+    protected function _create_csrf_token( string $nonce )
+    {
+        // this csrf token is stored in the cookie
+        // which means that if the cookie AND the CSRF value are stolen, we can forge requests
+        // so if the csrf key is not random, it shold be reproducable
+        return substr(sha1($nonce.__FILE__.$this->_get_salt()),0,20);
     }
 
     protected function _get_data()
@@ -125,33 +141,47 @@ final class LoginOperations
 
         // using session, and-or cookie data see if we are authenticated
         $private_data = null;
+        /* debug
         if( isset($_SESSION[$this->_loginkey]) ) {
             $private_data = $_SESSION[$this->_loginkey];
         }
-        else if( ($private_data = $this->_cookie_manager->get($this->_loginkey)) ) {
-            $_SESSION[$this->_loginkey] = $private_data;
+        else
+        */
+        if( ($private_data = $this->_cookie_manager->get($this->_loginkey)) ) {
+            // $_SESSION[$this->_loginkey] = $private_data; // debug
         }
         if( !$private_data ) return;
         $parts = explode('::',$private_data,2);
-        if( count($parts) != 2 ) return;
+        if( count($parts) != 2 ) return; // invalid cookie format
 
-        if( $parts[0] != sha1( $this->_get_salt() . $parts[1] ) ) return; // payload corrupted.
+        if( $parts[0] != sha1( $this->_get_salt() . $parts[1] ) ) return; // payload signature invalid
         $private_data = json_decode( base64_decode( $parts[1]), TRUE );
 
-        if( !is_array($private_data) ) return;
-        if( empty($private_data['uid']) ) return;
-        if( empty($private_data['username']) ) return;
-        if( empty($private_data['hash']) ) return;
+        if( !is_array($private_data) ) return; // payload corrupted
+        if( empty($private_data['uid']) ) return;  // invalid payload
+        if( empty($private_data['username']) ) return; // invalid payload
+        if( empty($private_data['hash']) ) return; // invalid payload
 
         // now authenticate the passhash
         // requires a database query
         if( !cmsms()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['hash']) ) return;
 
         // if we get here, the user is authenticated.
-        // if we don't have a user key.... we generate a new csrf token.
+        if( empty($_SESSION[CMS_USER_KEY]) && !empty($private_data['csrf_key']) ) {
+            // sets the CSRF key into the session, from the cookie for compatibility
+            // we set it from the cookie because the cookie has a longer lifetime than the session
+            // and we do not want the CSRF key to change when the user walks away from the screen
+            $_SESSION[CMS_USER_KEY] = $private_data['csrf_key'];
+        }
+
+        // still no csrf token,  so set a random one.
+        // this probably does not belong here.  If the csrf token is not in the
+        // session, and cannot be restored from the session cookie, the user should be logged out.
+        /*
         if( !isset($_SESSION[CMS_USER_KEY]) ) {
             $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $private_data['uid'] );
         }
+        */
 
         $this->_data = $private_data;
         return $this->_data;
@@ -159,6 +189,8 @@ final class LoginOperations
 
     public function validate_requestkey()
     {
+        if( !$this->_data || !isset($this->_data['nonce']) ) return FALSE;
+
         // asume we are authenticated
         // now we validate that the request has the user key in it somewhere.
         if( !isset($_SESSION[CMS_USER_KEY]) ) throw new \LogicException('Internal: User key not found in session.');
@@ -168,7 +200,7 @@ final class LoginOperations
         if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) $v = $_GET[CMS_SECURE_PARAM_NAME];
         if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) $v = $_POST[CMS_SECURE_PARAM_NAME];
         // validate the key in the request against what we have in the session.
-        if( $v != $_SESSION[CMS_USER_KEY] ) {
+        if( $v != $_SESSION[CMS_USER_KEY] || !$this->_verify_csrf_token($v, $this->_data['nonce']) ) {
             if( !$this->_ignore_xss_vulnerability ) return FALSE;
         }
         return TRUE;
