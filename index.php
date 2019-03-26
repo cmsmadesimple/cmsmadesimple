@@ -64,7 +64,7 @@ $contentobj = null;
 $trycount = 0;
 $showtemplate = true;
 
-$get_content_in_parts = function( $smarty, $top_rsrc, $body_rsrc, $head_rsrc ) {
+$get_content_in_parts = function( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc ) {
     $config = cms_config::get_instance();
 
     debug_buffer('process template top');
@@ -76,7 +76,7 @@ $get_content_in_parts = function( $smarty, $top_rsrc, $body_rsrc, $head_rsrc ) {
 
     if( $config['content_processing_mode'] == 1 ) {
         debug_buffer('preprocess module action');
-        \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
+        \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
     }
 
     debug_buffer('process template body');
@@ -177,14 +177,14 @@ while( $trycount < 2 ) {
                 $body_rsrc = $main_rsrc.';body';
                 $head_rsrc = $main_rsrc.';head';
 
-                $html = $get_content_in_parts( $smarty, $top_rsrc, $body_rsrc, $head_rsrc );
+                $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
             }
             else if( startswith( $main_rsrc, 'cms_template') ) {
                 $top_rsrc = $main_rsrc.';top';
                 $body_rsrc = $main_rsrc.';body';
                 $head_rsrc = $main_rsrc.';head';
 
-                $html = $get_content_in_parts( $smarty, $top_rsrc, $body_rsrc, $head_rsrc );
+                $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
             }
             else {
                 // not a cmsfile or cms_template resource, we process it as one chunk.
