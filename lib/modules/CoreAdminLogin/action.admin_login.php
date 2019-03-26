@@ -101,7 +101,7 @@ else if( isset( $params['submit'] ) ) {
         $expected_csrf_val = ( isset($_SESSION[$csrf_key]) ) ? $_SESSION[$csrf_key] : null;
         $provided_csrf_val = ( isset($params['csrf']) ) ? $params['csrf'] : null;
         if( !$expected_csrf_val || !$provided_csrf_val || $expected_csrf_val != $provided_csrf_val ) {
-            throw new \RuntimeException( lang('csrfinvalid') );
+            throw new \RuntimeException( lang('err_csrfinvalid') );
         }
 
         $username = html_entity_decode( filter_var( $params['username'] ?? null, FILTER_SANITIZE_STRING ) );
