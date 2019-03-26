@@ -45,9 +45,9 @@ class SignedCookieManager implements ICookieManager
         if( !isset($this->_parts['path']) || $this->_parts['path'] == '' ) {
             $this->_parts['path'] = '/';
         }
-	if( $this->_parts['path'] && !endswith($this->_parts['path'],'/') ) {
-	    $this->_parts['path'] .= '/';
-	}
+        if( $this->_parts['path'] && !endswith($this->_parts['path'],'/') ) {
+            $this->_parts['path'] .= '/';
+        }
         $this->_secure = $app->is_https_request();
     }
 
