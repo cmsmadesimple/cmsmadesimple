@@ -25,12 +25,8 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
 require_once("../lib/include.php");
-check_login();
-$userid = get_userid();
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-$smarty = cmsms()->GetSmarty();
-
+// mact is already decoded here, and placed in the request.
 $id = 'm1_';
 $module = '';
 $action = 'defaultadmin';
@@ -45,6 +41,7 @@ if (isset($_REQUEST['mact'])) {
 $modinst = ModuleOperations::get_instance()->get_module_instance($module);
 if( !$modinst ) {
     trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
     redirect('index.php'.$urlext);
 }
 
@@ -55,47 +52,63 @@ if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) 
 }
 if( $USE_THEME && $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) $USE_THEME = false;
 
-// module output
-$params = ModuleOperations::get_instance()->GetModuleParameters($id);
-$content = null;
-if( $USE_THEME ) {
-    $themeObject = cms_utils::get_theme_object();
-    $themeObject->set_action_module($module);
+// if use theme, we should throw an error here.
+try {
+    $userid = get_userid();
+    if( $userid < 1 ) throw new CmsError403Exception('Permission denied');
+    if( $USE_THEME ) check_login(); // checks the request key for CSRF stuff too.
+    $smarty = cmsms()->GetSmarty();
 
-    // get module output
-    @ob_start();
-    echo $modinst->DoActionBase($action, $id, $params, null, $smarty);
-    $content = @ob_get_contents();
-    @ob_end_clean();
+    // module output
+    $params = ModuleOperations::get_instance()->GetModuleParameters($id);
+    $content = null;
+    if( $USE_THEME ) {
+        $themeObject = cms_utils::get_theme_object();
+        $themeObject->set_action_module($module);
 
-    // deprecate this.
-    $txt = $modinst->GetHeaderHTML($action);
-    if( $txt ) $themeObject->add_headtext($txt);
+        // get module output
+        @ob_start();
+        echo $modinst->DoActionBase($action, $id, $params, null, $smarty);
+        $content = @ob_get_contents();
+        @ob_end_clean();
 
-    // call admin_add_headtext to get any admin data to add to the <head>
-    $out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
-    if( $out && count($out) ) {
-        foreach( $out as $one ) {
-            $one = trim($one);
-            if( $one ) $themeObject->add_headtext($one);
+        // deprecate this.
+        $txt = $modinst->GetHeaderHTML($action);
+        if( $txt ) $themeObject->add_headtext($txt);
+
+        // call admin_add_headtext to get any admin data to add to the <head>
+        $out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
+        if( $out && count($out) ) {
+            foreach( $out as $one ) {
+                $one = trim($one);
+                if( $one ) $themeObject->add_headtext($one);
+            }
         }
+
+        include_once("header.php");
+
+        // this is hackish
+        echo '<div class="pagecontainer">';
+        echo '<div class="pageoverflow">';
+        $title = $themeObject->title;
+        $module_help_type = 'both';
+        if( $title ) $module_help_type = null;
+        if( !$title ) $title = $themeObject->get_active_title();
+        if( !$title ) $title = $modinst->GetFriendlyName();
+        echo $themeObject->ShowHeader($title,[],'',$module_help_type).'</div>';
+        echo $content;
+        echo '</div>';
+        include_once("footer.php");
+    } else {
+        // no theme output.
+        echo $modinst->DoActionBase($action, $id, $params, null, $smarty);
     }
-
-    include_once("header.php");
-
-    // this is hackish
-    echo '<div class="pagecontainer">';
-    echo '<div class="pageoverflow">';
-    $title = $themeObject->title;
-    $module_help_type = 'both';
-    if( $title ) $module_help_type = null;
-    if( !$title ) $title = $themeObject->get_active_title();
-    if( !$title ) $title = $modinst->GetFriendlyName();
-    echo $themeObject->ShowHeader($title,[],'',$module_help_type).'</div>';
-    echo $content;
-    echo '</div>';
-    include_once("footer.php");
-} else {
-    // no theme output.
-    echo $modinst->DoActionBase($action, $id, $params, null, $smarty);
+}
+catch( CmsError403Exception $e ) {
+    header("HTTP/1.0 403 Forbidden");
+    header("Status: 403 Forbidden");
+}
+catch( \Exception $e ) {
+    audit('','Admin Interface','Request Error '.$e->GetMessage());
+    debug_to_log('Admin Module Request Error', $e->GetMessage()."\n".$e->GetTraceAsString());
 }
