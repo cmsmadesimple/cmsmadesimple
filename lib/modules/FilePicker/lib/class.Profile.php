@@ -12,17 +12,24 @@ class Profile extends \CMSMS\FilePickerProfile
 
     protected function setValue( $key, $val )
     {
+        $_clean = function(string $in = null) {
+            if( is_null($in) ) return;
+            $in = filter_var($in, FILTER_SANITIZE_STRING);
+            $in = html_entity_decode($in);
+            return trim(strip_tags($in));
+        };
+
         switch( $key ) {
             case 'name':
             case 'file_extensions':
-                $this->_data[$key] = trim($val);
+                $this->_data[$key] = $_clean($val);
                 break;
             case 'create_date':
             case 'modified_date':
                 $this->_data[$key] = (int) $val;
                 break;
             case 'prefix':
-                $this->_data[$key] = trim($val);
+                $this->_data[$key] = $_clean($val);
                 break;
             default:
                 parent::setValue( $key, $val );

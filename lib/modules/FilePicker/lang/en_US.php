@@ -29,6 +29,7 @@ $lang['error_upload_acceptFileTypes'] = 'Files of this type are not acceptable i
 $lang['error_upload_maxFileSize'] = 'The file is too large';
 $lang['error_upload_minFileSize'] = 'The file is too small';
 $lang['error_upload_maxNumberOfFiles'] = 'You are uploading too many files at once';
+$lang['err_profile_name'] = 'The profile name entered is empty or invalid';
 $lang['err_profile_topdir'] = 'The top directory specified does not exist';
 
 // F
