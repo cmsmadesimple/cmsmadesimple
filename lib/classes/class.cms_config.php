@@ -438,7 +438,16 @@ final class cms_config implements ArrayAccess
                 return true;
 
             case 'content_processing_mode':
-                return 2;
+                // 2 == render mact content before any template (same as startup_mact_processing == true)
+                // 1 == render mact content after the tpl:top
+                //      (does not have any effect when using template inheritance)
+                //      (this is new for 2.3)
+                // 0 == render mact content when the {content} tag is encountered
+                // if not specified, check startup_mact_processing (boolean) cast to an int
+                if( isset($this->_data['startup_mact_processing']) ) {
+                    return (int) $this->_data['startup_mact_processing'];
+                }
+                return 0;
 
             case 'root_path':
                 $out = dirname(dirname(__DIR__)); // realpath here?
