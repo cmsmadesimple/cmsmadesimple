@@ -49,11 +49,11 @@ function smarty_function_cms_selflink($params, &$smarty)
     $pageid = null;
 
     $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
-    if (isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) $urlparam = trim($params['urlparam']);
+    if( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) $urlparam = trim($params['urlparam']);
 
-    if (isset($params['page']) or isset($params['href'])) {
+    if( isset($params['page']) or isset($params['href']) ) {
         $page = null;
-        if (isset($params['href'])) {
+        if( isset($params['href']) ) {
             $page = trim($params['href']);
             $urlonly = 1;
         }
@@ -61,7 +61,7 @@ function smarty_function_cms_selflink($params, &$smarty)
             $page = trim($params['page']);
         }
 
-        if($page ) {
+        if( $page ) {
             if((int)$page > 0 && is_numeric($page) ) {
                 $pageid = (int)$page;
             }
@@ -73,7 +73,7 @@ function smarty_function_cms_selflink($params, &$smarty)
         }
     }
 
-    else if(isset($params['dir']) ) {
+    else if( isset($params['dir']) ) {
         $startpage = null;
         if($pageid ) $startpage = $pageid;
         if(!$startpage ) $startpage = $gCms->get_content_id();
@@ -186,17 +186,20 @@ function smarty_function_cms_selflink($params, &$smarty)
         }
     }
 
-    if($pageid == '' ) { return;
+    if( $pageid == '' ) {
+        return;
     }
 
     // one final check to see if this page exists.
     $node = $manager->find_by_tag('id', $pageid);
-    if(!$node ) { return;
+    if( !$node ) {
+        return;
     }
 
     // get the content object.
     $content = $node->GetContent();
-    if(!$content || !is_object($content) || !$content->Active() || !$content->HasUsableLink() ) { return;
+    if( !$content || !is_object($content) || !$content->Active() || !$content->HasUsableLink() ) {
+        return;
     }
 
     // get our raw display data
@@ -205,19 +208,23 @@ function smarty_function_cms_selflink($params, &$smarty)
     $url = $content->GetUrl();
     $menu_text = $content->MenuText();
     $titleattr = $content->TitleAttribute();
-    if (isset($params['anchorlink'])) { $url .= '#' . ltrim($params['anchorlink'], '#');
+    if (isset($params['anchorlink'])) {
+        $url .= '#' . ltrim($params['anchorlink'], '#');
     }
-    if($urlparam != '' ) { $url .= $urlparam;
-    }
-
-    if(empty($url) ) { return; // no url to link to, therefore nothing to do.
-    }
-
-    if(isset($params['urlonly']) ) { $urlonly = cms_to_bool($params['urlonly']);
+    if ($urlparam != '') {
+        $url .= $urlparam;
     }
 
-    if($urlonly ) {
-        if(isset($params['assign']) ) {
+    if( empty($url) ) {
+        return; // no url to link to, therefore nothing to do.
+    }
+
+    if( isset($params['urlonly']) ) {
+        $urlonly = cms_to_bool($params['urlonly']);
+    }
+
+    if( $urlonly ) {
+        if( isset($params['assign']) ) {
             $smarty->assign(trim($params['assign']), $url);
             return;
         }
@@ -261,21 +268,28 @@ function smarty_function_cms_selflink($params, &$smarty)
         $result .= 'href="'.$url.'" />';
     }
     else {
-        if(isset($params['label_side']) ) { $label_side = strtolower(trim($params['label_side']));
+        if(isset($params['label_side']) ) {
+            $label_side = strtolower(trim($params['label_side']));
         }
-        if($label_side == 'left' ) { $result .= $label.' ';
+        if($label_side == 'left' ) {
+            $result .= $label.' ';
         }
         $result .= '<a href="'.$url.'"';
         $result .= ' title="'.$title.'" ';
-        if (isset($params['target'])) { $result .= ' target="'.$params['target'].'"';
+        if (isset($params['target'])) {
+            $result .= ' target="'.$params['target'].'"';
         }
-        if (isset($params['id'])) { $result .= ' id="'.$params['id'].'"';
+        if (isset($params['id'])) {
+            $result .= ' id="'.$params['id'].'"';
         }
-        if (isset($params['class'])) { $result .= ' class="'.$params['class'].'"';
+        if (isset($params['class'])) {
+            $result .= ' class="'.$params['class'].'"';
         }
-        if (isset($params['tabindex'])) { $result .= ' tabindex="'.$params['tabindex'].'"';
+        if (isset($params['tabindex'])) {
+            $result .= ' tabindex="'.$params['tabindex'].'"';
         }
-        if (isset($params['more'])) { $result .= ' '.$params['more'];
+        if (isset($params['more'])) {
+            $result .= ' '.$params['more'];
         }
         $result .= '>';
 
