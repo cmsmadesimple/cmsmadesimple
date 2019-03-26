@@ -11,6 +11,8 @@ $categories_table = $this->categoriesManager()->table_name();
 $fielddefs_table = $this->fielddefManager()->table_name();
 $news_table = $this->articleManager()->news_table();
 $fieldvals_table = $this->articleManager()->fieldvals_table();
+$uid = get_userid(FALSE);
+if( $uid < 1 ) $uid = 1;
 
 $flds = "
     id I KEY AUTO NOTNULL,
@@ -110,7 +112,8 @@ $arr = [
     'news_date'=>time(),
     'title'=>'News2 module installed',
     'summary'=>'News2 is installed',
-    'content'=>'<p>The News2 moedule has been installed. <strong>Exciting!</strong></p>'
+    'content'=>'<p>The News2 moedule has been installed. <strong>Exciting!</strong></p>',
+    'author_id'=> $uid
     ];
 $article = $this->articleManager()->createNew( $arr );
 $this->articleManager()->save( $article );
