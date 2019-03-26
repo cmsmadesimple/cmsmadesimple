@@ -164,6 +164,10 @@ else {
     $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
     $file_array[] = $rec;
 
+    $rec = array('type'=>'function','name'=>'content_text');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $file_array[] = $rec;
+
     $rec = array('type'=>'function','name'=>'process_pagedata');
     $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
     $file_array[] = $rec;

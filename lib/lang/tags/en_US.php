@@ -515,6 +515,21 @@ $lang['help_function_content_image'] = <<<EOT
                                                             <p>In addition to the arguments listed above, this plugin will accept any number of additional arguments and forward them directly to the generated img tag if any.  i.e: <code>{content_image block='img1' id="id_img1" class="page-image" title='an image block' data-foo=bar}</code>
 EOT;
 
+$lang['help_function_content_text'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin allows template designers to place static text into the content edit form as an aide to content editors.</p>
+<h3>How do I use it?</h3>
+<p>Just insert the tag into your page template like: <code>{content_text text='some static text to display'}</code>.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li><em>(optional)</em> block (string) - The name for this additional content block.  If not specified, one will be calculated.</li>
+  <li><em>(optional)</em> label (sring) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+  <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
+</ul>
+<h3>Notes:</h3>
+<p>The content editor is responsible for styling this text in a reasonable way.  It is considered invalid to insert HTML content.</p>
+EOT;
+
 $lang['help_function_process_pagedata'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin will process the data in the &quot;pagedata&quot; block of content pages through smarty.  It allows you to specify page specific data to smarty without changing the template for each page.</p>
