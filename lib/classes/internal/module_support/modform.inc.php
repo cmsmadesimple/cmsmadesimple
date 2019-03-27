@@ -345,8 +345,10 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
-    $config = cmsms()->GetConfig();
-    $mact_assistant = cmsms()->get_mact_encoder();
+    $gCms = cmsms();
+    $config = $gCms->GetConfig();
+    $mact_assistant = $gCms->get_mact_encoder();
+    $contentops = $gCms->GetContentOperations();
 
     $text = '';
     if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {
@@ -359,8 +361,6 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 
     $base_url = CMS_ROOT_URL;
 
-    // get the destination content object
-
     if ($prettyurl && $prettyurl != ':NOPRETTY:' && $config['url_rewriting'] == 'mod_rewrite') {
         $text = $base_url . '/' . $prettyurl . $config['page_extension'];
     }
@@ -368,19 +368,29 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         $text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
     }
     else {
+        // get the destination content object
         $extraparams = null;
-        $text = $base_url.'/index.php';
         if( $returnid <= 0 ) {
             $id = 'm1_';
             $text = $config['admin_url'] .'/moduleinterface.php';
             if( isset($_SESSION[CMS_USER_KEY]) ) $extraparams[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-        } else if( $targetcontentonly || !$inline || !$id ) {
-            $id = 'cntnt01';
-            $extraparams[$config['query_var']] = $returnid;
+
+        }
+        else {
+            if( $targetcontentonly || !$inline || !$id ) $id = 'cntnt01';
+
+            $text = $base_url.'/index.php';
+            $contentobj = $contentops->LoadContentFromID();
+            if( $contentobj && ($tmp = $contentobj->GetURL()) ) {
+                $text = $tmp;
+            } else {
+                $extraparams[$config['query_var']] = $returnid;
+            }
         }
 
         // now we do the encoding of parameters.
         $mact = $mact_assistant->create_mactinfo($modinstance,$id,$action,$inline,$params);
+        // note extraparms are added to the URL, but not encoded into the _R mact stuff.
         $text .= '?'.$mact_assistant->encode_to_url($mact,$extraparams);
     }
 
