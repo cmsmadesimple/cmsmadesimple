@@ -381,7 +381,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 
             $text = $base_url.'/index.php';
             $contentobj = $contentops->LoadContentFromID($returnid);
-            if( $contentobj && ($tmp = $contentobj->GetURL()) ) {
+            if( $config['url_rewriting'] != 'none' && $contentobj && ($tmp = $contentobj->GetURL()) ) {
                 $text = $tmp;
             } else {
                 $extraparams[$config['query_var']] = $returnid;
