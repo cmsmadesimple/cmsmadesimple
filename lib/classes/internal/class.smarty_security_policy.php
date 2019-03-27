@@ -46,6 +46,7 @@ final class smarty_security_policy extends \Smarty_Security
         if($gCms->is_frontend_request() ) {
             $this->static_classes = array(); // allow all static classes
             $this->php_functions = array(); // allow any php functions
+            $this->php_modifiers = [];
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
@@ -58,6 +59,8 @@ final class smarty_security_policy extends \Smarty_Security
                                         'nl2br','file_exists', 'is_object', 'is_file','is_dir','basename', 'dirname',
                                         'debug_display','var_dump','print_r','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
                                         'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool' ];
+                // anything in this allowed list can also be used as a modifier.
+                $this->php_modifiers = $this->php_functions;
             }
         }
         else {
