@@ -210,6 +210,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
   <li>assign - <em>(optional)</em> - Assign the output URL to the named smarty variable.</li>
 </ul>
 <p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
+<p><strong>Note:</strong> As is documented in the CMSModule::create_url() method, you can pass NOPRETTY=1 as an option in this tag to disable any generation of pretty urls for this request.</p>
 <h3>Example:</h3>
 <pre><code>{cms_action_url module=News action=defaultadmin}</code><pre>
 EOT;
