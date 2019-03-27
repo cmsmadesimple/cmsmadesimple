@@ -64,6 +64,11 @@ $contentobj = null;
 $trycount = 0;
 $showtemplate = true;
 
+// register some smarty stuff.
+$obj = $_app->get_page_string_handler();
+$smarty->registerObject( 'cms_pagestr', $obj);
+$smarty->assign('cms_pagestr', $obj);
+
 $get_content_in_parts = function( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc ) {
     $config = cms_config::get_instance();
 
@@ -172,21 +177,24 @@ while( $trycount < 2 ) {
         }
         else {
             $main_rsrc = $contentobj->TemplateResource();
-            if( startswith( $main_rsrc, 'cmsfile:' ) ) {
-                $top_rsrc = $main_rsrc.';top';
-                $body_rsrc = $main_rsrc.';body';
-                $head_rsrc = $main_rsrc.';head';
+            if( $config['content_processing_mode'] >= 0 ) {
+                // doing the top+body+head splitup and separation
+                if( startswith( $main_rsrc, 'cmsfile:' ) ) {
+                    $top_rsrc = $main_rsrc.';top';
+                    $body_rsrc = $main_rsrc.';body';
+                    $head_rsrc = $main_rsrc.';head';
 
-                $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
-            }
-            else if( startswith( $main_rsrc, 'cms_template') ) {
-                $top_rsrc = $main_rsrc.';top';
-                $body_rsrc = $main_rsrc.';body';
-                $head_rsrc = $main_rsrc.';head';
+                    $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
+                }
+                else if( startswith( $main_rsrc, 'cms_template') ) {
+                    $top_rsrc = $main_rsrc.';top';
+                    $body_rsrc = $main_rsrc.';body';
+                    $head_rsrc = $main_rsrc.';head';
 
-                $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
+                    $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
+                }
             }
-            else {
+            if( !$html ) {
                 // not a cmsfile or cms_template resource, we process it as one chunk.
                 $tpl = $smarty->createTemplate($main_rsrc);
                 $html = $tpl->fetch();

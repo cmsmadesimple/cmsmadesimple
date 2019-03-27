@@ -33,6 +33,7 @@ use CMSMS\internal\MactEncoder;
 use CMSMS\internal\Smarty;
 use CMSMS\internal\AdminThemeManager;
 use CMSMS\internal\global_cache;
+use CMSMS\internal\page_string_handler;
 use CMSMS\LoginOperations;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
@@ -179,7 +180,7 @@ final class CmsApp
     /**
      * Retrieve the list of errors
      *
-        * @ignore
+     * @ignore
      * @since 1.9
      * @internal
      * @access private.
@@ -711,6 +712,19 @@ final class CmsApp
             $_obj = new LoginOperations( $this->GetUserOperations(), $this->get_cookie_manager(), $flag );
         }
         return $_obj;
+    }
+
+    /**
+     * Get the mact encoder/decoder
+     *
+     * @internal
+     * @since 2.3
+     */
+    public function get_page_string_handler() : page_string_handler
+    {
+        static $obj;
+        if( !$obj ) $obj = new page_string_handler( $this->get_hook_manager() );
+        return $obj;
     }
 
     /**

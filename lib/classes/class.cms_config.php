@@ -442,12 +442,14 @@ final class cms_config implements ArrayAccess
                 // 1 == render mact content after the tpl:top
                 //      (does not have any effect when using template inheritance)
                 //      (this is new for 2.3)
-                // 0 == render mact content when the {content} tag is encountered
+                // 0 == render mact content when the {content} tag is encountered, still divides up template
+                // -1 == Processes template in normal smarty order.
                 // if not specified, check startup_mact_processing (boolean) cast to an int
                 if( isset($this->_data['startup_mact_processing']) ) {
+                    // deprecated.
                     return (int) $this->_data['startup_mact_processing'];
                 }
-                return 0;
+                return -1;
 
             case 'root_path':
                 $out = dirname(dirname(__DIR__)); // realpath here?

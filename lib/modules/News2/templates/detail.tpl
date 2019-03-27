@@ -1,11 +1,18 @@
 {* the canonical URL is the one true URL for an item.
    Use caution when not using URL slugs, and a single article can be displayed from multiple paths, or on multiple different pages
 *}
-{cms_action_url action=detail article=$article->id assign='this_url'}{assign var='canonical' value=$this_url scope=global}
+{cms_action_url action=detail article=$article->id assign='this_url'}
+{cms_pagestr->set canonical=$this_url}
+{cms_pagestr->set pagetitle=$article->title}
 
       <section class="news2-article news2-article-detail row">
          <h4 class="news2-article-title">{$article->title}</h4>
 	 <div class="news2-article-backlink">
+	    {*
+	       note: there may have been many ways where a user got to this detail view.
+	       so a builtin return page is not reliable.
+	       you could use the browser history, or redirect to some other page.
+             *}
 	    <a href="{cms_selflink href=$page_alias}">Go Back</a>
 	 </div>
 
