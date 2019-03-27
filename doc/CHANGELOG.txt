@@ -140,6 +140,9 @@ Core - General
   - CHANGE: LazyLoadAdmin() and LazyLoadFrontend() methods.  Modules should not be lazy loaded anymore, however class files should be kept small
   - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
       pretty url determiniation.
+  - FEATURE: You can now pass NOPRETTY=1 as an item in  a module's create_url() method's params array to indicate that no attempt at generating a pretty URL
+      should be made.
+  - FEATURE: cms_action_url plugin now supports the NOPRETTY parameter.
   - FEATURE: cms_action_url plugin now supports the 'alias' parameter.
   - FEATURE: cms_action_url plugin now supports the 'inline' parameter.
   - CHANGE:  use the new assets/configs/hook_mapping.json file to map hooks to handlers.  Can specify modules, simple plugins, or callables
@@ -244,7 +247,7 @@ Search  - v1.52
   - Adds the use_like parameter
   - Removes the useor parameter.
   - Adds the ajax_getwords action for jquery-ui-autocomplete usage
-  - more... 
+  - more...
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).

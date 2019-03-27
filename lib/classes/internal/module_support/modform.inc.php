@@ -351,13 +351,14 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
     $contentops = $gCms->GetContentOperations();
 
     $text = '';
-    if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {
+    if( empty($prettyurl) && $config['url_rewriting'] != 'none' && !isset($params['NOPRETTY']) ) {
         // attempt to get a pretty url from the module... this is useful
         // incase this method is being called from outside the source module.
         // i.e: comments module wants a link to the article the comments are about
         // or something.
         $prettyurl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
     }
+    if( isset($params['NOPRETTY']) ) unset($params['NOPRETTY']);
 
     $base_url = CMS_ROOT_URL;
 

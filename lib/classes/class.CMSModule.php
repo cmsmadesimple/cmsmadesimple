@@ -1918,6 +1918,7 @@ abstract class CMSModule
      * @param string  $action The module action name
      * @param int $returnid The destination page.
      * @param hash    $params Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
+     *   Like the :NOPRETTY string below, a special item NOPRETTY=<anything> can be used to disable the calculation of a pretty url.
      * @param bool $inline Wether the target of the output link is the same tag on the same page.
      * @param bool $targetcontentonly Wether the target of the output link targets the content area of the destination page.
      * @param string  $prettyurl An optional url segment related to the root of the page for pretty url purposes.
