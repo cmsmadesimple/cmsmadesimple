@@ -195,7 +195,7 @@ while( $trycount < 2 ) {
                 }
             }
             if( !$html ) {
-                // not a cmsfile or cms_template resource, we process it as one chunk.
+                // no html yet, we process the template as one chunk.
                 $tpl = $smarty->createTemplate($main_rsrc);
                 $html = $tpl->fetch();
                 unset($tpl);
