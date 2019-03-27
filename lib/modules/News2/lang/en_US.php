@@ -1,4 +1,7 @@
 <?php
+$lang['related_articles'] = 'Related articles';
+$lang['next_article'] = 'Next article';
+$lang['prev_article'] = 'Previous article';
 $lang['tpltype_News2'] = 'News2';
 $lang['tpltype_detail'] = 'Detail View';
 $lang['tpltype_summary'] = 'Summary View';
