@@ -380,7 +380,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
             if( $targetcontentonly || !$inline || !$id ) $id = 'cntnt01';
 
             $text = $base_url.'/index.php';
-            $contentobj = $contentops->LoadContentFromID();
+            $contentobj = $contentops->LoadContentFromID($returnid);
             if( $contentobj && ($tmp = $contentobj->GetURL()) ) {
                 $text = $tmp;
             } else {
