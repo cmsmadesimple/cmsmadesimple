@@ -108,7 +108,7 @@ $(function(){
 {if !empty($category_tree_list)}
 <div class="c_full cf">
   <label for="fld_category_id" class="grid_3">{$mod->Lang('lbl_category')}</label>
-  <select id="fld_category_id" class="grid_8" name="category_id">
+  <select id="fld_category_id" class="grid_8" name="category_id" {if $settings->editor_category_required}required{/if}>
      {html_options options=$category_tree_list selected=$article->category_id}
   </select>
 </div>

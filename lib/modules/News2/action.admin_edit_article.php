@@ -3,6 +3,7 @@ namespace News2;
 use News2;
 use CMSMS\HookManager;
 use cms_route_manager;
+use cms_userprefs;
 
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission( News2::MANAGE_PERM ) && !$this->CheckPermission( News2::OWN_PERM ) ) exit;
@@ -38,17 +39,16 @@ try {
         $opts['start_time'] = strtotime('-1 day 00:00'); // starts tomorrow
         $opts['end_time'] = strtotime('+1 year 00:00');  // ends in one year
     }
+    // preselect a category
+    $opts['category_id'] = max(0,(int) cms_userprefs::get('news2_last_category'));
 
     $article = $artm->createNew( $opts );
     $news_id = get_parameter_value( $params, 'news_id' );
     if( $news_id ) {
-        $article = $artm->loadByID( $news_id );
-        if( !$this->CheckPermission( News2::MANAGE_PERM ) ) {
-            if( $article->author_id != get_userid() ) throw new \RuntimeException( $this->Lang('err_edit_nopermission' ) );
-            if( $article->status == $article::STATUS_PUBLISHED && !$this->settings()->editor_own_editpublished ) {
-                throw new \RuntimeException( $this->Lang('err_edit_cannoteditpublished') );
-            }
+        if( !$this->canEditArticle( $news_id ) ) {
+            throw new \RuntimeException( $this->Lang('err_edit_cannoteditarticle') );
         }
+        $article = $artm->loadByID( $news_id );
     }
 
     HookManager::do_hook( 'News2::beforeEditArticle', $article );
@@ -104,10 +104,16 @@ try {
                 }
             }
 
+            // save our category id in a userpref
+            cms_userprefs::set('news2_last_category', $article->category_id);
+
             // do validations
             if( ! $article->content ) throw new \RuntimeException( $this->Lang('err_contentrequired') );
             if( $article->end_time && $article->start_time ) {
                 if( $article->end_time <= $article->start_time ) throw new \RuntimeException( $this->Lang('err_invaliddates') );
+            }
+            if( $this->settings()->editor_category_required && $article->category_id < 1 ) {
+                throw new \RuntimeException( $this->Lang('err_category_required') );
             }
             if( $this->settings()->editor_urlslug_required && !$article->urlslug ) {
                 throw new \RuntimeException( $this->Lang('err_urlslug_empty') );

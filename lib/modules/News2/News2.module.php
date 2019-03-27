@@ -182,6 +182,22 @@ class News2 extends CMSModule
 
     public function get_pretty_url($id, $action, $returnid='', $params=[], $inline=false)
     {
+        if( $action == 'default' && $this->settings()->pretty_category_url ) {
+            $category_id = (int) get_parameter_value($params,'category_id');
+            if( $category_id < 1 ) return;
+
+            // News2/bycategory/$cat_id/$returnid/$category-path
+            // want to return this pretty URL, but still add pagination (limit, sorting can be provided by cms_moduel_hint)
+            $page = (int) get_parameter_value($params,'news_page');
+            $category = $this->categoriesManager()->loadByID( $category_id );
+            if( !$category ) return;
+            $category_path = str_replace(' | ','_',$category->long_name);
+            $category_path = str_replace('__','_',$category_path);
+            $out = "News2/bycategory/$category_id/$returnid/".munge_string_to_url($category_path);
+            if( $page > 1 ) $out .= "?news_page=$page";
+            return $out;
+        }
+
         if( $action != 'detail' ) return;
         $article_id = get_parameter_value($params,'article');
         if( $article_id < 1 ) return;
@@ -212,6 +228,9 @@ class News2 extends CMSModule
         cms_route_manager::del_static('',$this->GetName());
         $route = new CmsRoute('/'.$prefix.'\/(?P<article>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)$/',
                               $this->GetName(), ['action'=>'detail'] );
+        cms_route_manager::add_static( $route );
+        $route = new CmsRoute('/'.$prefix.'\/bycategory\/(?P<category_id>[0-9]+)\/(?P<returnid>[0-9]+)\/(.*?)$/',
+                              $this->GetName(), ['action'=>'default'] );
         cms_route_manager::add_static( $route );
 
         $offset = 0;
@@ -357,6 +376,7 @@ class News2 extends CMSModule
             $opts['editor_summary_enabled'] = $config['news2_summary_enabled'];
             $opts['editor_summary_wysiwyg'] = $config['news2_summary_usewysiwyg'];
             $opts['editor_urlslug_required'] = $config['news2_urlslug_required'];
+            $opts['editor_category_required'] = $config['news2_category_required'];
             $opts['detailpage'] = $config['news2_detailpage'];
             $opts['editor_own_editpublished'] = $config['news2_own_editpublsiehd'];
             $opts['editor_own_setpublished'] = $config['news2_own_setpublished'];
@@ -364,6 +384,8 @@ class News2 extends CMSModule
             $opts['detail_show_expired'] = $config['news2_detail_show_expired'];
             $opts['alert_draft'] = $config['news2_alert_on_draft'];
             $opts['alert_needsapproval'] = $config['news2_alert_needsapproval'];
+            $opts['pretty_category_url'] = get_parameter_value($config,'news2_default_pretty_bycategory_url',true);
+            $opts['bycategory_withchildren'] = get_parameter_value($config,'news2_default_bycategory_withchildren',true);
             $_obj = Settings::from_row( $opts );
         }
         return $_obj;
@@ -451,6 +473,7 @@ class News2 extends CMSModule
         if( $article->author_id > 0 && get_userid(false) == $article->author_id ) {
             // owners cannot edit disabled articles
             if( $article->status == $article::STATUS_DISABLED ) return FALSE;
+            if( $article->status == $article::STATUS_PUBLISHED && !$this->settings()->editor_own_editpublished ) return FALSE;
             return TRUE;
         }
         return FALSE;

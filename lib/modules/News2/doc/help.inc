@@ -247,6 +247,9 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
     <li><code>news2_summary_usewysiwyg</code> - bool
        <p>This entry determines whether the summary field (if enabled) should allow a WYSIWYG text field when adding or editing an article.</p>
     </li>
+    <li><code>news2_category_required</code> - bool
+       <p>This entry determines whether a category is required for new articles.</p>
+    </li>
     <li><code>news2_urlslug_required</code> - bool
        <p>This entry determines whether URL slugs are required when adding or editing an article.</p>
     </li>
@@ -270,6 +273,15 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
     </li>
     <li><code>news2_detailpage</code> - string|int
        <p>Used when url-rewriting is enabled, and one or more articles have valid URL slugs, this entry specifies the page alias or id of the page to use for rendering the article.</p>
+       <p>This config entry is NOT used when building the URL for articles that do not have url slugs.</p>
+    </li>
+    <li><code>news2_default_pretty_category_url</code> - bool
+       <p>If true, the system will not generate pretty urls for a summary view for a specific category. The default value is true</p>
+    </li>
+    <li><code>news2_default_bycategory_withchildren</code> - bool
+       <p>Determines whether by default, category summary views should include child categories.  The default value is true</p>
+       <p>Also see the withchildren parameter to allow overriding this on a per-call basis.</p>
+       <p>And see the {cms_module_hint} plugin for ways to inject this flag or other flags from page content or templates.</p>
     </li>
 </ul>
 

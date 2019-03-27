@@ -7,7 +7,7 @@
           {$pages=$articles->pageList()}
 	  {$mod->Lang('lbl_page')};
 	  {foreach $pages as $pagenum}
-	     <a {if $pagenum == $articles->page}class="active"{/if} href="{cms_action_url args=$params_str news_page=$pagenum inline=1}"/>{$pagenum}</a>
+	     <a {if $pagenum == $articles->page}class="active"{/if} href="{cms_action_url args=$params_str category_id=$actionparams.category_id|default:0 news_page=$pagenum inline=1}"/>{$pagenum}</a>
 	  {/foreach}
        </div>
    {/if}
@@ -33,7 +33,9 @@
 	 {if $article->category_id > 0}
   	 <div class="news2-article-category">
 	      <span class="news2-prompt">{$mod->Lang('lbl_category')}:</span>
-	      <span class="news2-value">{news2_category_name catid=$article->category_id}</span>
+	      <span class="news2-value">
+	          <a href="{cms_action_url action=default category_id=$article->category_id}">{news2_category_name catid=$article->category_id}</a>
+              </span>
 	 </div>
 	 {/if}
 

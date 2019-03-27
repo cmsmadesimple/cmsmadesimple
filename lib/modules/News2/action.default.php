@@ -21,7 +21,7 @@ $filter_opts = [ 'limit' => 50 , 'status'=>Article::STATUS_PUBLISHED, 'useperiod
 if( ($limit = (int)get_parameter_value( $params, 'limit')) ) {
     $filter_opts['limit'] = max(1,$limit);
 }
-if( ($category_id = (int) get_parameter_value( $params, 'category_id') ) ) {
+if( ($category_id = (int) get_parameter_value( $params, 'category_id') ) > 0 ) {
     $filter_opts['category_id'] = $category_id;
 }
 if( ($alias = trim(get_parameter_value( $params, 'category_alias')) ) ) {
@@ -29,7 +29,7 @@ if( ($alias = trim(get_parameter_value( $params, 'category_alias')) ) ) {
     if( $category ) $filter_opts['category_id'] = $category->id;
 }
 if( isset($filter_opts['category_id']) ) {
-    $tmp = cms_to_bool( get_parameter_value( $params, 'withchildren') );
+    $tmp = cms_to_bool( get_parameter_value( $params, 'withchildren', $this->settings()->bycategory_withchildren ) );
     $filter_opts['withchildren'] = $tmp;
 }
 if( ($useperiod = (int) get_parameter_value( $params, 'useperiod') ) >= 0 ) {
@@ -67,10 +67,11 @@ $tmp_idlist = get_parameter_value( $params, 'idlist' );
 if( $tmp_idlist && is_array($tmp_idlist) && count($tmp_idlist) ) {
     $filter_opts['id_list'] = $tmp_idlist;
 }
-if( ($page = (int) get_parameter_value( $params, 'news_page') ) ) {
-    $page = max(1,$page);
-    $filter_opts['offset'] = ($page - 1) * $filter_opts['limit'];
-}
+// page defaults to 1... but can be overriden in mact params or request.
+$page = (int) get_parameter_value( $params, 'news_page', 1);
+$page = (int) get_parameter_value( $_GET, 'news_page', $page);
+$page = max(1,$page);
+$filter_opts['offset'] = ($page - 1) * $filter_opts['limit'];
 
 $filter = $artm->createFilter( $filter_opts );
 $articles = $artm->loadByFilter( $filter );
