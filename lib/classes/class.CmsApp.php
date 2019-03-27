@@ -273,11 +273,14 @@ final class CmsApp
     }
 
     /**
-     * Get the current content page
+     * Get the current content page.
+     * Will return the current content object for frontend requests.
+     * For admin requests, this method returns null.
      *
      * @since 2.0
+     * @return ContentBase|null
      */
-    public function get_content_object() : ContentBase
+    public function get_content_object()
     {
         return $this->_current_content_page;
     }
