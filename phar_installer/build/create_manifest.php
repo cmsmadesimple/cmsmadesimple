@@ -207,6 +207,7 @@ $obj->ignore('scripts');
 $obj->ignore('install');
 $obj->ignore('phar_installer');
 $obj->ignore('config.php');
+$obj->ignore('uploads');
 if( $_notdeleted ) {
     foreach( $_notdeleted as $one ) {
         $obj->do_not_delete( $one );
