@@ -3,6 +3,7 @@
 /**
  * A file to describe an empty recordset
  *
+ * @package CMS
  * @ignore
  */
 namespace CMSMS\Database;
@@ -10,9 +11,10 @@ namespace CMSMS\Database;
 /**
  * A final class to describe a special (empty) recordset.
  *
+ * @package CMS
  * @ignore
  */
-final class EmptyResultset extends Resultset
+final class EmptyRecordset extends Resultset
 {
     /**
      * @ignore
