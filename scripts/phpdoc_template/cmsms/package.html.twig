@@ -2,12 +2,12 @@
 
 {% macro elementSummary(element, type) %}
 <div id="{{ type }}_{{ element.name }}" class="element ajax clickable {{ type }}">
-    <h1>{{ element.name }}{% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}">¶</a>{% endif %}</h1>
+    <h1>{{ element.name }}{% if type == 'class' or type == 'interface' or type == 'function' %}<a href="{{ path(element) }}">¶</a>{% endif %}</h1>
     <p class="short_description">{{ element.summary }}</p>
     <div class="details collapse">
         {{ element.description }}
     </div>
-    {% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}" class="more">« More »</a>{% endif %}
+    {% if type == 'class' or type == 'interface' or type == 'function' %}<a href="{{ path(element) }}" class="more">« More »</a>{% endif %}
 </div>
 {% endmacro %}
 
