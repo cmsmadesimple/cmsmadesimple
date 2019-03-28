@@ -407,11 +407,6 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
 	<p><strong>Default:</strong> false</p>
 	<p><strong>Description:</strong> This parameter can be used in the call to {cms_action_url} when building links to detail views to indicate that any URL slug should be ignored when building the article.</p>
     </li>
-    <li>nopretty:
-        <p><strong>View:</strong> n/a</p>
-	<p><strong>Default:</strong> false</p>
-	<p><strong>Description:</strong> This parameter can be used in the call to {cms_action_url} when building links to summary, detail or category views to indicate that no attempt to build pretty URLS should be made.</p>
-    </li>
 </ul>
 
 <h3>Properties of a Article Object:</h3>

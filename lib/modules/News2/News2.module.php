@@ -24,7 +24,8 @@ use News2\FieldTypes\StaticFieldType;
 use News2\FieldTypes\SeparatorFieldType;
 use News2\FieldTypes\RelatedArticlesFieldType;
 
-// NOTE: cannot lazy load this module because smarty plugins need to be registered
+// NOTE: cannot lazy load this module because field types and hook handlers are added in InitializeCommon
+//       the smarty plugins could be statically registered
 class News2 extends CMSModule
 {
     /**#@+
@@ -157,19 +158,6 @@ class News2 extends CMSModule
         return $out;
     }
 
-    public function create_url($id, $action, $returnid='', $params=[],
-                               $inline=false, $targetcontentonly=false, $prettyurl='')
-    {
-        $nopretty = cms_to_bool(get_parameter_value($params,'nopretty'));
-        if( isset($params['nopretty']) ) unset($params['nopretty']);
-        if( $nopretty ) {
-            // force ugly URL, but don't want the nopretty or noslug params on the output URL.
-            if( isset($params['noslug']) ) unset($params['noslug']);
-            $prettyurl = ':NOPRETTY:';
-        }
-        return parent::create_url( $id, $action, $returnid, $params, $inline, $targetcontentonly, $prettyurl );
-    }
-
     public function get_pretty_url($id, $action, $returnid='', $params=[], $inline=false)
     {
         if( $action == 'default' && $this->settings()->pretty_category_url ) {
@@ -177,7 +165,7 @@ class News2 extends CMSModule
             if( $category_id < 1 ) return;
 
             // News2/bycategory/$cat_id/$returnid/$category-path
-            // want to return this pretty URL, but still add pagination (limit, sorting can be provided by cms_moduel_hint)
+            // want to return this pretty URL, but still add pagination (limit, sorting can be provided by cms_module_hint)
             $page = (int) get_parameter_value($params,'news_page');
             $category = $this->categoriesManager()->loadByID( $category_id );
             if( !$category ) return;
@@ -325,7 +313,7 @@ class News2 extends CMSModule
         $txt = trim($alias);
         if( !$txt ) return;
 
-        $manager = cmsms()->GetHierarchyManger();
+        $manager = $this->app->GetHierarchyManger();
         $node = null;
         if( is_numeric($txt) && (int) $txt > 0 ) {
             $node = $manager->find_by_tag('id',(int)$txt);
@@ -388,7 +376,7 @@ class News2 extends CMSModule
     {
         $detailpage = $this->settings()->detailpage;
         if( $detailpage ) $detailpage = $this->resolvePageAlias( $detailpage );
-        if( !$detailpage ) $detailpage = cmsms()->GetContentOperations()->GetDefaultContent();
+        if( !$detailpage ) $detailpage = $this->app->GetContentOperations()->GetDefaultContent();
         return $detailpage;
     }
 

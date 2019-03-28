@@ -34,6 +34,7 @@ use CMSMS\internal\Smarty;
 use CMSMS\internal\AdminThemeManager;
 use CMSMS\internal\global_cache;
 use CMSMS\internal\page_string_handler;
+use CMSMS\internal\module_smarty_plugin_manager;
 use CMSMS\LoginOperations;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
@@ -724,6 +725,20 @@ final class CmsApp
     {
         static $obj;
         if( !$obj ) $obj = new page_string_handler( $this->get_hook_manager() );
+        return $obj;
+    }
+
+    /**
+     * Get the module_smarty_plugin_manager
+     *
+     * @internal
+     * @since 2.3
+     * @return moddule_smarty_plugin_manager
+     */
+    public function get_module_smarty_plugin_manager()
+    {
+        static $obj;
+        if( !$obj ) $obj = new module_smarty_plugin_manager( $this->GetDB(), $this->get_cache_driver() );
         return $obj;
     }
 

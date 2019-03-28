@@ -45,6 +45,11 @@ class Smarty extends smarty_base_template
     private $_simple_plugin_ops;
 
     /**
+     * @ignore
+     */
+    private $_module_smarty_plugin_manager;
+
+    /**
      * Constructor
      *
      * @param array The hash of CMSMS config settings
@@ -54,6 +59,7 @@ class Smarty extends smarty_base_template
         parent::__construct();
         $this->_is_frontend_request = $app->is_frontend_request();
         $this->_simple_plugin_ops = $app->GetSimplePluginOperations();
+        $this->_module_smarty_plugin_manager = $app->get_module_smarty_plugin_manager();
         $this->direct_access_security = TRUE;
 
         global $CMS_INSTALL_PAGE;
@@ -88,7 +94,7 @@ class Smarty extends smarty_base_template
         $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
         $config = $app->GetConfig();
-        if( $app->is_frontend_request()) {
+        if( $this->_is_frontend_request ) {
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
             if(isset($CMS_INSTALL_PAGE)) return;
@@ -207,10 +213,10 @@ class Smarty extends smarty_base_template
             }
         }
 
-        if( $type != 'function' ) return;
+        if( $type != 'function' ) return; // hmmm.
 
         if( $this->_is_frontend_request ) {
-            $row = \cms_module_smarty_plugin_manager::load_plugin($name,$type);
+            $row = $this->_module_smarty_plugin_manager->load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
                 $callback = $row['callback'][0].'::'.$row['callback'][1];

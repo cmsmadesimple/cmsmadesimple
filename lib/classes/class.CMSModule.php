@@ -259,8 +259,9 @@ abstract class CMSModule
         if( !$name || !$type || !$callback ) throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
 
         // todo: check name, and type
-        if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
-        cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,FALSE,$usage);
+        $mgr = $this->app->get_module_smarty_plugin_manager();
+        if( $usage == 0 ) $usage = $mgr::AVAIL_FRONTEND;
+        $mgr->addStatic($this->GetName(),$name,$type,$callback,FALSE,$usage);
     }
 
     /**
@@ -274,10 +275,10 @@ abstract class CMSModule
     public function RemoveSmartyPlugin($name = '')
     {
         if( $name == '' ) {
-            cms_module_smarty_plugin_manager::remove_by_module($this->GetName());
+            $this->app->get_module_smarty_plugin_manager()->remove_by_module($this->GetName());
             return;
         }
-        cms_module_smarty_plugin_manager::remove_by_name($name);
+        $this->app->get_module_smarty_plugin_manager()->remove_by_name($name);
     }
 
     /**
@@ -307,7 +308,7 @@ abstract class CMSModule
             return TRUE;
         }
         else {
-            return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(), 'function', 'function_plugin',$cachable);
+            return $this->app->get_module_smarty_plugin_manager()->addStatic($this->GetName(),$this->GetName(), 'function', 'function_plugin',$cachable);
         }
     }
 

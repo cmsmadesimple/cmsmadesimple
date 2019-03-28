@@ -32,7 +32,10 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-
+namespace CMSMS\internal;
+use cms_cache_driver;
+use cms_utils;
+use CMSMS\Database\Connection as Database;
 
 /**
  * Classes and functions to manage static smarty plugins
@@ -51,7 +54,7 @@
  * @access private
  * @since  1.11
  */
-final class cms_module_smarty_plugin_manager
+final class module_smarty_plugin_manager
 {
 
     /**
@@ -80,6 +83,11 @@ final class cms_module_smarty_plugin_manager
     private $_cache;
 
     /**
+     * @ignore
+     */
+    private $_db;
+
+    /**
      * A flag indicating that the plugin is intended to be available for the frontend
      */
     const AVAIL_FRONTEND = 1;
@@ -92,17 +100,20 @@ final class cms_module_smarty_plugin_manager
     /**
      * @ignore
      */
-    protected function __construct()
+    public function __construct( Database $db, cms_cache_driver $driver )
     {
-        $this->_cache = \CmsApp::get_instance()->get_cache_driver();
+        if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed');
+        self::$_instance = $this;
+        $this->_cache = $driver;
+        $this->_db = $db;
     }
 
     /**
      * Get the single allowed instance of this class
      */
-    public static function &get_instance()
+    public static function get_instance() : module_smarty_plugin_manager
     {
-        if( !self::$_instance ) self::$_instance = new cms_module_smarty_plugin_manager();
+        if( !is_object( self::$_instance) ) throw new \LogicException('Instance of '.__CLASS__.' not yet created');
         return self::$_instance;
     }
 
@@ -114,13 +125,12 @@ final class cms_module_smarty_plugin_manager
         if( $this->_loaded == true ) return;
         // todo: cache this stuff.  does not need to be run on each request
 
-        $data = $this->_cache->get(__CLASS__);
         $this->_data = [];
         $this->_loaded = TRUE;
+        $data = $this->_cache->get(__CLASS__);
         if( !$data ) {
-            $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_smarty_plugins ORDER BY module';
-            $data = $db->GetArray($query);
+            $data = $this->_db->GetArray($query);
             $this->_cache->set(__CLASS__,$data);
         }
 
@@ -142,9 +152,8 @@ final class cms_module_smarty_plugin_manager
         if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE ) return;
 
         $this->_cache->erase(__CLASS__);
-        $db = CmsApp::get_instance()->GetDb();
         $query = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'module_smarty_plugins';
-        $db->Execute($query);
+        $this->_db->Execute($query);
 
         $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
         $fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
@@ -153,7 +162,7 @@ final class cms_module_smarty_plugin_manager
             $query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],$row['callback'],$row['cachable'],$row['available']);
         }
         if( endswith($query,',') ) $query = substr($query,0,-1);
-        $dbr = $db->Execute($query);
+        $dbr = $this->_db->Execute($query);
         if( !$dbr ) return FALSE;
 
         $this->_modified = FALSE;
@@ -166,9 +175,9 @@ final class cms_module_smarty_plugin_manager
      *
      * @internal
      */
-    public static function load_plugin($name,$type)
+    public function load_plugin($name,$type)
     {
-        $row = self::get_instance()->find($name,$type);
+        $row = $this->find($name,$type);
         if( !is_array($row) ) return;
 
         // load the module
@@ -233,9 +242,9 @@ final class cms_module_smarty_plugin_manager
      * @param bool $cachable Whether the plugin is cachable
      * @param int  $available Flags indicating the availability of the plugin.   See AVAil_ADMIN AND AVAIL_FRONTEND
      */
-    public static function addStatic($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
+    public function addStatic($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
     {
-        return self::get_instance()->add($module_name,$name,$type,$callback,$cachable,$available);
+        return $this->add($module_name,$name,$type,$callback,$cachable,$available);
     }
 
 
@@ -274,9 +283,9 @@ final class cms_module_smarty_plugin_manager
      *
      * @param string $module_name
      */
-    public static function remove_by_module($module_name)
+    public function remove_by_module($module_name)
     {
-        self::get_instance()->_remove_by_module($module_name);
+        $this->_remove_by_module($module_name);
     }
 
     /**
@@ -304,9 +313,9 @@ final class cms_module_smarty_plugin_manager
      * @param string $name
      * @param string $type (function,block,modifier)
      */
-    public static function remove_by_name($name)
+    public function remove_by_name($name)
     {
-        self::get_instance()->_remove_by_name($name);
+        $this->_remove_by_name($name);
     }
 
     /**
@@ -333,4 +342,3 @@ final class cms_module_smarty_plugin_manager
 #
 # EOF
 #
-?>
