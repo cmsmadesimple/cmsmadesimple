@@ -35,7 +35,7 @@
  *
  * @package CMS
  * @license GPL
- * @deprecated
+ * @deprecated User Tags (or UDTs) are replaced with Simple plugins since v2.3
  */
 final class UserTagOperations
 {

@@ -27,6 +27,10 @@
  * @ignore
  */
 define('CMS_CONTENT_HIDDEN_NAME','--------');
+
+/**
+ * @ignore
+ */
 define('__CMS_PREVIEW_PAGE__',-100);
 
 /**

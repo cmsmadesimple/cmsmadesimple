@@ -1,7 +1,7 @@
 <?php
 /**
  * An interface to describe a CMSMS cookie manager.
- * @package CMSMS
+ * @package CMS
  * @since 2.3
  * @license GPL
  */
