@@ -251,7 +251,7 @@ abstract class CMSModule
      * @param string  $name The plugin name
      * @param string  $type The plugin type (function,compiler,block, etc)
      * @param callback $callback The function callback (must be a static function)
-     * @param bool $cachable Wether this function is cachable.
+     * @param bool $cachable Wether this function is cachable (ignored as of 2.3)
      * @param int $usage Indicates frontend (0), or frontend and backend (1) availability.
      */
     public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
@@ -260,7 +260,7 @@ abstract class CMSModule
 
         // todo: check name, and type
         if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
-        cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,$cachable,$usage);
+        cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,FALSE,$usage);
     }
 
     /**

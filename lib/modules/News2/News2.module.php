@@ -24,17 +24,7 @@ use News2\FieldTypes\StaticFieldType;
 use News2\FieldTypes\SeparatorFieldType;
 use News2\FieldTypes\RelatedArticlesFieldType;
 
-// todo: help
-// todo: notifications
-// todo: check lang strings
-// // done: view action
-// // done: translatable perms
-// // done: check permissions (view, and approve, own perms)
-// // done: hooks (fielddefs and categories)
-// // done: bulk actions
-// // done: admin filtering
-// // done: smarty plugin or action to display author name
-// // done: default sorting for admin COALESCE(modified_date,create_date)
+// NOTE: cannot lazy load this module because smarty plugins need to be registered
 class News2 extends CMSModule
 {
     /**#@+
@@ -122,7 +112,7 @@ class News2 extends CMSModule
     }
 
     // initializecommon??
-    public function SetParameters()
+    public function InitializeCommon()
     {
         // executed from both initializeadmin and initializefrontend
         // may be called multiple times.
