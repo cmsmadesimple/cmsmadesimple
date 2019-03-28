@@ -1,4 +1,34 @@
 <?php
+$lang['help_function_cms_pagestr->render'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is the partner to the {cms_pagestr->set} plugin that allows embedding previously set data into meta tags.</p>
+
+<h3>What parameters does it take:</h3>
+<ul>
+   <li>key - <em>(string)</em> - The name of the variable.</li>
+   <li>dflt - <em>(string,optional)</em> - An optional default valuable, to use if the variable has not been previously set.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;title&gt;{cms_pagestr->render('pagetitle',"{title}")}&lt;title&gt;</code></pre>
+
+<h3>Alternate Syntax:</h3>
+<pre><code>{\$cms_pagestr->renderv(key[,dflt])}/code></pre>
+
+EOT;
+
+$lang['help_function_cms_pagestr->set'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is used to set a variable that can later be used in other places in the template by the {cms_pagestr->render plugin}.</p>
+<p>This plugin is primarily useful for adjusting the value of meta tags such as the page title, or canonical URL from within module template (i.e: News2 detail templats).</p>
+<h3>What parameters does it take:</h3>
+<p>This plugin can take multiple parameters, each key+value pair will be stored as a separate value.</p>
+<h3>Example:</h3>
+<pre><code>{cms_pagestr->set pagetitle=\$article->title canonical=\$detail_url}</code></pre>
+
+<h3>Alternate Syntax:</h3>
+<pre><code>{cms_pagestr->setv('pagetitle',\$article->title)}</code></pre>
+EOT;
+
 $lang['help_function_cms_render_scripts'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin will use all of the input from various calls to {cms_queue_script}, read each of the files in order that they were queuexd, concatenate them together, and output a single javascript file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>

@@ -172,6 +172,14 @@ else {
     $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
     $file_array[] = $rec;
 
+    $rec = array('type'=>'function','name'=>'cms_pagestr->render');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $file_array[] = $rec;
+
+    $rec = array('type'=>'function','name'=>'cms_pagestr->set');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $file_array[] = $rec;
+
     function listtags_plugin_sort($a,$b)
     {
         return strcmp($a['name'],$b['name']);
