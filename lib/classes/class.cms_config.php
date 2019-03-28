@@ -52,22 +52,22 @@ final class cms_config implements ArrayAccess
     const TYPE_BOOL = 'BOOL';
 
     /**
-     * ignore
+     * @ignore
      */
     private static $_instance;
 
     /**
-     * ignore
+     * @ignore
      */
     private $_types;
 
     /**
-     * ignore
+     * @ignore
      */
     private $_data = array();
 
     /**
-     * ignore
+     * @ignore
      */
     private $_cache = array();
 
@@ -176,6 +176,8 @@ final class cms_config implements ArrayAccess
 
     /**
      * Retrieve the maximum file upload size (in bytes)
+     *
+     * @ignore
      */
     private function get_upload_size()
     {
@@ -656,7 +658,7 @@ final class cms_config implements ArrayAccess
      * A function to save the current state of the config.php file.  Any existing file is backed up
      * before overwriting.
      *
-     *
+     * @internal
      * @param bool $verbose indicates whether comments should be stored in the config.php file.
      * @param string $filename An optional complete file specification.  If not specified the standard config file location will be used.
      */

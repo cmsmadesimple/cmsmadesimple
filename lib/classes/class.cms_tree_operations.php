@@ -43,6 +43,7 @@
 /**
  * A utility class to provide functions to populate a tree
  *
+ * @internal
  * @package CMS
  * @license GPL
  * @author  Robert Campbell

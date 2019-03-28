@@ -52,6 +52,7 @@
  * @author Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.10
+ * @deprecated See ICookieManager
  */
 final class cms_cookies
 {

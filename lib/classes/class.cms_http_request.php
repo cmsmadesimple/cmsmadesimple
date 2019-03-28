@@ -35,14 +35,15 @@ class cms_http_request
     private $target;
 
     /**
-     * socket
-     *
+     * @ignore
+     * @var string
      */
     private $_socket;
 
     /**
      * Contains the target host
      *
+     * @ignore
      * @var string
      */
     private $host;
@@ -50,6 +51,7 @@ class cms_http_request
     /**
      * Contains the target port
      *
+     * @ignore
      * @var integer
      */
     private $port;
@@ -57,6 +59,7 @@ class cms_http_request
     /**
      * Contains the target path
      *
+     * @ignore
      * @var string
      */
     private $path;
@@ -64,6 +67,7 @@ class cms_http_request
     /**
      * Contains the target schema
      *
+     * @ignore
      * @var string
      */
     private $schema;
@@ -71,6 +75,7 @@ class cms_http_request
     /**
      * Contains the http method (GET or POST)
      *
+     * @ignore
      * @var string
      */
     private $method;
@@ -78,6 +83,7 @@ class cms_http_request
     /**
      * Contains raw post data
      *
+     * @ignore
      * @var str
      */
     private $rawPostData;
@@ -85,6 +91,7 @@ class cms_http_request
     /**
      * Contains the parameters for request
      *
+     * @ignore
      * @var array
      */
     private $params;
@@ -92,6 +99,7 @@ class cms_http_request
     /**
      * Contains the cookies for request
      *
+     * @ignore
      * @var array
      */
     private $cookies;
@@ -99,6 +107,7 @@ class cms_http_request
     /**
      * Contains the cookies retrieved from response
      *
+     * @ignore
      * @var array
      */
     private $_cookies;
@@ -106,6 +115,7 @@ class cms_http_request
     /**
      * Number of seconds to timeout
      *
+     * @ignore
      * @var integer
      */
     private $timeout;
@@ -113,6 +123,7 @@ class cms_http_request
     /**
      * Whether to use cURL or not
      *
+     * @ignore
      * @var boolean
      */
     private $useCurl;
@@ -120,6 +131,7 @@ class cms_http_request
     /**
      * Contains the referrer URL
      *
+     * @ignore
      * @var string
      */
     private $referrer;
@@ -127,6 +139,7 @@ class cms_http_request
     /**
      * Contains the User agent string
      *
+     * @ignore
      * @var string
      */
     private $userAgent;
@@ -134,6 +147,7 @@ class cms_http_request
     /**
      * Contains the cookie path (to be used with cURL)
      *
+     * @ignore
      * @var string
      */
     private $cookiePath;
@@ -141,6 +155,7 @@ class cms_http_request
     /**
      * Whether to use cookie at all
      *
+     * @ignore
      * @var boolean
      */
     private $useCookie;
@@ -148,6 +163,7 @@ class cms_http_request
     /**
      * Whether to store cookie for subsequent requests
      *
+     * @ignore
      * @var boolean
      */
     private $saveCookie;
@@ -155,6 +171,7 @@ class cms_http_request
     /**
      * Contains the Username (for authentication)
      *
+     * @ignore
      * @var string
      */
     private $username;
@@ -162,6 +179,7 @@ class cms_http_request
     /**
      * Contains the Password (for authentication)
      *
+     * @ignore
      * @var string
      */
     private $password;
@@ -169,6 +187,7 @@ class cms_http_request
     /**
      * Contains the fetched web source
      *
+     * @ignore
      * @var string
      */
     private $result;
@@ -176,6 +195,7 @@ class cms_http_request
     /**
      * Contains the last headers
      *
+     * @ignore
      * @var string
      */
     private $headers;
@@ -183,6 +203,7 @@ class cms_http_request
     /**
      * Contains the last call's http status code
      *
+     * @ignore
      * @var string
      */
     private $status;
@@ -190,6 +211,7 @@ class cms_http_request
     /**
      * Whether to follow http redirect or not
      *
+     * @ignore
      * @var boolean
      */
     private $redirect;
@@ -197,6 +219,7 @@ class cms_http_request
     /**
      * The maximum number of redirect to follow
      *
+     * @ignore
      * @var integer
      */
     private $maxRedirect;
@@ -204,6 +227,7 @@ class cms_http_request
     /**
      * The current number of redirects
      *
+     * @ignore
      * @var integer
      */
     private $curRedirect;
@@ -211,6 +235,7 @@ class cms_http_request
     /**
      * Contains any error occurred
      *
+     * @ignore
      * @var string
      */
     private $error;
@@ -218,6 +243,7 @@ class cms_http_request
     /**
      * Store the next token
      *
+     * @ignore
      * @var string
      */
     private $nextToken;
@@ -225,6 +251,7 @@ class cms_http_request
     /**
      * Whether to keep debug messages
      *
+     * @ignore
      * @var boolean
      */
     private $debug;
@@ -232,6 +259,7 @@ class cms_http_request
     /**
      * Stores optional http headers
      *
+     * @ignore
      * @var array
      */
     private $headerArray;
@@ -239,6 +267,7 @@ class cms_http_request
     /**
      * Stores the debug messages
      *
+     * @ignore
      * @var array
      * @todo will keep debug messages
      */
@@ -247,6 +276,7 @@ class cms_http_request
     /**
      * Stores proxy information (host:port)
      *
+     * @ignore
      * @var string
      */
     private $proxy;
@@ -1202,7 +1232,7 @@ class cms_http_request
      * Get the cookies which are valid for the current request. Checks
      * domain and path to decide the return.
      *
-     * @access private
+     * @ignore
      */
     private function _passCookies()
     {
@@ -1296,6 +1326,7 @@ class cms_http_request
     /**
      * Set error message (internal)
      *
+     * @ignore
      * @param string $error Error message
      * @return string Error message
      * @access private

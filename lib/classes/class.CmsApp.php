@@ -543,6 +543,7 @@ final class CmsApp
     /**
      * Get a handle to the ScriptCombiner stuff
      *
+     * @internal
      * @since 2.3
      */
     public function get_script_manager() : ScriptManager
@@ -555,6 +556,7 @@ final class CmsApp
     /**
      * Get a handle to the Stylesheet Combiner stuff
      *
+     * @internal
      * @since 2.3
      */
     public function get_stylesheet_manager() : StylesheetManager
@@ -980,6 +982,8 @@ final class CmsApp
 
 /**
  * Simple global convenience object to hold CMS Content Type structure.
+ *
+ * This class is subject to a refactoring at some point.
  *
  * @package CMS
  */

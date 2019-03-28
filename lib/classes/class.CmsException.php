@@ -215,7 +215,7 @@ class CmsDataNotFoundException extends CmsException
 }
 
 /**
- * A special exception indicating that a 404 error should be supplied.
+ * A special exception indicating that a 400 error should be supplied.
  *
  * @package CMS
  * @license GPL

@@ -52,8 +52,12 @@ if( !function_exists('__internal_cmp_routes') ) {
 }
 
 /**
- * A class to manage all recognized routes in the system.
+ * A singleton class to manage all recognized routes in the system.
  *
+ * This class is used internally to allow managing routes.  It should not be used by the public.
+ *
+ * @deprecated This class will be renamed/reworied in a subsequent version
+ * @internal
  * @package CMS
  * @license GPL
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>

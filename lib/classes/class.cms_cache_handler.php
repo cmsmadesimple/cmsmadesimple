@@ -54,7 +54,9 @@ class cms_cache_handler
     /**
      * @ignore
      */
-    private function __clone() {
+    private function __clone()
+    {
+        // nothing here, remove me?
     }
 
     /**

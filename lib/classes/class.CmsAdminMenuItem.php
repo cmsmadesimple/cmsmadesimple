@@ -25,15 +25,15 @@
  */
 
 /**
- * Base module class.
+ * A class to represent menu items for building an admin navigation.
  *
- * All modules should inherit and extend this class with their functionality.
+ * This class is used to build admin navigations.
  *
  * @package		CMS
  * @since		2.0
  * @license     GPL
  * @author      Robert Campbell <calguy1000@cmsmadesimple.org>
- * @see         CMSModule::GetAdminSection() FOO
+ * @see         CMSModule::GetAdminMenuItems()
  * @property string $module The module that hosts the destination action
  * @property string $section The admin section (from CMSModule::GetAdminSection)
  * @property string $title The title of the menu item

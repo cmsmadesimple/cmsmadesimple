@@ -26,7 +26,7 @@
 
 
 /**
- * A static class for preferences stored with admin user accounts
+ * A static class for preferences stored with admin user preferences.
  *
  * @package CMS
  * @license GPL

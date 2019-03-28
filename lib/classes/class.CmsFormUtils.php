@@ -11,6 +11,8 @@
 /**
  * A static class providing functionality for building forms.
  *
+ * This class will undergo changes in the future, and may no longer operate as a static class goinf forward.
+ *
  * @package CMS
  * @license GPL
  * @author  Robert Campbell

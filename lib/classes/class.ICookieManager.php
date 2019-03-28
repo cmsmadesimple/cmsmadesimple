@@ -27,6 +27,7 @@ interface ICookieManager
     /**
      * Set a cookie value.
      *
+     * @abstract
      * @param string $key The name of the cookie
      * @param mixed The cookie contents
      * @param int $expires The default expiry timestamp.  if 0 is specified, then a session cookie is created.
@@ -37,6 +38,7 @@ interface ICookieManager
     /**
      * Test whether a cookie exists.
      *
+     * @abstract
      * @param string $key The name of the cookie
      * @return bool
      */
@@ -45,6 +47,7 @@ interface ICookieManager
     /**
      * Erase a cookie
      *
+     * @abstract
      * @param string $key The name of the cookie
      */
     public function erase(string $key);

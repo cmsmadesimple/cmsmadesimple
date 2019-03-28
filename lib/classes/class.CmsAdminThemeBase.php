@@ -30,6 +30,7 @@
  * This is an abstract class that is used for building CMSMS Admin Themes.
  * This is also a singleton object.
  *
+ * @abstract
  * @package CMS
  * @license GPL
  * @since   1.11

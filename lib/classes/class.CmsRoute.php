@@ -52,8 +52,8 @@
  * @property string $key2
  * @property string $key3
  * @property array  $defaults
- * @property string absolute
- * @property string results
+ * @property bool   $absolute
+ * @property string $results
  */
 class CmsRoute implements ArrayAccess
 {

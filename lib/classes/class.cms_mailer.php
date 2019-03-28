@@ -38,10 +38,13 @@ use PHPMailer\PHPMailer\PHPMailer;
  *
  * Prior to CMSMS 2.0 this class was implemented as a core module.
  *
+ * This class should not be instantiated directly.
+ *
  * @package CMS
  * @license GPL
  * @since 2.0
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @see CmsApp::create_new_mailer()
  */
 class cms_mailer
 {
@@ -55,6 +58,7 @@ class cms_mailer
      * Constructor
      *
      * @param bool $exceptions Optionally disable exceptions, and rely on error strings.
+     * @param bool $reset Whether or not to reset the mailer object using internal preferences.
      */
     public function __construct($exceptions = true, $reset = true)
     {

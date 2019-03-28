@@ -71,6 +71,8 @@ class UserOperations
 
     /**
      * Constructor
+     *
+     * @param Database $db An active database instance.
      */
     public function __construct( Database $db )
     {

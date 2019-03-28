@@ -27,8 +27,9 @@
 use \CMSMS\internal\global_cache;
 
 /**
- * A class for working with site preferences
+ * A singleton class for working with site preferences
  *
+ * @see CMSModule::GetPreference() and CMSModule::SetPreference()
  * @package CMS
  * @license GPL
  * @since 1.10

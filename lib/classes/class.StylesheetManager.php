@@ -79,6 +79,7 @@ class StylesheetManager
      * since the last time the output file was generated.
      *
      * @param string $output_path The name of the directory where the output CSS file should be written.
+     * @param string $entropy Additional data to use when generating the filename.
      * @param bool $force Force the output stylesheet to be regenerated.
      * @return string The output CSS filename.
      */

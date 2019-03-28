@@ -35,8 +35,8 @@ define('__CMS_PREVIEW_PAGE__',-100);
  * This is the base level content class.  It is an abstract object and cannot be instantiated directly.
  * All content pages in the database are required to be drived from this class.
  *
- * @since		0.8
- * @package		CMS
+ * @since 0.8
+ * @package CMS
  */
 abstract class ContentBase
 {
