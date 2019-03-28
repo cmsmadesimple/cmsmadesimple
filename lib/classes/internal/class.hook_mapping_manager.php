@@ -40,7 +40,6 @@ class hook_mapping_manager
         $data = json_decode($str_data,TRUE);
         if( !$data ) throw new \RuntimeException("Could not parse json data from ".$filename);
         if( empty($data) || !count($data) ) throw new \RuntimeException("Could not find hook mapping data from ".$filename);
-
         foreach( $data as $one ) {
             $this->data[] = hook_mapping::from_array( $one );
         }
@@ -68,8 +67,9 @@ EOT;
 
     protected function get_module_event_handler_wrapper(string $hook_name, string $module_name)
     {
-        $mod = \cms_utils::get_module($module_name);
-        if( !$mod ) return;
+        // note: try not to load module here.
+        //$mod = \cms_utils::get_module($module_name);
+        //if( !$mod ) return;
         $key = md5(__FILE__.$hook_name.$module_name);
         $function = "__hooktoevent_$key";
         $filename = $this->create_module_event_handler_wrapper($function, $hook_name, $module_name);

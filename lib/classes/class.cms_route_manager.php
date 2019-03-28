@@ -382,15 +382,16 @@ final class cms_route_manager
     private static function _get_routes_from_cache()
     {
         $driver = self::_get_cache_driver();
-        $data = $driver->get(__CLASS__,__CLASS__);
-        if( !$data ) {
-            $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'routes';
-            $tmp = $db->GetArray($query);
-            $res = $driver->set(__CLASS__,$tmp,__CLASS__);
+        if( $driver->exists(__CLASS__,__CLASS__) ) {
+            $data = $driver->get(__CLASS__,__CLASS__);
             self::$_routes_loaded = TRUE;
+            return $data;
         }
         else {
+            $db = CmsApp::get_instance()->GetDb();
+            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'routes';
+            $data = $db->GetArray($query);
+            $driver->set(__CLASS__, $data, __CLASS__);
             self::$_routes_loaded = TRUE;
             return $data;
         }
