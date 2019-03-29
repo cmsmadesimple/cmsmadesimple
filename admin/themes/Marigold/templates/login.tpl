@@ -1,5 +1,5 @@
 {extends file='minimal.tpl'}
-{block name='css'}
+{block name='css' append}
     {* <link rel="stylesheet" href="loginstyle.php" /> *}
 {/block}
 {block name='js' append}

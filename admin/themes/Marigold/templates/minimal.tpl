@@ -9,7 +9,10 @@
 		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$theme_root}/images/favicon/cmsms-favicon.ico"/>
-		{block name='css'}{$dynamic_css|default:''}{/block}
+		{block name='css'}
+	        	<link rel="stylesheet" href="style.php?{$secureparam}" />
+			{$dynamic_css|default:''}
+		{/block}
   	        {block name='js'}
 		        <!-- learn IE html5 -->
 		        <!--[if lt IE 9]>
