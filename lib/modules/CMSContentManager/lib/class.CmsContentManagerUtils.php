@@ -56,28 +56,41 @@ final class CmsContentManagerUtils
 
     public static function get_pagedefaults()
     {
-        $design_id = $tpl_id = null;
-        try {
-            $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-            $tpl_id = $tpl->get_id();
-        }
-        catch( \CmsDataNotFoundException $e ) {
-            $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-            $list = CmsLayoutTemplate::load_all_by_type($type);
-            $tpl = $list[0];
-            $tpl_id = $tpl->get_id();
+        $design_id = $tpl_id = $tpl_rsrc = null;
+        $config = cmsms()->GetConfig();
+        if( isset($config['page_template_list']) ) {
+            if( is_string($config['page_template_list']) ) $tpl_rsrc = $config['page_template_list'];
+            if( is_array($config['page_template_list']) && count($config['page_template_list']) ) {
+                $values = array_values($config['page_template_list']);
+                $tpl_rsrc = $values[0];
+            }
         }
 
-        try {
-            $design_id = \CmsLayoutCollection::load_default()->get_id();
+        if( !$tpl_rsrc ) {
+            try {
+                $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+                $tpl_id = $tpl->get_id();
+            }
+            catch( \CmsDataNotFoundException $e ) {
+                $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+                $list = CmsLayoutTemplate::load_all_by_type($type);
+                $tpl = $list[0];
+                $tpl_id = $tpl->get_id();
+            }
+
+            try {
+                $design_id = \CmsLayoutCollection::load_default()->get_id();
+            }
+            catch( \CmsException $e ) {
+                // ignore this
+            }
         }
-        catch( \CmsException $e ) {
-            // ignore this
-        }
+
         $page_prefs = array('contenttype'=>'content', // string
                           'disallowed_types'=>'', // array of strings
                           'design_id'=> $design_id,
                           'template_id'=>$tpl_id,
+                          'template_rsrc'=>$tpl_rsrc,
                           'parent_id'=>-2, // int
                           'secure'=>0, // boolean
                           'cachable'=>1, // boolean
@@ -92,8 +105,10 @@ final class CmsContentManagerUtils
                           'extra3'=>''); // string
         $mod = cms_utils::get_module('CMSContentManager');
         $tmp = $mod->GetPreference('page_prefs');
-        if( $tmp ) $page_prefs = unserialize($tmp);
-
+        if( $tmp ) {
+            $tmp = unserialize($tmp);
+            return array_merge( $page_prefs, $tmp );
+        }
         return $page_prefs;
     }
 

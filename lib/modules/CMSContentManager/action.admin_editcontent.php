@@ -93,8 +93,9 @@ try {
         $content_obj->SetActive($pagedefaults['active']);
         $content_obj->SetCachable($pagedefaults['cachable']);
         $content_obj->SetShowInMenu($pagedefaults['showinmenu']);
-        $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);
-        $content_obj->SetTemplateId($pagedefaults['template_id']);
+        $content_obj->SetPropertyValue('template_rsrc',$pagedefaults['template_rsrc']);
+        if( $pagedefaults['design_id'] > 0 ) $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);
+        if( $pagedefaults['template_id'] > 0 ) $content_obj->SetTemplateId($pagedefaults['template_id']);
         $content_obj->SetPropertyValue('searchable',$pagedefaults['searchable']);
         $content_obj->SetPropertyValue('content_en',$pagedefaults['content']);
         $content_obj->SetMetaData($pagedefaults['metadata']);
