@@ -481,7 +481,7 @@ class News2 extends CMSModule
             $template = $dflt;
             try {
                 $tpl = CmsLayoutTemplate::load_dflt_by_type('News2::'.$type_suffix);
-                if( !is_object($tpl) ) $template = $tpl->get_name();
+                if( is_object($tpl) ) $template = $tpl->get_name();
             }
             catch( CmsDataNotFoundException $e ) {
                 // nothing here.
