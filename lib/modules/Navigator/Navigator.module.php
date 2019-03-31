@@ -122,7 +122,6 @@ final class Navigator extends CMSModule
 
     public function InitializeFrontend()
     {
-        $this->RestrictUnknownParams();
         $this->SetParameterType('items',CLEAN_STRING);
         $this->SetParameterType('nlevels',CLEAN_INT);
         $this->SetParameterType('number_of_levels',CLEAN_INT);
