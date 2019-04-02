@@ -1,6 +1,5 @@
 <?php
 
-use CMSMS\HookManager;
 use News2\AdminSearchSlave;
 use News2\Article;
 use News2\Settings;

@@ -1,5 +1,6 @@
 <?php
 namespace CMSMS\internal;
+use CMSMS\hook_manager;
 
 // handles setting, getting, and rendering
 class page_string_handler

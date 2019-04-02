@@ -54,11 +54,11 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
 @ob_start();
 
 // initial setup
-$_app = CmsApp::get_instance(); // internal use only, subject to change.
+$_app = cmsms(); // internal use only, subject to change.
 $config = $_app->GetConfig();
-$params = array_merge($_GET, $_POST);
 $smarty = $_app->GetSmarty();
 $contentops = $_app->GetContentOperations();
+$hook_mgr = $_app->get_hook_manager();
 $page = get_pageid_or_alias_from_url();
 $contentobj = null;
 $trycount = 0;
@@ -69,15 +69,15 @@ $obj = $_app->get_page_string_handler();
 $smarty->registerObject( 'cms_pagestr', $obj);
 $smarty->assign('cms_pagestr', $obj);
 
-$get_content_in_parts = function( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc ) {
+$get_content_in_parts = function( $app, $hook_mgr, $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc ) {
     $config = cms_config::get_instance();
 
     debug_buffer('process template top');
-    \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+    $hook_mgr->emit('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
     $tpl = $smarty->createTemplate($top_rsrc);
     $top .= $tpl->fetch();
     unset($tpl);
-    \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+    $hook_mgr->emit('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
 
     if( $config['content_processing_mode'] == 1 ) {
         debug_buffer('preprocess module action');
@@ -85,19 +85,19 @@ $get_content_in_parts = function( $smarty, $contentobj, $top_rsrc, $body_rsrc, $
     }
 
     debug_buffer('process template body');
-    \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+    $hook_mgr->emit('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
     $tpl = $smarty->createTemplate($body_rsrc);
     $body .= $tpl->fetch();
     unset($tpl);
-    \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+    $hook_mgr->emit('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
 
     debug_buffer('process template head');
-    \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+    $hook_mgr->emit('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
     //$tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
     $tpl = $smarty->createTemplate($head_rsrc);
     $head .= $tpl->fetch();
     unset($tpl);
-    \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+    $hook_mgr->emit('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
 
     $html = $top.$head.$body;
     return $html;
@@ -158,7 +158,7 @@ while( $trycount < 2 ) {
             $_app->disable_template_processing();
         }
 
-        \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
+        $hook_mgr->emit('Core::ContentPreRender', [ 'content' => &$contentobj ] );
 
         if( $config['content_processing_mode'] == 2 ) {
             debug_buffer('preprocess module action');
@@ -184,14 +184,14 @@ while( $trycount < 2 ) {
                     $body_rsrc = $main_rsrc.';body';
                     $head_rsrc = $main_rsrc.';head';
 
-                    $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
+                    $html = $get_content_in_parts( $_app, $hook_mgr, $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
                 }
                 else if( startswith( $main_rsrc, 'cms_template') ) {
                     $top_rsrc = $main_rsrc.';top';
                     $body_rsrc = $main_rsrc.';body';
                     $head_rsrc = $main_rsrc.';head';
 
-                    $html = $get_content_in_parts( $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
+                    $html = $get_content_in_parts( $_app, $hook_mgr, $smarty, $contentobj, $top_rsrc, $body_rsrc, $head_rsrc );
                 }
             }
             if( !$html ) {
@@ -326,7 +326,7 @@ while( $trycount < 2 ) {
     }
 } // end while trycount
 
-\CMSMS\HookManager::do_hook( 'Core::ContentPostRender', [ 'content' => &$html ] );
+$hook_mgr->emit( 'Core::ContentPostRender', [ 'content' => &$html ] );
 if( !headers_sent() ) {
     $ct = $_app->get_content_type();
     header("Content-Type: $ct; charset=" . CmsNlsOperations::get_encoding());

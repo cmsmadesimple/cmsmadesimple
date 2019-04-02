@@ -17,7 +17,6 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
-use CMSMS\HookManager;
 
 $CMS_ADMIN_PAGE=1;
 
@@ -50,8 +49,9 @@ $message = '';
 include_once("header.php");
 $db = $gCms->GetDb();
 $smarty = $gCms->GetSmarty();
+$hook_mgr = $gCms->get_hook_manager();
 
-$load_perms = function() use ($db) {
+$load_perms = function() use ($db, $hook_mgr) {
     $query = "SELECT p.permission_id, p.permission_source, p.permission_text, up.group_id FROM ".
     cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
     "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_text";
@@ -59,16 +59,16 @@ $load_perms = function() use ($db) {
     $result = $db->Execute($query);
 
     // use hooks to localize permissions.
-    HookManager::add_hook('localizeperm',function($perm_source, $perm_name) {
+    $hook_mgr->emit('localizeperm',function($perm_source, $perm_name) {
             $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
-    },\CMSMS\HookManager::PRIORITY_LOW);
+    },$hook_mgr::PRIORITY_LOW);
 
-    HookManager::add_hook('getperminfo',function($perm_source, $perm_name){
+    $hook_mgr->emit('getperminfo',function($perm_source, $perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
-    },\CMSMS\HookManager::PRIORITY_LOW);
+    },$hook_mgr::PRIORITY_LOW);
 
     $perm_struct = array();
     while($result && $row = $result->FetchRow()) {
@@ -83,8 +83,8 @@ $load_perms = function() use ($db) {
             $thisPerm->id = $row['permission_id'];
             $thisPerm->name = $thisPerm->label = $row['permission_text'];
             $thisPerm->source = $row['permission_source'];
-            $thisPerm->label = \CMSMS\HookManager::do_hook_first_result('localizeperm',$thisPerm->source,$thisPerm->name);
-            $thisPerm->description = \CMSMS\HookManager::do_hook_first_result('getperminfo',$thisPerm->source,$thisPerm->name);
+            $thisPerm->label = $hook_mgr->emit_first_result('localizeperm',$thisPerm->source,$thisPerm->name);
+            $thisPerm->description = $hook_mgr->emit_first_result('getperminfo',$thisPerm->source,$thisPerm->name);
             $perm_struct[$row['permission_id']] = $thisPerm;
         }
     }

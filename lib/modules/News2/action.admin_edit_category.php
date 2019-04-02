@@ -1,11 +1,11 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission(News2::MANAGE_PERM) ) exit;
 $catm = $this->categoriesManager();
+$hm = $this->cms->get_hook_manager();
 
 $category = $catm->createNew();
 $catid = get_parameter_value( $params, 'catid');
@@ -30,9 +30,9 @@ if( !empty($_POST) ) {
             throw new \RuntimeException( $this->Lang('err_catname') );
         }
 
-        $category = HookManager::do_hook( 'News2::beforeEditCategory', $category );
+        $category = $hm->emit( 'News2::beforeEditCategory', $category );
         $catm->save( $category );
-        $category = HookManager::do_hook( 'News2::afterEditCategory', $category );
+        $category = $hm->emit( 'News2::afterEditCategory', $category );
         audit($category->id,$this->GetName(),'Edited category '.$category->name);
         $this->RedirectToAdminTab('categories',null,'admin_settings');
     }

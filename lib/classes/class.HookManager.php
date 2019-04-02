@@ -66,6 +66,7 @@ class HookManager
      */
     private function __construct()
     {
+        // nothing here
     }
 
     /**
@@ -94,7 +95,7 @@ class HookManager
     {
         $args = func_get_args();
         $hook_manager = CmsApp::get_instance()->get_hook_manager();
-        return call_user_func_array( [ $hook_manager, 'do_hook' ], $args );
+        return call_user_func_array( [ $hook_manager, 'emit' ], $args );
     }
 
     /**
@@ -111,7 +112,7 @@ class HookManager
     {
         $args = func_get_args();
         $hook_manager = CmsApp::get_instance()->get_hook_manager();
-        return call_user_func_array( [ $hook_manager, 'do_hook_first_result' ], $args );
+        return call_user_func_array( [ $hook_manager, 'emit_first_result' ], $args );
     }
 
     /**
@@ -128,6 +129,6 @@ class HookManager
     {
         $args = func_get_args();
         $hook_manager = CmsApp::get_instance()->get_hook_manager();
-        return call_user_func_array( [ $hook_manager, 'do_hook_accumulate' ], $args );
+        return call_user_func_array( [ $hook_manager, 'emit_accumulate' ], $args );
     }
 } // end of class

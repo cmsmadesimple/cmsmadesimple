@@ -1,17 +1,19 @@
 <?php
-use CMSMS\HookManager;
 
 final class AdminSearch_tools
 {
     private function __construct()
     {
+        // nothing here yet
     }
 
     public static function get_slave_classes()
     {
+        $app = cmsms();
+        $hm = $app->get_hook_manager();
         $key = __CLASS__.'slaves'.get_userid(FALSE);
         $results = $dynamic = null;
-        $tmp = HookManager::do_hook_accumulate('AdminSearch::get_slave_classes');
+        $tmp = $hm->emit_accumulate('AdminSearch::get_slave_classes');
         if( !empty($tmp) ) {
             foreach( $tmp as $one ) {
                 $name = $one['name'];
@@ -20,7 +22,7 @@ final class AdminSearch_tools
             }
         }
 
-        $driver = CmsApp::get_instance()->get_cache_driver();
+        $driver = $app->get_cache_driver();
         $data = $driver->get($key,__CLASS__);
         if( !$data ) {
             // cache needs refreshing.

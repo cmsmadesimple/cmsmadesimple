@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use \CmsRegularTask;
-use CMSMS\HookManager;
 
 class HookTask implements CmsRegularTask
 {
@@ -16,18 +15,25 @@ class HookTask implements CmsRegularTask
         $this->_data = $data;
     }
 
-    public function get_name() { return $this->_hookname;
+    public function get_name()
+    {
+        return $this->_hookname;
     }
-    public function get_description() {
+
+    public function get_description()
+    {
+        // nothing here
     }
-    public function test($time = '') { return true;
+
+    public function test($time = '')
+    {
+        return true;
     }
 
     public function execute($time = '')
     {
         if( !$time ) $time = time();
-        debug_to_log('HookTask - do hook '.$this->_hookname );
-        HookManager::do_hook( $this->_hookname, $this->_data );
+        cmsms()->get_hook_manager()->emit( $this->_hookname, $this->_data );
         return TRUE;
     }
 

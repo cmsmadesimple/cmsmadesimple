@@ -40,7 +40,7 @@
  * @license GPL
  */
 
-use \CMSMS\HookManager;
+use \CMSMS\hook_manager;
 
 /**
  * A class to manage template types
@@ -396,14 +396,14 @@ class CmsLayoutTemplateType
             if( !isset($this->_data['id']) || (int)$this->_data['id'] < 1 ) throw new CmsInvalidDataException('id is not set');
 
             // check for item with the same name
-            $db = CmsApp::get_instance()->GetDb();
+            $db = cmsms()->GetDb();
             $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ? AND name = ? AND id != ?';
             $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name(),$this->get_id()));
             if( $dbr ) throw new CmsInvalidDataException('Template Type with the same name already exists.');
         }
         else {
             // check for item with the same name
-            $db = CmsApp::get_instance()->GetDb();
+            $db = cmsms()->GetDb();
             $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.'
                 WHERE originator = ? AND name = ?';
             $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name()));
@@ -423,7 +423,7 @@ class CmsLayoutTemplateType
     {
         if( !$this->_dirty ) return;
         $this->validate();
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $now = time();
         $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
                 (originator,name,has_dflt,one_only,dflt_contents,description,
@@ -455,7 +455,7 @@ class CmsLayoutTemplateType
     {
         if( !$this->_dirty ) return;
         $this->validate(FALSE);
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $now = time();
 
         $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
@@ -474,19 +474,29 @@ class CmsLayoutTemplateType
     }
 
     /**
+     * @ignore
+     */
+    protected function get_hook_manager() : hook_manager
+    {
+        static $_obj;
+        if( !$_obj ) $_obj = cmsms()->get_hook_manager();
+        return $_obj;
+    }
+
+    /**
      * Save the current record to the database.
      */
     public function save()
     {
         if( !$this->get_id() ) {
-            HookManager::do_hook('Core::AddTemplateTypePre', [ get_class($this) => &$this ]);
+            $this->get_hook_manager()->emit('Core::AddTemplateTypePre', [ get_class($this) => &$this ]);
             $this->_insert();
-            HookManager::do_hook('Core::AddTemplateTypePost', [ get_class($this) => &$this ]);
+            $this->get_hook_manager()->emit('Core::AddTemplateTypePost', [ get_class($this) => &$this ]);
             return;
         }
-        HookManager::do_hook('Core::EditTemplateTypePre', [ get_class($this) => &$this ]);
+        $this->get_hook_manager()->emit('Core::EditTemplateTypePre', [ get_class($this) => &$this ]);
         $this->_update();
-        HookManager::do_hook('Core::EditTemplateTypePost', [ get_class($this) => &$this ]);
+        $this->get_hook_manager()->emit('Core::EditTemplateTypePost', [ get_class($this) => &$this ]);
     }
 
     /**
@@ -510,17 +520,17 @@ class CmsLayoutTemplateType
     {
         if( !$this->get_id() ) return;
 
-        HookManager::do_hook('Core::DeleteTemplateTypePre', [ get_class($this) => &$this ]);
+        $this->get_hook_manager()->emit('Core::DeleteTemplateTypePre', [ get_class($this) => &$this ]);
         $tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
         if( is_array($tmp) && count($tmp) ) throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->_data['id']));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $this->_dirty = TRUE;
         audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
-        HookManager::do_hook('Core::DeleteTemplateTypePost', [ get_class($this) => &$this ]);
+        $this->get_hook_manager()->emit('Core::DeleteTemplateTypePost', [ get_class($this) => &$this ]);
         unset($this->_data['id']);
     }
 
@@ -652,7 +662,7 @@ class CmsLayoutTemplateType
      */
     public static function &load($val)
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $row = null;
         if( is_numeric($val) && (int)$val > 0 ) {
             $val = (int) $val;
@@ -692,7 +702,7 @@ class CmsLayoutTemplateType
     {
         if( !$originator ) throw new CmsInvalidDataException('Orignator is empty');
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ?';
         if( isset(self::$_cache) && count(self::$_cache) ) $query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
         $query .= ' ORDER BY modified DESC';
@@ -717,7 +727,7 @@ class CmsLayoutTemplateType
      */
     public static function get_all()
     {
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME;
         if( self::$_cache && count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
         $query .= '	ORDER BY modified ASC';
@@ -748,7 +758,7 @@ class CmsLayoutTemplateType
             $list2[] = $one;
         }
 
-        $db = CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$list).')';
         $list = $db->GetArray($query);
         if( !is_array($list) || count($list2) == 0 ) return;

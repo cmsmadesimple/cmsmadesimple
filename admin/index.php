@@ -27,6 +27,7 @@ $CMS_ADMIN_TITLE='mainmenu';
 $CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../lib/include.php");
+$gCms = cmsms();
 
 // if this page was accessed directly, and the secure param name is not in the URL
 // but it is in the session, assume it is correct.
@@ -40,7 +41,7 @@ include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
 // todo: we should just be getting the html, and giving it to the theme. mmaybe
 $themeObject->do_toppage($section);
-$out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
+$out = $gCms->get_hook_manager()->emit_accumulate('admin_add_headtext');
 if( $out && count($out) ) {
     foreach( $out as $one ) {
         $one = trim($one);

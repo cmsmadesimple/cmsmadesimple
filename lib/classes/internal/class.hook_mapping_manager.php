@@ -1,6 +1,6 @@
 <?php
 namespace CMSMS\internal;
-use CMSMS\internal\hook_manager;
+use CMSMS\hook_manager;
 use CMSMS\simple_plugin_operations;
 use CmsApp;
 

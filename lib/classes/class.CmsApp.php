@@ -27,7 +27,7 @@
  * @license GPL
  */
 
-use CMSMS\internal\hook_manager;
+use CMSMS\hook_manager;
 use CMSMS\internal\hook_mapping_manager;
 use CMSMS\internal\MactEncoder;
 use CMSMS\internal\Smarty;
@@ -823,7 +823,7 @@ final class CmsApp
      */
     final public function clear_cached_files()
     {
-        $this->get_hook_manager()->do_hook('Core::BeforeClearCache');
+        $this->get_hook_manager()->emit('Core::BeforeClearCache');
 
         // clear APC, or file cache separately and completely
         $config = $this->GetConfig();
@@ -842,7 +842,7 @@ final class CmsApp
         }
 
         file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
-        $this->get_hook_manager()->do_hook('Core::AfterClearCache');
+        $this->get_hook_manager()->emit('Core::AfterClearCache');
     }
 
     /**

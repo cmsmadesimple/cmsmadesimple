@@ -45,6 +45,7 @@ final class Events
      */
     private function __construct()
     {
+        // nothing here
     }
 
     /**
@@ -56,6 +57,7 @@ final class Events
      */
     static public function CreateEvent( $modulename, $eventname )
     {
+        // nothing here
     }
 
 
@@ -73,7 +75,7 @@ final class Events
     static public function RemoveEvent( $modulename, $eventname )
     {
         $hook = $modulename.'::'.$eventname;
-        $mgr = CmsApp::get_instance()->GetHookMappingManager();
+        $mgr = cmsms()->GetHookMappingManager();
         $mgr->remove_hook( $hook );
         $mgr->write_mapping();
     }
@@ -91,7 +93,7 @@ final class Events
     static public function SendEvent( $modulename, $eventname, $params = array() )
     {
         $hook = $modulename.'::'.$eventname;
-        CmsApp::get_instance()->get_hook_manager()->do_hook($hook,$params);
+        cmsms()->get_hook_manager()->emit($hook,$params);
     }
 
 
@@ -112,7 +114,7 @@ final class Events
         if( $tag_name != false && $module_handler != false ) return false;
 
         // use the hook mapper
-        $mgr = CmsApp::get_instance()->GetHookMappingManager();
+        $mgr = cmsms()->GetHookMappingManager();
         if( $tag_name ) {
             // deprecated
             $mgr->add_handler( $modulename.'::'.$eventname, hook_mapping::TYPE_SIMPLE, $tag_name );
@@ -140,7 +142,7 @@ final class Events
         if( $tag_name != false && $module_handler != false ) return false;
 
         // replace with calls to the hook_mapper
-        $mgr = CmsApp::get_instance()->GetHookMappingManager();
+        $mgr = cmsms()->GetHookMappingManager();
         if( $tag_name ) {
             // deprecated
             $mgr->remove_handler( $modulename.'::'.$eventname, hook_mapping::TYPE_SIMPLE, $tag_name );

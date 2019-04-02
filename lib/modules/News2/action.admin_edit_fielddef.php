@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
@@ -42,9 +41,10 @@ try {
             if( !preg_match( '/^[a-zA-Z_][a-zA-Z0-9_]*$/', $fielddef->name) ) {
                 throw new \RuntimeException( $this->Lang('err_fieldname') );
             }
-            HookManager::do_hook( 'News2::beforeEditFielddef', $fielddef );
+            $hm = $this->cms->get_hook_manager();
+            $hm->emit( 'News2::beforeEditFielddef', $fielddef );
             $fdm->save( $fielddef );
-            $fielddef = HookManager::do_hook( 'News2::afterEditFielddef', $fielddef );
+            $fielddef = $hm->emit( 'News2::afterEditFielddef', $fielddef );
             $this->SetMessage( $this->Lang('msg_saved') );
             if( $fielddef->id ) {
                 audit($fielddef->id, $this->GetName(), 'fielddef '.$fielddef->name.' updated');

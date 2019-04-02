@@ -43,12 +43,13 @@ final class AdminLog extends \CMSModule
     {
         parent::InitializeAdmin();
 
-        \CMSMS\HookManager::add_hook('localizeperm',function($perm_source,$perm_name) {
+        $hm = $this->cms->get_hook_manager();
+        $hm->add_hook('localizeperm',function($perm_source,$perm_name) {
                 if( $perm_source != 'AdminLog' ) return;
                 $key = 'perm_'.str_replace(' ','_',$perm_name);
                 return $this->Lang($key);
         });
-        \CMSMS\HookManager::add_hook('getperminfo',function($perm_source,$perm_name) {
+        $hm->add_hook('getperminfo',function($perm_source,$perm_name) {
                 if( $perm_source != 'AdminLog' ) return;
                 $key = 'permdesc_'.str_replace(' ','_',$perm_name);
                 return $this->Lang($key);

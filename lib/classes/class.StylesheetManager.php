@@ -89,7 +89,7 @@ class StylesheetManager
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
 
         $files = $this->_files;
-        $t_files = $this->_hook_manager->do_hook( 'Core::PreProcessCSS', $this->_files );
+        $t_files = $this->_hook_manager->emit( 'Core::PreProcessCSS', $this->_files );
         if( $t_files ) $files = $t_files;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -117,7 +117,7 @@ class StylesheetManager
                 $content = file_get_contents($rec['file']);
                 $output .= $content."\n\n";
             }
-            $tmp = $this->_hook_manager->do_hook( 'Core::PostProcessCSS', $output );
+            $tmp = $this->_hook_manager->emit( 'Core::PostProcessCSS', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );
         }

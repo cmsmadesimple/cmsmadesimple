@@ -37,7 +37,7 @@ $lang['help_function_cms_render_scripts'] = <<<EOT
 <h3>Usage:</h3>
 <ul>
     <li>force - <em>(bool,default=false)</em> - Force the scripts to be concatenated together and a new file output EVEN if the source scripts have not changed.</li>
-    <li>nocache - <em>(bool,default=false)</em> - Append information to the output HTML to prevent browsers from caching the output javascript file.</li>
+    <li>no_cache - <em>(bool,default=false)</em> - Append information to the output HTML to prevent browsers from caching the output javascript file.</li>
     <li>defer - <em>(bool,optional,default=true)</em> - enable deferred javascript.</li>
     <li>assign - <em>(string,optional)</em> - Optionally assign the output to a smarty variable with this name in local scope.</li>
 </ul>

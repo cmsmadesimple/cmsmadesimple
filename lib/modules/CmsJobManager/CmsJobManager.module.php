@@ -25,7 +25,7 @@
 use CMSMS\Async\Job as Job;
 use CMSMS\Async\CronJobTrait;
 use CmsJobManager\utils;
-use CMSMS\HookManager;
+use CmsJobManager\JobQueue;
 
 final class CmsJobManager extends \CMSModule
 {
@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     private $_lock;
 
     public static function table_name() {
-        return cms_db_prefix().'mod_cmsjobmgr';
+        return CMS_DB_PREFIX.'mod_cmsjobmgr';
     }
 
     public function GetFriendlyName() {
@@ -87,18 +87,22 @@ final class CmsJobManager extends \CMSModule
     }
 
     public function VisibleToAdminUser() {
-        return $this->CheckPermission(\CmsJobManager::MANAGE_JOBS);
+        return $this->CheckPermission( self::MANAGE_JOBS);
     }
 
     public function GetHelp() {
         return $this->Lang('help');
     }
 
+    public function InitializeCommon()
+    {
+        $this->cms->get_hook_manager()->add_hook('Core::ModuleUninstalled', [ $this, 'hook_ModuleUninstalled'] );
+    }
+
     public function InitializeFrontend()
     {
         $this->RegisterModulePlugin();
         $this->RestrictUnknownParams();
-        HookManager::add_hook('Core::ModuleUninstalled', [ $this, 'hook-ModuleUninstalled'] );
     }
 
     /**
@@ -121,7 +125,7 @@ final class CmsJobManager extends \CMSModule
      * @ignore
      * @internal
      */
-    public function &get_current_job()
+    public function get_current_job()
     {
         return $this->_current_job;
     }
@@ -168,10 +172,17 @@ final class CmsJobManager extends \CMSModule
         return FALSE;
     }
 
+    protected function get_job_queue() : JobQueue
+    {
+        static $_obj;
+        if( !$_obj ) $_obj = new JobQueue( $this );
+        return $_obj;
+    }
+
     protected function check_for_jobs_or_tasks()
     {
         // this is cheaper.
-        $out = \CmsJobManager\JobQueue::get_jobs(1);
+        $out = $this->get_job_queue()->get_jobs(1);
         if( $out ) return TRUE;
 
         // gotta check for tasks, which is more expensive
@@ -303,7 +314,7 @@ final class CmsJobManager extends \CMSModule
         // and store a returnid in there for safety.
         static $_returnid = -1;
         if( $_returnid !== -1 ) return; // only once per request thanks.
-        $_returnid = \ContentOperations::get_instance()->GetDefaultContent();
+        $_returnid = $this->cms->GetContentOperations()->GetDefaultContent();
 
         // if this function was called because we are actually processing a cron request... stop
         if( isset($_REQUEST['cms_cron']) ) return;
@@ -315,11 +326,12 @@ final class CmsJobManager extends \CMSModule
         $jobs = $this->check_for_jobs_or_tasks();
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
 
+        trigger_error(__METHOD__);
         // this could go into a function...
-        $config = cmsms()->GetConfig();
+        $config = $this->GetConfig();
         $url_str = $config['async_processing_url'];
-        if( !$url_str ) $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
-        $url_ob = new \cms_url($url_str);
+        if( !$url_str ) $url_str = html_entity_decode($this->create_url('cntnt01','process',$_returnid));
+        $url_ob = new cms_url($url_str);
         if( !$url_ob->get_host() ) {
             // todo: audit something
             return;
@@ -328,11 +340,13 @@ final class CmsJobManager extends \CMSModule
         // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
-        $prefix_scheme = null;
+        $url_str = (string) $url_ob;
+        debug_to_log('outurl is '.$url_str);
+        trigger_error('outurl is '.$url_str);
 
         try {
             $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, (string) $url_ob );
+            curl_setopt( $ch, CURLOPT_URL, $url_str );
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
             curl_setopt( $ch, CURLOPT_TIMEOUT, 3 );
             curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 3 );

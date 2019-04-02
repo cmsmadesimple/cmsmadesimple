@@ -1,5 +1,6 @@
 <?php
 namespace CMSMS\internal;
+use CMSMS\hook_manager;
 
 class hook_handler
 {

@@ -42,6 +42,8 @@ if (isset($_POST["cancel"])) {
     return;
 }
 
+$gCms = cmsms();
+$hook_mgr = $gCms->get_hook_manager();
 $userid = get_userid();
 $access = check_permission($userid, 'Manage Groups');
 
@@ -55,12 +57,12 @@ if ($access) {
             $groupobj->description = $description;
             $groupobj->active = $active;
 
-            \CMSMS\HookManager::do_hook('Core::AddGroupPre', [ 'group'=>&$groupobj ] );
+            $hook_mgr->emit('Core::AddGroupPre', [ 'group'=>&$groupobj ] );
 
             $result = $groupobj->save();
             if( !$result ) throw new \RuntimeException(lang('errorinsertinggroup'));
 
-            \CMSMS\HookManager::do_hook('Core::AddGroupPost', [ 'group'=>&$groupobj ] );
+            $hook_mgr->emit('Core::AddGroupPost', [ 'group'=>&$groupobj ] );
             // put mention into the admin log
             audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
             redirect("listgroups.php".$urlext);

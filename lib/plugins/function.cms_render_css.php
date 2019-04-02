@@ -8,7 +8,7 @@ function smarty_function_cms_render_css( $params, $template )
     $config = cmsms()->GetConfig();
 
     $force = (isset($params['force'])) ? cms_to_bool($params['force']) : false;
-    $nocache = (isset($params['nocache'])) ? cms_to_bool($params['nocache']) : false;
+    $nocache = (isset($params['no_cache'])) ? cms_to_bool($params['no_cache']) : false;
     $prefix = get_parameter_value($params,'prefix',$config['css_url']);
 
     $on_postrender = function(array $parms) use ($magic_string,$force,$nocache,$prefix,$params,$config) {

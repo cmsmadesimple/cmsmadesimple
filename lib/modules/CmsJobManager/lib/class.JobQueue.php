@@ -1,25 +1,33 @@
 <?php
 
 namespace CmsJobManager;
+use CmsJobManager;
+use cms_utils;
 
 final class JobQueue
 {
-    private function __construct() {
+    private $mod;
+
+    private $db;
+
+    public function __construct( CmsJobManager $mod )
+    {
+        $this->mod = $mod;
+        $this->db = $mod->GetDb();
     }
 
-    public static function have_jobs()
+    public function have_jobs()
     {
-        return self::get_jobs(TRUE);
+        return $this->get_jobs(TRUE);
     }
 
-    public static function get_all_jobs()
+    public function get_all_jobs()
     {
-        $db = \CmsApp::get_instance()->GetDb();
-
+        $db = $this->db;
         $now = time();
         $limit = 50; // hardcoded.... should never be more than 100 jobs in the queue for a site.
 
-        $sql = 'SELECT * FROM '.\CmsJobManager::table_name().' WHERE created < UNIX_TIMESTAMP() ORDER BY created ASC LIMIT ?';
+        $sql = 'SELECT * FROM '.$this->mod->table_name().' WHERE created < UNIX_TIMESTAMP() ORDER BY created ASC LIMIT ?';
         $list = $db->GetArray($sql,array($limit));
         if( !is_array($list) || count($list) == 0 ) return;
 
@@ -27,7 +35,7 @@ final class JobQueue
         foreach( $list as $row ) {
             $mod = null;
             if( !empty($row['module']) ) {
-                $mod = \cms_utils::get_module($row['module']);
+                $mod = cms_utils::get_module($row['module']);
                 if( !is_object($mod) ) throw new \RuntimeException('Job '.$row['name'].' requires module '.$row['module'].' That could not be loaded');
             }
             $obj = unserialize($row['data']);
@@ -39,15 +47,14 @@ final class JobQueue
         return $out;
     }
 
-    public static function get_jobs($check_only = fALSE)
+    public function get_jobs($check_only = fALSE)
     {
-        $db = \CmsApp::get_instance()->GetDb();
-
+        $db = $this->db;
         $now = time();
         $limit = 50; // hardcoded.... should never be more than 100 jobs in the queue for a site.
         if( $check_only ) $limit = 1;
 
-        $sql = 'SELECT * FROM '.\CmsJobManager::table_name().' WHERE start < UNIX_TIMESTAMP() AND created < UNIX_TIMESTAMP() ORDER BY errors ASC,created ASC LIMIT ?';
+        $sql = 'SELECT * FROM '.$this->mod->table_name().' WHERE start < UNIX_TIMESTAMP() AND created < UNIX_TIMESTAMP() ORDER BY errors ASC,created ASC LIMIT ?';
         $list = $db->GetArray($sql,array($limit));
         if( !is_array($list) || count($list) == 0 ) return;
         if( $check_only ) return TRUE;
@@ -55,7 +62,7 @@ final class JobQueue
         $out = [];
         foreach( $list as $row ) {
             if( !empty($row['module']) ) {
-                $mod = \cms_utils::get_module($row['module']);
+                $mod = cms_utils::get_module($row['module']);
                 if( !is_object($mod) ) {
                     audit('','CmsJobManager',sprintf('Could not load module %s required by job %s',$row['module'],$row['name']));
                     continue;
@@ -70,15 +77,15 @@ final class JobQueue
         return $out;
     }
 
-    public static function clear_bad_jobs()
+    public function clear_bad_jobs()
     {
-        $mod = \cms_utils::get_module('CmsJobManager');
+        $mod = $this->mod;
         $now = time();
         $lastrun = (int) $mod->GetPreference('last_badjob_run');
         if( $lastrun + 3600 >= $now ) return; // hardcoded
 
         $db = $mod->GetDb();
-        $sql = 'SELECT * FROM '.\CmsJobManager::table_name().' WHERE errors >= ?';
+        $sql = 'SELECT * FROM '.$this->mod->table_name().' WHERE errors >= ?';
         $list = $db->GetArray($sql,array(10));  // hardcoded
         if( is_array($list) && count($list) ) {
             $idlist = [];
@@ -92,12 +99,12 @@ final class JobQueue
                 }
                 $obj->set_id($row['id']);
                 $idlist[] = (int) $row['id'];
-                \CMSMS\HookManager::do_hook(\CmsJobManager::EVT_ONFAILEDJOB, [ 'job' => $obj ]);
+                $this->mod->cms->get_hook_manager()->emit(CmsJobManager::EVT_ONFAILEDJOB, [ 'job' => $obj ]);
             }
-            $sql = 'DELETE FROM '.\CmsJobManager::table_name().' WHERE id IN ('.implode(',',$idlist).')';
+            $sql = 'DELETE FROM '.$this->mod->table_name().' WHERE id IN ('.implode(',',$idlist).')';
             $db->Execute($sql);
             audit('',$mod->GetName(),'Cleared '.count($idlist).' bad jobs');
         }
         $mod->SetPreference('last_badjob_run',$now);
     }
-}
+} // class

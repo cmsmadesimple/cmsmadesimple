@@ -28,21 +28,16 @@ check_login();
 
 $gCms = cmsms();
 $db = $gCms->GetDb();
-
+$hook_mgr = $gCms->get_hook_manager();
 $error = "";
-
 $dropdown = "";
-
 $group = "";
 if (isset($_POST["group"])) $group = cleanValue($_POST["group"]);
-
 $description = "";
 if (isset($_POST["description"])) $description = cleanValue($_POST["description"]);
-
 $group_id = -1;
 if (isset($_POST["group_id"])) $group_id = (int) $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = (int) $_GET["group_id"];
-
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["editgroup"]) && $group_id != 1) $active = 0;
 
@@ -72,11 +67,11 @@ if ($access) {
             $groupobj->name = $group;
             $groupobj->description = $description;
             $groupobj->active = $active;
-            \CMSMS\HookManager::do_hook('Core::EditGroupPre', [ 'group'=>&$groupobj ] );
+            $hook_mgr->emit('Core::EditGroupPre', [ 'group'=>&$groupobj ] );
 
             $result = $groupobj->save();
             if ($result) {
-                \CMSMS\HookManager::do_hook('Core::EditGroupPost', [ 'group'=>&$groupobj ] );
+                $hook_mgr->emit('Core::EditGroupPost', [ 'group'=>&$groupobj ] );
 
                 // put mention into the admin log
                 audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Edited');

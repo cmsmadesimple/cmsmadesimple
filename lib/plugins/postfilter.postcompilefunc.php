@@ -16,8 +16,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-use \CMSMS\HookManager;
-
 function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
 {
     $hookmanager = cmsms()->get_hook_manager();
@@ -27,11 +25,11 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
         switch ($result[0])    {
             case 'cms_stylesheet':
             case 'stylesheet':
-                $hookmanager->do_hook('Core::StylesheetPostCompile', array('stylesheet'=>&$tpl_output));
+                $hookmanager->emit('Core::StylesheetPostCompile', array('stylesheet'=>&$tpl_output));
                 break;
 
             case "content":
-                $hookmanager->do_hook('Core::ContentPostCompile', array('content' => &$tpl_output));
+                $hookmanager->emit('Core::ContentPostCompile', array('content' => &$tpl_output));
                 break;
 
             case 'cms_template':
@@ -39,7 +37,7 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
             case 'tpl_top':
             case 'tpl_body':
             case 'tpl_head':
-                $hookmanager->do_hook('Core::TemplatePostCompile', array('template'=>&$tpl_output,'type'=>$result[0]));
+                $hookmanager->emit('Core::TemplatePostCompile', array('template'=>&$tpl_output,'type'=>$result[0]));
                 break;
 
             default:
@@ -47,6 +45,6 @@ function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
         }
     }
 
-    $hookmanager->do_hook('Core::SmartyPostCompile', array('content' => &$tpl_output));
+    $hookmanager->emit('Core::SmartyPostCompile', array('content' => &$tpl_output));
     return $tpl_output;
 }

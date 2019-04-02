@@ -1480,7 +1480,7 @@ abstract class CMSModule
             $tmp = $params;
             $tmp['module'] = $this->GetName();
             $tmp['action'] = $name;
-            $gCms->get_hook_manager()->do_hook('module_action', $tmp);
+            $gCms->get_hook_manager()->emit('module_action', $tmp);
         }
 
         if( $gCms->template_processing_allowed() ) {

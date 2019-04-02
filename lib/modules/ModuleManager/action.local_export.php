@@ -22,9 +22,9 @@ try {
     $files = 0;
     $message = '';
 
-    \CMSMS\HookManager::do_hook('ModuleManager::BeforeModuleExport', [ 'module_name' => $module, 'version' => $modinstance->GetVersion() ] );
+    $this->cms->get_hook_manager()->emit('ModuleManager::BeforeModuleExport', [ 'module_name' => $module, 'version' => $modinstance->GetVersion() ] );
     $xmltext = $this->get_operations()->create_xml_package($modinstance,$message,$files);
-    \CMSMS\HookManager::do_hook('ModuleManager::AfterModuleExport', [ 'module_name' => $module, 'version' => $modinstance->GetVersion() ] );
+    $this->cms->get_hook_manager()->emit('ModuleManager::AfterModuleExport', [ 'module_name' => $module, 'version' => $modinstance->GetVersion() ] );
     CmsNlsOperations::set_language($orig_lang);
     if( $old_display_errors !== FALSE ) ini_set('display_errors',$old_display_errors);
 
@@ -38,7 +38,7 @@ try {
 
         // send the file.
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { 
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) {
 	    ob_end_clean();
         }
         header('Content-Description: File Transfer');

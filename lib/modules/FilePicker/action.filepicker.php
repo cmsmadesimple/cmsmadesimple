@@ -21,7 +21,6 @@ use FilePicker\TemporaryProfileStorage;
 use FilePicker\PathAssistant;
 use FilePicker\utils;
 use CMSMS\FileType;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !get_userid(FALSE) ) exit; // admin only.... but any admin
@@ -246,7 +245,7 @@ try {
     $lang['error_failed_ajax'] = $this->Lang('error_failed_ajax');
     $smarty->assign('lang_js',json_encode($lang));
     $bodycontent = $this->ProcessTemplate('filepicker.tpl');
-    HookManager::do_hook('admin_content_postrender', ['content'=>&$bodycontent] );
+    $this->cms->get_hook_manager()->emit('admin_content_postrender', ['content'=>&$bodycontent] );
     echo $bodycontent;
 
 }

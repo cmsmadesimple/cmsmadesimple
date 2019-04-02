@@ -4,6 +4,7 @@ use Search\SearchItemCollection;
 
 /////////////////////////////////////////////////////////////////////////////////////
 
+$hook_mgr = $this->cms->get_hook_manager();
 $template = null;
 if( isset($params['resulttemplate']) ) {
     $template = trim($params['resulttemplate']);
@@ -34,7 +35,7 @@ if( $searchinput ) {
 
     $tpl_ob->assign('phrase', $searchinput);
     $words = array_values($this->StemPhrase($searchinput,$filter_stopwords,$do_stemming));
-    $words = \CMSMS\HookManager::do_hook('Search::SearchFilterWords', $words );
+    $words = $hook_mgr->emit('Search::SearchFilterWords', $words );
     $nb_words = count($words);
     $max_weight = 1;
 
@@ -195,7 +196,7 @@ if( $searchinput ) {
     }
     $col->_ary = $newresults;
 
-    \CMSMS\HookManager::do_hook( 'Search::SearchCompleted', [ &$searchinput, &$col->_ary ] );
+    $hook_mgr->emit( 'Search::SearchCompleted', [ &$searchinput, &$col->_ary ] );
 
     $tpl_ob->assign('searchwords',$words);
     $tpl_ob->assign('results', $col->_ary);

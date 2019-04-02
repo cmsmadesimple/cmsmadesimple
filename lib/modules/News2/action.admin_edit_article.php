@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 use cms_route_manager;
 use cms_userprefs;
 
@@ -14,6 +13,7 @@ try {
     $fdm  = $this->fielddefManager();
     $fielddefs = $fdm->loadAllAsHash();
     $fieldtypes = $this->fieldTypeManager()->getAll();
+    $hm = $this->cms->get_hook_manager();
 
     $get_config_status = function($val) {
         switch( $val ) {
@@ -51,7 +51,7 @@ try {
         $article = $artm->loadByID( $news_id );
     }
 
-    HookManager::do_hook( 'News2::beforeEditArticle', $article );
+    $hm->emit( 'News2::beforeEditArticle', $article );
 
     if( !empty($_POST) ) {
         if( isset($_POST['cancel']) ) {
@@ -143,10 +143,10 @@ try {
                 $ajax_out = ['status'=>'ok', 'preview_url'=>$preview_url];
             }
             else {
-                HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+                $hm->emit( 'News2::beforeSaveArticle', $article );
                 $article_id = $artm->save( $article );
                 // this will update the search and stuff
-                HookManager::do_hook( 'News2::afterSaveArticle', $article, $article_id );
+                $hm->emit( 'News2::afterSaveArticle', $article, $article_id );
 
                 if( $article->id ) {
                     audit($article->id,$this->GetName(),'Edited article: '.$article->title);

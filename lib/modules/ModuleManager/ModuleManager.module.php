@@ -188,11 +188,12 @@ class ModuleManager extends CMSModule
         if( ! $app instanceof \CMSMS\CLI\App ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
         if( !class_exists('\\CMSMS\\CLI\\GetOptExt\\Command') ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
 
+        $hm = $this->cms->get_hook_manager();
         $out = [];
         $out[] = new \ModuleManager\PingModuleServerCommand( $app );
         $out[] = new \ModuleManager\ModuleExistsCommand( $app );
-        $out[] = new \ModuleManager\ModuleExportCommand( $app );
-        $out[] = new \ModuleManager\ModuleImportCommand( $app );
+        $out[] = new \ModuleManager\ModuleExportCommand( $app, $this, $hm );
+        $out[] = new \ModuleManager\ModuleImportCommand( $app, $this, $hm );
         $out[] = new \ModuleManager\ModuleInstallCommand( $app, $this->app );
         $out[] = new \ModuleManager\ModuleUninstallCommand( $app, $this->app );
         $out[] = new \ModuleManager\ModuleUpgradeCommand( $app, $this->app );

@@ -1,6 +1,29 @@
 <?php
-namespace CMSMS\internal;
 
+/**
+ * This file implements CMSMS hook functionality.
+ *
+ * @deprecated.
+ * @see CmsApp::get_hook_manager()
+ * @package CMS
+ * @license GPL
+ * @since 2.2
+ */
+
+namespace CMSMS;
+use CMSMS\internal\hook_defn;
+use CMSMS\internal\hook_handler;
+
+/**
+ * A class to add hook handlers and emit hooks of various types.
+ *
+ * This class is capable of managing a flexible list of hooks, registering handlers for those hooks, and calling the handlers
+ *
+ * @package CMS
+ * @license GPL
+ * @since 2.3
+ * @author Robert Campbell <calguy1000@gmail.com>
+ */
 class hook_manager
 {
     /**
@@ -69,14 +92,14 @@ class hook_manager
     }
 
     /**
-     * Trigger a hook, progressively altering the value of the input.  i.e: a filter.
+     * Emit a hook, progressively altering the value of the input.  i.e: a filter.
      *
      * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
      * Further arguments will be passed to the various handlers.
      *
      * @return mixed The output of this method depends on the hook.
      */
-    public static function do_hook()
+    public static function emit()
     {
         $is_assoc = function($in) {
             if( !is_array($in) ) return FALSE;
@@ -125,7 +148,7 @@ class hook_manager
     }
 
     /**
-     * Trigger a hook, returning the first non empty value.
+     * Emit a hook, returning the first non empty value.
      *
      * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
      * Further arguments will be passed to the various handlers.
@@ -134,7 +157,7 @@ class hook_manager
      *
      * @return mixed The output of this method depends on the hook.
      */
-    public static function do_hook_first_result()
+    public static function emit_first_result()
     {
         $is_assoc = function($in) {
             if( !is_array($in) ) return FALSE;
@@ -180,7 +203,7 @@ class hook_manager
     }
 
     /**
-     * Trigger a hook, accumulating the results of each hook handler into an array.
+     * Emit a hook, accumulating the results of each hook handler into an array.
      *
      * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
      * Further arguments will be passed to the various handlers.
@@ -189,7 +212,7 @@ class hook_manager
      *
      * @return array Mixed data, as it cannot be ascertained what data is passed back from handlers.
      */
-    public static function do_hook_accumulate()
+    public static function emit_accumulate()
     {
         $is_assoc = function($in) {
             if( !is_array($in) ) return FALSE;
@@ -229,4 +252,5 @@ class hook_manager
         array_pop(self::$_in_process);
         return $out;
     }
+
 } // class

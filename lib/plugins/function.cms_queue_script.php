@@ -12,6 +12,15 @@ function smarty_function_cms_queue_script( $params, &$template )
     if(is_file($file) ) {
         $combiner->queue_script($file, $priority);
         return;
+    } else {
+        $dirs = [ CMS_ASSETS_PATH, CMS_ROOT_PATH ];
+        foreach( $dirs as $dir ) {
+            $fn = $dir.'.'.$file;
+            if( is_file($fn) ) {
+                $combiner->queue_script($fn, $priority);
+                return;
+            }
+        }
     }
 
     // if it's relative to a CMSMS path

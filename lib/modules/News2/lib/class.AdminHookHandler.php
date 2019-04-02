@@ -2,7 +2,6 @@
 namespace News2;
 use News2;
 use cms_utils;
-use CMSMS\HookManager;
 
 class AdminHookHandler
 {
@@ -18,11 +17,12 @@ class AdminHookHandler
         $this->mod = $mod;
         $this->settings = $settings;
         $this->artm = $artm;
+        $hm = $mod->cms->get_hook_manager();
 
-        HookManager::add_hook( 'News2::afterSaveArticle', [ $this, 'afterSaveArticle_Search'] );
-        HookManager::add_hook( 'AdminSearch::get_slave_classes', [ $this, 'adminsearch_get_slave_classes' ] );
-        HookManager::add_hook( 'localizeperm', [ $this, 'localizePerm'] );
-        HookManager::add_hook( 'getperminfo', [ $this, 'getPermDesc'] );
+        $hm->emit( 'News2::afterSaveArticle', [ $this, 'afterSaveArticle_Search'] );
+        $hm->emit( 'AdminSearch::get_slave_classes', [ $this, 'adminsearch_get_slave_classes' ] );
+        $hm->emit( 'localizeperm', [ $this, 'localizePerm'] );
+        $hm->emit( 'getperminfo', [ $this, 'getPermDesc'] );
     }
 
     public function localizePerm( string $source, string $name )

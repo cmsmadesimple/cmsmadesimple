@@ -43,18 +43,19 @@ if (isset($_GET["user_id"])) {
         $oneuser = $userops->LoadUserByID($user_id);
         $user_name = $oneuser->username;
         $ownercount = $userops->CountPageOwnershipByID($user_id);
+        $hook_mgr = $gCms->get_hook_manager();
 
         if ($ownercount > 0) {
             $dodelete = false;
         }
 
         if ($dodelete) {
-            \CMSMS\HookManager::do_hook('Core::DeleteUserPre', [ 'user'=>&$oneuser] );
+            $hook_mgr->emit('Core::DeleteUserPre', [ 'user'=>&$oneuser] );
 
             cms_userprefs::remove_for_user($user_id);
             $oneuser->Delete();
 
-            \CMSMS\HookManager::do_hook('Core::DeleteUserPost', [ 'user'=>&$oneuser] );
+            $hook_mgr->emit('Core::DeleteUserPost', [ 'user'=>&$oneuser] );
 
             // put mention into the admin log
             audit($user_id, 'Admin Username: '.$user_name, 'Deleted');

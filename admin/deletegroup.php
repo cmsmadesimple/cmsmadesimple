@@ -50,6 +50,7 @@ if (isset($_GET["group_id"])) {
     $gCms = cmsms();
     $groupops = $gCms->GetGroupOperations();
     $userops = $gCms->GetUserOperations();
+    $hook_mgr = $gCms->get_hook_manager();
     $groupobj = $groupops->LoadGroupByID($group_id);
     $group_name = $groupobj->name;
 
@@ -60,11 +61,11 @@ if (isset($_GET["group_id"])) {
     }
 
     // now do the work.
-    \CMSMS\HookManager::do_hook('Core::DeleteGroupPre', [ 'group'=>&$groupobj ] );
+    $hook_mgr->emit('Core::DeleteGroupPre', [ 'group'=>&$groupobj ] );
 
     if ($groupobj) $result = $groupobj->Delete();
 
-    \CMSMS\HookManager::do_hook('Core::DeleteGroupPost', [ 'group'=>&$groupobj ] );
+    $hook_mgr->emit('Core::DeleteGroupPost', [ 'group'=>&$groupobj ] );
 
     if ($result == true) {
         // put mention into the admin log

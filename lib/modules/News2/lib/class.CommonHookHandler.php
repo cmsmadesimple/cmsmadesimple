@@ -2,7 +2,6 @@
 namespace News2;
 use News2;
 use cms_utils;
-use CMSMS\HookManager;
 
 class CommonHookHandler
 {
@@ -19,8 +18,8 @@ class CommonHookHandler
         $this->settings = $settings;
         $this->artm = $artm;
 
-        HookManager::add_hook( 'News2::createDraftAlerts', [ $this, 'createDraftAlerts'] );
-        HookManager::add_hook( 'News2::createNeedsApprovalAlerts', [ $this, 'createPendingAlerts'] );
+        $this->mod->cms->get_hook_manager()->emit( 'News2::createDraftAlerts', [ $this, 'createDraftAlerts'] );
+        $this->mod->cms->get_hook_manager()->emit( 'News2::createNeedsApprovalAlerts', [ $this, 'createPendingAlerts'] );
     }
 
     public function createDraftAlerts()

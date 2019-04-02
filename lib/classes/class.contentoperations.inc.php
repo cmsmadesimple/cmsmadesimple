@@ -1397,7 +1397,7 @@ class ContentOperations
      */
     public function save_content(ContentBase $content)
     {
-        $this->app->get_hook_manager()->do_hook('Core::ContentEditPre', [ 'content' => &$content ] );
+        $this->app->get_hook_manager()->emit('Core::ContentEditPre', [ 'content' => &$content ] );
 
         if( $content->id() < 1) {
             $content = $this->insert_content($content);
@@ -1408,7 +1408,7 @@ class ContentOperations
 
         $this->SetContentModified();
         $this->SetAllHierarchyPositions();
-        $this->app->get_hook_manager()->do_hook('Core::ContentEditPost', [ 'content' => &$content ] );
+        $this->app->get_hook_manager()->emit('Core::ContentEditPost', [ 'content' => &$content ] );
         return $content;
     }
 
@@ -1426,7 +1426,7 @@ class ContentOperations
      */
     public function delete_content(ContentBase $content)
     {
-        $this->app->get_hook_manager()->do_hook('Core::ContentDeletePre', [ 'content' => &$content ] );
+        $this->app->get_hook_manager()->emit('Core::ContentDeletePre', [ 'content' => &$content ] );
         $db = $this->app->GetDb();
 
         if( $content->Id() ) {

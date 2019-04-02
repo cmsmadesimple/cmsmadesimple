@@ -1,5 +1,4 @@
 <?php
-use CMSMS\HookManager;
 
 // $USE_THEME inherited from parent scope.
 if (! isset($USE_THEME) || $USE_THEME ) {
@@ -7,8 +6,8 @@ if (! isset($USE_THEME) || $USE_THEME ) {
     $themeObject->do_footer();
 }
 
-$gCms = \CmsApp::get_instance();
-$config = \cms_config::get_instance();
+$gCms = cmsms();
+$config = $gCms->GetConfig();
 if ($config["debug"] == true) {
     // echo debug output to stdout
     echo '<div id="DebugFooter">';
@@ -32,6 +31,7 @@ $formtext = '';
 $formsubmittext = '';
 $bodytext = '';
 $userid = get_userid();
+$hook_mgr = $gCms->get_hook_manager();
 
 // initialize the requested wysiwyg modules
 // because this can change based on module actions etc... it's done in the footer.
@@ -101,7 +101,7 @@ if( is_array($list) && count($list) ) {
     }
 }
 
-$out = HookManager::do_hook_accumulate('admin_add_footertext');
+$out = $hook_mgr->emit_accumulate('admin_add_footertext');
 if( $out && count($out) ) {
     foreach( $out as $one ) {
         $one = trim($one);
@@ -112,7 +112,7 @@ if( $out && count($out) ) {
 $bodycontent = $themeObject->postprocess($bodycontent);
 
 if (!isset($USE_THEME) || $USE_THEME != false) {
-    HookManager::do_hook('admin_content_postrender', ['content'=>&$bodycontent] );
+    $hook_mgr->emit('admin_content_postrender', ['content'=>&$bodycontent] );
     echo $bodycontent;
     if( strpos($bodycontent,'</body') === FALSE ) echo '</body></html>';
     if( isset($config['show_performance_info']) ) {

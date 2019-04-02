@@ -63,7 +63,7 @@ class ScriptManager
         }
 
         $scripts = $this->_scripts;
-        $t_scripts = $this->_hook_manager->do_hook( 'Core::PreProcessScripts', $this->_scripts );
+        $t_scripts = $this->_hook_manager->emit( 'Core::PreProcessScripts', $this->_scripts );
         if( $t_scripts ) $scripts = $t_scripts;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -89,7 +89,7 @@ class ScriptManager
                 $content = file_get_contents( $rec['file'] );
                 $output .= $content."\n\n";
             }
-            $tmp = $this->_hook_manager->do_hook( 'Core::PostProcessScripts', $output );
+            $tmp = $this->_hook_manager->emit( 'Core::PostProcessScripts', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );
         }

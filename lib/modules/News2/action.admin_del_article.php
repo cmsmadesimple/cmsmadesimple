@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
@@ -13,6 +12,7 @@ try {
     if( $news_id < 1 ) throw new \LogicException( 'Invalid or missing parameter' );
     $article = $artm->loadByID( $news_id );
     if( !$article ) throw new \LogicException( 'Article not found' );
+    $hm = $this->cms->get_hook_manager();
 
     if( $this->CheckPermission( News2::MANAGE_PERM ) ||
         ($this->CheckPermission( News2::OWN_PERM) && $this->CheckPermission( News2::DELOWN_PERM) &&
@@ -23,9 +23,9 @@ try {
         throw new \RuntimeException( $this->Lang('err_permission') );
     }
 
-    HookManager::do_hook( 'News2::beforeDeleteArticle', $article );
+    $hm->emit( 'News2::beforeDeleteArticle', $article );
     $artm->delete( $article );
-    HookManager::do_hook( 'News2::afterDeleteArticle', $article );
+    $hm->emit( 'News2::afterDeleteArticle', $article );
 
     $this->SetMessage( $this->Lang('msg_deleted') );
     $this->RedirectToAdminTab();

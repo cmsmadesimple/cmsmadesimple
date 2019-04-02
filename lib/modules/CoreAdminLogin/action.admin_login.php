@@ -10,6 +10,7 @@ $username = $password = null;
 $theme_object = \cms_utils::get_theme_object();
 $csrf_key = md5(__FILE__);
 $login_ops = \CMSMS\LoginOperations::get_instance();
+$hm = $this->app->get_hook_manager();
 $username = $password = $error = $warning = $pwhash = $message = null;
 
 if( isset( $_GET['recoverme'] ) ) {
@@ -36,7 +37,7 @@ else if( isset( $params['forgotpwchangeform']) ) {
         $password2 = html_entity_decode( filter_var( $params['passwordagain'], FILTER_SANITIZE_STRING ) );
         if( !$usercode || !$username || !$password1 || !$password2 ) throw new LoginUserError( $this->Lang('err_missingdata') );
         if( $password1 != $password2 ) throw new LoginUserError( $this->Lang('err_passwordmismatch') );
-        \CMSMS\HookManager::do_hook('Core::PasswordStrengthTest', $password1 );
+        $hm->emit('Core::PasswordStrengthTest', $password1 );
 
         $user = $this->getLoginUtils()->find_recovery_user( $usercode );
         if( !$user || $user->username != $username ) throw new LoginUserError( $this->Lang('err_usernotfound') );
@@ -47,12 +48,12 @@ else if( isset( $params['forgotpwchangeform']) ) {
 
         $ip_passw_recovery = \cms_utils::get_real_ip();
         audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
-        \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user->id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
+        $hm->emit('Core::LostPasswordReset', [ 'uid'=>$user->id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
         $message = $this->Lang('msg_passwordchanged');
     }
     catch( LoginUserError $e ) {
         $error = $e->GetMessage();
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
+        $hm->emit('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
         $pwhash = $usercode;
         cms_warning('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Reset Failed');
@@ -74,11 +75,11 @@ else if( isset( $params['forgotpwform']) ) {
         unset( $params['username'] );
         if( !$username ) throw new LoginUserError( $this->Lang('err_usernotfound') );
 
-        \CMSMS\HookManager::do_hook('Core::LostPassword', [ 'username'=>$username] );
+        $hm->emit('Core::LostPassword', [ 'username'=>$username] );
         $userops = $gCms->GetUserOperations();
         $oneuser = $userops->LoadUserByUsername($username, null, true, true );
         if( !$oneuser ) {
-            \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
+            $hm->emit('Core::LoginFailed', [ 'user'=>$username ] );
             throw new LoginUserError( $this->Lang('err_usernotfound') );
         }
 
@@ -87,7 +88,7 @@ else if( isset( $params['forgotpwform']) ) {
     }
     catch( LoginUserError $e ) {
         $error = $e->GetMessage();
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
+        $hm->emit('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
         cms_warnng('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Recovery Failed');
     }
@@ -119,7 +120,7 @@ else if( isset( $params['submit'] ) ) {
         // user is authenticated. log him hin.
         $login_ops->save_authentication( $oneuser );
         audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
-        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>&$oneuser ] );
+        $hm->emit('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // now redirect someplace
         $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
@@ -130,7 +131,7 @@ else if( isset( $params['submit'] ) ) {
     }
     catch( LoginUserError $e ) {
         $error = $e->GetMessage();
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
+        $hm->emit('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
         cms_warning('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
     }

@@ -46,6 +46,7 @@ if (!$access) {
     return;
 }
 $gCms = cmsms();
+$hook_mgr = $gCms->get_hook_manager();
 $userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $message = '';
@@ -90,7 +91,7 @@ if ($submitted == 1) {
         if( $thisGroup->id <= 0 ) continue;
 
         // Send the ChangeGroupAssignPre event
-        \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPre',
+        $hook_mgr->emit( 'Core::ChangeGroupAssignPre',
                                      [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         $query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
         $result = $db->Execute($query, array($thisGroup->id,$userid));
@@ -104,7 +105,7 @@ if ($submitted == 1) {
             }
         }
 
-        \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPost',
+        $hook_mgr->emit( 'Core::ChangeGroupAssignPost',
                                      [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         // put mention into the admin log
         audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');

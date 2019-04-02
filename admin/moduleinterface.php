@@ -57,7 +57,8 @@ try {
     $userid = get_userid();
     if( $userid < 1 ) throw new CmsError403Exception('Permission denied');
     if( $USE_THEME ) check_login(); // checks the request key for CSRF stuff too.
-    $smarty = cmsms()->GetSmarty();
+    $gCms = cmsms();
+    $smarty = $gCms->GetSmarty();
 
     // module output
     $params = ModuleOperations::get_instance()->GetModuleParameters($id);
@@ -77,7 +78,7 @@ try {
         if( $txt ) $themeObject->add_headtext($txt);
 
         // call admin_add_headtext to get any admin data to add to the <head>
-        $out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
+        $out = $gCms->get_hook_manager()->emit_accumulate('admin_add_headtext');
         if( $out && count($out) ) {
             foreach( $out as $one ) {
                 $one = trim($one);

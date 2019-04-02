@@ -48,6 +48,7 @@ $lastname          = isset($_POST["lastname"]) ? cleanValue($_POST["lastname"]) 
 $email             = isset($_POST["email"]) ? trim(strip_tags($_POST["email"])) : '';
 $copyusersettings  = isset($_POST['copyusersettings']) ? (int)$_POST['copyusersettings'] : null;
 $sel_groups        = (isset($_POST['sel_groups']) && is_array($_POST['sel_groups'])) ? $_POST['sel_groups'] : $sel_groups;
+$hook_mgr          = $gCms->get_hook_manager();
 
 /*--------------------
  * Variables
@@ -96,13 +97,12 @@ if (isset($_POST["submit"])) {
         $newuser->email       = $email;
         $newuser->adminaccess = $adminaccess;
         $newuser->SetPassword($password);
-
-        \CMSMS\HookManager::do_hook('Core::AddUserPre', [ 'user'=>&$newuser ] );
+        $hook_mgr->emit('Core::AddUserPre', [ 'user'=>&$newuser ] );
 
         $result = $newuser->save();
 
         if ($result) {
-            \CMSMS\HookManager::do_hook('Core::AddUserPost', [ 'user'=>&$newuser ] );
+            $hook_mgr->emit('Core::AddUserPost', [ 'user'=>&$newuser ] );
 
             // set some default preferences, based on the user creating this user
             $adminid = get_userid();

@@ -12,6 +12,8 @@ function smarty_function_cms_queue_css( $params, &$template )
     if(is_file($file) ) {
         $combiner->queue($file,$priority);
         return;
+    } else {
+        cms_error('file not found: '.$file,'cms_queue_css');
     }
 
     // if it's relative to a CMSMS path

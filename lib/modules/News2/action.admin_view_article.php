@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
@@ -12,6 +11,7 @@ try {
     $fdm  = $this->fielddefManager();
     $fielddefs = $fdm->loadAllAsHash();
     $fieldtypes = $this->fieldTypeManager()->getAll();
+    $hm = $this->cms->get_hook_manager();
 
     $news_id = (int) get_parameter_value( $params, 'news_id' );
     $news_id = (int) get_parameter_value( $params, 'article', $news_id );
@@ -32,18 +32,18 @@ try {
         }
         else if( isset( $_POST['setpublished']) ) {
             $article->status = $article::STATUS_PUBLISHED;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+            $hm->emit( 'News2::beforeSaveArticle', $article );
             $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            $hm->emit( 'News2::afterSaveArticle', $article, $article->id );
             audit($article->id,$this->GetName(),'Article status set to published');
             $this->SetMessage( $this->Lang('msg_saved') );
             $this->RedirectToAdminTab();
         }
         else if( isset( $_POST['setneedsapproval']) ) {
             $article->status = $article::STATUS_NEEDSAPPROVAL;
-            HookManager::do_hook( 'News2::beforeSaveArticle', $article );
+            $hm->emit( 'News2::beforeSaveArticle', $article );
             $artm->save( $article );
-            HookManager::do_hook( 'News2::afterSaveArticle', $article, $article->id );
+            $hm->emit( 'News2::afterSaveArticle', $article, $article->id );
             audit($article->id,$this->GetName(),'Article status set to needs approval');
             $this->SetMessage( $this->Lang('msg_saved') );
             $this->RedirectToAdminTab();

@@ -43,7 +43,7 @@ class UploadHandler extends jquery_upload_handler
         $complete_path = $this->_path.$fileobject->name;
 
         $parms['file'] = $complete_path;
-        $parms = \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
+        $parms = $this->_mod->cms->get_hook_manager()->emit( 'FileManager::OnFileUploaded', $parms );
         if( is_array($parms) && isset($parms['file']) ) $file = $parms['file']; // file name could have changed.
 
         if( !is_file($complete_path) ) return;

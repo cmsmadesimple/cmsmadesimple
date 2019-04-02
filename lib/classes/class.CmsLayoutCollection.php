@@ -496,14 +496,14 @@ class CmsLayoutCollection
     {
         $app = cmsms();
         if( $this->get_id() ) {
-            $app->get_hook_manager()->do_hook('Core::EditDesignPre', [ get_class($this) => &$this ] );
+            $app->get_hook_manager()->emit('Core::EditDesignPre', [ get_class($this) => &$this ] );
             $this->_update();
-            $app->get_hook_manager()->do_hook('Core::EditDesignPost', [ get_class($this) => &$this ] );
+            $app->get_hook_manager()->emit('Core::EditDesignPost', [ get_class($this) => &$this ] );
             return;
         }
-        $app->get_hook_manager()->do_hook('Core::AddDesignPre', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->emit('Core::AddDesignPre', [ get_class($this) => &$this ] );
         $this->_insert();
-        $app->get_hook_manager()->do_hook('Core::AddDesignPost', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->emit('Core::AddDesignPost', [ get_class($this) => &$this ] );
     }
 
     /**
@@ -520,7 +520,7 @@ class CmsLayoutCollection
         if( !$force && $this->has_templates() ) throw new CmsLogicException('Cannot Delete a Design that has Templates Attached');
 
         $app = cmsms();
-        $app->get_hook_manager()->do_hook('Core::DeleteDesignPre', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->emit('Core::DeleteDesignPre', [ get_class($this) => &$this ] );
         $db = $app->GetDb();
         if( count($this->_css_assoc) ) {
             $query = 'DELETE FROM '.CMS_DB_PREFIX.self::CSSTABLE.' WHERE design_id = ?';
@@ -540,7 +540,7 @@ class CmsLayoutCollection
         $dbr = $db->Execute($query,array($this->get_id()));
 
         cms_notice('Design '.$this->get_name().' deleted');
-        $app->get_hook_manager()->do_hook('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
+        $app->get_hook_manager()->emit('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }

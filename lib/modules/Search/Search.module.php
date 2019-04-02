@@ -17,7 +17,6 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
-use CMSMS\HookManager;
 
 include_once(dirname(__FILE__) . '/PorterStemmer.class.php');
 
@@ -107,9 +106,10 @@ class Search extends CMSModule
 
     public function InitializeCommon()
     {
-        HookManager::add_hook('Core::ContentEditPost', [ $this, 'hook_ContentEditPost' ]);
-        HookManager::add_hook('Core::ContentDeletePost', [ $this, 'hook_ContentDeletePost' ]);
-        HookManager::add_hook('Core::ModuleUninstalled', [ $this, 'hook_ModuleUninstalled'] );
+        $hm = $this->cms->get_hook_manager();
+        $hm->add_hook('Core::ContentEditPost', [ $this, 'hook_ContentEditPost' ]);
+        $hm->add_hook('Core::ContentDeletePost', [ $this, 'hook_ContentDeletePost' ]);
+        $hm->add_hook('Core::ModuleUninstalled', [ $this, 'hook_ModuleUninstalled'] );
     }
 
     public function InitializeAdmin()
@@ -242,7 +242,7 @@ class Search extends CMSModule
         $db = $this->GetDb();
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
-        \CMSMS\HookManager::do_hook('Search::SearchAllItemsDeleted' );
+        $this->cms->get_hook_manager()->emit('Search::SearchAllItemsDeleted' );
     }
 
     public function Reindex()

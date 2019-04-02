@@ -46,6 +46,7 @@ $passwordagain     = isset($_POST["passwordagain"]) ? $_POST["passwordagain"] : 
 $firstname         = isset($_POST["firstname"]) ? cleanValue($_POST["firstname"]) : '';
 $lastname          = isset($_POST["lastname"]) ? cleanValue($_POST["lastname"]) : '';
 $email             = isset($_POST["email"]) ? trim(strip_tags($_POST["email"])) : '';
+$hook_mgr          = $gCms->get_hook_manager();
 
 if (isset($_POST["user_id"])) {
     $user_id = cleanValue($_POST["user_id"]);
@@ -103,7 +104,7 @@ if (isset($_POST["submit"])) {
 
     if( !empty($password) ) {
         try {
-            \CMSMS\HookManager::do_hook('Core::PasswordStrengthTest', $password );
+            $hook_mgr->emit('Core::PasswordStrengthTest', $password );
         }
         catch( \Exception $e ) {
             $validinfo = false;
@@ -133,7 +134,7 @@ if (isset($_POST["submit"])) {
                 $thisuser->SetPassword($password);
             }
 
-            \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$thisuser ] );
+            $hook_mgr->emit('Core::EditUserPre', [ 'user'=>&$thisuser ] );
 
             $result = $thisuser->save();
             if ($assign_group_perm && isset($_POST['groups'])) {
@@ -174,7 +175,7 @@ if (isset($_POST["submit"])) {
             }
 
             // put mention into the admin log
-            \CMSMS\HookManager::do_hook('Core::EditUserPost', [ 'user'=>&$thisuser ] );
+            $hook_mgr->emit('Core::EditUserPost', [ 'user'=>&$thisuser ] );
             $gCms->clear_cached_files();
             $url = 'listusers.php?' . $urlext;
             if ($message) {

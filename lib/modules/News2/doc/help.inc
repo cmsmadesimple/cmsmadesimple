@@ -521,7 +521,7 @@ cp lib/modules/News2/templates/default.tpl assets/module_custom/News2/templates/
 {else}
   {include file='module_file_tpl:News2;sub-detailtemplate_dflt.tpl'}
 {/if}
-      <p><strong>Tip:<strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cms_file, cms_template, and others.</p>
+      <p><strong>Tip:<strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cmsfile, cms_template, and others.</p>
 </code></pre>
       <p>This is basically the same as multiple if statements, but is cleaner, and allows the use of template inheritance in the sub-detail templates.</p>
    </li>

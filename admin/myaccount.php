@@ -40,6 +40,7 @@ $userobj = $gCms->GetUserOperations()->LoadUserByID($userid); // <- Safe to do, 
 $db = $gCms->GetDb();
 $error = '';
 $message = '';
+$hook_mgr = $gCms->get_hook_manager();
 
 
 /**
@@ -124,7 +125,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
         $userobj->firstname = $firstname;
         $userobj->lastname = $lastname;
         $userobj->email = $email;
-        \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$userobj ] );
+        $hook_mgr->emit('Core::EditUserPre', [ 'user'=>&$userobj ] );
 
         if ($password != '') $userobj->SetPassword($password);
         $result = $userobj->Save();
@@ -135,7 +136,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
         if($result) {
             // put mention into the admin log
             audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-            \CMSMS\HookManager::do_hook('Core::EditUserPost', [ 'user'=>&$userobj ] );
+            $hook_mgr->emit('Core::EditUserPost', [ 'user'=>&$userobj ] );
             $message = lang('accountupdated');
         } else {
             // throw exception? update just failed.

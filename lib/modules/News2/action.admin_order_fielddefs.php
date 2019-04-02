@@ -1,7 +1,6 @@
 <?php
 namespace News2;
 use News2;
-use CMSMS\HookManager;
 
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
@@ -35,6 +34,6 @@ for( $i = 0; $i < count($new_order_list); $i++ ) {
     $fdm->save($item);
 }
 
-HookManager::do_hook('News2::onReorderFielddefs');
+$this->cms->get_hook_manager()->emit('News2::onReorderFielddefs');
 $this->SetMessage( $this->Lang( 'msg_saved' ) );
 $this->RedirectToAdminTab('fielddefs', null, 'admin_settings');
