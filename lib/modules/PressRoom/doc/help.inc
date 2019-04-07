@@ -480,6 +480,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
       <li>Second, add the following code to the page template or to the "Smarty logic that is specific to this page" field in the content editor:
         <pre><code>{cms_module_hint module=PressRoom action=detail detailtemplate='othertemplate.tpl'}</code></pre>
       </li>
+      </ul>
    </li>
    <li>How do I specify a different detail page
       <p>Links to detail views are created from within a summary template (or another detail templatee).  Change your detail links in the summary template as follows:</p>
@@ -495,8 +496,8 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
   {include file='module_file_tpl:PressRoom;sub-detailtemplate_3.tpl'}
 {else}
   {include file='module_file_tpl:PressRoom;sub-detailtemplate_dflt.tpl'}
-{/if}
-      <p><strong>Tip:<strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cmsfile, cms_template, and others.</p>
+{/if}</code></pre>
+      <p><strong>Tip:</strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cmsfile, cms_template, and others.</p>
 </code></pre>
       <p>This is basically the same as multiple if statements, but is cleaner, and allows the use of template inheritance in the sub-detail templates.</p>
    </li>
@@ -506,7 +507,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
        <p><strong>Overriding admin templates</strong></p>
        <p>The steps for this are identical to the steps for creating a new summary or detail template.</p>
        <ol>
-          <li>Copy the <code>lib/modules/PressRoom/templates/admin_edit_article.tpl</li> file to <code>assets/module_custom/PressRoom/templates/admin_edit_article.tpl</code>
+          <li>Copy the <code>lib/modules/PressRoom/templates/admin_edit_article.tpl</li> file to <code>assets/module_custom/PressRoom/templates/admin_edit_article.tpl</code></li>
 	  <li>Adjust the smarty template as you see fit.</li>
        </ol>
    </li>
