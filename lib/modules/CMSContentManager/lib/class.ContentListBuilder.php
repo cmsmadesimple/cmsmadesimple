@@ -311,7 +311,7 @@ final class ContentListBuilder
         if( !$content ) return FALSE;
 
         $content->SetActive($state);
-        $content->Save();
+        $contentops->save_content($content);
         return TRUE;
     }
 
@@ -422,7 +422,7 @@ final class ContentListBuilder
 
         $contentops = \ContentOperations::get_instance();
         $content1 = $contentops->LoadContentFromId($page_id);
-        $page_id2 = \ContentOperations::get_instance()->GetDefaultContent();
+        $page_id2 = $contentops->GetDefaultContent();
         $content2 = $contentops->LoadContentFromId($page_id2);
 
         if( !$content1 ) return FALSE;
@@ -430,11 +430,11 @@ final class ContentListBuilder
         if( !$content1->Active() ) return FALSE;
 
         $content1->SetDefaultContent(TRUE);
-        $content1->Save();
+        $contentops->save_content($content1);
 
         if( $page_id != $page_id2 && $content2 ) {
             $content2->SetDefaultContent(FALSE);
-            $content2->Save();
+            $contentops->save_content($content2);
         }
 
         return TRUE;

@@ -11,7 +11,7 @@ final class TemplateTypeAssistant
         // nothing here
     }
 
-    protected function get_mod()
+    protected static function get_mod()
     {
         static $_mod;
         if( !$_mod ) $_mod = cms_utils::get_module('News2');

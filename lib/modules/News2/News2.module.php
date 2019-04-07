@@ -312,7 +312,7 @@ class News2 extends CMSModule
         $txt = trim($alias);
         if( !$txt ) return;
 
-        $manager = $this->app->GetHierarchyManger();
+        $manager = $this->app->GetHierarchyManager();
         $node = null;
         if( is_numeric($txt) && (int) $txt > 0 ) {
             $node = $manager->find_by_tag('id',(int)$txt);
