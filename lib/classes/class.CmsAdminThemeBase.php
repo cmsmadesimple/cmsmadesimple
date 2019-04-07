@@ -853,7 +853,13 @@ abstract class CmsAdminThemeBase
 
                 if( $maxdepth < 0 || $depth + 1 < $maxdepth ) {
                     $children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
-                    if( is_array($children) && count($children) ) $one['children'] = $children;
+                    if( is_array($children) && count($children) ) {
+			$tmp = null;
+		        foreach( $children as $child ) {
+			    if( $child['show_in_menu'] ) $tmp[] = $child;
+			}
+			$one['children'] = $tmp;
+		    }
                 }
                 $one['name'] = $key;
                 $result[] = $one;
