@@ -101,7 +101,7 @@ if( isset($params['collapse']) ) {
 }
 
 if( isset($params['setinactive']) ) {
-    $builder->set_active($params['setinactive'],FALSE);
+    $res = $builder->set_active($params['setinactive'],FALSE);
     if( !$res ) $error = $this->Lang('error_setinactive');
 }
 
