@@ -59,13 +59,13 @@ $load_perms = function() use ($db, $hook_mgr) {
     $result = $db->Execute($query);
 
     // use hooks to localize permissions.
-    $hook_mgr->emit('localizeperm',function($perm_source, $perm_name) {
+    $hook_mgr->add_hook('localizeperm',function($perm_source, $perm_name) {
             $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
     },$hook_mgr::PRIORITY_LOW);
 
-    $hook_mgr->emit('getperminfo',function($perm_source, $perm_name){
+    $hook_mgr->add_hook('getperminfo',function($perm_source, $perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
     },$hook_mgr::PRIORITY_LOW);
