@@ -89,7 +89,7 @@ class StylesheetManager
         if( !is_dir($output_path) || !is_writable($output_path) ) return; // nowhere to put it
 
         $files = $this->_files;
-        $t_files = $this->_hook_manager->emit( 'Core::PreProcessCSS', $this->_files );
+        $t_files = $this->_hook_manager->emit( 'Core::PreDetermineCSS', $this->_files );
         if( $t_files ) $files = $t_files;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -115,8 +115,11 @@ class StylesheetManager
             $output = null;
             foreach( $files as $sig => $rec ) {
                 $content = file_get_contents($rec['file']);
+                // this hook can be used on each individual CSS file to do things like change relative urls etc.
+                $this->_hook_manager->emit( 'Core::ProcessCSSFile', [ 'content'=>&$content, 'file'=>$rec['file'] ] );
                 $output .= $content."\n\n";
             }
+            // this hook can be used on the combined files to do things like pass it through smarty, minify it, etc.
             $tmp = $this->_hook_manager->emit( 'Core::PostProcessCSS', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );

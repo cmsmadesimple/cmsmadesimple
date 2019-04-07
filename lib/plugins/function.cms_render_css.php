@@ -1,11 +1,12 @@
 <?php
 function smarty_function_cms_render_css( $params, $template )
 {
+    $gCms = cmsms();
     static $sig;
     if( $sig ) throw new \RuntimeException('cms_render_css can only be called once per request');
     $sig = sha1(__FILE__.time().rand());
     $magic_string = "<!-- cms_render_css:$sig -->";
-    $config = cmsms()->GetConfig();
+    $config = $gCms->GetConfig();
 
     $force = (isset($params['force'])) ? cms_to_bool($params['force']) : false;
     $nocache = (isset($params['no_cache'])) ? cms_to_bool($params['no_cache']) : false;
@@ -25,7 +26,24 @@ function smarty_function_cms_render_css( $params, $template )
         }
     };
 
-    cmsms()->get_hook_manager()->add_hook( 'Core::ContentPostRender', $on_postrender );
+    $do_smarty_postprocess = function( $combined_css ) use ($force, $template) {
+        // here we should be creating a new template object
+        // without a new template object, we can though use all of the variables that are already set.
+        $template->left_delimiter = '[[';
+        $template->right_delimiter = ']]';
+        $tmp = $template->force_compile;
+        $template->force_compile = $force;
+        $combined_css = $template->fetch('string:'+$combined_css);  // allows caching of the compiled template.
+        $template->force_compile = $tmp;
+        $template->left_delimiter = '{';
+        $template->right_delimiter = '}';
+    };
+
+    $hook_manager = $gCms->get_hook_manager();
+    if( cms_to_bool(get_parameter_value($params,'smarty_procssing')) ) {
+        $hook_manager->add_hook('Core::PostProcessCSS', $do_smarty_postprocess, $hook_manager::PRIORITY_HIGH );
+    }
+    $gCms->get_hook_manager()->add_hook( 'Core::ContentPostRender', $on_postrender );
 
     // output an html placeholder
     return $magic_string;

@@ -32,7 +32,7 @@ EOT;
 $lang['help_function_cms_render_scripts'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin will use all of the input from various calls to {cms_queue_script}, read each of the files in order that they were queuexd, concatenate them together, and output a single javascript file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>
-<p>This plugin is smart in that it will only generate a new javascrip file if one of the queued script files has changed.  Unless of course, the force flag is enabled.</p>
+<p>This plugin is smart in that it will only generate a new javascript file if one of the queued script files has changed.  Unless of course, the force flag is enabled.</p>
 <p>If defered mode is enabled, then the output HTML will include the defer attribute in the script tag, but will also include support for the special text/cms_javascript script type which allows embedding scripts in module templates, and deferring their execution until after the primary scripts are loaded.</p>
 <h3>Usage:</h3>
 <ul>
@@ -54,7 +54,33 @@ $(function(){
 <pre><code>{cms_queue_script file="{assets_url}/js/jquery.min.js"}
 {cms_render_scripts}&lt;body&gt;
 </code></pre>
+
+<h3>Hooks:</h3>
+<p>This plugin emits these hooks to allow processing the scripts before it is saved to disk.  See the CMSMS Help for detailed information about them:</p>
+<ul>
+   <li>Core::PreDetermineScripts</li>
+   <li>Core::ProcessScript</li>
+   <li>Core::PostProcessScripts</li>
+</ul>
+
+<h3>Note:</p>
+<p>This plugin utilizes the Core::ContentPostRender hook to ensure that concatenating stylesheets happens at the latest possible stage in the HTML rendering process.  This allows for {cms_queue_script} to be called AFTER {cms_render_scripts} during smarty template procesing.</p>
 EOT;
+
+$lang['help_function_cms_queue_css'] = <<<EOT
+<h3>Waht does this do?</h3>
+<p>This plugin will take a relative or absolute <strong>FILE</strong> reference <em>(note: it does not understand URLS)</em> and queue it for inclusion via usage of the {cms_render_css} plugin.  This is useful for attaching necesary CSS files to your rendered HTML output.</p>
+<p>A special note, that {cms_queue_css} can be called from within a module action template, to attach styles that are only relavent to that module acton.</p>
+<h3>Usage:</h3>
+<ul>
+   <li>file - <em>(string)</em> - An absolute path to a script file, or a path relative to the CMSMS Assets path,  uploads path, or CMSMS root path in that order.</li>
+</ul>
+<p>Note: This plugin produces no output.</p>
+
+<h3>Example:</h3>
+<pre><code>{cms_queue_css file='assets/theme/style.css'}</code></pre>
+EOT;
+
 $lang['help_function_cms_queue_script'] = <<<EOT
 <h3>What does this do?</h3>
 <p>this plugin will take a relative or absolute <strong>FILE</strong> reference <em>(note: it does not understand URLS)</em> and queue it for inclusion via usage of the {cms_render_scripts} plugin.  This is useful for attaching necessary scripts to your rendered HTML output.</p>
@@ -66,8 +92,9 @@ $lang['help_function_cms_queue_script'] = <<<EOT
 <p>Note: This plugin produces no output.</p>
 
 <h3>Example:</h3>
-<pre><code>{cms_queue_script file='js/app.js'}</code>
+<pre><code>{cms_queue_script file='js/app.js'}</code></pre>
 EOT;
+
 $lang['help_function_assets_url'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This smarty plugin returns the full URL string to the CMSMS assets directory, as configured.  It is useful for referencing stylesheets, fonts, scripts and other assets relative to the assets directory.</p>
@@ -79,6 +106,32 @@ $lang['help_function_assets_url'] = <<<EOT
 <h3>Example:</h3>
 <pre><code>&lt;script src="{assets_url}/js/app.js"&gt;&lt;/script&gt;</code></pre>
 EOT;
+
+$lang['help_function_cms_render_css'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will use all of the input from various calls to {cms_queue_css}, read and process each of the files in the order that they were queued, concatenate them together, and output a single css file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>
+<p>This plugin is smart in that it will only generate a new CSS file if one of the queued files has changed.  Unless of course, the force flag is enabled.</p>
+<h3>Usage:</h3>
+<ul>
+    <li>force - <em>(bool,default=false)</em> - Force the files to be concatenated together and a new file output EVEN if the source scripts have not changed.</li>
+    <li>no_cache - <em>(bool,default=false)</em> - Append information to the output HTML to prevent browsers from caching the output CSS file.</li>
+    <li>smarty_processing - <em>(bool,default=false)</em> - Post process the CSS file through smarty with the delimiters [[ and ]] like {cms_stylesheet}</li>
+</ul>
+
+<h3>Hooks:</h3>
+<p>This plugin emits these hooks to allow processing the CSS before it is saved to disk  See the CMSMS Help for detailed information about them:</p>
+<ul>
+   <li>Core::PreDetermineCSS</li>
+   <li>Core::ProcessCSSFile</li>
+   <li>Core::PostProcessCSS</li>
+</ul>
+
+<h3>Note:</h3>
+<p>1.  It should be noted that this plugin outputs the concatenated CSS file to the \$config['css_path'] location (which is by default tmp/cache.  So any relative URL's in the CSS will probably fail.</p>
+<p>It is possible to add a handler to the Core::ProcessCSSFile or the Core::PostProcessCSS hooks to correct any relative URLs in files.</p>
+<p>2.  This plugin utilizes the Core::ContentPostRender hook to ensure that concatenating stylesheets happens at the latest possible stage in the HTML rendering process.  This allows for {cms_queue_css} to be called AFTER {cms_render_css} during smarty template processing.  i.e: You can have {cms_render_css} in the &lt;head&gt; section of the page template, and still allow the {cms_queue_css} script to be called in the &lt;body&lt; section.</p>
+EOT;
+
 $lang['help_block_admin_headtext'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a block plugin useful only in admin side actions that allows the module action template to insert HTML content into the HEAD section of the rendered HTML output.  A module action template can insert javascript, or inline styles, or meta tags.</p>

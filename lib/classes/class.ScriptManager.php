@@ -63,7 +63,7 @@ class ScriptManager
         }
 
         $scripts = $this->_scripts;
-        $t_scripts = $this->_hook_manager->emit( 'Core::PreProcessScripts', $this->_scripts );
+        $t_scripts = $this->_hook_manager->emit( 'Core::PreDetermineScripts', $this->_scripts );
         if( $t_scripts ) $scripts = $t_scripts;
 
         // sort the scripts by their priority, then their index (to preserve order)
@@ -87,8 +87,11 @@ class ScriptManager
             $output = null;
             foreach( $scripts as $sig => $rec ) {
                 $content = file_get_contents( $rec['file'] );
+                // process each individual script, useful for things like changing paths
+                $this->_hook_manager->emit( 'Core::ProcessScript', [ 'content'=>&$content, 'file'=>$rec['file']] );
                 $output .= $content."\n\n";
             }
+            // post process the combined script, for minifying etc.
             $tmp = $this->_hook_manager->emit( 'Core::PostProcessScripts', $output );
             if( $tmp ) $output = $tmp;
             file_put_contents( $output_file, $output );
