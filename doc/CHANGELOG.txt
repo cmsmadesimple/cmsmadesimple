@@ -187,8 +187,8 @@ Core - General
   - CHANGE: enable browser caching by default
   - REMOVED: preference for automatic clearing of cache from siteprefs.  This is now handled by a config entry.
 
-News2 v1.0
-  - New core module that is similar to, but not directly compatible with News.
+PressRoom v1.0
+  - New core example module to demonstrate module development techniques.  It allows managing and displaying time limited content.
 
 CMSContentManager - 1.2
   - REMOVED: Gets rid of secure options, flag output and bulk functionaltiy

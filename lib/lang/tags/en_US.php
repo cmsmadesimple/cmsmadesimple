@@ -19,7 +19,7 @@ EOT;
 $lang['help_function_cms_pagestr->set'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin is used to set a variable that can later be used in other places in the template by the {cms_pagestr->render plugin}.</p>
-<p>This plugin is primarily useful for adjusting the value of meta tags such as the page title, or canonical URL from within module template (i.e: News2 detail templats).</p>
+<p>This plugin is primarily useful for adjusting the value of meta tags such as the page title, or canonical URL from within module template (i.e: PressRoom detail templats).</p>
 <h3>What parameters does it take:</h3>
 <p>This plugin can take multiple parameters, each key+value pair will be stored as a separate value.</p>
 <h3>Example:</h3>
