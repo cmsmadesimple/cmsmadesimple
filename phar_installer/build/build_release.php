@@ -22,7 +22,7 @@ $datadir = $rootdir.'/data';
 $outdir = $rootdir."/out";
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
 $exclude_from_zip = array('*~','tmp/','.#*','#*'.'*.bak' );
-$src_excludes = array('/\/APIDOC\//', '/\/phar_installer\//','/^\/uploads\/.*/', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/', '/^\/assets\/.*/', '/^phpcs\.xml$/', '/^\.phpcs\.xml$/',
+$src_excludes = array('/\/APIDOC\//', '/\/phar_installer\//', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/', '/^\/assets\/.*/', '/^phpcs\.xml$/', '/^\.phpcs\.xml$/',
                       '/^\/tests\/.*/', '/^\/build\/.*/', '/^\.htaccess/', '/\.svn/', '/^config\.php$/','/.*~$/', '/\.\#.*/', '/\#.*/', '/.*\.bak/');
 $priv_file = dirname(__FILE__).'/priv.pem';
 $pub_file = dirname(__FILE__).'/pub.pem';
