@@ -7,7 +7,7 @@
   {*
      You can also instantiate custom behaviour on a module by module basis by looking at
      the $entry->module and $entry->modulerecord fields in $entry
-      ie: {if $entry->module == 'News'}{News action='detail' article_id=$entry->modulerecord detailpage='News'}
+      ie: {if $entry->module == 'PressRoom'}{PressRoom action='detail' article=$entry->modulerecord}{/if}
   *}
   {/foreach}
 </ul>
