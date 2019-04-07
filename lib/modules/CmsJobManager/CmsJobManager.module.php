@@ -326,7 +326,6 @@ final class CmsJobManager extends \CMSModule
         $jobs = $this->check_for_jobs_or_tasks();
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
 
-        trigger_error(__METHOD__);
         // this could go into a function...
         $config = $this->GetConfig();
         $url_str = $config['async_processing_url'];
@@ -337,12 +336,9 @@ final class CmsJobManager extends \CMSModule
             return;
         }
 
-        // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
         $url_str = (string) $url_ob;
-        debug_to_log('outurl is '.$url_str);
-        trigger_error('outurl is '.$url_str);
 
         try {
             $ch = curl_init();
