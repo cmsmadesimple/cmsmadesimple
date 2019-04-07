@@ -553,12 +553,11 @@ $lang['help_function_content_text'] = <<<EOT
 <p>Just insert the tag into your page template like: <code>{content_text text='some static text to display'}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
+  <li><strong>(required)</strong> text (sring) - The text to display.  It is considered invalid to provide HTML content here.</li>
   <li><em>(optional)</em> block (string) - The name for this additional content block.  If not specified, one will be calculated.</li>
   <li><em>(optional)</em> label (sring) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
   <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
 </ul>
-<h3>Notes:</h3>
-<p>The content editor is responsible for styling this text in a reasonable way.  It is considered invalid to insert HTML content.</p>
 EOT;
 
 $lang['help_function_process_pagedata'] = <<<EOT

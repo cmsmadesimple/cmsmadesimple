@@ -38,7 +38,7 @@
        <p>This is because in many situations, there may be many different paths that visitors can take to display a News2 article.  i.e: from a category view, from one or more summary views, or from the Search module.  Therefore, it is up to the developer to control navigation out of a detail view from within the detail template.</p>
    </li>
    <li>This module takes advantage of the power of Smarty and its plugins to implement features, rather than putting them into PHP code.</li>
-   <li>Extended categories</p>
+   <li>Extended categories</li>
    <li>No frontend editing functionality
        <p>This is a news module, not a blogging module, and frontend editing functionality was determined to be seldom used and not essential.  Additionally, Frontend editing introduces different security and other concerns.  If it is to be developed it should be done as a separate module.  The dev team does not in any way guarantee that they will write such a module.</p>
    </li>
@@ -60,7 +60,7 @@
       <li>If the end time is specified in an article
           <p>The article cannot be displayed after that time.</p>
       </li>
-<ul>
+</ul>
 <p>If either value is set to January 1, 1970 that is the same as turning it &quot;off&quot;</p>
 <p>The end time if specified, cannot be earlier than the start time, if specified.</p>
 <p>The post date is primarily only used for sorting in summary views, and for display purposes. It is NOT used to indicate whether an article can or cannot be displayed.</p>
