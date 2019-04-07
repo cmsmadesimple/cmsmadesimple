@@ -16,7 +16,9 @@ class Article
 
     private $_fields;
 
-    protected function __construct() {
+    protected function __construct()
+    {
+        // nothing here
     }
 
     public function __get( $key )

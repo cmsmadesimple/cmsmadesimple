@@ -166,8 +166,8 @@ class CategoriesManager
         $item_order = $this->db->GetOne( $sql, $obj->parent_id ) + 1;
 
         // and insert the bugger
-        $sql = 'INSERT INTO '.self::table_name().' (name, alias, image_url, parent_id, item_order) VALUES (?,?,?,?,?)';
-        $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $item_order] );
+        $sql = 'INSERT INTO '.self::table_name().' (name, alias, image_url, parent_id, detailpage, item_order) VALUES (?,?,?,?,?,?)';
+        $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $obj->detailpage, $item_order] );
         return $this->db->Insert_ID();
     }
 
@@ -204,10 +204,10 @@ class CategoriesManager
         }
 
         // update the record, and clear the hierarchy and longname stuff
-        $sql = 'UPDATE '.self::table_name().' SET name = ?, alias = ?, image_url = ?, parent_id = ?, item_order = ?,
+        $sql = 'UPDATE '.self::table_name().' SET name = ?, alias = ?, image_url = ?, parent_id = ?, detailpage = ?, item_order = ?,
                        hierarchy = null, long_name = null
                 WHERE id = ? ORDER BY parent_id';
-        $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $item_order , $obj->id ] );
+        $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $obj->detailpage, $item_order , $obj->id ] );
         return $obj->id;
     }
 
@@ -303,6 +303,15 @@ class CategoriesManager
         $this->updateHierarchyPositions();
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
         return $id;
+    }
+
+    public function get_detailpage_for_category( int $category_id )
+    {
+        while( $category_id > 0 ) {
+            $cat = $this->loadByID( $category_id );
+            if( $cat->detailpage > 0 ) return $cat->detailpage;
+            $category_id = $cat->parent_id;
+        }
     }
 
     public static function articles_table()

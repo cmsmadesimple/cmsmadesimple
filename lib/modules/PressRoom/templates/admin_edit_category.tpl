@@ -62,6 +62,19 @@ $(function(){
 {/if}
 
 <div class="c_full cf">
+   <label for="fld_alias" class="grid_3">{$mod->Lang('lbl_detailpage')}</label>
+   <div class="grid_8">
+      {page_selector name='detailpage' value=$obj->detailpage}
+      {if $obj->detailpage < 1}
+      <div class="grid_12">
+          <label class="grid_3">{$mod->lang('lbl_effective_detailpage')}</label>
+	  <div class="grid_8">{$effective_detailpage_str|default:$mod->Lang('none')}</div>
+      </div>
+      {/if}
+   </div>
+</div>
+
+<div class="c_full cf">
    <input type="submit" name="submit" value="{$mod->Lang('submit')}"/>
    <input type="submit" name="cancel" value="{$mod->Lang('cancel')}" formnovalidate/>
 </div>

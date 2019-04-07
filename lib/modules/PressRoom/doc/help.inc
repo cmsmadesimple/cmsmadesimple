@@ -6,6 +6,7 @@
    <li>Nested categories</li>
    <li>Categories can have an associated image</li>
    <li>Articles can belong to a single category</li>
+   <li>The article detail page (and therefore detail template) can be determined by its category.</li>
    <li>Numerous roles and permissions for managing time related content</li>
    <li>Articles can have an optional summary field, and optional start and end dates.</li>
    <li>Articles allow attachment of numerous different types of tertiary field definitions.</li>
@@ -63,11 +64,20 @@
 </ul>
 <p>Additionally, users with the "Modify Site Preferences" permission can manage field definitions for the module.</p>
 
-<h3>Pretty URLS, URL Slugs and Detail Views:</h3>
-<p>If url-rewriting is enabled in the CMSMS config.php file, this module will generate URLS to articles that use the URL slug entered with each article.  This allows editors to specify the relative url for each article, with a fixed detailpage.  If URL slugs are in use then the "pressroom_detailpage" config entry will be used to specify a page (and therefore a page template) that will be used to display the article.  It is not possible to specify a dynamic destination-page-id for detail links on articles that use URL Slugs.</p>
-<p>If an article does not have a URL slug, and url-rewriting is enabled, then this module will generate detail URLS for articles in the form of:  PressRoom/&lt;article id&gt;/&lt;destination_page_id&gt;/YYYY-mm-dd-text.  It is possible to specify a custom destination-page-id for these articles.<p>
-<p>If the pressroom_detailpage config entry is specified in the CMSMS config.php file, when you change it you must rebuild all static routes by going to "Site Admin >> System Maintenance >> Cache and Content", and then clicking on the button to "Update Routes".</p>
-<p>There are multiple methods to address a specific article, and each of them is valid within CMSMS.  Therefore for SEO purposes it is important that the canonical URL meta tag is set specifically for each detail view.  The default CMSMS page templates, and PressRoom detail templates help with this.</p>
+<h3>Pretty URLS, URL Slugs, Category summary views, and Detail Views:</h3>
+<p>When pretty URLS are enabled, there will be a single pretty URL for each detail view.  And there is flexibility in specifying which content page (and therefore page template, and detail template) will be used for displaying that detail view.</p>
+<p>Each article can have a URL slug.  Similar to editing a content Like when editing a content page.  The URL slug, in combination with the root url will be the single pretty URL to the detail view of tthe article.</p>
+<p>If a URL slug is not specified for an article, then the Pretty URL to a detail view for an article will take the form of &lt;urlprefix&gt;/&lt;articleid&gt;/&lt;date&gt;-&lt;title&gt;.</p>
+<p>To determine a page id to utilize for displaying the article, the following mechanism is used:</p>
+<ol>
+   <li>First an attempt at finding a detailpage is made by looking at the category that the requested article is linked to, and by looking at parent categories until a detailpage is found, or there are no further parents.</li>
+   <li>Next, if no detailpage can be found, and the "pressroom_detailpage" config entry is set, then that page id or alias will be used as a detailpage.</li>
+   <li>Lastly, the default content page will be used.</li>
+</ol>
+<p>If any of the found detailpages cannot be loaded, then even if the article is valud, a 404 error will be thrown.</p>
+<p>To minimize the problem with search engines indexing your content it is important that the canonical meta tag is set specifically for each detail view.  The default CMSMS page templates, and PressRoom detail templates help with this.</p>
+<p>This module also supports pretty URLS for a summamry view of a specific category.  These urls take the form of &lt;urlprefix&gt;/&lt;bycategoryprefix&gt;/&lt;categoryid&gt;/&lt;category-name&gt;.</p>
+<p>For a URL to a summary view of a specific category, the above mechanism is used to determine the content page.</p>
 
 <h3>Frontend Actions:</h3>
 <ul>
@@ -247,16 +257,21 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
        <p>Determines whether CMSMS admin alerts are generated for articles that have the "Needs approval" status.</p>
     </li>
     <li><code>pressroom_detailpage</code> - string|int
-       <p>Used when url-rewriting is enabled, and one or more articles have valid URL slugs, this entry specifies the page alias or id of the page to use for rendering the article.</p>
-       <p>This config entry is NOT used when building the URL for articles that do not have url slugs.</p>
+       <p>Used when url-rewriting is enabled, and a detailpage cannot be found by looking through an article's category hierarcy.  This entry specifies the page alias or id of the page to use for rendering the article.  If not specified, the default content page will be used.</p>
+       <p><strong>Note:</strong> When url-rewriting is disabled there is the possibility that the same article may have multiple URLS.</code>
+       <p><strong>Note:</strong> Changing this entry will NOT change the canonical URL for articles, but you should clear the cache each time you change it.</p>
     </li>
     <li><code>pressroom_default_pretty_category_url</code> - bool
-       <p>If true, the system will not generate pretty urls for a summary view for a specific category. The default value is true</p>
+       <p>If enabled, the system will generate pretty urls for a summary view for a specific category. The default value is true</p>
     </li>
     <li><code>pressroom_default_bycategory_withchildren</code> - bool
        <p>Determines whether by default, category summary views should include child categories.  The default value is true</p>
        <p>Also see the withchildren parameter to allow overriding this on a per-call basis.</p>
        <p>And see the {cms_module_hint} plugin for ways to inject this flag or other flags from page content or templates.</p>
+    </li>
+    <li><code>presroom_urlprefix</code> - string
+       <p>Determines the prefix for all pretty urls issued by, and read by this module.  The default value is "PressRoom".</p>
+       <p><strong>Note:</strong> Changing this config entry will change the URL for all existing news articles that do not have a URL slug.   Links to existing articles outside of this CMSMS installation will be broken.   You should also ensure you clear the cache if you change this config entry.</p>
     </li>
 </ul>
 
@@ -474,6 +489,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
 	  </li>
        </ul>
    </li>
+
    <li>How do I use a non default detail template
       <ul>
       <li>First, using the instructions above, create a non-default detail template in <code>assets/module_custom/PressRoom/templates</code>.</li>
@@ -482,33 +498,22 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
       </li>
       </ul>
    </li>
-   <li>How do I specify a different detail page
-      <p>Links to detail views are created from within a summary template (or another detail templatee).  Change your detail links in the summary template as follows:</p>
-      <pre><code>&lt;a href="{cms_action_url action=detail article=$article->id alias='otherpagealias'}"&gt;Go to detail view&lt;/a&gt;</code></pre>
-   </li>
-   <li>How do I use a different detail template for articles in different categories
-      <p>This can be done using sub-detail templates and the smarty {include} tag.</p>
-      <p>First, you must create as many detail templates as is required, including one as the 'master' template.</p>
-      <p>Next, based on the category id that an article is in, include the desired sub template. i.e:</p>
-<pre><code>{if $PressRoomTools->category_childof($article->category_id,'events')}
-  {include file='module_file_tpl:PressRoom;sub-detailtemplate_events.tpl'}
-{elseif $article->category_id == 3}
-  {include file='module_file_tpl:PressRoom;sub-detailtemplate_3.tpl'}
-{else}
-  {include file='module_file_tpl:PressRoom;sub-detailtemplate_dflt.tpl'}
-{/if}</code></pre>
-      <p><strong>Tip:</strong> Since we are using the smarty <code>{include}</code> plugin, we need to specify an absolute smarty resource.  module_file_tpl is a resource provided by CMSMS that will look for the template according to the module name, and template name, in the assets/module_custom directory.  You can use other smarty resources here,  such as cmsfile, cms_template, and others.</p>
-</code></pre>
-      <p>This is basically the same as multiple if statements, but is cleaner, and allows the use of template inheritance in the sub-detail templates.</p>
+
+   <li>How do I use a different detail page and template for articles in different categories:
+      <ol>
+         <li>Edit the desired PressRoom category, and set the detailpage to the desired detailpage.</li>
+	 <li>See the instructions above about using a non default detail template.</li>
+      </ol>
    </li>
 
    <li>How do I make further changes to the edit article form:
        <p>Many behavioral changes can be done to the form provided when adding or editing an article, beyond what is available in config files. This can be accomplished by overriding the admin_edit_article.tpl template.</p>
-       <p><strong>Overriding admin templates</strong></p>
-       <p>The steps for this are identical to the steps for creating a new summary or detail template.</p>
-       <ol>
-          <li>Copy the <code>lib/modules/PressRoom/templates/admin_edit_article.tpl</li> file to <code>assets/module_custom/PressRoom/templates/admin_edit_article.tpl</code></li>
-	  <li>Adjust the smarty template as you see fit.</li>
-       </ol>
-   </li>
+   </ii>
 </ul>
+
+<h3>Overriding admin templates</h3>
+<p>The steps for this are identical to the steps for creating a new summary or detail template.</p>
+<ol>
+    <li>Copy the <code>lib/modules/PressRoom/templates/admin_edit_article.tpl</code> file to <code>assets/module_custom/PressRoom/templates/admin_edit_article.tpl</code></li>
+    <li>Adjust the smarty template as you see fit.</li>
+</ol>

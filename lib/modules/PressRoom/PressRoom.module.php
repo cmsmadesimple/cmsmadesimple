@@ -105,9 +105,46 @@ class PressRoom extends CMSModule
         return parent::InitializeAdmin();
     }
 
+    protected function getUrlPrefix() : string
+    {
+        return get_parameter_value($this->config,'pressroom_urlprefix',$this->GetName());
+    }
+
+    protected function getModuleUrlPrefixForRoute() : string
+    {
+        $str = $this->getUrlPrefix();
+        $upper = strtoupper($str[0]);
+        $lower = strtolower($str[0]);
+        $suffix = substr($str,1);
+        $prefix = "[{$upper}{$lower}]{$suffix}";
+        return $prefix;
+    }
+
+    protected function getCategorySummaryUrlPrefix() : string
+    {
+        return get_parameter_value($this->config,'pressroom_categoryurlprefix','bycategory');
+    }
+
+    protected function getCategorySummaryUrlPrefixForRoute() : string
+    {
+        $str = $this->getCategorySummaryUrlPrefix();
+        $upper = strtoupper($str[0]);
+        $lower = strtolower($str[0]);
+        $suffix = substr($str,1);
+        $prefix = "[{$upper}{$lower}]{$suffix}";
+        return $prefix;
+    }
+
     public function InitializeFrontend()
     {
         $this->RegisterModulePlugin();
+        $prefix = $this->getModuleUrlPrefixForRoute();
+        $bycategoryprefix = $this->getCategorySummaryUrlPrefixForRoute();
+
+        $this->RegisterRoute('/'.$prefix.'\/(?P<article>[0-9]+)\/(?P<junk>.*?)$/',
+                              ['action'=>'detail'] );
+        $this->RegisterRoute('/'.$prefix.'\/'.$bycategoryprefix.'\/(?P<category_id>[0-9]+)\/(.*?)$/',
+                              ['action'=>'default'] );
         return parent::InitializeFrontend();
     }
 
@@ -159,18 +196,26 @@ class PressRoom extends CMSModule
 
     public function get_pretty_url($id, $action, $returnid='', $params=[], $inline=false)
     {
+        if( $this->config['pressroom_nopretty'] ) return;
+        /*
+        $nopretty = cms_to_bool(get_parameter_value( $params, 'nopretty' ));
+        if( $nopretty ) return;
+        */
+
         if( $action == 'default' && $this->settings()->pretty_category_url ) {
             $category_id = (int) get_parameter_value($params,'category_id');
             if( $category_id < 1 ) return;
 
-            // PressRoom/bycategory/$cat_id/$returnid/$category-path
+            // PressRoom/bycategory/$cat_id/$category-path
             // want to return this pretty URL, but still add pagination (limit, sorting can be provided by cms_module_hint)
             $page = (int) get_parameter_value($params,'news_page');
             $category = $this->categoriesManager()->loadByID( $category_id );
             if( !$category ) return;
             $category_path = str_replace(' | ','_',$category->long_name);
             $category_path = str_replace('__','_',$category_path);
-            $out = "PressRoom/bycategory/$category_id/$returnid/".munge_string_to_url($category_path);
+            $t_returnid = $this->categoriesManager()->get_detailpage_for_category( $category_id );
+            $prefix2 = $this->getCategorySummaryUrlPrefix();
+            $out = $this->getUrlPrefix()."/$prefix2/$category_id/".munge_string_to_url($category_path);
             if( $page > 1 ) $out .= "?news_page=$page";
             return $out;
         }
@@ -179,36 +224,56 @@ class PressRoom extends CMSModule
         $article_id = get_parameter_value($params,'article');
         if( $article_id < 1 ) return;
         $noslug = cms_to_bool(get_parameter_value( $params, 'noslug' ));
-        $nopretty = cms_to_bool(get_parameter_value( $params, 'nopretty' ));
-        if( $nopretty ) return;
 
         $article = $this->articleManager()->loadByID( $article_id );
-        if( !$article ) return;
+        if( !$article ) return; // no article == ugly url
+        if( !$noslug && $article->url_slug ) return $article->url_slug; // use urlslug unless told otherwise.
 
-        if( !$noslug && $article->url_slug ) return $article->url_slug;
-
-        if( !$returnid ) $returnid = $this->getDefaultDetailPage();
         $date_str = strftime('%Y-%m-%d',$article->news_date);
-        $out = "PressRoom/$article_id/$returnid/{$date_str}-".munge_string_to_url( $article->title );
+        $t_returnid = 0;
+        if( $article->category_id > 0 ) $t_returnid = $this->categoriesManager()->get_detailpage_for_category( $article->category_id );
+        if( !$t_returnid ) $t_returnid = $this->getDefaultDetailPage();
+        if( $t_returnid ) {
+            // we have a detailpage page
+            return $this->getUrlPrefix()."/$article_id/{$date_str}-".munge_string_to_url( $article->title );
+        }
+    }
+
+    public function GetMatchedRouteParams( CmsRoute $route ) : array
+    {
+        $out = parent::GetMatchedRouteParams( $route );
+        if( isset($out['returnid']) ) return $out;  // we are only determining returnid here
+
+        if( $out['action'] == 'detail' && isset($out['article']) && $out['article'] > 0 ) {
+            // detail view
+            $out['returnid'] = $this->getDefaultDetailPage();
+
+            // now we can find the category for this article.
+            $artm = $this->articleManager();
+            $article = $artm->loadByID( $out['article'] );
+            if( !$article ) throw new \CmsError404Exception( 'Article not found ');
+            if( $article->category_id > 0 ) {
+                // now we're gonna see if this category is mapped to a pageid.
+                $returnid = $this->categoriesManager()->get_detailpage_for_category( $article->category_id );
+                if( $returnid ) $out['returnid'] = $returnid;
+            }
+        }
+
+        if( $out['action'] == 'default' && isset($out['category_id']) && $out['category_id'] > 0 ) {
+            // category summary view.
+            $out['returnid'] = $this->getDefaultDetailPage();
+
+            $catm = $this->categoriesManager();
+            $returnid = $this->categoriesManager()->get_detailpage_for_category( $out['category_id'] );
+            if( $returnid ) $out['returnid'] = $returnid;
+        }
         return $out;
     }
 
     public function CreateStaticRoutes()
     {
-        $artm = $this->articleManager();
-        $str = $this->GetName();
-        $upper = strtoupper($str[0]);
-        $lower = strtolower($str[0]);
-        $suffix = substr($str,1);
-        $prefix = "[{$upper}{$lower}]{$suffix}";
-
         cms_route_manager::del_static('',$this->GetName());
-        $route = new CmsRoute('/'.$prefix.'\/(?P<article>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)$/',
-                              $this->GetName(), ['action'=>'detail'] );
-        cms_route_manager::add_static( $route );
-        $route = new CmsRoute('/'.$prefix.'\/bycategory\/(?P<category_id>[0-9]+)\/(?P<returnid>[0-9]+)\/(.*?)$/',
-                              $this->GetName(), ['action'=>'default'] );
-        cms_route_manager::add_static( $route );
+        $artm = $this->articleManager();
 
         $offset = 0;
         $detailpage = $this->getDefaultDetailPage();

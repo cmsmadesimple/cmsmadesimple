@@ -1,4 +1,6 @@
 <?php
+$lang['lbl_effective_detailpage'] = 'Effective detailpage';
+$lang['lbl_detailpage'] = 'Detailpage';
 $lang['related_articles'] = 'Related articles';
 $lang['next_article'] = 'Next article';
 $lang['prev_article'] = 'Previous article';

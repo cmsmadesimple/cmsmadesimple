@@ -20,6 +20,7 @@ $flds = "
     alias C(255),
     parent_id I NOTNULL,
     item_order I NOTNULL,
+    detailpage I,
     hierarchy C(255),
     long_name X,
     image_url C(255)
@@ -37,8 +38,8 @@ $flds = "
 	id I KEY AUTO,
 	name C(255) NOTNULL,
 	type C(255) NOTNULL,
-    item_order I NOTNULL,
-    extra  X
+	item_order I NOTNULL,
+	extra  X
 ";
 $sqlarray = $dict->CreateTableSQL( $fielddefs_table, $flds, $taboptarray );
 $dict->ExecuteSQLArray( $sqlarray );
@@ -53,16 +54,16 @@ $flds = "
 	title C(255) NOTNULL,
 	summary X,
 	content X2 NOTNULL,
-    news_date I NOTNULL,
+	news_date I NOTNULL,
 	start_time I,
 	end_time I,
 	status C(25) NOTNULL,
 	create_date I,
 	modified_date i,
 	author_id I,
-    extra X,
-    url_slug C(255),
-    searchable I1
+	extra X,
+	url_slug C(255),
+	searchable I1
 "; // icon is no longer used.
 $sqlarray = $dict->CreateTableSQL( $news_table, $flds, $taboptarray );
 $dict->ExecuteSQLArray( $sqlarray );

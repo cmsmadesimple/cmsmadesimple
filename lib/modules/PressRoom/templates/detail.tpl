@@ -12,8 +12,9 @@
 	       note: there may have been many ways where a user got to this detail view.
 	       so a builtin return page is not reliable.
 	       you could use the browser history, or redirect to some other page.
+	       <a href="{cms_selflink href=$page_alias}">Go Back</a>
              *}
-	    <a href="{cms_selflink href=$page_alias}">Go Back</a>
+	     <a href="javascript:history.back()">Go Back</a>
 	 </div>
 
 	 {if $article->summary}
