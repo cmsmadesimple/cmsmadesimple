@@ -271,7 +271,14 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
     </li>
     <li><code>presroom_urlprefix</code> - string
        <p>Determines the prefix for all pretty urls issued by, and read by this module.  The default value is "PressRoom".</p>
-       <p><strong>Note:</strong> Changing this config entry will change the URL for all existing news articles that do not have a URL slug.   Links to existing articles outside of this CMSMS installation will be broken.   You should also ensure you clear the cache if you change this config entry.</p>
+       <p><strong>Note:</strong> Changing this config entry will change the URL for all existing news articles that do not have a URL slug.   Links to existing articles outside of this CMSMS installation will be broken.   You should also ensure you clear the cache if you change config entries</p>
+    </li>
+    <li><code>pressroom_categoryurlprefix</code> - string
+        <p>Determins the secondary prefix for all pretty urls to summary view for a specific category.  The default value is "bycategory".</p>
+	<p><strong>Note:</strong> Changing this config entry will change the URL for all existing category news summary URLS.  Existing external links to your summary views will be broken.  You should also ensure that you clear the cache after changing config entries.</p>
+    </li>
+    <li><code>pressroom_nopretty</code> - boolean
+        <p>Disabled pretty URL generation for the whole module.</p>
     </li>
 </ul>
 
