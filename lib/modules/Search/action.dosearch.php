@@ -200,7 +200,7 @@ if( $searchinput ) {
 
     $tpl_ob->assign('searchwords',$words);
     $tpl_ob->assign('results', $col->_ary);
-    $tpl_ob->assign('itemcount', (!empty($col->ary)) ? count($col->_ary) : 0);
+    $tpl_ob->assign('itemcount', (!empty($col->_ary)) ? count($col->_ary) : 0);
 
     $searchendtime = microtime(true);
     $tpl_ob->assign('timetook', ($searchendtime - $searchstarttime));
