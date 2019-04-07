@@ -12,7 +12,7 @@ $lang['help_function_cms_pagestr->render'] = <<<EOT
 <pre><code>&lt;title&gt;{cms_pagestr->render('pagetitle',"{title}")}&lt;title&gt;</code></pre>
 
 <h3>Alternate Syntax:</h3>
-<pre><code>{\$cms_pagestr->renderv(key[,dflt])}/code></pre>
+<pre><code>{\$cms_pagestr->renderv(key[,dflt])}</code></pre>
 
 EOT;
 
