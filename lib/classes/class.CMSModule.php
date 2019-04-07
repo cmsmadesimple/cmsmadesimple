@@ -467,6 +467,32 @@ abstract class CMSModule
     }
 
     /**
+     * A callback to allow injecting params into the route requests.
+     *
+     * We are given a route that matches our module.  The route has an array of defaultparams, and
+     * an array of results from parsing the request URI
+     * Here we can adjust those result params based on incoming parameters.  For example to
+     * set a returnid based on an article id.
+     *
+     * Special parameters can be adjusted, including the 'id', 'inline', 'action', and 'returnid' params.
+     *
+     * This method is useful when pretty urls are enabled, AND some parameters must be injected based on the
+     * matched route, and existing parameters.  i.e: to calculate a returnid or additional parameters
+     *
+     * @abstract
+     * @since 2.3
+     * @param CmsRoute the matched route for a request
+     * @return array parameters that the module action can understand.  May also output special keys such as 'id', 'returnid', 'inline', and 'action',
+     */
+    public function GetMatchedRouteParams( CmsRoute $route ) : array
+    {
+        $out = array_merge( $route->get_defaults(), $route->get_results() );
+        return array_filter($out,function($key){
+                return !is_int($key);
+            }, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
      * Register a dynamic route to use for pretty url parsing
      *
      * Note: This method is not compatible wih lazy loading in the front end.
@@ -488,7 +514,9 @@ abstract class CMSModule
      * @since 1.11
      * @author Robert Campbell
      */
-    public function CreateStaticRoutes() {
+    public function CreateStaticRoutes()
+    {
+        // nothing here
     }
 
     /**

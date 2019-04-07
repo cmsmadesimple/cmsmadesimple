@@ -368,20 +368,23 @@ function get_pageid_or_alias_from_url()
             $page = (int)$route['key2'];
         }
         else {
-            $results = $route->get_results();
+            $module = $gCms->GetModuleInstance( $route->get_dest() );
+            if( !$module ) throw new \CmsError404Exceptin('Cannot find module '.$route->get_dest().' for route '.$page);
 
+            $results = $module->GetMatchedRouteParams( $route );  // by default returns $route->get_results();
             // it's a module route... setup some default parameters.
             $orig = $matches = ['id'=>'cntnt01', 'action'=>'defaulturl', 'inline'=>false, 'module'=>$route->get_dest() ];
-            $dflts = $route->get_defaults();
-            if( $dflts ) $matches = array_merge( $matches, $dflts );
             if( $results ) $matches = array_merge( $matches, $results );
+
+            // check the matches to make sure we have all the requred data
+            $special_keys = ['mact','module','id','action','inline','returnid'];
 
             // Get rid of numeric matches, and put the data into the _REQUEST for later processing.
             foreach ($matches as $key=>$val) {
                 if ( is_int($key) || isset($orig[$key]) ) {
                     continue;
                 }
-                else if ($key != 'id' && $key != 'returnid' && $key != 'action') {
+                else if ( !in_array($key,$special_keys) ) {
                     $_REQUEST[$matches['id'] . $key] = $val;
                 }
             }
@@ -391,7 +394,7 @@ function get_pageid_or_alias_from_url()
             $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . (int) $matches['inline'];
 
             // Get a decent returnid
-            $page = $dflt_content;
+            // $page = $dflt_content;
             if( $matches['returnid'] ) {
                 $page = (int) $matches['returnid'];
                 unset( $matches['returnid'] );

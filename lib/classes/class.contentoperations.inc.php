@@ -742,8 +742,10 @@ class ContentOperations
                 $explicit_ids[] = $id;
             }
             $children = $node->get_children();
-            for( $i = 0, $n = count($children); $i < $n; $i++ ) {
-                if( $all || $children[$i]->get_tag('active') ) $explicit_ids[] = $children[$i]->get_tag('id');
+            if( !empty($children) ) {
+                for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                    if( $all || $children[$i]->get_tag('active') ) $explicit_ids[] = $children[$i]->get_tag('id');
+                }
             }
         }
 

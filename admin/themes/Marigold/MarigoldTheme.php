@@ -166,7 +166,8 @@ class MarigoldTheme extends CmsAdminThemeBase
         $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
 
         // is the website set down for maintenance?
-        if( get_site_preference('enablesitedownmessage') == '1' )  { $smarty->assign('is_sitedown', 'true');
+        if( get_site_preference('enablesitedownmessage') == '1' )  { 
+            $smarty->assign('is_sitedown', 'true');
         }
 
         $_contents = $smarty->display('topcontent.tpl');

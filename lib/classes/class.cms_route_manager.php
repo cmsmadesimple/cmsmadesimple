@@ -111,7 +111,6 @@ final class cms_route_manager
             $rec = $regex[$i];
             if( $rec->matches($needle) ) return $rec;
         }
-
         return FALSE;
     }
 
@@ -286,6 +285,7 @@ final class cms_route_manager
     {
         if( self::route_exists($route) ) return FALSE;
         if( !is_array(self::$_dynamic_routes) ) self::$_dynamic_routes = array();
+
         self::$_dynamic_routes[$route->signature()] = $route;
         return TRUE;
     }

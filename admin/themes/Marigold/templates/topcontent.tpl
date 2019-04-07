@@ -15,7 +15,7 @@
 			<span class="description">{$node.description}</span>
 			{/if}
 			{if isset($node.children)}
-			<h4>{'subitems'|lang}</h4>
+			<h4>{lang('subitems')}</h4>
 			<ul class="subitems cf">
 			{foreach from=$node.children item='one'}
 			 	<li><a href="{$one.url}"{if isset($one.target)} target="{$one.target}"{/if} {if substr($one.url,0,6) == 'logout' and isset($is_sitedown)}onclick="return confirm('{'maintenance_warning'|lang|escape:'javascript'}')"{/if}>{$one.title}</a></li>
