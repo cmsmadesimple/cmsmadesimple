@@ -95,6 +95,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( !$dmmod || !$cmmod ) throw new \Exception( \__appbase\lang('error_internal',905) );
         if( !class_exists( '\dm_design_reader' ) ) throw new \Exception( \__appbase\lang('error_internal',906) );
 
+        // make sure we have an uploads/images directory
+        $dir = "$destdir/uploads/images";
+        if( !is_dir($dir) ) {
+            @mkdir($dir,0777,TRUE);
+            @touch( $dir.'/index.html' );
+        }
+
         $dir = \__appbase\get_app()->get_appdir().'/install';
         if( ! $destconfig['samplecontent'] ) {
             $this->message(\__appbase\lang('install_defaultcontent'));
@@ -128,7 +135,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $design->save();
 
             // copy assets/simplex/images to uploads/simplex/images because
-            // some of the initial content references images in there.
+            // some of the initial content properties references images in there.
+            // TODO: modify the simplex theme to not use additional content blocks, particularly for images
+            // so that we don't have to do this cruft
             $this->verbose(\__appbase\lang('msg_copy_theme_images'));
             $fromdir = $reader->get_destdir().'/images';
             $todir = "$destdir/uploads/".$reader->get_name().'/images';
