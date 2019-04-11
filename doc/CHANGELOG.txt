@@ -100,6 +100,7 @@ Core - General
   - BREAKING: Remove the {cms_jquery} plugin and the cms_get_jquery function in lib/misc.functions.php
     - Users using {cms_jquery} in frontend templates will need to find alternate solutions
     - See {cms_queue_script} and {cms_render_scripts}
+  - BREAKING: Remove the {breadcrumbs} tag that for a long time has just output a warning.
   - FEATURE: Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascript files and rendering them in fewer requests.
   - FEATURE: new Core::ProcessScript and Core::PostProcessScripts hooks
   - FEATURE: Adds {cms_queue_css} and {cms_render_css} plugins to allow combining stylesheet files and rendering them in fewer requests and database queries.

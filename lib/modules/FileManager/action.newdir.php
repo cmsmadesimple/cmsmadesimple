@@ -7,7 +7,7 @@ $path = filemanager_utils::get_cwd();
 
 $newdirname = "";
 if (isset($params["newdirname"])) {
-    $newdirname = trim($params["newdirname"]);
+    $newdirname = trim(cleanValue($params["newdirname"]));
 
     if (!filemanager_utils::is_valid_filename($params['newdirname'])) {
         // $this->Redirect($id, 'defaultadmin',$returnid,array("fmerror"=>"invalidnewdir"));
