@@ -1041,7 +1041,7 @@ abstract class ContentBase
      * @param string $name The property name
      * @param string $value The property value.
      */
-    public function SetPropertyValue(string $name, string $value)
+    public function SetPropertyValue(string $name, string $value = null)
     {
         $this->_props[$name] = $value;
     }
