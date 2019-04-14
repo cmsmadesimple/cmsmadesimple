@@ -58,18 +58,17 @@ function cmscm_admin_bulk_delete_can_delete($node)
 
 function cmscm_get_deletable_pages($node)
 {
-    $out = array();
-    if( cmscm_admin_bulk_delete_can_delete($node) ) {
-        // we can delete the parent node.
-        $out[] = $node->get_tag('id');
+    $out = [];
+    $tmp = cmscm_admin_bulk_delete_can_delete($node);
+    if( $tmp ) {
+        // can delete parent
         if( $node->has_children() ) {
-            // it has children.
             $children = $node->get_children();
             foreach( $children as $child_node ) {
-                $tmp = cmscm_get_deletable_pages($child_node);
-                $out = array_merge($out,$tmp);
+                $out = cmscm_get_deletable_pages($child_node);
             }
         }
+        $out[] = $node->get_tag('id');
     }
     return $out;
 }

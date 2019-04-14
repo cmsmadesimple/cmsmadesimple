@@ -2,6 +2,9 @@
 global $admin_user;
 
 
+// load our type
+$page_template_type = CmsLayoutTemplateType::load('core::page');
+
 //
 // Designs
 //
