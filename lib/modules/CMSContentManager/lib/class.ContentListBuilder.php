@@ -613,7 +613,7 @@ final class ContentListBuilder
 
             // add in top level items.
             $children = $hm->get_children();
-            if( count($children) ) {
+            if( !empty($children) ) {
                 foreach( $children as $child ) {
                     $display[] = $child->get_tag('id');
                 }

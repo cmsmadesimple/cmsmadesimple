@@ -245,7 +245,6 @@ class ContentOperations
      */
     final public function LoadContentType($type)
     {
-        die('remove me '.__METHOD__);
         if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 
         $ctph = $this->_get_content_type($type);
@@ -839,8 +838,7 @@ class ContentOperations
         $db->Execute( $sql );
         $one = $this->LoadContentFromId($id);
         $one->SetDefaultContent(true);
-        $one->Save();
-        $this->SetContentModified();
+	$this->save_content($one);
     }
 
 

@@ -65,7 +65,8 @@ function cmscm_get_deletable_pages($node)
         if( $node->has_children() ) {
             $children = $node->get_children();
             foreach( $children as $child_node ) {
-                $out = cmscm_get_deletable_pages($child_node);
+                $tmp2 = cmscm_get_deletable_pages($child_node);
+		if( !empty($tmp2) ) $out = array_merge($out,$tmp2);
             }
         }
         $out[] = $node->get_tag('id');
