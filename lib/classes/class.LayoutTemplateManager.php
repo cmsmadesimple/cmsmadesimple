@@ -297,7 +297,9 @@ class LayoutTemplateManager
         }
 
         $this->cache_driver->clear(__CLASS__);
+	// this is hackish, it re-creates the template object and then it has an id
         $arr = $tpl->_get_array();
+	$arr['id'] = $new_id;
         $tpl = $tpl::_load_from_data($arr);
         audit($new_id,'CMSMS','Template '.$tpl->get_name().' Created');
         return $tpl;
@@ -316,12 +318,13 @@ class LayoutTemplateManager
             $this->hook_manager->emit('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
             $tpl = $this->_update_template($tpl);
             $this->hook_manager->emit('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
-            return;
+            return $tpl;
         }
 
         $this->hook_manager->emit('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
         $tpl = $this->_insert_template($tpl);
         $this->hook_manager->emit('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
+	return $tpl;
     }
 
     /**
