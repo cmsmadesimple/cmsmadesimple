@@ -2,9 +2,7 @@
 namespace CoreAdminLogin;
 if( !isset($gCms) ) exit;
 
-class LoginUserError extends \RuntimeException
-{
-}
+class LoginUserError extends \RuntimeException {}
 
 $username = $password = null;
 $theme_object = \cms_utils::get_theme_object();
@@ -155,6 +153,7 @@ $tpl->assign( 'message', $message );
 $tpl->assign( 'changepwhash', $pwhash );
 $tpl->assign( 'username', $username);
 $tpl->assign( 'password', $password);
+$tpl->assign( 'admin_url', $config['admin_url'] );
 //$tpl->assign( 'theme', $theme_object);
 //$tpl->assign( 'theme_root', $theme_object->root_url );
 $csrf = $_SESSION[$csrf_key] = md5(__FILE__.time().rand());

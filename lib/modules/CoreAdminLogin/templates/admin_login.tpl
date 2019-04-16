@@ -1,6 +1,7 @@
 
                         {* login form starts here *}
 			{admin_headtext}
+			    <link rel="stylesheet" href="{$admin_url}/style.php"/>
 			    <link rel="stylesheet" href="{$mod->GetModuleURLPath()}/css/admin_login.css"/>
 			{/admin_headtext}
 
