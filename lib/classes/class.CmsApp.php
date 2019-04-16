@@ -711,8 +711,13 @@ final class CmsApp
     {
         static $_obj;
         if( !$_obj ) {
+            $salt = cms_siteprefs::get(__METHOD__);
+            if( !$salt ) {
+                $salt = sha1( __FILE__.bin2hex(random_bytes(64)));
+                cms_siteprefs::set(__METHOD__,$salt);
+            }
             $flag = (bool) $this->GetConfig()['stupidly_ignore_xss_vulnerability'];
-            $_obj = new LoginOperations( $this->GetUserOperations(), $this->get_cookie_manager(), $flag );
+            $_obj = new LoginOperations( $this->GetUserOperations(), $this->get_cookie_manager(), $salt, $flag );
         }
         return $_obj;
     }

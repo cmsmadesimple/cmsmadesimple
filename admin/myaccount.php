@@ -130,7 +130,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
         if ($password != '') $userobj->SetPassword($password);
         $result = $userobj->Save();
         if( $password != '' ) {
-            \CMSMS\LoginOperations::get_instance()->save_authentication( $userobj );
+            cmsms()->get_login_operations()->save_authentication( $userobj );
         }
 
         if($result) {

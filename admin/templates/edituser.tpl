@@ -45,61 +45,39 @@ $(document).ready(function(){
 
         <!-- user profile -->
         {tab_start name='user'}
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="username">{lang('name')}:</label>&nbsp;{cms_help realm='admin' key='info_adduser_username' title=lang('name')}
-            </p>
-            <p class="pageinput">
-                <input type="text" id="username" name="user" maxlength="25" value="{$user}" class="standard"/>
-            </p>
+        <div class="c_full cf">
+            <label for="username" class="grid_3">*{lang('name')}:&nbsp;{cms_help realm='admin' key='info_adduser_username' title=lang('name')}</label>
+            <input type="text" id="username" name="user" maxlength="25" value="{$user}" class="standard grid_8"  autocomplete="off" required/>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="password">{lang('password')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_password' title=lang('password')}
-            </p>
-            <p class="pageinput">
-                <input type="password" id="password" name="password" maxlength="100" value="" class="standard"/>
-                <br />
-                {lang('info_edituser_password')}
-            </p>
+        <div class="c_full cf">
+            <label for="password" class="grid_3">{lang('password')}:&nbsp;{cms_help realm='admin' key='info_edituser_password' title=lang('password')}</label>
+	    <div class="grid_8">
+                <input type="password" id="password" name="password" maxlength="100" value="" class="standard grid_12" autocomplete="off"/>
+                <div class="grid_12">{lang('info_edituser_password')}</div>
+            </div>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="passwordagain">{lang('passwordagain')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_passwordagain' title=lang('passwordagain')}
-            </p>
-            <p class="pageinput">
-                <input id="passwordagain" type="password" name="passwordagain" maxlength="100" value="" class="standard"/>
-                <br />
-                {lang('info_edituser_passwordagain')}
-            </p>
+        <div class="c_full cf">
+            <label for="passwordagain" class="grid_3">{lang('passwordagain')}:&nbsp;{cms_help realm='admin' key='info_edituser_passwordagain' title=lang('passwordagain')}</label>
+            <div class="grid_8">
+                <input id="passwordagain" type="password" name="passwordagain" maxlength="100" value="" class="standard grid_12" autocomplete="off"/>
+                <div class="grid_12">{lang('info_edituser_passwordagain')}</div>
+            </div>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="firstname">{lang('firstname')}:</label>&nbsp;{cms_help key2='help_myaccount_firstname' title=lang('firstname')}
-            </p>
-            <p class="pageinput">
-                <input id="firstname" type="text" name="firstname" maxlength="50" value="{$firstname}" class="standard"/>
-            </p>
+        <div class="c_full cf">
+            <label for="firstname" class="grid_3">{lang('firstname')}:&nbsp;{cms_help key2='help_myaccount_firstname' title=lang('firstname')}</label>
+            <input id="firstname" type="text" name="firstname" maxlength="50" value="{$firstname}" class="standard grid_8"/>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="lastname">{lang('lastname')}:</label>&nbsp;{cms_help key2='help_myaccount_lastname' title=lang('lastname')}
-            </p>
-            <p class="pageinput">
-                <input id="lastname" type="text" name="lastname" maxlength="50" value="{$lastname}" class="standard"/>
-            </p>
+        <div class="c_full cf">
+            <label for="lastname" class="grid_3">{lang('lastname')}:&nbsp;{cms_help key2='help_myaccount_lastname' title=lang('lastname')}</label>
+            <input id="lastname" type="text" name="lastname" maxlength="50" value="{$lastname}" class="standard grid_8"/>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="email">{lang('email')}:</label>&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}
-            </p>
-            <p class="pageinput">
-                <input id="email" type="text" name="email" maxlength="255" value="{$email}" class="standard"/>
-            </p>
+        <div class="c_full cf">
+            <label for="email" class="grid_3">{lang('email')}:&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}</label>
+            <input id="email" type="text" name="email" maxlength="255" value="{$email}" class="standard grid_8"/>
         </div>
 
         {if !$access_user}
-        <div class="pageoverflow">
+        <div class="c_full cf">
             <p class="pagetext">
                 <label for="active">{lang('active')}:</label>&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}
             </p>
@@ -152,29 +130,23 @@ $(document).ready(function(){
         {if $manage_users == true}
         <!-- user settings -->
         {tab_start name='settings'}
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="copyusersettings" title="{lang('info_copyusersettings')}">{lang('copyusersettings')}:</label>&nbsp;{cms_help realm='admin' key='info_copyusersettings' title=lang('copyusersettings')}
-            </p>
-            <p class="pageinput">
-                <select id="copyusersettings" name="copyusersettings">
-                    {html_options options=$users}
-                </select>
-            </p>
+        <div class="c_full cf">
+            <label for="copyusersettings" class="grid_3" title="{lang('info_copyusersettings')}">{lang('copyusersettings')}:&nbsp;{cms_help realm='admin' key='info_copyusersettings' title=lang('copyusersettings')}</label>
+            <select id="copyusersettings" name="copyusersettings" class="grid_8">
+                {html_options options=$users}
+            </select>
         </div>
-        <div class="pageoverflow">
-            <p class="pagetext">
-                <label for="clearusersettings" title="{lang('info_clearusersettings')}">{lang('clearusersettings')}</label>
-            </p>
-            <p class="pageinput">
+        <div class="c_full cf">
+            <label for="clearusersettings" class="grid_3" title="{lang('info_clearusersettings')}">{lang('clearusersettings')}</label>
+	    <div class="grid_8">
                 <input type="checkbox" name="clearusersettings" value="1" id="clearusersettings" title="{lang('info_clearusersettings')}:">
-            </p>
+	    </div>
         </div>
         {/if}
 
         {tab_end}
 
-        <div class="pageoverflow">
+        <div class="c_full cf">
             <input type="submit" id="submit" name="submit" value="{lang('submit')}" />
             <input type="submit" name="cancel" value="{lang('cancel')}" />
         </div>

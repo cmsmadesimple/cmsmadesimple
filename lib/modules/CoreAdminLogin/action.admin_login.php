@@ -9,8 +9,8 @@ class LoginUserError extends \RuntimeException
 $username = $password = null;
 $theme_object = \cms_utils::get_theme_object();
 $csrf_key = md5(__FILE__);
-$login_ops = \CMSMS\LoginOperations::get_instance();
-$hm = $this->app->get_hook_manager();
+$login_ops = $gCms->get_login_operations();
+$hm = $gCms->get_hook_manager();
 $username = $password = $error = $warning = $pwhash = $message = null;
 
 if( isset( $_GET['recoverme'] ) ) {

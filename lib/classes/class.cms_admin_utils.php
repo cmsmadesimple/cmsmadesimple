@@ -124,7 +124,7 @@ final class cms_admin_utils
     public static function get_help_tag()
     {
         $app = cmsms();
-        if( $app->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+        if( !$app->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
         $params = array();
         $args = func_get_args();

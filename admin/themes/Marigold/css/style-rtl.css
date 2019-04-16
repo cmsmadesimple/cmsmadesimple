@@ -149,8 +149,8 @@ table {
 	display: inline;
 	float: left;
 	position: relative;
-	margin-left: 1%;
-	margin-right: 1%
+	margin-left: 0;
+	margin-right: 0;
 }
 
 /* Alpha = no margin left, Omega = no margin right  */
@@ -169,7 +169,7 @@ table {
 .c_full .grid_9 { width: 73.0% }
 .c_full .grid_10 { width: 81.333% }
 .c_full .grid_11 { width: 89.667% }
-.c_full .grid_12 { width: 98.0% }
+.c_full .grid_12 { width: 100% }
 
 /* Prefix to add extra space left
  * Example (same for other like suffix, push or pull): <div class='grid_1 prefix_1'>

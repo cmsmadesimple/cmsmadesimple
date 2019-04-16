@@ -27,10 +27,9 @@ use CmsApp;
 
 final class LoginOperations
 {
-
     private static $_instance;
 
-    private $_cookie_name;
+    private $_salt = null;
 
     private $_data;
 
@@ -40,14 +39,21 @@ final class LoginOperations
 
     private $_ignore_xss_vulnerability;
 
-    public function __construct( UserOperations $userops, ICookieManager $cookiemgr, bool $ignore_xss_vulnerability = false )
+    public function __construct( UserOperations $userops, ICookieManager $cookiemgr, string $salt, bool $ignore_xss_vulnerability = false )
     {
+        $salt = trim($salt);
+        if( !$salt ) throw new \LogicException('Invalid salt passed to '.__METHOD__);
         if( self::$_instance ) throw new \LogicException('Only one instance of '.__CLASS__.' is permitted');
         self::$_instance = $this;
+        $this->_salt = $salt;
         $this->_userops = $userops;
         $this->_cookie_manager = $cookiemgr;
-        $this->_cookie_name = '_'.sha1( CMS_VERSION.$this->_get_salt() );
         $this->_ignore_xss_vulnerability = $ignore_xss_vulnerability;
+    }
+
+    protected function cookie_name()
+    {
+        return '_'.sha1(CMS_VERSION.$this->_salt);
     }
 
     public static function get_instance() : LoginOperations
@@ -58,21 +64,8 @@ final class LoginOperations
 
     public function deauthenticate()
     {
-        $this->_cookie_manager->erase($this->_cookie_name);
-        unset($_SESSION[$this->_cookie_name],$_SESSION[CMS_USER_KEY]);
-    }
-
-    protected function _get_salt()
-    {
-        // if we do not have a presaved salt.. we generate one
-        // this is just some randomized data that can be used in alternate salts.
-        $salt = cms_siteprefs::get(__CLASS__);
-        if( !$salt ) {
-            trigger_error('CMSMS LOGIN: no salt for login key');
-            $salt = sha1( rand().__FILE__.rand().time() );
-            cms_siteprefs::set(__CLASS__,$salt);
-        }
-        return $salt;
+        $this->_cookie_manager->erase($this->cookie_name());
+        unset($_SESSION[$this->cookie_name()],$_SESSION[CMS_USER_KEY]);
     }
 
     protected function _check_passhash($uid,$checksum)
@@ -112,10 +105,10 @@ final class LoginOperations
             $private_data['eff_username'] = $effective_user->username;
         }
         $enc = base64_encode( json_encode( $private_data ) );
-        $sig = sha1( $this->_get_salt() . $enc ); // sign the private data with the salt again.
+        $sig = sha1( $this->_salt . $enc ); // sign the private data with the salt again.
         $val = $sig.'::'.$enc; // append signature
         // note: depending on the cookie manager, this may be signed again...
-        $this->_cookie_manager->set($this->_cookie_name,$val);
+        $this->_cookie_manager->set($this->cookie_name(),$val);
 
         // this is for CSRF stuff, doesn't technically belong here.
         unset($this->_data);
@@ -124,7 +117,7 @@ final class LoginOperations
 
     protected function _verify_csrf_token( string $token, string $nonce )
     {
-        $test = substr(sha1($nonce.__FILE__.$this->_get_salt().$_SERVER['HTTP_USER_AGENT']),0,20);
+        $test = substr(sha1($nonce.__FILE__.$this->_salt.$_SERVER['HTTP_USER_AGENT']),0,20);
         return $token === $test;
     }
 
@@ -134,7 +127,7 @@ final class LoginOperations
         // which means that if the cookie AND the CSRF value are stolen, we can forge requests
         // so if the csrf key is not random, it shold be reproducable
         // but use some info from the database, som random info (per cookie)... and some server info, and some browser info
-        return substr(sha1($nonce.__FILE__.$this->_get_salt().$_SERVER['HTTP_USER_AGENT']),0,20);
+        return substr(sha1($nonce.__FILE__.$this->_salt.$_SERVER['HTTP_USER_AGENT']),0,20);
     }
 
     protected function _get_data()
@@ -144,19 +137,19 @@ final class LoginOperations
         // using session, and-or cookie data see if we are authenticated
         $private_data = null;
         /* debug
-        if( isset($_SESSION[$this->_cookie_name]) ) {
-            $private_data = $_SESSION[$this->_cookie_name];
+        if( isset($_SESSION[$this->cookie_name()]) ) {
+            $private_data = $_SESSION[$this->cookie_name()];
         }
         else
         */
-        if( ($private_data = $this->_cookie_manager->get($this->_cookie_name)) ) {
-            // $_SESSION[$this->_cookie_name] = $private_data; // debug
+        if( ($private_data = $this->_cookie_manager->get($this->cookie_name())) ) {
+            // $_SESSION[$this->cookie_name()] = $private_data; // debug
         }
         if( !$private_data ) return;
         $parts = explode('::',$private_data,2);
         if( count($parts) != 2 ) return; // invalid cookie format
 
-        if( $parts[0] != sha1( $this->_get_salt() . $parts[1] ) ) return; // payload signature invalid
+        if( $parts[0] != sha1( $this->_salt . $parts[1] ) ) return; // payload signature invalid
         $private_data = json_decode( base64_decode( $parts[1]), TRUE );
 
         if( !is_array($private_data) ) return; // payload corrupted

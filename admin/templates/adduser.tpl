@@ -9,62 +9,35 @@
     {tab_header name='settings' label=lang('settings')}
 
     {tab_start name='user'}
-    <!-- user -->
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="username">*{lang('name')}:</label>&nbsp;{cms_help realm='admin' key='info_adduser_username' title=lang('name')}
-        </p>
-        <p class="pageinput">
-            <input id="username" type="text" name="user" maxlength="255" value="{$user}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="username" class="grid_3">*{lang('name')}:&nbsp;{cms_help realm='admin' key='info_adduser_username' title=lang('name')}</label>
+        <input id="username" type="text" name="user" maxlength="255" value="{$user}" class="standard grid_8" required autocomplete="off"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="password">*{lang('password')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_password' title=lang('password')}
-        </p>
-        <p class="pageinput">
-            <input type="password" id="password" name="password" maxlength="100" value="{$password}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="password" class="grid_3">*{lang('password')}:&nbsp;{cms_help realm='admin' key='info_edituser_password' title=lang('password')}</label>
+        <input type="password" id="password" name="password" maxlength="100" value="{$password}" class="standard grid_8" autocomplete="off"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="passwordagain">*{lang('passwordagain')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_passwordagain' title=lang('passwordagain')}
-        </p>
-        <p class="pageinput">
-            <input type="password" id="passwordagain" name="passwordagain" maxlength="100" value="{$passwordagain}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="passwordagain" class="grid_3">*{lang('passwordagain')}:&nbsp;{cms_help realm='admin' key='info_edituser_passwordagain' title=lang('passwordagain')}</label>
+        <input type="password" id="passwordagain" name="passwordagain" maxlength="100" value="{$passwordagain}" class="standard grid_8" autocomplete="off"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="firstname">{lang('firstname')}:</label>&nbsp;{cms_help key2='help_myaccount_firstname' title=lang('firstname')}
-        </p>
-        <p class="pageinput">
-            <input type="text" id="firstname" name="firstname" maxlength="50" value="{$firstname}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="firstname" class="grid_3">{lang('firstname')}:&nbsp;{cms_help key2='help_myaccount_firstname' title=lang('firstname')}</label>
+        <input type="text" id="firstname" name="firstname" maxlength="50" value="{$firstname}" class="standard grid_8"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="lastname">{lang('lastname')}:</label>&nbsp;{cms_help key2='help_myaccount_lastname' title=lang('lastname')}
-        </p>
-        <p class="pageinput">
-            <input type="text" id="lastname" name="lastname" maxlength="50" value="{$lastname}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="lastname" class="grid_3">{lang('lastname')}:&nbsp;{cms_help key2='help_myaccount_lastname' title=lang('lastname')}</label>
+        <input type="text" id="lastname" name="lastname" maxlength="50" value="{$lastname}" class="standard grid_8"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            <label for="email">{lang('email')}:</label>&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}
-        </p>
-        <p class="pageinput">
-            <input type="text" id="email" name="email" maxlength="255" value="{$email}" class="standard"/>
-        </p>
+    <div class="c_full cf">
+        <label for="email" class="grid_3">{lang('email')}:&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}</label>
+        <input type="text" id="email" name="email" maxlength="255" value="{$email}" class="standard grid_8"/>
     </div>
-    <div class="pageoverflow">
-        <p class="pagetext">
-            {lang('active')}:&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}
-        </p>
-        <p class="pageinput">
+    <div class="c_full cf">
+        <label for="active" class="grid_3">{lang('active')}:&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}</label>
+	<div class="grid_8">
             <input type="checkbox" class="pagecheckbox" name="active" value="1"{if $active == 1} checked="checked"{/if}/>
-        </p>
+	</div>
     </div>
 
     {if isset($groups)}
@@ -103,19 +76,17 @@
 
     <!-- settings -->
     {tab_start name='settings'}
-    <div class="pageoverflow">
-        <p class="pagetext">
+    <div class="c_full cf">
+        <label for="copyusersettings" class="grid_3">
             {lang('copyusersettings')}:&nbsp;{cms_help realm='admin' key='info_copyusersettings' title=lang('copyusersettings')}
-        </p>
-        <p class="pageinput">
-            <select name="copyusersettings">
-                {html_options options=$users}
-            </select>
-        </p>
+        </label>
+        <select name="copyusersettings" id="copyusersettings" class="grid_8">
+            {html_options options=$users}
+        </select>
     </div>
     {tab_end}
 
-    <div class="pageoverflow">
+    <div class="c_full cf">
         <input type="submit" id="submit" name="submit" value="{lang('submit')}"/>
         <input type="submit" name="cancel" value="{lang('cancel')}"/>
     </div>
