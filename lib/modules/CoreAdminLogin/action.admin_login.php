@@ -1,5 +1,6 @@
 <?php
 namespace CoreAdminLogin;
+use cms_url;
 if( !isset($gCms) ) exit;
 
 class LoginUserError extends \RuntimeException {}
@@ -121,6 +122,20 @@ else if( isset( $params['submit'] ) ) {
         $hm->emit('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // now redirect someplace
+        if( ($redirect_to = $_SESSION['login_redirect_to']) ) {
+            unset($_SESSION['login_redirect_to']);
+            $url_ob = new cms_url($redirect_to);
+            if( !$url_ob->get_scheme() ) {
+                $url_ob->set_scheme('http');
+                if( $gCms->is_https_request() ) $url_ob->set_scheme('https');
+            }
+            $url_ob->set_host($_SERVER['SERVER_NAME']);
+            $url_ob->erase_queryvar('_s_');
+            $url_ob->erase_queryvar('sp_');
+            $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
+            $url = (string) $url_ob;
+            redirect($url);
+        }
         $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
         if( !$homepage ) $homepage = $config['admin_url'];
         $homepage = html_entity_decode( $homepage );

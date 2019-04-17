@@ -463,12 +463,12 @@ final class cms_config implements ArrayAccess
                 $parts = parse_url($_SERVER['PHP_SELF']);
                 $path = '';
                 if( !empty($parts['path']) ) {
-                      $path = dirname($parts['path']);
+                    $path = dirname($parts['path']);
                     if( endswith($path,'install') ) {
-                          $path = substr($path,0,strlen($path)-strlen('install')-1);
+                        $path = substr($path,0,strlen($path)-strlen('install')-1);
                     }
                     else if( endswith($path,$this->offsetGet('admin_dir')) ) {
-                          $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+                        $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
                     }
                     else if (strstr($path,'/lib') !== FALSE) {
                         while( strstr($path,'/lib') !== FALSE ) {
@@ -476,9 +476,9 @@ final class cms_config implements ArrayAccess
                         }
                     }
                     while(endswith($path, DIRECTORY_SEPARATOR)) {
-                          $path = substr($path,0,strlen($path)-1);
+                        $path = substr($path,0,strlen($path)-1);
                     }
-                      if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
+                    if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
                 }
                 $prefix = 'http://';
                 if( cmsms()->is_https_request() ) $prefix = 'https://';
@@ -489,10 +489,10 @@ final class cms_config implements ArrayAccess
             case 'pr_root_url':
                 $str = $this->offsetGet('root_url');
                 if( startswith($str,'http:') ) {
-                      $str = substr($str,5);
+                    $str = substr($str,5);
                 }
                 else if( startswith($str,'https:') ) {
-                      $str = substr($str,6);
+                    $str = substr($str,6);
                 }
                 $this->_cache[$key] = $str;
                 return $str;

@@ -45,6 +45,7 @@ function get_userid(bool $redirect = true)
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
         $config = $app->GetConfig();
+        $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
         redirect($config['admin_url']."/login.php");
     }
     return $uid;
@@ -69,6 +70,7 @@ function get_username(bool $check = true)
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
         $config = $app->GetConfig();
+        $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
         redirect($config['admin_url']."/login.php");
     }
     return $uname;
@@ -102,9 +104,7 @@ function check_login(bool $no_redirect = false)
             // redirect to the admin login.php
             // use SCRIPT_FILENAME and make sure it validates with the root_path
             $config = $app->GetConfig();
-            if( startswith($_SERVER['SCRIPT_FILENAME'],$config['root_path']) ) {
-                $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
-            }
+            $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
             $app->get_login_operations()->deauthenticate();
             redirect($config['admin_url']."/login.php");
         }
