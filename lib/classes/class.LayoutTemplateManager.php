@@ -114,7 +114,7 @@ class LayoutTemplateManager
      * @internal
      * @param CmsLayoutTemplate $tpl The template to store.
      */
-    protected function set_template_cached(\CmsLayoutTemplate $tpl)
+    protected function set_template_cached(CmsLayoutTemplate $tpl)
     {
         if( !$tpl->get_id() ) throw new \InvalidArgumentException('Cannot cache a template with no id');
         $this->cache_driver->set($tpl->get_id(),$tpl,__CLASS__);
@@ -123,6 +123,17 @@ class LayoutTemplateManager
         $idx[] = $tpl->get_id();
         $idx = array_unique($idx);
         $this->cache_driver->set('cached_index',__CLASS__);
+    }
+
+    protected function set_template_uncached(CmsLayoutTemplate $tpl)
+    {
+        if( !($tpl_id = $tpl->get_id()) ) return;
+        $idx = $this->get_cached_templates();
+        $idx = array_filter($idx,function($item) use ($tpl_id) {
+                return $item != $tpl_id;
+            });
+        $this->cache_driver->set('cached_index',__CLASS__);
+        $this->cache_driver->erase($tpl->get_id,__CLASS__);
     }
 
     /**
@@ -325,13 +336,16 @@ class LayoutTemplateManager
             $this->hook_manager->emit('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
             $tpl = $this->_update_template($tpl);
             $this->hook_manager->emit('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
+            if( $this->template_has_file($tpl) ) {
+                $this->set_template_uncached($tpl);
+            }
             return $tpl;
         }
 
         $this->hook_manager->emit('Core::AddTemplatePre', [ get_class($tpl) => &$tpl ] );
         $tpl = $this->_insert_template($tpl);
         $this->hook_manager->emit('Core::AddTemplatePost', [ get_class($tpl) => &$tpl ] );
-	return $tpl;
+        return $tpl;
     }
 
     /**
