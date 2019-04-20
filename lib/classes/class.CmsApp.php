@@ -634,7 +634,8 @@ final class CmsApp
         if( !$mgr ) $mgr = new LayoutTemplateManager(
             $this->GetDB(),
             $this->get_cache_driver(),
-            $this->get_hook_manager());
+            $this->get_hook_manager(),
+            $this->config);
         return $mgr;
     }
 

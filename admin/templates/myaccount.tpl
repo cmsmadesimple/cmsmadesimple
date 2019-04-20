@@ -52,7 +52,7 @@ jQuery(document).ready(function(){
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="email">{lang('email')}:</label>&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}</p>
-      <p class="pageinput"><input type="text" id="email" name="email" maxlength="255" value="{$userobj->email}" class="standard" /></p>
+      <p class="pageinput"><input type="email" id="email" name="email" maxlength="255" value="{$userobj->email}" class="standard" /></p>
     </div>
   </form>
   {$tab_end}

@@ -77,7 +77,7 @@ try {
         if ( isset($params['submit']) || $apply ) {
             // do the magic.
             if (isset($params['description'])) $tpl_obj->set_description($params['description']);
-            if (isset($params['type'])) $tpl_obj->set_type($params['type']);
+            if (isset($params['type'])) $tpl_obj->set_type(cleanValue(strip_tags($params['type'])));
             if (isset($params['default'])) $tpl_obj->set_type_dflt($params['default']);
             if (isset($params['owner_id'])) $tpl_obj->set_owner($params['owner_id']);
             if (isset($params['addt_editors']) && is_array($params['addt_editors']) && count($params['addt_editors'])) {

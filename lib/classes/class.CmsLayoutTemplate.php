@@ -869,13 +869,13 @@ class CmsLayoutTemplate
      */
     public function get_usage_string()
     {
-	try {
+        try {
             $type = $this->get_type();
             return $type->get_usage_string($this->get_name());
         }
         catch( CmsDataNotFoundException $e ) {
-	    // nothing here.
-	}
+            // nothing here.
+        }
     }
 
     /**
@@ -883,13 +883,11 @@ class CmsLayoutTemplate
      *
      * @since 2.2
      * @return string
+     * @deprecated
      */
     public function get_content_filename()
     {
-        if( !$this->get_name() ) return false;
-        $config = \cms_config::get_instance();
-        $name = munge_string_to_url($this->get_name()).'.'.$this->get_id().'.tpl';
-        return cms_join_path($config['assets_path'],'templates',$name);
+        return self::_mgr()->get_template_filename($this);
     }
 
     /**
@@ -897,11 +895,11 @@ class CmsLayoutTemplate
      *
      * @since 2.2
      * @return bool
+     * @deprecated
      */
     public function has_content_file()
     {
-        $fn = $this->get_content_filename();
-        if( is_file($fn) && is_readable($fn) ) return TRUE;
+        return self::_mgr()->template_has_file($this);
     }
 } // end of class
 

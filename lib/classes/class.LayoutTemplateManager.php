@@ -9,6 +9,7 @@
 
 namespace CMSMS;
 use CMSMS\Database\Connection as Database;
+use cms_config;
 use cms_cache_driver;
 use CmsLayoutTemplate;
 use CmsLayoutTemplateType;
@@ -28,6 +29,11 @@ use CmsInvalidDataException;
  */
 class LayoutTemplateManager
 {
+    private $db;
+    private $cache_driver;
+    private $hook_manager;
+    private $config;
+
     /**
      * Constructor
      *
@@ -35,11 +41,12 @@ class LayoutTemplateManager
      * @param cms_cache_driver $driver The Cache driver
      * @param hook_manager $hook_manager The hook manager
      */
-    public function __construct( Database $db, cms_cache_driver $driver, hook_manager $hook_manager )
+    public function __construct( Database $db, cms_cache_driver $driver, hook_manager $hook_manager, cms_config $config )
     {
         $this->db = $db;
         $this->cache_driver = $driver;
         $this->hook_manager = $hook_manager;
+        $this->config = $config;
     }
 
     /**
@@ -392,7 +399,7 @@ class LayoutTemplateManager
 
         // put it in the cache
         $obj = CmsLayoutTemplate::_load_from_data($row,$designs,$editors);
-        $this->set_template_cached($obj);
+        if( !$this->template_has_file($obj) ) $this->set_template_cached($obj);
         return $obj;
     }
 
@@ -573,6 +580,19 @@ class LayoutTemplateManager
         // search our preloaded template first
         $tpl_id = $this->get_default_template_by_type($t2->get_id());
         if( $tpl_id ) return $this->load_template($tpl_id);
+    }
+
+    public function get_template_filename(CmsLayoutTemplate $tpl)
+    {
+        if( !$tpl->get_name() ) return;
+        $name = munge_string_to_url($tpl->get_name()).'.'.$tpl->get_id().'.tpl';
+        return cms_join_path(CMS_ASSETS_PATH,'templates',$name);
+    }
+
+    public function template_has_file(CmsLayoutTemplate $tpl)
+    {
+        $fn = $this->get_template_filename($tpl);
+        return is_file($fn) && is_readable($fn);
     }
 
     /**

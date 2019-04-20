@@ -48,9 +48,9 @@ try {
             if (isset($params['description'])) $css_ob->set_description($params['description']);
             if (isset($params['content'])) $css_ob->set_content($params['content']);
             $typ = array();
-            if (isset($params['media_type'])) $typ = $params['media_type'];
+            if (isset($params['media_type'])) $typ = $params['media_type']);
             $css_ob->set_media_types($typ);
-            if (isset($params['media_query'])) $css_ob->set_media_query($params['media_query']);
+            if (isset($params['media_query'])) $css_ob->set_media_query(cleanValue($params['media_query']));
             if ($this->CheckPermission('Manage Designs')) {
                 $design_list = array();
                 if (isset($params['design_list'])) $design_list = $params['design_list'];
@@ -58,7 +58,7 @@ try {
             }
 
             $old_export_name = $css_ob->get_content_filename();
-            if (isset($params['name'])) $css_ob->set_name($params['name']);
+            if (isset($params['name'])) $css_ob->set_name(cleanValue(strip_tags($params['name'])));
             $css_ob->set_name($params['name']);
             $new_export_name = $css_ob->get_content_filename();
             if( $old_export_name && $old_export_name != $new_export_name && is_file( $old_export_name ) ) {

@@ -27,12 +27,12 @@ $oldname=$this->decodefilename($selall[0]);
 $newname=$oldname; //for initial input box
 
 if (isset($params["newname"])) {
-    $newname=$params["newname"];
+    $newname=cleanValue($params["newname"]);
     if (!filemanager_utils::is_valid_filename($newname)) {
         echo $this->ShowErrors($this->Lang("invaliddestname"));
     } else {
         $cwd = filemanager_utils::get_cwd();
-        $fullnewname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),trim($params['newname']));
+        $fullnewname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),trim($newname));
         if (file_exists($fullnewname)) {
             echo $this->ShowErrors($this->Lang("namealreadyexists"));
             //fallthrough
@@ -40,7 +40,7 @@ if (isset($params["newname"])) {
             $fulloldname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$oldname);
             if (@rename($fulloldname,$fullnewname)) {
                 $thumboldname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),'thumb_'.$oldname);
-                $thumbnewname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),'thumb_'.trim($params['newname']));
+                $thumbnewname = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),'thumb_'.trim($newname));
                 if( file_exists($thumboldname) ) {
                        @rename($thumboldname,$thumbnewname);
                 }

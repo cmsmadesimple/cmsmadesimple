@@ -69,7 +69,9 @@ final class JobManager
     /**
      * @ignore
      */
-    protected function __construct() {
+    protected function __construct() 
+    {
+	// nothing here
     }
 
     /**
@@ -151,6 +153,6 @@ final class JobManager
     public function delete_jobs_by_module( $module_name )
     {
         $mod = $this->get_mod();
-        if( $mod ) return $mod->delete_job($module_name);
+        if( $mod ) return $mod->delete_job_by_module($module_name);
     }
 } // end of class
