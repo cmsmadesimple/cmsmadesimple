@@ -133,7 +133,7 @@ class LayoutTemplateManager
                 return $item != $tpl_id;
             });
         $this->cache_driver->set('cached_index',__CLASS__);
-        $this->cache_driver->erase($tpl->get_id,__CLASS__);
+        $this->cache_driver->erase($tpl->get_id(),__CLASS__);
     }
 
     /**
