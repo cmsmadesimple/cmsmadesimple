@@ -336,9 +336,7 @@ class LayoutTemplateManager
             $this->hook_manager->emit('Core::EditTemplatePre', [ get_class($tpl) => &$tpl ] );
             $tpl = $this->_update_template($tpl);
             $this->hook_manager->emit('Core::EditTemplatePost', [ get_class($tpl) => &$tpl ] );
-            if( $this->template_has_file($tpl) ) {
-                $this->set_template_uncached($tpl);
-            }
+            $this->set_template_uncached($tpl);
             return $tpl;
         }
 
