@@ -117,6 +117,7 @@ class LayoutTemplateManager
     protected function set_template_cached(CmsLayoutTemplate $tpl)
     {
         if( !$tpl->get_id() ) throw new \InvalidArgumentException('Cannot cache a template with no id');
+	if( $this->template_has_file($tpl) ) return;
         $this->cache_driver->set($tpl->get_id(),$tpl,__CLASS__);
         $idx = $this->cache_driver->get('cached_index',__CLASS__);
         if( !$idx ) $idx = [];
@@ -132,8 +133,12 @@ class LayoutTemplateManager
         $idx = array_filter($idx,function($item) use ($tpl_id) {
                 return $item != $tpl_id;
             });
-        $this->cache_driver->set('cached_index',__CLASS__);
-        $this->cache_driver->erase($tpl->get_id(),__CLASS__);
+	if( empty($idx) ) {
+            $this->cache_driver->erase('cached_index',__CLASS__);
+        } else {
+            $this->cache_driver->set('cached_index',$idx,__CLASS__);
+        }
+        $this->cache_driver->erase($tpl_id,__CLASS__);
     }
 
     /**
@@ -395,7 +400,9 @@ class LayoutTemplateManager
 
         // if it exists in the cache, then we're done
         $obj = $this->get_cached_template($id);
-        if( $obj ) return $obj;
+        if( $obj ) {
+	    return $obj;
+	}
 
         // load it from the database
         $db = $this->db;
@@ -411,7 +418,7 @@ class LayoutTemplateManager
 
         // put it in the cache
         $obj = CmsLayoutTemplate::_load_from_data($row,$designs,$editors);
-        if( !$this->template_has_file($obj) ) $this->set_template_cached($obj);
+        $this->set_template_cached($obj);
         return $obj;
     }
 
