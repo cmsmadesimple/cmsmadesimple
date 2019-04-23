@@ -45,7 +45,7 @@
                 <label>{'password'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="password" name="password" required="required" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="password" required="required" autocomplete="new-password" />
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -56,7 +56,7 @@
                 <label>{'repeatpw'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="password" name="repeatpw" required="required" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="repeatpw" required="required" autocomplete="new-password" />
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
