@@ -452,17 +452,17 @@ class LayoutTemplateManager
             return $out;
         };
 
-        $list2 = array_diff($list,$this->get_cached_templates());
-        if( is_array($list2) && count($list2) > 0 ) {
+        $uncached = array_diff($list,$this->get_cached_templates());
+        $loaded = [];
+        if( is_array($uncached) && count($uncached) > 0 ) {
             // have to load these items and put them in the cache.
             $db = $this->db;
-            $str = implode(',',$list2);
+            $str = implode(',',$uncached);
             $sql = 'SELECT * FROM '.$this->template_table_name()." WHERE id IN ({$str})";
             $rows = $db->GetArray( $sql );
             if( count($rows) ) {
                 $sql = 'SELECT * FROM '.$this->design_assoc_table_name().' WHERE tpl_id IN ('.$str.') ORDER BY tpl_id';
                 $alldesigns = $db->GetArray($sql);
-
                 $sql = 'SELECT * FROM '.$this->tpl_additional_users_table_name().' WHERE tpl_id IN ('.$str.') ORDER BY tpl_id';
                 $allusers = $db->GetArray($sql);
 
@@ -470,17 +470,21 @@ class LayoutTemplateManager
                 foreach( $rows as $row ) {
                     $id = $row['id'];
                     $obj = CmsLayoutTemplate::_load_from_data($row,$get_assoc_designs($id,$alldesigns),$get_assoc_users($id,$allusers));
+                    $loaded[$id] = $obj;
                     // put it in the cache, we'll get it in a bit.
                     $this->set_template_cached($obj);
                 }
-                // cache it
             }
         }
 
         // read from the cache
         $out = null;
         foreach( $list as $tpl_id ) {
-            $out[] = $this->get_cached_template($tpl_id);
+            if( isset($loaded[$tpl_id]) ) {
+                $out[] = $loaded[$tpl_id];
+            } else {
+                $out[] = $this->get_cached_template($tpl_id);
+            }
         }
         return $out;
     }
