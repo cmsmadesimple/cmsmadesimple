@@ -60,6 +60,11 @@
                 </div>
             </div>
         </div>
+	{if $action != 'install'}
+        <div class="row form-row message blue">
+	    {'info_whyask_dbpass'|tr}
+	</div>
+	{/if}
         <div class="row form-row">
             <div class="four-col">
                 <label>{'prompt_dbpass'|tr}</label>

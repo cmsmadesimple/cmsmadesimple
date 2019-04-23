@@ -31,7 +31,7 @@ $lang['default_charset'] = 'Default Character-set';
 $lang['desc_wizard_step1'] = 'Start the installation or upgrade process';
 $lang['desc_wizard_step2'] = 'Analyze destination directory to find existing software';
 $lang['desc_wizard_step3'] = 'Check to make sure everything is OK to install the CMSMS core';
-$lang['desc_wizard_step4'] = 'For new installs, and freshen operation, enter basic configuration info';
+$lang['desc_wizard_step4'] = 'Provide, or confirm basic configuration info';
 $lang['desc_wizard_step5'] = 'For new installs, enter Admin account info';
 $lang['desc_wizard_step6'] = 'For new installs enter some basic site details';
 $lang['desc_wizard_step7'] = 'Extract files';
@@ -168,6 +168,7 @@ $lang['goback'] = 'Back';
 # H
 
 # I
+$lang['info_whyask_dbpass'] = 'We ask that you enter your database password on upgrade or freshen to ensure that you are authorized to perform this action.';
 $lang['info_addlanguages'] = 'Select languages (in addition to English) to install. <strong>Note:</strong> not all translations are complete.';
 $lang['info_adminaccount'] = 'Please provide credentials for the initial administrator account. This account will have access to all of the functionality of the CMSMS Admin console.';
 $lang['info_advanced'] = 'Advanced mode enables more options in the installation procedure.';
