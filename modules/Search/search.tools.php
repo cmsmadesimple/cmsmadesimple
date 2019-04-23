@@ -88,15 +88,15 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
     if ($content != "") {
         //Clean up the content
-	$content = html_entity_decode($content);
+	if( function_exists('utf8_decode') ) $content = utf8_decode($content);
+        $content = html_entity_decode($content);
         $stemmed_words = $obj->StemPhrase($content);
         $tmp = array_count_values($stemmed_words);
-	if( !is_array($tmp) || !count($tmp) ) return;
+        if( !is_array($tmp) || !count($tmp) ) return;
         $words = array();
         foreach( $tmp as $key => $val ) {
             $words[] = array('word'=>$key,'count'=>$val);
         }
-
         $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
         $parms = array($module);
 

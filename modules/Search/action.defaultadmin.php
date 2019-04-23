@@ -3,8 +3,13 @@ if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) exit;
 
 if (isset($params['reindex'])) {
-    $this->Reindex();
-    echo $this->ShowMessage($this->Lang('reindexcomplete'));
+    try {
+        $this->Reindex();
+        echo $this->ShowMessage($this->Lang('reindexcomplete'));
+    }
+    catch( \Exception $e ) {
+        debug_display($e);
+    }
 }
 else if (isset($params['clearwordcount'])) {
     $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_search_words';
