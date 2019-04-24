@@ -218,6 +218,7 @@ Installation Assistant - v1.4
   - The basic installer no longer emails the admin account information
   - Now write the primary contact email address to the config.php
   - Now enable browser caching by default
+  - Now display a message explaining why we want the database password on upgrade and freshen
 
 ModuleManaver v2.2
   - XML import code now lives here.

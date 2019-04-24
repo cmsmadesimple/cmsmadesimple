@@ -86,31 +86,39 @@ final class CmsLangOperations
         $is_module = false;
         $filename = 'en_US.php';
         if( $realm == self::CMSMS_ADMIN_REALM ) {
+            $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','en_US.json');
             $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','en_US.php');
         }
         else {
             if( is_dir(cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm)) ) {
                 $is_module = true;
+                $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.json');
                 $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
             }
             if( is_dir(cms_join_path(CMS_ASSETS_PATH,'modules',$realm)) ) {
                   $is_module = true;
+                  $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','en_US.json');
                   $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','en_US.php');
             }
-              $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
+            $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.json');
+            $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
         }
 
         // now handle other lang files.
         if( $curlang != 'en_US' ) {
             if( $realm == self::CMSMS_ADMIN_REALM ) {
+                $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','ext',$curlang.'.json');
                 $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','ext',$curlang.'.php');
             }
             else {
                 if( $is_module ) {
+                    $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','ext',$curlang.'.json');
                     $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','ext',$curlang.'.php');
+                    $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','ext',$curlang.'.json');
                     $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','ext',$curlang.'.php');
                 }
                 else {
+                    $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'ext',$curlang.'.json');
                     $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'ext',$curlang.'.php');
                 }
             }
@@ -118,12 +126,16 @@ final class CmsLangOperations
 
         // now load the custom stuff.
         if( $realm == self::CMSMS_ADMIN_REALM ) {
+            $files[] = cms_join_path($config['assets_path'],'admin_custom','lang',$curlang.'.json');
             $files[] = cms_join_path($config['assets_path'],'admin_custom','lang',$curlang.'.php');
         }
         else {
             if( $is_module ) {
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','en_US.json');
                 $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','en_US.php');
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang',$curlang.'.json');
                 $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang',$curlang.'.php');
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','ext',$curlang.'.json');
                 $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','ext',$curlang.'.php');
             }
         }
@@ -131,9 +143,15 @@ final class CmsLangOperations
         foreach( $files as $fn ) {
             if( !is_file($fn) ) continue;
 
-            $lang = array();
-            include($fn);
-            if( !isset(self::$_langdata[$curlang][$realm]) ) self::$_langdata[$curlang][$realm] = array();
+            $lang = [];
+            if( endswith($fn, '.json') ) {
+                $lang = json_decode(file_get_contents($fn),TRUE);
+            }
+            else if( endswith($fn,'.php') ) {
+                include($fn);
+            }
+            if( !$lang || !is_array($lang) || empty($lang) ) continue;
+            if( !isset(self::$_langdata[$curlang][$realm]) ) self::$_langdata[$curlang][$realm] = [];
             self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
             unset($lang);
         }
