@@ -135,10 +135,12 @@ try {
             $ajax_out = null;
             if( isset($_POST['__preview']) && isset($_POST['__ajax']) ) {
                 // we're serializing this thing to the session
+                // and returning a URL to display it.
                 $data = serialize($article);
                 $sig = sha1('pressroom_preview_'.$data);
                 $_SESSION[$sig] = serialize($article);
-                $detail_pageid = $this->GetDefaultDetailPage();
+                $detail_pageid = $this->categoriesManager()->get_detailpage_for_category($article->category_id);
+                if( !$detail_pageid ) $detail_pageid = $this->GetDefaultDetailPage();
                 $preview_url = $this->create_url('cntnt01','detail', $detail_pageid, ['preview_key'=>$sig] );
                 $ajax_out = ['status'=>'ok', 'preview_url'=>$preview_url];
             }

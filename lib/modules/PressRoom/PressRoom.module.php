@@ -241,6 +241,7 @@ class PressRoom extends CMSModule
 
     public function GetMatchedRouteParams( CmsRoute $route ) : array
     {
+        // given a matched route, fill out the params array
         $out = parent::GetMatchedRouteParams( $route );
         if( isset($out['returnid']) ) return $out;  // we are only determining returnid here
 
