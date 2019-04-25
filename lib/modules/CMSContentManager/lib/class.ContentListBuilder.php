@@ -908,12 +908,12 @@ final class ContentListBuilder
                         break;
 
                     case 'alias':
-                          if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = strip_tags($content->Alias());
+                        if( $content->RequiresAlias() && $content->Alias() != '' ) $rec[$column] = strip_tags($content->Alias());
                         break;
 
                     case 'url':
-                          $rec[$column] = '';
-                          if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = strip_tags($content->URL());
+                        $rec[$column] = '';
+                        if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = strip_tags($content->URL());
                         break;
 
                     case 'friendlyname':
@@ -921,7 +921,7 @@ final class ContentListBuilder
                         break;
 
                     case 'owner':
-                          if( $content->Owner() > 0 ) $rec[$column] = strip_tags($users[$content->Owner()]->username);
+                        if( $content->Owner() > 0 ) $rec[$column] = strip_tags($users[$content->Owner()]->username);
                         break;
 
                     case 'active':
