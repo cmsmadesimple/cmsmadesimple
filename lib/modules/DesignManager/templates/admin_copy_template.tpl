@@ -24,7 +24,9 @@
   <div class="pageoverflow">
     <p class="pagetext">{$mod->Lang('prompt_owner')}:</p>
     <p class="pageinput">
-      {$user_list[$tpl->get_owner_id()]}
+      {if $tpl->get_owner_id() > 0}
+          {$user_list[$tpl->get_owner_id()]}
+      {/if}
     </p>
   </div>
   {/if}
