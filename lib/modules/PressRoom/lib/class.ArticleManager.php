@@ -504,7 +504,7 @@ class ArticleManager
                 $fd = $this->fdmgr->loadByName( $key );
                 if( !$fd ) continue;
                 if( is_array($val) ) $val = json_encode($val);
-                if( empty($val) ) continue;
+                if( !$val && strlen($val) == 0 ) continue;
                 $this->db->Execute( $sql, [ $article->id, $fd->id, $val ] );
             }
         }

@@ -124,6 +124,7 @@ $(function(){
     <table class="pagetable">
        <thead>
           <tr>
+	     <th>{$mod->Lang('lbl_id')}</th>
 	     <th>{$mod->Lang('lbl_title')}</th>
 	     <th>{$mod->Lang('lbl_postdate')}</th>
 	     <th>{$mod->Lang('lbl_starttime')}</th>
@@ -148,6 +149,13 @@ $(function(){
 	        {$edit_url=''}
 	     {/if}
 	     <tr class="{cycle values='row1,row2'}">
+	        <td>
+		   {if $edit_url}
+		       <a href="{$edit_url}" title="{$mod->Lang('t_edit_article')}">{$art->id}</a>
+		   {else}
+		       {$art->id}
+		   {/if}
+		</td>
 	        <td>
 		   {if $edit_url}
 		       <a href="{$edit_url}" title="{$mod->Lang('t_edit_article')}">{$art->title|summarize}</a>

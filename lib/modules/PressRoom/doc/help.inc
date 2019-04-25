@@ -269,7 +269,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
        <p>Also see the withchildren parameter to allow overriding this on a per-call basis.</p>
        <p>And see the {cms_module_hint} plugin for ways to inject this flag or other flags from page content or templates.</p>
     </li>
-    <li><code>presroom_urlprefix</code> - string
+    <li><code>pressroom_urlprefix</code> - string
        <p>Determines the prefix for all pretty urls issued by, and read by this module.  The default value is "PressRoom".</p>
        <p><strong>Note:</strong> Changing this config entry will change the URL for all existing news articles that do not have a URL slug.   Links to existing articles outside of this CMSMS installation will be broken.   You should also ensure you clear the cache if you change config entries</p>
     </li>
@@ -297,7 +297,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
         <p><strong>View:</strong> default</p>
         <p><strong>Default:</strong> default.tpl</p>
 	<p><strong>Description:</strong> Specify an alternate summary template to use.</p>
-	<p>By default, this module uses file based templates so without specifying a smarty resource name, the system will look in <code>assets/module_custom/PressRoom/templates</code> for templates.   You can specify alternate smarty resources such as:  <code>cms_file:something.tpl</code> to look for something.tpl in <code>assets/templates</code> or <code>cms_template:something</code> to use a template named "something" from within DesignManager.</p>
+	<p>By default, this module uses file based templates so without specifying a smarty resource name, the system will look in <code>assets/module_custom/PressRoom/templates</code> for templates.   You can specify alternate smarty resources such as:  <code>cmsfile:something.tpl</code> to look for something.tpl in <code>assets/templates</code> or <code>cms_template:something</code> to use a template named "something" from within DesignManager.</p>
 	<p>You can use the <code>{cms_module_hint}</code> smarty plugin to specify which template to used from within the content page, or the page template.</p>
     </li>
     <li>detailtemplate:

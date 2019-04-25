@@ -44,7 +44,7 @@ $lang['help_function_cms_render_scripts'] = <<<EOT
 
 <h3>Example:</h3>
 <p>The following example illustrates queueing the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On news detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p>
-<h4>In News detail template:</h4>
+<h4>In PressRoom detail template:</h4>
 <pre><code>&lt;script type="text/cms_javascript"&gt;
 $(function(){
     alert('this is a test');
@@ -295,7 +295,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
 <p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
 <p><strong>Note:</strong> As is documented in the CMSModule::create_url() method, you can pass NOPRETTY=1 as an option in this tag to disable any generation of pretty urls for this request.</p>
 <h3>Example:</h3>
-<pre><code>{cms_action_url module=News action=defaultadmin}</code><pre>
+<pre><code>{cms_action_url module=PressRoom action=defaultadmin}</code><pre>
 EOT;
 
 $lang['help_function_cms_admin_user'] = <<<EOT
@@ -419,9 +419,9 @@ $lang['help_function_module_available'] = <<<EOT
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
-{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
+{module_available module='PressRoom' assign='havenews'}{if \$havenews}{cms_module module=PressRoom}{/if}
 <h3>Note:</h3>
-<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
+<p>You cannot use the short form of the module call, i.e: <em>{PressRoom}</em> in this type of expression.</p>
 EOT;
 
 $lang['help_function_cms_set_language'] = <<<EOT
@@ -840,15 +840,6 @@ $lang['help_function_print'] = <<<EOT
 	<p>Just put <code>{print}</code> on a page or in a template. For help about the CMSPrinting module, what parameters it takes etc., please refer to the CMSPrinting module help.</p>
 EOT;
 
-$lang['help_function_news'] = <<<EOT
-	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the News module to make the tag syntax easier.
-	Instead of having to use <code>{cms_module module='News'}</code> you can now just use <code>{news}</code> to insert the module on pages and templates.
-	</p>
-	<h3>How do I use it?</h3>
-	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the News module help.</p>
-EOT;
-
 $lang['help_function_modified_date'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Prints the date and time the page was last modified.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
@@ -1160,7 +1151,7 @@ EOT;
 $lang['help_function_cms_module_hint'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This function plugin can be used to provide hints for module behavior if various parameters cannot be specified on the URL.  I.e: In a situation when a site is configured to use pretty urls for SEO purposes it is often impossible to provide additional module parameters like a detailtemplate or sort order on a URL.  This plugin can be used in page templates, GCBs or in a page specific way to give hints as to how modules should behave.</p>
-<p><strong>Note:</strong> Any parameters that are specified on the URL will override matching module hints.   i.e:  When using News and a detailtemplate parameter is specified on a News detail url, any detailtemplate hints will have no effect.</p>
+<p><strong>Note:</strong> Any parameters that are specified on the URL will override matching module hints..</p>
 <p><strong>Note:</strong> In order to ensure proper behavior, module hints must be created before the {content} tag is executed in the CMSMS page template.  Therefore they should (normally) be created very early in the page template process.  An ideal location for page specific hints is in the &quot;Smarty data or logic that is specific to this page:&quot; textarea on the editcontent form.</p>
 <h3>Parameters:</h3>
 <ul>
@@ -1168,8 +1159,8 @@ $lang['help_function_cms_module_hint'] = <<<EOT
 </ul>
 <p>Any further parameters to this tag are stored as hints.</p>
 <h3>Example:</h3>
-<p>When using the News module, and pretty urls are configured.  You wish to display news articles for a specific category on one page, and would like to use a non standard detail template to display the individual articles on a different page.  I.e: perhaps on your &quot;Sports&quot; page you are calling News like: <code>{News category=sports detailpage=sports_detail}</code>.  However, using pretty urls it may be impossible to specify a detailtemplate on the links that will generate the detail views.  The solution is to use the {cms_module_hint} tag on the <u>sports_detail</u> page to provide some hints as to how News should behave on that page.</p>
-<p>When editing the <u>sports_detail</u> page on the options tab, in the textarea entitled &quot;Smarty data or logic that is specific to this page:&quot; you could enter a tag such as: <code>{cms_module_hint module=News detailtemplate=sports}</code>.  Now when a user clicks on a link from the News summary display on your &quot;sports&quot; page he will be directed to the <u>sports_detail</u> page, and the News detail template entitled &quot;sports&quot; will be used to display the article.</p>
+<p>When using the PressRoom module, and pretty urls are configured.  You wish to display news articles for a specific category on one page, and would like to use a non standard detail template to display the individual articles on a different page.  I.e: perhaps on your &quot;Sports&quot; page you are calling PressRoom like: <code>{PressRoom category=sports detailpage=sports_detail}</code>.  The solution is to use the {cms_module_hint} tag on the <u>sports_detail</u> page to provide some hints as to how PressRoom should behave on that page.</p>
+<p>When editing the <u>sports_detail</u> page on the options tab, in the textarea entitled &quot;Smarty data or logic that is specific to this page:&quot; you could enter a tag such as: <code>{cms_module_hint module=PressRoom detailtemplate=sports}</code>.  Now when a user clicks on a link from the PressRoom summary display on your &quot;sports&quot; page he will be directed to the <u>sports_detail</u> page, and the PressRoom detail template entitled &quot;sports&quot; will be used to display the article.</p>
 <h3>Usage:</h3>
 <p><code>{cms_module_hint module=ModuleName paramname=value ...}</code></p>
 <p><strong>Note:</strong> It is possible to specify multiple parameter hints to a single module in one call to this plugin.</p>
@@ -1377,7 +1368,7 @@ $lang['help_function_form_start'] = <<<EOT
 <p>This code, in a module template will generate a form tag to the named action.</p>
 <pre><code>{form_start action=myaction}</code></pre>
 <p>This code will generate a form tag to the named action in the named module.</p>
-<pre><code>{form_start module=News action=default}</code></pre>
+<pre><code>{form_start module=PressRoom action=default}</code></pre>
 <p>This code will generate a form tag to the same action, but set an id, and class.</p>
 <pre><code>{form_start id="myform" class="form-inline"}</code></pre>
 <p>This code will generate a form tag to the named url, and set an id, and class.</p>
@@ -1395,7 +1386,7 @@ $lang['help_function_form_start'] = <<<EOT
 &lt;input type="submit" name="{\$actionid}submit" value="Submit"/&gt;
 {form_end}</code></pre>
 <h3>Example 2:</h3>
-<p>The following is a sample form for use in the frontend of a website.  Entered into page content, this hypothetical form will gather a page limit, and submit it to the News module.</p>
+<p>The following is a sample form for use in the frontend of a website.  Entered into page content, this hypothetical form will gather a page limit, and submit it to the PressRoom module.</p>
 <pre><code>{form_start method="GET" class="form-inline"}
 &lt;select name="pagelimit"&gt;
 &lt;option value="10"&gt;10&lt;/option&gt;
@@ -1406,7 +1397,7 @@ $lang['help_function_form_start'] = <<<EOT
 {form_end}
 {\$pagelimit=25}
 {if isset(\$smarty.get.pagelimit)}{\$pagelimit=\$smarty.get.pagelimit}{/if}
-{News pagelimit=\$pagelimit}</code></pre>
+{PressRoom pagelimit=\$pagelimit}</code></pre>
 EOT;
 
 $lang['function'] = 'Functions may perform a task, or query the database, and typically display output.  They can be called like {tagname [attribute=value...]}';

@@ -23,7 +23,7 @@ class NumberFieldType extends FieldType
     {
         $get_num_or_null = function( $data, $key ) {
             $tmp = trim(get_parameter_value( $data, $key ));
-            if( !$tmp ) return;
+            if( strlen($tmp) == 0 ) return;
             return (float) $tmp;
         };
 

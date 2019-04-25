@@ -9,6 +9,7 @@ if( !$this->CheckPermission('Modify Site Preferences') ) exit;
 if( isset($_POST['create']) ) {
     try {
         TemplateTypeAssistant::create_dm_types();
+        $this->RedirectToAdminTab('categories',null,'admin_settings');
     }
     catch( CmsException $e ) {
         // log it

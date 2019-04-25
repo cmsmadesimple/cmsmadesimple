@@ -45,7 +45,7 @@ $(function(){
        <form method="post" action="{cms_action_url action=admin_order_fielddefs forjs=1}">
           <input type="hidden" id="datafld" name="data"/>
           <button id="savebtn">{$mod->Lang('btn_save_order')}</button>
-       </button>
+       </form>
    </div>
    <table class="pagetable">
       <thead>

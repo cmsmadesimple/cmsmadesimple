@@ -20,7 +20,7 @@
 	 {if $article->summary}
 	     <div class="pressroom-article-summary">{$article->summary}</div>
 	 {/if}
-	 <div class="pressroom-article-summary">{$article->content|strip_tags|nl2br}</div>
+	 <div class="pressroom-article-content">{$article->content}</div>
 
 	 <div class="pressroom-article-postdate">
 	      <span class="pressroom-prompt">{$mod->Lang('lbl_newsdate')}:</span>

@@ -45,8 +45,6 @@ $sqlarray = $dict->CreateTableSQL( $fielddefs_table, $flds, $taboptarray );
 $dict->ExecuteSQLArray( $sqlarray );
 $sqlarray = $dict->CreateIndexSQL( CMS_DB_PREFIX.'mod_pressroomfielddefs_idx0', $fielddefs_table, 'name', [ 'UNIQUE' ] );
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL( CMS_DB_PREFIX.'mod_pressroomfielddefs_idx1', $fielddefs_table, 'item_order', [ 'UNIQUE' ] );
-$dict->ExecuteSQLArray($sqlarray);
 
 $flds = "
 	id I KEY AUTO NOTNULL,

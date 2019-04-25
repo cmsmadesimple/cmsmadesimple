@@ -31,7 +31,7 @@ $(function(){
 <div class="c_full cf">
     <label class="grid_3" for="fllabel">{$mod->Lang('lbl_label')}</label>
     <div class="grid_8">
-        <input class="grid_12" id="fldlabel" name="label" value="{$obj->raw_label}"/>
+        <input class="grid_12" id="fldlabel" name="label" value="{$obj->label}"/>
     </div>
 </div>
 
