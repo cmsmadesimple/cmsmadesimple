@@ -9,7 +9,7 @@ $lang['help_function_cms_pagestr->render'] = <<<EOT
    <li>dflt - <em>(string,optional)</em> - An optional default valuable, to use if the variable has not been previously set.</li>
 </ul>
 <h3>Example:</h3>
-<pre><code>&lt;title&gt;{cms_pagestr->render('pagetitle',"{title}")}&lt;title&gt;</code></pre>
+<pre><code>&lt;title&gt;{cms_pagestr->render key='pagetitle' dflt="{title}"}&lt;title&gt;</code></pre>
 
 <h3>Alternate Syntax:</h3>
 <pre><code>{\$cms_pagestr->renderv(key[,dflt])}</code></pre>
