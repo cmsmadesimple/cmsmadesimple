@@ -1,6 +1,6 @@
 <?php
 $lang['lbl_maxsize'] = 'Maximum size';
-$lang['info_text_maxsize'] = 'The maximum length of the text provided for this field'
+$lang['info_text_maxsize'] = 'The maximum length of the text provided for this field';
 $lang['lbl_id'] = 'Id';
 $lang['lbl_effective_detailpage'] = 'Effective detailpage';
 $lang['lbl_detailpage'] = 'Detailpage';
