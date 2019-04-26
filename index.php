@@ -59,8 +59,7 @@ $config = $_app->GetConfig();
 $smarty = $_app->GetSmarty();
 $contentops = $_app->GetContentOperations();
 $hook_mgr = $_app->get_hook_manager();
-$page = get_pageid_or_alias_from_url();
-$contentobj = null;
+$page = $contentobj = null;
 $trycount = 0;
 $showtemplate = true;
 
@@ -106,9 +105,11 @@ $get_content_in_parts = function( $app, $hook_mgr, $smarty, $contentobj, $top_rs
 while( $trycount < 2 ) {
     $trycount++;
     try {
-        // todo: if we have no $page, throw an error
-        if( $trycount < 2 && is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new CmsError503Exception('Site down for maintenance');
-        if( $trycount < 2 && is_sitedown() ) throw new CmsError503Exception('Site down for maintenance');
+	if( $trycount < 2 ) {
+	    if( !$page ) $page = get_pageid_or_alias_from_url();
+            if( is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new CmsError503Exception('Site down for maintenance');
+            if( is_sitedown() ) throw new CmsError503Exception('Site down for maintenance');
+	}
 
         // preview
         if( $page == -100) {
@@ -311,7 +312,8 @@ while( $trycount < 2 ) {
     catch (Exception $e) {
         // Catch rest of exceptions
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { 
+	    ob_end_clean();
         }
         $code = $e->GetCode();
         if( !$showtemplate && $code >= 400 ) {
