@@ -369,7 +369,7 @@ function get_pageid_or_alias_from_url()
         }
         else {
             $module = $gCms->GetModuleInstance( $route->get_dest() );
-            if( !$module ) throw new \CmsError404Exceptin('Cannot find module '.$route->get_dest().' for route '.$page);
+            if( !$module ) throw new \CmsError404Exception('Cannot find module '.$route->get_dest().' for route '.$page);
 
             $results = $module->GetMatchedRouteParams( $route );  // by default returns $route->get_results();
             // it's a module route... setup some default parameters.
