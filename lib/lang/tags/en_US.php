@@ -281,13 +281,15 @@ EOT;
 $lang['help_function_cms_action_url'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a smart plugin useful for generating a URL to a module action. This plugin is useful for module developers who are generating links (either for Ajax or or in the admin interface) to perform different functionality or display different data.</p>
+<p>this plugin actually the parameters provided, and calls the module's create_url_method.</p>
 <h3>What parameters does it take?</h3>
 <ul>
   <li>module - <em>(optional)</em> - The module name to generate a URL for.  This parameter is not necessary if generating a URL from within a module action to an action within the same module.</li>
   <li>action - <strong>(required)</strong> - The action name to generate a URL to.</li>
   <li>alias - <em>(optional)</em>- The alias of an active page.  The pageid of this page will be used to create the url.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
   <li>inline - <em>(optional)</em>- Whether or not an inline URL should be generated.  Default is false.</li>
-  <li>returnid - <em>(optional)</em> - The integer pageid to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
+  <li>returnid - <em>(optional)</em> - The integer pageid on which to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.  Some modules may ingore this parameter for frontend requests when pretty urls are enabled.</li>
+  <li>alias - <em>(optional)</em> - A string page alias on which to display the results of the action.  This parameter is ignored if the returnid is provided.  Like the returnid argument, this parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.  Also, some modules may ignore this parameter for frontend requests when pretty urls are enabled.</li>
   <li>mid - <em>(optional)</em> - The module action id.  This defaults to &quot;m1_&quot; for admin actions, and &quot;cntnt01&quot; for frontend actions.</li>
   <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in JavaScript.</li>
   <li>assign - <em>(optional)</em> - Assign the output URL to the named smarty variable.</li>
@@ -295,7 +297,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
 <p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
 <p><strong>Note:</strong> As is documented in the CMSModule::create_url() method, you can pass NOPRETTY=1 as an option in this tag to disable any generation of pretty urls for this request.</p>
 <h3>Example:</h3>
-<pre><code>{cms_action_url module=PressRoom action=defaultadmin}</code><pre>
+<pre><code>{cms_action_url module=PressRoom action=default}</code><pre>
 EOT;
 
 $lang['help_function_cms_admin_user'] = <<<EOT
