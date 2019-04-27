@@ -201,7 +201,7 @@ function audit($itemid, $itemname, $action)
     if( $itemid == '' ) $itemid = -1;
     if( $userid < 1 ) $userid = 0;
 
-    if( $userid > 0 && $app->is_cli() ) $ip_addr = cms_utils::get_real_ip();
+    if( $userid > 0 && !$app->is_cli() ) $ip_addr = cms_utils::get_real_ip();
 
     $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
     $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
