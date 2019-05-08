@@ -80,7 +80,13 @@ try {
     //
     if( $content_id === 0 && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
-        $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
+        $tmp = $_SESSION['__cms_copy_obj__'];
+        $type_name = get_parameter_value($tmp,'type');
+        if( !$type_name ) throw new \LogicException('Invalid session data');
+        $ph = $contentops->LoadContentType($type_name);
+        if( !class_exists($ph->class) ) throw new \LogicException('Could not find class for content type');
+        if( !$ph ) throw new \LogicException('Could not find content type named '.$type_name);
+        $content_obj = unserialize($tmp['obj']);
         $content_type = $content_obj->Type();
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     }
