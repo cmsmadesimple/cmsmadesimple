@@ -4,6 +4,9 @@ Core - General
   - Fix minor bug in copying content objects
   - Minor fix to array indexes when filling params in ContentBase
 
+CMSContentManager --
+  - Fix an issue with copying non-core content objects
+
 ModuleManager v2.1.7
   - Minor exception handling improvements.
   - Minor improvement to dependency detection with modules that do not exist in ModuleRepository

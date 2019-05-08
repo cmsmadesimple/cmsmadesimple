@@ -74,7 +74,7 @@ final class CmsAdminUtils
     public static function get_generic_url($in_url)
     {
         if( !defined('CMS_USER_KEY') ) throw new \LogicException('This method can only be called for admin requests');
-        IF( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) throw new \LogicException('This method can only be called for admin requests');
+        if( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) throw new \LogicException('This method can only be called for admin requests');
 
         $len = strlen($_SESSION[CMS_USER_KEY]);
         $in_p = '+'.CMS_SECURE_PARAM_NAME.'\=[A-Za-z0-9]{'.$len.'}+';
