@@ -163,8 +163,6 @@ class FieldDefManager
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
     }
 
-    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_pressroom_fieldvals';
-    }
-    public static function table_name() { return CMS_DB_PREFIX.'mod_pressroom_fielddefs';
-    }
+    public static function fieldvals_table() { return CMS_DB_PREFIX.'mod_pressroom_fieldvals'; }
+    public static function table_name() { return CMS_DB_PREFIX.'mod_pressroom_fielddefs'; }
 } // class

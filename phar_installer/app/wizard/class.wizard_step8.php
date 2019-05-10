@@ -69,16 +69,16 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $dir = \__appbase\get_app()->get_appdir().'/install';
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',800));
 
         $adminaccount = $this->get_wizard()->get_data('adminaccount');
-        if( !$adminaccount ) throw new \Exception(\__appbase\lang('error_internal',701));
+        if( !$adminaccount ) throw new \Exception(\__appbase\lang('error_internal',801));
 
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',803));
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',704));
+        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',804));
 
         $this->connect_to_cmsms($destdir);
 
@@ -96,7 +96,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             // install the schema
             $this->message(\__appbase\lang('install_schema'));
             $fn = $dir.'/schema.php';
-            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',705));
+            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',805));
 
             global $CMS_INSTALL_DROP_TABLES, $CMS_INSTALL_CREATE_TABLES;
             $CMS_INSTALL_DROP_TABLES=1;
@@ -142,13 +142,13 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // get the list of all available versions that this upgrader knows about
         $app = \__appbase\get_app();
         $dir =  $app->get_appdir().'/upgrade';
-        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal',710));
+        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal',810));
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',811));
 
         $dh = opendir($dir);
         $versions = array();
-        if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',712));
+        if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',812));
         while( ($file = readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;
             if( is_dir($dir.'/'.$file) && (is_file("$dir/$file/MANIFEST.DAT") || is_file("$dir/$file/MANIFEST.DAT.gz")) ) $versions[] = $file;
@@ -157,7 +157,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         if( count($versions) ) usort($versions,'version_compare');
 
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',803));
 
         // setup and initialize the cmsms API's
         if( is_file("$destdir/lib/include.php") ) {
@@ -209,11 +209,11 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
     private function write_config($extra = null)
     {
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',803));
         $adminacct = $this->get_wizard()->get_data('adminaccount');
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',800));
 
         // create new config file.
         // this step has to go here.... as config file has to exist in step9
@@ -273,7 +273,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
                 $this->do_install();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',705));
+                throw new \Exception(\__appbase\lang('error_internal',806));
             }
         }
         catch( \Exception $e ) {
