@@ -9,7 +9,7 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat'
+_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat .#*'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -277,7 +277,7 @@ if [ $_tag = 1 -a ${_vc_type:-bad} != 'bad' ]; then
    if [ "$_ans" = 'y' -o "$_ans" = 'Y' -o "$_ans" = 'YES' -o "$_ans" = 'yes' ]; then
      _msg="${_name} version ${_version}"
      if [ ${_vc_type:-bad} = 'svn' ]; then
-       echo "Performiong svn tag";
+       echo "Performing svn tag";
        svn copy -m "${_msg}" . ${_newtag}
      else
        echo "Performiong git svn branch";
