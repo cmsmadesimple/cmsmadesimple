@@ -85,7 +85,7 @@ class cms_mailer
     public function reset()
     {
         // note: should be passsing in preferences in the constructor.
-        // but that would break existing modules that construct this object directly
+	    // but that would break existing modules that construct this object directly
         $prefs = unserialize(cms_siteprefs::get('mailprefs'));
         if( !$prefs ) throw new \RuntimeException( 'CMS Mailer has not been configured' );
         $this->mailer->Mailer = get_parameter_value($prefs,'mailer','mail');
