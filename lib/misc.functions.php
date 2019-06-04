@@ -820,6 +820,12 @@ function cleanValue(string $val) {
     return $val;
 }
 
+function cleanString(string $in)
+{
+    if( !$in ) return $in;
+    return filter_var( $val, FILTER_SANITIZE_STRING );
+}
+
 
 /**
  * A convenience function to return a bool variable given a php ini key that represents a bool.

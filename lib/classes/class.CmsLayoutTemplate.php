@@ -554,7 +554,9 @@ class CmsLayoutTemplate
      */
     public function save()
     {
-        return self::_mgr()->save_template($this);
+	    $res = self::_mgr()->save_template($this);
+	    if( ($val = $res->get_id()) && !$this->get_id() ) $this->_data['id'] = $val;
+	    return $res;
     }
 
     /**

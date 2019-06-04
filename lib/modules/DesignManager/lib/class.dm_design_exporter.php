@@ -216,7 +216,9 @@ EOT;
                     $name = $tpl_ob->get_name();
                 }
                 else {
+		    if( startswith($name,'cms_template:') ) $name = substr($name,strlen('cms_template:'));   
                     $tpl_ob = CmsLayoutTemplate::load($name);
+		    if( !$tpl_ob ) throw new \CmsException('Could not load template '.$name);
                 }
                 $sig = $this->_get_signature($tpl_ob->get_name(),$type);
 

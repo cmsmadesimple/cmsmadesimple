@@ -15,7 +15,6 @@ use CmsLayoutTemplate;
 use CmsLayoutTemplateType;
 use CmsLayoutCollection;
 use CMSMS\hook_manager;
-use CmsInvalidDataException;
 
 /**
  * A class that manages the storage of CmsLayoutTemplate objects in the database.
@@ -178,7 +177,7 @@ class LayoutTemplateManager
      */
     public function generate_unique_template_name(string $prototype, string $prefix = null)
     {
-        if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
+        if( !$prototype ) throw new \InvalidArgumentException('Prototype name cannot be empty');
         $db = $this->db;
         $query = 'SELECT id FROM '.$this->template_table_name().' WHERE name = ?';
         for( $i = 0; $i < 25; $i++ ) {
@@ -188,7 +187,7 @@ class LayoutTemplateManager
             $tmp = $db->GetOne($query,array($name));
             if( !$tmp ) return $name;
         }
-        throw new CmsLogicException('Could not generate a template name for '.$prototype);
+        throw new \CmsLogicException('Could not generate a template name for '.$prototype);
     }
 
     /**
@@ -213,7 +212,7 @@ class LayoutTemplateManager
             $query = 'SELECT id FROM '.$this->template_table_name().' WHERE name = ?';
             $tmp = $db->GetOne($query,array($tpl->get_name()));
         }
-        if( $tmp ) throw new CmsInvalidDataException('Template with the same name already exists.');
+        if( $tmp ) throw new \CmsLogicException('Template with the same name already exists.');
     }
 
     /**
@@ -236,18 +235,18 @@ class LayoutTemplateManager
                                 $tpl->get_type_id(),$tpl->get_type_dflt(),$tpl->get_category_id(),
                                 $tpl->get_owner_id(),$tpl->get_listable(),time(),
                                 $tpl->get_id()));
-        if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         if( $tpl->get_type_dflt() ) {
             // if it's default for a type, unset default flag for all other records with this type
             $query = 'UPDATE '.$this->template_table_name().' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
             $dbr = $db->Execute($query,array($tpl->get_type_id(),$tpl->get_id()));
-            if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+            if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
         }
 
         $query = 'DELETE FROM '.$this->tpl_additional_users_table_name().' WHERE tpl_id = ?';
         $dbr = $db->Execute($query,array($tpl->get_id()));
-        if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $t = $tpl->get_additional_editors();
         if( is_array($t) && count($t) ) {
@@ -259,7 +258,7 @@ class LayoutTemplateManager
 
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
         $dbr = $db->Execute($query,array($tpl->get_id()));
-        if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
         $t = $tpl->get_designs();
         if( is_array($t) && count($t) ) {
             $query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
@@ -293,14 +292,14 @@ class LayoutTemplateManager
                               $tpl->get_type_id(),$tpl->get_type_dflt(),$tpl->get_category_id(),
                               $tpl->get_owner_id(),$tpl->get_listable(),time(),time()
                               ]);
-        if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
         $new_id = $db->Insert_ID();
 
         if( $tpl->get_type_dflt() ) {
             // if it's default for a type, unset default flag for all other records with this type
             $query = 'UPDATE '.$this->template_table_name().' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
             $dbr = $db->Execute($query,[ $tpl->get_type_id(), $new_id ]);
-            if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+            if( !$dbr ) throw new \CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
         }
 
         $t = $tpl->get_additional_editors();
@@ -527,7 +526,7 @@ class LayoutTemplateManager
     public function get_owned_templates($a)
     {
         $n = $this->_resolve_user($a);
-        if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+        if( $n <= 0 ) throw new \InvalidArgumentException('Invalid user specified to get_owned_templates');
 
         $query = new CmsLayoutTemplateQuery(array('u'=>$n));
         $tmp = $query->GetMatchedTemplateIds();
@@ -543,7 +542,7 @@ class LayoutTemplateManager
     public function get_editable_templates($a)
     {
         $n = $this->_resolve_user($a);
-        if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+        if( $n <= 0 ) throw new \InvalidArgumentException('Invalid user specified to get_owned_templates');
         $db = $this->db;
 
         $sql = 'SELECT id FROM '.self::template_table_name();
@@ -598,7 +597,7 @@ class LayoutTemplateManager
             $t2 = $t;
         }
 
-        if( !$t2 ) throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::;load_dflt_by_type()');
+        if( !$t2 ) throw new \InvalidArgumentException('Invalid data passed to CmsLayoutTemplate::;load_dflt_by_type()');
 
         // search our preloaded template first
         $tpl_id = $this->get_default_template_by_type($t2->get_id());

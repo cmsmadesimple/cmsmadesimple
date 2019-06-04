@@ -83,7 +83,7 @@ class hook_mapping implements JsonSerializable
         if( empty($handler) ) throw new \InvalidArgumentException('Invalid handler name passed to '.__METHOD__);
 
         $handlers = $this->_handlers;
-        $handlers[] = $handler;
+        $handlers[$type][] = $handler;
         $obj = clone $this;
         $obj->_handlers = array_unique($handlers);
         return $obj;

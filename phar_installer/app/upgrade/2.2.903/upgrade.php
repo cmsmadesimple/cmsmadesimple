@@ -103,7 +103,7 @@ foreach( $events as $evt ) {
     }
     $mapping_data[] = $rec;
 }
-$res = mkdir(CMS_ASSETS_PATH.'/configs',0775,true);
+$res = @mkdir(CMS_ASSETS_PATH.'/configs',0775,true);
 file_put_contents( CMS_ASSETS_PATH.'/configs/hook_mapping.json', json_encode($mapping_data, JSON_PRETTY_PRINT) );
 $db->Execute( 'DROP TABLE '.CMS_DB_PREFIX.'event_handler_seq');
 $db->Execute( 'DROP TABLE '.CMS_DB_PREFIX.'events_seq');
