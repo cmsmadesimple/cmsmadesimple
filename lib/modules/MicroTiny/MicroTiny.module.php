@@ -28,7 +28,7 @@ class MicroTiny extends CMSModule
     }
     public function GetFriendlyName() { return $this->Lang("friendlyname");
     }
-    public function GetVersion(){ return '2.2.2';
+    public function GetVersion(){ return '2.3';
     }
     public function HasAdmin() { return TRUE;
     }

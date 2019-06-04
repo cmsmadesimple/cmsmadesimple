@@ -51,7 +51,7 @@ final class FileManager extends CMSModule
 
     public function GetVersion()
     {
-        return '1.6.5';
+        return '1.7';
     }
 
     public function GetHelp()
