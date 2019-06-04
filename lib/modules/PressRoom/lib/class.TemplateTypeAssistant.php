@@ -26,7 +26,7 @@ final class TemplateTypeAssistant
 
     public static function template_help_callback(string $str)
     {
-        $str = trim(Str);
+        $str = trim($str);
         $mod = self::get_mod();
         if( $mod ) {
             $file = $mod->GetModulePath().'/doc/tpltype_'.$str.'.inc';

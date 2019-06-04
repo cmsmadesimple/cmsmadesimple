@@ -117,7 +117,7 @@ $(function(){
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
 
-{if $lock_timeout < 1}
+{if $tpl_id > 0 && $lock_timeout < 1}
    <div class="warning lock-warning" style="width: 95%; text-align: center;">{lang('warn_lockingdisabled')}</div>
 {elseif isset($get_lock)}
 	<div class="warning lock-warning">

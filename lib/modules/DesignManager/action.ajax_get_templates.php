@@ -12,7 +12,7 @@ try {
 
     $tpl_query = new CmsLayoutTemplateQuery($filter);
     $templates = $tpl_query->GetMatches();
-    if( count($templates) ) {
+    if( !empty($templates) ) {
         $smarty->assign('templates',$templates);
         $tpl_nav = array();
         $tpl_nav['pagelimit'] = $tpl_query->limit;
@@ -23,7 +23,7 @@ try {
     }
 
     $designs = CmsLayoutCollection::get_all();
-    if( count($designs) ) {
+    if( !empty($designs) ) {
         $smarty->assign('list_designs',$designs);
         $tmp = array();
         for( $i = 0; $i < count($designs); $i++ ) {

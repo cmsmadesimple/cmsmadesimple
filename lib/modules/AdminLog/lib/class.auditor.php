@@ -49,7 +49,7 @@ class auditor implements \CMSMS\IAuditManager
         }
         $sitename = \cms_siteprefs::get('sitename','CMSMS');
         $msg = "$sitename $sevmsg: $msg";
-        @error_log( $msg, 0 );
+        @error_log( $msg, 4 );
     }
 
     public function notice( string $msg, string $subject = null )

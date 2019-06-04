@@ -156,6 +156,7 @@ Core - General
   - FEATURE:  Site administrators (Modify Site Preferences') can clear the cache (including APC cache) by adding ?__clearcache__ to
      the /admin/index.php request.  Only for logged in admins.
   - IMPROVEMENT: Rationalize the CmsLayoutTemplate code to use a manager class, which takes advantage of the cache.
+     some functions have been deprecated.
   - IMPROVEMENT: Rationalize the ContentOperations class to better take advantage of a cache
   - IMPROVEMENT: CmsApp now acts more as a service provider module.  Begin to remove singletons
   - IMPROVEMENT: All core functionality that utilizes a cache can now take advantage of the APC cache

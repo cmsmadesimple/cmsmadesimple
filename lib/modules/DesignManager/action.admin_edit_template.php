@@ -174,6 +174,7 @@ try {
     $smarty->assign('type_obj', $type_obj);
     $smarty->assign('extraparms', $extraparms);
     $smarty->assign('template', $tpl_obj);
+    $smarty->assign('tpl_id',$tpl_obj->get_id());
 
     $cats = CmsLayoutTemplateCategory::get_all();
     $out = array();
