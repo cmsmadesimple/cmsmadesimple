@@ -13,7 +13,7 @@ $permissionstyle=$this->GetPreference("permissionstyle","xxx");
 $smarty->assign('advancedmode',$advancedmode);
 $smarty->assign('showhiddenfiles',$showhiddenfiles);
 $smarty->assign('showthumbnails',$showthumbnails);
-$smarty->assign('create_thumbnails',$this->GetPreference('create_thumbnails',1));
+$smarty->assign('create_thumbnails',$this->GetPreference('create_thumbnails',0));
 $iconsizes = array();
 $iconsizes['32px'] = $this->Lang('largeicons').' (32px)';
 $iconsizes['16px'] = $this->Lang('smallicons').' (16px)';

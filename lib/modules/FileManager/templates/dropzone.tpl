@@ -1,7 +1,7 @@
 {if !isset($is_ie)}
 {* IE sucks... we only get here for REAL browsers. *}
 <script type="text/javascript">{literal}
-$(document).ready(function(){
+$(function(){
 
     var thediv = '#theme_dropzone';
 
@@ -49,6 +49,7 @@ $(document).on('drop dragover', function(e) {
          stop: function(e,data) {
            $(thediv).progressbar('destroy');
            $(thediv).trigger('dropzone_stop');
+	   $(thediv).val('')
          }
     });
 });
