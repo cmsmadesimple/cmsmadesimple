@@ -22,6 +22,7 @@
  * This file provides the basic abstract content class
  * @package CMS
  */
+use CMSMS\internal\content_assistant;
 
 /**
  * @ignore

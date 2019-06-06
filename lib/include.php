@@ -207,13 +207,11 @@ if (!isset($DONT_LOAD_DB)) {
 if (! isset($CMS_INSTALL_PAGE)) {
     // note: the mact encoder reads a preference, so must happen afer siteprefs and global cache are setup.
     $_mact_encoder = $_app->get_mact_encoder();
-    debug_to_log($_REQUEST,'before decoding');
     if( !$config['allow_old_mact'] && $_mact_encoder->old_mact_exists() ) {
         // somebody is making a request using an old mact.
         $_mact_encoder->remove_old_mact_params();
     }
     $_mact_encoder->expand_secure_mact(false);  // expands the secure MACT stuff into $_REQUEST
-    debug_to_log($_REQUEST,'decoded');
 
     $_app->GetHookMappingManager(); // initialize hook mappings.
 

@@ -4,7 +4,7 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
 
 $jobs = [];
-$job_objs = $this->get_job_queue()-get_all_jobs();
+$job_objs = $this->get_job_queue()->get_all_jobs();
 if( $job_objs ) {
     foreach( $job_objs as $job ) {
         $obj = new StdClass;

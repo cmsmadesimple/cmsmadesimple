@@ -89,7 +89,6 @@ if( is_array($slaves) && count($slaves) ) {
         if( is_array($results) && count($results) ) {
             begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
             foreach( $results as $one ) {
-                debug_to_log($one);
                 $text = isset($one['text'])?$one['text']:'';
                 if( $text ) $text = addslashes($text);
                 $url = isset($one['edit_url'])?$one['edit_url']:'';
