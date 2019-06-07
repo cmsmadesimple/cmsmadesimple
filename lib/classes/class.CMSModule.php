@@ -2314,9 +2314,11 @@ abstract class CMSModule
 
     /**
      * Given a template in a variable, this method processes it through smarty
-     * note, there is no caching involved.
+     *
+     * This method creates a new smarty template using the string passed in as a resource.
      *
      * Note: this function is deprecated and scheduled for removal.
+     * Note: there is no caching involved.
      *
      * @final
      * @param data $data Input template
@@ -2325,7 +2327,11 @@ abstract class CMSModule
      */
     final public function ProcessTemplateFromData( string $data )
     {
-        return $this->action_tpl->fetch('string:'.$data);
+        $root_smarty = $this->app->GetSmarty();
+        $parent = $this->action_tpl;
+        if( !$parent ) $parent = $root_smarty;
+        $tpl = $root_smarty->CreateTemplate('string:'.$data, null, null, $parent);
+        return $tpl->fetch();
     }
 
     /**
