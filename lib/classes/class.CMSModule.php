@@ -2328,9 +2328,7 @@ abstract class CMSModule
     final public function ProcessTemplateFromData( string $data )
     {
         $root_smarty = $this->app->GetSmarty();
-        $parent = $this->action_tpl;
-        if( !$parent ) $parent = $root_smarty;
-        $tpl = $root_smarty->CreateTemplate('string:'.$data, null, null, $parent);
+        $tpl = $root_smarty->CreateTemplate('string:'.$data, null, null, $root_smarty);
         return $tpl->fetch();
     }
 
@@ -2338,6 +2336,7 @@ abstract class CMSModule
      * Process a smarty template associated with a module through smarty and return the results
      *
      * @final
+     * @depreacted
      * @param string $tpl_name Template name
      * @param string $designation (optional) Designation (ignored)
      * @param bool $cache (optional) Cachable flag (ignored)
