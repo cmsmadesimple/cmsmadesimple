@@ -892,11 +892,11 @@ function cms_move_uploaded_file( string $tmpfile, string $destination )
  *   xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
  *
  * @param string $ip IP address to test
- * @param array  $checklist Array of match expressions
+ * @param string|array  $checklist Array of match expressions
  * @return bool
  * Rolf: only used in lib/content.functions.php
  */
-function cms_ipmatches(string $ip,array $checklist)
+function cms_ipmatches(string $ip, $checklist)
 {
     $_testip = function($range,$ip) {
         $result = 1;

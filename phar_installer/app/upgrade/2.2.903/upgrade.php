@@ -21,8 +21,9 @@ if( count($udt_list) ) {
             return;
         }
 
+        $code = null;
         if( $row['description'] ) {
-            $code = "/*\n";
+            $code .= "/*\n";
             $code .= $row['description'];
             $code .= "\n*/\n\n";
         }
