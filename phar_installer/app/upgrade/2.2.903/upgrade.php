@@ -27,7 +27,7 @@ if( count($udt_list) ) {
             $code .= "\n*/\n\n";
         }
         $code .= "// for security purposes, we ensure that this file cannot be directly requested by browsers\n";
-        $code .= "if !defined('CMS_VERSION\)) exit;\n\n";
+        $code .= "if !defined('CMS_VERSION')) exit;\n\n";
         $code .= $row['code'];
 
         if( !startswith( $code, '<?php') ) $code = "<?php\n".$code;
