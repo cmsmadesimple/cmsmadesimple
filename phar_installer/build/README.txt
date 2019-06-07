@@ -44,14 +44,14 @@ Building the release packages
 1.  Change dir into the build directory
     Note:  You only need the phar_installer directory to do a build... but use caution that it is from the proper branch of cmsms.
 
-2.  Executebuild_release.php
+2.  Execute build_release.php
     -- execute build_release.php -h for help
     ** This script is only tested on linux (I'm allergic to windoze)
  
     ** This script requires a bit of configuration
    
     a: requires the php-cli package
-       (from ubuntu:  sudo apt-get install php5-cgi)
+       (from ubuntu:  sudo apt-get install php5-cli)
 
     b: requires that the php-cli package be allowed (in its configuration) to create phar files
        (from ubuntu:  vi /etc/php5/cli/php.ini; set phar.readonly = Off;)
