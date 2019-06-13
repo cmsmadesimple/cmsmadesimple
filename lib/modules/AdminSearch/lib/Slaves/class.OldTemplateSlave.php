@@ -1,34 +1,37 @@
 <?php
+namespace AdminSearch\Slaves;
+use AdminSearch;
+use CMSMS\Database\Connection as Database;
 
-final class AdminSearch_oldmodtemplate_slave extends AdminSearch_slave
+final class OldTemplateSlave extends AbstractSlave
 {
+    private $mod;
+    private $db;
+
+    public function __construct(AdminSearch $mod, Database $db)
+    {
+        $this->mod = $mod;
+        $this->db = $db;
+    }
+
     public function get_name()
     {
-        $mod = cms_utils::get_module('AdminSearch');
-        return $mod->Lang('lbl_oldmodtemplate_search');
+        return $this->mod->Lang('lbl_oldmodtemplate_search');
     }
 
     public function get_description()
     {
-        $mod = cms_utils::get_module('AdminSearch');
-        return $mod->Lang('desc_oldmodtemplate_search');
-    }
-
-    public function check_permission()
-    {
-        return check_permission(get_userid(),'Modify Templates');
+        return $this->mod->Lang('desc_oldmodtemplate_search');
     }
 
     public function get_matches()
     {
         $userid = get_userid();
 
-        $db = cmsms()->GetDb();
         $query = 'SELECT module_name,template_name,content FROM '.CMS_DB_PREFIX.'module_templates WHERE content LIKE ?';
-        $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
+        $dbr = $this->db->GetArray($query,array('%'.$this->get_text().'%'));
         if( is_array($dbr) && count($dbr) ) {
             $output = array();
-            $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
             foreach( $dbr as $row ) {
                 // here we could actually have a smarty template to build the description.
@@ -55,8 +58,7 @@ final class AdminSearch_oldmodtemplate_slave extends AdminSearch_slave
 
     public function get_section_description()
     {
-        $mod = cms_utils::get_module('AdminSearch');
-        return $mod->Lang('sectiondesc_oldmodtemplates');
+        return $this->mod->Lang('sectiondesc_oldmodtemplates');
     }
 } // end of class
 

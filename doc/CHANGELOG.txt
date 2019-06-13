@@ -255,10 +255,10 @@ Search  - v1.52
   - Adds the ajax_getwords action for jquery-ui-autocomplete usage
   - more...
 
-AdminSearch v1.0.5
+AdminSearch v1.1
  - Rationalize the code a bit (remove un-necessary files).
- - Now optionally use a hook to get search slaves.
- - Optmization to the gathering of slaves.
+ - Adds the ability to search text files within the /assets directory (excluding modules)
+ - Rename of slave classes to use namespaces. 
 
 DesignManager v1.1.6
  - Now properly handle renaming exported stylesheets and templates.

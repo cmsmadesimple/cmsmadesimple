@@ -1,9 +1,9 @@
 <?php
 namespace PressRoom;
 use PressRoom;
-use AdminSearch_slave;
+use AdminSearch\Slaves\AbstractSlave;
 
-final class AdminSearchSlave extends AdminSearch_slave
+final class AdminSearchSlave extends AbstractSlave
 {
     private $mod;
     private $mgr;

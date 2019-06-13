@@ -1,16 +1,30 @@
 <?php
+namespace AdminSearch\Slaves;
 
-abstract class AdminSearch_slave
+abstract class AbstractSlave
 {
-
     private $_params = array();
 
-    public function set_text($text) {
+    public function set_text($text)
+    {
         $this->set_params(array('search_text'=>$text));
     }
 
-    protected function get_text() {
+    protected function get_text()
+    {
         if( isset($this->_params['search_text']) ) return $this->_params['search_text'];
+    }
+
+    protected function get_searchterm()
+    {
+        $text = $this->get_text();
+        if( !$text ) return;
+
+        // _ and % are wildcard chars
+        if( strpos($text,'_') !== FALSE ) $text = str_replace('_','\_',$text);
+        if( strpos($text,'%') !== FALSE ) $text = str_replace('%','\%',$text);
+        $text = '%'.$text.'%';
+        return $text;
     }
 
     public function set_params($params)
@@ -36,12 +50,9 @@ abstract class AdminSearch_slave
         return FALSE;
     }
 
-    abstract public function check_permission();
     abstract public function get_name();
     abstract public function get_description();
     abstract public function get_matches();
-    public function get_section_description() {
-    }
-}
+    public function get_section_description() {}
 
-?>
+} // class

@@ -8,6 +8,7 @@ $lang['desc_content_search'] = 'Search for matching text in content pages';
 $lang['desc_filter_all'] = 'Toggle all filters';
 $lang['desc_oldmodtemplate_search'] = 'Search old module templates.';
 $lang['desc_template_search'] = 'Search for matching text in templates';
+$lang['desc_textasset_search'] = 'Search for matching text from text assets';
 
 // E
 $lang['error_nosearchtext'] = 'Please enter a search term';
@@ -44,6 +45,7 @@ $lang['lbl_gcb_search'] = 'Search Global Content Blocks';
 $lang['lbl_oldmodtemplate_search'] = 'Search module templates';
 $lang['lbl_search_desc'] = 'Search Descriptions <em>(where applicable)</em>';
 $lang['lbl_template_search'] = 'Search Templates';
+$lang['lbl_textasset_search'] = 'Search text assets';
 
 // M
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';

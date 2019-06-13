@@ -18,6 +18,12 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
+use AdminSearch\Slaves\ContentSlave;
+use AdminSearch\Slaves\LayoutTemplateSlave;
+use AdminSearch\Slaves\OldTemplateSlave;
+use AdminSearch\Slaves\StylesheetSlave;
+use AdminSearch\Slaves\TextAssetSlave;
+
 if( !isset($gCms) ) exit;
 
 final class AdminSearch extends CMSModule
@@ -28,11 +34,11 @@ final class AdminSearch extends CMSModule
     }
 
     public function GetVersion() {
-        return '1.0.5';
+        return '1.1';
     }
 
     public function MinimumCMSVersion() {
-        return '1.12-alpha0';
+        return '2.2.900';
     }
 
     public function LazyLoadAdmin() {
@@ -111,17 +117,23 @@ final class AdminSearch extends CMSModule
 
     public function get_adminsearch_slaves()
     {
-        $dir = dirname(__FILE__).'/lib/';
-        $files = glob($dir.'/class.AdminSearch*slave.php');
-        if( count($files) ) {
-            $output = array();
-            foreach( $files as $onefile ) {
-                $parts = explode('.',basename($onefile));
-                $classname = implode('.',array_slice($parts,1,count($parts)-2));
-                if( $classname == 'AdminSearch_slave' ) continue;
-                $output[] = $classname;
-            }
-            return $output;
+        $contentMgr = $this->GetModuleInstance('CMSContentManager');
+        $designMgr = $this->GetModuleInstance('DesignManager');
+        $contentops = $this->cms->GetContentOperations();
+        $tplmgr = $this->cms->get_template_manager();
+        $db = $this->GetDb();
+
+        $out[] = new ContentSlave($this, $contentMgr, $db, $contentops);
+
+        if( $this->CheckPermission('Modify Templates') ) {
+            $out[] = new LayoutTemplateSlave($this, $designMgr, $db, $tplmgr);
+            $out[] = new OldTemplateSlave($this, $db);
         }
+        if( $this->CheckPermission('Manage Stylesheets') ) {
+            $out[] = new StylesheetSlave($this, $designMgr, $db);
+        }
+
+        $out[] = new TextAssetSlave($this);
+        return $out;
     }
 } // class

@@ -18,6 +18,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
+use AdminSearch\Slaves\AbstractSlave;
+
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
 
@@ -80,9 +82,7 @@ if( is_array($slaves) && count($slaves) ) {
             if( !is_subclass_of($one_slave['class'],'AdminSearch_slave') ) continue;
             $obj = new $one_slave['class'];
         }
-        if( !is_object($obj) ) continue;
-        if( !is_a($obj,'AdminSearch_slave') ) continue;
-        if( !$obj->check_permission() ) continue;
+        if( ! $obj instanceof AbstractSlave ) continue;
 
         $obj->set_params($searchparams);
         $results = $obj->get_matches();

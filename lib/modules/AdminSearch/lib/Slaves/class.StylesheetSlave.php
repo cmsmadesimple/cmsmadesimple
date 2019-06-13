@@ -1,26 +1,35 @@
 <?php
+namespace AdminSearch\Slaves;
+use AdminSearch;
+use AdminSearch_tools;
+use DesignManager;
+use CMSMS\Database\Connection as Database;
+use CmsLayoutStylesheet;
 
-final class AdminSearch_css_slave extends AdminSearch_slave
+final class StylesheetSlave extends AbstractSlave
 {
+    private $mod;
+    private $dm;
+    private $db;
+
+    public function __construct(AdminSearch $mod, DesignManager $dm, Database $db)
+    {
+        $this->mod = $mod;
+        $this->dm = $dm;
+        $this->db = $db;
+    }
+
     public function get_name()
     {
-        $mod = cms_utils::get_module('AdminSearch');
-        return $mod->Lang('lbl_css_search');
+        return $this->mod->Lang('lbl_css_search');
     }
 
     public function get_description()
     {
-        $mod = cms_utils::get_module('AdminSearch');
-        return $mod->Lang('desc_css_search');
+        return $this->mod->Lang('desc_css_search');
     }
 
-    public function check_permission()
-    {
-        $userid = get_userid();
-        return check_permission($userid,'Manage Stylesheets');
-    }
-
-    private function check_css_matches(\CmsLayoutStylesheet $css)
+    private function check_css_matches(CmsLayoutStylesheet $css)
     {
         if( strpos($css->get_name(),$this->get_text()) !== FALSE ) return TRUE;
         if( strpos($css->get_content(),$this->get_text()) !== FALSE ) return TRUE;
@@ -35,7 +44,7 @@ final class AdminSearch_css_slave extends AdminSearch_slave
         return $_mod;
     }
 
-    private function get_css_match_info(\CmsLayoutStylesheet $css)
+    private function get_css_match_info(CmsLayoutStylesheet $css)
     {
         $one = $css->get_id();
         $intext = $this->get_text();
@@ -51,7 +60,7 @@ final class AdminSearch_css_slave extends AdminSearch_slave
             $text = str_replace("\r",'',$text);
             $text = str_replace("\n",'',$text);
         }
-        $url = $this->get_mod()->create_url( 'm1_','admin_edit_css','', [ 'css'=>$one ] );
+        $url = $this->dm->create_url( 'm1_','admin_edit_css','', [ 'css'=>$one ] );
         $url = str_replace('&amp;','&',$url);
         $title = $css->get_name();
         if( $css->has_content_file() ) {
@@ -67,16 +76,14 @@ final class AdminSearch_css_slave extends AdminSearch_slave
 
     public function get_matches()
     {
-        $db = cmsms()->GetDb();
-        $mod = $this->get_mod();
         // get all of the stylesheet ids
         $sql = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME.' ORDER BY name ASC';
-        $all_ids = $db->GetCol($sql);
+        $all_ids = $this->db->GetCol($sql);
         $output = [];
         if( count($all_ids) ) {
             $chunks = array_chunk($all_ids,15);
             foreach( $chunks as $chunk ) {
-                $css_list = \CmsLayoutStylesheet::load_bulk($chunk);
+                $css_list = CmsLayoutStylesheet::load_bulk($chunk);
                 foreach( $css_list as $css ) {
                     if( $this->check_css_matches($css) ) $output[] = $this->get_css_match_info($css);
                 }
