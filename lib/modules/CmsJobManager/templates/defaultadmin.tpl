@@ -35,7 +35,7 @@ $(document).ready(function(){
 		<td>{$job->created|relative_time}</td>
 		<td>
 		   {if $job->start && $job->start < $smarty.now - $async_freq}<span style="color: red;">
-			   {elseif $job->start < $smarty.now + async_freq}<span style="color: green;">
+			   {elseif $job->start < $smarty.now + $async_freq}<span style="color: green;">
 		   {else}<span>{/if}
 		   {if $job->start}{$job->start|relative_time}{/if}
 		   </span>
