@@ -32,7 +32,7 @@ use cms_config;
  * @package CMS
  * @since 0.1
  */
-class Smarty extends smarty_base_template
+class Smarty extends smarty_theme_template
 {
     /**
      * @ignore
@@ -76,6 +76,7 @@ class Smarty extends smarty_base_template
 
         // common resources.
         //$this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
+        $this->registerResource('cms_theme', new \CMSMS\internal\smarty_resource_cmstheme());
         $this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
         $this->registerResource('module_db_tpl',new \CMSMS\internal\module_db_template_resource());
         $this->registerResource('module_file_tpl',new \CMSMS\internal\module_file_template_resource());

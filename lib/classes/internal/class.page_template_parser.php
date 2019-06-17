@@ -221,7 +221,7 @@ class page_template_parser extends \Smarty_Internal_Template
         // we need a new smarty object because we do not want registered plugins, error handlers and cruft.
         // but we do want template directories, and resources.
         $global_smarty = \cms_utils::get_smarty();
-        $smarty = new \Smarty;
+        $smarty = new smarty_theme_template();  //
         $smarty->setCompileDir(TMP_TEMPLATES_C_LOCATION);
         $smarty->registered_resources = $global_smarty->registered_resources;
         $dirs = $global_smarty->getTemplateDir();

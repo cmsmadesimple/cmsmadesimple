@@ -117,7 +117,7 @@ class Content extends ContentBase
     public function SetProperties()
     {
         parent::SetProperties();
-        $this->AddProperty('design_id',0,self::TAB_OPTIONS);
+        //$this->AddProperty('design_id',0,self::TAB_OPTIONS);
         $this->AddProperty('template_rsrc',0,self::TAB_OPTIONS);
         $this->AddProperty('searchable',20,self::TAB_OPTIONS);
         $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
@@ -156,7 +156,7 @@ class Content extends ContentBase
     public function FillParams(array $params,bool $editing = false)
     {
         if (isset($params)) {
-            $parameters = array('pagedata','searchable','disable_wysiwyg','design_id','wantschildren');
+            $parameters = array('pagedata','searchable','disable_wysiwyg','wantschildren');
 
             //pick up the template id before we do parameters
             if (isset($params['template_rsrc'])) {
@@ -195,7 +195,7 @@ class Content extends ContentBase
                         // nothing
                         break;
                     default:
-                        if( count($blocks) && isset($blocks[$oneparam]) ) {
+                        if( !empty($blocks) && isset($blocks[$oneparam]) ) {
                             // it's a content block.
                             $val = $val;
                         } else {
@@ -314,7 +314,7 @@ class Content extends ContentBase
             $result = false;
         }
 
-        return (count($errors) > 0?$errors:FALSE);
+        return (!empty($errors)) ? $errors : FALSE;
     }
 
     public function TemplateResource()
@@ -376,27 +376,7 @@ class Content extends ContentBase
     protected function get_template_list()
     {
         static $_list;
-        if( is_array($_list) && count($_list) ) return $_list;
-
-        $_list = null;
-        $config = \cms_config::get_instance();
-        if( empty($config['page_template_list']) ) {
-            $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
-            if( is_array($_tpl) && count($_tpl) > 0 ) {
-                foreach( $_tpl as $tpl_id => $tpl_name ) {
-                    $_list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
-                }
-            }
-        }
-        else {
-            $raw = $config['page_template_list'];
-            if( is_string($raw) ) $raw = [ lang('default')=>$raw ];
-
-            foreach( $raw as $label => $rsrc ) {
-		if( (string)(int)$label == $label ) $label = $rsrc;
-                $_list[] = [ 'label'=>$label, 'value'=>$rsrc ];
-            }
-        }
+        if( !$_list ) $_list = cmsms()->get_page_template_list();
         return $_list;
     }
 
@@ -414,6 +394,7 @@ class Content extends ContentBase
 
         switch($one) {
             case 'design_id':
+                break;
                 if( $config['page_template_list'] ) break;
                 try {
                     $_designlist = CmsLayoutCollection::get_list();
@@ -446,58 +427,58 @@ class Content extends ContentBase
                        if( !$current ) $current = $this->TemplateId();
                        $options = $this->get_template_list();
 
-                       $out = \CmsFormUtils::create_dropdown('template_rsrc', $options, $current, ['id'=>'template_rsrc'] );
+                       $out = CmsFormUtils::create_dropdown('template_rsrc', $options, $current, ['id'=>'template_rsrc'] );
                        $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template',lang('help_title_editcontent_template'));
-                      return array('<label for="template_rsrc">*'.lang('template').':</label>'.$help,$out);
+                       return ['<label for="template_rsrc">*'.lang('template').':</label>'.$help, $out];
                 }
                 catch( CmsException $e ) {
-                    // nothing here yet.
+                       // nothing here yet.
                 }
                 break;
 
             case 'pagemetadata':
                 $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagemeta',lang('help_title_content_pagemeta'));
                 return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,
-             CmsFormUtils::create_textarea(array('name'=>'metadata','value'=>$this->MetaData(),
-															 'classname'=>'pagesmalltextarea',
-															 'width'=>80,'height'=>3,
-															 'id'=>'metadata')));
+                             CmsFormUtils::create_textarea(array('name'=>'metadata','value'=>$this->MetaData(),
+                                                                 'classname'=>'pagesmalltextarea',
+                                                                 'width'=>80,'height'=>3,
+                                                                 'id'=>'metadata')));
 
             case 'pagedata':
                 $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagedata',lang('help_title_content_pagedata'));
                 return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>'.$help,
-             	    CmsFormUtils::create_textarea(array('name'=>'pagedata','value'=>$this->GetPropertyValue('pagedata'),
-															 'width'=>80,'height'=>3,
-															 'classname'=>'pagesmalltextarea','id'=>'id_pagedata')));
+                             CmsFormUtils::create_textarea(array('name'=>'pagedata','value'=>$this->GetPropertyValue('pagedata'),
+                                                                 'width'=>80,'height'=>3,
+                                                                 'classname'=>'pagesmalltextarea','id'=>'id_pagedata')));
 
             case 'searchable':
                 $searchable = $this->GetPropertyValue('searchable');
                 if( $searchable == '' ) $searchable = 1;
                 $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_searchable',lang('help_title_page_searchable'));
                 return array('<label for="id_searchable">'.lang('searchable').':</label>'.$help,
-                    '<input type="hidden" name="searchable" value="0"/>
+                             '<input type="hidden" name="searchable" value="0"/>
                     <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>');
-            // phpcs shut up
+                    // phpcs shut up
 
             case 'defaultcontent':
                 if( $this->IsDefaultPossible() && check_permission( get_userid(), 'Manage All Content') ) {
-                        $default = $this->DefaultContent();
-                        $help = '&nbsp'.cms_admin_utils::get_help_tag('core','help_page_default',lang('help_title_page_default'));
-                        $attrtext = '';
-                        $label = '<label for="id_dfltcontent">'.lang('prompt_defaultcontent').':</label>'.$help;
+                    $default = $this->DefaultContent();
+                    $help = '&nbsp'.cms_admin_utils::get_help_tag('core','help_page_default',lang('help_title_page_default'));
+                    $attrtext = '';
+                    $label = '<label for="id_dfltcontent">'.lang('prompt_defaultcontent').':</label>'.$help;
                     if( $default ) {
                         return [ $label,
-                        '<input id="id_dfltcontent" type="checkbox" disabled value="1" checked/>'
-                        ];
+                                 '<input id="id_dfltcontent" type="checkbox" disabled value="1" checked/>'
+                            ];
                     }
                     else {
                         return [ $label,
-                        '<input type="hidden" name="defaultcontent" value="0"/>
+                                 '<input type="hidden" name="defaultcontent" value="0"/>
 						  <input id="id_dfltcontent" type="checkbox" name="defaultcontent" value="1"/>'
-                        ];
+                            ];
                     }
                 }
-		              break;
+                break;
 
             case 'disable_wysiwyg':
                 $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');

@@ -502,6 +502,7 @@ final class CmsApp
         return $_obj;
     }
 
+
     /**
     * Get a handle to the CMS Smarty object.
     * If it does not yet exist, this method will instantiate it.
@@ -751,7 +752,7 @@ final class CmsApp
     }
 
     /**
-     * Get a theme manager object
+     * Get an admin theme manager object
      *
      * @since 2.3
      * @internal
@@ -797,6 +798,53 @@ final class CmsApp
             if( !$_obj ) throw new \RuntimeException("Could not find an admin theme to instantiate");
         }
         return $_obj;
+    }
+
+    /**
+     * Get a list of page templates that are displayable to editors.
+     *
+     * @return array An array of hashes, each entry is a hash with 'label' and 'value' properties.
+     * @internal
+     * @ignore
+     * @access private
+     */
+    public function get_page_template_list() : array
+    {
+        $list = null;
+        $page_template_list = $this->GetConfig()['page_template_list'];
+        if( !empty($page_template_list) ) {
+            if( is_string($page_template_list) ) $page_template_list = [$page_template_list];
+            foreach( $page_template_list as $lbl => $val ) {
+                if( (int) $lbl > 0 && trim($lbl) == $lbl ) $lbl = $val;
+                $list[] = ['value'=>$val, 'label'=>$lbl ];
+            }
+            return $list;
+        }
+
+        $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
+        if( is_array($_tpl) && count($_tpl) > 0 ) {
+            foreach( $_tpl as $tpl_id => $tpl_name ) {
+                $list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
+            }
+        }
+        // read from theme directories if they exit.
+        $themes = glob(CMS_ASSETS_PATH.'/themes/*/theme.json');
+        if( !empty($themes) ) {
+            foreach( $themes as $theme_json ) {
+                $theme = basename(dirname($theme_json));
+                $json = json_decode(file_get_contents($theme_json));
+                if( !$json || !isset($json->page_templates)  ) continue;
+                if( !is_array($json->page_templates) || !isset($json->page_templates[0]) ) continue;
+                foreach( $json->page_templates as $one ) {
+                    if( !isset($one->label) || !isset($one->template) || !$one->label || !$one->template ) continue;
+                    $one->label = $theme.' : '.$one->label;
+                    $one->value = "cms_theme:$theme;".$one->template;
+                    $list[] = json_decode(json_encode($one), TRUE);
+                }
+            }
+        }
+        if( empty($list) ) throw new \LogicException('Could not determine a template list');
+        return $list;
     }
 
     /**

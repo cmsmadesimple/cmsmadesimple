@@ -39,7 +39,6 @@ namespace CMSMS\internal;
  */
 class smarty_base_template extends \Smarty
 {
-
     /**
      * Smarty 2 BC
      *
