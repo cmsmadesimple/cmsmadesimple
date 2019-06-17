@@ -393,6 +393,7 @@ class Content extends ContentBase
             if( is_string($raw) ) $raw = [ lang('default')=>$raw ];
 
             foreach( $raw as $label => $rsrc ) {
+		if( (string)(int)$label == $label ) $label = $rsrc;
                 $_list[] = [ 'label'=>$label, 'value'=>$rsrc ];
             }
         }
@@ -446,7 +447,7 @@ class Content extends ContentBase
                        $options = $this->get_template_list();
 
                        $out = \CmsFormUtils::create_dropdown('template_rsrc', $options, $current, ['id'=>'template_rsrc'] );
-                      $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template',lang('help_title_editcontent_template'));
+                       $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template',lang('help_title_editcontent_template'));
                       return array('<label for="template_rsrc">*'.lang('template').':</label>'.$help,$out);
                 }
                 catch( CmsException $e ) {
