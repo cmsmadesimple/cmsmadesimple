@@ -33,14 +33,15 @@ function smarty_function_cms_render_css( $params, $template )
         $template->right_delimiter = ']]';
         $tmp = $template->force_compile;
         $template->force_compile = $force;
-        $combined_css = $template->fetch('string:'+$combined_css);  // allows caching of the compiled template.
+        $combined_css = $template->fetch('string:'.$combined_css);  // allows caching of the compiled template.
         $template->force_compile = $tmp;
         $template->left_delimiter = '{';
         $template->right_delimiter = '}';
+        return $combined_css;
     };
 
     $hook_manager = $gCms->get_hook_manager();
-    if( cms_to_bool(get_parameter_value($params,'smarty_procssing')) ) {
+    if( cms_to_bool(get_parameter_value($params,'smarty_processing')) ) {
         $hook_manager->add_hook('Core::PostProcessCSS', $do_smarty_postprocess, $hook_manager::PRIORITY_HIGH );
     }
     $gCms->get_hook_manager()->add_hook( 'Core::ContentPostRender', $on_postrender );
