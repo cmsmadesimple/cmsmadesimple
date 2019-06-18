@@ -588,7 +588,7 @@ EOT;
       $tmp_a = array_keys($this->_list_a);
       $tmp_b = array_keys($this->_list_b);
       $out = array_diff($tmp_a,$tmp_b);
-      if( count($out) && count($this->_donotdelete) ) {
+      if( !empty($out) && !empty($this->_donotdelete) ) {
           foreach( $out as $file ) {
               $skipped = false;
               foreach( $this->_donotdelete as $nd ) {
