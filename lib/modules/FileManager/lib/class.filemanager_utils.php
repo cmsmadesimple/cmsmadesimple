@@ -305,7 +305,7 @@ final class filemanager_utils
     public static function mime_content_type($filename)
     {
         $mime_type = null;
-        if( version_compare(phpversion(),'5.3','ge') && function_exists('finfo_open') ) {
+        if( function_exists('finfo_open') ) {
             $fh = finfo_open(FILEINFO_MIME_TYPE);
             if( $fh ) {
                 $mime_type = finfo_file($fh,$filename);

@@ -37,7 +37,7 @@ function enable_action_buttons() {
         if (dirs == 0) enable_button('#btn_copy');
         if (arch == 1) enable_button('#btn_unpack');
         if (imgs == 1) enable_button('#btn_view,#btn_thumb,#btn_resizecrop,#btn_rotate');
-        if (text == 1) enable_button('#btn_view');
+        if (text == 1) enable_button('#btn_view,#btn_textedit');
     } else if (files > 1 && dirs == 0) {
         // multiple files selected
         enable_button('#btn_delete,#btn_copy,#btn_move');
@@ -139,6 +139,7 @@ $(document).ready(function () {
 		{filebtn id='btn_move' iname="{$actionid}fileactionmove" icon='ui-icon-arrow-4-diag' text=$mod->Lang('move') title=$mod->Lang('title_move')}
 		{filebtn id='btn_copy' iname="{$actionid}fileactioncopy" icon='ui-icon-copy' text=$mod->Lang('copy') title=$mod->Lang('title_copy')}
 		{if $mod->AdvancedAccessAllowed()}
+		{filebtn id='btn_textedit' iname="{$actionid}fileactiontextedit" icon='ui-icon-edit' text=$mod->Lang('edit') title=$mod->Lang('title_edit')}
 		{filebtn id='btn_unpack' iname="{$actionid}fileactionunpack" icon='ui-icon-suitcase' text=$mod->Lang('unpack') title=$mod->Lang('title_unpack')}
 		{/if}
 		{filebtn id='btn_thumb' iname="{$actionid}fileactionthumb" icon='ui-icon-star' text=$mod->Lang('thumbnail') title=$mod->Lang('title_thumbnail')}

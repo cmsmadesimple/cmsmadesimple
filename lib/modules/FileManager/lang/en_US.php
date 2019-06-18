@@ -61,6 +61,7 @@ $lang['dirtreedeletefail'] = 'An error occurred when deleting this directory. So
 $lang['dirtreedeletesuccess'] = 'The directory including content was successfully deleted.';
 
 // E
+$lang['edit'] = 'Edit';
 $lang['enableadvanced'] = 'Enable advanced mode?';
 $lang['error_dirnotempty'] = 'Directory %s is not empty';
 $lang['error_notwritable'] = 'No write permission to %s';
@@ -91,6 +92,7 @@ $lang['filedeletefail'] = ' was not deleted due to an error';
 $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
 $lang['fileimagetype'] = 'Cannot perform this action on this type of image';
+$lang['filenottexttype'] = 'Cannot perform this action on non text files';
 $lang['fileinfo'] = 'File info';
 $lang['filemovesame'] = 'Cannot move a directory';
 $lang['filename'] = 'File name';
@@ -107,6 +109,8 @@ $lang['filesdeletedfiled'] = '%s file(s) failed being deleted';
 $lang['filesdeletedsuccessfully'] = '%s file(s) was successfully deleted';
 $lang['filesize'] = 'Size';
 $lang['filesmovedfailed'] = '%s file(s) failed being moved';
+$lang['filetoolarge'] = 'The file is too large for this operation';
+$lang['filetypenoteditable'] = 'This file type cannot be edited';
 $lang['filesmovedsuccessfully'] = '%s file(s) was successfully moved';
 $lang['fileview'] = 'File view';
 $lang['folder'] = 'Folder';
@@ -162,6 +166,7 @@ $lang['kb'] = 'kb';
 
 // L
 $lang['largeicons'] = 'Large icons';
+$lang['lbl_content'] = 'File contents';
 
 // M
 $lang['mb'] = 'mb';
@@ -288,6 +293,8 @@ $lang['title_col_fileowner'] = 'This column displays the user name of the owner 
 $lang['title_copy'] = 'Copy the selected item';
 $lang['title_delete'] = 'Delete the selected item';
 $lang['title_dropzone'] = 'You can drop files here from your file manager to automatically begin uploading';
+$lang['title_edit'] = 'Edit the selected item';
+$lang['title_edittextfile'] = 'Edit text file';
 $lang['title_filefield'] = 'Select one or more files they will automatically begin uploading';
 $lang['title_filemanager_settings'] = 'Settings - File Manager';
 $lang['title_move'] = 'Move the selected item to another folder';

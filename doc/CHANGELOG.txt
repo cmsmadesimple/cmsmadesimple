@@ -238,6 +238,8 @@ ModuleManaver v2.2
   - Removes all support for events, now uses hooks
 
 FileManager v1.6.4
+  - When advanced mode is permitted, and enabled access to a simple text file editor (supports syntax hilighters)
+    to allow developers to make simple edits to text files that are writable by the web server.  
   - modified to use CMS_ROOT_URL
   - Add a different icon for navigating up one level.
   - No longer allow uploading any php (or derivative) file.

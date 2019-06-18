@@ -569,7 +569,6 @@ input[type="submit"],
 .ui-button-text {
 	font-size: 13px;
 	margin-right: 2px;
-	text-transform: uppercase
 }
 button.ui-button.ui-state-active {
 	border: 1px solid #d3d3d3;

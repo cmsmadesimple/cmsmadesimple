@@ -80,6 +80,11 @@ if (isset($params["fileactionunpack"]) || $fileaction=="unpack") {
     return;
 }
 
+if (isset($params["fileactiontextedit"]) || $fileaction=="textedit") {
+    include_once(__DIR__."/action.textedit.php");
+    return;
+}
+
 if (isset($params["fileactionthumb"]) || $fileaction=="thumb") {
     include_once(__DIR__."/action.thumb.php");
     return;
