@@ -48,7 +48,7 @@ try {
             if (isset($params['description'])) $css_ob->set_description($params['description']);
             if (isset($params['content'])) $css_ob->set_content($params['content']);
             $typ = array();
-            if (isset($params['media_type'])) $typ = $params['media_type']);
+            if (isset($params['media_type'])) $typ = $params['media_type'];
             $css_ob->set_media_types($typ);
             if (isset($params['media_query'])) $css_ob->set_media_query(cleanValue($params['media_query']));
             if ($this->CheckPermission('Manage Designs')) {
