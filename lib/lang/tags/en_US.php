@@ -1,4 +1,40 @@
 <?php
+$lang['help_function_cms_theme_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will return the complete URL to the top of the named theme's path.</p>
+
+<h3>What parameters does it take:</h3>
+<ul>
+    <li>assign - <em>(string)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;img src="{cms_theme_url}/images/logo.png" alt=""/&gt;</code></pre>
+EOT;
+
+$lang['help_function_cms_theme_path'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will return the complete path to the top of the theme directory.</p>
+
+<h3>What parameters does it take:</h3>
+<ul>
+    <li>assign - <em>(string)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{cms_queue_css file="{cms_theme_path}/css/Simplex-Core.css"}</code></pre>
+EOT;
+
+$lang['help_function_cms_set_theme'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is used within themes to set the name of the current theme.  It is used by the cms_theme smarty resource, the {cms_theme_url} and the {cms_theme_path} plugins.</p>
+
+<h3>What parameters does it take:</h3>
+<ul>
+    <li>theme - <em>(string)</em> - The name of the theme.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{cms_set_theme theme='Simplex'}</code></pre>
+EOT;
+
 $lang['help_function_cms_pagestr->render'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin is the partner to the {cms_pagestr->set} plugin that allows embedding previously set data into meta tags.</p>
