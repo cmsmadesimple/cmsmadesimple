@@ -41,6 +41,7 @@ try {
     switch( $ext ) {
     case 'html':
         $filetype = 'html';
+        break;
     case 'md':
         $filetype = "markdown";
         break;
