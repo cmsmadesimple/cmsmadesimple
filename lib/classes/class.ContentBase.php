@@ -630,6 +630,20 @@ abstract class ContentBase
     /**
      * Set the id of the template associated with this content page.
      *
+     * @since 2.3
+     * @abstract
+     * @param string $rsrc;
+     */
+    public function SetTemplateResource(string $rsrc)
+    {
+        // nothing here.
+    }
+
+    /**
+     * Set the id of the template associated with this content page.
+     *
+     * @deprecated
+     * @see SetTemplateResource
      * @param int $templateid
      */
     public function SetTemplateId(int $templateid)
