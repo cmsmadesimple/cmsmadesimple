@@ -67,17 +67,39 @@ final class CmsContentManagerUtils
         }
 
         if( !$tpl_rsrc ) {
+            // no template resource set in config... so we check DesignManager for a dfault page template
+            // or the first page template and return a tpl_id
             try {
                 $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+                if( !$tpl ) {
+                    $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+                    $list = CmsLayoutTemplate::load_all_by_type($type);
+                    if( empty($list) ) {
+                        throw new \CmsDataNotFoundException('Could not find a default page template');
+                    }
+                    $tpl = $list[0];
+                }
                 $tpl_id = $tpl->get_id();
             }
             catch( \CmsDataNotFoundException $e ) {
-                $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-                $list = CmsLayoutTemplate::load_all_by_type($type);
-                $tpl = $list[0];
-                $tpl_id = $tpl->get_id();
+                // get a theme resource
+                // todo: move me into a class somewhere
+                $theme_exports = glob(CMS_ASSETS_PATH."/themes/*/theme.json");
+                if( !empty($theme_exports) ) {
+                    foreach( $theme_exports as $json_file ) {
+                        $theme_name = trim(basename(dirname($json_file)));
+                        $json_data = json_decode(file_get_contents($json_file));
+                        if( $json_data && isset($json_data->page_templates) && !empty($json_data->page_templates) ) {
+                            $tpl = $json_data->page_templates[0]->template;
+                            $tpl_rsrc = "cms_theme:$theme_name;$tpl";
+			    break;
+                        }
+                    }
+                }
             }
+        }
 
+        if( !$tpl_rsrc ) {
             try {
                 $design_id = \CmsLayoutCollection::load_default()->get_id();
             }

@@ -33,7 +33,7 @@ class smarty_theme_template extends smarty_base_template
             });
     }
 
-    public function theme_manager() : theme_manager
+    public function theme_manager() : current_theme_manager
     {
         if( !$this->theme_manager ) $this->theme_manager = new current_theme_manager();
         return $this->theme_manager;
