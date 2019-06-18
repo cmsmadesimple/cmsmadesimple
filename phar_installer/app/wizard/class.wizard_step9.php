@@ -117,30 +117,48 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 // not an error.
             }
 
-            // copy the filename into the temporary directory.
             $this->message(\__appbase\lang('install_theme'));
             $theme_file = 'simplex_theme.zip';
+            $theme_name = 'Simplex';
+
+            // copy the filename into the temporary directory for unzipping.
             $src_filename = $dir.DIRECTORY_SEPARATOR.$theme_file;
             $tmp_filename = $app->get_my_tmpdir().DIRECTORY_SEPARATOR.$theme_file;
             $cksum = md5_file($src_filename);
             copy($src_filename,$tmp_filename);
             $cksum2 = md5_file($tmp_filename);
             if( $cksum != $cksum2 ) throw new \Exception( \__appbase\lang('error_internal', 907 ));
-            $reader = new design_importer( $tmp_filename, $destdir.DIRECTORY_SEPARATOR.'assets' );
-            $design = $reader->import_design();
+            $theme_dest_dir = $destdir.DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'themes';
+            if( !is_dir($theme_dest_dir)) mkdir($theme_dest_dir,0777,true);
 
-            $design_id = $design->get_id();
-            $design = \CmsLayoutCollection::load( $design_id ); // re-load the design
-            $design->set_default( TRUE );
-            $design->save();
+            // unzip the archive
+            $zip = new \ZipArchive;
+            if( $zip->open($tmp_filename) === TRUE ) {
+                $zip->extractTo( $theme_dest_dir );
+                $zip->close();
+            }
+            $theme_dest_dir = $destdir.DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'themes'.DIRECTORY_SEPARATOR.$theme_name;
+
+            // get the exported templates
+            $theme_json_file = $theme_dest_dir.DIRECTORY_SEPARATOR.'theme.json';
+            if( !is_file($theme_json_file) ) throw new \CmsDataNotFoundException('could not find theme.json in '.$theme_dest_dir);
+            $theme_json = json_decode(file_get_contents($theme_json_file));
+            if( !$theme_json || !isset($theme_json->page_templates) || empty($theme_json->page_templates) ) {
+                throw new \CmsDataNotFoundException('invalid theme.json file at '.$theme_json_file);
+            }
+            if( count($theme_json->page_templates) < 2 || !isset($theme_json->page_templates[0]->template) ) {
+                throw new \CmsDataNotFoundException('invalid theme.json file at '.$theme_json_file);
+            }
+            $dflt_template_rsrc = "cms_theme:$theme_name;".$theme_json->page_templates[0]->template;  // simplex-sub
+            $home_template_rsrc = "cms_theme:$theme_name;".$theme_json->page_templates[1]->template;  // simplex-home
 
             // copy assets/simplex/images to uploads/simplex/images because
             // some of the initial content properties references images in there.
             // TODO: modify the simplex theme to not use additional content blocks, particularly for images
             // so that we don't have to do this cruft
             $this->verbose(\__appbase\lang('msg_copy_theme_images'));
-            $fromdir = $reader->get_destdir().'/images';
-            $todir = "$destdir/uploads/".$reader->get_name().'/images';
+            $fromdir = $theme_dest_dir.'/images';
+            $todir = "$destdir/uploads/$theme_name/images";
             if( is_dir( $fromdir ) && is_readable( $fromdir ) && !is_dir( $todir ) ) {
                 // copy all files in this directory (not recursively)
                 $res = @mkdir( $todir, 0777, true );
@@ -156,23 +174,16 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 }
             }
 
-            // set the 'Simplex-Sub' template as the default.
-            $simplex_sub = \CmsLayoutTemplate::load('Simplex Sub');
-            $simplex_sub->set_type_dflt( TRUE );
-            $simplex_sub->save();
-            // get the simplex-home template.
-            $simplex_home = \CmsLayoutTemplate::load('Simplex Home');
-
-            // default content
+            // import the default content.
             $this->message(\__appbase\lang('install_defaultcontent'));
             $filename = $dir.'/initial_content.xml';
             $contentops = \ContentOperations::get_instance();
-            $reader = new \__appbase\content_reader( $filename, $contentops, null, $design->get_id() );
-            $reader->set_template_callback( function( \ContentBase $obj ) use ($simplex_sub,$simplex_home) {
-                    // callback to get the template id
+            $reader = new \__appbase\content_reader( $filename, $contentops);
+            $reader->set_template_callback( function( \ContentBase $obj ) use($dflt_template_rsrc, $home_template_rsrc) {
+                    // callback to get the template resource
                     // given a content object.
-                    if( $obj->Name() == 'Home' ) return $simplex_home->get_id();
-                    return $simplex_sub->get_id();
+                    if( $obj->Name() == 'Home' ) return $home_template_rsrc;
+                    return $dflt_template_rsrc;
                 });
             $reader->import();
         }
@@ -190,12 +201,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( !endswith($root_url,'/') ) $root_url .= '/';
         $admin_url = $root_url.'admin';
 
-        if( is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo'] && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
+        if( is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo']
+            && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
             try {
                 $this->message(\__appbase\lang('send_admin_email'));
                 $mailer = new \cms_mailer(true,false);
-		$mailer->SetFrom('root@localhost.localdomain');
-		$mailer->SetFromName('CMSMS Installer');
+                $mailer->SetFrom('root@localhost.localdomain');
+                $mailer->SetFromName('CMSMS Installer');
                 $mailer->AddAddress($adminacct['emailaddr']);
                 $mailer->SetSubject(\__appbase\lang('email_accountinfo_subject'));
                 $body = null;

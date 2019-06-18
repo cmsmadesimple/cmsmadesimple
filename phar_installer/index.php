@@ -24,7 +24,7 @@ try {
     _detect_bad_ioncube();
 
     // disable some stuff.
-    @ini_set('opcache.enable',0); // disable zend opcode caching.
+    //@ini_set('opcache.enable',false); // disable zend opcode caching.
     @ini_set('apc.enabled',0); // disable apc opcode caching (for later versions of APC)
     @ini_set('xcache.cacher',0); // disable xcache opcode caching
 

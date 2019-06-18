@@ -12,11 +12,8 @@ class content_reader
     private   $_default_template;
     private   $_template_cb;
 
-    public function __construct( $filename, \ContentOperations $ops, $tpl_id = null, $design_id = null )
+    public function __construct( $filename, \ContentOperations $ops, $tpl_id = null, int $design_id = null )
     {
-        $tpl_id = (int) $tpl_id;
-        if( $tpl_id < 1 ) $tpl_id = $this->_getDefaultTemplateId();
-        if( $tpl_id < 1 ) throw new \Exception('Could not get a valid template id');
         if( !is_file( $filename ) ) throw new \InvalidArgumentException("invalid filename passed to ".___METHOD__);
         $this->design_id = $design_id;
         $this->filename = $filename;
@@ -60,6 +57,7 @@ class content_reader
         if( $this->_template_cb && is_callable( $this->_template_cb ) ) {
             return call_user_func( $this->_template_cb, $content );
         }
+        if( $this->tpl_id < 1 ) throw new \LogicException('No template id specified');
         return $this->tpl_id;
     }
 
@@ -85,8 +83,8 @@ class content_reader
         $tmp = $this->contentops->CheckAliasError($alias);
         if( $tmp ) $alias = '';
         $content_obj->SetAlias($alias);
-        $tpl_id = $this->get_template_for_content( $content_obj );
-        $content_obj->SetTemplateId($tpl_id);
+        $tpl_resource = $this->get_template_for_content( $content_obj );
+        $content_obj->SetTemplateResource($tpl_resource);
 
         // now to get the properties.
         $children = $node->childNodes;
