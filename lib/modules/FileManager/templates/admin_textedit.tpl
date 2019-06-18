@@ -9,7 +9,7 @@
 <div class="pageoverflow">
     <p class="pagetext">{$mod->Lang('lbl_content')}</p>
     <p class="pageinput">
-        {cms_textarea wantedsyntax=$filetype name="content" text=$content rows=25}
+        {cms_textarea wantedsyntax=$filetype name="content" text=$content rows=20}
     </p>
 </div>
 <div class="c_full cf">

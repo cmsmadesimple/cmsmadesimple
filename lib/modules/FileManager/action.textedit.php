@@ -20,7 +20,7 @@ try {
     }
 
     $filename = $this->decodefilename($encoded);
-    $src = filemanager_utils::join_path($this->config['root_path'],filemanager_utils::get_cwd(),$filename);
+    $src = filemanager_utils::join_path(CMS_ROOT_PATH,filemanager_utils::get_cwd(),$filename);
     if( !is_file($src) ) throw new \RuntimeException($this->Lang('filenotfound'));
     if( !is_writable($src) ) throw new \RuntimeException($this->Lang('insufficientpermission',$filename));
 

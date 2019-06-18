@@ -80,6 +80,11 @@ if (isset($params["fileactionunpack"]) || $fileaction=="unpack") {
     return;
 }
 
+if (isset($params["fileactionnewtextfile"]) || $fileaction=="newtextfile") {
+    include_once(__DIR__."/action.newtextfile.php");
+    return;
+}
+
 if (isset($params["fileactiontextedit"]) || $fileaction=="textedit") {
     include_once(__DIR__."/action.textedit.php");
     return;
@@ -101,5 +106,3 @@ if (isset($params['fileactionrotate']) || $fileaction == 'rotate') {
 }
 
 $this->Redirect($id,"defaultadmin",$returnid,array("path"=>$params["path"],"fmerror"=>"unknownfileaction"));
-
-?>
