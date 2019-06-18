@@ -76,7 +76,7 @@ $('#css_selall').cmsms_checkall();
 	    {else}
 	      {$hn}
 	    {/if}
-	  {elseif !$t1 || count($t1) == 0}
+	  {elseif empty($tl)}
 	    <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
 	  {else}
 	    {capture assign='tooltip_designs'}{strip}
