@@ -321,31 +321,13 @@ class Content extends ContentBase
     {
         $config = \cms_config::get_instance();
         $tmp = $this->GetPropertyValue('template_rsrc');
-        if( !$tmp ) $tmp = $this->mTemplateId;
-        if( $tmp ) {
-            $num = (int) $tmp;
-            if( $num > 0 && trim($num) == $tmp ) {
-                // numeric assume design manager.
-                return "cms_template:$tmp";
-            } else {
-                return $tmp;
-            }
-        }
+        if( !$tmp ) $tmp = 'cms_template:'.$this->mTemplateId;
+        return $tmp;
     }
 
-    private function get_template_resource()
+    public function SetTemplateResource(string $rsrc)
     {
-        // used for the parser.
-        $config = \cms_config::get_instance();
-        if( empty($config['page_template_list']) ) {
-            return 'cms_template:'.$this->TemplateId();
-        } else {
-            $raw = $config['page_template_list'];
-            if( is_string($raw) ) return $raw;
-            $val = current($raw);
-            if( strpos($val,':') === FALSE ) $val = 'cmsfile:'.$val;
-            return $val;
-        }
+        $this->SetPropertyValue('template_rsrc', $rsrc);
     }
 
     /**
