@@ -21,7 +21,8 @@ function enable_action_buttons() {
         dirs = $("#filesarea input[type='checkbox'].dir").filter(':checked').length,
         arch = $("#filesarea input[type='checkbox'].archive").filter(':checked').length,
         text = $("#filesarea input[type='checkbox'].text").filter(':checked').length,
-        imgs = $("#filesarea input[type='checkbox'].image").filter(':checked').length;
+        imgs = $("#filesarea input[type='checkbox'].image").filter(':checked').length,
+        empty = $("#filesarea input[type='checkbox'].empty").filter(':checked').length;
 
     disable_button('button.filebtn');
     $('button.filebtn').attr('disabled','disabled');
@@ -35,10 +36,10 @@ function enable_action_buttons() {
         enable_button('#btn_move');
         enable_button('#btn_delete');
 
-        if (dirs == 0) enable_button('#btn_copy');
-        if (arch == 1) enable_button('#btn_unpack');
-        if (imgs == 1) enable_button('#btn_view,#btn_thumb,#btn_resizecrop,#btn_rotate');
-        if (text == 1) enable_button('#btn_view,#btn_textedit');
+        if (dirs == 0 && empty == 0) enable_button('#btn_copy');
+        if (arch == 1 && empty == 0) enable_button('#btn_unpack');
+        if (imgs == 1 && empty == 0) enable_button('#btn_view,#btn_thumb,#btn_resizecrop,#btn_rotate');
+        if (text == 1 || empty == 1) enable_button('#btn_view,#btn_textedit');
     } else if (files > 1 && dirs == 0) {
         // multiple files selected
         enable_button('#btn_delete,#btn_copy,#btn_move');

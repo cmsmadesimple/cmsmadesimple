@@ -21,7 +21,6 @@ try {
             if( !preg_match('/^[a-z0-9][a-z0-9\ \-_]*\.[a-z0-9]{1,5}$/ui',$filename) ) throw new \RuntimeException($this->Lang('invalidfilename'));
             $ext = strtolower(substr($filename, strrpos($filename, '.')+1));
             if( startswith($ext,'php') ) throw new \RuntimeException($this->Lang('filetypenoteditable'));
-            if( startswith($content,'<?') !== FALSE ) throw new \RuntimeException($this->Lang('filetypenoteditable'));
 
             // make sure we can write, and that the file does not exist)
             $dir = filemanager_utils::join_path(CMS_ROOT_PATH, filemanager_utils::get_cwd());

@@ -63,7 +63,7 @@ for ($i = 0; $i < count($filelist); $i++) {
         $onerow->checked = true;
     }
 
-    if( strpos($onerow->mime,'text') !== FALSE ) {
+    if( startswith($onerow->mime,'text/') ) {
         $onerow->type[] = 'text';
     }
 
@@ -136,6 +136,9 @@ for ($i = 0; $i < count($filelist); $i++) {
         $filesize = filemanager_utils::format_filesize($filelist[$i]["size"]);
         $onerow->filesize = $filesize["size"];
         $onerow->filesizeunit = $filesize["unit"];
+        if( $onerow->filesize == 0 ) {
+            $onerow->type[] = 'empty';
+        }
     }
 
     if (!$filelist[$i]["dir"]) {

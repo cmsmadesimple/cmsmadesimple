@@ -27,13 +27,13 @@ try {
     // do some analysis, to see if this thing is editable.
     $mimetype = filemanager_utils::mime_content_type($src);
     $ext = strtolower(substr($filename, strrpos($filename, '.')+1));
-    if( !startswith($mimetype, 'text/') ) throw new \RuntimeException($this->Lang('filenottexttype'));
+    $size = filesize($src);
+    $mtime = filemtime($src);
+    if( !startswith($mimetype, 'text/') && $size > 0 ) throw new \RuntimeException($this->Lang('filenottexttype'));
     if( strpos($mimetype, 'php') !== FALSE ) throw new \RuntimeException($this->Lang('filetypenoteditable'));
     if( strpos($mimetype, 'script') !== FALSE ) throw new \RuntimeException($this->Lang('filetypenoteditable'));
     if( startswith($ext,'php') ) throw new \RuntimeException($this->Lang('filetypenoteditable'));
 
-    $size = filesize($src);
-    $mtime = filemtime($src);
     if( $size > 5 * 1024 * 1024 ) throw new \RuntimeException($this->Lang('filetoolarge'));
 
     // determining the file type for the editor (can be improved)
