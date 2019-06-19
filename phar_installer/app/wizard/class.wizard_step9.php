@@ -152,13 +152,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $dflt_template_rsrc = "cms_theme:$theme_name;".$theme_json->page_templates[0]->template;  // simplex-sub
             $home_template_rsrc = "cms_theme:$theme_name;".$theme_json->page_templates[1]->template;  // simplex-home
 
-            // copy assets/simplex/images to uploads/simplex/images because
+            // copy assets/Simplex/images to uploads/simplex/images because (note lowercase destdir)
             // some of the initial content properties references images in there.
             // TODO: modify the simplex theme to not use additional content blocks, particularly for images
             // so that we don't have to do this cruft
             $this->verbose(\__appbase\lang('msg_copy_theme_images'));
             $fromdir = $theme_dest_dir.'/images';
-            $todir = "$destdir/uploads/$theme_name/images";
+            $todir = "$destdir/uploads/".strtolower($theme_name)."/images";
             if( is_dir( $fromdir ) && is_readable( $fromdir ) && !is_dir( $todir ) ) {
                 // copy all files in this directory (not recursively)
                 $res = @mkdir( $todir, 0777, true );
