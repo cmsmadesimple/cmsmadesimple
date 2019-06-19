@@ -122,7 +122,8 @@ else if( isset( $params['submit'] ) ) {
         $hm->emit('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // now redirect someplace
-        if( ($redirect_to = $_SESSION['login_redirect_to']) ) {
+	$redirect_to = $_SESSION['login_redirect_to'] ?? null;
+        if( $redirect_to ) {
             unset($_SESSION['login_redirect_to']);
             $url_ob = new cms_url($redirect_to);
             if( !$url_ob->get_scheme() ) {
