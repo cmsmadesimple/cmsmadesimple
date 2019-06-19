@@ -216,9 +216,19 @@ final class cms_config implements ArrayAccess
         // we determine if the requested host is in a whitelist.
         // if all else fails, we use $_SERVER['SERVER_NAME']
         $whitelist = (isset($this['host_whitelist'])) ? $this['host_whitelist'] : null;
-        if( !$whitelist ) return $_SERVER['SERVER_NAME'];
-        $requested = $_SERVER['HTTP_HOST'];
+        if( !$whitelist ) {
+            $out = $_SERVER['SERVER_NAME'];
+            $port = (int) $_SERVER['SERVER_PORT'];
+            if( $port > 0 && cmsms()->is_https_request() && $port != 443 ) {
+                $out .= ':'.$port;
+            }
+            else if( $port > 0 && $port != 80 ) {
+                $out .= ':'.$port;
+            }
+            return $out;
+        }
 
+        $requested = $_SERVER['HTTP_HOST'];
         $out = null;
         if( is_callable($whitelist) ) {
             $out = call_user_func($whitelist,$requested);
