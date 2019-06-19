@@ -12,7 +12,7 @@ try {
     $smarty->assign('css_filter',$filter);
 
     $designs = CmsLayoutCollection::get_all();
-    if( count($designs) ) {
+    if( !empty($designs) ) {
         $smarty->assign('list_designs',$designs);
         $tmp = array();
         for( $i = 0; $i < count($designs); $i++ ) {
