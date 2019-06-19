@@ -206,11 +206,13 @@ $(document).ready(function(){
 
 {$extra_content|default:''}
 
+{*
 {if $content_id < 1}
     <h3>{$mod->Lang('prompt_editpage_addcontent')}</h3>
 {else}
     <h3>{$mod->Lang('prompt_editpage_editcontent')}&nbsp;<em>({$content_id})</em></h3>
 {/if}
+*}
 
 {if $lock_timeout < 1}
    <div class="warning" style="width: 95%; text-align: center;">{lang('warn_lockingdisabled')}</div>

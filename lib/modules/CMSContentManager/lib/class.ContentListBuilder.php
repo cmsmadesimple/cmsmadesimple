@@ -862,7 +862,10 @@ final class ContentListBuilder
             $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
             if( $rec['can_edit_tpl'] ) {
                 // sets the template related fields.
-                $rsrc = $content->TemplateResource();
+                $rsrc = $content->TemplateResource(); // could be a template id or a resource string.
+                if( is_int($rsrc) || $rsrc > 0 && (int)$rsrc == $rsrc ) {
+                    $rsrc = 'cms_template:'.$rsrc;
+                }
                 $rec['template_rsrc'] = $rsrc;
                 if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
                     $rec['can_edit_tpl'] = false;
