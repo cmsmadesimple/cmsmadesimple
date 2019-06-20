@@ -9,47 +9,6 @@ $lang['count'] = 'Count';
 $lang['default_stopwords'] = 'i, me, my, myself, we, our, ours, ourselves, you, your, yours, yourself, yourselves, he, him, his, himself, she, her, hers, herself, it, its, itself, they, them, their, theirs, themselves, what, which, who, whom, this, that, these, those, am, is, are, was, were, be, been, being, have, has, had, having, do, does, did, doing, a, an, the, and, but, if, or, because, as, until, while, of, at, by, for, with, about, against, between, into, through, during, before, after, above, below, to, from, up, down, in, out, on, off, over, under, again, further, then, once, here, there, when, where, why, how, all, any, both, each, few, more, most, other, some, such, no, nor, not, only, own, same, so, than, too, very';
 $lang['description'] = 'Module for search site and other module\'s contents.';
 
-// E
-$lang['eventdesc-SearchAllItemsDeleted'] = 'Sent when all items are deleted from the index.';
-$lang['eventhelp-SearchAllItemsDeleted'] = '<h4>Parameters</h4>
-<ul>
-<li>None</li>
-</ul>
-';
-
-$lang['eventdesc-SearchCompleted'] = 'Sent when a search is completed.';
-$lang['eventhelp-SearchCompleted'] = '<h4>Parameters</h4>
-<ol>
-<li>Text that was searched for.</li>
-<li>Array of the completed results.</li>
-</ol>
-';
-
-$lang['eventdesc-SearchInitiated'] = 'Sent when a search is started.';
-$lang['eventhelp-SearchInitiated'] = '<h4>Parameters</h4>
-<ol>
-<li>Text that was searched for.</li>
-</ol>
-';
-
-$lang['eventdesc-SearchItemAdded'] = 'Sent when a new item is indexed.';
-$lang['eventhelp-SearchItemAdded'] = '<h4>Parameters</h4>
-<ol>
-<li>Module name.</li>
-<li>Id of the item.</li>
-<li>Additional Attribute.</li>
-<li>Content to index and add.</li>
-</ol>
-';
-
-$lang['eventdesc-SearchItemDeleted'] = 'Sent when an item is deleted from the index.';
-$lang['eventhelp-SearchItemDeleted'] = '<h4>Parameters</h4>
-<ol>
-<li>Module name.</li>
-<li>Id of the item.</li>
-<li>Additional Attribute.</li>
-</ol>
-';
 $lang['export_to_csv'] = 'Export to CSV';
 
 // H

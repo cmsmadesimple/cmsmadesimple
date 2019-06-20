@@ -27,6 +27,8 @@ if( isset($_REQUEST['term']) ) $searchinput = filter_var($_REQUEST['term'],FILTE
 if( isset($params['searchinput']) ) $searchinput = $params['searchinput'];
 if( $searchinput ) {
     // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
+    $tmp = $this->cms->get_hook_manager()->emit('Search::SearchInitiated', $searchinput);
+    if( $tmp ) $searchinput = $tmp;
     $searchinput = trim(strip_tags(cms_html_entity_decode($searchinput, ENT_COMPAT, 'UTF-8')));
 
     $searchstarttime = microtime(true);
@@ -35,7 +37,8 @@ if( $searchinput ) {
 
     $tpl_ob->assign('phrase', $searchinput);
     $words = array_values($this->StemPhrase($searchinput,$filter_stopwords,$do_stemming));
-    $words = $hook_mgr->emit('Search::SearchFilterWords', $words );
+    $tmp = $hook_mgr->emit('Search::SearchFilterWords', $words );
+    if( is_array($tmp) ) $words = $tmp;
     $nb_words = count($words);
     $max_weight = 1;
 

@@ -1430,6 +1430,7 @@ class ContentOperations
         $db = $this->app->GetDb();
 
         if( $content->Id() ) {
+
             // it would be nice to use transactions here
             $query = "DELETE FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
             $dbresult = $db->Execute($query, $content->Id());
@@ -1451,6 +1452,8 @@ class ContentOperations
 
             $this->SetContentModified();
             $this->SetAllHierarchyPositions();
+
+            $this->app->get_hook_manager()->emit('Core::ContentDeletePost', [ 'content' => &$content ] );
         }
     }
 
