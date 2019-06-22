@@ -211,38 +211,39 @@ final class FileManager extends CMSModule
     }
 
     public function GetModeTable($id,$permissions) {
-        $this->smarty->assign('ownertext', $this->Lang("owner"));
-        $this->smarty->assign('groupstext', $this->Lang("group"));
-        $this->smarty->assign('otherstext', $this->Lang("others"));
+        $smarty = $this->GetSmarty();
+        $tpl = $smarty->CreateTemplate($this->GetTemplateREsource('modetable.tpl'));
+        $tpl->assign('ownertext', $this->Lang("owner"));
+        $tpl->assign('groupstext', $this->Lang("group"));
+        $tpl->assign('otherstext', $this->Lang("others"));
 
         $ownerr="0"; if ($permissions & 0400) $ownerr="1";
-        $this->smarty->assign('ownerr', $this->CreateInputCheckbox($id,"ownerr","1",$ownerr));
+        $tpl->assign('ownerr', $this->CreateInputCheckbox($id,"ownerr","1",$ownerr));
 
         $ownerw="0"; if ($permissions & 0200) $ownerw="1";
-        $this->smarty->assign('ownerw', $this->CreateInputCheckbox($id,"ownerw","1",$ownerw));
+        $tpl->assign('ownerw', $this->CreateInputCheckbox($id,"ownerw","1",$ownerw));
 
         $ownerx="0"; if ($permissions & 0100) $ownerx="1";
-        $this->smarty->assign('ownerx', $this->CreateInputCheckbox($id,"ownerx","1",$ownerx));
+        $tpl->assign('ownerx', $this->CreateInputCheckbox($id,"ownerx","1",$ownerx));
 
         $groupr="0"; if ($permissions & 0040) $groupr="1";
-        $this->smarty->assign('groupr', $this->CreateInputCheckbox($id,"groupr","1",$groupr));
+        $tpl->assign('groupr', $this->CreateInputCheckbox($id,"groupr","1",$groupr));
 
         $groupw="0"; if ($permissions & 0020) $groupw="1";
-        $this->smarty->assign('groupw', $this->CreateInputCheckbox($id,"groupw","1",$groupw));
+        $tpl->assign('groupw', $this->CreateInputCheckbox($id,"groupw","1",$groupw));
 
         $groupx="0"; if ($permissions & 0010) $groupx="1";
-        $this->smarty->assign('groupx', $this->CreateInputCheckbox($id,"groupx","1",$groupx));
+        $tpl->assign('groupx', $this->CreateInputCheckbox($id,"groupx","1",$groupx));
 
         $othersr="0"; if ($permissions & 0004) $othersr="1";
-        $this->smarty->assign('othersr', $this->CreateInputCheckbox($id,"othersr","1",$othersr));
+        $tpl->assign('othersr', $this->CreateInputCheckbox($id,"othersr","1",$othersr));
 
         $othersw="0"; if ($permissions & 0002) $othersw="1";
-        $this->smarty->assign('othersw', $this->CreateInputCheckbox($id,"othersw","1",$othersw));
+        $tpl->assign('othersw', $this->CreateInputCheckbox($id,"othersw","1",$othersw));
 
         $othersx="0"; if ($permissions & 0001) $othersx="1";
-        $this->smarty->assign('othersx', $this->CreateInputCheckbox($id,"othersx","1",$othersx));
-
-        return $this->ProcessTemplate('modetable.tpl');
+        $tpl->assign('othersx', $this->CreateInputCheckbox($id,"othersx","1",$othersx));
+        $tpl->display();
     }
 
     public function GetModeFromTable($params) {

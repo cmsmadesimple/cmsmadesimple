@@ -11,17 +11,17 @@ if( !is_array($selall) ) {
     $selall = unserialize($selall);
 }
 if (count($selall)==0) {
-    $params["fmerror"]="nofilesselected";
+    $this->SetError($this->Lang('err_nofilesselected'));
     $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 //echo count($selall);
 if (count($selall)>1) {
     //echo "hi";die();
-    $params["fmerror"]="morethanonefiledirselected";
+    $this->SetError($this->Lang('morethanonefiledirselected'));
     $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
-$config=cmsms()->GetConfig();
+$config = $this->config;
 
 $oldname=$this->decodefilename($selall[0]);
 $newname=$oldname; //for initial input box
@@ -46,10 +46,10 @@ if (isset($params["newname"])) {
                 }
                 $this->SetMessage($this->Lang('renamesuccess'));
                 $this->Audit('',"File Manager", "Renamed file: ".$fullnewname);
-                $this->Redirect($id,"defaultadmin",$returnid,$paramsnofiles);
+                $this->Redirect($id,"defaultadmin",$returnid);
             } else {
                 $this->SetError($this->Lang('renameerror'));
-                $this->Redirect($id,"defaultadmin",$returnid,$params);
+                $this->Redirect($id,"defaultadmin",$returnid);
             }
         }
     }
@@ -58,16 +58,8 @@ if (isset($params["newname"])) {
 if( is_array($params['selall']) ) {
     $params['selall'] = serialize($params['selall']);
 }
-$this->smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
-//$this->CreateInputHidden($id,"fileaction","rename");
-$this->smarty->assign('newnametext',$this->lang("newname"));
-$smarty->assign('newname',$newname);
-$this->smarty->assign('newnameinput',$this->CreateInputText($id,"newname",$newname,40));
 
-$this->smarty->assign('endform', $this->CreateFormEnd());
-
-$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('rename')));
-$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', $this->Lang('cancel')));
-echo $this->ProcessTemplate('renamefile.tpl');
-
-?>
+//$tpl = $smarty->CreateTemplate( $this->GetTemplateResource('renamefile.tpl'), null, null, $smarty );
+$smarty->assign('selall', $selall);
+$smarty->assign('newname', $newname);
+$smarty->display($this->GetTemplateResource('renamefile.tpl'));

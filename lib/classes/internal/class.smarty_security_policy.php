@@ -54,7 +54,7 @@ final class smarty_security_policy extends \Smarty_Security
                 // i.e: string searches, array searches, string comparison, sorting, etc.
                 $this->php_functions = ['isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
                                         'date','strftime','strtotime',
-                                        'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen',
+                                        'str_replace','is_string','strpos','strrpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','trim','ltrim','rtrim',
                                         'array_search','array_reverse', 'array_flip','shuffle','array_rand','sort','ksort','asort',
                                         'nl2br','file_exists', 'is_object', 'is_file','is_dir','basename', 'dirname',
                                         'debug_display','var_dump','print_r','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
