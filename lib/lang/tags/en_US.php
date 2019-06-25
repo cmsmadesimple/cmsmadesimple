@@ -506,11 +506,11 @@ $lang['help_function_content_module'] = <<<EOT
 EOT;
 
 $lang['help_function_cms_stylesheet'] = <<<EOT
-	<h3>What does this do?</h3>
-  <p>A replacement for the {stylesheet} tag, this tag provides caching of css files by generating static files in the tmp/cache directory, and smarty processing of the individual stylesheets.</p>
+  <h3>What does this do?</h3>
+  <p>This tag provides caching of css files by generating static files in the tmp/cache directory, and smarty processing of the individual stylesheets.</p>
+  <p>This plugin is deprecated, please see the {cms_queue_css} and {cms_render_css} plugins.</p>
   <p>This plugin retrieves stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template in the order specified by the designer, and combines them into a single stylesheet tag.</p>
   <p>Generated stylesheets are uniquely named according to the last modification date in the database, and are only generated if a stylesheet has changed.</p>
-  <p>This tag is the replacement for the {stylesheet} tag.</p>
   <h3>How do I use it?</h3>
   <p>Just insert the tag into your template/page's head section like: <code>{cms_stylesheet}</code></p>
   <h3>What parameters does it take?</h3>
@@ -761,21 +761,6 @@ $lang['help_function_title'] = <<<EOT
 	<p>Just insert the tag into your template/page like: <code>{title}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
-EOT;
-
-$lang['help_function_stylesheet'] = <<<EOT
-	<h3>What does this do?</h3>
-        <p><strong>Deprecated:</strong> This function is deprecated and will be removed in later versions of CMSMS.</p>
-	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one specifically named one, whether it's attached to the current template or not.</li>
-		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
-    <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
-	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
-	</ul>
 EOT;
 
 $lang['help_function_sitename'] = <<<EOT
