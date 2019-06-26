@@ -4,7 +4,7 @@ $app = \__appbase\get_app();
 $destdir = $app->get_destdir();
 
 $udt_list = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'userplugins');
-if( count($udt_list) ) {
+if( !empty($udt_list) ) {
     if( !$destdir || !is_dir($destdir) ) {
         throw new \LogicException('Destination directory does not exist');
     }
@@ -71,41 +71,47 @@ status_msg('Moved modules that are no longer considered -core- to assets/modules
 
 //  3.  convert events table stuff to the new hook_mapping.json file
 $t_events = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'events ORDER BY event_id');
-$events = null;
-foreach( $t_events as $row ) {
-    $events[$row['event_id']] = $row;
-}
-$table_str = "'Search','CmsJobManager'";
-$db->Execute( 'DELETE FROM '.CMS_DB_PREFIX.'event_handlers WHERE module_name IN ('.$table_str.')' );
-$t_event_handlers = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'event_handlers ORDER BY event_id, handler_order');
-foreach( $t_event_handlers as $row ) {
-    $event_id = $row['event_id'];
-    if( isset($events[$event_id]) ) {
-        $events[$event_id]['handlers'][] = $row;
+if( !empty($t_events) ) {
+    $events = null;
+    foreach( $t_events as $row ) {
+        $events[$row['event_id']] = $row;
     }
-}
-unset($t_events,$t_event_handlers);
-$mapping_data = null;
-foreach( $events as $evt ) {
-    if( !isset($evt['handlers']) || !count($evt['handlers']) ) continue;
-    if( strpos($evt['event_name'],'::') !== FALSE ) {
-        $hook = $evt['event_name'];
-    }
-    else {
-        $hook = $evt['originator'].'::'.$evt['event_name'];
-    }
-    $rec = [ 'hook'=>$hook, 'handlers'=>null ];
-    foreach( $evt['handlers'] as $evt_handler ) {
-        if( $evt_handler['tag_name'] ) {
-            $rec['handlers'][] = [ 'type'=>'simple_plugin', 'name'=>$evt_handler['tag_name'] ];
-        } else if( $evt_handler['module_name'] ) {
-            $rec['handlers'][] = [ 'type'=>'module', 'name'=>$evt_handler['module_name'] ];
+    $table_str = "'Search','CmsJobManager'";
+    $db->Execute( 'DELETE FROM '.CMS_DB_PREFIX.'event_handlers WHERE module_name IN ('.$table_str.')' );
+    $t_event_handlers = $db->GetArray('SELECT * FROM '.CMS_DB_PREFIX.'event_handlers ORDER BY event_id, handler_order');
+    if( !empty($t_event_handlers) ) {
+        foreach( $t_event_handlers as $row ) {
+            $event_id = $row['event_id'];
+            if( isset($events[$event_id]) ) {
+                $events[$event_id]['handlers'][] = $row;
+            }
         }
     }
-    $mapping_data[] = $rec;
+    unset($t_events,$t_event_handlers);
+    $mapping_data = null;
+    foreach( $events as $evt ) {
+        if( !isset($evt['handlers']) || !count($evt['handlers']) ) continue;
+        if( strpos($evt['event_name'],'::') !== FALSE ) {
+            $hook = $evt['event_name'];
+        }
+        else {
+            $hook = $evt['originator'].'::'.$evt['event_name'];
+        }
+        $rec = [ 'hook'=>$hook, 'handlers'=>null ];
+        foreach( $evt['handlers'] as $evt_handler ) {
+            if( $evt_handler['tag_name'] ) {
+                $rec['handlers'][] = [ 'type'=>'simple_plugin', 'name'=>$evt_handler['tag_name'] ];
+            } else if( $evt_handler['module_name'] ) {
+                $rec['handlers'][] = [ 'type'=>'module', 'name'=>$evt_handler['module_name'] ];
+            }
+        }
+        $mapping_data[] = $rec;
+    }
+    $res = @mkdir(CMS_ASSETS_PATH.'/configs',0775,true);
+    if( !empty($mapping_data) ) {
+        file_put_contents( CMS_ASSETS_PATH.'/configs/hook_mapping.json', json_encode($mapping_data, JSON_PRETTY_PRINT) );
+    }
 }
-$res = @mkdir(CMS_ASSETS_PATH.'/configs',0775,true);
-file_put_contents( CMS_ASSETS_PATH.'/configs/hook_mapping.json', json_encode($mapping_data, JSON_PRETTY_PRINT) );
 $db->Execute( 'DROP TABLE '.CMS_DB_PREFIX.'event_handler_seq');
 $db->Execute( 'DROP TABLE '.CMS_DB_PREFIX.'events_seq');
 $db->Execute( 'DROP TABLE '.CMS_DB_PREFIX.'event_handlers');
