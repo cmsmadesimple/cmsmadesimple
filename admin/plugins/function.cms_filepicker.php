@@ -16,7 +16,10 @@ function smarty_function_cms_filepicker($params,&$template)
 
     $profile = $filepicker->get_profile_or_default($profile_name);
     $parms = [];
-    if( $top ) $parms['top'] = $top;
+    if( $top ) {
+	if( !startswith($top,'/') ) $top = cmsms()->GetConfig()['uploads_path'].'/'.$top;
+	if( startswith($top, CMS_ROOT_PATH ) ) $parms['top'] = $top;
+    }
     if( $type ) $parms['type'] = $type;
     if( count($parms) ) $profile = $profile->overrideWith( $parms );
 
