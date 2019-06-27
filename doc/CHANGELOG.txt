@@ -3,6 +3,7 @@ Version 2.2.11 -
 Core - General
   - Fix minor bug in copying content objects
   - Minor fix to array indexes when filling params in ContentBase
+  - Fix to the {cms_filepicker} plugin
 
 CMSContentManager --
   - Fix an issue with copying non-core content objects
