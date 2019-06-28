@@ -50,10 +50,13 @@ try {
     if (isset($params['import_type'])) {
         $tpl_obj = CmsLayoutTemplate::create_by_type($params['import_type']);
         $tpl_obj->set_owner(get_userid());
-        $design = CmsLayoutCollection::load_default();
-        if( $design ) {
-            $tpl_obj->add_design($design);
-        }
+	try {
+            $design = CmsLayoutCollection::load_default();
+            if( $design ) $tpl_obj->add_design($design);
+	}
+	catch( \Exception $e ) {
+	    // do nothing here.
+	}
         $extraparms['import_type'] = $params['import_type'];
         $type_is_readonly = true;
     } else if (isset($params['tpl'])) {

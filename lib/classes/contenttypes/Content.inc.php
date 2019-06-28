@@ -158,7 +158,7 @@ class Content extends ContentBase
         if (isset($params)) {
             $parameters = array('pagedata','searchable','disable_wysiwyg','wantschildren');
 
-            //pick up the template id before we do parameters
+            //pick up the template resource before we do parameters
             if (isset($params['template_rsrc'])) {
                 $newvalue = filter_var( $params['template_rsrc'], FILTER_SANITIZE_STRING );
                 $oldvalue = $this->GetPropertyValue('template_rsrc');
@@ -321,7 +321,8 @@ class Content extends ContentBase
     {
         $config = \cms_config::get_instance();
         $tmp = $this->GetPropertyValue('template_rsrc');
-        if( !$tmp ) $tmp = 'cms_template:'.$this->mTemplateId;
+        $tmp2 = (int) $tmp;
+        if( !$tmp || ($tmp2 > 0 && trim($tmp2) == $tmp) ) $tmp = 'cms_template:'.$this->mTemplateId;
         return $tmp;
     }
 

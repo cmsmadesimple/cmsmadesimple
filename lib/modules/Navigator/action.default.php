@@ -72,7 +72,7 @@ foreach( $params as $key => $value ) {
             // hardcoded list of items (and their children)
             Nav_utils::clear_excludes();
             $items = trim($value);
-            $nlevels = 1;
+            //$nlevels = 1;
             $start_element = null;
             $start_page = null;
             $start_level = null;
