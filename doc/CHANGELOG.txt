@@ -229,7 +229,7 @@ Installation Assistant - v1.4
   - Now enable browser caching by default
   - Now display a message explaining why we want the database password on upgrade and freshen
 
-ModuleManaver v2.2
+ModuleManager v2.2
   - XML import code now lives here.
   - XML export code now lives here.
   - Now output an error message to logs when the is_connection_ok test fails
@@ -270,7 +270,7 @@ AdminSearch v1.1
  - Adds the ability to search text files within the /assets directory (excluding modules)
  - Rename of slave classes to use namespaces.
 
-DesignManager v1.1.6
+DesignManager v1.1.7
  - Now properly handle renaming exported stylesheets and templates.
  - Now only reads {Navigator} tags, will not read {cms_module module=Navigator} tags (for a bit).
  - PHP 7 fixes
@@ -325,7 +325,7 @@ Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
   - Fix issue with requiring a database prefix on upgrade.
 
-FilePicker v1.0.2
+FilePicker v1.0.4
   - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory.
   - Add a prefix on all returned strings.
   - Slight modification to the profile class.
