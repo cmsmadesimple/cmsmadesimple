@@ -4,6 +4,7 @@ Core - General
   - Fix minor bug in copying content objects
   - Minor fix to array indexes when filling params in ContentBase
   - Fix to the {cms_filepicker} plugin
+  - Minor fix to the 'my account' form.
 
 CMSContentManager --
   - Fix an issue with copying non-core content objects
