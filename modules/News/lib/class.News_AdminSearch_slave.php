@@ -1,7 +1,7 @@
 <?php
 
 if( !class_exists('AdminSearch_slave') ) {
-    class AdminSearch_slave extends \Adminsearch\Slaves\AbstractSlave {}
+    abstract class AdminSearch_slave extends \Adminsearch\Slaves\AbstractSlave {}
 }
 
 final class News_AdminSearch_slave extends AdminSearch_slave
