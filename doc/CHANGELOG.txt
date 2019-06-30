@@ -13,6 +13,9 @@ ModuleManager v2.1.7
   - Minor exception handling improvements.
   - Minor improvement to dependency detection with modules that do not exist in ModuleRepository
 
+News v2.51.6
+  - Minor improvements for CMSMS v2.3 compatibility.
+
 Version 2.2.10 - Spuzzum
 -------------------------------
 Core - General
