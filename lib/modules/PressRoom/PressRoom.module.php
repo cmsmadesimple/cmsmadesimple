@@ -79,6 +79,11 @@ class PressRoom extends CMSModule
         return 'calguy1000@gmail.com';
     }
 
+    public function GetFriendlyName()
+    {
+        return $this->Lang('friendlyname');
+    }
+
     public function GetHelp()
     {
         return file_get_contents(__DIR__.'/doc/help.inc');

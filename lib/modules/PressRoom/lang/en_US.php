@@ -1,4 +1,5 @@
 <?php
+$lang['friendlyname'] = 'PressRoom';
 $lang['lbl_maxsize'] = 'Maximum size';
 $lang['info_text_maxsize'] = 'The maximum length of the text provided for this field';
 $lang['lbl_id'] = 'Id';
