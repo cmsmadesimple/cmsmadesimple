@@ -46,7 +46,8 @@ class PressRoom extends CMSModule
      */
     public function GetVersion()
     {
-        return '0.0.6';
+	// todo: change me to v1.0 before release.
+        return '0.0.7';
     }
 
     public function MinimumCMSVersion()
