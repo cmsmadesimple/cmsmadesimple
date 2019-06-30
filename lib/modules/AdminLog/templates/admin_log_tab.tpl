@@ -1,10 +1,8 @@
 <script>
 $(function(){
    var url = '{cms_action_url action=defaultadmin page=xxx forjs=1}';
-   $('#pagenum').change(function(){
-       var v = $(this).val();
-       var t_url = url.replace('xxx',v);
-       window.location = t_url;
+   $('[name=page]').change(function(){
+       $(this).closest('form').submit()
    })
 
    $('#filterbtn').click(function(){
@@ -27,7 +25,9 @@ $(function(){
 
 {if $pagelist && count($pagelist) > 1}
   <div style="text-align: right; float: right;">
-    {$mod->Lang('page')}:  <select id="pagenum">{html_options options=$pagelist selected=$page}</select>
+    {form_start}
+    {$mod->Lang('page')}:  <select name="page">{html_options options=$pagelist selected=$page}</select>
+    {form_end}
   </div>
 {/if}
 </div>

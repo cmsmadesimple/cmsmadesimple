@@ -24,7 +24,7 @@ if( isset($params['filter']) ) {
     $_SESSION['adminlog_filter'] = $filter;
     $filter_applied = true;
 }
-if( ($page = (int) get_parameter_value($params,'page',1)) > 1 ) {
+if( ($page = (int) get_parameter_value($_POST,'page',1)) > 1 ) {
     $filter->offset = ($page - 1) * $filter->limit;
 }
 
