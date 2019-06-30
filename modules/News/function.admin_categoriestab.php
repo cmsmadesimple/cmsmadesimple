@@ -27,7 +27,7 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
   ($rowclass=="row1"?$rowclass="row2":$rowclass="row1");
 }
 	
-$smarty->assign_by_ref('items', $entryarray);
+$smarty->assign('items', $entryarray);
 $smarty->assign('itemcount', count($entryarray));
 	
 // Setup links
