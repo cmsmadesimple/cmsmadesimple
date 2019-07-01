@@ -14,7 +14,7 @@ class page_template_parser extends \Smarty_Internal_Template
     {
         parent::__construct($template_resource, $smarty );
 
-        $this->registerDefaultPluginHandler(array($this,'defaultPluginHandler'));
+        $this->registerDefaultPluginHandler([$this, 'defaultPluginHandler']);
         $this->merge_compiled_includes = TRUE;
 
         $this->registerPlugin('compiler','content', [ $this, 'smarty_compiler_contentblock' ], false );
@@ -206,6 +206,11 @@ class page_template_parser extends \Smarty_Internal_Template
      */
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
+        // this is hackish, but... if we tell smarty that a name is a 'function' plugin, it will error out
+        // because the system expects a 'close' function but does not call the defaultPluginHandler
+        $tmp = strtolower($name);
+        if( (endswith($tmp,'block') || startswith($tmp,'block')) && $type != 'block' ) return false;
+
         $callback = array(__CLASS__,'_dflt_plugin');
         $cachable = false;
         return TRUE;
