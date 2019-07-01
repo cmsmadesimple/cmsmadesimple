@@ -9,7 +9,7 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat .#*'
+_excludes='*~ #*# .\#* .svn .git CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -219,7 +219,7 @@ if [ $_doc = 1 -a -r phpdoc.xml ]; then
 	phpdoc --defaultpackagename $_name --title "${_tpl}" > $_o;
     fi
 else
-    _excludes="$_excludes apidoc apidocs"
+    _excludes="$_excludes apidoc apidocs doc/apidoc doc/apidocs docs/apidoc docs/apidocs"
 fi
 
 # do an svn update
