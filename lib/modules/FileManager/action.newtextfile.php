@@ -7,7 +7,6 @@ if( !$this->AdvancedAccessAllowed() ) exit;
 
 try {
     if( isset($_POST['cancel']) ) {
-        die('cancel');
         $this->Redirect($id,"defaultadmin",$returnid,$params);
     }
 
