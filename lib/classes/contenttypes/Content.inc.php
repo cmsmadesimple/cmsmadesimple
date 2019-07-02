@@ -321,8 +321,9 @@ class Content extends ContentBase
     {
         $config = \cms_config::get_instance();
         $tmp = $this->GetPropertyValue('template_rsrc');
+	if( !$tmp ) $tmp = $this->TemplateID();
         $tmp2 = (int) $tmp;
-        if( !$tmp || ($tmp2 > 0 && trim($tmp2) == $tmp) ) $tmp = 'cms_template:'.$tmp;
+        if( $tmp2 > 0 && trim($tmp2) == $tmp ) $tmp = 'cms_template:'.$tmp;
         return $tmp;
     }
 
