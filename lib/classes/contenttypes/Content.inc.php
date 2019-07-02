@@ -163,7 +163,7 @@ class Content extends ContentBase
                 $newvalue = filter_var( $params['template_rsrc'], FILTER_SANITIZE_STRING );
                 $oldvalue = $this->GetPropertyValue('template_rsrc');
                 if( $newvalue != $oldvalue ) $this->_contentBlocks = null;
-                $this->SetPropertyValue('template_rsrc',$newvalue);
+                $this->SetTemplateResource($newvalue);
             }
 
             if( $this->IsDefaultPossible() && isset($params['defaultcontent']) ) {
@@ -322,7 +322,7 @@ class Content extends ContentBase
         $config = \cms_config::get_instance();
         $tmp = $this->GetPropertyValue('template_rsrc');
         $tmp2 = (int) $tmp;
-        if( !$tmp || ($tmp2 > 0 && trim($tmp2) == $tmp) ) $tmp = 'cms_template:'.$this->mTemplateId;
+        if( !$tmp || ($tmp2 > 0 && trim($tmp2) == $tmp) ) $tmp = 'cms_template:'.$tmp;
         return $tmp;
     }
 
