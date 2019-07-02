@@ -111,7 +111,7 @@ $arr = [
     'news_date'=>time(),
     'title'=>'Introducing PressRoom',
     'summary'=>'Introducing the PressRoom module.',
-    'content'=>'<p>Introducing The PressRoom moedule, a tool to allow managing time related articles.  <strong>Woot!</strong></p>',
+    'content'=>'<p>Introducing The PressRoom module, a tool to allow managing time related articles.  <strong>Woot!</strong></p>',
     'author_id'=> $uid
     ];
 $article = $this->articleManager()->createNew( $arr );
