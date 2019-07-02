@@ -77,8 +77,9 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 
         $gCms = CmsApp::get_instance();
         $tpl_table_name = $gCms->get_template_manager()->template_table_name();
+        $type_table_name = CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME;
         $query = 'SELECT SQL_CALC_FOUND_ROWS tpl.id FROM '.$tpl_table_name.' tpl
-              LEFT JOIN '.$tpl_table_name.' type ON tpl.type_id = type.id';
+              LEFT JOIN '.$type_table_name.' type ON tpl.type_id = type.id';
         $where = array('id'=>array(),'type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
 
         $this->_limit = 1000;
@@ -142,7 +143,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                 case 'u': // user
                 case 'user':
                     $second = (int)$second;
-                    $where['user'][] = 'owner_id = '.$db->qstr($second);
+                    $where['user'][] = 'tpl.owner_id = '.$db->qstr($second);
                     break;
 
                 case 'e': // editable
@@ -153,7 +154,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                    WHERE user_id = ?
                  UNION
                  SELECT id AS tpl_id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.'
-                   WHERE owner_id = ?)
+                   WHERE tpl.owner_id = ?)
                  AS tmp1';
                     $t2 = $db->GetCol($q2,array($second,$second));
                     if( is_array($t2) && count($t2) ) $where['user'][] = 'tpl.id IN ('.implode(',',$t2).')';
