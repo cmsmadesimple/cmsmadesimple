@@ -71,16 +71,14 @@ if( isset($params['submit']) ) {
 } // if submit
 
 // give everything to smarty.
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('delete.tpl'));
 if( count($errors) ) {
     echo $this->ShowErrors($errors);
-    $smarty->assign('errors',$errors);
+    $tpl->assign('errors',$errors);
 }
 if( is_array($params['selall']) ) $params['selall'] = serialize($params['selall']);
-$smarty->assign('selall',$selall);
-$smarty->assign('mod',$this);
-$smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
-$smarty->assign('endform', $this->CreateFormEnd());
-
-echo $this->ProcessTemplate('delete.tpl');
-
-?>
+$tpl->assign('selall',$selall);
+$tpl->assign('mod',$this);
+$tpl->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
+$tpl->assign('endform', $this->CreateFormEnd());
+$tpl->display();
