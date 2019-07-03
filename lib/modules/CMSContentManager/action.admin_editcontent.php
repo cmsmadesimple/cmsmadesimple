@@ -178,6 +178,7 @@ try {
 
     $active_tab = isset($params['active_tab']) ? trim($params['active_tab']) : null;
     if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
+        $is_insert = $content_obj->id() < 1;
         $error = $content_obj->ValidateData();
         if( $error ) {
             if( isset($params['ajax']) ) {
@@ -196,6 +197,11 @@ try {
             unset($_SESSION['__cms_copy_obj__']);
             audit($content_obj->Id(),'Content','Edited content item '.$content_obj->Name());
             if( isset($params['submit']) ) {
+                // if we inserted, and we have a parent.. make sure it is expanded
+                if( $is_insert && $content_obj->ParentID() > 0 ) {
+                    $builder = new \CMSContentManager\ContentListBuilder($this);
+                    $builder->expand_section($content_obj->ParentID());
+                }
                 $this->SetMessage($this->Lang('msg_editpage_success'));
                 $this->RedirectToAdminTab();
             }

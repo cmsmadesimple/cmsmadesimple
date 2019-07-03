@@ -2345,7 +2345,9 @@ abstract class CMSModule
      */
     final public function ProcessTemplateFromDatabase(string $tpl_name, $designation = '', $cache = false, $modulename = '')
     {
-        return $this->action_tpl->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
+        $smarty = $this->action_tpl;
+        if( !$smarty ) $smarty = $this->app->GetSmarty();
+        return $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
     /**

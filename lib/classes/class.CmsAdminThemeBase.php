@@ -690,64 +690,60 @@ abstract class CmsAdminThemeBase
             }
         }
 
-        // find the selected menu item.
-        $selected_key = null;
-        $pending_selected_key = null;
-        $req_url = new cms_url($_SERVER['REQUEST_URI']);
-        $req_vars = array();
-        if( !empty($_REQUEST['mact']) ) {
-            // if mact is available
-            // can get the mact from the query
-            $req_url->set_queryvar('mact',$_REQUEST['mact']);
-            $req_url = new cms_url((string)$req_url);
+        // if using old macts, THEN req_mact is just $_REQUEST['mact'], and key is 'mact'
+        // to find the active menu item we need to compare the basename of the request URI with that that is in the menuitems
+        // note menuitems already have the secure param key
+        // if it is a module' menu item, the basename will always be moduleinterface.php so we now need to compare the 'mact' arguments
+        // on the menuitem url with that that is requested.
+        // the mact argument is different since v2.3
+        $encoder = $this->_app->get_mact_encoder();
+        $selected_key = $requested_module = null;
+        $query_var = $encoder::KEY;
+        if( $this->_app->config['generate_old_mact'] ) {
+            $query_var = 'mact';
         }
-        parse_str($req_url->get_query(),$req_vars);
 
-        foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-            if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
-                isset($req_vars['mact']) &&
-                isset($sectionArray['module']) && $sectionArray['module'] ) {
-
-                // note, this is kludgy
-                // we compare each and every menu item against the request.
-                // if the mact is set for both, and the module portion of the mact
-                // are the same, we add a reference to the option to our 'matches'
-                // list.  at the end, we re-compare
-                $u1 = new cms_url(cms_html_entity_decode($sectionArray['url']));
-                $v1 = array();
-                parse_str($u1->get_query(),$v1);
-                if( $u1->get_path() == $req_url->get_path() &&
-                    isset($v1['mact']) && isset($req_vars['mact']) ) {
-
-                    $t1 = explode(',',$v1['mact']);
-                    $t2 = explode(',',$req_vars['mact']);
-                    if( $t1[0] == $t2[0] ) {
-                        if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
-                            // requested action is for the same module and same action, we're done.
-                            $selected_key = $sectionKey;
-                            break;
-                        }
-                        else if( !$pending_selected_key ) {
-                            // requested action is for the same module, but different actions
-                            // we continue, but set a pending key (only once)
-                            $pending_selected_key = $sectionKey;
-                        }
-                    }
+        $req_url = new cms_url(basename($_SERVER['REQUEST_URI']));
+        //$req_url->erase_queryvar(CMS_SECURE_PARAM_NAME);
+        $clean_req_url = trim($req_url);
+        $req_mact = urldecode($req_url->get_queryvar($query_var));
+        if( $req_mact ) {
+            $info = $encoder->decode();
+            if( $info && $info->module ) $requested_module = $info->module;
+        }
+        foreach ($this->_menuItems as $sectionKey => $sectionArray) {
+            if( !empty($sectionArray['module']) && strpos($_SERVER['REQUEST_URI'],'/moduleinterface.php') !== FALSE ) {
+                // it's a module menu item
+                $url = new cms_url($sectionArray['url']);
+                $item_mact = urldecode($url->get_queryvar($query_var));
+                if( $item_mact == $req_mact ) {
+                    $selected_key = $sectionKey;
+                    break;
+                }
+            } else {
+                // simply match the request URI with the url.
+                if( $sectionArray['url'] == $clean_req_url ) {
+                    $selected_key = $sectionKey;
+                    break;
                 }
             }
-            else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
-            (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
-                 // this handles selecting internal actions that are not part of modules
-                 // i.e (admin/somefile.php stuff)
-                 $selected_key = $sectionKey;
-                 break;
+        }
+
+        // it is possible that we requested a URI that we do not have a menu item for
+        // for example a child action in a module OR the index page.
+        // if it is a mact request, we find the first matching menuitem that is for the same module
+        // (as there is no hierarchy in mact requests we cannot tell what the parent action is)
+        if( !$selected_key && $req_mact ) {
+            foreach ($this->_menuItems as $sectionKey => $sectionArray) {
+                if( !empty($sectionArray['module']) && $sectionArray['module'] == $requested_module ) {
+                    $selected_key = $sectionKey;
+                    break;
+                }
             }
         }
 
-        if( $selected_key || $pending_selected_key ) {
-            // if we only have a pending key, we use it... not ideal.
-            if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
 
+        if( $selected_key ) {
             // we have the sectionKey of the selected match
             // now set it active, and set the parent all the way to the top
             // and build breadcrumbs
@@ -831,9 +827,11 @@ abstract class CmsAdminThemeBase
      */
     protected function get_admin_navigation()
     {
-        $smarty = $this->_app->GetSmarty();
-        $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
-        $this->_populate_admin_navigation();
+        if( empty($this->_menuItems) ) {
+            $smarty = $this->_app->GetSmarty();
+            $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
+            $this->_populate_admin_navigation();
+        }
         return $this->_menuItems;
     }
 
