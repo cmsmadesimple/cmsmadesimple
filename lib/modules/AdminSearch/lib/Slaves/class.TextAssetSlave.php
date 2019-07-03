@@ -28,7 +28,7 @@ class TextAssetSlave extends AbstractSlave
         $out = null;
         $intext = $this->get_text();
         $fh = fopen($filename,'r');
-        $subpath = substr($filename, strlen(CMS_ASSETS_PATH));
+        $subpath = substr($filename, strlen(CMS_ROOT_PATH));
         while( !feof($fh) ) {
             $data = fread($fh, 64*1024);
             if( ($pos = strpos($data,$intext)) !== FALSE ) {

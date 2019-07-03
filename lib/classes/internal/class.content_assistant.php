@@ -35,6 +35,7 @@
 #END_LICENSE
 
 namespace CMSMS\internal;
+use cms_route_manager;
 
 /**
  * @package CMS

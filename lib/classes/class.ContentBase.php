@@ -1294,7 +1294,7 @@ abstract class ContentBase
             }
         }
 
-        $auto_type = \CMSMS\internal\content_assistant::auto_create_url();
+        $auto_type = content_assistant::auto_create_url();
         if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
             // create a valid url.
             if( !$this->DefaultContent() ) {

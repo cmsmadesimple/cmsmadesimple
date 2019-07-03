@@ -40,7 +40,7 @@ final class ContentSlave extends AbstractSlave
         $arr = $this->db->GetArray($sql1, [ $term ] );
         foreach( $arr as $row ) {
             $content_id = (int) $row['content_id'];
-            if( array_key_exists($content_id, $dbr) ) continue;
+            if( isset($dbr[$content_id]) ) continue;
             $dbr[$content_id] = $row;
         }
 
@@ -48,7 +48,7 @@ final class ContentSlave extends AbstractSlave
         $arr = $this->db->GetArray($sql2, [ $term ] );
         foreach( $arr as $row ) {
             $content_id = (int) $row['content_id'];
-            if( array_key_exists($content_id, $dbr) ) continue;
+            if( isset($dbr[$content_id]) ) continue;
             $dbr[$content_id] = $row;
         }
 
