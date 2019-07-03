@@ -103,7 +103,7 @@ $(function(){
       <div id="tpl_{$one@index}" class="template_content" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
     </td>
     <td>
-      {admin_icon class="template_view pointer" icon='view.gif' alt=lang('view')}
+      {admin_icon class="template_view pointer" icon='view' alt=lang('view')}
     </td>
   </tr>
   {/foreach}
@@ -137,7 +137,7 @@ $(function(){
 	   </div>
 	</td>
 	<td>
-          {admin_icon class="stylesheet_view pointer" icon='view.gif' alt=lang('view')}
+          {admin_icon class="stylesheet_view pointer" icon='view' alt=lang('view')}
 	</td>
       </tr>
       {/foreach}

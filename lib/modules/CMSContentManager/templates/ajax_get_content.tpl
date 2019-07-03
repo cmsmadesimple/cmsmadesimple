@@ -16,7 +16,7 @@ $(function(){
 	  <a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>
 	{/if}
 	{if $have_locks}
-	  <a id="clearlocks" href="{cms_action_url action=admin_clearlocks}" accesskey="l" title="{$mod->Lang('title_clearlocks')}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>
+	  <a id="clearlocks" href="{cms_action_url action=admin_clearlocks}" accesskey="l" title="{$mod->Lang('title_clearlocks')}">{admin_icon icon='run' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>
 	{/if}
       {/if}
       <a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a>
@@ -197,7 +197,7 @@ $(function(){
 	  {elseif $column == 'view'}
 	    {if $row.view != ''}
 	      <a class="page_view" target="_blank" href="{$row.view}" accesskey="v">
-		{admin_icon icon='view.gif' title=$mod->Lang('prompt_page_view')}
+		{admin_icon icon='view' title=$mod->Lang('prompt_page_view')}
 	      </a>
 	    {/if}
 	  {elseif $column == 'copy'}
