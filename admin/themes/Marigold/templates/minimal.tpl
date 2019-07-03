@@ -10,7 +10,7 @@
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$theme_root}/images/favicon/cmsms-favicon.ico"/>
 		{block name='css'}
-	        	<link rel="stylesheet" href="style.php?{$secureparam}" />
+	        	<link rel="stylesheet" href="style.php" />
 			{$dynamic_css|default:''}
 		{/block}
   	        {block name='js'}
@@ -18,7 +18,7 @@
 		        <!--[if lt IE 9]>
 			    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 			<![endif]-->
-                        {cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'} 
+                        {cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
 			{cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
 		{/block}
 		{$dynamic_headtext|default:''}

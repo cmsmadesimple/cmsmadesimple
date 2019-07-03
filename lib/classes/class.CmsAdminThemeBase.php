@@ -1378,6 +1378,9 @@ abstract class CmsAdminThemeBase
 
     /**
      * An abstract method to output a minimal HTML page (typically for login and other operations that do not require navigations)
+     *
+     * This method is no longer called.
+     * @deprecated
      */
     abstract public function do_minimal();
 

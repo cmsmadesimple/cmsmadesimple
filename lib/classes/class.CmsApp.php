@@ -785,7 +785,7 @@ final class CmsApp
             $uid = get_userid(FALSE);
             $theme_manager = $this->get_theme_manager();
             $theme_name = null;
-            $usertheme = cms_userprefs::get_for_user($uid,'admintheme');
+            if( $uid ) $usertheme = cms_userprefs::get_for_user($uid,'admintheme');
             if( $usertheme ) $_obj = $theme_manager->load_theme($usertheme, $this, $uid);
             if( !$_obj ) {
                 $logintheme = cms_siteprefs::get('logintheme');
