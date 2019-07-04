@@ -838,7 +838,7 @@ class ContentOperations
         $db->Execute( $sql );
         $one = $this->LoadContentFromId($id);
         $one->SetDefaultContent(true);
-	$this->save_content($one);
+        $this->save_content($one);
     }
 
 
@@ -1322,6 +1322,7 @@ class ContentOperations
             die($db->sql.'<br/>'.$db->ErrorMsg());
         }
 
+        $content->SetId($newid);
         $this->save_content_properties($content);
         $this->save_additional_editors($content);
         if( $content->URL() ) {

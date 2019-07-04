@@ -66,7 +66,7 @@ final class simple_plugin_operations
 
         $out = null;
         foreach( $files as $file ) {
-            $name = substr(basename($file),0,-4);
+            $name = substr(basename($file),0,strlen('.cmsplugin')*-1);
             if( !$this->is_valid_plugin_name( $name ) ) continue;
             $out[] = $name;
         }

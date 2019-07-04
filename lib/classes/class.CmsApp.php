@@ -784,7 +784,7 @@ final class CmsApp
             // get the defalt theme
             $uid = get_userid(FALSE);
             $theme_manager = $this->get_theme_manager();
-            $theme_name = null;
+            $theme_name = $usertheme = null;
             if( $uid ) $usertheme = cms_userprefs::get_for_user($uid,'admintheme');
             if( $usertheme ) $_obj = $theme_manager->load_theme($usertheme, $this, $uid);
             if( !$_obj ) {

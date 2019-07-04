@@ -1007,8 +1007,10 @@ function get_secure_param()
  * @param string $str Input string to test.
  * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
-function cms_to_bool(string $str = null)
+function cms_to_bool($str = null)
 {
+    if( is_null($str) || is_bool($str) ) return (bool)$str;
+    if( !is_scalar($str) ) throw new \InvalidArgumentException('Invalid type passed to '.__FUNCTION__);
     if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
     $str = strtolower($str);

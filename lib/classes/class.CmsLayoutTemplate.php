@@ -709,7 +709,7 @@ class CmsLayoutTemplate
         $query = new CmsLayoutTemplateQuery($params);
         $out = self::_mgr()->load_bulk_templates($query->GetMatchedTemplateIds());
 
-        if( isset($params['as_list']) && count($out) ) {
+        if( isset($params['as_list']) && !empty($out) ) {
             $tmp2 = array();
             foreach( $out as $one ) {
                 $tmp2[$one->get_id()] = $one->get_name();
