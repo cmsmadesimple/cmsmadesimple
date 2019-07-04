@@ -1,15 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 # bourne shell script to create a release archive of a cmsms module
 # within a cmsms install
 
 # finds the name
+set -o noglob
 _this=`basename $0`
 _configfile=${HOME}/.CreateRelease.rc
 _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .\#* .svn .git CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat'
+_excludes=' *~ \#*\# .\#* .svn .git CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -50,7 +51,7 @@ usage()
   echo "        _doc = turn on or off phpdoc generation."
   echo "        _tag = turn on or off svn tag generation."
   echo "        _destdir = The destination directory."
-  echo "        _excludes = Standard exlude patterns."
+  echo "        _myexcludes = More exclude pattersn"
   echo "        _yes = if value is 1, turn on quiet mode."
   echo "        _svn = if value is 0 turn off svn update option."
   echo "        _checksums = if value is 0 do not attempt to create checksums."
@@ -198,6 +199,7 @@ if [ $_yes = 0 ]; then
   exit 0;
 fi
 
+# test vcs type
 _vc_type=''
 if [ -d .svn ]; then
   _vc_type='svn'
@@ -205,6 +207,11 @@ elif [ -d .git ]; then
   if [ -d .git/svn ]; then
     _vc_type='gitsvn'
   fi
+fi
+
+# expand excludes
+if [ ! -z $_myexcludes ]; then
+   _excludes="${_excludes} ${_myexcludes}"
 fi
 
 # do a phpdoc generation

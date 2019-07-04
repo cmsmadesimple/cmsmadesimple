@@ -27,27 +27,28 @@ class nlstools
 
   protected function load_nls()
   {
-    if( is_array($this->_nls) ) return;
+      if( is_array($this->_nls) ) return;
 
-    $rdi = new \RecursiveDirectoryIterator($this->get_nls_dir());
-    $rii = new \RecursiveIteratorIterator($rdi);
+      $rdi = new \RecursiveDirectoryIterator($this->get_nls_dir());
+      $rii = new \RecursiveIteratorIterator($rdi);
 
-    $this->_nls = array();
-    foreach( $rii as $file => $info ) {
-      if( !endswith($file,'.nls.php') ) continue;
-      $name = basename($file);
-      $name = trim(substr($name,6,strlen($name)-14)).'_nls';
+      $this->_nls = array();
+      foreach( $rii as $file => $info ) {
+          if( !endswith($file,'.nls.php') ) continue;
+          $name = basename($file);
+          $name = trim(substr($name,6,strlen($name)-14)).'_nls';
 
-      include($file);
-
-      $tmp = __NAMESPACE__.'\\'.$name;
-      $obj = new $tmp;
-      if( !is_a($obj,__NAMESPACE__.'\nls') ) {
-          unset($obj);
-          continue;
+          include_once($file);
+          $classname = __NAMESPACE__.'\\'.$name;
+          if( class_exists($classname) ) {
+              $obj = new $classname;
+              if( !is_a($obj,__NAMESPACE__.'\nls') ) {
+                  unset($obj);
+                  continue;
+              }
+              $this->_nls[$name] = $obj;
+          }
       }
-      $this->_nls[$name] = $obj;
-    }
   }
 
   public function get_list()
