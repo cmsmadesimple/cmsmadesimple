@@ -1584,7 +1584,7 @@ abstract class CMSModule
         $parms =
             [
                 'module'=>$this->GetName(), 'mid'=>$id, 'returnid'=>$returnid, 'action'=>$action, 'inline'=>$inline,
-                'method'=>$method, 'enctype'=>$method, 'extra_str'=>$extra
+                'method'=>$method, 'enctype'=>$enctype, 'extra_str'=>$extra
             ];
         if( !empty($params) ) $parms['extraparms'] = $params;
 
