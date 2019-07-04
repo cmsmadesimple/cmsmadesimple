@@ -375,6 +375,8 @@ class cms_install extends cms_install_base
             $res = $wizard->process();
         }
         catch( \Exception $e ) {
+	    $msg = "CMS INSTALLER ERROR  Type=".get_class($e)." - Message = ".$e->GetMessage()." at ".$e->GetFile().'::'.$e->GetLine();
+	    trigger_error($msg, E_USER_ERROR); 
             $smarty = \__appbase\smarty();
             $smarty->assign('error',$e->GetMessage());
             $smarty->display('error.tpl');
