@@ -124,7 +124,7 @@ class ErrorPage extends Content
         $this->mActive = true;
     }
 
-    public function display_single_element($one,$adding)
+    public function display_single_element(string $one,bool $adding)
     {
         switch($one) {
             case 'alias':
