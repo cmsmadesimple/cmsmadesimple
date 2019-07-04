@@ -159,6 +159,7 @@ if( $cats && count($cats) ) {
     $opts[$this->Lang('prompt_categories')] = $tmp;
 }
 $designs = CmsLayoutCollection::get_all();
+$smarty->assign('design_names',null);
 if( $designs && count($designs) ) {
     $smarty->assign('list_designs',$designs);
     $tmp = array();

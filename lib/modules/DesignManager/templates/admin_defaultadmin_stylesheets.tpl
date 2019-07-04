@@ -58,7 +58,9 @@ $(function(){
       <label for="filter_css_design" class="grid_3 text-right">{$mod->Lang('prompt_design')}:</label>
       <select id="filter_css_design" name="{$actionid}filter_css_design" title="{$mod->Lang('title_filter_design')}" class="grid_9">
           <option value="">{$mod->Lang('any')}</option>
-	  {html_options options=$design_names selected=$css_filter.design}
+          {if !empty($design_names)}
+	      {html_options options=$design_names selected=$css_filter.design}
+          {/if}
       </select>
     </div>
     <div class="c_full">
