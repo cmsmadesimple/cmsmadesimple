@@ -10,7 +10,7 @@ function smarty_function_cms_render_scripts( $params, $template )
 
     $force = (isset($params['force'])) ? cms_to_bool($params['force']) : false;
     $nocache = (isset($params['no_cache'])) ? cms_to_bool($params['no_cache']) : false;
-    $defer = (isset($params['defer'])) ? cms_to_bool($params['defer']) : true;
+    $defer = (isset($params['defer'])) ? cms_to_bool($params['defer']) : false;
     if($defer ) $defer = 'defer';
     $prefix = get_parameter_value($params,'prefix',PUBLIC_CACHE_URL);
 
