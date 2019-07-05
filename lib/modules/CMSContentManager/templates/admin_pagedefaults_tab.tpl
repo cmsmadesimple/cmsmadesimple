@@ -23,10 +23,10 @@
 		</select></p>
 </div>
 <div class="pageoverflow">
-	<p class="pagetext"><label for="template_id">{$mod->Lang('prompt_pagedflt_template_id')}:</label>&nbsp;{cms_help key2='help_pagedflt_template_id' title=$mod->Lang('prompt_pagedflt_template_id')}</p>
+	<p class="pagetext"><label for="template_rsrc">{$mod->Lang('prompt_pagedflt_template_id')}:</label>&nbsp;{cms_help key2='help_pagedflt_template_id' title=$mod->Lang('prompt_pagedflt_template_id')}</p>
 	<p class="pageinput">
-		<select id="template_id" name="{$actionid}template_id">
-			{html_options options=$template_list selected=$page_prefs.template_id}
+		<select id="template_rsrc" name="{$actionid}template_rsrc">
+			{html_options options=$template_list selected=$page_prefs.template_rsrc}
 		</select></p>
 </div>
 <div class="pageoverflow">

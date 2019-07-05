@@ -54,6 +54,25 @@ final class CmsContentManagerUtils
     private function __construct() {
     }
 
+    public static function get_theme_page_templates()
+    {
+        $out = null;
+        $theme_exports = glob(CMS_ASSETS_PATH."/themes/*/theme.json");
+        if( !empty($theme_exports) ) {
+            foreach( $theme_exports as $json_file ) {
+                $theme_name = trim(basename(dirname($json_file)));
+                $json_data = json_decode(file_get_contents($json_file));
+                if( $json_data && isset($json_data->page_templates) && !empty($json_data->page_templates) ) {
+                    foreach( $json_data->page_templates as $one ) {
+                        $rsrc = "cms_theme:$theme_name;{$one->template}";
+                        $out[$rsrc] = "{$theme_name} : {$one->label}";
+                    }
+                }
+            }
+        }
+        return $out;
+    }
+
     public static function get_pagedefaults()
     {
         $design_id = $tpl_id = $tpl_rsrc = null;
@@ -84,17 +103,10 @@ final class CmsContentManagerUtils
             catch( \CmsDataNotFoundException $e ) {
                 // get a theme resource
                 // todo: move me into a class somewhere
-                $theme_exports = glob(CMS_ASSETS_PATH."/themes/*/theme.json");
-                if( !empty($theme_exports) ) {
-                    foreach( $theme_exports as $json_file ) {
-                        $theme_name = trim(basename(dirname($json_file)));
-                        $json_data = json_decode(file_get_contents($json_file));
-                        if( $json_data && isset($json_data->page_templates) && !empty($json_data->page_templates) ) {
-                            $tpl = $json_data->page_templates[0]->template;
-                            $tpl_rsrc = "cms_theme:$theme_name;$tpl";
-			    break;
-                        }
-                    }
+                $list = self::get_theme_page_templates();
+                if( !empty($list) ) {
+                    $keys = array_keys($list);
+                    return $keys[0];
                 }
             }
         }
