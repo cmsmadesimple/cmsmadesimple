@@ -26,6 +26,7 @@ use cms_config;
 use CmsError403Exception;
 use CmsError404Exception;
 use CmsError503Exception;
+use CmsStopProcessingContentException;
 
 $starttime = microtime();
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
@@ -105,11 +106,11 @@ $get_content_in_parts = function( $app, $hook_mgr, $smarty, $contentobj, $top_rs
 while( $trycount < 2 ) {
     $trycount++;
     try {
-	if( $trycount < 2 ) {
-	    if( !$page ) $page = get_pageid_or_alias_from_url();
+        if( $trycount < 2 ) {
+            if( !$page ) $page = get_pageid_or_alias_from_url();
             if( is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new CmsError503Exception('Site down for maintenance');
             if( is_sitedown() ) throw new CmsError503Exception('Site down for maintenance');
-	}
+        }
 
         // preview
         if( $page == -100) {
@@ -309,10 +310,10 @@ while( $trycount < 2 ) {
         }
     }
 
-    catch (Exception $e) {
+    catch (\Exception $e) {
         // Catch rest of exceptions
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { 
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) {
 	    ob_end_clean();
         }
         $code = $e->GetCode();

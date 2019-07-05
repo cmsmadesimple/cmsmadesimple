@@ -18,7 +18,7 @@
 
 function smarty_function_page_selector($params,&$template)
 {
-    $value = (isset($params['value']) ) ? (int) $params['value'] : 0;
+    $value = (isset($params['value']) ) ? (int) $params['value'] : -1;
     $name = (isset($params['name']) ) ? trim($params['name']) : 'parent_id';
     $allowcurrent = (isset($params['allowcurrent']) ) ? cms_to_bool($params['allowcurrent']) : 0;
     $allow_all = (isset($params['allowall']) ) ? cms_to_bool($params['allowall']) : 0;
