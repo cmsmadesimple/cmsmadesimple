@@ -309,6 +309,14 @@ function create_file_dropdown(string $name,string $dir,string $value,string $all
  */
 function get_pageid_or_alias_from_url()
 {
+    // handles:  index.php -> route to default content page
+    // handles:  index.php?query_var=alias
+    // handles:  index.php/something/something/something/alias (url rewriting enabled))
+    // handles:  index.php/some_route (uses route matching)
+    // todo: handle decoding the mact here ?? 
+    //   if we did not find a matching route in the request, throw a 404 exception
+    //   if we did not find a valid content page from the route throw a different exception (LogicException)
+    
     $gCms = cmsms();
     $config = $gCms->GetConfig();
     $contentops = $gCms->GetContentOperations();

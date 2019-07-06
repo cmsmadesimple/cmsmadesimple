@@ -26,6 +26,10 @@
  */
 
 use \CMSMS\internal\bulkcontentoperations;
+require_once(cms_join_path(__DIR__,'internal','module_support','modtemplates.inc.php'));
+require_once(cms_join_path(__DIR__, 'internal', 'module_support', 'modform.inc.php'));
+require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modredirect.inc.php'));
+require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modmisc.inc.php'));
 
 /**
  * Base module class.
@@ -44,7 +48,7 @@ abstract class CMSModule
 {
 
     /**
-     * A hash of the parameters passed in to the module action
+     * A hash of the parameters passed in to the module action.  Used for module help.
      *
      * @access private
      * @ignore
@@ -52,36 +56,16 @@ abstract class CMSModule
     private $params = [];
 
     /**
-     * @access private
-     * @ignore
-     */
-    private $modtemplates = false;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $modform = false;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $modredirect = false;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $modmisc = false;
-
-    /**
+     * A hash of parameters and types used for the internal param cleaning stuff.
+     *
      * @access private
      * @ignore
      */
     private $param_map = [];
 
     /**
+     * A flag indicating whether params not known to this module should be provided to the action.
+     *
      * @access private
      * @ignore
      */
@@ -113,6 +97,8 @@ abstract class CMSModule
 
         if( isset($CMS_FORCELOAD) && $CMS_FORCELOAD ) return;
         if( $this->app->is_cli() ) return;
+
+        // todo: move this stuff into initizefrontend??
         if( $this->app->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
@@ -135,7 +121,7 @@ abstract class CMSModule
         switch( $key ) {
             case 'cms':
             case 'app':
-                return CmsApp::get_instance();
+                return cmsms();
 
             case 'config':
                 return $this->app->GetConfig();
@@ -155,64 +141,6 @@ abstract class CMSModule
     public function __call($name, $args)
     {
         return FALSE;
-    }
-
-    /**
-     * ------------------------------------------------------------------
-     * Load internals.
-     * ------------------------------------------------------------------
-     */
-
-    /**
-     * Private
-     *
-     * @ignore
-     */
-    private function _loadTemplateMethods()
-    {
-        if (!$this->modtemplates) {
-            require_once(cms_join_path(__DIR__,'internal','module_support','modtemplates.inc.php'));
-            $this->modtemplates = true;
-        }
-    }
-
-    /**
-     * Private
-     *
-     * @ignore
-     */
-    private function _loadFormMethods()
-    {
-        if (!$this->modform) {
-            require_once(cms_join_path(__DIR__, 'internal', 'module_support', 'modform.inc.php'));
-            $this->modform = true;
-        }
-    }
-
-    /**
-     * Private
-     *
-     * @ignore
-     */
-    private function _loadRedirectMethods()
-    {
-        if (!$this->modredirect) {
-            require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modredirect.inc.php'));
-            $this->modredirect = true;
-        }
-    }
-
-    /**
-     * Private
-     *
-     * @ignore
-     */
-    private function _loadMiscMethods()
-    {
-        if (!$this->modmisc) {
-            require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modmisc.inc.php'));
-            $this->modmisc = true;
-        }
     }
 
     /**
@@ -326,7 +254,6 @@ abstract class CMSModule
      */
     public function GetAbout()
     {
-        $this->_loadMiscMethods();
         return cms_module_GetAbout($this);
     }
 
@@ -339,7 +266,6 @@ abstract class CMSModule
      */
     final public function GetHelpPage()
     {
-        $this->_loadMiscMethods();
         return cms_module_GetHelpPage($this);
     }
 
@@ -369,6 +295,7 @@ abstract class CMSModule
 
     /**
      * Returns the URL path to the module directory.
+     * This is a helper method.
      *
      * @final
      * @param bool $use_ssl Optional generate an URL using HTTPS path
@@ -376,6 +303,7 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
+        // todo: add a method in module operations.
         $modops = $this->app->GetModuleOperations();
         if( $modops->IsSystemModule( $this->GetName() ) ) {
             return CMS_ROOT_URL . '/lib/modules/' . $this->GetName();
@@ -449,7 +377,7 @@ abstract class CMSModule
     public function AddAdminHeaderText($text)
     {
         $text = trim($text);
-        $obj = \cms_utils::get_theme_object();
+        $obj = cms_utils::get_theme_object();
         if( $obj ) $obj->add_headtext( $text );
     }
 
@@ -1523,8 +1451,10 @@ abstract class CMSModule
             $tpl->assign('actionparams',$params);
             $tpl->assign('returnid',$returnid);
             $tpl->assign('mod',$this);
-
             $this->action_tpl = $tpl;
+        } else {
+            // pass through the smarty template
+            $this->action_tpl = $parent;
         }
         $output = $this->DoAction($name, $id, $params, $returnid);
         if( $gCms->template_processing_allowed() ) $this->action_tpl = null;
@@ -1597,7 +1527,6 @@ abstract class CMSModule
         $str = CmsFormUtils::create_form_start($parms);
         return $str;
 
-        //$this->_loadFormMethods();
         //return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
     }
 
@@ -1627,7 +1556,6 @@ abstract class CMSModule
      */
     public function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
     }
 
@@ -1644,7 +1572,6 @@ abstract class CMSModule
      */
     public function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
     }
 
@@ -1662,7 +1589,6 @@ abstract class CMSModule
      */
     public function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
     }
 
@@ -1681,7 +1607,6 @@ abstract class CMSModule
      */
     public function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
     }
 
@@ -1698,7 +1623,6 @@ abstract class CMSModule
      */
     public function CreateInputHidden($id, $name, $value='', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
     }
 
@@ -1716,7 +1640,6 @@ abstract class CMSModule
      */
     public function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
     }
 
@@ -1735,7 +1658,6 @@ abstract class CMSModule
      */
     public function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
     }
 
@@ -1752,7 +1674,6 @@ abstract class CMSModule
      */
     public function CreateInputReset($id, $name, $value='Reset', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
     }
 
@@ -1771,7 +1692,6 @@ abstract class CMSModule
      */
     public function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
     }
 
@@ -1791,7 +1711,6 @@ abstract class CMSModule
      */
     public function CreateInputSelectList($id, $name, $items, $selecteditems=[], $size=3, $addttext='', $multiple = true)
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
     }
 
@@ -1809,7 +1728,6 @@ abstract class CMSModule
      */
     public function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
     }
 
@@ -1934,7 +1852,6 @@ abstract class CMSModule
                         $warn_message='', $onlyhref=false, $inline=false, $addttext='',
                         $targetcontentonly=false, $prettyurl='')
     {
-        $this->_loadFormMethods();
         return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
     }
 
@@ -1959,7 +1876,6 @@ abstract class CMSModule
     public function create_url($id,$action,$returnid='',$params=[],
                                $inline=false,$targetcontentonly=false,$prettyurl='')
     {
-        $this->_loadFormMethods();
         return cms_module_create_url($this,$id,$action,$returnid,$params,$inline,$targetcontentonly,$prettyurl);
     }
 
@@ -1997,7 +1913,6 @@ abstract class CMSModule
     public function CreateReturnLink($id, $returnid, $contents='', $params=[], $onlyhref=false)
     {
         die(__METHOD__.' should not be used');
-        $this->_loadFormMethods();
         return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
     }
 
@@ -2226,7 +2141,6 @@ abstract class CMSModule
      */
     final public function ListTemplates(string $modulename = null)
     {
-        $this->_loadTemplateMethods();
         return cms_module_ListTemplates($this, $modulename);
     }
 
@@ -2242,7 +2156,6 @@ abstract class CMSModule
      */
     final public function GetTemplate(string $tpl_name, string $modulename = null)
     {
-        $this->_loadTemplateMethods();
         return cms_module_GetTemplate($this, $tpl_name, $modulename);
     }
 
@@ -2256,7 +2169,6 @@ abstract class CMSModule
      */
     final public function GetTemplateFromFile(string $template_name)
     {
-        $this->_loadTemplateMethods();
         return cms_module_GetTemplateFromFile($this, $template_name);
     }
 
@@ -2273,7 +2185,6 @@ abstract class CMSModule
      */
     final public function SetTemplate(string $tpl_name, string $content, string $modulename = '')
     {
-        $this->_loadTemplateMethods();
         return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
     }
 
@@ -2288,7 +2199,6 @@ abstract class CMSModule
      */
     final public function DeleteTemplate(string $tpl_name = null, $modulename = null)
     {
-        $this->_loadTemplateMethods();
         return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
     }
 

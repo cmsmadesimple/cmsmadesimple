@@ -607,7 +607,7 @@ abstract class ContentBase
     /**
      * Return the id of the template associated with this content page.
      *
-        * @deprecated
+     * @deprecated
      * @return int.
      */
     public function TemplateId()
@@ -684,6 +684,7 @@ abstract class ContentBase
      * this value uses the item order when calculating the output i.e:  3.3.3
      * to indicate the third grandghild of the third child of the third root page.
      *
+     * @deprecated
      * @return string
      */
     public function Hierarchy()
@@ -697,6 +698,7 @@ abstract class ContentBase
      * Sets the Hierarchy
      *
      * @internal
+     * @deprecated
      * @param string $hierarchy
      */
     public function SetHierarchy(string $hierarchy)
@@ -709,8 +711,9 @@ abstract class ContentBase
      * A string like #.##.## indicating the path to the page and it's order
      * this property uses the id's of pages when calculating the output i.e: 21.5.17
      * to indicate that page id 17 is the child of page with id 5 which is inturn the
-        * child of the page with id 21
+     * child of the page with id 21
      *
+     * @deprecated
      * @return string
      */
     final public function IdHierarchy()
@@ -724,6 +727,7 @@ abstract class ContentBase
      * Similar to the Hierarchy and IdHierarchy this string uses page aliases
      * and outputs a string like root_alias/parent_alias/page_alias
      *
+     * @deprecated
      * @return string
      */
     final public function HierarchyPath()
@@ -788,6 +792,7 @@ abstract class ContentBase
      * The default page is the one that is displayed when no alias or pageid is specified in the route
      * Only one content page can be the default.
      *
+     * @deprecated
      * @return bool
      */
     final public function DefaultContent()
@@ -813,6 +818,7 @@ abstract class ContentBase
      * Cachable pages (when enabled in global settings) are cached by the browser
      * (also server side caching of HTML output may be enabled)
      *
+     * @deprecated
      * @return bool
      */
     public function Cachable()
@@ -823,6 +829,7 @@ abstract class ContentBase
     /**
      * Set whether this page is cachable
      *
+     * @deprecated
      * @param bool $cachable
      */
     public function SetCachable(bool $cachable)
@@ -1005,6 +1012,7 @@ abstract class ContentBase
      */
     public function ChildCount()
     {
+	// todo: this should not be here.  it should be in the contentoperations stuff
         $hm = cmsms()->GetHierarchyManager();
         $node = $hm->getNodeById($this->mId);
         if( $node ) return $node->count_children();
@@ -1135,7 +1143,7 @@ abstract class ContentBase
     }
 
     /************************************************************************/
-    /* The rest																*/
+    /* The rest */
     /************************************************************************/
 
     /**
@@ -1195,8 +1203,8 @@ abstract class ContentBase
 
     /**
      * Convert the current object to an array.
-        *
-        * This can be considered a simple DTO (Data Transfer Object)
+     *
+     * This can be considered a simple DTO (Data Transfer Object)
      *
      * @since 2.0
      * @author Robert Campbell
@@ -1284,6 +1292,7 @@ abstract class ContentBase
         }
 
         if (!$this->HandlesAlias()) {
+	    // todo:  this stuff should not be here.  should only be checkin if it exists if required
             if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
                 $contentops = cmsms()->GetContentOperations();
                 $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
@@ -1294,6 +1303,7 @@ abstract class ContentBase
             }
         }
 
+	// todo:  this stuff should not be here.  should only be checkin if it exists if required
         $auto_type = content_assistant::auto_create_url();
         if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
             // create a valid url.
@@ -1361,6 +1371,7 @@ abstract class ContentBase
      */
     public function FillParams(array $params, bool $editing = false)
     {
+	// todo: this should be done in the editor
         // content property parameters
         $parameters = array('extra1','extra2','extra3','image','thumbnail');
         foreach ($parameters as $oneparam) {
@@ -1463,6 +1474,7 @@ abstract class ContentBase
      */
     public function GetURL($rewrite = true)
     {
+	// this should not be here, should be in the ContentOperations class
         $config = cmsms()->GetConfig();
         $url = "";
         $alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
@@ -1498,7 +1510,7 @@ abstract class ContentBase
 
     /**
      * Return the raw value for a content property.
-     * If no proeprty name is specified 'content_en' is assumed
+     * If no property name is specified 'content_en' is assumed
      *
      * @abstract
      * @param string $propname An optional property name to display.  If none specified, the system should assume content_en.
@@ -1519,6 +1531,7 @@ abstract class ContentBase
      */
     public function GetEditableProperties()
     {
+        // todo: this should not be here... at least not the reliance on siteprefs and basic attributes
         if( !check_permission(get_userid(),'Manage All Content') ) {
             $basic_attributes = array('title','parent');
             $tmp_basic_attributes = cms_siteprefs::get('basic_attributes');
@@ -1542,6 +1555,7 @@ abstract class ContentBase
      */
     private function _SortProperties(array $props)
     {
+	// todo: this is a method for editing, should not be here
         // sort the properties.
         // sort the attributes by tab, priority, name...
         usort($props,function($a,$b) {
@@ -1566,6 +1580,7 @@ abstract class ContentBase
      */
     private function _GetEditableProperties()
     {
+	// todo: this is an editor functionality
         if( isset($this->_editable_properties) ) return $this->_editable_properties;
 
         $props = $this->_SortProperties($this->GetEditableProperties());
@@ -1583,6 +1598,7 @@ abstract class ContentBase
      */
     public function GetTabNames()
     {
+	// todo: this is editor functionality
         $props = $this->_GetEditableProperties();
         $arr = array();
         foreach( $props as $one ) {
@@ -1604,6 +1620,7 @@ abstract class ContentBase
      */
     public function GetTabMessage($key)
     {
+	// todo: this is editor functionality
         switch( $key ) {
             case self::TAB_PERMS:
                 return '<div class="information">'.lang('msg_permstab').'</div>';
@@ -1619,6 +1636,7 @@ abstract class ContentBase
      */
     public function GetTabElements(string $key,bool $adding = FALSE)
     {
+	// todo: this is editor functionality
         $props = $this->_GetEditableProperties();
         $out = array();
         foreach( $props as $one ) {
@@ -1638,6 +1656,7 @@ abstract class ContentBase
      */
     public function HasChildren(bool $activeonly = false)
     {
+        // todo: remove me
         die(__METHOD__);
         // todo: remove me.
         $node = cmsms()->GetContentOperations()->quickfind_node_by_id($id);
@@ -1679,13 +1698,16 @@ abstract class ContentBase
     }
 
     /**
-	 * A utility method to return all of the userid and group ids in a format that is
-	 * suitable to be used in a select field.
-	 * Note: group ids are expressed as negative integers in the keys.
-	 * @return array
-	 */
+     * A utility method to return all of the userid and group ids in a format that is
+     * suitable to be used in a select field.
+     * Note: group ids are expressed as negative integers in the keys.
+     *
+     * @deprecated
+     * @return array
+     */
     static public function GetAdditionalEditorOptions()
     {
+	// todo: move me out of here
         $opts = [];
         $gCms = cmsms();
         $userops = $gCms->GetUserOperations();
@@ -1706,13 +1728,14 @@ abstract class ContentBase
 
     /**
      * A utility method to generate a <select> field for selecting additional editors.
-	 * If a positive owner id is specified that user will be excluded from output select element.
-	 *
-	 * @see ContentBase::GetAdditionalEditorOptions
-	 * @param array $addteditors Array of additional editors
-	 * @param int  $owner_id  The current owner of the page.
-	 * @return string HTML output
-	 */
+     * If a positive owner id is specified that user will be excluded from output select element.
+     *
+     * @deprecated
+     * @see ContentBase::GetAdditionalEditorOptions
+     * @param array $addteditors Array of additional editors
+     * @param int  $owner_id  The current owner of the page.
+     * @return string HTML output
+     */
     static public function GetAdditionalEditorInput(array $addteditors,int $owner_id = -1)
     {
         $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_addteditor',lang('help_title_content_addteditor'));
@@ -1735,6 +1758,7 @@ abstract class ContentBase
      * Provides an input element to display the list of additional editors.
      * This method is usually called from within this object.
      *
+     * @deprecated
      * @param array $addteditors An optional array of additional editor id's (group ids specified with negative values)
      * @return string The input element.
      * @see ContentBase::GetAdditionalEditorInput
@@ -1747,11 +1771,11 @@ abstract class ContentBase
     }
 
     /**
-     * Handles setting the value (by member) of a base (not addon property) property of the content object
+     * Handles setting the value (by member) of a base (not addon) property of the content object
      * for base properties that have been removed from the form.
      *
-	 * @ignore
-	 */
+     * @ignore
+     */
     private function _handleRemovedBaseProperty(string $name,string $member)
     {
         if( !is_array($this->_attributes) ) return FALSE;
@@ -1798,7 +1822,7 @@ abstract class ContentBase
      * @param int $priority The property priority, for sorting.
      * @param string $tab The tab for the property (see tab constants)
      * @param bool $required (whether the property is required)
-        * @param bool $basic Whether or not the property is a basic property (editable by even restricted editors)
+     * @param bool $basic Whether or not the property is a basic property (editable by even restricted editors)
      */
     protected function AddProperty(string $name,int $priority,string $tab = self::TAB_MAIN,bool $required = FALSE,bool $basic = FALSE)
     {
@@ -1825,28 +1849,28 @@ abstract class ContentBase
     }
 
     /**
-	 * Add a property that is directly associtated with a field in the content table.
-	 * @alias for AddProperty
-	 *
-	 * @param string $name The property name
-	 * @param int    $priority The priority
-	 * @param bool   $is_required Whether this field is required for this content type
-	 * @param string  (optional) unused.
-	 * @deprecated
-	 */
+     * Add a property that is directly associtated with a field in the content table.
+     *
+     * @alias for AddProperty
+     * @param string $name The property name
+     * @param int    $priority The priority
+     * @param bool   $is_required Whether this field is required for this content type
+     * @param string  (optional) unused.
+     * @deprecated
+     */
     protected function AddBaseProperty(string $name,int $priority,bool $is_required = false)
     {
         $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
     }
 
     /**
-	 * Alias for AddBaseProperty.
-	 *
-	 * @param string $name
-	 * @param int    $priority
-	 * @param bool   $is_required
-	 * @deprecated
-	 */
+     * Alias for AddBaseProperty.
+     *
+     * @param string $name
+     * @param int    $priority
+     * @param bool   $is_required
+     * @deprecated
+     */
     protected function AddContentProperty(string $name,int $priority,bool $is_required = false)
     {
         return $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
@@ -1855,6 +1879,7 @@ abstract class ContentBase
     /**
      * A method to display a single input element for an object basic, or extended property.
      *
+     * @deprecated
      * @abstract
      * @param string $one The property name
      * @param bool $adding Whether or not we are in add or edit mode.

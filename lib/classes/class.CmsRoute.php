@@ -217,6 +217,7 @@ class CmsRoute implements ArrayAccess
 
     /**
      * Get matching parameter results.
+     * Must be called AFTER the matches method to get the resulting parameters from the URI and route
      *
      * @deprecated
      * @return array Matching parameters... or Null
