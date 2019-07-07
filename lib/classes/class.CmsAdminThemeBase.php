@@ -705,7 +705,7 @@ abstract class CmsAdminThemeBase
 
         $req_url = new cms_url(basename($_SERVER['REQUEST_URI']));
         //$req_url->erase_queryvar(CMS_SECURE_PARAM_NAME);
-        $clean_req_url = trim($req_url);
+        $clean_req_url = trim(ltrim($req_url,'/'));
         $req_mact = urldecode($req_url->get_queryvar($query_var));
         if( $req_mact ) {
             $info = $encoder->decode();
@@ -713,7 +713,7 @@ abstract class CmsAdminThemeBase
         }
         foreach ($this->_menuItems as $sectionKey => $sectionArray) {
             if( !empty($sectionArray['module']) && strpos($_SERVER['REQUEST_URI'],'/moduleinterface.php') !== FALSE ) {
-                // it's a module menu item
+                // it's a module menu item request
                 $url = new cms_url($sectionArray['url']);
                 $item_mact = urldecode($url->get_queryvar($query_var));
                 if( $item_mact == $req_mact ) {
