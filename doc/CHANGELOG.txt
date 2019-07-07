@@ -138,8 +138,7 @@ Core - General
   - CHANGE:  RestrictUnknownParams is now OFF by default, AND cleaning is only done if RestrictUnknownParams() is enabled
   - BREAKING: Modules that register content types cannot be lazy loaded or adminonly
   - CHANGE: LazyLoadAdmin() and LazyLoadFrontend() methods.  Modules should not be lazy loaded anymore, however class files should be kept small
-  - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
-      pretty url determiniation.
+  - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable pretty url determinition.
   - FEATURE: You can now pass NOPRETTY=1 as an item in  a module's create_url() method's params array to indicate that no attempt at generating a pretty URL
       should be made.
   - FEATURE: cms_action_url plugin now supports the NOPRETTY parameter.
@@ -198,7 +197,7 @@ PressRoom v1.0
   - New core example module to demonstrate module development techniques.  It allows managing and displaying time limited content.
 
 CMSContentManager - 1.2
-  - REMOVED: Gets rid of secure options, flag output and bulk functionaltiy
+  - REMOVED: Gets rid of secure options, flag output and bulk functionality
   - REMOVED: The design dropdown option in the content editor.
   - CHANGE: modified to use CMS_ROOT_URL
   - CHANGE: Change connection timeout to 1 second.
