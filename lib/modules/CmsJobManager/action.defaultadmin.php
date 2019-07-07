@@ -7,7 +7,7 @@ $jobs = [];
 $job_objs = $this->get_job_queue()->get_all_jobs();
 if( $job_objs ) {
     foreach( $job_objs as $job ) {
-        $obj = new StdClass;
+        $obj = new \StdClass;
         $obj->name = $job->name;
         $obj->module = $job->module;
         $obj->frequency = (utils::job_recurs($job)) ? $job->frequency : null;
