@@ -215,7 +215,7 @@ CMSContentManager - 1.2
   - REMOVED: all support for events, now uses hooks
 
 Installation Assistant - v1.4
-  - Now require at least version 2.0.1 to upgrade
+  - Now require at least CMSMS version 2.0.1 to upgrade
   - Now test the default character set
   - Now require at least PHP 7.1 and recommend 7.2+
   - Upgrade to smarty v3.1.33
@@ -245,6 +245,7 @@ FileManager v1.6.4
   - No longer allow renaming any file to have a .php extension (or a derivative).
   - Now use CMSMS error console when displaying filepicker exceptions (no uncaught exceptions)
   - Removes all support for events, now uses hooks
+  - FEATURE: New ability to add and edit simple text files.  Useful for quick edits on small config files and simple template changes.  
 
 FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
@@ -279,6 +280,7 @@ DesignManager v1.1.7
 
 Navigator v1.0.9
  - Adds the title property to each node.
+ - Fixes problem with the requirments that some parameters (such as items, and nlevels) be specified in a specific order.
 
 CmsJobManager v0.3
  - Now uses CURL to initiate asynchronous requests
