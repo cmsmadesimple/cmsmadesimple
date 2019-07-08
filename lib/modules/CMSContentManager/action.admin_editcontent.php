@@ -339,7 +339,7 @@ if( $content_id > 0 ) $parms['content_id']=$content_id;
 $url = str_replace('&amp','&',$this->create_url($id,'admin_editcontent',$returnid,$parms)).'&showtemplate=false';
 $smarty->assign('apply_ajax_url',$url);
 $smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
-$smarty->assign('lock_timeout',$this->GetPreference('locktimeout') && !$config['disable_locking']);
+$smarty->assign('lock_timeout',($config['disable_locking']) ? 0 : $this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
 $smarty->assign('options_tab_name',$content_obj::TAB_OPTIONS);
 $smarty->assign('active_tab',$active_tab);

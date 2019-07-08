@@ -111,10 +111,10 @@ $(function(){
 		  {if $row.can_steal}<strong>{$mod->Lang('locked_steal')}:</strong><br/>{/if}
 		  <strong>{$mod->Lang('locked_by')}:</strong> {$row.lockuser}<br/>
 		  <strong>{$mod->Lang('locked_since')}:</strong> {$row.lock->created|date_format:'%x %H:%M'}<br/>
-		  {if $row.lock->expires < $smarty.now}
-		    <span style="color: red;"><strong>{$mod->Lang('lock_expired')}:</strong> {$row.lock->expires|relative_time}</span>
+		  {if $row.lock.expires < $smarty.now}
+		    <span style="color: red;"><strong>{$mod->Lang('lock_expired')}:</strong> {$row.lock.expires|relative_time}</span>
 		  {else}
-		    <strong>{$mod->Lang('lock_expires')}:</strong> {$row.lock->expires|relative_time}
+		    <strong>{$mod->Lang('lock_expires')}:</strong> {$row.lock.expires|relative_time}
      	          {/if}<br/>
 	        {/strip}{/capture}
 	        {if !$row.can_steal}
