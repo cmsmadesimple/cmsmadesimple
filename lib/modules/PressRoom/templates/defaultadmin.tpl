@@ -101,8 +101,9 @@ $(function(){
 <div class="c_full cf">
     {if $mod->canAddArticle()}
     <a href="{cms_action_url action=admin_edit_article}" title="{$mod->Lang('t_add_article')}">{admin_icon icon=newobject} {$mod->Lang('add_article')}</a>
+    &nbsp;
     {/if}
-    <a id="filter_btn">{admin_icon icon=view} {$mod->Lang('view_filter')} <em id="filterinuse">{if $filter_applied}({$mod->Lang('applied')}){/if}</em></a>
+    <a id="filter_btn">{admin_icon icon=filter} {$mod->Lang('view_filter')} <em id="filterinuse">{if $filter_applied}({$mod->Lang('applied')}){/if}</em></a>
 
     {if $articles->pagecount > 1}
        <div style="float: right;">
