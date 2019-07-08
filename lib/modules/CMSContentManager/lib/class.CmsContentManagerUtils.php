@@ -106,7 +106,7 @@ final class CmsContentManagerUtils
                 $list = self::get_theme_page_templates();
                 if( !empty($list) ) {
                     $keys = array_keys($list);
-                    return $keys[0];
+                    $tpl_rsrc = $keys[0];
                 }
             }
         }

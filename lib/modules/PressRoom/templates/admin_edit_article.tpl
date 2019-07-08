@@ -51,8 +51,9 @@ $(function(){
 	  if( typeof data.preview_url != 'undefined' ) url = data.preview_url
 	  if( !url ) cms_alert('an unknown error occurred')
 	  $('#previewframe').prop('src',url);
-      }).fail(function(data){
+      }).fail(function(jqxhr, textStatus, errorThrown){
           let msg = 'An unknown error occurred'
+	  if( errorThrown.length > 0 ) msg = errorThrown
 	  if( typeof data.message != 'undefined' && data.message.length > 0 ) msg = data.message;
 	  cms_alert(msg);
       })

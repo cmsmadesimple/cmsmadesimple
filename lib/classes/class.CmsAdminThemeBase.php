@@ -742,7 +742,6 @@ abstract class CmsAdminThemeBase
             }
         }
 
-
         if( $selected_key ) {
             // we have the sectionKey of the selected match
             // now set it active, and set the parent all the way to the top
