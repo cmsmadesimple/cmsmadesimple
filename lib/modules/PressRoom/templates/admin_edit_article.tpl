@@ -94,7 +94,7 @@ $(function(){
 <div class="c_full cf">
   <label for="fld_summary" class="grid_3">{$mod->Lang('lbl_summary')}</label>
   <div class="grid_8">
-      {cms_textarea name=summary enablewysiwyg=$settings->editor_summary_wysiwyg id="fld_summary" rows="5" value=$article->summary}
+      {cms_textarea name=summary enablewysiwyg=$settings->editor_summary_wysiwyg id="fld_summary" rows="5" value=$article->summary class="grid_12"}
   </div>
 </div>
 {/if}
@@ -102,7 +102,7 @@ $(function(){
 <div class="c_full cf">
   <label for="fld_content" class="grid_3">{$mod->Lang('lbl_content')}*</label>
   <div class="grid_8">
-      {cms_textarea name=content enablewysiwyg=1 id="fld_content" rows="10" value=$article->content}
+      {cms_textarea name=content enablewysiwyg=1 id="fld_content" rows="10" value=$article->content class="grid_12"}
   </div>
 </div>
 
