@@ -671,7 +671,7 @@ final class ModuleOperations
                 }
 
                 $alerts = \CMSMS\AdminAlerts\Alert::load_all();
-                if( count($alerts) ) {
+                if( !empty($alerts) ) {
                     foreach( $alerts as $alert ) {
                         if( $alert->module == $module ) $alert->delete();
                     }
