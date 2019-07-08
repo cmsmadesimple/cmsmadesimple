@@ -1912,7 +1912,6 @@ abstract class CMSModule
      */
     public function CreateReturnLink($id, $returnid, $contents='', $params=[], $onlyhref=false)
     {
-        die(__METHOD__.' should not be used');
         return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
     }
 
