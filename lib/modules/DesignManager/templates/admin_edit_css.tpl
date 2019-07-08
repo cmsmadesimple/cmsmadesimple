@@ -127,7 +127,7 @@ $(function(){
 {/if}
 *}
 
-{if $lock_timeout < 1}
+{if $css->get_id() > 0 && $lock_timeout < 1}
    <div class="warning lock-warning" style="width: 95%; text-align: center;">{lang('warn_lockingdisabled')}</div>
 {elseif isset($get_lock)}
 	<div class="warning lock-warning">
