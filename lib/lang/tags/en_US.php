@@ -152,6 +152,7 @@ $lang['help_function_cms_render_css'] = <<<EOT
     <li>force - <em>(bool,default=false)</em> - Force the files to be concatenated together and a new file output EVEN if the source scripts have not changed.</li>
     <li>no_cache - <em>(bool,default=false)</em> - Append information to the output HTML to prevent browsers from caching the output CSS file.</li>
     <li>smarty_processing - <em>(bool,default=false)</em> - Post process the CSS file through smarty with the delimiters [[ and ]] like {cms_stylesheet}</li>
+    <li>adjust_urls - <em>(bool,default=false)</em> - Post process the CSS file, adjusting relative url() entries to be absolute URLs.</li>
 </ul>
 
 <h3>Hooks:</h3>

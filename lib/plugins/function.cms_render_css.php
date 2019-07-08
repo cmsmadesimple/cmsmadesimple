@@ -40,11 +40,39 @@ function smarty_function_cms_render_css( $params, $template )
         return $combined_css;
     };
 
+    $css_url_adjust = function(array $params) {
+        // this fixes relative URLS in CSS url statements to prepend a prefix
+        // given the filename in $params['file'] convert the path portion to a CMSMS absolute url.
+        $pathname = dirname($params['file']);
+        if( !startswith($pathname,CMS_ROOT_PATH) ) return;
+        $cms_real_root = realpath(CMS_ROOT_PATH);
+        if( !$cms_real_root ) return;
+        $url_prefix = str_replace(CMS_ROOT_PATH, CMS_ROOT_URL, $pathname);
+        $css_search = '#url\(\s*[\'"]?(.*?)[\'"]?\s*\)#';
+        $css_url_fix = function($matches) use ($url_prefix, $pathname, $cms_real_root) {
+            // we do absolutely nothing with URI's or with anything with ../ in the name.
+            if( startswith($matches[1],'data:') ) return $matches[0];
+            if( startswith($matches[1],'http:') ) return $matches[0];
+            if( startswith($matches[1],'https:') ) return $matches[0];
+            if( startswith($matches[1],'//') ) return $matches[0];
+            $fullpath = realpath($pathname.'/'.$matches[1]);
+            if( !$fullpath || !startswith($fullpath,$cms_real_root) || !is_file($fullpath) ) return $matches[0];
+            // all checks done... we can replace the url with
+            $in = $matches[0];
+            $out = "url('{$url_prefix}/{$matches[1]}')";
+            return $out;
+        };
+        $params['content'] = preg_replace_callback($css_search, $css_url_fix, $params['content']);
+    };
+
     $hook_manager = $gCms->get_hook_manager();
-    if( cms_to_bool(get_parameter_value($params,'smarty_processing')) ) {
+    if( cms_to_bool(get_parameter_value($params, 'adjust_urls')) ) {
+        $hook_manager->add_hook('Core::ProcessCSSFile', $css_url_adjust, $hook_manager::PRIORITY_LOW );
+    }
+    if( cms_to_bool(get_parameter_value($params, 'smarty_processing')) ) {
         $hook_manager->add_hook('Core::PostProcessCSS', $do_smarty_postprocess, $hook_manager::PRIORITY_HIGH );
     }
-    $gCms->get_hook_manager()->add_hook( 'Core::ContentPostRender', $on_postrender );
+    $hook_manager->add_hook( 'Core::ContentPostRender', $on_postrender );
 
     // output an html placeholder
     return $magic_string;
