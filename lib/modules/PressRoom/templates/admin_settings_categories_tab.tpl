@@ -1,3 +1,14 @@
+<script>
+$(function(){
+   $('a.delcat').click(function(ev){
+      ev.preventDefault()
+      let url = $(this).attr('href')
+      cms_confirm('{$mod->Lang('confirm_delcat')}').done(function(){
+          window.location.href = url
+      })
+   })
+})
+</script>
 <style>
 .alias {
    color: maroon;
@@ -36,7 +47,7 @@
 	          <a href="{$edit_url}" title="{$mod->Lang('t_edit_category')}">{admin_icon icon='edit'}</a>
 	       </td>
 	       <td>
-  	          <a href="{cms_action_url action=admin_del_category catid=$cat->id}" title="{$mod->Lang('t_del_category')}">{admin_icon icon='delete'}</a>
+  	          <a class="delcat" href="{cms_action_url action=admin_del_category catid=$cat->id}" title="{$mod->Lang('t_del_category')}">{admin_icon icon='delete'}</a>
 	       </td>
 	    </tr>
 	 {/foreach}

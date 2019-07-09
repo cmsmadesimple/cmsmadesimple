@@ -245,34 +245,36 @@ class CategoriesManager
     {
         // load them all
         $all = $this->loadAllArray();
-        // convert to tree
-        $tree = $this->_arrayToTree( $all );
-        unset( $all );
+        if( !empty($all) ) {
+            // convert to tree
+            $tree = $this->_arrayToTree( $all );
+            unset( $all );
 
-        $walkTreeTD = function( array &$tree, Callable $fn, $depth = 0, $parent_hier = null, $parent_long = null ) use (&$walkTreeTD) {
-            foreach( $tree as &$node ) {
-                $node = $fn( $node, $parent_hier, $parent_long );
-                // calculate hierarchy and long name
-                if( !empty($node['children']) ) $walkTreeTD( $node['children'], $fn, $depth + 1, $node['hierarchy'], $node['long_name'] );
-            }
-        };
+            $walkTreeTD = function( array &$tree, Callable $fn, $depth = 0, $parent_hier = null, $parent_long = null ) use (&$walkTreeTD) {
+                foreach( $tree as &$node ) {
+                    $node = $fn( $node, $parent_hier, $parent_long );
+                    // calculate hierarchy and long name
+                    if( !empty($node['children']) ) $walkTreeTD( $node['children'], $fn, $depth + 1, $node['hierarchy'], $node['long_name'] );
+                }
+            };
 
-        $walkTreeTD( $tree, function( $node, $parent_hier, $parent_long ) {
-                $node['hierarchy'] = ($parent_hier) ? $parent_hier . '.' . $node['item_order'] : $node['item_order'];
-                $node['long_name'] = ($parent_long) ? $parent_long . ' | ' . $node['name'] : $node['name'];
-                // save this thing.
-                // $obj = Category::from_row( $node );
-                // $this->save( $obj );
-                return $node;
-        });
+            $walkTreeTD( $tree, function( $node, $parent_hier, $parent_long ) {
+                    $node['hierarchy'] = ($parent_hier) ? $parent_hier . '.' . $node['item_order'] : $node['item_order'];
+                    $node['long_name'] = ($parent_long) ? $parent_long . ' | ' . $node['name'] : $node['name'];
+                    // save this thing.
+                    // $obj = Category::from_row( $node );
+                    // $this->save( $obj );
+                    return $node;
+                });
 
-        // now save the damned thing.
-        $this->db->StartTrans();
-        $walkTreeTD( $tree, function( $node ){
-                $this->_updateRow( $node );
-                return $node;
-        });
-        $this->db->CompleteTrans();
+            // now save the damned thing.
+            $this->db->StartTrans();
+            $walkTreeTD( $tree, function( $node ){
+                    $this->_updateRow( $node );
+                    return $node;
+                });
+            $this->db->CompleteTrans();
+        }
         if( $this->cache_driver ) $this->cache_driver->clear(__CLASS__);
     }
 

@@ -1,4 +1,5 @@
 <?php
+$lang['confirm_delcat'] = 'Are you sure you want to delete this category?  Any articles associated with this category will be orphaned.';
 $lang['friendlyname'] = 'PressRoom';
 $lang['lbl_maxsize'] = 'Maximum size';
 $lang['info_text_maxsize'] = 'The maximum length of the text provided for this field';
