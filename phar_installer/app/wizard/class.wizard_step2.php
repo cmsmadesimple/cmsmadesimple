@@ -16,10 +16,10 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
 
         $info = array();
         if( is_file("$dir/version.php") ) {
-            include_once($dir.'/version.php');
+            include($dir.'/version.php');
             $info['mtime'] = filemtime($dir.'/version.php');
         } else {
-            include_once("$dir/lib/version.php");
+            include("$dir/lib/version.php");
             $info['mtime'] = filemtime($dir.'/lib/version.php');
         }
         $info['version'] = $CMS_VERSION;

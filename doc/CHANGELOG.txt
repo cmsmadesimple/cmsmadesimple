@@ -17,6 +17,9 @@ ModuleManager v2.1.7
 News v2.51.6
   - Minor improvements for CMSMS v2.3 compatibility.
 
+Phar Installer v1.3.8
+  - Minor change to use include() instead of include_once()... not sure why
+
 Version 2.2.10 - Spuzzum
 -------------------------------
 Core - General
