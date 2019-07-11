@@ -1,82 +1,80 @@
-<script type="text/javascript">{literal}
+<script>
 $(function() {
-   var _jqXHR = [];  // jqXHR array
-   var _files = [];  // filenames
+   var _jqXHR = []  // jqXHR array
+   var _files = []  // filenames
 
     // prevent browser default drag/drop handling
     $(document).bind('drop dragover', function(e) {
         // prevent default drag/drop stuff.
-        e.preventDefault();
-    });
+        e.preventDefault()
+    })
 
     $(document).on('click', '#cancel', function(e){
-        e.preventDefault();
-        aborting = true;
-        var ul = $('#fileupload').data('fileupload');
-        if( typeof ul != 'undef' )
-        {
-          var data = {};
-          data.errorThrown = 'abort';
-	  ul._trigger('fail', e, data);
+        e.preventDefault()
+        aborting = true
+        var ul = $('#fileupload').data('fileupload')
+        if( typeof ul != 'undef' ) {
+          var data = {}
+          data.errorThrown = 'abort'
+	  ul._trigger('fail', e, data)
         }
-    });
+    })
 
     // create our file upload area.
     $('#fileupload').fileupload({
 
         add: function(e, data) {
-            _files.push(data.files[0].name);
-            _jqXHR.push(data.submit());
+            _files.push(data.files[0].name)
+            _jqXHR.push(data.submit())
         },
 
+        url: '{$action_url}',
     	dataType: 'json',
     	dropZone: $('#dropzone'),
-    	maxChunkSize: {/literal}{$max_chunksize},{literal}
+    	maxChunkSize: {$max_chunksize},
 
     	start: function(e,data){
-		$('#cancel').show();
-    		$('#progressarea').show();
+		$('#cancel').show()
+    		$('#progressarea').show()
     	},
 
     	done: function(e,data){
-		_files = [];
-		_jqXHR = [];
+		_files = []
+		_jqXHR = []
         },
 
         fail: function(e, data) {
             $.each(_jqXHR, function(index,obj){
-                if( typeof obj == 'object' )
- 		{
-		  obj.abort();
-		  if( index < _files.length && typeof data.url != 'undefined' ) {
-  		    // now delete the file.
-                    var turl = '{/literal}{$action_url}{literal}';
-		    turl = turl.replace(/amp;/g,'') + '&' + $.param({ file: _files[index] });
-		    $.ajax({
-	               url: turl,
-                       type: 'DELETE'
-                    });
-                  }
+                if( typeof obj == 'object' ) {
+		    obj.abort()
+		    if( index < _files.length && typeof data.url != 'undefined' ) {
+  		        // now delete the file.
+                    	var turl = '{$action_url}'
+		    	turl = turl.replace(/amp;/g,'') + '&' + $.param({ file: _files[index] })
+		    	$.ajax({
+	                    url: turl,
+                       	    type: 'DELETE'
+                        })
+                    }
                 }
-            });
-	    _jqXHR = [];
-            _files = [];
+            })
+	    _jqXHR = []
+            _files = []
         },
 
         progressall: function(e, data) {
-        	// overall progress callback
-        	var perc = (data.loaded / data.total * 100).toFixed(2);
-            var total = null;
-            total = (data.loaded / data.total * 100).toFixed(0);
-            var str = perc + ' %';
-        	//console.log(total);
-        	barValue(total);
-        		function barValue(total) {
-                    	$("#progressarea").progressbar({
-                    		value: parseInt(total)
-                    	});
-                    	$(".ui-progressbar-value").html(str);
-        		}
+            // overall progress callback
+            var perc = (data.loaded / data.total * 100).toFixed(2)
+            var total = null
+            total = (data.loaded / data.total * 100).toFixed(0)
+            var str = perc + ' %'
+            barValue(total)
+            function barValue(total) {
+               	$("#progressarea").progressbar({
+            	    value: parseInt(total)
+                })
+                $(".ui-progressbar-value").html(str);
+            }
         },
 
         stop: function(e, data) {
@@ -86,24 +84,24 @@ $(function() {
         }
     });
 });
-{/literal}</script>
+</script>
 
-<style type="text/css">{literal}
+<style type="text/css">
 .upload-wrapper {
 	margin: 10px 0
 }
 .hcentered {
 	text-align: center
-	}
+}
 .vcentered {
 	display: table-cell;
 	vertical-align: middle
-   }
+}
 #dropzone {
 	margin: 15px 0;
 	border-radius: 4px;
 	border: 2px dashed #ccc
-	}
+}
 #dropzone:hover{
 	cursor: move
 }
@@ -115,8 +113,8 @@ $(function() {
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	display: none
-	}
-{/literal}</style>
+}
+</style>
 
 {$formstart}
 <input type="hidden" name="disable_buffer" value="1"/>

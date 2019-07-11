@@ -1,12 +1,12 @@
 {if !isset($is_ie)}
 {* IE sucks... we only get here for REAL browsers. *}
-<script type="text/javascript">{literal}
-$(function(){
+<script>
+	$(function(){
 
     var thediv = '#theme_dropzone';
 
     $(document).on('dialogopen', '.drop .dialog', function(event,ui){
-        var url = '{/literal}{$chdir_url}{literal}';
+        var url = '{$chdir_url}';
             url = url.replace(/amp;/g,'')+'&showtemplate=false';
 
         $.get(url,function(data) {
@@ -16,7 +16,7 @@ $(function(){
 
     $('#chdir_form').submit(function(e){
         var data = $(this).serialize();
-        var url = '{/literal}{$chdir_url}{literal}';
+        var url = '{$chdir_url}';
         url = url.replace(/amp;/g,'')+'&showtemplate=false';
 
         $.post(url,data,function(data,textStatus,jqXHR){
@@ -25,35 +25,36 @@ $(function(){
             $('.dialog').dialog('close');
         });
 
-    e.preventDefault();
-});
+        e.preventDefault();
+    });
 
-// prevent browser default drag/drop handling
-$(document).on('drop dragover', function(e) {
-    // prevent default drag/drop stuff.
-    e.preventDefault();
-});
+    // prevent browser default drag/drop handling
+    $(document).on('drop dragover', function(e) {
+        // prevent default drag/drop stuff.
+        e.preventDefault();
+    });
 
     $(thediv+'_i').fileupload({
         dataType: 'json',
         dropZone: $(thediv),
-        maxChunkSize: {/literal}{$max_chunksize},{literal}
+        maxChunkSize: {$max_chunksize},
 
         progressall: function(e,data) {
             var total = (data.loaded / data.total * 100).toFixed(0);
 
             $(thediv).progressbar({ value: parseInt(total) });
             $('.ui-progressbar-value').html(total+'%');
-         },
+        },
 
-         stop: function(e,data) {
-           $(thediv).progressbar('destroy');
-           $(thediv).trigger('dropzone_stop');
-	   $(thediv).val('')
-         }
+        stop: function(e,data) {
+            $(thediv).progressbar('destroy');
+            $(thediv).trigger('dropzone_stop');
+	    $(thediv).val('')
+        }
     });
 });
-{/literal}</script>
+</script>
+
 <div class="drop">
 	<div class="drop-inner cf">
 	{if isset($dirlist)}

@@ -10,14 +10,13 @@
  * http://www.opensource.org/licenses/MIT
  */
 namespace FileManager;
-use StdClass;
 
 abstract class jquery_upload_handler
 {
 
     private $options;
 
-    function __construct($options=null) {
+    public function __construct($options=null) {
         $this->options = array(
             'script_url' => $this->getFullUrl().'/'.basename(__FILE__),
             'upload_dir' => dirname(__FILE__).'/files/',
@@ -30,16 +29,26 @@ abstract class jquery_upload_handler
             'accept_file_types' => '/.+$/i',
             'max_number_of_files' => null,
             // Set the following option to false to enable non-multipart uploads:
-            'discard_aborted_uploads' => false
+            'discard_aborted_uploads' => false,
+            'orient_image'=>false,
+            'image_versions'=>[]
         );
         if (is_array($options) && count($options)) {
             foreach( $options as $key => $value ) {
                 $this->options[$key] = $value;
             }
         }
+
+        // tweak some headers (done because we're using an older version of this class)
+        if( !isset($_SERVER['HTTP_X_FILE_SIZE']) && isset($_SERVER['HTTP_CONTENT_RANGE']) ) {
+            $tmp = explode('/',trim($_SERVER['HTTP_CONTENT_RANGE']));
+            if( count($tmp) == 2 ) {
+                $_SERVER['HTTP_X_FILE_SIZE'] = (int) $tmp[1];
+            }
+        }
     }
 
-    function getFullUrl() {
+    public function getFullUrl() {
         return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').
         		(isset($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
         		(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
@@ -51,7 +60,7 @@ abstract class jquery_upload_handler
     private function get_file_object($file_name) {
         $file_path = $this->options['upload_dir'].$file_name;
         if (is_file($file_path) && $file_name[0] !== '.') {
-            $file = new StdClass();
+            $file = new \stdClass();
             $file->name = $file_name;
             $file->size = filesize($file_path);
             $file->url = $this->options['upload_url'].rawurlencode($file->name);
@@ -129,17 +138,21 @@ abstract class jquery_upload_handler
         return $success;
     }
 
-    protected function is_file_acceptable( $filename ) { return TRUE;
+    protected function is_file_type_acceptable( $file ) {
+        if (!preg_match($this->options['accept_file_types'], $file->name)) return false;
+        return true;
+    }
+
+    protected function process_error( $file, $error ) {
+        $file->error = $error;
+        return $file;
     }
 
     private function has_error($uploaded_file, $file, $error) {
         if ($error) {
             return $error;
         }
-        if( !$this->is_file_acceptable( $file->name ) ) {
-            return 'acceptFileName';
-        }
-        if (!preg_match($this->options['accept_file_types'], $file->name)) {
+        if( !$this->is_file_type_acceptable( $file ) ) {
             return 'acceptFileTypes';
         }
         if ($uploaded_file && is_uploaded_file($uploaded_file)) {
@@ -178,7 +191,7 @@ abstract class jquery_upload_handler
         return $file_name;
     }
 
-    private function orient_image($file_path) {
+    protected function orient_image($file_path) {
         $exif = exif_read_data($file_path);
         $orientation = intval(@$exif['Orientation']);
         if (!in_array($orientation, array(3, 6, 8))) {
@@ -208,12 +221,8 @@ abstract class jquery_upload_handler
     protected function after_uploaded_file($fileobject) {
     }
 
-    // cmsms
-    protected function after_uploaded_files($fileobjects_array) {
-    }
-
     private function handle_file_upload($uploaded_file, $name, $size, $type, $error) {
-        $file = new StdClass();
+        $file = new \stdClass();
         $file->name = $this->trim_file_name($name, $type);
         $file->size = intval($size);
         $file->type = $type;
@@ -268,7 +277,7 @@ abstract class jquery_upload_handler
                 .'?file='.rawurlencode($file->name);
             $file->delete_type = 'DELETE';
         } else {
-            $file->error = $error;
+            $file = $this->process_error( $file, $error );
         }
         return $file;
     }
@@ -290,6 +299,13 @@ abstract class jquery_upload_handler
             return $this->delete();
         }
 
+        $total_file_size = (isset($_SERVER['HTTP_X_FILE_NAME']) && isset($_SERVER['HTTP_X_FILE_SIZE']) ) ? (int) $_SERVER['HTTP_X_FILE_SIZE'] : null;
+        if( !$total_file_size ) {
+            $content_range_header = isset($_SERVER['HTTP_CONTENT_RANGE']) ? trim($_SERVER['HTTP_CONTENT_RANGE']) : null;
+            $content_range = $content_range_header ? preg_split('/[^0-9]+/', $content_range_header) : null;
+            $total_file_size = $content_range[3];
+        }
+
         $upload = isset($_FILES[$this->options['param_name']]) ?
             $_FILES[$this->options['param_name']] : null;
         $info = array();
@@ -299,8 +315,7 @@ abstract class jquery_upload_handler
                     $upload['tmp_name'][$index],
                     isset($_SERVER['HTTP_X_FILE_NAME']) ?
                         $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
-                    isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                        $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
+                    $total_file_size ? $total_file_size : $upload['size'][$index],
                     isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                         $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
                     $upload['error'][$index]
@@ -312,9 +327,7 @@ abstract class jquery_upload_handler
                 isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
                 isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : (isset($upload['name']) ?
                         isset($upload['name']) : null),
-                isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                    $_SERVER['HTTP_X_FILE_SIZE'] : (isset($upload['size']) ?
-                        isset($upload['size']) : null),
+                $total_file_size ? $total_file_size : $upload['size'],
                 isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                     $_SERVER['HTTP_X_FILE_TYPE'] : (isset($upload['type']) ?
                         isset($upload['type']) : null),

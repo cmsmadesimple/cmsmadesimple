@@ -301,7 +301,8 @@ final class FileManager extends CMSModule
     {
         $out = '';
         $urlpath = $this->GetModuleURLPath()."/js";
-        $jsfiles = array('jquery-file-upload/jquery.iframe-transport.js');
+        $jsfiles = [];
+	//$jsfines[] = 'jquery-file-upload/jquery.iframe-transport.js';
         $jsfiles[] = 'jquery-file-upload/jquery.fileupload.js';
         $jsfiles[] = 'jqueryrotate/jQueryRotate-2.2.min.js';
         $jsfiles[] = 'jrac/jquery.jrac.js';
