@@ -75,9 +75,8 @@ class Smarty extends smarty_theme_template
         $this->template_class = '\\CMSMS\internal\template_wrapper';
 
         // common resources.
-        //$this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
         $this->registerResource('cms_theme', new \CMSMS\internal\smarty_resource_cmstheme());
-        $this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
+        $this->registerResource('cms_file',new \CMSMS\internal\smarty_resource_cmsfile());
         $this->registerResource('module_db_tpl',new \CMSMS\internal\module_db_template_resource());
         $this->registerResource('module_file_tpl',new \CMSMS\internal\module_file_template_resource());
         $this->registerResource('cms_template',new \CMSMS\internal\layout_template_resource());

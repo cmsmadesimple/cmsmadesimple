@@ -112,4 +112,6 @@ catch( CmsError403Exception $e ) {
 catch( \Exception $e ) {
     audit('','Admin Interface','Request Error '.$e->GetMessage());
     debug_to_log('Admin Module Request Error', $e->GetMessage()."\n".$e->GetTraceAsString());
+    header("HTTP/1.0 500 Internal server error - check debug log");
+    header("Status: 500 Internal server error - check debug log");
 }

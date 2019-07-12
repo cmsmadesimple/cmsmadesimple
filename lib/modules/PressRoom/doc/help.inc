@@ -28,6 +28,7 @@
      <li>The display start date/time</li>
      <li>The display end date/time</li>
 </ul>
+
 <p>These dates are essentially mutually exclusive.  The start and end fields are used to control the visibility of the article, along with the status field.  The rules for displaying articles are as follows:</p>
 <ul>
       <li>If the start time is specified in an article
@@ -40,6 +41,7 @@
 <p>If either value is set to January 1, 1970 that is the same as turning it &quot;off&quot;</p>
 <p>The end time if specified, cannot be earlier than the start time, if specified.</p>
 <p>The post date is primarily only used for sorting in summary views, and for display purposes. It is NOT used to indicate whether an article can or cannot be displayed.</p>
+
 <h3>Permissions:</h3>
 <p>On installation, this module creates four new permissons:</p>
 <ul>
@@ -283,7 +285,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
 </ul>
 
 <h3>Links within Templates:</h3>
-<p>By default, a summary view will create links to detail views<p>
+<p>By default, a summary view will create links to detail views.  You can use the {cms_action_url} plugin to create links to other views.  i.e:  from the detail view you may wan to create a link back to the summary view, or to a list of categories.<p>
 
 <h3>Search integration:</h3>
 <ul>
@@ -297,7 +299,7 @@ cp lib/modules/PressRoom/templates/default.tpl assets/module_custom/PressRoom/te
         <p><strong>View:</strong> default</p>
         <p><strong>Default:</strong> default.tpl</p>
 	<p><strong>Description:</strong> Specify an alternate summary template to use.</p>
-	<p>By default, this module uses file based templates so without specifying a smarty resource name, the system will look in <code>assets/module_custom/PressRoom/templates</code> for templates.   You can specify alternate smarty resources such as:  <code>cmsfile:something.tpl</code> to look for something.tpl in <code>assets/templates</code> or <code>cms_template:something</code> to use a template named "something" from within DesignManager.</p>
+	<p>By default, this module uses file based templates so without specifying a smarty resource name, the system will look in <code>assets/module_custom/PressRoom/templates</code> for templates.   You can specify alternate smarty resources such as:  <code>cms_file:something.tpl</code> to look for something.tpl in <code>assets/templates</code> or <code>cms_template:something</code> to use a template named "something" from within DesignManager.</p>
 	<p>You can use the <code>{cms_module_hint}</code> smarty plugin to specify which template to used from within the content page, or the page template.</p>
     </li>
     <li>detailtemplate:

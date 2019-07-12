@@ -181,7 +181,7 @@ while( $trycount < 2 ) {
             $main_rsrc = $contentobj->TemplateResource();
             if( $config['content_processing_mode'] >= 0 ) {
                 // doing the top+body+head splitup and separation
-                if( startswith( $main_rsrc, 'cmsfile:' ) ) {
+                if( startswith( $main_rsrc, 'cms_file:' ) ) {
                     $top_rsrc = $main_rsrc.';top';
                     $body_rsrc = $main_rsrc.';body';
                     $head_rsrc = $main_rsrc.';head';

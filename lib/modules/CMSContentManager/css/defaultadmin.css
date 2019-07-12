@@ -33,3 +33,6 @@
 #contenttable tr.selected td {
     background-color: lightcyan;
 }
+.ui-tooltiip {
+    font-size: 12px !important;
+}

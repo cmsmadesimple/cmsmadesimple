@@ -875,13 +875,13 @@ class ContentOperations
      * in the admin and various modules.  If $current or $parent variables are passed, care is taken
      * to make sure that children which could cause a loop are hidden, in cases of when you're creating
      * a dropdown for changing a content object's parent.
-         *
-          * This method was rewritten for 2.0 to use the jquery hierselector plugin to better accommodate larger websites.
-         *
-            * Since many parameters are now ignored, A new method needs to be writtent o replace this archaic method...
-            * so consider this method to be deprecateed.
      *
-            * @deprecated
+     * This method was rewritten for 2.0 to use the jquery hierselector plugin to better accommodate larger websites.
+     *
+     * Since many parameters are now ignored, A new method needs to be writtent o replace this archaic method...
+     * so consider this method to be deprecateed.
+     *
+     * @deprecated
      * @param int $current The id of the content object we are working with.  Used with allowcurrent to not show children of the current conrent object, or itself.
      * @param int $value The id of the currently selected content object.
      * @param string $name The html name of the dropdown.
@@ -889,7 +889,7 @@ class ContentOperations
      * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current user has authorship of (can edit)
      * @param bool $ignore_current (ignored as of 2.0) (Before 2.2 this parameter was called ignore_current
      * @param bool $allow_all If true, show all items, even if the content object doesn't have a valid link. Defaults to false.
-            * @param bool $for_child If true, assume that we want to add a new child and obey the WantsChildren flag of each content page. (new in 2.2).
+     * @param bool $for_child If true, assume that we want to add a new child and obey the WantsChildren flag of each content page. (new in 2.2).
      * @return string The html dropdown of the hierarchy.
      */
     public function CreateHierarchyDropdown($current = '', $value = '', $name = 'parent_id', $allowcurrent = 0,

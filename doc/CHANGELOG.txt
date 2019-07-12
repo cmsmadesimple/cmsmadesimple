@@ -115,10 +115,10 @@ Core - General
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
   - CHANGE: Performance Improvement to contentoperations::SetDefaultContent()
   - IMPROVE: Improve input checking to cms_ipmatches.
-  - FEATURE: Adds the cmsfile: smarty resource which is similar to the file resource but more restrictive
+  - FEATURE: Adds the cms_file: smarty resource which is similar to the file resource but more restrictive
      (templates must exist BELOW one of the allowed template directories).  This resource also supports the ;top ;head and ;body
      suffixes to allow parsing a subset of the template.
-  - FEATURE: The cmsfile: resource is now the default resource (instead of file:)
+  - FEATURE: The cms_file: resource is now the default resource (instead of file:)
   - FEATURE: Now allow loading a page template directly from a smarty resource.
   - FEATURE: Adds new config entry $config['page_template_list'] to allow manually creating a page template list of smarty
       resources:. When enabled, and adding or editing content no design selection is possible, and this list will be displayed.

@@ -895,8 +895,8 @@ final class CmsApp
             @touch(cms_join_path($start_dir,'index.html'));
         }
 
-        file_put_contents(TMP_CACHE_LOCATION.'/.root_url', $config['root_url']);
-        $this->get_hook_manager()->emit('Core::AfterClearCache');
+        file_put_contents(TMP_CACHE_LOCATION.'/.root_url', CMS_ROOT_URL);
+	$this->get_hook_manager()->emit('Core::AfterClearCache');
     }
 
     /**

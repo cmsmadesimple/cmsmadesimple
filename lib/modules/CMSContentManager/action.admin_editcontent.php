@@ -152,7 +152,11 @@ try {
         $tmpobj->SetName($content_obj->Name());
         $tmpobj->SetMenuText($content_obj->MenuText());
         $tmpobj->SetTemplateId($content_obj->TemplateId());
-        if( $tmpobj->TemplateId() < 1 ) $tmpobj->SetTemplateId($pagedefaults['template_id']);
+        if( !$tmpobj->GetPropertyValue('template_rsrc') && $pagedefaults['template_rsrc'] ) {
+            $tmpobj->SetPropertyvalue('template_rsrc', $pagedefaults['template_rsrc']);
+        } else if( $tmpobj->TemplateId() < 1 && $pagedefaults['template_id'] > 0 ) {
+            $tmpobj->SetTemplateId($pagedefaults['template_id']);
+        }
         if( $tmpobj->GetPropertyValue('design_id') < 1 ) $tmpobj->SetPropertyValue('design_id',$pagedefaults['design_id']);
 
         $tmpobj->SetParentId($content_obj->ParentId());
@@ -242,6 +246,14 @@ catch( CmsContentException $e ) {
     }
 }
 catch( ContentException $e ) {
+    $error = $e->GetMessage();
+    if( isset($params['ajax']) ) {
+        $tmp = array('response'=>'Error','details'=>$error);
+        echo json_encode($tmp);
+        exit;
+    }
+}
+catch( \Exception $e ) {
     $error = $e->GetMessage();
     if( isset($params['ajax']) ) {
         $tmp = array('response'=>'Error','details'=>$error);
