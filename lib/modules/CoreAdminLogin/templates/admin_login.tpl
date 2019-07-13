@@ -5,7 +5,6 @@
 			{/admin_headtext}
 
 			<div class="login-container">
-			        <p>Test: {$mode}</p>
 				<div class="login-box cf"{if !empty($error)} id="error"{/if}>
 					<div class="logo">
 						<img src="{theme_root}/images/layout/cmsms_login_logo.png" width="180" height="36" alt="CMS Made Simple&trade;" />
