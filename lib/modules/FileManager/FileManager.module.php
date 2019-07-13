@@ -96,7 +96,7 @@ final class FileManager extends CMSModule
 
     public function MinimumCMSVersion()
     {
-        return "2.2.2";
+        return "2.2.900";
     }
 
     public function InstallPostMessage()

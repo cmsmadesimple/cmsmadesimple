@@ -38,7 +38,7 @@ class MicroTiny extends CMSModule
     }
     public function LazyLoadAdmin() { return TRUE;
     }
-    public function MinimumCMSVersion() { return "1.99-alpha0";
+    public function MinimumCMSVersion() { return "2.2.900";
     }
     public function GetDependencies() { return array('FileManager'=>'1.5');
     }

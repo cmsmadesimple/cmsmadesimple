@@ -77,7 +77,7 @@ final class Navigator extends CMSModule
 
     public function MinimumCMSVersion()
     {
-        return '2.1.99';
+        return '2.2.900';
     }
 
     public function GetAdminDescription()
