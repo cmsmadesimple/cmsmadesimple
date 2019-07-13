@@ -10,7 +10,7 @@ $theme_object = \cms_utils::get_theme_object();
 $csrf_key = md5(__FILE__);
 $login_ops = $gCms->get_login_operations();
 $hm = $gCms->get_hook_manager();
-$username = $password = $error = $warning = $pwhash = $message = null;
+$username = $password = $error = $warning = $pwhash = $message = $mode = null;
 
 if( isset( $_GET['recoverme'] ) ) {
     $code = filter_var( $_GET['recoverme'], FILTER_SANITIZE_STRING );
@@ -24,6 +24,7 @@ if( isset( $_GET['recoverme'] ) ) {
 }
 else if( isset( $params['forgotpwchangeform']) ) {
     try {
+        $mode = 'forgotpwchangeform';
         $expected_csrf_val = ( isset($_SESSION[$csrf_key]) ) ? $_SESSION[$csrf_key] : null;
         $provided_csrf_val = ( isset($params['csrf']) ) ? $params['csrf'] : null;
         if( !$expected_csrf_val || !$provided_csrf_val || $expected_csrf_val != $provided_csrf_val ) {
@@ -61,9 +62,18 @@ else if( isset( $params['forgotpwchangeform']) ) {
         $error = $e->GetMessage();
     }
 }
+else if( isset($_GET['forgotpw']) ) {
+    $mode = 'forgotpw';
+}
 else if( isset( $params['forgotpwform']) ) {
     // got the forgot password form request
     try {
+        $mode = 'forgotpw';
+        if( isset($_POST['__cancel']) ) {
+            $login_ops->deauthenticate(); // just in case
+            redirect( $config['admin_url'].'/login.php', true );
+        }
+
         $expected_csrf_val = ( isset($_SESSION[$csrf_key]) ) ? $_SESSION[$csrf_key] : null;
         $provided_csrf_val = ( isset($params['csrf']) ) ? $params['csrf'] : null;
         if( !$expected_csrf_val || !$provided_csrf_val || $expected_csrf_val != $provided_csrf_val ) {
@@ -89,15 +99,16 @@ else if( isset( $params['forgotpwform']) ) {
         $error = $e->GetMessage();
         $hm->emit('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
-        cms_warnng('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Recovery Failed');
+        cms_warning('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Recovery Failed');
     }
     catch( \Exception $e ) {
         $error = $e->GetMessage();
     }
 }
-else if( isset( $params['submit'] ) ) {
-    // validatte CSRF key
+else if( isset($params['submit']) ) {
+    // normal login
     try {
+        // validatte CSRF key
         $expected_csrf_val = ( isset($_SESSION[$csrf_key]) ) ? $_SESSION[$csrf_key] : null;
         $provided_csrf_val = ( isset($params['csrf']) ) ? $params['csrf'] : null;
         if( !$expected_csrf_val || !$provided_csrf_val || $expected_csrf_val != $provided_csrf_val ) {
@@ -122,7 +133,7 @@ else if( isset( $params['submit'] ) ) {
         $hm->emit('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // now redirect someplace
-	$redirect_to = $_SESSION['login_redirect_to'] ?? null;
+        $redirect_to = $_SESSION['login_redirect_to'] ?? null;
         if( $redirect_to ) {
             unset($_SESSION['login_redirect_to']);
             $url_ob = new cms_url($redirect_to);
@@ -163,6 +174,7 @@ else if( isset( $params['cancel'] ) ) {
 
 $login_ops->deauthenticate(); // cannot be logged in when we get here.
 $tpl = $smarty->CreateTemplate( $this->GetTemplateResource( 'admin_login.tpl' ), null, null, $smarty );
+$tpl->assign('mode',$mode);
 $tpl->assign( 'error', $error );
 $tpl->assign( 'warning', $warning );
 $tpl->assign( 'message', $message );
