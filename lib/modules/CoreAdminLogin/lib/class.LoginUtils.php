@@ -1,34 +1,38 @@
 <?php
 namespace CoreAdminLogin;
+use CoreAdminLogin;
+use cms_userprefs;
 
 class LoginUtils
 {
 
     protected $_mod;
 
-    public function __construct( \CoreAdminLogin $mod )
+    public function __construct( CoreAdminLogin $mod )
     {
         $this->_mod = $mod;
     }
 
     public function create_reset_code( \User $user )
     {
+        $expires = time() + 3600; // one hour
         $code = sha1(__FILE__ . '--' . $user->username . $user->password . rand() . time() );
-        \cms_userprefs::set_for_user( $user->id, 'pwreset', $code );
+        cms_userprefs::set_for_user( $user->id, 'pwreset', $code.'::'.$expires );
         return $code;
     }
 
     public function remove_reset_code( \User $user )
     {
-        \cms_userprefs::remove_for_user( $user->id, 'pwreset' );
+        cms_userprefs::remove_for_user( $user->id, 'pwreset' );
     }
 
     public function validate_reset_code( \User $user, string $code )
     {
-        $dbcode = \cms_userprefs::get_for_user( $user->id, 'pwreset' );
-        if( !$dbcode ) return false;
+        $str = cms_userprefs::get_for_user( $user->id, 'pwreset' );
+        if( !$str ) return false;
+        list($dbcode,$expires) = explode('::',$str);
+        if( !$dbcode || !$expires || time() > $expires ) return false;
         if( $dbcode != $code ) return false;
-        $this->remove_reset_code( $user );
         return true;
     }
 
@@ -62,7 +66,7 @@ class LoginUtils
         $userops = $gCms->GetUserOperations();
 
         foreach ($userops->LoadUsers() as $user) {
-            $code = \cms_userprefs::get_for_user( $user->id, 'pwreset' );
+            $code = cms_userprefs::get_for_user( $user->id, 'pwreset' );
             if( $code && $hash && $hash === $code ) return $user;
         }
 

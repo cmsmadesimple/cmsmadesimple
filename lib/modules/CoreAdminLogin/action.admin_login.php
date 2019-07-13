@@ -42,9 +42,9 @@ else if( isset( $params['forgotpwchangeform']) ) {
         $user = $this->getLoginUtils()->find_recovery_user( $usercode );
         if( !$user || $user->username != $username ) throw new LoginUserError( $this->Lang('err_usernotfound') );
 
+        $this->getLoginUtils()->remove_reset_code( $user );
         $user->SetPassword( $password1 );
         $user->Save();
-        $this->getLoginUtils()->remove_reset_code( $user );
 
         $ip_passw_recovery = \cms_utils::get_real_ip();
         audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
@@ -93,7 +93,7 @@ else if( isset( $params['forgotpwform']) ) {
         }
 
         $this->getLoginUtils()->send_recovery_email( $oneuser );
-        $warning = $this->Lang('warn_recoveryemailsent');
+        $warning = $this->Lang('warn_recoveryemailsent2');
     }
     catch( LoginUserError $e ) {
         $error = $e->GetMessage();

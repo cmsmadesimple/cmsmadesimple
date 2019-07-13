@@ -1,7 +1,7 @@
 <?php
 $lang['err_csrfinvalid'] = 'Hmmm. Something has gone wrong (LOGIN001)';
 $lang['err_usernotfound'] = 'User not found';
-$lang['warn_recoveryemailsent'] = 'Check your email for password recovery instructions.';
+$lang['warn_recoveryemailsent2'] = 'Check your email for password recovery instructions.  Note: you have a limited amount of time to complete this process';
 $lang['err_invalidusernamepassword'] = 'The username or password you provided is incorrect';
 $lang['err_nouseremail'] = 'A problem occurred sending your email (LOGIN002)';
 $lang['email_subject'] = 'Password reset instructions for %s';
