@@ -26,6 +26,8 @@
  * @license GPL
  */
 
+use CMSMS\simple_plugin_operations;
+
 /**
  * A compatibility class to manage simple plugins.
  * Formerly 'UserDefinedTags' were stored in the database.

@@ -498,7 +498,7 @@ final class CmsApp
     public function GetUserTagOperations() : UserTagOperations
     {
         static $_obj;
-        if( !$_obj ) $obj = new UserTagOperations( $this->GetSimplePluginOperations() );
+        if( !$_obj ) $_obj = new UserTagOperations( $this->GetSimplePluginOperations() );
         return $_obj;
     }
 

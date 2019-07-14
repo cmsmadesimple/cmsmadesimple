@@ -1061,19 +1061,22 @@ abstract class CmsAdminThemeBase
                 $imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
                 $imageName = substr($imageName,strrpos($imageName,'/')+1);
             }
-
+	
             $config = $this->_app->GetConfig();
             $str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
-            if (file_exists("{$str}/{$imageName}")) {
+            if (is_file("{$str}/{$imageName}")) {
                 $str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
                 $this->_imageLink[$imageName] = $str;
             }
+	    /*
             else {
                 // todo: uses default theme.
-                $this->_imageLink[$imageName] = 'themes/OneEleven/images/' . $imagePath . $imageName;
+                $this->_imageLink[$imageName] = 'themes/Marigold/images/' . $imagePath . $imageName;
             }
+	    */
         }
 
+	if( !isset($this->_imageLink[$imageName] ) ) return;
         $retStr = '<img src="'.$this->_imageLink[$imageName].'"';
         if ($class != '') $retStr .= ' class="'.$class.'"';
         if ($width != '') $retStr .= ' width="'.(int)$width.'"';
