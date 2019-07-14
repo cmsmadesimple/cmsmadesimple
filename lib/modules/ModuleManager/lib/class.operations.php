@@ -206,8 +206,8 @@ class operations
     {
         // get a file list
         $filecount = 0;
-        $dir = $modinstance->GetModulePath();
-        if( !is_directory_writable( $dir ) ) throw new \CmsFileSystemException(lang('errordirectorynotwritable'));
+	$dir = $modinstance->GetModulePath();
+        if( !is_writable( $dir ) ) throw new \CmsFileSystemException(lang('errordirectorynotwritable'));
 
         // generate the moduleinfo.ini file
         \ModuleOperations::get_instance()->generate_moduleinfo($modinstance);
