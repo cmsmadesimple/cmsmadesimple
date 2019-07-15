@@ -23,10 +23,11 @@ if( isset( $params['resultpage'] ) ) {
     if (isset($node)) {
         $returnid = $node->getID();
     }
-    else {
+    else if( (int) $params['resultpage'] > 0 ) {
         $node = $manager->sureGetNodeById((int) $params['resultpage']);
         if (isset($node)) $returnid = $params['resultpage'];
     }
+    if( !$node ) cms_warning('Could not resolve resultpage of '.$params['resultpage'].' to an id','Search');
 }
 //Pretty Urls Compatibility
 $is_method = isset($params['search_method'])?'post':'get';
