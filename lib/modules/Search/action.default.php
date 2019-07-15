@@ -24,7 +24,7 @@ if( isset( $params['resultpage'] ) ) {
         $returnid = $node->getID();
     }
     else {
-        $node = $manager->sureGetNodeById($params['resultpage']);
+        $node = $manager->sureGetNodeById((int) $params['resultpage']);
         if (isset($node)) $returnid = $params['resultpage'];
     }
 }
