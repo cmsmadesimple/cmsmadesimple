@@ -484,9 +484,9 @@ final class ModuleOperations
 
 
     /**
-     * A function to return a list of all modules that appear to exist properly in the modules directory.
+     * A function to return a list of all modules that appear to exist properly.
      *
-     * @return array of module names for all modules that exist in the module directory.
+     * @return array of module names
      */
     public function FindAllModules()
     {

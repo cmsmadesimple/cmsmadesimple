@@ -72,7 +72,8 @@ final class cms_admin_utils
         if( !is_object($theme) ) return;
 
         $smarty = cmsms()->GetSmarty();
-        $module = $smarty->get_template_vars('actionmodule');
+        $module = $smarty->getTemplateVars('actionmodule');
+        if( !$module ) $module = $smarty->getTemplateVars('_module');
 
         $dirs = array();
         if( $module ) {
@@ -123,6 +124,7 @@ final class cms_admin_utils
      */
     public static function get_help_tag()
     {
+	$smarty = null;
         $app = cmsms();
         if( !$app->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
@@ -138,6 +140,9 @@ final class cms_admin_utils
         }
         else {
             $params = $args[0];
+	    if( isset($args[1]) && is_object($args[1]) ) {
+		$smarty = $args[1];
+	    }
         }
 
         $theme = cms_utils::get_theme_object();
@@ -167,8 +172,9 @@ final class cms_admin_utils
         }
 
         if( !$key1 ) {
-            $smarty = $app->GetSmarty();
-            $module = $smarty->get_template_vars('actionmodule');
+            if( !$smarty ) $smarty = $app->GetSmarty();
+            $module = $smarty->getTemplateVars('actionmodule');
+            if( !$module ) $module = $smarty->getTemplateVars('_module');
             if( $module ) {
                 $key1 = $module;
             }

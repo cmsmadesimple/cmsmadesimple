@@ -82,7 +82,7 @@ class microtiny_utils
 
         // if this is an action for MicroTiny disable caching.
         $smarty = CmsApp::get_instance()->GetSmarty();
-        $module = $smarty->get_template_vars('actionmodule');
+        $module = $smarty->getTemplateVars('_module');
         if( $module == $mod->GetName() ) $mtime = time() + 60; // do not cache when we're using this from within the MT modul.
 
         // also disable caching if told to by the config.php

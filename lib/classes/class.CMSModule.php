@@ -308,7 +308,7 @@ abstract class CMSModule
         if( $modops->IsSystemModule( $this->GetName() ) ) {
             return CMS_ROOT_URL . '/lib/modules/' . $this->GetName();
         } else {
-            return CMS_ROOT_URL . '/assets/modules/' . $this->GetName();
+            return CMS_ASSETS_URL . '/modules/' . $this->GetName();
         }
     }
 
