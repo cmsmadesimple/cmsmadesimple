@@ -16,11 +16,11 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_help($params,&$template)
+function smarty_function_cms_help($params,$template)
 {
     $smarty = $template->smarty;
 
-    $out = cms_admin_utils::get_help_tag($params);
+    $out = cms_admin_utils::get_help_tag($params,$template);
 
     if( isset($params['assign']) ) {
         $smarty->assign($params['assign'],$out);

@@ -36,10 +36,10 @@ final class JobQueue
             $mod = null;
             if( !empty($row['module']) ) {
                 $mod = cms_utils::get_module($row['module']);
-                if( !is_object($mod) ) throw new \RuntimeException('Job '.$row['name'].' requires module '.$row['module'].' That could not be loaded');
             }
             $obj = unserialize($row['data']);
             $obj->set_id($row['id']);
+            $obj->errors = (int) $row['errors'];
             $obj->force_start = $row['start']; // in case this job was modified.
             $out[] = $obj;
         }
@@ -55,21 +55,25 @@ final class JobQueue
         if( $check_only ) $limit = 1;
 
         $sql = 'SELECT * FROM '.$this->mod->table_name().' WHERE start < UNIX_TIMESTAMP() AND created < UNIX_TIMESTAMP() ORDER BY errors ASC,created ASC LIMIT ?';
-        $list = $db->GetArray($sql,array($limit));
+        $list = $db->GetArray($sql, $limit);
         if( !is_array($list) || count($list) == 0 ) return;
         if( $check_only ) return TRUE;
 
         $out = [];
         foreach( $list as $row ) {
             if( !empty($row['module']) ) {
+                // we attempt to load the module because the job class may depend on the module to unserialize
                 $mod = cms_utils::get_module($row['module']);
                 if( !is_object($mod) ) {
-                    audit('','CmsJobManager',sprintf('Could not load module %s required by job %s',$row['module'],$row['name']));
+                    $sql = 'UPDATE '.$this->mod->table_name().' SET errors = errors + 1 WHERE id = ?';
+                    $db->Execute($sql, $row['id']);
+                    cms_error(sprintf('Could not load module %s required by job %s',$row['module'],$row['name']), 'CmsJobManager');
                     continue;
                 }
             }
             $obj = unserialize($row['data']);
             $obj->set_id($row['id']);
+            $obj->errors = (int) $row['errors'];
             $obj->force_start = $row['start']; // in case this job was modified.
             $out[] = $obj;
         }
@@ -95,15 +99,16 @@ final class JobQueue
                     debug_to_log(__METHOD__);
                     debug_to_log('Problem deserializing row');
                     debug_to_log($row);
-                    continue;
                 }
-                $obj->set_id($row['id']);
-                $idlist[] = (int) $row['id'];
-                $this->mod->cms->get_hook_manager()->emit(CmsJobManager::EVT_ONFAILEDJOB, [ 'job' => $obj ]);
+                else {
+                    $obj->set_id($row['id']);
+                    $idlist[] = (int) $row['id'];
+                    $this->mod->cms->get_hook_manager()->emit(CmsJobManager::EVT_ONFAILEDJOB, [ 'job' => $obj ]);
+                }
             }
             $sql = 'DELETE FROM '.$this->mod->table_name().' WHERE id IN ('.implode(',',$idlist).')';
             $db->Execute($sql);
-            audit('',$mod->GetName(),'Cleared '.count($idlist).' bad jobs');
+            cms_notice('Cleared '.count($idlist).' bad jobs',$this->GetName());
         }
         $mod->SetPreference('last_badjob_run',$now);
     }

@@ -4,7 +4,6 @@ use CmsJobManager;
 if( !isset($gCms) ) exit;
 if( !isset($_REQUEST['cms_cron']) ) exit();
 
-debug_to_log(__FILE__);
 while(ob_get_level()) @ob_end_clean();
 @header('Connection: close');
 $tout = 'X-CMSMS: Processing';
@@ -37,7 +36,7 @@ function _cmsjobmgr_process_errors()
 
     // have jobs to increase error count on.
     $db = \cms_utils::get_db();
-    $sql = 'UPDATE '.$this->table_name().' SET errors = errors + 1 WHERE id IN ('.implode(',',$job_ids).')';
+    $sql = 'UPDATE '.CmsJobManager::table_name().' SET errors = errors + 1 WHERE id IN ('.implode(',',$job_ids).')';
     $db->Execute($sql);
     debug_to_log('Increased error count on '.count($job_ids).' jobs ');
 }
@@ -84,7 +83,6 @@ try {
     $jobs = $this->get_job_queue()->get_jobs();
     if( !is_array($jobs) || !count($jobs) ) return; // nothing to do.
 
-    debug_to_log(__FILE__.' starting');
     if( $this->is_locked() ) {
         if( $this->lock_expired() ) {
             cms_notice('Removing an expired lock.. An error probably occurred with a previous job.',$this->GetName());
@@ -95,7 +93,6 @@ try {
         }
     }
 
-    debug_to_log(__FILE__.' working');
     $time_limit = (int) $config['cmsjobmanager_timelimit'];
     if( !$time_limit ) $time_limit = (int) ini_get('max_execution_time');
     $time_limit = max(30,min(1800,$time_limit)); // no stupid time limit values

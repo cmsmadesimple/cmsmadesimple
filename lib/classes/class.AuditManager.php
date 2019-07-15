@@ -72,7 +72,7 @@ namespace CMSMS {
             $out = "CMSMS MSG: ADMINUSER=$username ($userid)";
             if( $itemid ) $out .= ", ITEMID=$itemid,";
             if( $subject ) $out .= ", SUBJECT=$subject,";
-            $out .= " $msg\n";
+            $out .= " $msg";
             $this->notice( $out );
         }
 
@@ -83,7 +83,7 @@ namespace CMSMS {
         {
             $out = "CMSMS NOTICE: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
-            $out .= " $msg\n";
+            $out .= " $msg";
             @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
@@ -94,7 +94,7 @@ namespace CMSMS {
         {
             $out = "CMSMS WARNING: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
-            $out .= " $msg\n";
+            $out .= " $msg";
             @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
 
@@ -105,7 +105,7 @@ namespace CMSMS {
         {
             $out = "CMSMS ERROR: ";
             if( $subject ) $out .= "SUBJECT=$subject,";
-            $out .= " $msg\n";
+            $out .= " $msg";
             @error_log( $out, 0, TMP_CACHE_LOCATION.'/audit_log' );
         }
     }
