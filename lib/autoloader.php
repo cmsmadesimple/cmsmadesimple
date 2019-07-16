@@ -121,45 +121,54 @@ function cms_autoloader($classname)
         }
     }
 
+    $get_module_path = function(string $modname) use ($modops) {
+        static $list = [];
+
+        // caching of module paths.
+        if( !$modname ) return;
+        if( isset($list[$modname]) ) return $list[$modname];
+        $path = $modops->get_module_path($modname);
+        if( !$path ) return;
+        $list[$modname] = $path;
+        return $path;
+    };
+
     // loaded module classes.
     $modules = $modops->GetLoadedModules();
     if( is_null($modules) ) return;
     $list = array_keys($modules);
-    $tmp = ltrim(str_replace('\\','/',$classname),'/');
-    $class_base = basename($tmp);
-    $dirname = dirname($tmp);
     if( is_array($list) && count($list) ) {
-        if( in_array($dirname,$list) ) {
-            $modpath = $modops->get_module_path( $dirname );
-            $fn = "$modpath/lib/class.$class_base.php";
-            if( is_file( $fn ) ) {
-                require_once($fn);
+        if( strpos($classname,'\\') !== FALSE ) {
+            $parts = explode('\\',ltrim($classname));
+            $modname = $parts[0];
+            $modpath = $get_module_path($modname);
+            array_shift($parts);
+            $class_lastname = $parts[count($parts)-1];
+            $filename1 = "{$modpath}/lib/{$class_lastname}.php";
+            $filename2 = "{$modpath}/lib/class.{$class_lastname}.php";
+            if( is_file($filename1) ) {
+                require_once $filename1;
                 return;
             }
-
-        }
-
-        // handle \ModuleName\<path>\Class
-        $tmp = ltrim(str_replace('\\','/',$classname),'/');
-        $p1 = strpos($tmp,'/');
-        if( $p1 !== FALSE ) {
-            $pos1 = strpos($tmp,'/');
-            $modname = substr($tmp,0,strpos($tmp,'/'));
-            if( in_array($modname,$list) ) {
-                $modpath = $modops->get_module_path( $modname );
-                $subpath = dirname(substr($tmp,$pos1+1));
-                $class = basename($tmp);
-                $fn = "$modpath/lib/$subpath/class.$class.php";
-                if( is_file($fn) ) {
-                    require_once($fn);
+            if( is_file($filename2) ) {
+                require_once $filename2;
+                return;
+            }
+            if( count($parts) > 1 ) {
+                $parts = array_slice($parts, 0, -1);
+                $subpath = implode($parts, '/');
+                $filename3 = "{$modpath}/lib/{$subpath}/class.{$class_lastname}.php";
+                if( $filename3 && is_file($filename3) ) {
+                    require_once $filename3;
                     return;
                 }
             }
         }
 
-        // handle class Foo (search in loaded modules)
+        // handle class Foo in global namespace (search in loaded modules)
+        // deprecated.
         foreach( $list as $modname ) {
-            $modpath = $modops->get_module_path( $modname );
+            $modpath = $get_module_path($modname);
             $fn = "$modpath/lib/class.$classname.php";
             if( is_file($fn) ) {
                 require_once($fn);
