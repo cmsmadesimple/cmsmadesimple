@@ -192,6 +192,11 @@ Core - General
      - Supports putting templates into a directory called 'templates' below the theme directory OR having templates in the root.
      - Supports syntax like:  cms_thme:[theme;]template_name[;section]
        - if the theme name is not specified then the 'current' theme {cms_set_theme} will be used.
+  - FEATURE: simple new function cms_is_uri to test whether a string is a URI or not
+  - FEATURE: new function cms_fix_path() which will assume strings that are NOT URI's represent paths and will correct them to use
+     platform specific directory separators.   This should be used as much as possible instead of cms_join_path and DIRECTORY_SEPARATOR
+     as it will allow uri's like file:/// and ssh://  and phar:// to pass through to other file operations like is_file() etc.
+
 
 PressRoom v1.0
   - New core example module to demonstrate module development techniques.  It allows managing and displaying time limited content.

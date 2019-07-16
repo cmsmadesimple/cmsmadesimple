@@ -175,10 +175,41 @@ function microtime_diff(string $a, string $b)
  * @since 0.14
  * @return string
  */
-function cms_join_path()
+function cms_join_path() : string
 {
     $args = func_get_args();
     return implode(DIRECTORY_SEPARATOR,$args);
+}
+
+/**
+ * Test if a string provided is a URI
+ *
+ * @since 2.3
+ * @param string $in The string to test
+ * @return bool
+ */
+function cms_is_uri(string $in = null) : bool
+{
+    return $in && filter_var($in, FILTER_VALIDATE_URL) === TRUE;
+}
+
+/**
+ * Convert a string to use platform specific separators IF it is not a uri.
+ *
+ * @since 2.3
+ * @param string $in
+ * @return string
+ */
+function cms_fix_path(string $in) : string
+{
+    if( cms_is_uri($in) ) return $in;
+    if( DIRECTORY_SEPARATOR != '/' ) {
+        return str_replace('/', DIRECTORY_SEPARATOR, $in);
+    } else if( strpos($in, '\\') !== FALSE ) {
+        // REAL operating systems..
+        return str_replace('\\', DIRECTORY_SEPARATOR, $in);
+    }
+    return $in;
 }
 
 /**

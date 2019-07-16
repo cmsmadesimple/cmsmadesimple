@@ -138,7 +138,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    protected function get_module_classmap()
+    public function get_module_classmap()
     {
         if( !is_array($this->_classmap) ) {
             $this->_classmap = [];
@@ -170,7 +170,7 @@ final class ModuleOperations
         $config = $this->_config;
         $path = CMS_ROOT_PATH.'/lib/modules';
         if( !$this->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
-        $fn = $path."/$module/$module.module.php";
+        $fn = cms_fix_path($path."/$module/$module.module.php");
         if( is_file($fn) ) return $fn;
     }
 

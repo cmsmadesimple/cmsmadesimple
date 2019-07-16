@@ -29,7 +29,7 @@ use CMSMS\Database\Connection as Database;
 /**
  * Include group class definition
  */
-include_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.group.inc.php');
+include_once(__DIR__ . '/class.group.inc.php');
 
 /**
  * A singleton Class for doing group related functions.

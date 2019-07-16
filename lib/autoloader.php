@@ -112,10 +112,9 @@ function cms_autoloader($classname)
         }
     }
 
-    // if requesting a module..
-    // note, if force loading we include the file.
-    // if not forceloading.  we load the module.
     $modops = $gCms->GetModuleOperations();
+    // if requesting a module..
+    // if( strpos($classname,'\\') === FALSE && ($fn = $modops->get_module_filename( $classname )) ) {
     if( ($fn = $modops->get_module_filename( $classname )) ) {
         if( is_file( $fn ) ) {
             require_once($fn);

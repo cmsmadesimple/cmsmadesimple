@@ -26,13 +26,12 @@
  * @license GPL
  */
 
+use CMSMS\Database\Connection as Database;
+
 /**
  * Include user class definition
  */
-
-use CMSMS\Database\Connection as Database;
-
-require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
+require_once(__DIR__ . '/class.user.inc.php');
 
 /**
  * Class for doing user related functions.  Maybe of the User object functions

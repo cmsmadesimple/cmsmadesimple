@@ -335,7 +335,7 @@ class ContentOperations
         if( !is_numeric($alias) || (int) $alias < 1 ) {
             $id = $this->alias_to_id($alias);
             if( !$id ) {
-                cms_notice('could not find an id for alias '.$alias);
+                cms_warning('could not find an id for alias '.$alias, 'Content');
                 return;
             }
         }
