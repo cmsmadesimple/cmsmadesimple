@@ -113,14 +113,6 @@ function cms_autoloader($classname)
     }
 
     $modops = $gCms->GetModuleOperations();
-    // if requesting a module..
-    if( strpos($classname,'\\') === FALSE && ($fn = $modops->get_module_filename($classname)) ) {
-        if( is_file($fn) ) {
-            require_once($fn);
-            return;
-        }
-    }
-
     $get_module_path = function(string $modname) use ($modops) {
         static $list = [];
 

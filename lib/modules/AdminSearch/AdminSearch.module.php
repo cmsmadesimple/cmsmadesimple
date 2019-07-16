@@ -24,8 +24,6 @@ use AdminSearch\Slaves\OldTemplateSlave;
 use AdminSearch\Slaves\StylesheetSlave;
 use AdminSearch\Slaves\TextAssetSlave;
 
-if( !isset($gCms) ) exit;
-
 final class AdminSearch extends CMSModule
 {
     public function GetFriendlyName()

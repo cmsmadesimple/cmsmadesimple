@@ -34,8 +34,6 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if (!isset($gCms)) exit;
-
 define('MINIMUM_REPOSITORY_VERSION','1.5');
 
 class ModuleManager extends CMSModule

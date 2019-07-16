@@ -391,7 +391,7 @@ final class ModuleOperations
 
         // now load the module itself... recurses into the autoloader if possible.
         $class_name = $this->get_module_classname($module_name);
-        if( !class_exists($class_name,true) ) {
+        if( !class_exists($class_name,false) ) {
             $fname = $this->get_module_filename( $module_name);
             if( !is_file($fname) ) {
                 cms_warning("Cannot load $module_name because the module file does not exist");
@@ -399,7 +399,8 @@ final class ModuleOperations
             }
 
             debug_buffer('including source for module '.$module_name);
-            require_once($fname);
+            $gCms = $this->_app; // compatibility
+            require_once $fname;
         }
 
         if( !class_exists($class_name,FALSE) ) {
