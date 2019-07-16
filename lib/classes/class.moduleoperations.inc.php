@@ -165,22 +165,23 @@ final class ModuleOperations
      */
     public function get_module_filename(string $module)
     {
-        $module = trim($module);
-        if( !$module ) return;
-        $config = $this->_config;
-        $path = CMS_ROOT_PATH.'/lib/modules';
-        if( !$this->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
-        $fn = cms_fix_path($path."/$module/$module.module.php");
+        $path = $this->get_module_path($module);
+        if( !$path ) return;
+        $fn = cms_fix_path("$path/$module.module.php");
         if( is_file($fn) ) return $fn;
     }
 
     /**
      * @ignore
      */
-    public function get_module_path( string $module )
+    public function get_module_path(string $module)
     {
-        $fn = $this->get_module_filename( $module );
-        if( $fn ) return dirname( $fn );
+        $module = trim($module);
+        if( !$module ) return;
+        $path = CMS_ROOT_PATH.'/lib/modules';
+        if( !$this->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
+        $out = cms_fix_path("$path/$module");
+        if( is_dir($out) ) return $out;
     }
 
     /**
