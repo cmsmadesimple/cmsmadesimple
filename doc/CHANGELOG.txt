@@ -53,7 +53,6 @@ Core - General
   - CHANGE: Renames a bunch of classes into namespaces, and cleans up a bunch of old, commented out code.
   - CHANGE: Replaces old "admin log" functionality with a new core module that has extra functionality.
   - CHANGE: Refactor mact processing.  get rid of un-necessary variables and duplicated code.
-  - CHANGE: Autoloader will now try to load modules.  Modules can still only be instantiated once.
   - IMPROVE: autoloader now handles namespaced module classes if the module is already loaded.
   - FEATURE: Adds new CmsError400Exception class.
   - IMPROVE: exception handling in include.php to handle when showtemplate is false.
