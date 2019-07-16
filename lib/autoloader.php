@@ -114,9 +114,8 @@ function cms_autoloader($classname)
 
     $modops = $gCms->GetModuleOperations();
     // if requesting a module..
-    // if( strpos($classname,'\\') === FALSE && ($fn = $modops->get_module_filename( $classname )) ) {
-    if( ($fn = $modops->get_module_filename( $classname )) ) {
-        if( is_file( $fn ) ) {
+    if( strpos($classname,'\\') === FALSE && ($fn = $modops->get_module_filename($classname)) ) {
+        if( is_file($fn) ) {
             require_once($fn);
             return;
         }
