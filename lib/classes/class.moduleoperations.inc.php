@@ -100,12 +100,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private $_config;
-
-    /**
-     * @ignore
-     */
-    public function __construct( CmsApp $app, \cms_config $config = null )
+    public function __construct( CmsApp $app )
     {
         if( isset(self::$_instance) ) throw new \LogicException('Only one instance of '.__CLASS__.' allowed per request');
         self::$_instance = $this;
@@ -113,8 +108,6 @@ final class ModuleOperations
         $this->_app = $app;
         $this->_hook_manager = $app->get_hook_manager();
         $this->_db = $app->GetDb();
-        if( !$config ) $config = $app->GetConfig();
-        $this->_config = $config;
     }
 
     /**
@@ -536,7 +529,6 @@ final class ModuleOperations
         global $CMS_STYLESHEET;
         if( isset($CMS_STYLESHEET) ) return;
 
-        $config = $this->_config;
         debug_buffer('Loading Modules');
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
@@ -637,7 +629,7 @@ final class ModuleOperations
      */
     public function UninstallModule( string $module )
     {
-        $db = $this->_app->GetDb();
+        $db = $this->_db;
 
         $modinstance = $this->get_module_instance($module);
         if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
