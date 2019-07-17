@@ -5,6 +5,7 @@ $lang['help_function_cms_theme_url'] = <<<EOT
 
 <h3>What parameters does it take:</h3>
 <ul>
+    <li>theme - <em>(string)</em> - Optionally specify the theme to get the path for.  If not specified the current theme will be used, OR an the system will attempt to detect it.</li>
     <li>assign - <em>(string)</em> - Optionally assign the output to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
@@ -17,6 +18,7 @@ $lang['help_function_cms_theme_path'] = <<<EOT
 
 <h3>What parameters does it take:</h3>
 <ul>
+    <li>theme - <em>(string)</em> - Optionally specify the theme to get the path for.  If not specified the current theme will be used, OR an the system will attempt to detect it.</li>
     <li>assign - <em>(string)</em> - Optionally assign the output to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>

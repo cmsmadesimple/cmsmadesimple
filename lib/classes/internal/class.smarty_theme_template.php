@@ -5,7 +5,17 @@ namespace CMSMS\internal;
 // that provides the cms_*_theme based plugins.
 class smarty_theme_template extends smarty_base_template
 {
-    private $theme_manager;
+    protected function get_theme_from_resource($tpl)
+    {
+	$rsrc = $tpl->template_resource;
+	if( !$rsrc || !startswith($rsrc,'cms_theme:') ) return;
+
+	$parts = explode(';', substr($rsrc,10));
+	if( count($parts) == 2 ) {
+	    $this->theme_manager()->set_theme($parts[0]);
+	    return $parts[0];
+	}
+    }
 
     public function __construct()
     {
@@ -16,7 +26,10 @@ class smarty_theme_template extends smarty_base_template
                 $this->theme_manager()->set_theme($theme);
             });
         $this->registerPlugin('function', 'cms_theme_path', function($params, $tpl) {
-                $out = $this->theme_manager()->get_theme_path();
+                $theme = get_parameter_value($params,'theme');
+		if( !$theme ) $theme = $this->get_theme_from_resource($tpl);
+		if( !$theme ) $theme = $this->theme_manager()->get_theme();
+                $out = $this->theme_manager()->get_theme_path($theme);
                 if( isset($params['assign']) ) {
                     $tpl->assign($params['assign'], $out);
                 } else {
@@ -24,7 +37,10 @@ class smarty_theme_template extends smarty_base_template
                 }
             });
         $this->registerPlugin('function', 'cms_theme_url', function($params, $tpl) {
-                $out = $this->theme_manager()->get_theme_url();
+                $theme = get_parameter_value($params,'theme');
+		if( !$theme ) $theme = $this->get_theme_from_resource($tpl);
+		if( !$theme ) $theme = $this->theme_manager()->get_theme();
+                $out = $this->theme_manager()->get_theme_url($theme);
                 if( isset($params['assign']) ) {
                     $tpl->assign($params['assign'], $out);
                 } else {
@@ -35,8 +51,10 @@ class smarty_theme_template extends smarty_base_template
 
     public function theme_manager() : current_theme_manager
     {
-        if( !$this->theme_manager ) $this->theme_manager = new current_theme_manager();
-        return $this->theme_manager;
+	// todo: this should go in CmsApp
+	static $theme_manager;
+        if( !$theme_manager ) $theme_manager = new current_theme_manager();
+        return $theme_manager;
     }
 
 } // class

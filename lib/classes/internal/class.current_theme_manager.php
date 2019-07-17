@@ -40,14 +40,17 @@ class current_theme_manager
         return $this->theme;
     }
 
-    public function get_theme_path() : string
+    public function get_theme_path(string $theme = null) : string
     {
-        if( !$this->theme ) throw new \LogicException('A theme has not been set');
-        return CMS_ASSETS_PATH."/themes/".$this->theme;
+	if( !$theme ) $theme = $this->theme;
+        if( !$theme ) throw new \LogicException('A theme has not been set');
+        return CMS_ASSETS_PATH."/themes/".$theme;
     }
 
-    public function get_theme_url() : string
+    public function get_theme_url(string $theme = null) : string
     {
-        return CMS_ASSETS_URL."/themes/".$this->theme;
+	if( !$theme ) $theme = $this->theme;
+        if( !$theme ) throw new \LogicException('A theme has not been set');
+        return CMS_ASSETS_URL."/themes/".$theme;
     }
 } // class
