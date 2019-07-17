@@ -50,8 +50,9 @@ class smarty_resource_cmstheme extends fixed_smarty_custom_resource
         if( !$theme ) {
             $theme = $this->smarty->theme_manager()->get_theme();
             if( !$theme ) throw new \LogicException("No current theme name detected when using resource cms_theme:$name");
-        }
-        if( !$theme ) return;
+        } else {
+            $this->smarty->theme_manager()->set_theme($theme);
+	}
 
         // search for the file. make sure it actually exists in the subdirectory
         $real_file = null;

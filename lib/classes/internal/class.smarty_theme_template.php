@@ -15,6 +15,9 @@ class smarty_theme_template extends smarty_base_template
 	    $this->theme_manager()->set_theme($parts[0]);
 	    return $parts[0];
 	}
+	else {
+	    return $this->theme_manager()->get_theme();
+	}
     }
 
     public function __construct()

@@ -28,7 +28,7 @@ class current_theme_manager
 
     public function set_theme(string $theme)
     {
-        if( $this->theme ) return;
+        //if( $this->theme ) return;
         $theme = trim($theme);
         $path = CMS_ASSETS_PATH."/themes/$theme";
         if( !is_dir($path) ) throw new \InvalidArgumentException("cannot set invalid theme $theme");
