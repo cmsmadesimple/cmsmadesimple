@@ -203,13 +203,8 @@ function cms_is_uri(string $in = null) : bool
 function cms_fix_path(string $in) : string
 {
     if( cms_is_uri($in) ) return $in;
-    if( DIRECTORY_SEPARATOR != '/' ) {
-        return str_replace('/', DIRECTORY_SEPARATOR, $in);
-    } else if( strpos($in, '\\') !== FALSE ) {
-        // REAL operating systems..
-        return str_replace('\\', DIRECTORY_SEPARATOR, $in);
-    }
-    return $in;
+    $opp = (DIRECTORY_SEPARATOR === '/') ? '\\' : '/';
+    return str_replace($opp, DIRECTORY_SEPARATOR, $in);
 }
 
 /**

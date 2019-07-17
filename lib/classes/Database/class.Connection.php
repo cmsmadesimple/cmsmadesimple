@@ -166,7 +166,7 @@ namespace CMSMS\Database {
          * Data Dictionary objects are used for manipulating tables, i.e: creating, altering and editing them.
          * @return \CMSMS\Database\DataDictionary
          */
-        abstract public function &NewDataDictionary();
+        abstract public function NewDataDictionary();
 
         /**
          * Return the database type.
@@ -266,7 +266,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql The SQL query
          */
-        abstract public function &do_sql($sql);
+        abstract public function do_sql($sql);
 
         /**
          * Create a prepared statement object.
@@ -274,7 +274,7 @@ namespace CMSMS\Database {
          * @param string $sql The SQL query
          * @return Statement
          */
-        abstract public function &Prepare($sql);
+        abstract public function Prepare($sql);
 
         /**
          * Execute an SQL Select and limit the output.
@@ -285,7 +285,7 @@ namespace CMSMS\Database {
          * @param array Any additional paramters required by placeholders in the $sql statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
+        public function SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
             $limit = null;
             $nrows = (int) $nrows;
@@ -344,7 +344,7 @@ namespace CMSMS\Database {
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &Execute($sql, $inputarr = null)
+        public function Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
             return $rs;
@@ -712,7 +712,7 @@ namespace CMSMS\Database {
          * @return \CMSMS\Database\Connection
          * @todo  Move this into a factory class
          */
-        public static function &Initialize(ConnectionSpec $spec)
+        public static function Initialize(ConnectionSpec $spec) : Connection
         {
             if( !$spec->valid() ) throw new ConnectionSpecException('Invalid or incorrect configuration information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';

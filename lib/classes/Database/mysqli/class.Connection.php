@@ -41,10 +41,9 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function &NewDataDictionary()
+    public function NewDataDictionary()
     {
-        $obj = new DataDictionary($this);
-        return $obj;
+        return new DataDictionary($this);
     }
 
     public function Disconnect()
@@ -55,7 +54,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function &get_inner_mysql()
+    public function get_inner_mysql()
     {
         return $this->_mysql;
     }
@@ -119,7 +118,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function &do_sql($sql)
+    public function do_sql($sql)
     {
         // execute all queries, but only need the resultset from the last one.
         $resultset = null;
@@ -138,10 +137,9 @@ class Connection extends \CMSMS\Database\Connection
         return $resultset;
     }
 
-    public function &Prepare($sql)
+    public function Prepare($sql)
     {
-        $stmt = new Statement($this,$sql);
-        return $stmt;
+        return new Statement($this,$sql);
     }
 
     public function BeginTrans()
@@ -203,9 +201,7 @@ class Connection extends \CMSMS\Database\Connection
         }
 
         if( $this->_transaction_status && $autoComplete ) {
-            if( !$this->CommitTrans() ) {
-                $this->_transaction_status = FALSE;
-            }
+            if( !$this->CommitTrans() ) $this->_transaction_status = FALSE;
         } else {
             $this->RollbackTrans();
         }

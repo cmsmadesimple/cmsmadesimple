@@ -145,68 +145,10 @@ namespace {
      * @return \CMSMS\Database\DataDictionary
      * @deprecated
      */
-    function &NewDataDictionary(\CMSMS\Database\Connection $conn)
+    function NewDataDictionary(\CMSMS\Database\Connection $conn)
     {
         // called by module installation routines.
         return $conn->NewDataDictionary();
     }
 
-    /**
-     * A function co create a new adodb database connection.
-     *
-     * @param string $dbms
-     * @param string $flags
-     * @return \CMSMS\Database\Connection
-     * @deprecated
-     */
-    function &ADONewConnection( $dbms, $flags )
-    {
-        // now that our connection object is stateless... this is just a wrapper
-        // for our global db instance.... but should not be called.
-        return cmsms()->GetDb();
-    }
-
-    /**
-     * A function forumerly used to load the adodb library.
-     * This method currently has no functionality.
-     *
-     * @deprecated
-     */
-    function load_adodb()
-    {
-        // this should only have been called by the core
-        // but now does nothing, just in case it is called.
-    }
-
-    /**
-     * An old method formerly used to ensure that we were re-connected to the proper database.
-     * This method currently has no functionality.
-     *
-     * @deprecated
-     */
-    function adodb_connect()
-    {
-        // this may be called by UDT's etc. that are talking to other databases
-        // or using manual mysql methods.
-    }
-
-    /**
-     * An old function for handling a database error.
-     *
-     * @param string $dbtype
-     * @param string $function_performed
-     * @param int    $error_number
-     * @param string $error_message
-     * @param string $host
-     * @param string $database
-     * @param mixed  $connection_obj
-     * @deprecated
-     */
-    function adodb_error($dbtype,$function_performed,$error_number,$error_message,
-                         $host, $database, &$connection_obj)
-    {
-        // does nothing.... remove me later.
-    }
-
-}
-?>
+} // class
