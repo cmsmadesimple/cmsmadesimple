@@ -249,6 +249,17 @@ class Smarty extends smarty_theme_template
 
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
     {
+        $rsrc = $template;
+        if( !$rsrc ) $rsrc = $this->template_resource;
+        if( startswith($rsrc,'cms_theme:') ) {
+            // we need to adjust the compile id to include our topend theme which may not be specified in the resource.
+            $node = cmsms()->get_frontend_theme_manager()->get_entry_theme();
+            $theme_name = null;
+            if( $node ) $theme_name = $node->get_tag('name'); // we are inside a theme template resource.
+            // set the compile id based on the resource/template and the top level theme.
+            $compile_id = md5(__FILE__.$theme_name.$template);
+        }
+	
         if( !startswith($template,'eval:') && !startswith($template,'string:') && !startswith($template,'cmsfile:') ) {
             if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
             if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");

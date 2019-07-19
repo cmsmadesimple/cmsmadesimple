@@ -40,22 +40,24 @@ class smarty_resource_cmstheme extends fixed_smarty_custom_resource
         $template = trim($template);
         $section = trim($section);
 
-        while(startswith($template,'/')) {
-            $template = substr($template,1);
-        }
+        $template = ltrim($template,'/');
         $bn = basename( $template );
         if( startswith($bn, '.') ) return;
         if( !$template ) return;
 
         if( !$theme ) {
+            // if this is the first call to this resource
+            // we need a theme.
+            // if this is not, we can infer the theme from the top level
+            // and recurse a bit.
             $theme = $this->smarty->theme_manager()->get_current_theme();
-            if( !$theme ) throw new \LogicException("No current theme name detected when using resource cms_theme:$name");
-        } else {
-            $this->smarty->theme_manager()->set_current_theme($theme);
+            return $this->fetch("$theme;$template",$source,$mtime);
         }
 
+        // if got here we have a theme name
+        $this->smarty->theme_manager()->set_current_theme($theme);
+
         $real_file = $this->smarty->theme_manager()->resolve_template($theme, $template);
-        if( !$real_file ) die('failed to resolve');
         if( !$real_file ) return;
 
         // if we got here, we're golden

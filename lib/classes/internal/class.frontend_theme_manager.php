@@ -8,6 +8,7 @@ class frontend_theme_manager
     private $theme_list;
     private $theme_tree;
     private $current_theme;
+    private $entry_theme;
 
     /**
      * Create a frontend_theme_placeholder from a path and the theme.json file that it contains.
@@ -100,11 +101,20 @@ class frontend_theme_manager
         $this->theme_list[$placeholder->name] = $placeholder;
     }
 
+    public function get_entry_theme()
+    {
+        return $this->entry_theme;
+    }
+
+    public function get_entry_theme_name()
+    {
+        if( $this->entry_theme ) return $this->entry_theme->get_tag('name');
+    }
+
     public function resolve_template(string $theme_name, string $template_name)
     {
-        static $top;
-        if( !$top ) $top = $this->get_theme_node($theme_name);
-        $node = $top;
+        if( !$this->entry_theme ) $this->entry_theme = $this->get_theme_node($theme_name);
+        $node = $this->entry_theme;
 
         while($node) {
             $theme_obj = $this->get_theme($node->get_tag('name'));
@@ -121,7 +131,9 @@ class frontend_theme_manager
 
     protected function get_theme(string $theme_name) : frontend_theme_placeholder
     {
-        if( !isset($this->theme_list[$theme_name]) ) throw new \InvalidArgumentException('Could not find them with name '.$theme_name);
+        if( !isset($this->theme_list[$theme_name]) ) {
+            throw new \InvalidArgumentException('Could not find them with name '.$theme_name);
+        }
         return $this->theme_list[$theme_name];
     }
 
