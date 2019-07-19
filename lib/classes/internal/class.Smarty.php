@@ -56,7 +56,7 @@ class Smarty extends smarty_theme_template
      */
     public function __construct( CmsApp $app )
     {
-        parent::__construct();
+        parent::__construct( $app->get_frontend_theme_manager() );
         $this->_is_frontend_request = $app->is_frontend_request();
         $this->_simple_plugin_ops = $app->GetSimplePluginOperations();
         $this->_module_smarty_plugin_manager = $app->get_module_smarty_plugin_manager();

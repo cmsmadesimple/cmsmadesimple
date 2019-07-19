@@ -113,6 +113,11 @@ function cms_autoloader($classname)
     }
 
     $modops = $gCms->GetModuleOperations();
+    if( in_array($classname, $modops->GetAllModuleNames()) ) {
+        $res = $modops->get_module_instance($classname);
+        return;
+    }
+
     $get_module_path = function(string $modname) use ($modops) {
         static $list = [];
 

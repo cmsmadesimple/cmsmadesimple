@@ -25,7 +25,8 @@
  * @license GPL
  */
 
-use \CMSMS\internal\bulkcontentoperations;
+use CMSMS\frontend_theme_placeholder;
+use CMSMS\internal\bulkcontentoperations;
 require_once(cms_join_path(__DIR__,'internal','module_support','modtemplates.inc.php'));
 require_once(cms_join_path(__DIR__, 'internal', 'module_support', 'modform.inc.php'));
 require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modredirect.inc.php'));
@@ -167,6 +168,17 @@ abstract class CMSModule
         return cms_module_plugin($params,$template);
     }
 
+    /**
+     * Register a frontend theme
+     *
+     * @since 2.3
+     * @see CMSMS\frontend_theme_placeholder
+     * @see CmsApp::create_theme_placeholder()
+     */
+    public function RegisterFrontendTheme(frontend_theme_placeholder $ph)
+    {
+        $this->cms->get_frontend_theme_manager()->register_theme($ph);
+    }
 
     /**
      * Register a smarty plugin and attach it to this module.

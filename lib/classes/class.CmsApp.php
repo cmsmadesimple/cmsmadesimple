@@ -35,6 +35,7 @@ use CMSMS\internal\AdminThemeManager;
 use CMSMS\internal\global_cache;
 use CMSMS\internal\page_string_handler;
 use CMSMS\internal\module_smarty_plugin_manager;
+use CMSMS\internal\frontend_theme_manager;
 use CMSMS\LoginOperations;
 use CMSMS\apc_cache_driver;
 use CMSMS\LayoutTemplateManager;
@@ -45,6 +46,7 @@ use CMSMS\AutoCookieManager;
 use CMSMS\simple_plugin_operations;
 use CMSMS\Database\Connection as Database;
 use CMSMS\Database\compatibility as DBCompatibility;
+use CMSMS\frontend_theme_placeholder;
 
 /**
  * Simple singleton class that contains various functions and states
@@ -801,6 +803,38 @@ final class CmsApp
     }
 
     /**
+     * Get a single instance to a frontend theme manager object.
+     *
+     * This method will create a frontend theme manager object if it does not already exist
+     * and will register the themes that exist in the /assets/themes directory.
+     *
+     * @internal
+     * @ignore
+     */
+    public function get_frontend_theme_manager() : frontend_theme_manager
+    {
+        static $_obj;
+        if( !$_obj ) {
+            // buuld and populate the initial theme manager with themes from /assets/themes
+            $_obj = new frontend_theme_manager();
+            $themes = glob(CMS_ASSETS_PATH.'/themes/*/theme.json');
+            if( !empty($themes) ) {
+                foreach( $themes as $theme_json ) {
+                    try {
+                        $dirname = dirname($theme_json);
+                        $ph = $_obj->create_placeholder_from_path($dirname);
+                        $_obj->register_theme($ph);
+                    }
+                    catch( \Exception $e ) {
+                        cms_error($e->GetMessage(),'Registering theme');
+                    }
+                }
+            }
+        }
+        return $_obj;
+    }
+
+    /**
      * Get a list of page templates that are displayable to editors.
      *
      * @return array An array of hashes, each entry is a hash with 'label' and 'value' properties.
@@ -810,7 +844,7 @@ final class CmsApp
      */
     public function get_page_template_list() : array
     {
-        $list = null;
+        $list = [];
         $page_template_list = $this->GetConfig()['page_template_list'];
         if( !empty($page_template_list) ) {
             if( is_string($page_template_list) ) $page_template_list = [$page_template_list];
@@ -827,22 +861,9 @@ final class CmsApp
                 $list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
             }
         }
-        // read from theme directories if they exit.
-        $themes = glob(CMS_ASSETS_PATH.'/themes/*/theme.json');
-        if( !empty($themes) ) {
-            foreach( $themes as $theme_json ) {
-                $theme = basename(dirname($theme_json));
-                $json = json_decode(file_get_contents($theme_json));
-                if( !$json || !isset($json->page_templates)  ) continue;
-                if( !is_array($json->page_templates) || !isset($json->page_templates[0]) ) continue;
-                foreach( $json->page_templates as $one ) {
-                    if( !isset($one->label) || !isset($one->template) || !$one->label || !$one->template ) continue;
-                    $one->label = $theme.' : '.$one->label;
-                    $one->value = "cms_theme:$theme;".$one->template;
-                    $list[] = json_decode(json_encode($one), TRUE);
-                }
-            }
-        }
+
+        $tmp = $this->get_frontend_theme_manager()->get_exported_page_templates();
+        if( !empty($tmp) ) $list = array_merge($list,$tmp);
         if( empty($list) ) throw new \LogicException('Could not determine a template list');
         return $list;
     }

@@ -48,25 +48,14 @@ class smarty_resource_cmstheme extends fixed_smarty_custom_resource
         if( !$template ) return;
 
         if( !$theme ) {
-            $theme = $this->smarty->theme_manager()->get_theme();
+            $theme = $this->smarty->theme_manager()->get_current_theme();
             if( !$theme ) throw new \LogicException("No current theme name detected when using resource cms_theme:$name");
         } else {
-            $this->smarty->theme_manager()->set_theme($theme);
-	}
-
-        // search for the file. make sure it actually exists in the subdirectory
-        $real_file = null;
-        $top_path = CMS_ASSETS_PATH."/themes/$theme/";
-        $rp1 = realpath($top_path);
-        $search = [ $template, "templates/$template" ];
-        foreach( $search as $one ) {
-            $fn = $top_path.$one;
-            $rp2 = realpath($fn);
-            if( is_file($fn) && $rp2 && startswith($rp2,$rp1) ) {
-                $real_file = $fn;
-                break;
-            }
+            $this->smarty->theme_manager()->set_current_theme($theme);
         }
+
+        $real_file = $this->smarty->theme_manager()->resolve_template($theme, $template);
+        if( !$real_file ) die('failed to resolve');
         if( !$real_file ) return;
 
         // if we got here, we're golden

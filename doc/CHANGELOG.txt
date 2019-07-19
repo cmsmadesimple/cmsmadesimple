@@ -185,12 +185,19 @@ Core - General
   - CHANGE: Internal pretty urls are now ON by default.  To disable it you set url_rewriting to none in the config.php
   - CHANGE: enable browser caching by default
   - REMOVED: preference for automatic clearing of cache from siteprefs.  This is now handled by a config entry.
-  - FEATURE: Adds the new {cms_set_theme} plugin usable in a page template of a theme to tell the system what the current theme is.
-  - FEATURE: Adds {cms_theme_url} and {cms_theme_path} smarty plugins that return the start URL and path of the current theme.
-  - FEATURE: Adds the cms_theme smarty resource to read templates from themes located in /assets/themes/thememane
-     - Supports putting templates into a directory called 'templates' below the theme directory OR having templates in the root.
-     - Supports syntax like:  cms_thme:[theme;]template_name[;section]
-       - if the theme name is not specified then the 'current' theme {cms_set_theme} will be used.
+  - FEATURE: Adds new 'themes' capability for frontend templates, stylesheets, scripts, images, fonts etc.
+    - New API allows registering themes dynamically
+    - Auto load any themes from the /assets/themes directory
+      (reads /assets/themes/<theme name>/theme.json file
+    - Themes can export page templates to show up in the page template list
+    - Allows for child themes that can add css and extend templates from parent templates
+    - Child themes can 'override' templates of the same name from parent themes.
+    - A new RegisterTheme method in the module API allows distributing themes as a module
+    - Adds a new cms_theme smarty resource to read templates from registered themes
+      - Supports syntax like:  cms_thme:[theme;]template_name[;section]
+      - if the theme name is not specified then the 'current' theme if one can be found, will be used.
+    - Adds new {cms_set_theme} plugin usable in the page template of a theme to tell the system what the current theme is.
+    - Adds the {cms_theme_url} and {cms_theme_path} plugins usable in a themes template to get the path and url to a theme.
   - FEATURE: simple new function cms_is_uri to test whether a string is a URI or not
   - FEATURE: new function cms_fix_path() which will assume strings that are NOT URI's represent paths and will correct them to use
      platform specific directory separators.   This should be used as much as possible instead of cms_join_path and DIRECTORY_SEPARATOR
@@ -219,6 +226,7 @@ CMSContentManager - 1.2
   - REMOVED: all support for events, now uses hooks
 
 Installation Assistant - v1.4
+  - BREAKING: Because of the new smarty version, use of the phar installer for installations on windows is broken
   - Now require at least CMSMS version 2.0.1 to upgrade
   - Now test the default character set
   - Now require at least PHP 7.1 and recommend 7.2+
