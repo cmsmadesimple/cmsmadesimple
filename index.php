@@ -302,7 +302,7 @@ while( $trycount < 2 ) {
             @ob_end_clean();
             echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
-<title>503 Site down for maintenance./title>
+<title>503 Site down for maintenance.</title>
 </head><body>
 <h1>Sorry, down for maintenance.  Check back shortly.</h1>'.$msg.'
 </body></html>';
