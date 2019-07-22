@@ -951,10 +951,16 @@ abstract class CmsAdminThemeBase
         $marks = array_reverse($bookops->LoadBookmarks($this->userid));
 
         if( !$pure ) {
-            $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	    $current_url = $_SERVER['REQUEST_URI'];
+        $title = $this->_title;
+        if( $this->_subtitle ) $title .= ' - '.$this->_subtitle;
+	    $current_url = base64_encode(sha1($current_url.$this->_app->get_site_identifier()).':'.$current_url.':'.$title);
+	    $key = sha1(__FILE__.time().rand());
+	    $_SESSION[$key]=$current_url;
             $mark= new Bookmark();
+            $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
             $mark->title = lang('addbookmark');
-            $mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->_title);
+            $mark->url = 'makebookmark.php'.$urlext.'&amp;key='.$key;
             $marks[] = $mark;
 
             $mark = new Bookmark();
@@ -1061,7 +1067,7 @@ abstract class CmsAdminThemeBase
                 $imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
                 $imageName = substr($imageName,strrpos($imageName,'/')+1);
             }
-	
+
             $config = $this->_app->GetConfig();
             $str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
             if (is_file("{$str}/{$imageName}")) {

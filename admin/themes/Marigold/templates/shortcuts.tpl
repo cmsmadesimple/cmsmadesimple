@@ -45,6 +45,7 @@
          <li><a{if $mark->bookmark_id > 0} class="bookmark"{/if} href="{$mark->url}" title="{$mark->title}">{$mark->title}</a></li>
       {/foreach}
       </ul>
+      <hr/>
     {/if}
     <h3>{'help'|lang}</h3>
     <ul>

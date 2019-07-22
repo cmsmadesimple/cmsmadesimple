@@ -102,9 +102,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$flds = "
 		bookmark_id I KEY,
-		user_id I,
+		user_id I NOTNULL,
 		title C(255),
-		url C(255)
+		url X NOTNULL
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."admin_bookmarks", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);

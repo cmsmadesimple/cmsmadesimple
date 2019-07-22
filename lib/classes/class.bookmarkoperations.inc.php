@@ -91,11 +91,12 @@ class BookmarkOperations
             $onemark = new Bookmark();
             $onemark->bookmark_id = $row['bookmark_id'];
             $onemark->user_id = $row['user_id'];
+            debug_display('in '.$row['url']);
             $onemark->url = $this->_prep_for_display($row['url']);
             $onemark->title = $row['title'];
             $result[] = $onemark;
         }
-
+        debug_display($result);
         return $result;
     }
 

@@ -122,6 +122,9 @@ $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY username VARCHAR(80)' )
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY password VARCHAR(128)' );
 status_msg('Added some size to the password and username columns of the users table');
 
+$db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'admin_bookmarks url X');
+status_msg('Added some size to the url column of the admin_bookmarks table');
+
 // tweak callbacks for page and generic layout templatet types.
 $page_type = \CmsLayoutTemplateType::load('__CORE__::page');
 $page_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::page_type_lang_callback');
@@ -140,6 +143,6 @@ if( !$tmp ) {
     status_msg('created a random size signature');
 }
 
-verbose_msg(ilang('upgrading_schema',203));
-$query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 203';
+verbose_msg(ilang('upgrading_schema',204));
+$query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 204';
 $db->Execute($query);

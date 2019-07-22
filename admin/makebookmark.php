@@ -28,17 +28,22 @@ include_once("header.php");
 
 check_login();
 $config = cmsms()->GetConfig();
-$link = $_SERVER['HTTP_REFERER'];
+$key = get_parameter_value($_GET,'key');
+if( !$key || !isset($_SESSION[$key]) ) throw new \InvalidArgumentException('Missing param');
+list($sig,$url,$title) = explode(':',base64_decode($_SESSION[$key]),3);
+unset($_SESSION[$key]);
+if( $sig != sha1($url.cmsms()->get_site_identifier()) ) throw new \InvalidArgumentException('Invalid/Incorrect session data');
+
 $newmark = new Bookmark();
 $newmark->user_id = get_userid();
-$newmark->url = $link;
-$newmark->title = $_GET['title'];
+$newmark->url = $url;
+$newmark->title = $title;
 $result = $newmark->save();
 
 if ($result)
 	{
     header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
-    redirect($link);
+    redirect($url);
 }
 else
 	{

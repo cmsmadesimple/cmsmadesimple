@@ -49,13 +49,18 @@ if (count($marklist) > $limit)
 
 if (count($marklist) > 0) {
 
+    $summarize = function(string $in, int $len = 80) {
+        if( strlen($in) > $len ) $in = substr($in,0,$len).'...';
+        return $in;
+    };
+
     echo '<p class="pagewarning visible">' . lang('show_shortcuts_message') . '</p>';
 
     echo "<table class=\"pagetable\">\n";
     echo '<thead>';
     echo "<tr>\n";
-    echo "<th class=\"pagew60\">".lang('name')."</th>\n";
-    echo "<th class=\"pagew60\">".lang('url')."</th>\n";
+    echo "<th>".lang('name')."</th>\n";
+    echo "<th>".lang('url')."</th>\n";
     echo "<th class=\"pageicon\">&nbsp;</th>\n";
     echo "<th class=\"pageicon\">&nbsp;</th>\n";
     echo "</tr>\n";
@@ -73,7 +78,7 @@ if (count($marklist) > 0) {
         if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
             echo "<tr class=\"$currow\">\n";
             echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
-            echo "<td>".$onemark->url."</td>\n";
+            echo "<td>".$summarize($onemark->url,80)."</td>\n";
             echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
