@@ -44,15 +44,16 @@ $(function(){
 
       cms_busy()
       $.post(url,data).then(function(data){
-         cms_busy(false)
-         return data;
+          return data;
       }).done(function(data){
           let url = null
+          cms_busy(false)
 	  if( typeof data.preview_url != 'undefined' ) url = data.preview_url
 	  if( !url ) cms_alert('an unknown error occurred')
 	  $('#previewframe').prop('src',url);
       }).fail(function(jqxhr, textStatus, errorThrown){
           let msg = 'An unknown error occurred'
+          cms_busy(false)
 	  if( errorThrown.length > 0 ) msg = errorThrown
 	  if( typeof data.message != 'undefined' && data.message.length > 0 ) msg = data.message;
 	  cms_alert(msg);
