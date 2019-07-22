@@ -9,7 +9,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         'group_perms'               => array('id' => 'group_perm_id'),
         'groups'                    => array('id' => 'group_id'),
         'users'                     => array('id' => 'user_id'),
-        'userplugins'               => array('id' => 'userplugin_id'),
         'permissions'               => array('id' => 'permission_id')
     );
 
