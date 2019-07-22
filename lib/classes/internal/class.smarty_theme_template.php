@@ -30,7 +30,7 @@ class smarty_theme_template extends smarty_base_template
         $this->registerPlugin('function', 'cms_set_theme', function($params, $tpl) {
                 $theme = get_parameter_value($params,'theme');
                 if( !$theme ) throw new \InvalidArgumentException('The cms_set_theme plugin requres a theme argument');
-                $this->_theme_manager->set_theme($theme);
+                $this->_theme_manager->set_current_theme($theme);
             });
         $this->registerPlugin('function', 'cms_theme_path', function($params, $tpl) {
                 $theme = get_parameter_value($params,'theme');
