@@ -632,7 +632,7 @@ abstract class ContentBase
      *
      * @since 2.3
      * @abstract
-     * @param string $rsrc;
+     * @param string $rsrc
      */
     public function SetTemplateResource(string $rsrc)
     {

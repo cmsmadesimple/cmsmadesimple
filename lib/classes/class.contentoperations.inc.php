@@ -281,7 +281,6 @@ class ContentOperations
      * Given a content id, load and return the loaded content object.
      *
      * @param int $id The id of the content object to load
-     * @param bool $loadprops Also load the properties of that content object. Defaults to false.
      * @return mixed The loaded content object. If nothing is found, returns void
      */
     public function LoadContentFromId(int $id = null)

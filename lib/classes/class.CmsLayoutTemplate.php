@@ -658,11 +658,11 @@ class CmsLayoutTemplate
     /**
      * Load a bulk list of templates
      *
-        * @deprecated
-        * @see CMSMS\LayoutTemplateManager::load_bulk_templates()
+     * @deprecated
+     * @see CMSMS\LayoutTemplateManager::load_bulk_templates()
      * @param int[] $list Array of integer template ids
      * @param bool $deep Optionally load attached data.
-     * @return array Array of CmsLayoutTemplate objects
+     * @return array $list Array of CmsLayoutTemplate objects
      */
     public static function load_bulk(array $list)
     {

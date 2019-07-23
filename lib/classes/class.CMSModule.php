@@ -174,6 +174,7 @@ abstract class CMSModule
      * @since 2.3
      * @see CMSMS\frontend_theme_placeholder
      * @see CmsApp::create_theme_placeholder()
+     * @param frontend_theme_placeholder $ph
      */
     public function RegisterFrontendTheme(frontend_theme_placeholder $ph)
     {

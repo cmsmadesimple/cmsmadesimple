@@ -28,13 +28,13 @@
 
 
 /**
- * Gets the userid of the currently logged in user.
+ * Gets the userid of the currently logged in admin user.
  *
  * If an effective uid has been set in the session, AND the primary user is a member of the admin group
  * then allow emulating that effective uid.
  *
  * @since 0.1
- * @param  boolean $redirect Redirect to the admin login page if the user is not logged in.
+ * @param  bool $redirect Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
  */
 function get_userid(bool $redirect = true)
@@ -53,13 +53,13 @@ function get_userid(bool $redirect = true)
 
 
 /**
- * Gets the username of the currently logged in user.
+ * Gets the username of the currently logged in admin user.
  *
  * If an effective username has been set in the session, AND the primary user is a member of the admin group
  * then return the effective username.
  *
  * @since 2.0
- * @param  boolean $check Redirect to the admin login page if the user is not logged in.
+ * @param  bool $check Redirect to the admin login page if the user is not logged in.
  * @return string the username of the logged in user.
  */
 function get_username(bool $check = true)
@@ -86,7 +86,7 @@ function get_username(bool $check = true)
  *
  * @since 0.1
  * @param string $no_redirect If true, then don't redirect if not logged in
- * @return boolean
+ * @return bool
  */
 function check_login(bool $no_redirect = false)
 {
@@ -121,7 +121,7 @@ function check_login(bool $no_redirect = false)
  * @since 0.1
  * @param int $userid The user id
  * @param string $permname The permission name
- * @return boolean
+ * @return bool
  */
 function check_permission(int $userid = null, string $permname)
 {
@@ -138,7 +138,7 @@ function check_permission(int $userid = null, string $permname)
  * @since 0.2
  * @param  integer The admin user id
  * @param  integer A valid content id.
- * @return boolean
+ * @return bool
  */
 function check_authorship(int $userid = null, int $contentid = null)
 {
@@ -180,7 +180,7 @@ function get_site_preference(string $prefname, $defaultvalue = null)
  *
  * @internal
  * @access private
- * @param boolean $enablewysiwyg Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
+ * @param bool $enablewysiwyg Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
  * @param string  $text The contents of the text area
  * @param string  $name The name of the text area
  * @param string  $classname An optional class name
@@ -228,7 +228,7 @@ function create_textarea(bool $enablewysiwyg, string $text, string $name, string
  * This method includes handling the preference that indicates that site-down behaviour should
  * be disabled for certain IP address ranges.
  *
- * @return boolean
+ * @return bool
  */
 function is_sitedown()
 {
@@ -260,11 +260,11 @@ function is_sitedown()
  * @param string The name of the file that should be selected
  * @param string A comma separated list of extensions that should be displayed in the list
  * @param string An optional string with which to prefix each value in the output by
- * @param boolean Wether 'none' should be an allowed option
+ * @param bool Wether 'none' should be an allowed option
  * @param string Text containing additional parameters for the dropdown element
  * @param string A prefix to use when filtering files
- * @param boolean A flag indicating wether the files matching the extension and the prefix should be included or excluded from the result set
- * @param boolean A flag indicating wether the output should be sorted.
+ * @param bool A flag indicating wether the files matching the extension and the prefix should be included or excluded from the result set
+ * @param bool A flag indicating wether the output should be sorted.
  * @return string
  */
 function create_file_dropdown(string $name,string $dir,string $value,string $allowed_extensions,string $optprefix='',
@@ -313,10 +313,10 @@ function get_pageid_or_alias_from_url()
     // handles:  index.php?query_var=alias
     // handles:  index.php/something/something/something/alias (url rewriting enabled))
     // handles:  index.php/some_route (uses route matching)
-    // todo: handle decoding the mact here ?? 
+    // todo: handle decoding the mact here ??
     //   if we did not find a matching route in the request, throw a 404 exception
     //   if we did not find a valid content page from the route throw a different exception (LogicException)
-    
+
     $gCms = cmsms();
     $config = $gCms->GetConfig();
     $contentops = $gCms->GetContentOperations();

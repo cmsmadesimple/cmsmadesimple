@@ -85,7 +85,7 @@ function lang($key)
 /**
  * Retrieve a list of installed languages that is suitable for use in a dropdown.
  *
- * @param boolean $allow_none Optionally adds 'none' (translated to current language) to the top of the list.
+ * @param bool $allow_none Optionally adds 'none' (translated to current language) to the top of the list.
  * @return associative array of lang keys and display strings.
  * @internal
  * @deeprecated

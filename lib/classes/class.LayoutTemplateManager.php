@@ -39,6 +39,7 @@ class LayoutTemplateManager
      * @param Database $db The database
      * @param cms_cache_driver $driver The Cache driver
      * @param hook_manager $hook_manager The hook manager
+     * @param cms_config $config
      */
     public function __construct( Database $db, cms_cache_driver $driver, hook_manager $hook_manager, cms_config $config )
     {
@@ -125,6 +126,9 @@ class LayoutTemplateManager
         $this->cache_driver->set('cached_index',__CLASS__);
     }
 
+    /**
+     * @internal
+     */
     protected function set_template_uncached(CmsLayoutTemplate $tpl)
     {
         if( !($tpl_id = $tpl->get_id()) ) return;
@@ -604,6 +608,9 @@ class LayoutTemplateManager
         if( $tpl_id ) return $this->load_template($tpl_id);
     }
 
+    /**
+     * @internal
+     */
     public function get_template_filename(CmsLayoutTemplate $tpl)
     {
         if( !$tpl->get_name() ) return;
@@ -611,6 +618,9 @@ class LayoutTemplateManager
         return cms_join_path(CMS_ASSETS_PATH,'templates',$name);
     }
 
+    /**
+     * @internal
+     */
     public function template_has_file(CmsLayoutTemplate $tpl)
     {
         $fn = $this->get_template_filename($tpl);
