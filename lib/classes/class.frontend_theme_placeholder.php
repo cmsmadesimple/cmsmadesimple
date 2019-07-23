@@ -1,5 +1,4 @@
 <?php
-namespace CMSMS;
 
 /**
  * This file contains the class that defines a placeholder for a file based theme.
@@ -8,6 +7,8 @@ namespace CMSMS;
  * @license GPL
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
+
+namespace CMSMS;
 
 /**
  * A class that acts as a placeholder for a frontend theme.
@@ -97,6 +98,11 @@ class frontend_theme_placeholder
         return $this->data['location'];
     }
 
+    /**
+     * Get the URL where theme files can be located.
+     * 
+     * @return string
+     */
     public function get_urlbase() : string
     {
         if( !isset($this->data['urlbase']) ) throw new \LogicException('No urlbase available for files in this theme');

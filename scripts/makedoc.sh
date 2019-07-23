@@ -47,7 +47,7 @@ fi
 cp ${_config} phpdoc.dist.xml
 
 # execute phpdoc
-phpdoc $* | tee tmp/phpdoc.log
+phpdoc $* 2>/dev/null | grep -v E_WARNING | tee tmp/phpdoc.log
 
 # cleanup
 cleanup;

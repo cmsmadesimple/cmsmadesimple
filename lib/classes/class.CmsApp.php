@@ -697,6 +697,7 @@ final class CmsApp
      * Create a new instance of the mailer
      *
      * @since 2.3
+     * @param bool $exceptions Whether or not the mailer should throw exceptions.
      * @return cms_mailer
      */
     public function create_new_mailer(bool $exceptions = true) : cms_mailer

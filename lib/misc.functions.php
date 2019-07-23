@@ -813,7 +813,8 @@ function munge_string_to_url(string $alias, bool $tolower = false, bool $withsla
  * @param string $val input value
  * @return string
  */
-function cleanValue(string $val) {
+function cleanValue(string $val) : string
+{
     if ($val == '') return $val;
     return filter_var( $val, FILTER_SANITIZE_STRING );
     //Replace odd spaces with safe ones
@@ -846,7 +847,14 @@ function cleanValue(string $val) {
     return $val;
 }
 
-function cleanString(string $in)
+/**
+ * Clean an input string 
+ * Will encode unsafe characters as entities.
+ * 
+ * @param string $in
+ * @return string
+ */
+function cleanString(string $in) : string
 {
     if( !$in ) return $in;
     return filter_var( $val, FILTER_SANITIZE_STRING );
@@ -859,7 +867,7 @@ function cleanString(string $in)
  * @param string $str The php ini key
  * @return int
  */
-function ini_get_boolean(string $str)
+function ini_get_boolean(string $str) : int
 {
     $val1 = ini_get($str);
     $val2 = strtolower($val1);
