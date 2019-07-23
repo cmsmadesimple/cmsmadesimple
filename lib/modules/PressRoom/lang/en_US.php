@@ -1,4 +1,5 @@
 <?php
+$lang['warn_nomatching_articles'] = 'There are no matching articles to display at this time.';
 $lang['confirm_delcat'] = 'Are you sure you want to delete this category?  Any articles associated with this category will be orphaned.';
 $lang['friendlyname'] = 'PressRoom';
 $lang['lbl_maxsize'] = 'Maximum size';
