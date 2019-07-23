@@ -45,7 +45,7 @@ function cms_autoloader($classname)
         foreach( $filenames as $test ) {
             $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',$path,$test);
             if( is_file($fn) ) {
-                require_once($fn);
+                require $fn;
                 return;
             }
         }
@@ -54,14 +54,14 @@ function cms_autoloader($classname)
     // standard classes
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$classname}.php");
     if( is_file($fn) ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
     // standard internal classes
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$classname}.php");
     if( is_file($fn) ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
@@ -69,7 +69,7 @@ function cms_autoloader($classname)
     $lowercase = strtolower($classname);
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$lowercase}.inc.php");
     if( is_file($fn) && $classname != 'Content' ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
@@ -77,28 +77,28 @@ function cms_autoloader($classname)
     $lowercase = strtolower($classname);
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$lowercase}.inc.php");
     if( is_file($fn) && $classname != 'Content' ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
     // standard interfaces
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"interface.{$classname}.php");
     if( is_file($fn) ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
     // internal interfaces
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"interface.{$classname}.php");
     if( is_file($fn) ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
     // standard content types
     $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','contenttypes',"{$classname}.inc.php");
     if( is_file($fn) ) {
-        require_once($fn);
+        require $fn;
         return;
     }
 
@@ -107,7 +107,7 @@ function cms_autoloader($classname)
         $class = substr($classname,0,-4);
         $fn = CMS_ROOT_PATH."/lib/tasks/class.{$class}.task.php";
         if( is_file($fn) ) {
-            require_once($fn);
+            require $fn;
             return;
         }
     }
@@ -144,11 +144,11 @@ function cms_autoloader($classname)
             $filename1 = "{$modpath}/lib/{$class_lastname}.php";
             $filename2 = "{$modpath}/lib/class.{$class_lastname}.php";
             if( is_file($filename1) ) {
-                require_once $filename1;
+                require $filename1;
                 return;
             }
             if( is_file($filename2) ) {
-                require_once $filename2;
+                require $filename2;
                 return;
             }
             if( count($parts) > 1 ) {
@@ -156,7 +156,7 @@ function cms_autoloader($classname)
                 $subpath = implode($parts, '/');
                 $filename3 = "{$modpath}/lib/{$subpath}/class.{$class_lastname}.php";
                 if( $filename3 && is_file($filename3) ) {
-                    require_once $filename3;
+                    require $filename3;
                     return;
                 }
             }

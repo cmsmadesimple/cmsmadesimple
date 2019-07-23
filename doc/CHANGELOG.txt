@@ -202,6 +202,9 @@ Core - General
   - FEATURE: new function cms_fix_path() which will assume strings that are NOT URI's represent paths and will correct them to use
      platform specific directory separators.   This should be used as much as possible instead of cms_join_path and DIRECTORY_SEPARATOR
      as it will allow uri's like file:/// and ssh://  and phar:// to pass through to other file operations like is_file() etc.
+  - FEATURE: Now catch \Throwable errors whenever including a user editable file which allows us to catch syntax errors and in some 
+     cases class not found errors etc.  which is a serious stability improvement for CMSMS.
+  - Improvements to the CMSMS autoloader
 
 
 PressRoom v1.0
