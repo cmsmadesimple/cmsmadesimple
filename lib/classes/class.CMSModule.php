@@ -1379,13 +1379,19 @@ abstract class CMSModule
             else {
                 $filename = $this->GetModulePath().'/action.' . $name . '.php';
                 if( is_file($filename) ) {
-                    // these are included in scope in the included file for convenience.
-                    $gCms = $this->app;
-                    $db = $gCms->GetDb();
-                    $config = $gCms->GetConfig();
-                    $out = include($filename);
-                    if( $out === 1 ) $out = null;
-                    return $out;
+                    try {
+                        // these are included in scope in the included file for convenience.
+                        $gCms = $this->app;
+                        $db = $gCms->GetDb();
+                        $config = $gCms->GetConfig();
+                        $out = include $filename;
+                        if( $out === 1 ) $out = null;
+                        return $out;
+                    }
+                    catch( \Throwable $e ) {
+                        cms_error('ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(), 'Module action '.$this->GetName().'::'.$name);
+                        return;
+                    }
                 }
             }
         }

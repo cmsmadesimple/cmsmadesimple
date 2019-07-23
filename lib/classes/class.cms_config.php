@@ -318,28 +318,33 @@ final class cms_config implements ArrayAccess
 
         $config = array();
         if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
-            include(CONFIG_FILE_LOCATION);
-            foreach( $config as $key => &$value ) {
-                if( isset($this->_types[$key]) ) {
-                    switch( $this->_types[$key] ) {
+            try {
+                include CONFIG_FILE_LOCATION;
+                foreach( $config as $key => &$value ) {
+                    if( isset($this->_types[$key]) ) {
+                        switch( $this->_types[$key] ) {
                         case self::TYPE_BOOL:
                             $value = cms_to_bool($value);
                             break;
 
                         case self::TYPE_STRING:
-                              $value = trim($value);
+                            $value = trim($value);
                             break;
 
                         case self::TYPE_INT:
                             $value = (int)$value;
                             break;
+                        }
                     }
                 }
+                unset($config['max_upload_size']);
+                $this->_data = $config;
             }
-            unset($config['max_upload_size']);
+            catch( \Throwable $e ) {
+                trigger_error('Error: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine().' when loading config file');
+                die('FATAL ERROR '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine());
+            }
         }
-
-        $this->_data = $config;
     }
 
     /**

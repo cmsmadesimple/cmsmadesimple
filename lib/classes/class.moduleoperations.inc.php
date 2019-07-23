@@ -244,11 +244,12 @@ final class ModuleOperations
      */
     private function _install_module(CmsModule& $module_obj)
     {
-        debug_buffer('install_module '.$module_obj->GetName());
-        $db = $this->_db;
+        try {
+            debug_buffer('install_module '.$module_obj->GetName());
+            $db = $this->_db;
+            $result = $module_obj->Install();
+            if( $result ) return [FALSE, $result];
 
-        $result = $module_obj->Install();
-        if( !isset($result) || $result === FALSE) {
             // install returned nothing, or FALSE, a successful installation
             $query = 'DELETE FROM '.CMS_DB_PREFIX.'modules WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
@@ -261,12 +262,12 @@ final class ModuleOperations
                       (module_name,version,status,admin_only,active,allow_fe_lazyload,allow_admin_lazyload)
                       VALUES (?,?,?,?,?,?,?)';
             $dbr = $db->Execute($query,array($module_obj->GetName(),$module_obj->GetVersion(),'installed',
-                                         ($module_obj->IsAdminOnly()==true)?1:0,
-                                         1,$lazyload_fe,$lazyload_admin));
+                                             ($module_obj->IsAdminOnly()==true)?1:0,
+                                             1,$lazyload_fe,$lazyload_admin));
 
             $deps = $module_obj->GetDependencies();
             if( is_array($deps) && count($deps) ) {
-                  $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
+                $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
                           VALUES (?,?,?,NOW(),NOW())';
                 foreach( $deps as $depname => $depversion ) {
                     if( !$depname || !$depversion ) continue;
@@ -277,11 +278,12 @@ final class ModuleOperations
 
             $this->_hook_manager->emit('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             cms_notice('Installed module '.$module_obj->GetName().' version '.$module_obj->GetVersion());
-            return array(TRUE,$module_obj->InstallPostMessage());
+            return [TRUE, $module_obj->InstallPostMessage()];
         }
-
-        // install returned something.
-        return array(FALSE,$result);
+        catch( \Throwable $e ) {
+            cms_error('Error: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine());
+            return [FALSE, $e->GetMessage()];
+        }
     }
 
 
@@ -358,123 +360,121 @@ final class ModuleOperations
      */
     private function _load_module(string $module_name,bool $force_load = FALSE,bool $dependents = TRUE)
     {
-        $info = $this->_get_module_info();
-        if( !isset($info[$module_name]) && !$force_load ) {
-            cms_warning("Nothing is known about $module_name... cant load it");
-            return FALSE;
-        }
+        try {
+            $info = $this->_get_module_info();
+            if( !isset($info[$module_name]) && !$force_load ) {
+                throw new \RuntimeException("Nothing is known about $module_name. cannott load it");
+            }
 
-        global $CMS_ADMIN_PAGE, $CMS_STYLESHEET, $CMS_INSTALL_PAGE;
+            global $CMS_ADMIN_PAGE, $CMS_STYLESHEET, $CMS_INSTALL_PAGE, $CMS_FORCELOAD;
 
-        // okay, lessee if we can load the dependants
-        if( $dependents ) {
-            $deps = $this->get_module_dependencies($module_name);
-            if( is_array($deps) && count($deps) ) {
-                foreach( $deps as $name => $ver ) {
-                    if( $name == $module_name ) continue; // a module cannot depend on itself.
-                    // this is the start of a recursive routine. get_module_instance() may call _load_module
-                    $obj2 = $this->get_module_instance($name,$ver);
-                    if( !is_object($obj2) ) {
-                          cms_warning("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
-                          return FALSE;
+            // okay, lessee if we can load the dependants
+            if( $dependents ) {
+                $deps = $this->get_module_dependencies($module_name);
+                if( is_array($deps) && count($deps) ) {
+                    foreach( $deps as $name => $ver ) {
+                        if( $name == $module_name ) continue; // a module cannot depend on itself.
+                        // this is the start of a recursive routine. get_module_instance() may call _load_module
+                        $obj2 = $this->get_module_instance($name,$ver);
+                        if( !is_object($obj2) ) {
+                            throw new \RuntimeException("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
+                        }
                     }
                 }
             }
-        }
 
-        // now load the module itself... recurses into the autoloader if possible.
-        $class_name = $this->get_module_classname($module_name);
-        if( !class_exists($class_name,false) ) {
-            $fname = $this->get_module_filename( $module_name);
-            if( !is_file($fname) ) {
-                cms_warning("Cannot load $module_name because the module file does not exist");
-                return FALSE;
+            // now load the module itself... recurses into the autoloader if possible.
+            $class_name = $this->get_module_classname($module_name);
+            if( !class_exists($class_name,false) ) {
+                $fname = $this->get_module_filename( $module_name);
+                if( !is_file($fname) ) throw new \RuntimeException("Cannot load $module_name because the module file does not exist");
+
+                debug_buffer('including source for module '.$module_name);
+                $gCms = $this->_app; // compatibility
+                require_once $fname;
             }
 
-            debug_buffer('including source for module '.$module_name);
-            $gCms = $this->_app; // compatibility
-            require_once $fname;
-        }
+            if( !class_exists($class_name,FALSE) ) {
+                throw new \RuntimeException("Cannot load $module_name because the class still does not exist");
+            }
 
-        if( !class_exists($class_name,FALSE) ) {
-            debug_buffer("Cannot load $module_name because the class still does not exist");
-            return FALSE;
-        }
+            $CMS_FORCELOAD = $force_load;
+            $obj = new $class_name;
+            unset($CMS_FORCELOAD);
+            if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
+                throw new \Exception("Cannot load module $module_name. Some problem instantiating the class");
+            }
 
-        global $CMS_FORCELOAD;
-        $CMS_FORCELOAD = $force_load;
-        $obj = new $class_name;
-        unset($CMS_FORCELOAD);
-        if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
-            // oops, some problem loading.
-            cms_error("Cannot load module $module_name ... some problem instantiating the class");
-            return FALSE;
-        }
+            if (version_compare($obj->MinimumCMSVersion(),CMS_VERSION) == 1 ) {
+                // oops, not compatible.... can't load.
+                throw new \Exception("Cannot load module {$module_name}. It is not compatible wth this version of CMSMS");
+            }
 
-        if (version_compare($obj->MinimumCMSVersion(),CMS_VERSION) == 1 ) {
-            // oops, not compatible.... can't load.
-            cms_error('Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
-            unset($obj);
-            return FALSE;
-        }
+            $this->_modules[$module_name] = $obj;
 
-        $this->_modules[$module_name] = $obj;
+            $tmp = $this->_app->get_installed_schema_version();
+            if( $tmp == CMS_SCHEMA_VERSION ) {
+                // schema versions match
+                $needs_upgrade = isset($info[$module_name]) && $info[$module_name]['status'] == 'installed';
+                $needs_upgrade = $needs_upgrade && version_compare($info[$module_name]['version'], $obj->GetVersion()) == -1;
 
-        $tmp = $this->_app->get_installed_schema_version();
-        if( $tmp == CMS_SCHEMA_VERSION ) {
-            // schema versions match
-            $needs_upgrade = isset($info[$module_name]) && $info[$module_name]['status'] == 'installed';
-            $needs_upgrade = $needs_upgrade && version_compare($info[$module_name]['version'], $obj->GetVersion()) == -1;
-
-            if( isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
-                // during the phar installer, we can use get_module_instance() to install or upgrade core modules
-                if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
-                    $res = $this->_install_module($obj);
-                    if( $res[0] == FALSE ) {
-                          // nope, can't auto install...
-                          unset($obj,$this->_modules[$module_name]);
-                          return FALSE;
+                if( isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
+                    // during the phar installer, we can use get_module_instance() to install or upgrade core modules
+                    if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
+                        $res = $this->_install_module($obj);
+                        if( $res[0] == FALSE ) throw new \RuntimeException('Cannot auto install '.$module_name);
+                    }
+                    else if( $needs_upgrade ) {
+                        $res = $this->_upgrade_module($obj);
+                        if( !$res ) {
+                            // upgrade failed
+                            allow_admin_lang(FALSE); // isn't this ugly.
+                            Throw new \RuntimeException("Automatic upgrade of $module_name failed");
+                        }
                     }
                 }
-                else if( $needs_upgrade ) {
-                    $res = $this->_upgrade_module($obj);
-                    if( !$res ) {
-                        // upgrade failed
-                        allow_admin_lang(FALSE); // isn't this ugly.
-                        debug_buffer("Automatic upgrade of $module_name failed");
-                        unset($obj,$this->_modules[$module_name]);
-                        return FALSE;
-                    }
+                else if( $needs_upgrade && !$force_load ) {
+                    // not in the installer, but the module needs an upgrade
+                    throw new \RuntimeException("Cannot load module $module_name in a regular request,it needs an upgrade");
+                    unset($obj,$this->_modules[$module_name]);
+                    return FALSE;
                 }
             }
-            else if( $needs_upgrade && !$force_load ) {
-                // not in the installer, but the module needs an upgrade
-                cms_error('Cannot load module '.$module_name.' in a regular request,it needs an upgrade');
-                debug_buffer('cannot load a module that nees upgrading');
+
+            if( !$force_load && (!isset($info[$module_name]['status']) || $info[$module_name]['status'] != 'installed') ) {
                 unset($obj,$this->_modules[$module_name]);
-                return FALSE;
+                throw new \RuntimeException('Cannot load an uninstalled module');
             }
-        }
 
-        if( !$force_load && (!isset($info[$module_name]['status']) || $info[$module_name]['status'] != 'installed') ) {
-            debug_buffer('Cannot load an uninstalled module');
-            unset($obj,$this->_modules[$module_name]);
-            return false;
-        }
-
-        if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
-            $obj->SetParameters(); // deprecated
-            $obj->InitializeCommon();
-            if( isset($CMS_ADMIN_PAGE) ) {
-                $obj->InitializeAdmin();
-            } else if( $this->_app->is_frontend_request() ) {
-                $obj->InitializeFrontend();
+            if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
+                $obj->SetParameters(); // deprecated
+                $obj->InitializeCommon();
+                if( isset($CMS_ADMIN_PAGE) ) {
+                    $obj->InitializeAdmin();
+                } else if( $this->_app->is_frontend_request() ) {
+                    $obj->InitializeFrontend();
+                }
             }
-        }
 
-        // we're all done.
-        $this->_hook_manager->emit('Core::ModuleLoaded', [ 'name' => $module_name ] );
-        return TRUE;
+            // we're all done.
+            $this->_hook_manager->emit('Core::ModuleLoaded', [ 'name' => $module_name ] );
+            return TRUE;
+        }
+        catch( \RuntimeException $e ) {
+            unset($this->_modules[$module_name]);
+            cms_warning($e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(),"Loading $module_name");
+            return FALSE;
+        }
+        catch( \Exception $e ) {
+            unset($this->_modules[$module_name]);
+            cms_error($e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(),"Loading $module_name");
+            return FALSE;
+        }
+        catch( \Throwable $e ) {
+            unset($this->_modules[$module_name]);
+            cms_error('PHP ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine());
+            return FALSE;
+        }
     }
 
 
@@ -553,20 +553,22 @@ final class ModuleOperations
      */
     private function _upgrade_module( \CMSModule &$module_obj, string $to_version = '' )
     {
-        // we can't upgrade a module if the schema is not up to date.
-        $tmp = $this->_app->get_installed_schema_version();
-        if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return array(FALSE,lang('error_coreupgradeneeded'));
+        try {
+            // we can't upgrade a module if the schema is not up to date.
+            $tmp = $this->_app->get_installed_schema_version();
+            if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return array(FALSE,lang('error_coreupgradeneeded'));
 
-        $info = $this->_get_module_info();
-        $module_name = $module_obj->GetName();
-        $dbversion = $info[$module_name]['version'];
-        if( $to_version == '' ) $to_version = $module_obj->GetVersion();
-        $dbversion = $info[$module_name]['version'];
-        if( version_compare($dbversion, $to_version) != -1 ) return array(TRUE); // nothing to do.
+            $info = $this->_get_module_info();
+            $module_name = $module_obj->GetName();
+            $dbversion = $info[$module_name]['version'];
+            if( $to_version == '' ) $to_version = $module_obj->GetVersion();
+            $dbversion = $info[$module_name]['version'];
+            if( version_compare($dbversion, $to_version) != -1 ) return array(TRUE); // nothing to do.
 
-        $db = $this->_db;
-        $result = $module_obj->Upgrade($dbversion,$to_version);
-        if( !isset($result) || $result === FALSE ) {
+            $db = $this->_db;
+            $result = $module_obj->Upgrade($dbversion,$to_version);
+            if( $result ) throw new \RuntimeException($result);
+
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
             $admin_only = ($module_obj->IsAdminOnly())?1:0;
@@ -592,11 +594,16 @@ final class ModuleOperations
 
             cms_notice('Upgraded module '.$module_obj->GetName().' from version '.$dbversion.' to version '.$module_obj->GetVersion());
             $this->_hook_manager->emit('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
-            return array(TRUE);
+            return [TRUE];
         }
-
-        cms_error('Upgrade failed for module '.$module_obj->GetName());
-        return array(FALSE,$result);
+        catch( \Exception $e ) {
+            cms_error('Upgrade failed for module '.$module_obj->GetName());
+            return [FALSE, $e->GetMessage()];
+        }
+        catch( \Throwable $e ) {
+            cms_error('ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetMessage(),'Upgrade '.$module_obj->GetName());
+            return [FALSE, $e->GetMessage()];
+        }
     }
 
 
@@ -629,15 +636,15 @@ final class ModuleOperations
      */
     public function UninstallModule( string $module )
     {
-        $db = $this->_db;
+        try {
+            $db = $this->_db;
+            $modinstance = $this->get_module_instance($module);
+            if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
 
-        $modinstance = $this->get_module_instance($module);
-        if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
+            $cleanup = $modinstance->AllowUninstallCleanup();
+            $result = $modinstance->Uninstall();
+            if( $result ) return [FALSE, $result];
 
-        $cleanup = $modinstance->AllowUninstallCleanup();
-        $result = $modinstance->Uninstall();
-
-        if (!isset($result) || $result === FALSE) {
             // now delete the record
             $query = "DELETE FROM ".CMS_DB_PREFIX."modules WHERE module_name = ?";
             $db->Execute($query, array($module));
@@ -657,7 +664,7 @@ final class ModuleOperations
                         $tpls = CmsLayoutTemplate::template_query(array('t:'.$type->get_id()));
                         if( is_array($tpls) && count($tpls) ) {
                             foreach( $tpls as $tpl ) {
-                                  $tpl->delete();
+                                $tpl->delete();
                             }
                         }
                         $type->delete();
@@ -687,11 +694,12 @@ final class ModuleOperations
 
             cms_notice('Uninstalled module '.$module);
             $this->_hook_manager->emit('Core::ModuleUninstalled', [ 'name' => $module ] );
-            return array(TRUE);
+            return [TRUE];
         }
-
-        cms_error('Uninstall failed: '.$module);
-        return array(FALSE,$result);
+        catch( \Throwable $e ) {
+            cms_error('Error: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(), 'Uninstll '.$module );
+            return [FALSE, $e->GetMessage()];
+        }
     }
 
 

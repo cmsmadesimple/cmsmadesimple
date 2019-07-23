@@ -161,10 +161,15 @@ final class simple_plugin_operations
         if( !is_file($fn) ) throw new \RuntimeException('Could not find simple plugin named '.$name);
 
         // these variables are created for plugins to use in scope.
-        $params = $args[0];
-        $smarty = null;
-        $gCms = cmsms(); // put this in scope.
-        if( isset($args[1]) ) $smarty = $args[1];
-        include( $fn );
+        try {
+            $params = $args[0];
+            $smarty = null;
+            $gCms = cmsms(); // put this in scope.
+            if( isset($args[1]) ) $smarty = $args[1];
+            include( $fn );
+        }
+        catch( \Throwable $e ) {
+            cms_error('ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(), 'Calling simple plugin '.$name);
+        }
     }
 } // end of filex

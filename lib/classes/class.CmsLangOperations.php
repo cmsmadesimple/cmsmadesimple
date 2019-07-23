@@ -143,17 +143,22 @@ final class CmsLangOperations
         foreach( $files as $fn ) {
             if( !is_file($fn) ) continue;
 
-            $lang = [];
-            if( endswith($fn, '.json') ) {
-                $lang = json_decode(file_get_contents($fn),TRUE);
+            try {
+                $lang = [];
+                if( endswith($fn, '.json') ) {
+                    $lang = json_decode(file_get_contents($fn),TRUE);
+                }
+                else if( endswith($fn,'.php') ) {
+                    include($fn);
+                }
+                if( !$lang || !is_array($lang) || empty($lang) ) continue;
+                if( !isset(self::$_langdata[$curlang][$realm]) ) self::$_langdata[$curlang][$realm] = [];
+                self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
+                unset($lang);
             }
-            else if( endswith($fn,'.php') ) {
-                include($fn);
+            catch( \Throwable $e ) {
+                cms_error('ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(),'Loading langfile '.$fn);
             }
-            if( !$lang || !is_array($lang) || empty($lang) ) continue;
-            if( !isset(self::$_langdata[$curlang][$realm]) ) self::$_langdata[$curlang][$realm] = [];
-            self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
-            unset($lang);
         }
     }
 
