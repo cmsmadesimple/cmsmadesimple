@@ -363,7 +363,7 @@ final class ModuleOperations
         try {
             $info = $this->_get_module_info();
             if( !isset($info[$module_name]) && !$force_load ) {
-                throw new \RuntimeException("Nothing is known about $module_name. cannott load it");
+                throw new \RuntimeException("Nothing is known about $module_name. cannot load it");
             }
 
             global $CMS_ADMIN_PAGE, $CMS_STYLESHEET, $CMS_INSTALL_PAGE, $CMS_FORCELOAD;
