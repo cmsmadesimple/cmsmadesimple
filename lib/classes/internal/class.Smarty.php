@@ -225,12 +225,14 @@ class Smarty extends smarty_theme_template
             }
 
             // see if it is a simple plugin
-            $plugin = $this->_simple_plugin_ops->load_plugin( $name );
-            if( $plugin ) {
-                $callback = $plugin;
-                $cachable = FALSE;
-                return TRUE;
-            }
+	    if( $this->_simple_plugin_ops->plugin_exists($name) ) {
+                $plugin = $this->_simple_plugin_ops->load_plugin($name);
+                if( $plugin ) {
+                    $callback = $plugin;
+                    $cachable = FALSE;
+                    return TRUE;
+                }
+	    }
         }
 
         return FALSE;
