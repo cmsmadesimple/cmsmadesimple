@@ -595,22 +595,6 @@ $lang['help_function_page_image'] = <<<EOT
 <p>If the plugin is outputting a full img tag, and the alt argument has not been provided, then the value of the property will be used for the alt attribute of the img tag.</p>
 EOT;
 
-$lang['help_function_dump'] = <<<EOT
-<h3>What does this do?</h3>
-  <p>This tag can be used to dump the contents of any smarty variable in a more readable format.  This is useful for debugging, and editing templates, to know the format and types of data available.</p>
-<h3>How do I use it?</h3>
-<p>Insert the tag in the template like <code>{dump item='the_smarty_variable_to_dump'}</code>.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><strong>item (required)</strong> - The smarty variable to dump the contents of.</li>
-<li>maxlevel - The maximum number of levels to recurse (applicable only if recurse is also supplied.  The default value for this parameter is 3</li>
-<li>nomethods - Skip output of methods from objects.</li>
-<li>novars - Skip output of object members.</li>
-<li>recurse - Recurse a maximum number of levels through the objects providing verbose output for each item until the maximum number of levels is reached.</li>
-<li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
-</ul>
-EOT;
-
 $lang['help_function_content_image'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin allows template designers to prompt users to select an image file when editing the content of a page. It behaves similarly to the content plugin, for additional content blocks.</p>
@@ -1193,10 +1177,6 @@ $lang['help_function_cms_module_hint'] = <<<EOT
 <p><strong>Note:</strong> It is possible to call this module multiple times to provide hints to different modules.</p>
 EOT;
 
-$lang['help_function_breadcrumbs'] = <<<EOT
-<h3 style="font-weight:bold;color:#f00;">REMOVED - Use now &#123nav_breadcrumbs&#125 or &#123Navigator action='breadcrumbs'&#125</h3>
-EOT;
-
 $lang['help_function_anchor'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Makes a proper anchor link.</p>
@@ -1236,43 +1216,6 @@ $lang['help_function_redirect_page'] = <<<EOT
  <p>This plugin allows you to easily redirect to another page.  It is handy inside of smarty conditional logic (for example, redirect to a login page if the user is not logged in.)</p>
 <h3>How do I use it?</h3>
 <p>Simply insert this tag into your page or template: <code>{redirect_page page='some-page-alias'}</code></p>
-EOT;
-
-
-$lang['help_function_cms_jquery'] = <<<EOT
-<h3>What does this do?</h3>
- <p>This plugin allows you output the JavaScript libraries and plugins used from the admin.</p>
-<h3>How do I use it?</h3>
-<p>Simply insert this tag into your page or template: <code>{cms_jquery}</code></p>
-
-<h3>Sample</h3>
-<pre><code>{cms_jquery cdn='true' exclude='jquery-ui' append='uploads/NCleanBlue/js/ie6fix.js' include_css=0}</code></pre>
-<h4><em>Outputs</em></h4>
-<pre><code>&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="http://localhost/1.10.x/lib/jquery/js/jquery.json-2.3.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="uploads/NCleanBlue/js/ie6fix.js"&gt;&lt;/script&gt;
-</code></pre>
-
-<h3>>Known Scripts:</h3>
-<ul>
-	<li><tt>jQuery</tt></li>
-	<li><tt>jQuery-UI</tt></li>
-	<li><tt>nestedSortable</tt></li>
-	<li><tt>json</tt></li>
-	<li><tt>migrate</tt></li>
-</ul>
-
-<h3>What parameters does it take?</h3>
-<ul>
-	<li><em>(optional) </em><tt>exclude</tt> - use comma separated value(CSV) list of scripts you would like to exclude. <code>'jquery-ui,migrate'</code></li>
-	<li><em>(optional) </em><tt>append</tt> - use comma separated value(CSV) list of script paths you would like to append. <code>'/uploads/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.7.1.min.js'</code></li>
-	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Network. Default is false.</li>
-	<li><em>(optional) </em><tt>ssl</tt> - use to use the ssl_url as the base path.</li>
-	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: overwrites ssl option and works with the cdn option</li>
-	<li><em>(optional) </em><tt>include_css <em>(boolean)</em></tt> - use to prevent css from being included with the output.  Default value is true.</li>
-	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
-	</ul>
 EOT;
 
 $lang['help_function_cms_filepicker'] = <<<EOT
