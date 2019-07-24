@@ -69,7 +69,7 @@ EOT;
 
 $lang['help_function_cms_render_scripts'] = <<<EOT
 <h3>What does this do?</h3>
-<p>This plugin will use all of the input from various calls to {cms_queue_script}, read each of the files in order that they were queuexd, concatenate them together, and output a single javascript file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>
+<p>This plugin will use all of the input from various calls to {cms_queue_script}, read each of the files in order that they were queued, concatenate them together, and output a single javascript file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>
 <p>This plugin is smart in that it will only generate a new javascript file if one of the queued script files has changed.  Unless of course, the force flag is enabled.</p>
 <p>If defered mode is enabled, then the output HTML will include the defer attribute in the script tag, but will also include support for the special text/cms_javascript script type which allows embedding scripts in module templates, and deferring their execution until after the primary scripts are loaded.</p>
 <h3>Usage:</h3>
@@ -81,9 +81,9 @@ $lang['help_function_cms_render_scripts'] = <<<EOT
 </ul>
 
 <h3>Example:</h3>
-<p>The following example illustrates queueing the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On news detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p>
+<p>The following example illustrates the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On PressRoom detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p>
 <h4>In PressRoom detail template:</h4>
-<pre><code>&lt;script type="text/cms_javascript"&gt;
+<pre><code>&lt;script&gt;
 $(function(){
     alert('this is a test');
 };
@@ -106,9 +106,9 @@ $(function(){
 EOT;
 
 $lang['help_function_cms_queue_css'] = <<<EOT
-<h3>Waht does this do?</h3>
-<p>This plugin will take a relative or absolute <strong>FILE</strong> reference <em>(note: it does not understand URLS)</em> and queue it for inclusion via usage of the {cms_render_css} plugin.  This is useful for attaching necesary CSS files to your rendered HTML output.</p>
-<p>A special note, that {cms_queue_css} can be called from within a module action template, to attach styles that are only relavent to that module acton.</p>
+<h3>What does this do?</h3>
+<p>This plugin will take a relative or absolute <strong>FILE</strong> reference <em>(note: it does not understand URLS)</em> and queue it for inclusion via usage of the {cms_render_css} plugin.  This is useful for attaching necessary CSS files to your rendered HTML output.</p>
+<p>A special note, that {cms_queue_css} can be called from within a module action template, to attach styles that are only relevent to that module acton.</p>
 <h3>Usage:</h3>
 <ul>
    <li>file - <em>(string)</em> - An absolute path to a script file, or a path relative to the CMSMS Assets path,  uploads path, or CMSMS root path in that order.</li>
@@ -561,8 +561,8 @@ $lang['help_function_page_attr'] = <<<EOT
       <li>modified_date - (string date) Date of the last modification of the content object.</li>
       <li>last_modified_by - (int) UID of the user who last modified the page.</li>
       <li>owner - (int) UID of the page owner.</li>
-      <li>image - (string) The path to the image assocated with the content page.</li>
-      <li>thumbnail - (string) The path to the thumbnail assocated with the content page.</li>
+      <li>image - (string) The path to the image associated with the content page.</li>
+      <li>thumbnail - (string) The path to the thumbnail associated with the content page.</li>
       <li>extra1 - (string) The value of the extra1 attribute.</li>
       <li>extra2 - (string) The value of the extra2 attribute.</li>
       <li>extra3 - (string) The value of the extra3 attribute.</li>
@@ -622,7 +622,7 @@ $lang['help_function_content_image'] = <<<EOT
     <p>Example:</p>
     <pre>{content_image block='image1'}</pre><br/>
   </li>
-  <li><em>(optional)</em> label (sring) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+  <li><em>(optional)</em> label (string) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
   <li><em>(optional)</em> dir (string) - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
   <p>Example: use images from the uploads/images directory.</p>
   <pre><code>{content_image block='image1' dir='images'}</code></pre><br/>
@@ -850,7 +850,7 @@ $lang['help_function_recently_updated'] = <<<EOT
  	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: {recently_updated leadin='Last Changed'}</p></li>
  	 <li><p><em>(optional)</em> showtitle='true' - Shows the title attribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>
 	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>
-	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>
+	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you wish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>
 	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 	<p>or combined:</p>
@@ -1228,7 +1228,7 @@ $lang['help_function_redirect_url'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin allows you to easily redirect to a specified url.  It is handy inside of smarty conditional logic (for example, redirect to a splash page if the site is not live yet).</p>
 <h3>How do I use it?</h3>
-<p>Simply insert this tage into your page or template: <code>{redirect_url to='http://www.cmsmadesimple.org'}</code></p>
+<p>Simply insert this tag into your page or template: <code>{redirect_url to='http://www.cmsmadesimple.org'}</code></p>
 EOT;
 
 $lang['help_function_redirect_page'] = <<<EOT
@@ -1265,9 +1265,9 @@ $lang['help_function_cms_jquery'] = <<<EOT
 
 <h3>What parameters does it take?</h3>
 <ul>
-	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery-ui,migrate'</code></li>
-	<li><em>(optional) </em><tt>append</tt> - use comma seperated value(CSV) list of script paths you would like to append. <code>'/uploads/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.7.1.min.js'</code></li>
-	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Netwok. Default is false.</li>
+	<li><em>(optional) </em><tt>exclude</tt> - use comma separated value(CSV) list of scripts you would like to exclude. <code>'jquery-ui,migrate'</code></li>
+	<li><em>(optional) </em><tt>append</tt> - use comma separated value(CSV) list of script paths you would like to append. <code>'/uploads/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.7.1.min.js'</code></li>
+	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Network. Default is false.</li>
 	<li><em>(optional) </em><tt>ssl</tt> - use to use the ssl_url as the base path.</li>
 	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: overwrites ssl option and works with the cdn option</li>
 	<li><em>(optional) </em><tt>include_css <em>(boolean)</em></tt> - use to prevent css from being included with the output.  Default value is true.</li>
@@ -1344,7 +1344,7 @@ EOT;
 
 $lang['help_function_form_start'] = <<<EOT
 <h3>What does this do?</h3>
-  <p>Thie tag creates a &lt;form&gt; tag for a module action.  It is useful in module templates and is part of the separation of design from logic principle that is at the heart of CMSMS.</p>
+  <p>This tag creates a &lt;form&gt; tag for a module action.  It is useful in module templates and is part of the separation of design from logic principle that is at the heart of CMSMS.</p>
   <p>This tag accepts numerous parameters that can accept the &lt;form&gt; tag, and effect its styling.</p>
 <h3>What parameters does it take?</h3>
 <ul>
