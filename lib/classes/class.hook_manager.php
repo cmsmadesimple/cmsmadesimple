@@ -70,7 +70,7 @@ class hook_manager
      * @param callable $callable A callable function, or a string representing a callable function.  Closures are also supported.
      * @param int $priority The priority of the handler.
      */
-    public static function add_hook($name,$callable,$priority = self::PRIORITY_NORMAL)
+    public static function add_hook(string $name,callable $callable,int $priority = self::PRIORITY_NORMAL)
     {
         $name = trim($name);
         if( !isset(self::$_hooks[$name]) ) self::$_hooks[$name] = new hook_defn($name);
@@ -85,7 +85,7 @@ class hook_manager
      * @param null|string $name The hook name to test for.  If null is provided, the system will return true if any hook is being processed.
      * @return bool
      */
-    public static function in_hook($name = null)
+    public static function in_hook(string $name = null)
     {
         if( !$name ) return (count(self::$_in_process) > 0);
         return in_array($name,self::$_in_process);
@@ -136,7 +136,7 @@ class hook_manager
                 // note it's not certain that the same data will be passed out of the handler
                 $res = null;
                 if( empty($value) || !is_array($value) || $is_assoc($value) ) {
-                    $res = call_user_func($obj->callable,$value);
+                    $res = call_user_func($obj->callable, $value);
                 } else {
                     $res = call_user_func_array($obj->callable,$value);
                 }
