@@ -79,17 +79,13 @@ function getSupportedDBDriver()
 function getTestValues( $property )
 {
     $range = array(
-				   //		'php_version'			=> array('minimum'=>'5.4.9', 'recommended'=>'5.5.5'),
-    'php_version'			=> array('minimum'=>'5.4.4', 'recommended'=>'5.5.5'),
-    'gd_version'			=> array('minimum'=>2),
-    'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
+    'php_version'		=> array('minimum'=>'7.1', 'recommended'=>'7.3'),
+    'gd_version'		=> array('minimum'=>2),
+    'memory_limit'		=> array('minimum'=>'16M', 'recommended'=>'24M'),
     'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
-    'post_max_size'			=> array('minimum'=>'2M', 'recommended'=>'10M'),
+    'post_max_size'		=> array('minimum'=>'2M', 'recommended'=>'10M'),
     'upload_max_filesize'	=> array('minimum'=>'2M', 'recommended'=>'10M'),
-
-    'mysql_version'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
-    'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
-    'sqlite_version'		=> array('minimum'=>'', 'recommended'=>''),
+    'mysql_version'		=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
     );
 
     if(array_key_exists($property, $range)) {
