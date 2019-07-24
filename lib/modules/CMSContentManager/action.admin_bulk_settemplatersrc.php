@@ -36,10 +36,6 @@
 if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
-if( !$config['page_template_list'] ) {
-    $this->SetError($this->Lang('error_action_invalid'));
-    $this->RedirectToAdminTab();
-}
 if( !$this->CheckPermission('Manage All Content') ) {
     $this->SetError($this->Lang('error_bulk_permission'));
     $this->RedirectToAdminTab();
@@ -72,6 +68,7 @@ if( isset($params['submit']) ) {
         ContentOperations::get_instance()->LoadChildren(-1,FALSE,FALSE,$pagelist);
         $rsrc = filter_var( $params['templatersrc'], FILTER_SANITIZE_STRING );
         if( !$rsrc ) throw new \Exception( $this->Lang('error_missingparam') );
+        if( (int)$rsrc > 0 && (int)$rsrc == $rsrc ) $rsrc = 'cms_template:'.$rsrc;
 
         $i = 0;
         foreach( $pagelist as $pid ) {
@@ -82,21 +79,25 @@ if( isset($params['submit']) ) {
 
             $content->SetPropertyValue('template_rsrc',$rsrc);
             $content->SetLastModifiedBy(get_userid());
-            $content->Save();
+            $this->cms->GetContentOperations()->save_content($content);
             $i++;
         }
-        if( $i != count($pagelist) ) {
-            throw new CmsException('Bulk operation to set design did not adjust all selected pages');
-        }
-        audit('','Content','Changed template resource on '.$i.' pages');
+        if( $i != count($pagelist) ) throw new CmsException('Bulk operation to set design did not adjust all selected pages');
+        cms_notice('Changed template resource on '.$i.' pages', 'Content');
         $this->SetMessage($this->Lang('msg_bulk_successful'));
         $this->RedirectToAdminTab();
     }
     catch( Exception $e ) {
-        cms_warning('Changing design and template on multiple pages failed: '.$e->GetMessage());
+        cms_warning('Changing design and template on multiple pages failed: '.$e->GetMessage(), 'Content');
         $this->SetError($e->GetMessage());
         $this->RedirectToAdminTab();
     }
+}
+
+$list = $this->cms->get_page_template_list();
+$page_template_list = null;
+foreach( $list as $row ) {
+    $page_template_list[$row['value']] = $row['label'];
 }
 
 $displaydata = array();
@@ -117,7 +118,7 @@ foreach( $pagelist as $pid ) {
 
 $smarty->assign('multicontent',$params['multicontent']);
 $smarty->assign('displaydata',$displaydata);
-$smarty->assign('template_list',array_flip($config['page_template_list']));
+$smarty->assign('template_list',$page_template_list);
 
 echo $this->ProcessTemplate('admin_bulk_settemplatersrc.tpl');
 

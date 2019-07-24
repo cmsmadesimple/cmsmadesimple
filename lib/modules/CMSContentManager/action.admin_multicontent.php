@@ -122,7 +122,6 @@ switch( $bulkaction ) {
     case 'delete':
         $this->Redirect($id,'admin_bulk_'.$bulkaction,$returnid,$parms);
         break;
-
 }
 
 $this->SetError($this->Lang('error_nobulkaction'));

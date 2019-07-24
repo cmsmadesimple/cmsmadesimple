@@ -127,11 +127,8 @@ try {
         bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
         bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
         bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-        if( $config['page_template_list'] ) {
-            bulkcontentoperations::register_function($this->Lang('bulk_settemplatersrc'),'settemplatersrc');
-        } else {
-            bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
-        }
+        bulkcontentoperations::register_function($this->Lang('bulk_settemplatersrc'),'settemplatersrc');
+        bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
         bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
     }
     $opts = bulkcontentoperations::get_operation_list();

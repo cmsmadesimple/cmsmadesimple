@@ -84,6 +84,7 @@ if( isset($params['submit']) ) {
             $content = $node->getContent(FALSE,FALSE,TRUE);
             if( !is_object($content) ) continue;
 
+            $content->SetTemplateResource('');
             $content->SetTemplateId((int)$params['template']);
             $content->SetPropertyValue('design_id',$params['design']);
             $content->SetLastModifiedBy(get_userid());
