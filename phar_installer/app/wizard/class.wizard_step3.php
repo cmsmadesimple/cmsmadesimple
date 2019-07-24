@@ -26,7 +26,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         // required test for php version
         $obj = new _tests_\version_range_test('php_version',phpversion());
         $obj->minimum = '7.1';
-        $obj->recommended = '7.2';
+        $obj->recommended = '7.3';
         $obj->fail_msg = \__appbase\lang('pass_php_version',$obj->minimum,$obj->recommended,phpversion());
         $obj->warn_msg = \__appbase\lang('msg_yourvalue',phpversion());
         $obj->pass_msg = \__appbase\lang('msg_yourvalue',phpversion());
