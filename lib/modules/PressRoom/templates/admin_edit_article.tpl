@@ -16,6 +16,25 @@ $(function(){
       }
    }).trigger('change')
 
+   // form validation stuff to handle validation on tabs.
+   $('#edit_news').on('click', '[name$=submit],[name$=apply]', function (ev) {
+       let $form = $('#edit_news')
+       let form_el = $form[0]
+       let tabs = $('#page_tabs',$form)
+       if( form_el.checkValidity && !form_el.checkValidity() ) {
+           ev.preventDefault()
+           $(':input',$form).each(function(){
+	      let el = $(this)[0]
+	      if( el.checkValidity && !el.checkValidity() ) {
+	          let tab = $(this).closest('div.tabcontent').data('tab')
+		  $('#'+tab).click()
+		  el.reportValidity()
+		  return false
+	      }
+	   })
+       }
+   });
+
    // note: this is done afer triggering the use_endtime stuff
    // so that dirtyform is not auto triggered
    $('#edit_news').dirtyForm({
@@ -30,6 +49,7 @@ $(function(){
    $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function () {
        $('#edit_news').dirtyForm('option', 'disabled', true);
    });
+
 
    $('#preview').click(function(ev){
       // gonna submit this article via ajax

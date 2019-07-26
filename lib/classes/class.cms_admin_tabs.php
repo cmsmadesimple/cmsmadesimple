@@ -97,7 +97,7 @@ final class cms_admin_tabs
 
         $out = '';
         if( !self::$_start_headers_sent ) $out .= self::start_tab_headers();
-        $out .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+        $out .= '<div class="tabheader" id="'.$tabid.'"'.$a.'>'.$title.'</div>';
         return $out;
     }
 
@@ -158,7 +158,8 @@ final class cms_admin_tabs
         if( !self::$_start_content_sent ) $out .= self::start_tab_content();
         if( self::$_in_tab ) $out .= self::end_tab();
         self::$_in_tab = 1;
-        $out .= '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
+	$tabid = str_replace(' ','_', $tabid);
+        $out .= '<div class="tabcontent" data-tab="'. $tabid.'" id="' . $tabid . '_c">'.$message;
         return $out;
     }
 
