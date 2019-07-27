@@ -88,16 +88,18 @@ final class cms_admin_tabs
             self::$_tab_idx++;
         }
 
+	$class="tabheader";
         $a="";
         if (TRUE == $active) {
-            $a=" class='active'";
+            $class .= " active";
             self::$_current_tab = $tabid;
         }
+	$a = " class=\"{$class}\" ";
         $tabid = strtolower(str_replace(' ','_',$tabid));
 
         $out = '';
         if( !self::$_start_headers_sent ) $out .= self::start_tab_headers();
-        $out .= '<div class="tabheader" id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+        $out .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
         return $out;
     }
 

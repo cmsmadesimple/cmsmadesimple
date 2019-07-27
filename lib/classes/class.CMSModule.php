@@ -1530,6 +1530,7 @@ abstract class CMSModule
      */
     public function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = [], $extra='')
     {
+	if( !$enctype ) $enctype = 'multipart/form-data';
         static $_formcount;
         $parms =
             [
