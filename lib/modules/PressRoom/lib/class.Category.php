@@ -22,7 +22,7 @@ class Category
         case 'name':
         case 'alias':
         case 'image_url':
-            return trim($this->_data[$key]);
+            return ($this->_data[$key]) ? trim($this->_data[$key]) : null;
         case 'parent_id':
         case 'item_order':
             return (int) $this->_data[$key];

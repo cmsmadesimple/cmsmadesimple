@@ -63,7 +63,7 @@ $(function(){
 	     <tr class="{cycle values='row1,row2'}" data-id="{$def->id}">
 	        <td><a href="{$edit_url}" title="{$mod->Lang('t_edit_fielddef')}">{$def->name}</a></td>
 	        <td>{$def->label}</td>
-	        <td>{$def->type}</td>
+	        <td>{$field_type_list[$def->type]}</td>
 		<td>
 		    <a href="{$edit_url}" title="{$mod->Lang('t_edit_fielddef')}">{admin_icon icon='edit'}</a>
 		</td>

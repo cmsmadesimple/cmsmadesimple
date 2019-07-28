@@ -167,7 +167,8 @@ class CategoriesManager
 
         // and insert the bugger
         $sql = 'INSERT INTO '.self::table_name().' (name, alias, image_url, parent_id, detailpage, item_order) VALUES (?,?,?,?,?,?)';
-        $this->db->Execute( $sql, [ $obj->name, $obj->alias ?? null, $obj->image_url, $obj->parent_id, $obj->detailpage, $item_order] );
+        $res = $this->db->Execute( $sql, [ $obj->name, $obj->alias, $obj->image_url, $obj->parent_id, $obj->detailpage, $item_order] );
+        if( !$res ) throw new \RuntimeException('Could not create new category');
         return $this->db->Insert_ID();
     }
 
