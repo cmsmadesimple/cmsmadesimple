@@ -69,7 +69,8 @@ namespace CMSMS {
             $ip_addr = null;
             if( $userid < 1 ) $userid = null;
 
-            $out = "CMSMS MSG: ADMINUSER=$username ($userid)";
+	    $out = "CMSMS MSG: ";
+	    if( $userid ) $out .= "ADMINUSER=$username ($userid)";
             if( $itemid ) $out .= ", ITEMID=$itemid,";
             if( $subject ) $out .= ", SUBJECT=$subject,";
             $out .= " $msg";

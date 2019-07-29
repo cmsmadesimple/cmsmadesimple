@@ -25,7 +25,6 @@ class page_template_parser extends \Smarty_Internal_Template
 
     public function smarty_compiler_contentblock($params,$smarty)
     {
-        // todo: should be in page_template_parser
         // {content} tag encountered.
         $rec = array('type'=>'text','id'=>'','name'=>'','noedit'=>false, 'usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
                      'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'','adminonly'=>0);
@@ -226,7 +225,7 @@ class page_template_parser extends \Smarty_Internal_Template
         // we need a new smarty object because we do not want registered plugins, error handlers and cruft.
         // but we do want template directories, and resources.
         $global_smarty = cmsms()->GetSmarty();
-        $smarty = new smarty_theme_template(cmsms()->get_frontend_theme_manager());  
+        $smarty = new smarty_theme_template(cmsms()->get_frontend_theme_manager());
         $smarty->setCompileDir(TMP_TEMPLATES_C_LOCATION);
         $smarty->registered_resources = $global_smarty->registered_resources;
         $dirs = $global_smarty->getTemplateDir();

@@ -49,7 +49,7 @@ class auditor implements \CMSMS\IAuditManager
         }
         $sitename = \cms_siteprefs::get('sitename','CMSMS');
         $msg = "$sitename $sevmsg: $msg";
-        @error_log( $msg, 4 );
+        @error_log( $msg, 0 );
     }
 
     public function notice( string $msg, string $subject = null )
@@ -59,7 +59,7 @@ class auditor implements \CMSMS\IAuditManager
         $ev = new event( $parms );
 
         $this->_storage->save( $ev );
-        $this->error_log( $ev::TYPE_NOTICE, $msg );
+        if( !cmsms()->is_cli() ) $this->error_log( $ev::TYPE_NOTICE, $msg );
     }
 
     public function warning( string $msg, string $subject = null )

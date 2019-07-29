@@ -429,9 +429,11 @@ abstract class CMSModule
     {
         $out = $route->get_defaults();
         if( !empty($route->get_results() ) ) $out = array_merge( $route->get_defaults(), $route->get_results() );
-        return array_filter($out,function($key){
+        $out = array_filter($out,function($key){
                 return !is_int($key);
             }, ARRAY_FILTER_USE_KEY);
+        if( empty($out) ) $out = [];
+        return $out;
     }
 
     /**
