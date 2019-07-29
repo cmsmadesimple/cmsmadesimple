@@ -117,6 +117,7 @@ class frontend_theme_manager
         $node = $this->entry_theme;
 
         while($node) {
+	    if( !$node->get_tag('name') ) break;
             $theme_obj = $this->get_theme($node->get_tag('name'));
             if( $theme_obj->has_template($template_name) ) return $theme_obj->get_template_file($template_name);
             $node = $node->get_parent();
