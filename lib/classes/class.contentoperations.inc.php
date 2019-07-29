@@ -204,7 +204,7 @@ class ContentOperations
      */
     public function getContentObject()
     {
-        return $this->_aqp->get_content_object();
+        return $this->app->get_content_object();
     }
 
 
