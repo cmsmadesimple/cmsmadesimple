@@ -120,10 +120,10 @@ status_msg('Converted events to hooks... and use the new assets/configs/hook_map
 
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY username VARCHAR(80)' );
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY password VARCHAR(128)' );
-status_msg('Added some size to the password and username columns of the users table');
+verbose_msg('Added some size to the password and username columns of the users table');
 
 $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'admin_bookmarks url X');
-status_msg('Added some size to the url column of the admin_bookmarks table');
+verbose_msg('Added some size to the url column of the admin_bookmarks table');
 
 // tweak callbacks for page and generic layout templatet types.
 $page_type = \CmsLayoutTemplateType::load('__CORE__::page');
@@ -140,7 +140,7 @@ $generic_type->save();
 $tmp = cms_siteprefs::get('site_signature');
 if( !$tmp ) {
     cms_siteprefs::set('site_signature',sha1(bin2hex(random_bytes(256)))); // a unique signature to identify this site.  Useful for some signatures too.
-    status_msg('created a random size signature');
+    verbose_msg('created a random site signature');
 }
 
 verbose_msg(ilang('upgrading_schema',204));
