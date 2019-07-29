@@ -113,6 +113,11 @@ class frontend_theme_manager
 
     public function resolve_template(string $theme_name, string $template_name)
     {
+	// we want the child theme to be able to override templates of the same name
+        // from theparent theme.   Even if the theme name was specified in the resource in the parent template.
+        // i.e: ParentTheme:page_template.tpl {include file='cms_theme:ParentTheme;Foo.tpl'}
+        // i.e: ChildTheme:child_page_template.tpl overrides Foo.tpl
+        // note: it means that ChildTheme cannot have a page template named page_template.tpl
         if( !$this->entry_theme ) $this->entry_theme = $this->get_theme_node($theme_name);
         $node = $this->entry_theme;
 
