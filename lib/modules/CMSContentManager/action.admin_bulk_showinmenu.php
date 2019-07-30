@@ -57,7 +57,8 @@ if( count($multicontent) == 0 ) {
 // do the real work
 try {
     ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
-    $hm = cmsms()->GetHierarchyManager();
+    $hm = $this->cms->GetHierarchyManager();
+    $ops = $this->cms->GetContentOperations();
 
     foreach( $multicontent as $pid ) {
         $node = $hm->find_by_tag('id',$pid);
@@ -66,7 +67,7 @@ try {
         if( !is_object($content) ) continue;
         $content->SetShowInMenu($showinmenu);
         $content->SetLastModifiedBy(get_userid());
-        $content->Save();
+        $ops->save_content($content);
     }
     audit('','Content','Changed show-in-menu status on '.count($multicontent).' pages');
     $this->SetMessage($this->Lang('msg_bulk_successful'));

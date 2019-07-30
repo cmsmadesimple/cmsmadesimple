@@ -56,8 +56,9 @@ if( count($multicontent) == 0 ) {
 
 // do the real work
 try {
-    $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
-    $hm = cmsms()->GetHierarchyManager();
+    $ops = $this->cms->GetContentOperations();
+    $ops->LoadChildren(-1,FALSE,TRUE,$multicontent);
+    $hm = $this->cms->GetHierarchyManager();
     foreach( $multicontent as $pid ) {
         $node = $hm->find_by_tag('id',$pid);
         if( !$node ) continue;
@@ -66,7 +67,7 @@ try {
         if( $content->DefaultContent() ) continue;
         $content->SetActive($active);
         $content->SetLastModifiedBy(get_userid());
-        $content->Save();
+        $ops->save_content($content);
     }
     audit('','Content','Changed active status on '.count($multicontent).' pages');
     $this->SetMessage($this->Lang('msg_bulk_successful'));

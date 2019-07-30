@@ -65,7 +65,8 @@ if( isset($params['submit']) ) {
 
     // do the real work
     try {
-        ContentOperations::get_instance()->LoadChildren(-1,FALSE,FALSE,$pagelist);
+        $ops = $this->cms->GetContentOperations();
+        $ops->LoadChildren(-1,FALSE,FALSE,$pagelist);
 
         $i = 0;
         foreach( $pagelist as $pid ) {
@@ -76,7 +77,7 @@ if( isset($params['submit']) ) {
 
             $content->SetOwner((int)$params['owner']);
             $content->SetLastModifiedBy(get_userid());
-            $content->Save();
+            $ops->save_content($content);
             $i++;
         }
         if( $i != count($pagelist) ) {
