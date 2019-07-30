@@ -1800,9 +1800,9 @@ abstract class ContentBase
      * Specify a default value to use if the property is called.
      *
      * @param string $name The property name
-     * @param string $dflt The default value.
+     * @param string $dflt The default value. Null is acceptable.
      */
-    protected function RemoveProperty(string $name,string $dflt)
+    protected function RemoveProperty(string $name,string $dflt = null)
     {
         if( !is_array($this->_attributes) ) return;
         $tmp = array();
