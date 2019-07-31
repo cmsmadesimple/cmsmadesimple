@@ -43,6 +43,7 @@ class layout_template_resource extends fixed_smarty_custom_resource
     private function &get_template($name)
     {
         $obj = \CmsLayoutTemplate::load($name);
+	if( !$obj ) return;
         $ret = new \StdClass;
         $ret->modified = $obj->get_modified();
         $ret->content = $obj->get_content();
