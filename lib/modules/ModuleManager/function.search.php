@@ -81,9 +81,7 @@ if( isset($params['submit']) ) {
         $res = $res[1];
         $data = array();
         if( count($res) ) $res = modmgr_utils::build_module_data($res, $instmodules);
-
-        $config = cmsms()->GetConfig();
-        $moduledir = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
+        $moduledir = CMS_ASSETS_PATH."/modules";
         $writable = is_writable($moduledir);
 
         $search_data = array();
@@ -128,7 +126,7 @@ if( isset($params['submit']) ) {
                 case 'notinstalled':
                     $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
                     if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
-                     ($writable && !file_exists( $mod ) )) && $caninstall ) {
+                         ($writable && !file_exists( $mod ) )) && $caninstall ) {
                         $obj->candownload = TRUE;
                         $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
                                                       $this->Lang('download'),
@@ -143,12 +141,12 @@ if( isset($params['submit']) ) {
                 case 'upgrade':
                     $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
                     if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
-                     ($writable && !file_exists( $mod ) )) && $caninstall ) {
+                         ($writable && !file_exists( $mod ) )) && $caninstall ) {
                         $obj->candownload = TRUE;
                         $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
-                                                      $this->Lang('upgrade'),
-                                                      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
-                                                            'size' => $row['size']));
+                                                          $this->Lang('upgrade'),
+                                                          array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
+                                                                'size' => $row['size']));
                     }
                     else {
                         $obj->status = $this->Lang('cantdownload');
