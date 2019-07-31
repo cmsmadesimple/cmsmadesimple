@@ -80,7 +80,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 
     public function GetVersion()
     {
-        return '1.0.4';
+        return '1.0.5';
     }
 
     public function GetHelp()
@@ -91,6 +91,11 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
     public function IsPluginModule()
     {
         return FALSE;
+    }
+
+    public function AdminOnly()
+    {
+        return TRUE;
     }
 
     public function HasAdmin()

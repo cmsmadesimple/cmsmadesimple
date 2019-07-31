@@ -28,7 +28,7 @@ final class DesignManager extends CMSModule
 
     public function GetVersion()
     {
-        return '1.1.7';
+        return '1.1.8';
     }
 
     public function MinimumCMSVersion()
@@ -59,6 +59,11 @@ final class DesignManager extends CMSModule
     public function GetAuthorEmail()
     {
         return 'calguy1000@cmsmadesimple.org';
+    }
+
+    public function AdminOnly()
+    {
+        return TRUE;
     }
 
     public function HasAdmin()

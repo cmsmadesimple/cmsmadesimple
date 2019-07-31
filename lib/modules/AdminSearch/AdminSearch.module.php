@@ -32,7 +32,7 @@ final class AdminSearch extends CMSModule
     }
 
     public function GetVersion() {
-        return '1.1';
+        return '1.1.1';
     }
 
     public function MinimumCMSVersion() {
@@ -58,6 +58,11 @@ final class AdminSearch extends CMSModule
 
     public function GetAuthorEmail() {
         return 'calguy1000@cmsmadesimple.org';
+    }
+
+    public function AdminOnly()
+    {
+        return TRUE;
     }
 
     public function HasAdmin() {

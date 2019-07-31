@@ -329,13 +329,17 @@ final class CmsJobManager extends \CMSModule
         // this could go into a function...
         $config = $this->GetConfig();
         $url_str = $config['async_processing_url'];
-        if( !$url_str ) $url_str = html_entity_decode($this->create_url('cntnt01','process',$_returnid));
+        if( !$url_str ) {
+	    $url_str = html_entity_decode($this->create_url('cntnt01','process',$_returnid));
+	}
         $url_ob = new cms_url($url_str);
         if( !$url_ob->get_host() ) {
             // todo: audit something
             return;
         }
-
+	if( $config['async_processing_host'] && !$config['async_processing_url'] ) {
+	    $url_ob->set_host($config['async_processing_host']);
+	}
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
         $url_str = (string) $url_ob;
@@ -351,6 +355,7 @@ final class CmsJobManager extends \CMSModule
             curl_close( $ch );
             if( $code != 200 ) {
                 cms_warning('Received '.$code.' response when trying to trigger async processing','CmsJobManager');
+		debug_to_log('Problem with triggering async processing at: '.$url_str);
             } else {
                 $this->SetPreference('last_async_trigger',$now+1);
             }

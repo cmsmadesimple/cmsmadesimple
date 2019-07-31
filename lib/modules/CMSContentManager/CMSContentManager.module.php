@@ -41,7 +41,7 @@ final class CMSContentManager extends CMSModule
     }
 
     public function GetVersion() {
-        return '1.2';
+        return '1.2.1';
     }
 
     public function GetHelp() {
@@ -62,6 +62,11 @@ final class CMSContentManager extends CMSModule
 
     public function IsPluginModule() {
         return FALSE;
+    }
+
+    public function AdminOnly()
+    {
+        return TRUE;
     }
 
     public function HasAdmin() {

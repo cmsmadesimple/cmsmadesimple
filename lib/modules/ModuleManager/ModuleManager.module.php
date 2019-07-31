@@ -54,7 +54,7 @@ class ModuleManager extends CMSModule
 
     public function GetVersion()
     {
-        return '2.2';
+        return '2.2.1';
     }
 
     public function GetHelp()
@@ -87,7 +87,7 @@ class ModuleManager extends CMSModule
         return TRUE;
     }
 
-    public function IsAdminOnly()
+    public function AdminOnly()
     {
         return TRUE;
     }
