@@ -40,7 +40,7 @@ use \CmsLayoutTemplateType;
  */
 class layout_template_resource extends fixed_smarty_custom_resource
 {
-    private function &get_template($name)
+    private function get_template($name)
     {
         $obj = \CmsLayoutTemplate::load($name);
 	if( !$obj ) return;
