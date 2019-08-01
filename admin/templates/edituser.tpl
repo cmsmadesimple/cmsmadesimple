@@ -73,7 +73,7 @@ $(document).ready(function(){
         </div>
         <div class="c_full cf">
             <label for="email" class="grid_3">{lang('email')}:&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}</label>
-            <input id="email" type="text" name="email" maxlength="255" value="{$email}" class="standard grid_8"/>
+            <input id="email" type="email" name="email" maxlength="255" value="{$email}" class="standard grid_8"/>
         </div>
 
         {if !$access_user}
@@ -148,7 +148,7 @@ $(document).ready(function(){
 
         <div class="c_full cf">
             <input type="submit" id="submit" name="submit" value="{lang('submit')}" />
-            <input type="submit" name="cancel" value="{lang('cancel')}" />
+            <input type="submit" name="cancel" value="{lang('cancel')}" formnovalidate/>
         </div>
     {form_end}
 </div>

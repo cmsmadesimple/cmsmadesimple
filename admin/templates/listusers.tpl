@@ -76,7 +76,7 @@ $(document).ready(function() {
 {form_start url='listusers.php' id="listusers"}
 
     <div class="pageoptions">
-        <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>
+        <a href="adduser.php{$urlext}" title="{lang('info_adduser')}" class="adduser">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>
     </div>
 
     <table class="pagetable">
@@ -99,7 +99,7 @@ $(document).ready(function() {
                 {/if}
                 <td>
                     {if $can_edit}
-                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}">{$user->username}</a>
+                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}" class="edituser">{$user->username}</a>
                     {else}
                         <span title="{lang('info_noedituser')}">{$user->username}</span>
                     {/if}
@@ -125,7 +125,7 @@ $(document).ready(function() {
 
                 <td>
                     {if $can_edit}
-                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}">{admin_icon icon='edit.gif'}</a>
+                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}" class="edituser">{admin_icon icon='edit.gif'}</a>
                     {/if}
                 </td>
                 <td>
@@ -145,7 +145,7 @@ $(document).ready(function() {
 
     <div class="pageoptions">
         <div style="width: 40%; float: left;">
-            <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif'}&nbsp;{lang('adduser')}</a>
+            <a href="adduser.php{$urlext}" title="{lang('info_adduser')}" class="adduser">{admin_icon icon='newobject.gif'}&nbsp;{lang('adduser')}</a>
         </div>
         <div style="width: 40%; float: right; text-align: right;">
             <label for="withselected">{lang('selecteditems')}:</label>&nbsp;
