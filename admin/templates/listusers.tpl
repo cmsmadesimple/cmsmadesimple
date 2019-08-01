@@ -92,16 +92,16 @@ $(document).ready(function() {
         </thead>
         <tbody>
         {foreach from=$users item='user'}
-            <tr class="{cycle values='row1,row2'}">
+            <tr class="{cycle values='row1,row2'}" data-uid="{$user->id}" data-username="{$user->username}">
                 {$can_edit=1}
                 {if !$user->access_to_user }
                     {$can_edit=0}
                 {/if}
                 <td>
                     {if $can_edit}
-                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}" class="edituser">{$user->username}</a>
+                        <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}" class="edituser" data-username="{$user->username}">{$user->username}</a>
                     {else}
-                        <span title="{lang('info_noedituser')}">{$user->username}</span>
+                        <span data-username="{$user->username}" title="{lang('info_noedituser')}">{$user->username}</span>
                     {/if}
                 </td>
 
