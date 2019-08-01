@@ -93,6 +93,11 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return FALSE;
     }
 
+    public function LazyLoadFrontend()
+    {
+        return TRUE;
+    }
+
     public function AdminOnly()
     {
         return TRUE;

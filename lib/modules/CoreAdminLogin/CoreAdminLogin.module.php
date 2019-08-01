@@ -3,17 +3,22 @@ class CoreAdminLogin extends CMSModule
 {
     public function GetName()
     {
-	return 'CoreAdminLogin';
+        return 'CoreAdminLogin';
     }
 
-    public function GetVersion() 
+    public function GetVersion()
     {
-	return '0.0.1';
+        return '0.0.2';
     }
 
     public function MinimumCMSVersion()
     {
         return '2.2.903';
+    }
+
+    public function LazyLoadFrontend()
+    {
+        return TRUE;
     }
 
     protected function getLoginUtils()

@@ -102,6 +102,11 @@ class ModuleManager extends CMSModule
         return $this->Lang('admindescription');
     }
 
+    public function LazyLoadFrontend()
+    {
+        return TRUE;
+    }
+
     public function LazyLoadAdmin()
     {
         return TRUE;

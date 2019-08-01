@@ -29,11 +29,6 @@ final class FileManager extends CMSModule
         return 'FileManager';
     }
 
-    public function LazyLoadFrontend()
-    {
-        return TRUE;
-    }
-
     public function GetChangeLog()
     {
         return $this->ProcessTemplate('changelog.tpl');
@@ -72,6 +67,11 @@ final class FileManager extends CMSModule
     public function IsPluginModule()
     {
         return FALSE;
+    }
+
+    public function LazyLoadFrontend()
+    {
+        return TRUE;
     }
 
     public function HasAdmin()
