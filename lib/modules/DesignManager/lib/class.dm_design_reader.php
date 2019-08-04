@@ -461,6 +461,7 @@ class dm_design_reader extends dm_reader_base
             try {
                 $typename = $tpl['type_originator'].'::'.$tpl['type_name'];
                 $type_obj = CmsLayoutTemplateType::load($typename);
+		if( !$type_obj ) throw new CmsException('Could not load template type '.$typename);
                 $template->set_type($type_obj);
             }
             catch( CmsException $e ) {
