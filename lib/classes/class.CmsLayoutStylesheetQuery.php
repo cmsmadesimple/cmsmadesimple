@@ -96,7 +96,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 
                 case 'fullname':
                     $val = trim($val);
-                    $where[] = 'name = '.$db->qstr($val.'%');
+                    $where[] = 'name = '.$db->qstr($val);
                     break;
 
                 case 'd': // design
@@ -154,7 +154,9 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
         $query .= ' ORDER BY '.$sortby.' '.$sortorder;
 
         $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
+	debug_to_log($db->sql);
         if( $db->ErrorMsg() != '' ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+	debug_to_log($db->ErrorMsg());
         $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
     }
 
