@@ -261,8 +261,9 @@ class Smarty extends smarty_theme_template
             // set the compile id based on the resource/template and the top level theme.
             $compile_id = md5(__FILE__.$theme_name.$template);
         }
-	
-        if( !startswith($template,'eval:') && !startswith($template,'string:') && !startswith($template,'cmsfile:') ) {
+
+        if( !startswith($template,'eval:') && !startswith($template,'string:') && !startswith($template,'cms_file:') &&
+            !startswith($template,'cms_theme')) {
             if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
             if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
         }

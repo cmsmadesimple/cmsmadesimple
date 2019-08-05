@@ -100,7 +100,7 @@ class frontend_theme_placeholder
 
     /**
      * Get the URL where theme files can be located.
-     * 
+     *
      * @return string
      */
     public function get_urlbase() : string
@@ -128,7 +128,10 @@ class frontend_theme_placeholder
      */
     public function get_template_file(string $template_name) : string
     {
-        return $this->get_location().'/templates/'.$template_name;
+        $out = $this->get_location().'/templates/'.$template_name;
+        $rp = realpath($out);
+        $rp_parent = realpath($this->get_location());
+        if( $rp && $rp_parent && startswith($rp,$rp_parent) ) return $out;
     }
 
 } // class
