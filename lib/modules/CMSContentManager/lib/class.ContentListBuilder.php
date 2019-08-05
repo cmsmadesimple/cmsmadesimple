@@ -880,7 +880,7 @@ final class ContentListBuilder
                         try {
                             $tpl_ob = CmsLayoutTemplate::load($tpl_id);
                             if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
-                            $rec['template'] = $gCms->get_page_template_label($rsrc) ?: null;
+                            $rec['template'] = $gCms->get_page_template_label($tpl_id) ?: null;
                             $rec['template_id'] = $tpl_id;
                         }
                         catch( \Exception $e ) {
