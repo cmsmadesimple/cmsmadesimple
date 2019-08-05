@@ -55,8 +55,27 @@ function smarty_function_cms_stylesheet($params, &$smarty)
             $design_id = (int)$params['designid'];
         } else {
             $content_obj = $gCms->get_content_object();
-            if(!is_object($content_obj) ) return;
-            $design_id = (int) $content_obj->GetPropertyValue('design_id');
+            if( is_object($content_obj) ) {
+                $design_id = (int) $content_obj->GetPropertyValue('design_id');
+                if( $design_id < 1 ) {
+                    // no design id attached to the page
+                    $tpl_rsrc = $content_obj->GetPropertyValue('template_rsrc');
+                    // if there is a template resource and it is cms_template:## or cms_template:something or it is just a template id
+                    // we get the first design from that template
+                    if( is_numeric($tpl_rsrc) && (string)(int)$tpl_rsrc == $tpl_rsrc ) {
+                        // get this template
+                        // get it's first associated design if any
+                        // load template uses a cache, so performance should not be an issue.
+                        $tpl = $gCms->get_template_manager()->load_template($tpl_rsrc);
+                        if( $tpl ) {
+                            $designs = $tpl->get_designs();
+                            if( !empty($designs) && isset($designs[0]) ) {
+                                $design_id = (int) $designs[0];
+                            }
+                        }
+                    }
+                }
+            }
         }
         if(!$name && $design_id < 1 ) throw new \RuntimeException('Invalid parameters, or there is no design attached to the content page');
 
@@ -178,9 +197,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 
                 $filename = 'stylesheet_'.md5('single'.$one->get_id().$one->get_modified().$fnsuffix).'.css';
                 $fn = cms_join_path($cache_dir, $filename);
-
                 if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
-
                 cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
             }
         }

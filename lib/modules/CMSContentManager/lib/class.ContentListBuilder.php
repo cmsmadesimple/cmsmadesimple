@@ -874,7 +874,7 @@ final class ContentListBuilder
                     if( $tpl_id > 0 ) {
                         try {
                             $tpl_ob = CmsLayoutTemplate::load($tpl_id);
-			    if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
+                            if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
                             $rec['template'] = $tpl_ob->get_name();
                             $rec['template_id'] = $tpl_id;
                         }

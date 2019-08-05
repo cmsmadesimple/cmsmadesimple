@@ -70,12 +70,16 @@ class microtiny_utils
         // if we have a stylesheet name, use it's modification time as our mtime
         if( $css_name ) {
             try {
+		// @todo: Microtiny should allow loading a stylesheet from a theme.
+		// or even better, when the page is using a theme... somehow, get it's css
                 $css = CmsLayoutStylesheet::load($css_name);
+		if( !$css ) throw new \RuntimeException('MicroTiny Could not load stylesheet named '.$css_name);
                 $css_name = $css->get_name();
                 $mtime = $css->get_modified();
             }
             catch( Exception $e ) {
                 // couldn't load the stylesheet for some reason.
+		cms_warning($e->GetMessage());
                 $css_name = null;
             }
         }

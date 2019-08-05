@@ -16,13 +16,6 @@
 		</select></p>
 </div>
 <div class="pageoverflow">
-	<p class="pagetext"><label for="design_id">{$mod->Lang('prompt_pagedflt_design_id')}:</label>&nbsp;{cms_help key2='help_pagedflt_design_id' title=$mod->Lang('prompt_pagedflt_design_id')}</p>
-	<p class="pageinput">
-		<select id="design_id" name="{$actionid}design_id">
-			{html_options options=$design_list selected=$page_prefs.design_id}
-		</select></p>
-</div>
-<div class="pageoverflow">
 	<p class="pagetext"><label for="template_rsrc">{$mod->Lang('prompt_pagedflt_template_id')}:</label>&nbsp;{cms_help key2='help_pagedflt_template_id' title=$mod->Lang('prompt_pagedflt_template_id')}</p>
 	<p class="pageinput">
 		<select id="template_rsrc" name="{$actionid}template_rsrc">

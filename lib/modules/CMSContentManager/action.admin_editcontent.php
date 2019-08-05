@@ -94,7 +94,7 @@ try {
         $content_obj->SetCachable($pagedefaults['cachable']);
         $content_obj->SetShowInMenu($pagedefaults['showinmenu']);
         $content_obj->SetPropertyValue('template_rsrc',$pagedefaults['template_rsrc']);
-        if( $pagedefaults['design_id'] > 0 ) $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);
+        //if( $pagedefaults['design_id'] > 0 ) $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);
         if( $pagedefaults['template_id'] > 0 ) $content_obj->SetTemplateId($pagedefaults['template_id']);
         $content_obj->SetPropertyValue('searchable',$pagedefaults['searchable']);
         $content_obj->SetPropertyValue('content_en',$pagedefaults['content']);
@@ -157,7 +157,7 @@ try {
         } else if( $tmpobj->TemplateId() < 1 && $pagedefaults['template_id'] > 0 ) {
             $tmpobj->SetTemplateId($pagedefaults['template_id']);
         }
-        if( $tmpobj->GetPropertyValue('design_id') < 1 ) $tmpobj->SetPropertyValue('design_id',$pagedefaults['design_id']);
+        //if( $tmpobj->GetPropertyValue('design_id') < 1 ) $tmpobj->SetPropertyValue('design_id',$pagedefaults['design_id']);
 
         $tmpobj->SetParentId($content_obj->ParentId());
         $tmpobj->SetAlias($content_obj->Alias());
