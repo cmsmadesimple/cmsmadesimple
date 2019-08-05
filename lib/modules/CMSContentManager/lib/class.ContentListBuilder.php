@@ -34,6 +34,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 namespace CMSContentManager;
+use CMSContentManager;
 use CmsLayoutTemplate;
 
 /**
@@ -181,6 +182,8 @@ final class ContentListBuilder
 
     private $_module;
 
+    private $_mgr;
+
     private $_userid;
 
     private $_use_perms = TRUE;
@@ -204,7 +207,7 @@ final class ContentListBuilder
      *
      * Caches the opened pages, and userid
      */
-    public function __construct(\CMSModule $mod)
+    public function __construct(CMSContentManager $mod)
     {
         if( get_class($mod) != 'CMSContentManager' ) throw new CmsInvalidDataException('Expected ContentEditor object, got: '.get_class($mod));
 
@@ -802,9 +805,10 @@ final class ContentListBuilder
      */
     private function _get_display_data($page_list)
     {
-        $config = \cms_config::get_instance();
+        $gCms = cmsms();
+        $config = $gCms->GetConfig();
         $users = $this->_get_users();
-        $contentops = \ContentOperations::get_instance();
+        $contentops = $gCms->GetContentOperations();
         $mod = $this->_module;
         $columns = $this->get_display_columns();
         $userid = $this->_userid;
@@ -869,13 +873,14 @@ final class ContentListBuilder
                 $rec['template_rsrc'] = $rsrc;
                 if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
                     $rec['can_edit_tpl'] = false;
+                    $rec['template'] = $gCms->get_page_template_label($rsrc) ?: null;
                 } else {
                     $tpl_id = (int) substr($rsrc,strlen('cms_template:'));
                     if( $tpl_id > 0 ) {
                         try {
                             $tpl_ob = CmsLayoutTemplate::load($tpl_id);
                             if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
-                            $rec['template'] = $tpl_ob->get_name();
+                            $rec['template'] = $gCms->get_page_template_label($rsrc) ?: null;
                             $rec['template_id'] = $tpl_id;
                         }
                         catch( \Exception $e ) {

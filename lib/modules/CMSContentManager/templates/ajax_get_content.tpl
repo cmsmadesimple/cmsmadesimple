@@ -145,7 +145,7 @@ $(function(){
 	      {/if}
 	    {elseif $row.viewable}
 	       {if !empty($row.template_rsrc)}
-	          <span style="color: black;">{$row.template_rsrc}</span>
+	          <span style="color: gray;">{$row.template|default:$row.template_rsrc}</span>
 	       {else}
 	         <span class="text-red" title="{$mod->Lang('error_template_notavailable')}">{$mod->Lang('critical_error')}</span>
 	       {/if}

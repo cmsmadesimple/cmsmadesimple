@@ -845,28 +845,52 @@ final class CmsApp
      */
     public function get_page_template_list() : array
     {
-        $list = [];
-        $page_template_list = $this->GetConfig()['page_template_list'];
-        if( !empty($page_template_list) ) {
-            if( is_string($page_template_list) ) $page_template_list = [$page_template_list];
-            foreach( $page_template_list as $lbl => $val ) {
-                if( (int) $lbl > 0 && trim($lbl) == $lbl ) $lbl = $val;
-                $list[] = ['value'=>$val, 'label'=>$lbl ];
+        // this method does not belong in CmsApp
+        static $_list = null;
+        if( !$_list ) {
+            $list = [];
+            $page_template_list = $this->GetConfig()['page_template_list'];
+            if( !empty($page_template_list) ) {
+                if( is_string($page_template_list) ) $page_template_list = [$page_template_list];
+                foreach( $page_template_list as $lbl => $val ) {
+                    if( (int) $lbl > 0 && trim($lbl) == $lbl ) $lbl = $val;
+                    $list[] = ['value'=>$val, 'label'=>$lbl ];
+                }
             }
-            return $list;
-        }
+            else {
+                $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
+                if( is_array($_tpl) && count($_tpl) > 0 ) {
+                    foreach( $_tpl as $tpl_id => $tpl_name ) {
+                        $list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
+                    }
+                }
 
-        $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
-        if( is_array($_tpl) && count($_tpl) > 0 ) {
-            foreach( $_tpl as $tpl_id => $tpl_name ) {
-                $list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
+                $tmp = $this->get_frontend_theme_manager()->get_exported_page_templates();
+                if( !empty($tmp) ) $list = array_merge($list,$tmp);
+                if( empty($list) ) throw new \LogicException('Could not determine a template list');
+            }
+            $_list = $list;
+        }
+        return $_list;
+    }
+
+
+    /**
+     * @internal
+     * @ignore
+     * @return string|null
+     */
+    public function get_page_template_label(string $rsrc)
+    {
+        // this method does not belong in CmsApp
+        $list = $this->get_page_template_list();
+        if( empty($list) ) return;
+
+        foreach( $list as $one ) {
+            if( $rsrc == $one['value'] ) {
+                return $one['label'];
             }
         }
-
-        $tmp = $this->get_frontend_theme_manager()->get_exported_page_templates();
-        if( !empty($tmp) ) $list = array_merge($list,$tmp);
-        if( empty($list) ) throw new \LogicException('Could not determine a template list');
-        return $list;
     }
 
     /**
