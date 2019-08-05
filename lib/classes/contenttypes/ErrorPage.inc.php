@@ -33,9 +33,7 @@
  */
 class ErrorPage extends Content
 {
-
     var $doAliasCheck;
-
     var $error_types;
 
     public function __construct()
@@ -58,6 +56,11 @@ class ErrorPage extends Content
         return true;
     }
 
+    public function IsSearchable()
+    {
+        return false;
+    }
+
     public function FriendlyName()
     {
         return lang('contenttype_errorpage');
@@ -67,7 +70,7 @@ class ErrorPage extends Content
     {
         parent::SetProperties();
         $this->RemoveProperty('secure',0);
-        //$this->RemoveProperty('searchable',0);
+        $this->RemoveProperty('searchable',0);
         $this->RemoveProperty('parent',-1);
         $this->RemoveProperty('showinmenu',false);
         $this->RemoveProperty('menutext','');

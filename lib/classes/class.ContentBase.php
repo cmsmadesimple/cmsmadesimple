@@ -285,6 +285,14 @@ abstract class ContentBase
     }
 
     /**
+     * @internal
+    public function __wakeup()
+    {
+        $this->SetProperties();
+    }
+     */
+
+    /**
      * Sets object to some sane initial values
      *
      * @abstract
@@ -1834,6 +1842,9 @@ abstract class ContentBase
         $ob->basic = $basic;
 
         if( !is_array($this->_attributes) ) $this->_attributes = array();
+        foreach( $this->_attributes as $attr ) {
+            if( $attr->name == $name ) return;
+        }
         $this->_attributes[] = $ob;
     }
 
