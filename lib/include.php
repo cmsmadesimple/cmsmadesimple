@@ -68,7 +68,7 @@ $_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
 $_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
 // include some stuff
-require_once($dirname.DIRECTORY_SEPARATOR.'/vendor/autoload.php');
+require_once("$dirname/vendor/autoload.php");
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php'); // tells us where the config file is and other things.
@@ -127,11 +127,11 @@ require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 if( $_app->is_frontend_request() && isset($_GET['_auth']) && isset($_GET['_op']) ) {
     // todo: put this into a class, as it is a remote control mechanism
     // make this secure, but do not document/advertise it.  it's internal only
-    $auth = filter_var($_GET['_auth'],FILTER_SANITIZE_STRING);
+    $auth = $_GET['auth'];
     $fn = TMP_CACHE_LOCATION.'/.f'.$auth;
     if( is_file($fn) && is_writable($fn) && is_readable($fn) ) {
         unlink($fn);
-        $op = filter_var($_GET['_op'],FILTER_SANITIZE_STRING);
+        $op = $_GET['_op'];
         switch( $op ) {
             case 'clearcache':
                 $_app->clear_cached_files();
