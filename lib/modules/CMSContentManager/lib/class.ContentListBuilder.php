@@ -873,7 +873,7 @@ final class ContentListBuilder
                 $rec['template_rsrc'] = $rsrc;
                 if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
                     $rec['can_edit_tpl'] = false;
-                    $rec['template'] = $gCms->get_page_template_label($rsrc) ?: null;
+                    $rec['template'] = ($rsrc) ? $gCms->get_page_template_label($rsrc) : null;
                 } else {
                     $tpl_id = (int) substr($rsrc,strlen('cms_template:'));
                     if( $tpl_id > 0 ) {
