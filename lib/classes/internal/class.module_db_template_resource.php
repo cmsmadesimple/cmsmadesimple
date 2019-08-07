@@ -40,7 +40,7 @@ class module_db_template_resource extends fixed_smarty_custom_resource
     protected function fetch($name,&$source,&$mtime)
     {
         debug_buffer('','CMSModuleDbTemplateResource start'.$name);
-        $db = \CmsApp::get_instance()->GetDb();
+        $db = cmsms()->GetDb();
 
         $tmp = explode(';',$name);
         $query = "SELECT * from ".CMS_DB_PREFIX."module_templates WHERE module_name = ? and template_name = ?";
@@ -85,7 +85,7 @@ class module_file_template_resource extends fixed_smarty_custom_resource
 
         $module_name = trim($params[0]);
         $filename = trim($params[1]);
-        $module = \ModuleOperations::get_instance()->get_module_instance($module_name);
+        $module = cmsms()->GetModuleOperations()->get_module_instance($module_name);
 	if( !$module ) return;
         $files = [ CMS_ASSETS_PATH."/module_custom/$module_name/templates/$filename" ];
         $files[] = $module->GetModulePath()."/templates/$filename";
