@@ -4,7 +4,7 @@ function smarty_function_cms_render_scripts( $params, $template )
     // output a placeholder
     // add a hook to replace the placeholder with a <script> tag after render
     static $sig;
-    if( $sig ) throw new \RuntimeException('cms_render_css can only be called once per request');
+    if( $sig ) throw new \RuntimeException('cms_render_scripts can only be called once per request');
     $sig = sha1(__FILE__.time().rand());
     $magic_string = "<!-- cms_render_scripts:$sig -->";
 
