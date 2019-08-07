@@ -65,11 +65,11 @@
 				<!-- start header-bottom -->
 				<div class="header-bottom cf">
 					<!-- welcome -->
-					<div class="welcome">
+					<div class="welcome" data-username="{$user->username}">
 					{if isset($myaccount)}
 						<span><a class="welcome-user" href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}"><i class="fa fa-user"></i></a> {'welcome_user'|lang}: <a href="myaccount.php?{$secureparam}">{$user->username}</a></span>
 					{else}
-						<span><a class="welcome-user"><i class="fa fa-user"></i></a> {'welcome_user'|lang}: {$user->username}</span>
+						<span><a class="welcome-user"><i class="fa fa-user"></i></a> {'welcome_user'|lang}: <span data-username="{$user->username}">{$user->username}</span></span>
 					{/if}
 					</div>
 					<!-- bookmarks -->
