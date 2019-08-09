@@ -311,7 +311,7 @@ abstract class CMSModule
      * This is a helper method.
      *
      * @final
-     * @param bool $use_ssl Optional generate an URL using HTTPS path
+     * @param bool $use_ssl Optional generate an URL using HTTPS path (no longer used)
      * @return string The full path to the module directory.
      */
     final public function GetModuleURLPath($use_ssl=false)
