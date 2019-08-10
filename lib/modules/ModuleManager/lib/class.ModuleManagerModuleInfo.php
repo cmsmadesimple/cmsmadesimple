@@ -167,7 +167,7 @@ class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
                 $out[$module_name] = $info;
             }
             catch( \Exception $e ) {
-                debug_display($e->GetMessage(),$module_name);
+                debug_display($e->GetMessage(),$module_name.' '.get_class($e));
             }
         }
 

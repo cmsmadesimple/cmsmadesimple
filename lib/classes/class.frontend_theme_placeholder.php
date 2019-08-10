@@ -132,6 +132,7 @@ class frontend_theme_placeholder
         $rp = realpath($out);
         $rp_parent = realpath($this->get_location());
         if( $rp && $rp_parent && startswith($rp,$rp_parent) ) return $out;
+	return '';
     }
 
 } // class

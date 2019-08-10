@@ -89,6 +89,7 @@ class module_file_template_resource extends fixed_smarty_custom_resource
 	if( !$module ) return;
         $files = [ CMS_ASSETS_PATH."/module_custom/$module_name/templates/$filename" ];
         $files[] = $module->GetModulePath()."/templates/$filename";
+	// was this left here for some reason?
         $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$module_name,'templates',$filename);
 
         foreach( $files as $one ) {

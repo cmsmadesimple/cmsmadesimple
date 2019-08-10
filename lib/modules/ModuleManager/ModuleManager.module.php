@@ -54,7 +54,7 @@ class ModuleManager extends CMSModule
 
     public function GetVersion()
     {
-        return '2.2.1';
+        return '2.2.1.1';
     }
 
     public function GetHelp()

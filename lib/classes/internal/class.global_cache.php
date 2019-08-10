@@ -35,7 +35,7 @@ class global_cache
         if (!is_array(self::$_cache))
         self::_load();
 
-        if (!isset (self::$_cache[$type])) {
+        if (!isset (self::$_cache[$type]) || empty(self::$_cache[$type])) {
             self::$_cache[$type] = self::$_types[$type]->fetch ();
             self::$_dirty[$type] = 1;
             self::save ();
