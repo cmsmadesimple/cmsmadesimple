@@ -329,8 +329,8 @@ final class ModuleOperations
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');
+            $this->_moduleinfo = [];
             if( is_array($tmp) ) {
-                $this->_moduleinfo = [];
                 for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                     $name = $tmp[$i]['module_name'];
                     $filename = $this->get_module_filename($name);

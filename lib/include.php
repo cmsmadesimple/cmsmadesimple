@@ -20,6 +20,7 @@
 #$Id$
 namespace CMSMS;
 use CMSMS\internal\global_cache;
+use CMSMS\internal\global_cachable;
 use CmsApp;
 use cms_siteprefs;
 use ModuleOperations;
@@ -146,50 +147,50 @@ if( $_app->is_frontend_request() && isset($_GET['_auth']) && isset($_GET['_op'])
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
 global_cache::set_driver($_app->get_cache_driver());
-$obj = new \CMSMS\internal\global_cachable('schema_version',
-                                            function() {
-                                                $db = \CmsApp::get_instance()->GetDb();
-                                                $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
-                                                return $db->GetOne($query);
-                                            });
-\CMSMS\internal\global_cache::add_cachable($obj);
-$obj = new \CMSMS\internal\global_cachable('latest_content_modification',
-                                            function(){
-                                                $db = \CmsApp::get_instance()->GetDb();
-                                                $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified_date DESC';
-                                                $tmp = $db->GetOne($query);
-                                                return $db->UnixTimeStamp($tmp);
-                                            });
-\CMSMS\internal\global_cache::add_cachable($obj);
-$obj = new \CMSMS\internal\global_cachable('default_content',
-                                            function(){
-                                                $db = \CmsApp::get_instance()->GetDb();
-                                                $query = 'SELECT content_id FROM '.CmsApp::get_instance()->GetDbPrefix().'content WHERE default_content = 1';
-                                                $tmp = $db->GetOne($query);
-                                                return $tmp;
-                                            });
-\CMSMS\internal\global_cache::add_cachable($obj);
-$obj = new \CMSMS\internal\global_cachable('modules',
-                                            function(){
-                                                $db = \CmsApp::get_instance()->GetDb();
-                                                $query = 'SELECT * FROM '.CmsApp::get_instance()->GetDbPrefix().'modules ORDER BY module_name';
-                                                $tmp = $db->GetArray($query);
-                                                return $tmp;
-                                            });
-\CMSMS\internal\global_cache::add_cachable($obj);
-$obj = new \CMSMS\internal\global_cachable('module_deps',
-                                            function(){
-                                                $db = \CmsApp::get_instance()->GetDb();
-                                                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
-                                                $tmp = $db->GetArray($query);
-                                                if( !is_array($tmp) || !count($tmp) ) return '-';  // special value so that we actually return something to cache.
-                                                $out = array();
-                                                foreach( $tmp as $row ) {
-                                                    $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
-                                                }
-                                                return $out;
-                                            });
-\CMSMS\internal\global_cache::add_cachable($obj);
+$obj = new global_cachable('schema_version',
+                           function() use ($_app) {
+                               $db = $_app->GetDb();
+                               $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+                               return $db->GetOne($query);
+                           });
+global_cache::add_cachable($obj);
+$obj = new global_cachable('latest_content_modification',
+                           function() use ($_app) {
+                               $db = $_app->GetDb();
+                               $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified_date DESC';
+                               $tmp = $db->GetOne($query);
+                               return $db->UnixTimeStamp($tmp);
+                           });
+global_cache::add_cachable($obj);
+$obj = new global_cachable('default_content',
+                           function() use ($_app) {
+                               $db = $_app->GetDb();
+                               $query = 'SELECT content_id FROM '.CmsApp::get_instance()->GetDbPrefix().'content WHERE default_content = 1';
+                               $tmp = $db->GetOne($query);
+                               return $tmp;
+                           });
+global_cache::add_cachable($obj);
+$obj = new global_cachable('modules',
+                           function() use ($_app) {
+                               $db = $_app->GetDb();
+                               $query = 'SELECT * FROM '.CmsApp::get_instance()->GetDbPrefix().'modules ORDER BY module_name';
+                               $tmp = $db->GetArray($query);
+                               return $tmp;
+                           });
+global_cache::add_cachable($obj);
+$obj = new global_cachable('module_deps',
+                           function() use ($_app) {
+                               $db = $_app->GetDb();
+                               $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
+                               $tmp = $db->GetArray($query);
+                               if( !is_array($tmp) || !count($tmp) ) return '-';  // special value so that we actually return something to cache.
+                               $out = array();
+                               foreach( $tmp as $row ) {
+                                   $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
+                               }
+                               return $out;
+                           });
+global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 
 // Load them into the usual variables.  This'll go away a little later on.
