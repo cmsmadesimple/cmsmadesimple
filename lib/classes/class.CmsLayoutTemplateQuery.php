@@ -98,6 +98,7 @@ o	 * @throws CmsInvalidDataException
 
             case 'l':
             case 'listable':
+		if( !isset($second) && $val ) $second = $val;
                 $second = (cms_to_bool($second)) ? 0 : 1;
                 $where['listable'] = array('listable = '.$second);
                 break;
