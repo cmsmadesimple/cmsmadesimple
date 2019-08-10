@@ -858,7 +858,10 @@ final class CmsApp
                 }
             }
             else {
-                $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
+	        $type = CmsLayoutTemplateType::load('Core::Page');
+	        $args = ['listable'=>1, 'as_list'=>1];
+		if( $type ) $args['type'] = $type->get_id();
+                $_tpl = CmsLayoutTemplate::template_query($args);
                 if( is_array($_tpl) && count($_tpl) > 0 ) {
                     foreach( $_tpl as $tpl_id => $tpl_name ) {
                         $list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
