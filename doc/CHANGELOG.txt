@@ -21,6 +21,9 @@ News v2.51.6
 Phar Installer v1.3.8
   - Minor change to use include() instead of include_once()... not sure why
 
+FilePicker v1.0.4.1
+  - Fix type error
+
 Version 2.2.10 - Spuzzum
 -------------------------------
 Core - General
