@@ -50,7 +50,7 @@ try {
     $nosub = (int) get_parameter_value($_GET,'nosub');
     $profile = null;
     if( $sig ) $profile = TemporaryProfileStorage::get($sig);
-    if( !$sig ) $profile = $this->get_default_profile();
+    if( !$profile ) $profile = $this->get_default_profile();
     /*
     if( !$sig && $profile ) {
         $profile = $profile->overrideWith( [ 'type'=>$type ] );
