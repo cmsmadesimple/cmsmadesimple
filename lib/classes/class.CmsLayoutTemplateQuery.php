@@ -102,7 +102,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                 case 'l':
                 case 'listable':
 		    if( !isset($second) && $val ) $second = $val;
-                    $second = (cms_to_bool($second)) ? 0 : 1;
+                    $second = cms_to_bool($second);
                     $where['listable'] = array('listable = '.$second);
                     break;
 
