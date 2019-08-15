@@ -36,119 +36,118 @@
 if( !isset($gCms) ) exit;
 $this->SetCurrentTab('pages');
 
-if( $config['page_template_list'] ) {
-    $this->SetError($this->Lang('error_action_invalid'));
-    $this->RedirectToAdminTab();
-}
-if( !$this->CheckPermission('Manage All Content') ) {
-    $this->SetError($this->Lang('error_bulk_permission'));
-    $this->RedirectToAdminTab();
-}
-if( !isset($params['multicontent']) ) {
-    $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToAdminTab();
-}
-if( isset($params['cancel']) ) {
-    $this->SetMessage($this->Lang('msg_cancelled'));
-    $this->RedirectToAdminTab();
-}
-
-$hm = $gCms->GetHierarchyManager();
-$pagelist = unserialize(base64_decode($params['multicontent']));
-
-$showmore = 0;
-if( isset($params['showmore']) ) {
-    $showmore = (int) $params['showmore'];
-    \cms_userprefs::set('cgcm_bulk_showmore',$showmore);
-}
-if( isset($params['submit']) ) {
-    if( !isset($params['confirm1']) || !isset($params['confirm2']) ) {
-        $this->SetError($this->Lang('error_notconfirmed'));
-        $this->RedirectToAdminTab();
-    }
-    if( !isset($params['design']) || !isset($params['template']) ) {
-        $this->SetError($this->Lang('error_missingparam'));
-        $this->RedirectToAdminTab();
-    }
-
-    // do the real work
-    try {
-        @set_time_limit(9999);
-        $ops = $gCms->GetContentOperations();
-        $ops->LoadChildren(-1,FALSE,FALSE,$pagelist);
-
-        $i = 0;
-        foreach( $pagelist as $pid ) {
-            $node = $hm->find_by_tag('id',$pid);
-            if( !$node ) continue;
-            $content = $node->getContent(FALSE,FALSE,TRUE);
-            if( !is_object($content) ) continue;
-
-            $content->SetTemplateResource('');
-            $content->SetTemplateId((int)$params['template']);
-            $content->SetPropertyValue('design_id',$params['design']);
-            $content->SetLastModifiedBy(get_userid());
-            $ops->save_content($content);
-            $i++;
-        }
-        if( $i != count($pagelist) ) {
-            throw new CmsException('Bulk operation to set design did not adjust all selected pages');
-        }
-        audit('','Content','Changed template and design on '.count($pagelist).' pages');
-        $this->SetMessage($this->Lang('msg_bulk_successful'));
-        $this->RedirectToAdminTab();
-    }
-    catch( Exception $e ) {
-        cms_warning('Changing design and template on multiple pages failed: '.$e->GetMessage());
-        $this->SetError($e->GetMessage());
-        $this->RedirectToAdminTab();
-    }
-}
-
-$displaydata = array();
-foreach( $pagelist as $pid ) {
-    $node = $hm->find_by_tag('id',$pid);
-    if( !$node ) continue;  // this should not happen, but hey.
-    $content = $node->getContent(FALSE,FALSE,FALSE);
-    if( !is_object($content) ) continue; // this should never happen either
-
-    $rec = array();
-    $rec['id'] = $content->Id();
-    $rec['name'] = $content->Name();
-    $rec['menutext'] = $content->MenuText();
-    $rec['owner'] = $content->Owner();
-    $rec['alias'] = $content->Alias();
-    $displaydata[] = $rec;
-}
-
-$smarty->assign('showmore',\cms_userprefs::get('cgcm_bulk_showmore'));
-$smarty->assign('multicontent',$params['multicontent']);
-$smarty->assign('displaydata',$displaydata);
-$smarty->assign('alldesigns',CmsLayoutCollection::get_list());
-$dflt_design = CmsLayoutCollection::load_default();
-$smarty->assign('dflt_design_id',$dflt_design->get_id());
-
-$dflt_tpl_id = -1;
 try {
-    $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-    $dflt_tpl_id = $dflt_tpl->get_id();
+    if( $config['page_template_list'] ) throw new \LogicException('error_action_invalid');
+    if( !$this->CheckPermission('Manage All Content') ) throw new \CmsError403Exception($this->Lang('error_bulk_permission'));
+    if( !isset($params['multicontent']) ) throw new \LogicException($this->Lang('error_missingparam'));
+
+    if( isset($params['cancel']) ) {
+        $this->SetMessage($this->Lang('msg_cancelled'));
+        $this->RedirectToAdminTab();
+    }
+
+    $hm = $gCms->GetHierarchyManager();
+    $pagelist = unserialize(base64_decode($params['multicontent']));
+
+    $showmore = 0;
+    if( isset($params['showmore']) ) {
+        $showmore = (int) $params['showmore'];
+        \cms_userprefs::set('cgcm_bulk_showmore',$showmore);
+    }
+    if( isset($params['submit']) ) {
+        if( !isset($params['confirm1']) || !isset($params['confirm2']) ) {
+            $this->SetError($this->Lang('error_notconfirmed'));
+            $this->RedirectToAdminTab();
+        }
+        if( !isset($params['design']) || !isset($params['template']) ) {
+            $this->SetError($this->Lang('error_missingparam'));
+            $this->RedirectToAdminTab();
+        }
+
+        // do the real work
+        try {
+            @set_time_limit(9999);
+            $ops = $gCms->GetContentOperations();
+            $ops->LoadChildren(-1,FALSE,FALSE,$pagelist);
+
+            $i = 0;
+            foreach( $pagelist as $pid ) {
+                $node = $hm->find_by_tag('id',$pid);
+                if( !$node ) continue;
+                $content = $node->getContent(FALSE,FALSE,TRUE);
+                if( !is_object($content) ) continue;
+
+                $content->SetTemplateResource('');
+                $content->SetTemplateId((int)$params['template']);
+                $content->SetPropertyValue('design_id',$params['design']);
+                $content->SetLastModifiedBy(get_userid());
+                $ops->save_content($content);
+                $i++;
+            }
+            if( $i != count($pagelist) ) {
+                throw new CmsException('Bulk operation to set design did not adjust all selected pages');
+            }
+            audit('','Content','Changed template and design on '.count($pagelist).' pages');
+            $this->SetMessage($this->Lang('msg_bulk_successful'));
+            $this->RedirectToAdminTab();
+        }
+        catch( Exception $e ) {
+            cms_warning('Changing design and template on multiple pages failed: '.$e->GetMessage());
+            $this->SetError($e->GetMessage());
+            $this->RedirectToAdminTab();
+        }
+    }
+
+    $displaydata = array();
+    foreach( $pagelist as $pid ) {
+        $node = $hm->find_by_tag('id',$pid);
+        if( !$node ) continue;  // this should not happen, but hey.
+        $content = $node->getContent(FALSE,FALSE,FALSE);
+        if( !is_object($content) ) continue; // this should never happen either
+
+        $rec = array();
+        $rec['id'] = $content->Id();
+        $rec['name'] = $content->Name();
+        $rec['menutext'] = $content->MenuText();
+        $rec['owner'] = $content->Owner();
+        $rec['alias'] = $content->Alias();
+        $displaydata[] = $rec;
+    }
+
+    $smarty->assign('showmore',\cms_userprefs::get('cgcm_bulk_showmore'));
+    $smarty->assign('multicontent',$params['multicontent']);
+    $smarty->assign('displaydata',$displaydata);
+    $smarty->assign('alldesigns',CmsLayoutCollection::get_list());
+    $dflt_design = CmsLayoutCollection::load_default();
+    die('test1');
+    $smarty->assign('dflt_design_id',$dflt_design->get_id());
+
+    $dflt_tpl_id = -1;
+    try {
+        $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+        $dflt_tpl_id = $dflt_tpl->get_id();
+    }
+    catch( \Exception $e ) {
+        // ignore
+    }
+    $smarty->assign('dflt_tpl_id',$dflt_tpl_id);
+    if( $showmore ) {
+        $_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
+        $smarty->assign('alltemplates',$_tpl);
+    }
+    else {
+        // gotta get the core page template type
+        $_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+        $_tpl = CmsLayoutTemplate::template_query(array('t:'.$_type->get_id(),'as_list'=>1));
+        $smarty->assign('alltemplates',$_tpl);
+    }
+
+    echo $this->ProcessTemplate('admin_bulk_setdesign.tpl');
 }
 catch( \Exception $e ) {
-    // ignore
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
-$smarty->assign('dflt_tpl_id',$dflt_tpl_id);
-if( $showmore ) {
-    $_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
-    $smarty->assign('alltemplates',$_tpl);
-}
-else {
-    // gotta get the core page template type
-    $_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-    $_tpl = CmsLayoutTemplate::template_query(array('t:'.$_type->get_id(),'as_list'=>1));
-    $smarty->assign('alltemplates',$_tpl);
-}
-
-echo $this->ProcessTemplate('admin_bulk_setdesign.tpl');
 
 #
 # EOF
