@@ -427,8 +427,9 @@ abstract class CMSModule
      */
     public function GetMatchedRouteParams( CmsRoute $route ) : array
     {
-        $out = $route->get_defaults();
-        if( !empty($route->get_results() ) ) $out = array_merge( $route->get_defaults(), $route->get_results() );
+        $out = $route->get_defaults() ?: [];
+	$res = $route->get_results() ?: [];
+        $out = array_merge( $out, $res );
         $out = array_filter($out,function($key){
                 return !is_int($key);
             }, ARRAY_FILTER_USE_KEY);
