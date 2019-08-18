@@ -19,8 +19,8 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.2.10";
-$CMS_VERSION_NAME = "Spuzzum";
+$CMS_VERSION = "2.2.11";
+$CMS_VERSION_NAME = "Vulcan";
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
