@@ -243,7 +243,8 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     {
         $this->execute();
         if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
-        return CmsLayoutTemplate::load($this->fields['id']);
+        $out = CmsLayoutTemplate::load($this->fields['id']);
+	return $out;
     }
     /**
      * Get the list of matched template ids
