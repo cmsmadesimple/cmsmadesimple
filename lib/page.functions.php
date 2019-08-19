@@ -407,7 +407,8 @@ function get_pageid_or_alias_from_url()
                 $page = (int) $matches['returnid'];
                 unset( $matches['returnid'] );
             } else {
-                throw new \CmsException('Could not determine a content page id from matched route');
+		return $dflt_content;
+                // throw new \CmsException('Could not determine a content page id from matched route');
             }
         }
     }
