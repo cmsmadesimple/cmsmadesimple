@@ -399,41 +399,42 @@ final class ModuleOperations
                     break;
 
                 case 'FILE':
-                    if( $brief != 0 ) continue;
+                    if( !$brief ) {
 
-                    // finished a first file
-                    if( !isset( $moduledetails['name'] ) || !isset( $moduledetails['version'] ) ||
-                        !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
-                        throw new CmsInvalidDataException('CMSEX_XML003');
-                        return false;
-                    }
+                        // finished a first file
+                        if( !isset( $moduledetails['name'] ) || !isset( $moduledetails['version'] ) ||
+                            !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
+                            throw new CmsInvalidDataException('CMSEX_XML003');
+                            return false;
+                        }
 
-                    // ready to go
-                    $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-                    $filename=$moduledir.$moduledetails['filename'];
-                    if( !file_exists( $moduledir ) ) {
-                        if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
-                            throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$moduledir);
-                            break;
+                        // ready to go
+                        $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+                        $filename=$moduledir.$moduledetails['filename'];
+                        if( !file_exists( $moduledir ) ) {
+                            if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
+                                throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$moduledir);
+                                break;
+                            }
                         }
-                    }
-                    else if( $moduledetails['isdir'] ) {
-                        if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
-                            throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$filename);
-                            break;
+                        else if( $moduledetails['isdir'] ) {
+                            if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
+                                throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$filename);
+                                break;
+                            }
                         }
+                        else {
+                            $data = $moduledetails['filedata'];
+                            if( strlen( $data ) ) $data = base64_decode( $data );
+                            $fp = @fopen( $filename, "w" );
+                            if( !$fp ) throw new CmsFileSystemException(lang('errorcantcreatefile').' '.$filename);
+                            if( strlen( $data ) ) @fwrite( $fp, $data );
+                            @fclose( $fp );
+                        }
+                        unset( $moduledetails['filedata'] );
+                        unset( $moduledetails['filename'] );
+                        unset( $moduledetails['isdir'] );
                     }
-                    else {
-                        $data = $moduledetails['filedata'];
-                        if( strlen( $data ) ) $data = base64_decode( $data );
-                        $fp = @fopen( $filename, "w" );
-                        if( !$fp ) throw new CmsFileSystemException(lang('errorcantcreatefile').' '.$filename);
-                        if( strlen( $data ) ) @fwrite( $fp, $data );
-                        @fclose( $fp );
-                    }
-                    unset( $moduledetails['filedata'] );
-                    unset( $moduledetails['filename'] );
-                    unset( $moduledetails['isdir'] );
                     break;
 				}
 				break;
