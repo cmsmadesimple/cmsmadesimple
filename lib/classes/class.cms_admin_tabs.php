@@ -88,13 +88,13 @@ final class cms_admin_tabs
             self::$_tab_idx++;
         }
 
-	$class="tabheader";
+        $class="tabheader";
         $a="";
         if (TRUE == $active) {
             $class .= " active";
             self::$_current_tab = $tabid;
         }
-	$a = " class=\"{$class}\" ";
+        $a = " class=\"{$class}\" ";
         $tabid = strtolower(str_replace(' ','_',$tabid));
 
         $out = '';
@@ -150,6 +150,7 @@ final class cms_admin_tabs
      */
     public static function start_tab($tabid,$params = array())
     {
+        $tabid = strtolower($tabid);
         $message = '';
         if( $tabid == self::$_current_tab && !empty($params['tab_message']) ) {
             $theme = cms_utils::get_theme_object();
@@ -160,7 +161,7 @@ final class cms_admin_tabs
         if( !self::$_start_content_sent ) $out .= self::start_tab_content();
         if( self::$_in_tab ) $out .= self::end_tab();
         self::$_in_tab = 1;
-	$tabid = str_replace(' ','_', $tabid);
+        $tabid = str_replace(' ','_', $tabid);
         $out .= '<div class="tabcontent" data-tab="'. $tabid.'" id="' . $tabid . '_c">'.$message;
         return $out;
     }
