@@ -48,7 +48,7 @@ class Search extends CMSModule
     public function IsPluginModule() { return true; }
     public function HasAdmin() { return true; }
     public function HandlesEvents () { return true; }
-    public function GetVersion() { return '1.51.6'; }
+    public function GetVersion() { return '1.51.7'; }
     public function MinimumCMSVersion() { return '1.12-alpha0'; }
     public function GetAdminDescription() { return $this->Lang('description'); }
     public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
@@ -143,7 +143,10 @@ EOT;
 
     public function RemoveStopWordsFromArray($words)
     {
-        $stop_words = preg_split("/[\s,]+/", $this->GetPreference('stopwords', $this->DefaultStopWords()));
+        if( !is_array($words) ) return [];
+        $stop_words = $this->GetPreference('stopwords', $this->DefaultStopWords());
+        if( !$stop_words ) return $words;
+        $stop_words = preg_split("/[\s,]+/", $stop_words);
         return array_diff($words, $stop_words);
     }
 

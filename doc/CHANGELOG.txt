@@ -10,10 +10,12 @@ Core - General
 
 CMSContentManager --
   - Fix an issue with copying non-core content objects
+  - Minor fixes for php 7.3
 
 ModuleManager v2.1.7
   - Minor exception handling improvements.
   - Minor improvement to dependency detection with modules that do not exist in ModuleRepository
+  - Minor fixes for php 7.3
 
 News v2.51.6
   - Minor improvements for CMSMS v2.3 compatibility.
@@ -23,6 +25,9 @@ Phar Installer v1.3.8
 
 FilePicker v1.0.4.1
   - Fix type error
+
+Search v1.51.7
+  - Minor fixes for php 7.3
 
 Version 2.2.10 - Spuzzum
 -------------------------------
