@@ -41,6 +41,7 @@ function search_StemPhrase(&$module,$phrase,$filter_stopwords, $do_stemming)
 
     // split into words
     $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/u', $phrase);
+    if( !is_array($words) ) [];
 
     // strip off anything 3 chars or less
     if( !function_exists('__search_stemphrase_filter') ) {
@@ -58,7 +59,6 @@ function search_StemPhrase(&$module,$phrase,$filter_stopwords, $do_stemming)
 
     $stemmed_words = array();
     $stemmer = new PorterStemmer();
-
     foreach ($words as $word) {
         $word = trim($word);
         $word = trim($word, ' \'"');

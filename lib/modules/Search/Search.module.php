@@ -215,7 +215,10 @@ class Search extends CMSModule
 
     public function RemoveStopWordsFromArray($words)
     {
-        $stop_words = preg_split("/[\s,]+/", $this->GetPreference('stopwords', $this->DefaultStopWords()));
+        if( !is_array($words) ) return [];
+        $stop_words = $this->GetPreference('stopwords', $this->DefaultStopWords());
+        if( !$stop_words ) return $words;
+        $stop_words = preg_split("/[\s,]+/", $stop_words);
         return array_diff($words, $stop_words);
     }
 

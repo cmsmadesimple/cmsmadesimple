@@ -144,10 +144,11 @@ class operations
                 case \XMLReader::END_ELEMENT:
                     switch( strtoupper($reader->localName) ) {
                         case 'REQUIRES':
-                             if( count($requires) != 2 ) continue;
-                             if( !isset( $moduledetails['requires'] ) ) $moduledetails['requires'] = array();
-                             $moduledetails['requires'][] = $requires;
-                             $requires = array();
+                            if( count($requires) == 2 ) {
+                                if( !isset( $moduledetails['requires'] ) ) $moduledetails['requires'] = array();
+                                $moduledetails['requires'][] = $requires;
+                                $requires = array();
+			    }
                             break;
 
                         case 'FILE':
