@@ -72,7 +72,14 @@ function smarty_function_cms_render_css( $params, $template )
     if( cms_to_bool(get_parameter_value($params, 'smarty_processing')) ) {
         $hook_manager->add_hook('Core::PostProcessCSS', $do_smarty_postprocess, $hook_manager::PRIORITY_HIGH );
     }
-    $hook_manager->add_hook( 'Core::ContentPostRender', $on_postrender );
+
+    $app = cmsms();
+    if( $app->is_frontend_request() ) {
+        cmsms()->get_hook_manager()->add_hook( 'Core::ContentPostRender', $on_postrender );
+    }
+    else {
+        cmsms()->get_hook_manager()->add_hook( 'admin_content_postrender', $on_postrender );
+    }
 
     // output an html placeholder
     return $magic_string;
