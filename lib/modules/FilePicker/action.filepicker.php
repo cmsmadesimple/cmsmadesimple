@@ -231,6 +231,9 @@ try {
         }
     }
     $smarty->assign('cssurl',$this->GetModuleURLPath().$sel_file);
+
+    $cms_js_setup = $this->config['admin_url'].'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+    $smarty->assign('cms_js_setup', $cms_js_setup);
     $smarty->assign('cwd_for_display',$cwd_for_display);
     $smarty->assign('cwd',$cwd);
     $smarty->assign('files',$files);

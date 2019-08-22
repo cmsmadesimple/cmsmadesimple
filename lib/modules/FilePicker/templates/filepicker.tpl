@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<meta http-equiv="Content-type" content="text/html;charset=utf-8"/>
 		<title>{$mod->Lang('filepickertitle')}</title>
+	        {cms_queue_css file="lib/js/jquery-ui/jquery-ui.min.css"}
+                {cms_render_css adjust_urls=1}
 		<link rel="stylesheet" type="text/css" href="{$cssurl}">
 	</head>
 	{strip}
@@ -139,6 +141,7 @@
 	</body>
 	{/strip}
 
+        <script src="{$cms_js_setup}"></script>
         {cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
         {cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
         {cms_queue_script file='lib/jquery/js/jquery.cms_admin.js'}
