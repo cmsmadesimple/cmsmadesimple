@@ -55,18 +55,19 @@ function search_StemPhrase(&$module,$phrase,$filter_stopwords, $do_stemming)
     if( $filter_stopwords ) $words = $module->RemoveStopWordsFromArray($words);
 
     // stem words
-    if( !$do_stemming ) return $words;
 
     $stemmed_words = array();
-    $stemmer = new PorterStemmer();
+    if( $do_stemming ) $stemmer = new PorterStemmer();
     foreach ($words as $word) {
         $word = trim($word);
-        $word = trim($word, ' \'"');
+        //$word = trim($word, ' \'"');
+        $word = preg_replace('/(^[\"\']|[\"\']$)/', '', $word);
         $word = trim($word);
-        if (strlen($word) < 3) continue;
 
         //trim words get rid of wrapping quotes
-        $stemmed_words[] = $stemmer->stem($word, true);
+        if( $do_stemming ) $word = $stemmer->stem($word, true);
+	if( strlen($word) < 3 ) continue;
+	$stemmed_words[] = $word;
     }
     return $stemmed_words;
 }
@@ -75,7 +76,7 @@ function search_StemPhrase(&$module,$phrase,$filter_stopwords, $do_stemming)
 function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
 {
     $do_stopwords = true;
-    $do_stemming = cms_to_bool($obj->GetPreference('usesstemming','false'));
+    $do_stemming = cms_to_bool($obj->GetPreference('usestemming','false'));
     $db = $obj->GetDb();
     $obj->DeleteWords($module, $id, $attr);
     $hm = $obj->cms->get_hook_manager();
