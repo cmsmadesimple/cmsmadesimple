@@ -129,6 +129,9 @@ abstract class CMSModule
 
             case 'db':
                 return $this->app->GetDb();
+
+	    default:
+		throw new \LogicException("$key is not a gettable property of ".__CLASS__);
         }
 
         return null;
