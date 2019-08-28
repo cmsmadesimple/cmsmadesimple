@@ -1,64 +1,67 @@
-Version 2.2.11 -
+Version 2.2.11 - Vulcan
 -------------------------------
 Core - General
-  - Fix minor bug in copying content objects
-  - Minor fix to array indexes when filling params in ContentBase
-  - Fix to the {cms_filepicker} plugin
+  - Fix minor bug in copying content objects.
+  - Minor fix to array indexes when filling params in ContentBase.
+  - Fix to the {cms_filepicker} plugin.
   - Minor fix to the 'my account' form.
-  - Fix error in cmsms_filepicker.js encountered in LISE
-  - PHP 7.3 fix to DataDictionary::RenameColumnSQL
+  - Fix error in cmsms_filepicker.js encountered in LISE.
+  - PHP 7.3 fix to DataDictionary::RenameColumnSQL.
 
-CMSContentManager --
-  - Fix an issue with copying non-core content objects
-  - Minor fixes for php 7.3
+CMSContentManager v1.1.8
+  - Fix an issue with copying non-core content objects.
+  - Minor fixes for php 7.3.
 
 ModuleManager v2.1.7
   - Minor exception handling improvements.
-  - Minor improvement to dependency detection with modules that do not exist in ModuleRepository
+  - Minor improvement to dependency detection with modules that do not exist in ModuleRepository.
   - Minor fixes for php 7.3
 
 News v2.51.6
   - Minor improvements for CMSMS v2.3 compatibility.
 
 Phar Installer v1.3.8
-  - Minor change to use include() instead of include_once()... not sure why
+  - Minor change to use include() instead of include_once()... not sure why.
 
 FilePicker v1.0.4.1
-  - Fix type error
+  - Fix type error.
 
 Search v1.51.7
-  - Minor fixes for php 7.3
+  - Minor fixes for php 7.3.
+
 
 Version 2.2.10 - Spuzzum
 -------------------------------
 Core - General
-  - Fix minor potential authenticated object insertion vulnerability in changegroupperm
-  - Fix minor potential uncleaned input vulnerability in siteprefs
-  - Minor improvement to get_real_ip()
-  - Fix to clearing cache in cms_filecache_driver
+  - Fix minor potential authenticated object insertion vulnerability in changegroupperm.
+  - Fix minor potential uncleaned input vulnerability in siteprefs.
+  - Minor improvement to get_real_ip().
+  - Fix to clearing cache in cms_filecache_driver.
 
 News v2.51.5
-  - Fix unauthenticated SQL injection vulnerability with the default action
+  - Fix unauthenticated SQL injection vulnerability with the default action.
 
 ModuleManager v2.1.6
-  - Fix authenticated object insertion vulnerability in the installmodule action
+  - Fix authenticated object insertion vulnerability in the installmodule action.
   - Improve ordering of the dependencies before installing or upgrading modules.
   - Adds more auditing, particularly in the cached request stuff.
 
 FilePicker v1.0.4
-  - Fix authenticated object insertion vulnerability
+  - Fix authenticated object insertion vulnerability.
+
 
 Version 2.2.9.1
 -------------------------------
 Core - General
-  - fix to the CmsLayoutStylesheetQuery class
-  - fix an edge case in the Database\Connection::DbTimeStamp() method
+  - fix to the CmsLayoutStylesheetQuery class.
+  - fix an edge case in the Database\Connection::DbTimeStamp() method.
 
 MicroTiny v2.2.4
   - Minor fix in error displays.
 
 Phar Installer v1.3.7
-  - Fix to edge case in step 3 where memory_limit is set to -1
+  - Fix to edge case in step 3 where memory_limit is set to -1.
+
 
 Version 2.2.9 - Blow Me Down
 -------------------------------
@@ -66,7 +69,7 @@ Core - General
   - PHP 7.2+ fixes.
   - Now do not call Module::InitializeAdmin() or Module::InitializeFrontend() if the module loading is being forced
     (as is the case sometimes within ModuleManager);
-  - Minor changes and fixes to prevent warnings/notices in CLI based scripts
+  - Minor changes and fixes to prevent warnings/notices in CLI based scripts.
   - Improvements to the {browser_lang} plugin.
   - Fixes a bug in the CmsLayoutTemplateQuery class.
   - Fixes a bug with the name= parameter in the {cms_stylesheet} plugin.
@@ -76,10 +79,10 @@ Core - General
   - Now check for an english language file first in module_custom/xxxxx/lang before a file for the current language.
   - Prevent false-positive hit for "multiple_webshells_0018" rule webserver virusscanner (https://github.com/Yara-Rules/rules/blob/master/Webshells/WShell_THOR_Webshells.yar#L4764).
   - Fixes a bug in ContentOperations::LoadAllContent() if the content list had a custom content type from a module that was unvavailable.
-  - Fixes a bug in the Database\Connection::DbTimeStamp()
+  - Fixes a bug in the Database\Connection::DbTimeStamp().
 
 Search v1.51.6
-  - Minor fixes to help
+  - Minor fixes to help.
 
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
@@ -98,7 +101,7 @@ DesignManager v1.1.5
   - Fixes ownership issue on templates with importing a design.
 
 Phar Installer v1.3.7
-  - Minof fix to detect when PHP's memory limit is set to -1
+  - Minof fix to detect when PHP's memory limit is set to -1.
 
 
 Version 2.2.8 - Flin Flon
