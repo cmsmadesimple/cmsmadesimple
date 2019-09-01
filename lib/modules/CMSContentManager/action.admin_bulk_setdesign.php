@@ -119,13 +119,12 @@ try {
     $smarty->assign('displaydata',$displaydata);
     $smarty->assign('alldesigns',CmsLayoutCollection::get_list());
     $dflt_design = CmsLayoutCollection::load_default();
-    die('test1');
     $smarty->assign('dflt_design_id',$dflt_design->get_id());
 
     $dflt_tpl_id = -1;
     try {
         $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-        $dflt_tpl_id = $dflt_tpl->get_id();
+	if( $dflt_tp ) $dflt_tpl_id = $dflt_tpl->get_id();
     }
     catch( \Exception $e ) {
         // ignore
