@@ -1325,7 +1325,7 @@ class ContentOperations
         $this->save_content_properties($content);
         $this->save_additional_editors($content);
         if( $content->URL() ) {
-            $route = CmsRoute::new_builder($content->URL(),'__CONTENT__',$newId,'',TRUE);
+            $route = CmsRoute::new_builder($content->URL(),'__CONTENT__',$newid,'',TRUE);
             cms_route_manager::add_static($route);
         }
 

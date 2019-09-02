@@ -1311,7 +1311,7 @@ abstract class ContentBase
             }
         }
 
-	// todo:  this stuff should not be here.  should only be checkin if it exists if required
+        // todo:  this stuff should not be here.  should only be checkin if it exists if required
         $auto_type = content_assistant::auto_create_url();
         if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
             // create a valid url.
