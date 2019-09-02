@@ -838,6 +838,11 @@ input[type="submit"],
     font-size: 12px
 }
 
+.ui-tooltip {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+}
+
 .ui-button {
     margin: 4px 0
 }
