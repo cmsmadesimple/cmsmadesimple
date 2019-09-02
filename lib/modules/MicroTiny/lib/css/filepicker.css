@@ -343,7 +343,7 @@ img {
 
 .list-view .filepicker-thumb {
 	overflow: hidden;
-	display: inline-block
+	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
 	width: 50px;
