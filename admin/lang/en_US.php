@@ -1095,7 +1095,6 @@ $lang['invalidparent'] = "You must select a parent page (contact your administra
 //$lang['invalidtemplate'] = "The template is not valid";
 $lang['invalid_test'] = "Invalid test parameter value!";
 $lang['ip_addr'] = "IP Address";
-$lang['irc'] = "IRC";
 $lang['itemid'] = "Item ID";
 $lang['itemname'] = "Item Name";
 $lang['item_name_contains'] = 'Item Name Contains';
