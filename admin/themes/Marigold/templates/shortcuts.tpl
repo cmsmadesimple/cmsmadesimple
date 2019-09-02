@@ -51,7 +51,7 @@
     <ul>
       <li><a rel="external" class="external" href="https://docs.cmsmadesimple.org" title="{'documentation'|lang}">{'documentation'|lang}</a></li>
       <li><a rel="external" class="external" href="https://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
-      <li><a rel="external" class="external" href="https://www.cmsmadesimple.org/support/documentation/chat/">{'irc'|lang}</a></li>
+      {*<li><a rel="external" class="external" href="https://www.cmsmadesimple.org/support/documentation/chat/">{'irc'|lang}</a></li>*}
     </ul>
 </div>
 {/if}
