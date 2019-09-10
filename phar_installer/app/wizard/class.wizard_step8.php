@@ -55,9 +55,6 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         if( is_file("$destdir/lib/include.php") ) {
             include_once("$destdir/lib/include.php");
         }
-        else if( is_file( "$destdir/include.php")) {
-            include_once( "$destdir/lib/include.php" );
-        }
         else {
             throw new \RuntimeException('Could not find include.php file in destination');
         }
