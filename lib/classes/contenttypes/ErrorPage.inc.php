@@ -33,8 +33,9 @@
  */
 class ErrorPage extends Content
 {
-    var $doAliasCheck;
-    var $error_types;
+    private $doAliasCheck;
+    private $error_types;
+    private $valid_aliases;
 
     public function __construct()
     {
@@ -42,9 +43,10 @@ class ErrorPage extends Content
 
         global $CMS_ADMIN_PAGE;
         if( isset($CMS_ADMIN_PAGE) ) {
-            $this->error_types = array('404' => lang('404description'),
+            $this->error_types = ['404' => lang('404description'),
                                        '403' => lang('403description'),
-                                       '503' => lang('503description') );
+                                       '503' => lang('503description') ];
+            $this->valid_aliases = [ 'error404', 'error403', 'error503' ];
         }
         $this->doAliasCheck = false;
         $this->doAutoAliasIfEnabled = false;
@@ -87,7 +89,7 @@ class ErrorPage extends Content
         $this->RemoveProperty('page_url','');
 
         $this->RemoveProperty('alias','');
-        $this->AddBaseProperty('alias',10,1);
+        $this->AddProperty('alias',1,self::TAB_MAIN,true);
 
         #Turn on preview
         $this->mPreview = true;
@@ -122,6 +124,7 @@ class ErrorPage extends Content
     {
         parent::FillParams($params,$editing);
         //$this->mParentId = -1;
+        $this->mAlias = get_parameter_value($params,'alias');
         $this->mShowInMenu = false;
         $this->mCachable = false;
         $this->mActive = true;
@@ -138,7 +141,7 @@ class ErrorPage extends Content
                     if ('error'.$code == $this->mAlias) $dropdownopts .= ' selected="selected" ';
                     $dropdownopts .= ">{$name} ({$code})</option>";
                 }
-                return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
+                return ['*'.lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>'];
 
             default:
                 return parent::display_single_element($one,$adding);
@@ -155,15 +158,13 @@ class ErrorPage extends Content
 
         //Do our own alias check
         if ($this->mAlias == '') {
-            $errors[] = lang('nofieldgiven', array(lang('error_type')));
+            $errors[] = lang('invalidalias');
         }
-        else if (in_array($this->mAlias, $this->error_types)) {
-            $errors[] = lang('nofieldgiven', array(lang('error_type')));
+        else if (!in_array($this->mAlias, $this->valid_aliases)) {
+            $errors[] = lang('missingparams');
         }
         else if ($this->mAlias != $this->mOldAlias) {
-            $gCms = cmsms();
-            $contentops =& $gCms->GetContentOperations();
-            $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+            $error = cmsms()->GetContentOperations()->CheckAliasError($this->mAlias, $this->mId);
             if ($error !== FALSE) {
                 if ($error == lang('aliasalreadyused')) {
                     $errors[] = lang('errorpagealreadyinuse');
