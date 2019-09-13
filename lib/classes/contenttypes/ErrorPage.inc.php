@@ -71,7 +71,7 @@ class ErrorPage extends Content
         parent::SetProperties();
         $this->RemoveProperty('secure',0);
         $this->RemoveProperty('searchable',0);
-        $this->RemoveProperty('parent',-1);
+        //$this->RemoveProperty('parent',-1);
         $this->RemoveProperty('showinmenu',false);
         $this->RemoveProperty('menutext','');
         $this->RemoveProperty('target','');
@@ -121,7 +121,7 @@ class ErrorPage extends Content
     public function FillParams(array $params,bool $editing = false)
     {
         parent::FillParams($params,$editing);
-        $this->mParentId = -1;
+        //$this->mParentId = -1;
         $this->mShowInMenu = false;
         $this->mCachable = false;
         $this->mActive = true;
