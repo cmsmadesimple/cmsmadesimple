@@ -83,10 +83,10 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     if (isset($_POST["user"])) $username = cleanValue($_POST["user"]);
 
     $password = '';
-    if (isset($_POST["password"])) $password = $_POST["password"];
+    if (isset($_POST["password"])) $password = cleanValue($_POST["password"]);
 
     $passwordagain = '';
-    if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
+    if (isset($_POST["passwordagain"])) $passwordagain = cleanValue($_POST["passwordagain"]);
 
     $firstname = '';
     if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
@@ -134,7 +134,10 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
             // put mention into the admin log
             audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
             $hook_mgr->emit('Core::EditUserPost', [ 'user'=>&$userobj ] );
-            $message = lang('accountupdated');
+            $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+            $thisurl = basename(__FILE__) . $urlext;
+            $_SESSION[$thisurl] = lang('accountupdated');
+            redirect($thisurl);
         } else {
             // throw exception? update just failed.
         }
@@ -188,6 +191,10 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
  */
 
 include_once ("header.php");
+if( isset($_SESSION[$thisurl]) ) {
+    $message = $_SESSION[$thisurl];
+    unset($_SESSION[$thisurl]);
+}
 
 if ($error != "") {
     $themeObject->ShowErrors($error);
