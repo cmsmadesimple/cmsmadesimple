@@ -478,7 +478,7 @@ abstract class CMSModule
      */
     final public function GetParameters()
     {
-        if( count($this->params) == 0 ) $this->InitializeAdmin(); // quick hack to load parameters if they are not already loaded.
+        // if( count($this->params) == 0 ) $this->InitializeAdmin(); // quick hack to load parameters if they are not already loaded.
         return $this->params;
     }
 
