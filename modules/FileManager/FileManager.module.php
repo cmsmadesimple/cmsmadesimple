@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
     public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
     public function GetHeaderHTML() { return $this->_output_header_javascript(); }
     public function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    public function GetVersion() { return '1.6.9'; }
+    public function GetVersion() { return '1.6.9.1'; }
     public function GetHelp() { return $this->Lang('help'); }
     public function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
     public function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -229,12 +229,12 @@ final class FileManager extends CMSModule {
     }
 
     protected function encodefilename($filename) {
-        return base64_encode(sha1(__FILE__.$filename).'|'.$filename);
+        return base64_encode(sha1($this->config['dbpassword'].__FILE__.$filename).'|'.$filename);
     }
 
     protected function decodefilename($encodedfilename) {
         list($sig,$filename) = explode('|',base64_decode($encodedfilename),2);
-        if( sha1(__FILE__.$filename) == $sig ) return $filename;
+        if( sha1($this->config['dbpassword'].__FILE__.$filename) == $sig ) return $filename;
     }
 
   public function GetAdminMenuItems()
