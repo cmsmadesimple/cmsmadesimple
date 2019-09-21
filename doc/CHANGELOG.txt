@@ -1,3 +1,11 @@
+Version 2.2.12 - Osoyoos
+-------------------------------
+Core - General
+  - Fix warning in cms_html_entity_decode
+
+FileManager v1.6.9
+  - Security fixes for view action.
+
 Version 2.2.11 - Vulcan
 -------------------------------
 Core - General

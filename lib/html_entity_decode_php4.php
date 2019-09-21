@@ -28,7 +28,7 @@
  */
 function __code_to_utf8($num) {
   if ($num <= 0x7F) {
-        $ord = $ord[1];
+        $ord = $num[1];
         if (preg_match('/^x([0-9a-f]+)$/i', $ord, $match))
         {
             $ord = hexdec($match[1]);
