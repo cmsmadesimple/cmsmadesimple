@@ -1,5 +1,6 @@
 <?php
 if (!function_exists("cmsms")) exit;
+if( get_userid(FALSE) < 1 || $this->cms->is_frontend_request() ) throw new \CmsError403Exception('Permission denied');
 
 if( !isset($params['file']) ) {
     $params["fmerror"]="nofilesselected";
