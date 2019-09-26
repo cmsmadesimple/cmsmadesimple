@@ -23,7 +23,7 @@ if( !isset($gCms) ) exit;
 final class DesignManager extends CMSModule
 {
     function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-    function GetVersion()  { return '1.1.6'; }
+    function GetVersion()  { return '1.1.7'; }
     function MinimumCMSVersion()  { return '2.1'; }
     function LazyLoadAdmin() { return TRUE; }
     function LazyLoadFrontend() { return TRUE; }
@@ -45,7 +45,7 @@ final class DesignManager extends CMSModule
             $this->CheckPermission('Modify Templates') ||
             $this->CheckPermission('Manage Stylesheets') ||
             $this->CheckPermission('Manage Designs') ||
-            count(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
+            !empty(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
         return FALSE;
     }
 
