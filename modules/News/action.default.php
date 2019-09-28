@@ -57,14 +57,12 @@ if( !$tpl_ob->IsCached() ) {
         ";
 
     if( isset($params['idlist']) ) {
-        $idlist = $params['idlist'];
-        if( is_string($idlist) ) {
-            $tmp = explode(',',$idlist);
-            $idlist = [];
-            for( $i = 0; $i < count($tmp); $i++ ) {
-                $val = (int)$tmp[$i];
-                if( $val > 0 && !in_array($val,$idlist) ) $idlist[] = $val;
-            }
+        $tmp = trim($params['idlist']);
+        $tmp = explode(',', $tmp);
+        $idlist = [];
+        for( $i = 0; $i < count($tmp); $i++ ) {
+            $val = (int)$tmp[$i];
+            if( $val > 0 && !in_array($val,$idlist) ) $idlist[] = $val;
         }
         if( !empty($idlist) ) $query1 .= ' (mn.news_id IN ('.implode(',',$idlist).')) AND ';
     }
