@@ -59,7 +59,7 @@ if( $preview || !$tpl_ob->IsCached() ) {
     }
     $article->set_linkdata($id,$params);
 
-    $return_url = $this->CreateReturnLink($id, isset($params['origid'])?$params['origid']:$returnid, $this->lang('news_return'));
+    $return_url = $this->CreateReturnLink($id, isset($params['origid'])?(int)$params['origid']:$returnid, $this->lang('news_return'));
     $tpl_ob->assign('return_url', $return_url);
     $tpl_ob->assign('entry', $article);
 

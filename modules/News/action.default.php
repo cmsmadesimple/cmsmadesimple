@@ -22,7 +22,7 @@ if( !$tpl_ob->IsCached() ) {
     if( $tmp > 0 ) $detailpage = $tmp;
     if (isset($params['detailpage'])) {
         $manager = $gCms->GetHierarchyManager();
-        $node = $manager->sureGetNodeByAlias($params['detailpage']);
+        $node = $manager->sureGetNodeByAlias(trim($params['detailpage']));
         if (isset($node)) {
             $detailpage = $node->getID();
         }
@@ -57,7 +57,7 @@ if( !$tpl_ob->IsCached() ) {
         ";
 
     if( isset($params['idlist']) ) {
-        $tmp = trim($params['idlist']);
+        $tmp = cleanValue(trim($params,'idlist'));
         $tmp = explode(',', $tmp);
         $idlist = [];
         for( $i = 0; $i < count($tmp); $i++ ) {
@@ -77,6 +77,7 @@ if( !$tpl_ob->IsCached() ) {
         $count = 0;
         foreach ($categories as $onecat) {
             if ($count > 0) $query1 .= ' OR ';
+	    $onecat = trim($onecat);
             if (strpos($onecat, '|') !== FALSE || strpos($onecat, '*') !== FALSE) {
                 $tmp = $db->qstr(trim(str_replace('*', '%', str_replace("'",'_',$onecat))));
                 $query1 .= "upper(mnc.long_name) like upper({$tmp})";
@@ -259,7 +260,7 @@ if( !$tpl_ob->IsCached() ) {
             $onerow->fieldsbyname = $onerow->fields; // dumb, I know.
             $onerow->file_location = $gCms->config['uploads_url'].'/news/id'.$row['news_id'];
 
-            $moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
+            $moretext = isset($params['moretext'])?trim($params['moretext']):$this->Lang('more');
             $sendtodetail = array('articleid'=>$row['news_id']);
             if (isset($params['showall'])) $sendtodetail['showall'] = $params['showall'];
             if (isset($params['detailpage'])) $sendtodetail['origid'] = $returnid;
@@ -272,9 +273,9 @@ if( !$tpl_ob->IsCached() ) {
                 if (isset($sendtodetail['detailtemplate'])) $prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
             }
 
-            if (isset($params['lang'])) $sendtodetail['lang'] = $params['lang'];
-            if (isset($params['category_id'])) $sendtodetail['category_id'] = $params['category_id'];
-            if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = $params['pagelimit'];
+            if (isset($params['lang'])) $sendtodetail['lang'] = trim($params['lang']);
+            if (isset($params['category_id'])) $sendtodetail['category_id'] = (int)$params['category_id'];
+            if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = (int)$params['pagelimit'];
 
             $onerow->detail_url = $this->create_url( $id, 'detail', $detailpage!=''?$detailpage:$returnid, $sendtodetail );
             $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true,
