@@ -153,7 +153,7 @@ function cms_autoloader($classname)
             }
             if( count($parts) > 1 ) {
                 $parts = array_slice($parts, 0, -1);
-                $subpath = implode($parts, '/');
+                $subpath = implode(',', $parts);
                 $filename3 = "{$modpath}/lib/{$subpath}/class.{$class_lastname}.php";
                 if( $filename3 && is_file($filename3) ) {
                     require $filename3;
