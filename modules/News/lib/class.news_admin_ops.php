@@ -82,7 +82,7 @@ final class news_admin_ops
             return FALSE;
         }
 
-        $filename = basename($_FILES[$fieldname]['name']);
+        $filename = cleanValue(basename($_FILES[$fieldname]['name']));
         $dest = cms_join_path($config['uploads_path'],'news','id'.$itemid,$filename);
 
         // Get the files extension

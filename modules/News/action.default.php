@@ -57,7 +57,7 @@ if( !$tpl_ob->IsCached() ) {
         ";
 
     if( isset($params['idlist']) ) {
-        $tmp = cleanValue(trim($params,'idlist'));
+        $tmp = cleanValue(trim($params['idlist']));
         $tmp = explode(',', $tmp);
         $idlist = [];
         for( $i = 0; $i < count($tmp); $i++ ) {
