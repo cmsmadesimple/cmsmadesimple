@@ -255,7 +255,7 @@ final class CmsFormUtils
         $attribs = array();
         $module = null;
         $attribs['name'] = get_parameter_value($parms,'name');
-        if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
+        if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter');
         $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
         $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
         $attribs['readonly'] = cms_to_bool( get_parameter_value($parms,'readonly', false ) );
@@ -371,31 +371,6 @@ final class CmsFormUtils
         $tagparms['action'] = null;
         $tagparms['method'] = 'post';
         $tagparms['enctype'] = 'multipart/form-data';
-        if ($gCms->test_state(CmsApp::STATE_LOGIN_PAGE)) {
-            $tagparms['action'] = 'login.php';
-        }
-        else if ($gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
-            // check if it's a module action
-            if ($mactparms['module']) {
-                $tagparms['action'] = 'moduleinterface.php';
-                if(!isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
-
-                $mactparms['returnid'] = '';
-                if (!$mactparms['mid']) $mactparms['mid'] = 'm1_';
-            }
-        }
-        else if ($gCms->is_frontend_request()) {
-            if ($mactparms['module']) {
-                $tagparms['action'] = 'index.php'; // default page
-                if(!$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();
-                $hm = $gCms->GetHierarchyManager();
-                $node = $hm->sureGetNodeById($mactparms['returnid']);
-                if ($node) {
-                    $content_obj = $node->getContent();
-                    if($content_obj ) $tagparms['action'] = $content_obj->GetURL();
-                }
-            }
-        }
 
         // prcess arguments
         $extra_str = null;
@@ -464,38 +439,46 @@ final class CmsFormUtils
 
         // make sure we have all the data in mactparms and tagparams, and extraparms
         $extraparms = null;
+        if ($gCms->test_state(CmsApp::STATE_LOGIN_PAGE)) {
+            $tagparms['action'] = 'login.php';
+        }
+        else if ($mactparms['module']) {
+            // link to module action
+            if( !$mactparms['returnid'] ) {
+                // link to admin action
+                $tagparms['action'] = 'moduleinterface.php';
+                if( empty($mactparms['action'] ) ) $mactparms['action'] = 'defaultadmin';
+                if (!$mactparms['mid']) $mactparms['mid'] = 'm1_';
+            }
+            else {
+                // link to frontend action
+                $tagparms['action'] = 'index.php';
+                if( empty($mactparms['action']) ) $mactparms['action'] = 'default';
+                $hm = $gCms->GetHierarchyManager();
+                $node = $hm->sureGetNodeById($mactparms['returnid']);
+                if (!$node) {
+                    cms_error("Call to CmsFormUtils::create_form_start with an invalid returnid");
+                    return;
+                }
+
+                $content_obj = $node->getContent();
+                if( !$content_obj ) {
+                    cms_error("Call to CmsFormUtils::create_form_start with an invalid returnid");
+                    return;
+                }
+                $tagparms['action'] = $content_obj->GetURL();
+                if( empty($mactparms['mid']) ) $mactparms['mid'] = 'cntnt01';
+                if( empty($mactparms['inline']) ) $mactparms['inline'] = false;
+            }
+        }
         if (!$gCms->is_frontend_request()) {
             // admin request
-            if( !$tagparms['action'] ) $tagparms['action'] = 'moduleinterface.php';
-            if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
-            if( $mactparms['module'] ) {
-                //if( !$mactparms['returnid'] ) $mactparms['returnid'] = $gCms->get_content_id();
-                if( !$mactparms['action'] ) $mactparms['action'] = 'default';
-                if( $mactparms['returnid'] > 0 ) {
-                    $hm = $gCms->GetHierarchyManager();
-                    $node = $hm->sureGetNodeById($mactparms['returnid']);
-                    if($node ) {
-                        $content_obj = $node->getContent();
-                        if($content_obj ) $tagparms['action'] = $content_obj->GetURL();
-                    }
-                }
-            }
             if( !isset($mactparms['returnid']) || $mactparms['returnid'] < 1 ) {
                 // not frontend request, not linking to a frontend url.
                 if( isset($_SESSION[CMS_USER_KEY]) ) $extraparms[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-            }
-        }
-        else {
-            // frontend request
-            if( !$tagparms['action'] ) {
-                if( !isset($mactparms['module']) ) {
-                    cms_error('Call to CmsFormUtils::create_form_start for admin form does not have a module or tag action');
-                    return;
-                }
-                $tagparms['action'] = 'index.php';
-                if( !$mactparms['action'] ) $mactparms['action'] = 'defaultadmin';
-                if( !$mactparms['mid'] ) $mactparms['mid'] = 'cntnt01';
-                $mactparms['returnid'] = '';
+            } else if( empty($tagparms['action']) ) {
+                cms_error("Call to CmsFormUtils::create_form_start could not auto-determine valid form action");
+                return;
             }
         }
 

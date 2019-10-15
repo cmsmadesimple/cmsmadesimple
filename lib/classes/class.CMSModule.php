@@ -692,7 +692,7 @@ abstract class CMSModule
                 $this->param_map[trim($param)] = $type;
                 break;
             default:
-                trigger_error('Attempt to set invalid parameter type');
+                trigger_error('Attempt to set invalid parameter type '.$type);
                 break;
         }
     }
@@ -1987,8 +1987,7 @@ abstract class CMSModule
      *
      * @param string $id The id given to the module on execution
      * @param string $action The action that this form should do when the form is submitted
-     * @param string $returnid The id to eventually return to when the module is finished it's task
-     * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
+     * @param string $returnid The id of the content page to receive the request.
      * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
      */
     public function Redirect($id, $action, $returnid='', $params=[], $inline=false)
