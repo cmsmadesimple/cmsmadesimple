@@ -458,7 +458,7 @@ class UserOperations
     public function CheckPermission($userid,$permname)
     {
         $userid = (int) $userid;
-        $username = trim($permname);
+        $permname = trim($permname);
         if( $userid < 1 ) return FALSE;
         if( !$permname ) return FALSE;
 
