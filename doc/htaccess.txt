@@ -59,6 +59,7 @@ RedirectMatch 403 ^.*/uploads/.*\.php$
 RedirectMatch 403 ^.*/assets/.*\.php$
 RedirectMatch 403 ^.*/assets/.*\.tpl$
 RedirectMatch 403 ^.*/assets/.*\.cmsplugin$
+RedirectMatch 403 ^.*/assets/.*\.json$
 RedirectMatch 403 ^.*/assets/configs/.*$
 RedirectMatch 403 ^.*/assets/templates/.*$
 

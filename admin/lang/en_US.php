@@ -71,6 +71,7 @@ $lang['alias'] = "Alias";
 $lang['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page. Change the "Page Alias" to something else.';
 $lang['aliasmustbelettersandnumbers'] = "Alias must be all letters and numbers";
 $lang['aliasnotaninteger'] = "Alias cannot be an integer";
+$lang['invalidalias'] = 'The page alias is invalid';
 $lang['allow_browser_cache'] = "Allow Browser to Cache Pages";
 $lang['allpagesmodified'] = "All pages modified!";
 $lang['all_groups'] = "All Groups";

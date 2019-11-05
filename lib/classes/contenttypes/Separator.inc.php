@@ -55,7 +55,7 @@ class Separator extends ContentBase
         $this->RemoveProperty('tabindex','');
     }
 
-    public function GetURL(bool $rewrite = true)
+    public function GetURL($rewrite = true)
     {
         return '#';
     }

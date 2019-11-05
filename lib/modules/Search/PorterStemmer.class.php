@@ -407,8 +407,8 @@ class PorterStemmer
 
         return preg_match("#($c$v$c)$#", $str, $matches)
                AND strlen($matches[1]) == 3
-               AND $matches[1]{2} != 'w'
-               AND $matches[1]{2} != 'x'
-               AND $matches[1]{2} != 'y';
+               AND $matches[1][2] != 'w'
+               AND $matches[1][2] != 'x'
+               AND $matches[1][2] != 'y';
     }
 }

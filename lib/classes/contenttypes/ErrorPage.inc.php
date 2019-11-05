@@ -42,12 +42,10 @@ class ErrorPage extends Content
         parent::__construct();
 
         global $CMS_ADMIN_PAGE;
-        if( isset($CMS_ADMIN_PAGE) ) {
-            $this->error_types = ['404' => lang('404description'),
-                                       '403' => lang('403description'),
-                                       '503' => lang('503description') ];
-            $this->valid_aliases = [ 'error404', 'error403', 'error503' ];
-        }
+        $this->error_types = ['404' => lang('404description'),
+                              '403' => lang('403description'),
+                              '503' => lang('503description') ];
+        $this->valid_aliases = [ 'error404', 'error403', 'error503' ];
         $this->doAliasCheck = false;
         $this->doAutoAliasIfEnabled = false;
         $this->mType = strtolower(get_class($this));

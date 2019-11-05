@@ -43,7 +43,7 @@ if( isset($params['submit']) ) {
 
     if( count($errors) == 0 ) {
         if( isset($params['destname']) && count($selall) == 1 ) {
-            $destname = trim($params['destname']);
+            $destname = trim(cleanValue($params['destname']));
             if( $destname == '' ) $errors[] = $this->Lang('invaliddestname');
         }
 

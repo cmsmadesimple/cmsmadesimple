@@ -157,7 +157,7 @@ class PageLink extends ContentBase
         }
     }
 
-    public function GetURL(bool $rewrite = true)
+    public function GetURL($rewrite = true)
     {
         $page = $this->GetPropertyValue('page');
         $params = $this->GetPropertyValue('params');
