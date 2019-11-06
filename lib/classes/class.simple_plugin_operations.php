@@ -166,7 +166,9 @@ final class simple_plugin_operations
             $smarty = null;
             $gCms = cmsms(); // put this in scope.
             if( isset($args[1]) ) $smarty = $args[1];
-            include( $fn );
+            $res = include( $fn );
+	    if( is_int($res) && $res === 1 ) return;
+	    return $res;
         }
         catch( \Throwable $e ) {
             cms_error('ERROR: '.$e->GetMessage().' at '.$e->GetFile().'::'.$e->GetLine(), 'Calling simple plugin '.$name);
