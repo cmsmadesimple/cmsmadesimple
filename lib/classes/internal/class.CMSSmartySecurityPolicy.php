@@ -56,7 +56,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                                         'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen',
                                         'array_search','array_reverse', 'array_flip','shuffle','array_rand','sort','ksort','asort',
 					'array_sum', 'array_diff', 'array_combine',
-                                        'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump',
+                                        'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump', 'number_format',
                                         'debug_display','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
                                         'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool', 'min', 'max' ];
             }

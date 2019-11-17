@@ -1,5 +1,8 @@
 Version 2.2.13 - Moosomin
 -------------------------------
+Core - General
+   - Explicitly add a function or two to the allowed functions in PHP secure mode.
+
 DesignManger v1.1.7
    - Fix a warning in PHP 7.3+
 
