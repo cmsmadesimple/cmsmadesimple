@@ -58,7 +58,7 @@ final class smarty_security_policy extends \Smarty_Security
                                         'array_search','array_reverse', 'array_flip','shuffle','array_rand','sort','ksort','asort',
 					'array_sum', 'array_diff', 'array_combine',
                                         'nl2br','file_exists', 'is_object', 'is_file','is_dir','basename', 'dirname',
-                                        'debug_display','var_dump','print_r','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
+                                        'debug_display','var_dump','print_r','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email', 'number_format',
                                         'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool','min', 'max' ];
                 // anything in this allowed list can also be used as a modifier.
                 $this->php_modifiers = $this->php_functions;
