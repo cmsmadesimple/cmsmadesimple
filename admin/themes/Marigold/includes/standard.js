@@ -434,14 +434,10 @@
             var $header = $('header.header');
             var offset = $header.outerHeight() + $header.offset().top;
             if( $alert_box.length ) offset = $alert_box.outerHeight() + $alert_box.offset().top;
-            console.debug('menu height = '+$menu.outerHeight()+' offset = '+offset);
-            console.debug('window height = '+$(window).height());
             if( $menu.outerHeight() + offset < $(window).height() ) {
-                console.debug('fixed');
                 $menu.css({ 'position': 'fixed', 'top': offset });
             } else {
                 $menu.css({ 'position': '', 'top': '' });
-                console.debug('floating');
                 if( $menu.offset().top < $(window).scrollTop() ) {
                     //if the top of the menu is not visible, scroll to it.
                     $('html, body').animate({
