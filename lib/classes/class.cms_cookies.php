@@ -60,11 +60,6 @@ final class cms_cookies
     /**
      * @ignore
      */
-    private static $_mgr;
-
-    /**
-     * @ignore
-     */
     final private function __construct()
     {
     }
@@ -73,11 +68,9 @@ final class cms_cookies
     /**
      * @ignore
      */
-    final private function _mgr()
+    final private static function _mgr()
     {
-        static $_mgr;
-        if( !$_mgr ) $_mgr = CmsApp::get_instance()->get_cookie_manager();
-        return $_mgr;
+        return CmsApp::get_instance()->get_cookie_manager();
     }
 
     /**
