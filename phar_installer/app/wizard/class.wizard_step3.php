@@ -136,13 +136,13 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_ziparchive';
         $tests[] = $obj;
 
-	// required test...  magic_quotes_runtime
-	if( version_compare(phpversion(),'7.4') < 0 ) {
+        // required test...  magic_quotes_runtime
+        if( version_compare(phpversion(),'7.4') < 0 ) {
             $obj = new _tests_\boolean_test('magic_quotes_runtime',!get_magic_quotes_runtime());
             $obj->required = 1;
             $obj->fail_key = 'fail_magic_quotes_runtime';
-	    $tests[] = $obj;
-	}
+            $tests[] = $obj;
+        }
 
         // required test... multibyte extensions
         $obj = new _tests_\boolean_test('multibyte_support',_tests_\test_extension_loaded('mbstring') && function_exists('mb_get_info'));

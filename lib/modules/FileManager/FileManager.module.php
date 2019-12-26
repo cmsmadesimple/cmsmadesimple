@@ -321,12 +321,15 @@ final class FileManager extends CMSModule
         return $out;
     }
 
-    protected function encodefilename($filename) {
-        return str_replace("==","",base64_encode($filename));
+    protected function encodefilename($filename)
+    {
+        return base64_encode(sha1($this->config['dbpassword'].__FILE__.$filename).'|'.$filename);
     }
 
-    protected function decodefilename($encodedfilename) {
-        return base64_decode($encodedfilename."==");
+    protected function decodefilename($encodedfilename)
+    {
+        list($sig,$filename) = explode('|',base64_decode($encodedfilename),2);
+        if( sha1($this->config['dbpassword'].__FILE__.$filename) == $sig ) return $filename;
     }
 
     public function GetAdminMenuItems()
