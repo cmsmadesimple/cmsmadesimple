@@ -864,30 +864,29 @@ final class ContentListBuilder
             $rec['can_delete'] = $rec['can_edit'] && $mod->CheckPermission('Remove Pages');
             $rec['template'] = $rec['template_id'] = $rec['template_rsrc'] = null;
             $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
-            if( $rec['can_edit_tpl'] ) {
-                // sets the template related fields.
-                $rsrc = $content->TemplateResource(); // could be a template id or a resource string.
-                if( is_int($rsrc) || $rsrc > 0 && (int)$rsrc == $rsrc ) {
-                    $rsrc = 'cms_template:'.$rsrc;
-                }
-                $rec['template_rsrc'] = $rsrc;
-                if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
-                    $rec['can_edit_tpl'] = false;
-                    $rec['template'] = ($rsrc) ? $gCms->get_page_template_label($rsrc) : null;
-                } else {
-                    $tpl_id = (int) substr($rsrc,strlen('cms_template:'));
-                    if( $tpl_id > 0 ) {
-                        try {
-                            $tpl_ob = CmsLayoutTemplate::load($tpl_id);
-                            if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
-                            $rec['template'] = $gCms->get_page_template_label($tpl_id) ?: null;
-                            $rec['template_id'] = $tpl_id;
-                        }
-                        catch( \Exception $e ) {
-                          // can't edit this content object, cuz we can't get the template associated with it.
-                          $rec['can_edit'] = false;
-                          $rec['can_edit_tpl'] = false;
-                        }
+
+            // sets the template related fields.
+            $rsrc = $content->TemplateResource(); // could be a template id or a resource string.
+            if( is_int($rsrc) || $rsrc > 0 && (int)$rsrc == $rsrc ) {
+                $rsrc = 'cms_template:'.$rsrc;
+            }
+            $rec['template_rsrc'] = $rsrc;
+            if( !$rsrc || !$content->IsViewable() || !startswith($rsrc,'cms_template:') ) {
+                $rec['can_edit_tpl'] = false;
+                $rec['template'] = ($rsrc) ? $gCms->get_page_template_label($rsrc) : null;
+            } else {
+                $tpl_id = (int) substr($rsrc,strlen('cms_template:'));
+                if( $tpl_id > 0 ) {
+                    try {
+                        $tpl_ob = CmsLayoutTemplate::load($tpl_id);
+                        if( !$tpl_ob ) throw new \RuntimeException('no such template '.$tpl_id);
+                        $rec['template'] = $gCms->get_page_template_label($tpl_id) ?: null;
+                        $rec['template_id'] = $tpl_id;
+                    }
+                    catch( \Exception $e ) {
+                        // can't edit this content object, cuz we can't get the template associated with it.
+                        $rec['can_edit'] = false;
+                        $rec['can_edit_tpl'] = false;
                     }
                 }
             }
