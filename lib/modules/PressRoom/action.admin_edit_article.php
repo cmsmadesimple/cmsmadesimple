@@ -224,7 +224,7 @@ try {
     if( empty($author_list) && $article->author_id > 0 ) {
         // user can own perms, AND can approve them
         // so we will display the users username.
-        $user = $gCms->GetUserOperations()->LoadUsersByID( $article->author_id );
+        $user = $gCms->GetUserOperations()->LoadUserByID( $article->author_id );
         if( $user ) $author_name = $user->username;
     }
 

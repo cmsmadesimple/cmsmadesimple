@@ -39,7 +39,7 @@ if( $this->CheckPermission( PressRoom::MANAGE_PERM ) ) {
     // can edit all articles
 }
 else if( $this->CheckPermission( PressRoom::APPROVE_PERM ) ) {
-    // can view all articles, if have own_perm may be able to edit some
+    // can view all articles, if have own_perm may also be able to edit some
 }
 else if( $this->CheckPermission( PressRoom::OWN_PERM ) ) {
     // can only see their articles
