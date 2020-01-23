@@ -409,7 +409,7 @@ abstract class CmsAdminThemeBase
         $this->_perms['adminPerms'] = $this->_perms['sitePrefPerms'] |
             (isset($this->_sectionCount['siteadmin']) && $this->_sectionCount['siteadmin'] > 0);
         $this->_perms['siteAdminPerms'] = $this->_perms['sitePrefPerms'] |
-        $this->_perms['adminPerms'] | (isset($this->_sectionCount['siteadmin']) && $this->_sectionCount['siteadmin'] > 0);
+            $this->_perms['adminPerms'] | (isset($this->_sectionCount['siteadmin']) && $this->_sectionCount['siteadmin'] > 0);
 
         // extensions
         $this->_perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
@@ -529,15 +529,15 @@ abstract class CmsAdminThemeBase
         $items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin','priority'=>2,
         'title' => $this->_FixSpaces(lang('systeminfo')),
         'description' => lang('systeminfodescription'),
-        'show_in_menu' => $this->HasPerm('adminPerms'));
+        'show_in_menu' => $this->HasPerm('sitePrefPerms'));
         $items['systemmaintenance'] = array('url' => 'systemmaintenance.php','priority'=>1,'parent' => 'siteadmin',
          'title' => $this->_FixSpaces(lang('systemmaintenance')),
          'description' => lang('systemmaintenancedescription'),
-         'show_in_menu' => $this->HasPerm('adminPerms'));
+         'show_in_menu' => $this->HasPerm('sitePrefPerms'));
         $items['checksum'] = array('url' => 'checksum.php', 'parent' => 'siteadmin','priority'=>4,
          'title' => $this->_FixSpaces(lang('system_verification')),
          'description' => lang('checksumdescription'),
-         'show_in_menu' => $this->HasPerm('adminPerms'));
+         'show_in_menu' => $this->HasPerm('sitePrefPerms'));
         // base my prefs menu ---------------------------------------------------------
         $items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,'priority'=>8,
         'title'=>$this->_FixSpaces(lang('myprefs')),
