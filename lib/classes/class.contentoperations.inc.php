@@ -817,7 +817,7 @@ class ContentOperations
             }
 
             if( isset($contentprops[$id]) ) $row['_props'] = $contentprops[$id];
-            if( isset($addtusers[$id]) ) $row['_editors'] = $contentprops[$id];
+            if( isset($addteditors[$id]) ) $row['_editors'] = $contentprops[$id];
             $contentobj->LoadFromData($row);
             $this->put_cached_content($contentobj);
         }
