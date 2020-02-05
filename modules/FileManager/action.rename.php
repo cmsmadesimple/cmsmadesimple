@@ -27,7 +27,7 @@ $oldname=$this->decodefilename($selall[0]);
 $newname=$oldname; //for initial input box
 
 if (isset($params["newname"])) {
-  $newname=strip_tags(trim($params["newname"])));
+  $newname=strip_tags(trim($params["newname"]));
   if (!filemanager_utils::is_valid_filename($newname)) {
     echo $this->ShowErrors($this->Lang("invaliddestname"));
   } else {
