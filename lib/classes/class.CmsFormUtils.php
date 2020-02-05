@@ -408,7 +408,7 @@ final class CmsFormUtils
                 case 'enctype':
                 case 'id':
                 case 'class':
-                    $tagparms[$key] = trim($value);
+                    $tagparms[$key] = trim((string)$value);
                     break;
 
                 case 'extraparms':
