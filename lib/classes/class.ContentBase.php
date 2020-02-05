@@ -1260,12 +1260,22 @@ abstract class ContentBase
     }
 
     /**
+     * Callback function for content types to use to preset data or other things as necessary.
+     * This is called immediately before database operations to save the properties and data.
+     *
+     * @abstract
+     * @since 2.3
+     */
+    protected function PreSave()
+    {
+    }
+
+    /**
      * Test if the content object is valid.
      * This function is used to check that no compulsory argument
      * has been forgotten by the user
      *
      * We do not check the Id because there can be no Id (new content)
-     * That's up to Save to check this.
      *
      * @abstract
      * @returns	mixed On error returns an array of strings, otherwise FALSE

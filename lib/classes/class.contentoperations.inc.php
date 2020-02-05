@@ -1399,6 +1399,7 @@ class ContentOperations
     {
         $this->app->get_hook_manager()->emit('Core::ContentEditPre', [ 'content' => &$content ] );
 
+        $content->PreSave();
         if( $content->id() < 1) {
             $content = $this->insert_content($content);
         }
