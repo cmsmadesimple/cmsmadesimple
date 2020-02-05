@@ -1266,7 +1266,7 @@ abstract class ContentBase
      * @abstract
      * @since 2.3
      */
-    protected function PreSave()
+    public function PreSave()
     {
     }
 
