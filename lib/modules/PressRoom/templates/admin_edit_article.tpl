@@ -92,10 +92,10 @@ $(function(){
 
 <div class="c_full cf">
   <input type="submit" name="submit" value="{$mod->Lang('submit')}"/>
+  <input type="submit" name="cancel" value="{$mod->Lang('cancel')}" formnovalidate/>
   {if $article->id > 0}
   <input type="submit" name="apply" value="{$mod->Lang('apply')}"/>
   {/if}
-  <input type="submit" name="cancel" value="{$mod->Lang('cancel')}" formnovalidate/>
 </div>
 
 {tab_header name='content' label=$mod->Lang('tab_content')}
