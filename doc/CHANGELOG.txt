@@ -1,4 +1,4 @@
-Version 2.3 - NO NAME SET
+Version 2.3 - Denmark
 ----------------------------------
 Core - General
   - IMPROVEMENT: Upgrade Smarty to v3.1.33 and now use composer
@@ -202,10 +202,9 @@ Core - General
   - FEATURE: new function cms_fix_path() which will assume strings that are NOT URI's represent paths and will correct them to use
      platform specific directory separators.   This should be used as much as possible instead of cms_join_path and DIRECTORY_SEPARATOR
      as it will allow uri's like file:/// and ssh://  and phar:// to pass through to other file operations like is_file() etc.
-  - FEATURE: Now catch \Throwable errors whenever including a user editable file which allows us to catch syntax errors and in some 
+  - FEATURE: Now catch \Throwable errors whenever including a user editable file which allows us to catch syntax errors and in some
      cases class not found errors etc.  which is a serious stability improvement for CMSMS.
   - Improvements to the CMSMS autoloader
-
 
 PressRoom v1.0
   - New core example module to demonstrate module development techniques.  It allows managing and displaying time limited content.
@@ -216,7 +215,7 @@ CMSContentManager - 1.2
   - CHANGE: modified to use CMS_ROOT_URL
   - CHANGE: Change connection timeout to 1 second.
   - CHANGE: processing to be a little more friendly to some environments wrt. content-size header.
-  - FEATURE: Adds expand/functionality into reorder content (TODO: needs styling)
+  - FEATURE: Adds expand/collapse functionality into reorder content
   - FEATURE: Adds new 'add child here' icon in the content list.
   - FEATURE: Find functionality in content list can now search on page alias and url.
   - FEATURE: Allow setting the default content page from within the page edit form (for pages where it is possible, and permission allows)
@@ -253,14 +252,14 @@ ModuleManager v2.2
 
 FileManager v1.6.4
   - When advanced mode is permitted, and enabled access to a simple text file editor (supports syntax hilighters)
-    to allow developers to make simple edits to and also create text files that are writable by the web server.  
+    to allow developers to make simple edits to and also create text files that are writable by the web server.
   - modified to use CMS_ROOT_URL
   - Add a different icon for navigating up one level.
   - No longer allow uploading any php (or derivative) file.
   - No longer allow renaming any file to have a .php extension (or a derivative).
   - Now use CMSMS error console when displaying filepicker exceptions (no uncaught exceptions)
   - Removes all support for events, now uses hooks
-  - FEATURE: New ability to add and edit simple text files.  Useful for quick edits on small config files and simple template changes.  
+  - FEATURE: New ability to add and edit simple text files.  Useful for quick edits on small config files and simple template changes.
 
 FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.

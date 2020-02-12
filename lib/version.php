@@ -19,8 +19,8 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.3-beta10";
-$CMS_VERSION_NAME = "NO NAME SET";
+$CMS_VERSION = "2.3";
+$CMS_VERSION_NAME = "Denmark";
 $CMS_SCHEMA_VERSION = '204';
 
 define('CMS_VERSION', $CMS_VERSION);
