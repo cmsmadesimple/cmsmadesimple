@@ -1988,6 +1988,7 @@ abstract class CMSModule
      * @param string $id The id given to the module on execution
      * @param string $action The action that this form should do when the form is submitted
      * @param string $returnid The id of the content page to receive the request.
+     * @param array $params An array of parameters to the output action
      * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
      */
     public function Redirect($id, $action, $returnid='', $params=[], $inline=false)
