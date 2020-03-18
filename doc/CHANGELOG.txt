@@ -1,4 +1,4 @@
-Version 2.2.14 - NO NAME SET
+Version 2.2.14 - T'Sou-ke
 -------------------------------
 Core - General
   - Site Prefs, remove submit confirmation.
