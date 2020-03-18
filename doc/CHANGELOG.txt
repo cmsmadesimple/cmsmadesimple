@@ -5,12 +5,15 @@ Core - General
   - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
   - System Maintenance, remove confirmation update page hierarchy positions and routes.
 
-Search
-  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+News
+  - Minor code improvements/fixes.
 
 Phar Installer
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
   - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated".
+
+Search
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
 
 
 Version 2.2.13 - Moosomin
