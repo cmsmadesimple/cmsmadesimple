@@ -151,7 +151,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
   $indent = (isset($_POST['indent']) ? true : false);
   $paging = (isset($_POST['paging']) ? 1 : 0);
-  $date_format_string = trim(strip_tags($_POST['date_format_string']));
+  $date_format_string = trim(strip_tags(cleanValue($_POST['date_format_string'])));
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
   $homepage = cleanValue($_POST['homepage']);
@@ -167,7 +167,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   cms_userprefs::set_for_user($userid, 'hide_help_links', $hide_help_links);
   cms_userprefs::set_for_user($userid, 'indent', $indent);
   cms_userprefs::set_for_user($userid, 'paging', $paging);
-  cms_userprefs::set_for_user($userid, 'date_format_string', $date_format_string);
+  cms_userprefs::set_for_user($userid, 'date_format_string', strip_tags($date_format_string));
   cms_userprefs::set_for_user($userid, 'default_parent', $default_parent);
   cms_userprefs::set_for_user($userid, 'homepage', $homepage);
 
