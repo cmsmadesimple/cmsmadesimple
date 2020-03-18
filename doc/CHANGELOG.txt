@@ -1,11 +1,14 @@
 Version 2.2.14 - NO NAME SET
 -------------------------------
+Core - General
+  - Site Prefs, remove submit confirmation.
+
 Search
-  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated"
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
 
 Phar Installer
-  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated"
-  - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated"
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+  - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated".
 
 
 Version 2.2.13 - Moosomin
@@ -14,14 +17,14 @@ Core - General
    - Explicitly add a function or two to the allowed functions in PHP secure mode.
 
 DesignManger v1.1.7
-   - Fix a warning in PHP 7.3+
+   - Fix a warning in PHP 7.3+.
 
 FileManager v1.6.10
    - Fix minor XSS vulnerabilities in FileManager.
 
 News v2.51.8
-   - Fix a security issue in the default action with the idlist param
-   (This version was also separately released in the forge)
+   - Fix a security issue in the default action with the idlist param.
+   (This version was also separately released in the forge).
 
 
 Version 2.2.12 - Osoyoos
@@ -29,7 +32,7 @@ Version 2.2.12 - Osoyoos
 NOTICE: Due to the nature of the security issue fixed in FileManager after upgrading you should change your database password.
 
 Core - General
-  - Fix warning in cms_html_entity_decode
+  - Fix warning in cms_html_entity_decode.
 
 FileManager v1.6.9.1
   - Security fixes for view action.
@@ -52,7 +55,7 @@ CMSContentManager v1.1.8
 ModuleManager v2.1.7
   - Minor exception handling improvements.
   - Minor improvement to dependency detection with modules that do not exist in ModuleRepository.
-  - Minor fixes for php 7.3
+  - Minor fixes for php 7.3.
 
 News v2.51.6
   - Minor improvements for CMSMS v2.3 compatibility.
