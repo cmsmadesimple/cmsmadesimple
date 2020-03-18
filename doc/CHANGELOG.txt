@@ -7,13 +7,14 @@ Core - General
   - BR #12227 - Stored Cross-Site Scripting
 
 Design Manager
-  - BR #12225 - Reflected Cross-Site Scripting
+  - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 File Manager
-  - BR #12224 - Reflected Cross-Site Scripting
+  - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 News
   - BR #12207 - Can't display image in news when using upload field.
+  - BR #12228 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - Minor code fix.
 
 Phar Installer
