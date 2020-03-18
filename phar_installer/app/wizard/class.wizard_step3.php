@@ -130,7 +130,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_ziparchive';
         $tests[] = $obj;
 
-        // required test...  magic_quotes_runtime
+        // required test...  magic_quotes_runtime #TODO remove on 2.3 if not removed already as it was removed from PHP since v 5.4.0 (JM)
         $obj = new _tests_\boolean_test('magic_quotes_runtime',function_exists(get_magic_quotes_runtime) && !get_magic_quotes_runtime());
         $obj->required = 1;
         $obj->fail_key = 'fail_magic_quotes_runtime';
