@@ -51,14 +51,26 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                 $this->static_classes = null;
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
-                $this->php_functions = ['isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
-                                        'date','strftime','strtotime',
-                                        'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen',
-                                        'array_search','array_reverse', 'array_flip','shuffle','array_rand','sort','ksort','asort',
-					'array_sum', 'array_diff', 'array_combine',
-                                        'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump', 'number_format',
-                                        'debug_display','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
-                                        'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool', 'min', 'max' ];
+                $this->php_functions = [
+                    'array_sum','array_combine','array_diff','array_flip','array_rand','array_reverse','array_search','asort',
+                    'cms_html_entity_decode','cms_to_bool','count',
+                    'date','debug_display',
+                    'empty','endswith','explode',
+                    'file_exists',
+                    'getimagesize',
+                    'htmlspecialchars','htmlspecialchars_decode',
+                    'implode','in_array','is_array','is_dir','is_email','is_file','is_object','is_string','isset',
+                    'json_decode','json_encode',
+                    'ksort',
+                    'lang',
+                    'max','min',
+                    'nl2br','number_format',
+                    'print_r',
+                    'shuffle','sizeof','sort','startswith','str_replace','strcasecmp','strcmp','strftime','strlen','strpos','strtolower','strtotime','strtoupper','substr',
+                    'time',
+                    'urlencode',
+                    'var_dump'
+                ];
             }
         }
         else {
