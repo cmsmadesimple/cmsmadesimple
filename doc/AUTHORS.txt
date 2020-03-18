@@ -1,15 +1,17 @@
 Developers Past and Present
 ---------------------------
+- Fernando Morgado - <fjmorgado [AT] gmail [DOT] com>
+- Rolf - <rolf [AT] cmscanbesimple [DOT] org>
+- Mathieu Muths (AirLibre)
+- Chris Taylor (chrisbt)
+- Morten Poulsen <morten [AT] poulsen [DOT] org>
+
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Tapio Löytty - stikki [AT] cmsmadesimple [AT] org
 - Goran Ilic - g [DOT] ilic [AT] i-arts [DOT] eu
-- Rolf - <rolf [AT] cmsmadesimple [DOT] org>
-- Mark Reed <drcss [AT] cmsmadesimple [DOT] org>
-- Morten Poulsen <morten [AT] poulsen [DOT] org>
 - Ronny Krijt - <ronnyk [AT] cmsmadesimple [DOT] org>
 - Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
-- Fernando Morgado -- fjmorgado {AT] gmail {DOT] com
-
+- Mark Reed <drcss [AT] cmsmadesimple [DOT] org>
 - Nuno Costa <nuno [AT] criacaoweb [DOT] net>
 - Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>

@@ -18,7 +18,7 @@ Version 2.2.13 - Moosomin
 Core - General
    - Explicitly add a function or two to the allowed functions in PHP secure mode.
 
-DesignManger v1.1.7
+DesignManager v1.1.7
    - Fix a warning in PHP 7.3+.
 
 FileManager v1.6.10
@@ -153,8 +153,8 @@ Core - General
   - Minor fix to pagination in Admin log.
   - Change Finnish locale priorities so that UTF-8 is first.
   - Minor fix to calling hooks with a single associative array parameter.
-  - Adds new HookManager::do_hook_first_result() method
-  - cangegroupperms now calls HookManager::do_hook_first_result
+  - Adds new HookManager::do_hook_first_result() method.
+  - cangegroupperms now calls HookManager::do_hook_first_result.
   - Minor enhancement to moduleoperations::_load_module() to check if the class exists.
   - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
   - Deprecate CMSModule::SetParameterType and CMSModule::CreateParameter methods.
@@ -302,7 +302,7 @@ Core - General
   - adds new cms_entities_array function in misc to convert an array recursively to values.
   - Fixes transposed arguments in UserOperations::AddMemberGroup().
   - Better detection of duplicate content blocks.
-  - Revert template_stack change to Smarty_CMS from 2.2.2
+  - Revert template_stack change to Smarty_CMS from 2.2.2.
   - Improvements to HookManager.
 
 CmsJobManager v0.1.1
@@ -341,7 +341,7 @@ Navigator v1.0.8
 
 Installation Assistant v1.3.3
   - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
-  - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception)
+  - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception).
 
 
 Version 2.2.2 - Hearts Content
