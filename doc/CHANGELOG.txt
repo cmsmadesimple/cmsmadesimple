@@ -1,6 +1,7 @@
 Version 2.2.14 - T'Sou-ke
 -------------------------------
 Core - General
+  - fixes to the class.CmsAdminThemeBase.php regarding main sections title and breadcrumbs generation;
   - Explicitly add getimagesize function to the allowed functions in PHP secure mode.
   - Site Prefs, remove submit confirmation.
   - System Maintenance, remove confirmation update page hierarchy positions and routes.
