@@ -718,8 +718,8 @@ abstract class CmsAdminThemeBase
                     }
 				}
 			}
-			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
-					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
+			else if(strstr($_SERVER['REQUEST_URI'], htmlspecialchars_decode($sectionArray['url']))!== FALSE &&
+					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external') ){
                 // this handles selecting internal actions that are not part of modules
                 // i.e (admin/somefile.php stuff)
                 $selected_key = $sectionKey;
@@ -748,7 +748,36 @@ abstract class CmsAdminThemeBase
                                                   'url'=>$this->_menuItems[$parent]['url']);
                     $parent = $this->_menuItems[$parent]['parent'];
                 }
+        
+      }
+      else
+      {
+        // so we are in a section?
+        // if it's the cms / home section we'll have to force it
+        // otherwise no need to do anything...
+        
+        if($selected_key == 'main')
+        {
+          $item                 =& $this->_menuItems[$selected_key];
+          $item['selected']     = TRUE;
+          $this->_active_item   = $selected_key;
+          $this->_menuItems[$item['parent']]['selected'] = TRUE;
             }
+      }
+      
+      $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+    }
+    else
+    {
+      // we didn't get anything? we most likelly are in admin home right after loggin in
+      // we'll have to force the default settings
+      $selected_key         = 'home';
+      $item                 =& $this->_menuItems[$selected_key];
+      $item['selected']     = TRUE;
+      $this->_title         .= $item['title'];
+      $this->_active_item   = $selected_key;
+      $this->_menuItems[$item['parent']]['selected'] = TRUE;
+      $this->_breadcrumbs[] = array('title' => $item['title'], 'url' => $item['url']);
             $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
         }
 
