@@ -3,6 +3,7 @@ Version 2.2.14 - NO NAME SET
 Core - General
   - Site Prefs, remove submit confirmation.
   - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+  - System Maintenance, remove confirmation update page hierarchy positions and routes.
 
 Search
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".

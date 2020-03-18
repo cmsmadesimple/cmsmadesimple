@@ -54,7 +54,7 @@
 
 		<fieldset>
 			<legend>{'sysmain_content_status'|lang}&nbsp;</legend>
-			<form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdatehierarchy'|lang|escape:'javascript'}')" >
+			<form action="{$formurl}" method="post">
 				{$pagecount} {'sysmain_pagesfound'|lang}
 
 				<div class="pageoverflow">
@@ -65,7 +65,7 @@
 				</div>
 			</form>
 
-			<form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdateurls'|lang|escape:'javascript'}')" >
+			<form action="{$formurl}" method="post">
 				<div class="pageoverflow">
 					<p class="pagetext">{'sysmain_updateurls'|lang}:</p>
 					<p class="pageinput">
