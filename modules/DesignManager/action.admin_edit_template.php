@@ -79,7 +79,7 @@ try {
             if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
             $tpl_obj->set_listable(isset($params['listable'])?$params['listable']:1);
             if( isset($params['contents']) ) $tpl_obj->set_content($params['contents']);
-            $tpl_obj->set_name($params['name']);
+            $tpl_obj->set_name(strip_tags($params['name']));
 
             if ($this->CheckPermission('Manage Designs')) {
                 $design_list = array();

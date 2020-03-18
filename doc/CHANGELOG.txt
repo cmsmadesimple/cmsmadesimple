@@ -5,6 +5,12 @@ Core - General
   - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
   - System Maintenance, remove confirmation update page hierarchy positions and routes.
 
+Design Manager
+  - BR #12225 - Reflected Cross-Site Scripting
+
+File Manager
+  - BR #12224 - Reflected Cross-Site Scripting
+
 News
   - BR #12207 - Can't display image in news when using upload field.
   - Minor code fix.
