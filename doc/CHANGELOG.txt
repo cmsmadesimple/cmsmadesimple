@@ -6,7 +6,8 @@ Core - General
   - System Maintenance, remove confirmation update page hierarchy positions and routes.
 
 News
-  - Minor code improvements/fixes.
+  - BR #12207 - Can't display image in news when using upload field.
+  - Minor code fix.
 
 Phar Installer
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
