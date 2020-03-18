@@ -1,3 +1,13 @@
+Version 2.2.14 - NO NAME SET
+-------------------------------
+Search
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated"
+
+Phar Installer
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated"
+  - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated"
+
+
 Version 2.2.13 - Moosomin
 -------------------------------
 Core - General
@@ -13,6 +23,7 @@ News v2.51.8
    - Fix a security issue in the default action with the idlist param
    (This version was also separately released in the forge)
 
+
 Version 2.2.12 - Osoyoos
 -------------------------------
 NOTICE: Due to the nature of the security issue fixed in FileManager after upgrading you should change your database password.
@@ -22,6 +33,7 @@ Core - General
 
 FileManager v1.6.9.1
   - Security fixes for view action.
+
 
 Version 2.2.11 - Vulcan
 -------------------------------

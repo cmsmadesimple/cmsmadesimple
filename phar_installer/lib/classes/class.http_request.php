@@ -1307,7 +1307,7 @@ class http_request
     */
     function _domainMatch($requestHost, $cookieDomain)
     {
-        if ('.' != $cookieDomain{0})
+        if ('.' != $cookieDomain[0])
         {
             return $requestHost == $cookieDomain;
         }
