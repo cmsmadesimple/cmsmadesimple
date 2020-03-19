@@ -9,6 +9,7 @@ Core - General
   - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
   - BR #12172 - CronJobTrait undefined constants.
   - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+  - BR #12272 - Internal page link - selecting destination page problem.
 
 Design Manager
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
