@@ -7,6 +7,7 @@ Core - General
   - Site Prefs, remove submit confirmation.
   - System Maintenance, remove confirmation update page hierarchy positions and routes.
   - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+  - BR #12172 - CronJobTrait undefined constants.
   - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 Design Manager

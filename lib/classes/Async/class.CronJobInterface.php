@@ -55,7 +55,7 @@ interface CronJobInterface
     /**
      * Constant indicating that this job does not recur (empty string is also used).
      */
-    const RECUR_NONE  = '_none';
+    const RECUR_NONE = '_none';
 
     /**
      * Constant indicating that ths job should recur every 15 minutes.
@@ -70,30 +70,37 @@ interface CronJobInterface
     /**
      * Constant indicating that ths job should recur every hour.
      */
-    const RECUR_HOURLY  = '_hourly';
+    const RECUR_HOURLY = '_hourly';
 
     /**
      * Constant indicating that ths job should recur every 2 hours.
      */
     const RECUR_120M = '_120m';
+    const RECUR_2H = '_120m';
 
     /**
      * Constant indicating that ths job should recur every 3 hours.
      */
     const RECUR_180M = '_180m';
+    const RECUR_3H = '_180m';
 
     /**
-     * Constant indicating that ths job should recur daily..
+     * Constant indicating that ths job should recur every 12 hours..
      */
-    const RECUR_DAILY   = '_daily';
+    const RECUR_12H = '_720m';
 
     /**
-     * Constant indicating that ths job should recur weekly..
+     * Constant indicating that ths job should recur daily.
      */
-    const RECUR_WEEKLY  = '_weekly';
+    const RECUR_DAILY = '_daily';
 
     /**
-     * Constant indicating that ths job should recur monthly..
+     * Constant indicating that ths job should recur weekly.
+     */
+    const RECUR_WEEKLY = '_weekly';
+
+    /**
+     * Constant indicating that ths job should recur monthly.
      */
     const RECUR_MONTHLY = '_monthly';
 }
