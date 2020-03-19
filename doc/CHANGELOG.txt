@@ -11,6 +11,9 @@ Core - General
   - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12272 - Internal page link - selecting destination page problem.
 
+AdminSearch
+  - Remove click thru warning.
+  
 CMSContentManager
   - Fix notices in edit content template.
   - Fix notice in default admin view.

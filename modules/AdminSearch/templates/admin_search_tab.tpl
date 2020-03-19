@@ -12,9 +12,9 @@
 }
 </style>
 
-<script type="text/javascript">
+<script>
  var ajax_url = '{$ajax_url}';
- var clickthru_msg = '{$mod->Lang('warn_clickthru')|escape:'javascript'}';
+ //var clickthru_msg = '{$mod->Lang('warn_clickthru')|escape:'javascript'}';
  {if isset($saved_search.slaves) && in_array(-1,$saved_search.slaves)}
  var sel_all = 1;
  {/if}
