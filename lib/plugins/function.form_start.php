@@ -138,7 +138,7 @@ function smarty_function_form_start($params, &$smarty)
         }
     }
     foreach( $parms as $key => $value ) {
-        $out .= '<input type="hidden" name="'.$mactparms['mid'].$key.'" value="'.$value.'"/>';
+        $out .= '<input type="hidden" name="'.$mactparms['mid'].$key.'" value="'.$value.'"/>'; // @todo Notice: Array to string conversion in /lib/plugins/function.form_start.php on line 141 -> $value
     }
     $out .= '</div>';
 
