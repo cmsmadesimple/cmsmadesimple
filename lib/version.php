@@ -19,7 +19,7 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.2.13";
+$CMS_VERSION = "2.2.14";
 $CMS_VERSION_NAME = "T'Sou-ke";
 $CMS_SCHEMA_VERSION = '202';
 
