@@ -112,7 +112,7 @@ final class filemanager_utils
         if( !self::test_valid_path($path) ) {
             $path = self::get_default_cwd();
         }
-        if( $path == '' ) $path = '/';
+        //if( $path == '' ) $path = '/'; causes double // in site root
         return $path;
     }
 
