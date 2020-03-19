@@ -22,7 +22,6 @@ if( version_compare($oldversion,'1.6.2') < 0 ) {
 
 
 // do this stuff for all upgrades.
-$this->SetPreference('advancedmode',0);
 $this->RemovePermission('Use Filemanager');
 $this->RegisterModulePlugin(true);
 $this->RemovePreference('uploadboxes');
