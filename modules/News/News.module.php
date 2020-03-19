@@ -239,7 +239,7 @@ class News extends CMSModule
 
     public function get_tasks()
     {
-        if( !$this->GetPreference('alert_drafts',1) ) return;
+        if( !$this->GetPreference('alert_drafts',0) ) return;
         $out = array();
         $out[] = new \News\CreateDraftAlertTask();
         return $out;

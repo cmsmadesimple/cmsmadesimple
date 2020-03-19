@@ -16,9 +16,10 @@ File Manager
   - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 News
+  - Minor code fix.
+  - Alert on unapproved articles disabled by default. Enable at Settings >> Options tab.
   - BR #12207 - Can't display image in news when using upload field.
   - BR #12228 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
-  - Minor code fix.
 
 Phar Installer
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
