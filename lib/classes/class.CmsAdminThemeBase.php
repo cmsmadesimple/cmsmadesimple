@@ -860,7 +860,7 @@ abstract class CmsAdminThemeBase
 		$result = array();
 		$flatitems = $this->get_admin_navigation();
 		foreach( $flatitems as $key => $one ) {
-			if( !isset($one['show_in_menu'])) continue;
+			if( empty($one['show_in_menu']) ) continue;
 			if( (!isset($one['parent']) && $parent == -1) ||
 				(isset($one['parent']) && $one['parent'] == $parent) ) {
 				if( isset($one['children']) ) unset($one['children']);
