@@ -13,6 +13,7 @@ Core - General
 
 CMSContentManager
   - Fix notices in edit content template.
+  - Fix notice in default admin view.
 
 Design Manager
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.

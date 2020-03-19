@@ -101,7 +101,7 @@ if( isset($params['collapse']) ) {
 }
 
 if( isset($params['setinactive']) ) {
-    $builder->set_active($params['setinactive'],FALSE);
+    $res = $builder->set_active($params['setinactive'],FALSE);
     if( !$res ) $error = $this->Lang('error_setinactive');
 }
 
@@ -127,7 +127,7 @@ if( isset($params['movedown']) ) {
 
 if( isset($params['delete']) ) {
     $res = $builder->delete_content($params['delete']);
-    if( $res ) $error = $res;
+    if( $res ) $error = $res; // @todo Rolf: ???
 }
 
 if( isset($params['multisubmit']) && isset($params['multiaction']) &&
