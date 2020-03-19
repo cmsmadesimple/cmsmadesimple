@@ -13,6 +13,7 @@ Design Manager
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 File Manager
+  - BR #12215 - FileManager 1.6.10 crashes when trying to rename a file.
   - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 News
