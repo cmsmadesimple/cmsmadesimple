@@ -56,7 +56,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'cms_html_entity_decode','cms_to_bool','count',
                     'date','debug_display',
                     'empty','endswith','explode',
-                    'file_exists',
+                    'file_exists','function_exists',
                     'getimagesize',
                     'htmlspecialchars','htmlspecialchars_decode',
                     'implode','in_array','is_array','is_dir','is_email','is_file','is_object','is_string','isset',
