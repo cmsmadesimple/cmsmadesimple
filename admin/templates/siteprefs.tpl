@@ -1,3 +1,5 @@
+<div class="pagecontainer">
+
 {tab_header name='general' label=lang('general_settings') active=$tab}
 {tab_header name='editcontent' label=lang('editcontent_settings') active=$tab}
 {tab_header name='sitedown' label=lang('sitedown_settings') active=$tab}
