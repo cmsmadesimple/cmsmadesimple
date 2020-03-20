@@ -3,7 +3,7 @@
 # CMS Made Simple - Power for the professional, Simplicity for the end user.
 # (c) 2004 - 2011 by Ted Kulp
 # (c) 2011 - 2018 by the CMS Made Simple Development Team
-# (c) 2018 - 2020 by the CMS Made Simple Foundation
+# (c) 2018 and beyond by the CMS Made Simple Foundation
 # This project's homepage is: https://www.cmsmadesimple.org
 #---------------------------------------------------------------------------
 # This program is free software; you can redistribute it and/or modify
