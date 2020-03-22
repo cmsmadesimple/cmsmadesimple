@@ -72,10 +72,10 @@
             <img src="{root_url}/lib/assets/images/cmsms-logo.png" alt="CMS Made Simple" />
         </div>
         <div id="wrapper">
-            <h1>Ouch!</h1>
+            <h1>Oops!</h1>
             <p class="info">
-                That's embarrassing... It looks like something went wrong and an error has occurred.<br />
-				The site administrator has been informed about this.
+                It looks like something went wrong and an error has occurred.<br />
+				A notification has been added to the admin log.
             </p>
             <div class="clear"></div>
 			{if $loggedin}
