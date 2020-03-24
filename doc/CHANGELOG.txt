@@ -1,6 +1,7 @@
 Version 2.2.14 - T'Sou-ke
 -------------------------------
 Core - General
+  - BR #12280 - Add Shortcut from Shortcuts modal broken.
   - Fixes to the class.CmsAdminThemeBase.php regarding main sections title and breadcrumbs generation.
   - Explicitly add function_exists and getimagesize functions to the allowed functions in PHP secure mode.
   - Improved Error Console template.

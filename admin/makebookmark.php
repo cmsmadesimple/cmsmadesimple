@@ -25,25 +25,26 @@ require_once('../lib/include.php');
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 include_once("header.php");
-
 check_login();
 $config = cmsms()->GetConfig();
-$link = $_SERVER['HTTP_REFERER'];
+$link = base64_decode($_GET['ref'], TRUE);
+
 $newmark = new Bookmark();
 $newmark->user_id = get_userid();
 $newmark->url = $link;
 $newmark->title = $_GET['title'];
 $result = $newmark->save();
 
-if ($result)
-	{
-	header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
-	redirect($link);
-	}
+if($result)
+{
+	header('Location: //' . $link);
+
+}
 else
-	{
-	include_once("header.php");
-	echo "<h3>". lang('erroraddingbookmark') . "</h3>";
-	}
+{
+	redirect($config['admin_url'] . '/listbookmarks.php?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
+}
+
+
 
 ?>

@@ -241,7 +241,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$marks = $this->get_bookmarks();
 			$smarty->assign('marks', $marks);
 		}
-
 		$smarty->assign('headertext',$this->get_headtext());
         $smarty->assign('footertext',$this->get_footertext());
 

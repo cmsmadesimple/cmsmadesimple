@@ -45,8 +45,9 @@ class BookmarkOperations
    */
   private function _prep_for_saving($url)
   {
+    $root_url = preg_replace('#^http(s)?://#','', CMS_ROOT_URL);
 	  $urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-      if( startswith($url,CMS_ROOT_URL) ) $url = str_replace(CMS_ROOT_URL,'[ROOT_URL]',$url);
+      if( startswith($url,$root_url) ) $url = str_replace($root_url,'[ROOT_URL]',$url);
       $url = str_replace($urlext,'[SECURITYTAG]',$url);
 	  return $url;
   }

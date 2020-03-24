@@ -960,12 +960,14 @@ abstract class CmsAdminThemeBase
 	{
 		$bookops = CmsApp::get_instance()->GetBookmarkOperations();
 		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-
+		
 		if( !$pure ) {
+			$source = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			//$url = str_replace(CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY], '', $source);
 			$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$mark= new Bookmark();
 			$mark->title = lang('addbookmark');
-			$mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->_title);
+			$mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->_title).'&amp;ref='.base64_encode($source);
 			$marks[] = $mark;
 
 			$mark = new Bookmark();
