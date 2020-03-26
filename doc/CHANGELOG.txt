@@ -11,6 +11,7 @@ Core - General
   - BR #12172 - CronJobTrait undefined constants.
   - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12272 - Internal page link - selecting destination page problem.
+  - Backend users, fixed the bulk actions
 
 AdminSearch
   - Remove click thru warning.

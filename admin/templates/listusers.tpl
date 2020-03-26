@@ -47,12 +47,14 @@ $(document).ready(function() {
 	if( v === 'delete' ) {
 	    cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
 	        $('#listusers').unbind('submit');
-		$('#bulksubmit').click();
+            $('#bulksubmit').click();
 	    }).fail(function() {
 	        return false;
 	    });
 	} else {
             cms_confirm('{lang('confirm_bulkuserop')|escape:'javascript'}').done(function(){
+            $('#listusers').unbind('submit');
+            $('#bulksubmit').click();
 	        return true;
 	    });
 	}
