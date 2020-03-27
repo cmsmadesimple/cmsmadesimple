@@ -13,33 +13,33 @@ Core - General
   - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12272 - Internal page link - selecting destination page problem.
 
-AdminSearch v
+AdminSearch v1.0.5
   - Remove click thru warning.
   
-CMSContentManager v
+CMSContentManager v1.1.9
   - Fix notices in edit content template.
   - Fix notice in default admin view.
 
-DesignManager v
+DesignManager v1.1.8
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
-FileManager v
+FileManager v1.6.11
   - Don’t disable advanced mode on upgrade.
   - Fix adding double // in site root link.
   - BR #12215 - FileManager 1.6.10 crashes when trying to rename a file.
   - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
-News v
+News v2.51.9
   - Minor code fix.
   - Alert on unapproved articles disabled by default. Enable at Settings >> Options tab.
   - BR #12207 - Can't display image in news when using upload field.
   - BR #12228 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
-Phar Installer v
+Phar Installer v1.3.9
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
   - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated".
 
-Search v
+Search v1.51.8
   - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
 
 
