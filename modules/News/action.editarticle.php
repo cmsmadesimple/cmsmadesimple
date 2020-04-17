@@ -22,7 +22,7 @@ $author_id    = isset($params['author_id']) ? $params['author_id'] : '-1';
 $useexp       = isset($params['useexp']) ? 1: 0;
 $extra        = isset($params['extra']) ? trim($params['extra']) : '';
 $searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
-$title        = isset($params['title']) ? cleanvalue(strip_tags($params['title'])) : '';
+$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
 $status       = isset($params['status']) ? $params['status'] : $status;
 
 if (isset($params['postdate_Month'])) {

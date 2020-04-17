@@ -25,7 +25,7 @@ $useexp       = isset($params['useexp']) ? 1: 0;
 $searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
 $news_url     = isset($params['news_url']) ? $params['news_url'] : '';
 $extra        = isset($params['extra']) ? trim($params['extra']) : '';
-$title        = isset($params['title']) ? cleanvalue(strip_tags($params['title'])) : '';
+$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
 $ndays        = (int)$this->GetPreference('expiry_interval', 180);
 
 if ($ndays == 0)

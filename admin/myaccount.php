@@ -151,7 +151,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
   $indent = (isset($_POST['indent']) ? true : false);
   $paging = (isset($_POST['paging']) ? 1 : 0);
-  $date_format_string = trim(strip_tags(cleanValue($_POST['date_format_string'])));
+  $date_format_string = trim(strip_tags(substr($_POST['date_format_string'], 0, 20)));
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
   $homepage = cleanValue($_POST['homepage']);
