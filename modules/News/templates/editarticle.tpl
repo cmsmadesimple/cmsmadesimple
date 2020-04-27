@@ -64,7 +64,7 @@
                 <label for="fld1">*{$titletext}:</label> {cms_help key='help_article_title' title=$titletext}
             </p>
             <p class="pageinput">
-                <input type="text" id="fld1" name="{$actionid}title" value="{$title}" size="80" maxlength="255" required/>
+                <input type="text" id="fld1" name="{$actionid}title" value="{$title|escape:htmlall}" size="80" maxlength="255" required/>
             </p>
         </div>
         <div class="pageoverflow">
