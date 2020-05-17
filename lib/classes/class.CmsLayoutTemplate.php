@@ -822,7 +822,7 @@ class CmsLayoutTemplate
 	 */
 	public static function load_bulk($list,$deep = true)
 	{
-		if( !is_array($list) || count($list) == 0 ) return;
+		if( !is_array($list) || count($list) == 0 ) return [];
 
 		$list2 = array();
 		foreach( $list as $one ) {
@@ -1109,6 +1109,7 @@ class CmsLayoutTemplate
 	 */
 	public static function process_dflt($t)
 	{
+    $smarty = \Smarty_CMS::get_instance();
 		$tpl = self::load_dflt_by_type($t);
 		return $smarty->fetch('cms_template:id='.$tpl->get_id());
 	}
