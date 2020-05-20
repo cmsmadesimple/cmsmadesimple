@@ -280,7 +280,7 @@ if( $debug || isset($config['log_performance_info']) || (isset($config['show_per
     $time = microtime_diff($starttime,$endtime);
 
     if( isset($config['log_performance_info']) ) {
-        $out = [ time(), $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $time, $sql_time, $queries, $memory, $memory_peak ];
+        $out = [ time(), $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $time, $sql_time, $sql_queries, $memory, $memory_peak ];
         $filename = TMP_CACHE_LOCATION.'/performance.log';
         error_log(implode('|',$out)."\n", 3, $filename);
     } else {
