@@ -4,7 +4,7 @@ Core - General
   - Minor code fix to encoding Date Format String.
 
 News v...
-  - Minor code fix to encoding title content.
+  - Minor code fix to encoding title content. 
 
 
 Version 2.2.14 - T'Sou-ke
