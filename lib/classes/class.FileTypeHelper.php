@@ -36,7 +36,7 @@ class FileTypeHelper
     /**
      * @ignore
      */
-    private $_image_extensions = ['jpg','jpeg','bmp','wbmp','gif','png','webp'];
+    private $_image_extensions = ['jpg','jpeg','bmp','wbmp','gif','png','webp', 'svg'];
     /**
      * @ignore
      */
