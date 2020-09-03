@@ -1,9 +1,14 @@
-Version 2.2.14.1 - T'Sou-ke
+Version 2.2.15 - No Name Yet
 -------------------------------
 Core - General
   - Minor code fix to encoding Date Format String.
+  - BR #12311 - log_performance_info - undefined variable: queries.
+  - Fix to the Admin home page landing after login.
 
-News v...
+FilePicker v...
+  - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
+
+News v2.51.10
   - Minor code fix to encoding title content. 
 
 
