@@ -6,6 +6,9 @@ Core - General
   - BR #12357 - Filepicker dropzone size issue.
   - Fix to the Admin home page landing after login.
 
+FileManager v...
+  - Dropzone improvement like core FilePicker.
+
 FilePicker v...
   - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
 
