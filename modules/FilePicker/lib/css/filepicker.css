@@ -67,6 +67,10 @@
   content: "\e60e";
 }
 
+html,
+body { height: 100% }
+.filepicker-container { height: 100% }
+
 body.cmsms-filepicker {
 	margin: 0;
 	padding: 0;
