@@ -249,8 +249,8 @@ try {
         catch( \ModuleNoDataException $e ) {
             // at least one of the dependencies could not be found on the server.
             // may be a system module... if it is not a system module, throw an exception
-            audit('',$this->GetVersion(),'At least one requested module was not available on the forge');
-        }
+            audit('','ModuleManager','At least one requested module was not available on the forge ('.$this->GetName().' '.$this->GetVersion().')');
+        } 
 
         foreach( $alldeps as $name => $row ) {
             $fnd = FALSE;
