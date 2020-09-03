@@ -1,8 +1,9 @@
 Version 2.2.15 - No Name Yet
 -------------------------------
 Core - General
-  - Minor code fix to encoding Date Format String.
+  - BR #12303 - No date displayed in the admin + category id not incremented
   - BR #12311 - log_performance_info - undefined variable: queries.
+  - BR #12357 - Filepicker dropzone size issue.
   - Fix to the Admin home page landing after login.
 
 FilePicker v...
