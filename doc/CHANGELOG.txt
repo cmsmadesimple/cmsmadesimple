@@ -15,6 +15,9 @@ FilePicker v...
 News v2.51.10
   - Minor code fix to encoding title content. 
 
+Module Manager v...
+  - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+
 
 Version 2.2.14 - T'Sou-ke
 -------------------------------

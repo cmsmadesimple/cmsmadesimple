@@ -71,7 +71,7 @@ if( isset($params['submit']) ) {
     try {
         $url = $this->GetPreference('module_repository');
         $error = 0;
-        $term = trim($params['term']);
+        $term = cleanvalue(trim($params['term']));
         if( strlen($term) < 3 ) throw new \Exception($this->Lang('error_searchterm'));
         $advanced = (int)$params['advanced'];
 
