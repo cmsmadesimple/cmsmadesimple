@@ -175,7 +175,6 @@ if (isset($_SESSION['logout_user_now'])) {
 
 if( isset($_POST['logincancel']) ) {
     debug_buffer("Login cancelled.  Returning to content.");
-    $login_ops->deauthenticate(); // just in case
     redirect($config["root_url"].'/index.php', true);
 }
 else if( isset($_POST['loginsubmit']) ) {
