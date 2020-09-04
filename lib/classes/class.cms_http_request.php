@@ -1020,14 +1020,14 @@ class cms_http_request
         if($this->status == 0)
         {
             // Oooops !
-            if(!preg_match("/http\/[0-9]+\.[0-9]+[ \t]+([0-9]+)[ \t]*(.*)\$/i", $headers[0], $matches))
+            if(!preg_match("/http\/[0-9]+(\.[0-9]+)?[ \t]+([0-9]+)[ \t]*(.*)\$/i", $headers[0], $matches))
             {
                 $this->_setError('Unexpected HTTP response status');
                 return FALSE;
             }
 
             // Gotcha!
-            $this->status = $matches[1];
+            $this->status = $matches[2];
             array_shift($headers);
         }
 

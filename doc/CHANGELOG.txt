@@ -9,7 +9,8 @@ Core - General
   - FR #12345 - More user friendly admin session handling (partly implemented)
   - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore
   - Fix to admin redirection after login on Windows platform
-
+  - BR #12338 - Allow http/2 responses 
+  
 FileManager v...
   - Dropzone improvement like core FilePicker.
 
