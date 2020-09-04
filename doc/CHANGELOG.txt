@@ -10,7 +10,7 @@ Core - General
   - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore
   - Fix to admin redirection after login on Windows platform
   - BR #12338 - Allow http/2 responses 
-  
+
 FileManager v...
   - Dropzone improvement like core FilePicker.
 
@@ -23,6 +23,9 @@ News v...
 
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+
+MicroTiny
+  - BR #12351 - Escaping translation strings in tinymce_config.js
 
 
 Version 2.2.14 - T'Sou-ke
