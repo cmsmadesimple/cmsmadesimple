@@ -290,7 +290,7 @@ try {
         $tmp = $content_obj->GetTabMessage($currenttab);
         if( $tmp ) $tab_message_array[$currenttab] = $tmp;
 
-        $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() == 0 );
+        $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() < 1 );
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
             if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {
