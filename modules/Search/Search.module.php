@@ -124,6 +124,8 @@ class Search extends CMSModule
      You can also instantiate custom behaviour on a module by module basis by looking at
      the \$entry->module and \$entry->modulerecord fields in \$entry
       ie: {if \$entry->module == 'News'}{News action='detail' article_id=\$entry->modulerecord detailpage='News'}
+
+     For content pages the module is 'content' and modulerecord the page id. 
   *}
   {/foreach}
 </ul>

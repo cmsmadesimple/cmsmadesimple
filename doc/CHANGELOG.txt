@@ -28,6 +28,9 @@ Module Manager v...
 MicroTiny
   - BR #12351 - Escaping translation strings in tinymce_config.js
 
+Search
+  - FR #11886 - include module and modulerecord fields for content pages
+
 
 Version 2.2.14 - T'Sou-ke
 -------------------------------
