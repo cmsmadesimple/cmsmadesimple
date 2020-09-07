@@ -30,6 +30,8 @@ $lang['error_upload_maxFileSize'] = 'The file is too large';
 $lang['error_upload_minFileSize'] = 'The file is too small';
 $lang['error_upload_maxNumberOfFiles'] = 'You are uploading too many files at once';
 $lang['err_profile_topdir'] = 'The top directory specified does not exist';
+$lang['err_profile_name'] = 'The profile name is invalid';
+$lang['err_profilename_exists'] = 'The profile name already exists';
 
 // F
 $lang['filename'] = 'Filename';

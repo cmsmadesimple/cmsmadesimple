@@ -11,12 +11,13 @@ Core - General
   - Fix to admin redirection after login on Windows platform
   - BR #12338 - Allow http/2 responses 
   - BR #12337 - GetContentBlockFieldInput $adding always false
-
+  
 FileManager v...
   - Dropzone improvement like core FilePicker.
 
 FilePicker v...
   - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
+  - BR #12312 - Stored XSS vulnerability in File Picker
 
 News v...
   - Minor code fix to encoding title content. 

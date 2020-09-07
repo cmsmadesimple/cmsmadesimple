@@ -21,7 +21,7 @@
 		  <tr class="{cycle values='row1,row2'}">
 			{cms_action_url action=edit_profile pid=$profile->id assign='edit_url'}
 			<td>{$profile->id}</td>
-			<td><a href="{$edit_url}" title="{$mod->Lang('edit_profile')}">{$profile->name}</a></td>
+			<td><a href="{$edit_url}" title="{$mod->Lang('edit_profile')}">{$profile->name|cms_escape}</a></td>
 		<td>{$profile->reltop}</td>
 		<td>
 		   {if $profile->id == $dflt_profile_id}

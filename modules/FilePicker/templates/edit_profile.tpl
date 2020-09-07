@@ -14,7 +14,7 @@
 <hr/>
 <div class="c_full cf">
   <label for="profile_name" class="grid_2 required">* {$mod->Lang('name')}:</label>
-  <p class="grid_9"><input type="text" size="40" id="profile_name" name="{$actionid}name" value="{$profile->name}" required/>
+  <p class="grid_9"><input type="text" size="40" id="profile_name" name="{$actionid}name" value="{$profile->name|cms_escape}" required/>
     &nbsp;{cms_help key2='HelpPopup_ProfileName' title=$mod->Lang('HelpPopupTitle_ProfileName')}
   </p>
 </div>
