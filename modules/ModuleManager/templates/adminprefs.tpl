@@ -34,7 +34,7 @@ $(document).ready(function(){
   <div class="pageoverflow">
     <p class="pagetext"><label>{$ModuleManager->Lang('prompt_dl_chunksize')}:</label>&nbsp;{cms_help key2='help_dl_chunksize' title=$ModuleManager->Lang('prompt_dl_chunksize')}</p>
     <p class="pageinput">
-      <input type="text" name="{$actionid}dl_chunksize" value="{$dl_chunksize}" size="3" maxlength="3"/>
+      <input type="text" name="{$actionid}dl_chunksize" value="{$dl_chunksize}" size="4" maxlength="4"/>
     </p>
   </div>
 

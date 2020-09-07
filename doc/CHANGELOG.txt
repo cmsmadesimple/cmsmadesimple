@@ -25,6 +25,7 @@ News v...
 
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+  - Increased the Download Chunk Size field size to 4 
 
 MicroTiny
   - BR #12351 - Escaping translation strings in tinymce_config.js
