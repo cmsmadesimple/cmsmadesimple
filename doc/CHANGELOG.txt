@@ -11,6 +11,7 @@ Core - General
   - Fix to admin redirection after login on Windows platform
   - BR #12338 - Allow http/2 responses 
   - BR #12337 - GetContentBlockFieldInput $adding always false
+  - BR #12335 - User pref admin homepage not properly displayed under certain conditions
   
 FileManager v...
   - Dropzone improvement like core FilePicker.

@@ -67,6 +67,7 @@ final class CmsAdminUtils
     /**
      * Convert an admin request URL to a generic form that is suitable for saving to a database.
      * This is useful for things like bookmarks and homepages.
+     * Note it only works for admin urls with user key of the current admin user
      *
      * @param string $in_url The input URL that has the session key in it.
      * @return string A URL that is converted to a generic form.
@@ -76,13 +77,12 @@ final class CmsAdminUtils
         if( !defined('CMS_USER_KEY') ) throw new \LogicException('This method can only be called for admin requests');
         if( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) throw new \LogicException('This method can only be called for admin requests');
 
-        $len = strlen($_SESSION[CMS_USER_KEY]);
-        $in_p = '+'.CMS_SECURE_PARAM_NAME.'\=[A-Za-z0-9]{'.$len.'}+';
-        $out_p = '_CMSKEY_='.str_repeat('X',$len);
-        $out = preg_replace($in_p,$out_p,$in_url);
+        $in_p = CMS_SECURE_PARAM_NAME. '=' . $_SESSION[CMS_USER_KEY];
+        $out_p = '[SECURITYTAG]';
+        $out = str_replace($in_p,$out_p,$in_url);
         $config = \cms_config::get_instance();
-        if( startswith($out,$config['root_url']) ) {
-            $out = str_replace($config['root_url'],'',$out);
+        if( startswith($out,$config['admin_url'] . '/') ) {
+            $out = str_replace($config['admin_url'] . '/','',$out);
         }
         return $out;
     }
@@ -98,10 +98,9 @@ final class CmsAdminUtils
         if( !defined('CMS_USER_KEY') ) throw new \LogicException('This method can only be called for admin requests');
         IF( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) throw new \LogicException('This method can only be called for admin requests');
 
-        $len = strlen($_SESSION[CMS_USER_KEY]);
-        $in_p = '+_CMSKEY_=[X]{'.$len.'}+';
+        $in_p = '[SECURITYTAG]';
         $out_p = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-        return preg_replace($in_p,$out_p,$in_url);
+        return str_replace($in_p,$out_p,$in_url);
     }
 
     /**

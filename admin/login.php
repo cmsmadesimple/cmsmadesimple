@@ -225,7 +225,8 @@ else if( isset($_POST['loginsubmit']) ) {
 
             // quick hacks to remove old secure param name from homepage url
             // and replace with the correct one.
-            $homepage = str_replace('&amp;','&',$homepage);
+            // @todo either do this in the upgrade process or accept a few backend users need to set their homepage once 
+            /*$homepage = str_replace('&amp;','&',$homepage);
             $tmp = explode('?',$homepage);
             @parse_str($tmp[1],$tmp2);
             if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
@@ -235,10 +236,13 @@ else if( isset($_POST['loginsubmit']) ) {
                 $tmp3[] = $k.'='.$v;
             }
             $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+            */
+
+            $homepage = \CmsAdminUtils::get_session_url($homepage);
 
             // and redirect.
             $homepage = html_entity_decode($homepage);
-            if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
+            //if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
             redirect($homepage);
         }
     }
