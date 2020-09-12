@@ -223,21 +223,6 @@ else if( isset($_POST['loginsubmit']) ) {
             $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
             if( !$homepage ) $homepage = $config['admin_url'];
 
-            // quick hacks to remove old secure param name from homepage url
-            // and replace with the correct one.
-            // @todo either do this in the upgrade process or accept a few backend users need to set their homepage once 
-            /*$homepage = str_replace('&amp;','&',$homepage);
-            $tmp = explode('?',$homepage);
-            @parse_str($tmp[1],$tmp2);
-            if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-            if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-            $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-            foreach( $tmp2 as $k => $v ) {
-                $tmp3[] = $k.'='.$v;
-            }
-            $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
-            */
-
             $homepage = \CmsAdminUtils::get_session_url($homepage);
 
             // and redirect.
