@@ -1,24 +1,25 @@
 Version 2.2.15 - No Name Yet
 -------------------------------
 Core - General
-  - BR #12303 - No date displayed in the admin + category id not incremented
+  - BR #12287 - Admin shortcuts popup refers to IRC.
+  - BR #12303 - No date displayed in the admin + category id not incremented.
   - BR #12311 - log_performance_info - undefined variable: queries.
   - BR #12357 - Filepicker dropzone size issue.
   - Fix to the Admin home page landing after login.
-  - FR #12349 - Swap tabs on System Maintenance page
-  - FR #12345 - More user friendly admin session handling (partly implemented)
-  - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore
-  - Fix to admin redirection after login on Windows platform
-  - BR #12338 - Allow http/2 responses 
-  - BR #12337 - GetContentBlockFieldInput $adding always false
-  - BR #12335 - User pref admin homepage not properly displayed under certain conditions
-  
+  - FR #12349 - Swap tabs on System Maintenance page.
+  - FR #12345 - More user friendly admin session handling (partly implemented).
+  - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore.
+  - Fix to admin redirection after login on Windows platform.
+  - BR #12338 - Allow http/2 responses .
+  - BR #12337 - GetContentBlockFieldInput $adding always false.
+  - BR #12335 - User pref admin homepage not properly displayed under certain conditions.
+
 FileManager v...
   - Dropzone improvement like core FilePicker.
 
 FilePicker v...
   - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
-  - BR #12312 - Stored XSS vulnerability in File Picker
+  - BR #12312 - Stored XSS vulnerability in File Picker.
 
 News v...
   - Minor code fix to encoding title content. 
@@ -26,13 +27,13 @@ News v...
 
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
-  - Increased the Download Chunk Size field size to 4 
+  - Increased the Download Chunk Size field size to 4.
 
 MicroTiny
-  - BR #12351 - Escaping translation strings in tinymce_config.js
+  - BR #12351 - Escaping translation strings in tinymce_config.js.
 
 Search
-  - FR #11886 - include module and modulerecord fields for content pages
+  - FR #11886 - include module and modulerecord fields for content pages.
 
 
 Version 2.2.14 - T'Sou-ke
