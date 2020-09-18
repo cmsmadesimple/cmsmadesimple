@@ -15,6 +15,7 @@ Core - General
   - BR #12335 - User pref admin homepage not properly displayed under certain conditions.
   - BR #12325 - Several XSS vulnerabilities
   - BR #12317 - XSS on Settings News Module
+  - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager
   
 FileManager v...
   - Dropzone improvement like core FilePicker.
