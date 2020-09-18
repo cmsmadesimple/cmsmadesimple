@@ -4,7 +4,7 @@
 <aside class="message pageerrorcontainer" role="alert">
 {foreach from=$errors item='error'}
 	{if $error}
-	<p>{$error}</p>
+	<p>{$error|cms_escape}</p>
 	{/if}
 {/foreach}
 </aside>	
@@ -13,7 +13,7 @@
 <aside class="message pagemcontainer" role="status">
 {foreach from=$messages item='message'}
 	{if $message}
-	<p>{$message}</p>
+	<p>{$message|cms_escape}</p>
 	{/if}
 {/foreach}
 </aside>

@@ -19,6 +19,8 @@ Core - General
   - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages
   - Fix to the module API redirection to support arrays in parameters
   - BR #12292 - showbase parameter of metadata tag doesn't accept boolean value
+  - BR #12291 - Reflected Cross site scripting
+  - (Error) messages in OneEleven won't dismiss on click
   
 FileManager v...
   - Dropzone improvement like core FilePicker.
