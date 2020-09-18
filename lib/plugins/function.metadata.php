@@ -31,7 +31,7 @@ function smarty_function_metadata($params, &$smarty)
 
     // But allow a parameter to override it
 	if (isset($params['showbase']))	{
-		if ($params['showbase'] == 'false')	$showbase = false;
+		if ($params['showbase'] == false || $params['showbase'] == 'false')	$showbase = false;
 	}
 
     \CMSMS\HookManager::do_hook('metadata_prerender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);

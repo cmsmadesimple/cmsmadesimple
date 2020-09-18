@@ -18,6 +18,7 @@ Core - General
   - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager
   - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages
   - Fix to the module API redirection to support arrays in parameters
+  - BR #12292 - showbase parameter of metadata tag doesn't accept boolean value
   
 FileManager v...
   - Dropzone improvement like core FilePicker.
