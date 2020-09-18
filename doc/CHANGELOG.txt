@@ -16,6 +16,7 @@ Core - General
   - BR #12325 - Several XSS vulnerabilities
   - BR #12317 - XSS on Settings News Module
   - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager
+  - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages
   - Fix to the module API redirection to support arrays in parameters
   
 FileManager v...
