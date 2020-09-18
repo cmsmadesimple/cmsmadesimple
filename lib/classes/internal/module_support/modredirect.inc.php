@@ -33,11 +33,34 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
 {
     $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
     $url = $page.$urlext;
-    if( count($params) ) {
-        foreach ($params as $key=>$value) {
-            $url .= '&'.$key.'='.rawurlencode($value);
+  
+  $recursive_fix = function($arr) use (&$recursive_fix)
+  {
+    $ret = [];
+    if( is_array($arr) )
+    {
+      foreach ($arr as $key => $value)
+      {
+        if (is_array($value))
+        {
+          $ret[$key] =  $recursive_fix($value);
         }
+        else
+        {
+          $ret[$key] = rawurlencode($value);
+        }
+      }
     }
+    
+    return $ret;
+  };
+  
+  if( count($params) )
+  {
+    $url .=  '&' . http_build_query( $recursive_fix($params) );
+  }
+    
+  
     redirect($url);
 }
 
@@ -83,10 +106,33 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	else {
 	    $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	}
-
-	foreach ($params as $key=>$value) {
-		if( $key !== '' && $value !== '' ) $text .= '&'.$id.$key.'='.rawurlencode($value);
-	}
+  
+  $recursive_fix = function($arr, $id) use (&$recursive_fix)
+  {
+    $ret = [];
+    if( is_array($arr) )
+    {
+      foreach ($arr as $key => $value)
+      {
+        if (is_array($value))
+        {
+          $ret[$id . $key] =  $recursive_fix($value, $id);
+        }
+        else
+        {
+          $ret[$id . $key] = rawurlencode($value);
+        }
+      }
+    }
+    
+    return $ret;
+  };
+  
+  if( count($params) )
+  {
+    $text .=  '&' . http_build_query( $recursive_fix($params, $id) );
+  }
+  
 	redirect($text);
 }
 
