@@ -160,20 +160,20 @@
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="imagefield_path">{lang('content_imagefield_path')}:</label></p>
 			<p class="pageinput">
-				<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
+				<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path|cms_escape}"/>
 				&nbsp;{cms_help key2='settings_imagefield_path' title=lang('content_imagefield_path')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="thumbfield_path">{lang('content_thumbnailfield_path')}:</label></p>
 			<p class="pageinput">
-				<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>&nbsp;{cms_help key2='settings_thumbfield_path' title=lang('content_thumbnailfield_path')}
+				<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path|cms_escape}"/>&nbsp;{cms_help key2='settings_thumbfield_path' title=lang('content_thumbnailfield_path')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="contentimage_path">{lang('contentimage_path')}:</label></p>
 			<p class="pageinput">
-				<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
+				<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path|cms_escape}"/>
 				&nbsp;{cms_help key2='settings_contentimage_path' title=lang('contentimage_path')}
 			</p>
 		</div>

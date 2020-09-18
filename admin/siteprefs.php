@@ -263,7 +263,8 @@ if (isset($_POST["editsiteprefs"])) {
 	if ($access) {
 		switch( $tab ) {
 		case 'general':
-			// tab 1
+            // tab 1
+            // @todo: should validate input or fully trust users allowed to change these values
 			if (isset($_POST['sitename'])) $sitename = cleanValue($_POST['sitename']);
 			cms_siteprefs::set('sitename', $sitename);
 			if (isset($_POST['frontendlang'])) $frontendlang = cleanValue($_POST['frontendlang']);
