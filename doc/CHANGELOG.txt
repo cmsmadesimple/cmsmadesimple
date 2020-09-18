@@ -14,6 +14,7 @@ Core - General
   - BR #12337 - GetContentBlockFieldInput $adding always false.
   - BR #12335 - User pref admin homepage not properly displayed under certain conditions.
   - BR #12325 - Several XSS vulnerabilities
+  - BR #12317 - XSS on Settings News Module
   
 FileManager v...
   - Dropzone improvement like core FilePicker.
@@ -26,6 +27,7 @@ News v...
   - Minor code fix to encoding title content. 
   - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12325 - Several XSS vulnerabilities
+
 
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.

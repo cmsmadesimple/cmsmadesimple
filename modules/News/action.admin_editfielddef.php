@@ -48,6 +48,7 @@ $public = 0;
 if( isset($params['public']) ) $public = (int)$params['public'];
 
 if (isset($params['submit'])) {
+  // @todo: sanitizing input
   $error = '';
   if ($name == '') $error = $this->Lang('nonamegiven');
 
@@ -108,7 +109,7 @@ $smarty->assign('options',$options);
 $smarty->assign('mod',$this);
 $smarty->assign('hidden',
 		$this->CreateInputHidden($id, 'fdid', $fdid).
-		$this->CreateInputHidden($id, 'origname', $origname));
+		$this->CreateInputHidden($id, 'origname', htmlspecialchars($origname)));
 echo $this->ProcessTemplate('editfielddef.tpl');
 
 // EOF

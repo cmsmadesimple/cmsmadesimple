@@ -49,7 +49,7 @@ $(document).ready(function(){
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld_name">*{$nametext}:</label> {cms_help key='help_fielddef_name' title=$nametext}</p>
 		<p class="pageinput">
-                  <input type="text" id="fld_name" name="{$actionid}name" value="{$name}" size="30" maxlength="255" required/>
+                  <input type="text" id="fld_name" name="{$actionid}name" value="{$name|cms_escape}" size="30" maxlength="255" required/>
                 </p>
 	</div>
 	{if $showinputtype eq true}

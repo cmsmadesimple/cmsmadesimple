@@ -14,7 +14,7 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
     $onerow = new stdClass();
 
     $onerow->id = $row['id'];
-    $onerow->name = $this->CreateLink($id, 'admin_editfielddef', $returnid, $row['name'], array('fdid'=>$row['id']));
+    $onerow->name = $this->CreateLink($id, 'admin_editfielddef', $returnid, htmlspecialchars($row['name']), array('fdid'=>$row['id']));
     $onerow->type = $this->Lang($row['type']);
     $onerow->max_length = $row['max_length'];
     $onerow->item_order = $row['item_order'];

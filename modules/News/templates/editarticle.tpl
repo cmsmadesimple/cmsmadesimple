@@ -178,7 +178,7 @@
         {foreach $custom_fields as $field}
         <div class="pageoverflow">
             <p class="pagetext">
-                <label for="{$field->idattr}">{$field->prompt}:</label>
+                <label for="{$field->idattr}">{$field->prompt|cms_escape}:</label>
             </p>
             <p class="pageinput">
                 {if $field->type == 'textbox'}
