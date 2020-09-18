@@ -24,7 +24,8 @@ FilePicker v...
 News v...
   - Minor code fix to encoding title content. 
   - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
-
+  - BR #12325 - Several XSS vulnerabilities
+  
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - Increased the Download Chunk Size field size to 4.

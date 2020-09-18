@@ -83,13 +83,13 @@
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld6">{$title_formsubmit_emailaddress}:</label></p>
 		<p class="pageinput">
-                   <input type="text" id="fld6" name="{$actionid}formsubmit_emailaddress" value="{$formsubmit_emailaddress}" size="50" maxlength="255"/>
+                   <input type="text" id="fld6" name="{$actionid}formsubmit_emailaddress" value="{$formsubmit_emailaddress|cms_escape}" size="50" maxlength="255"/>
                 </p>
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld7">{$title_email_subject}:</label></p>
 		<p class="pageinput">
-		  <input type="text" id="fld7" name="{$actionid}email_subject" value="{$email_subject}" size="50" maxlength="255"/>
+		  <input type="text" id="fld7" name="{$actionid}email_subject" value="{$email_subject|cms_escape}" size="50" maxlength="255"/>
                 </p>
 	</div>
 	<div class="pageoverflow">

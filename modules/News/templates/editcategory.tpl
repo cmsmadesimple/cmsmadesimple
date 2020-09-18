@@ -17,7 +17,7 @@ $(document).ready(function(){
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="{$actionid}name">*{$mod->Lang('name')}:</label> {cms_help key='help_category_name' title=$mod->Lang('name')}</p>
 		<p class="pageinput">
-		  <input type="text" id="{$actionid}name" name="{$actionid}name" value="{$name|default:''}"/ required>
+		  <input type="text" id="{$actionid}name" name="{$actionid}name" value="{$name|cms_escape|default:''}"/ required>
 		</p>
 	</div>
 	<div class="pageoverflow">

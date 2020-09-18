@@ -123,7 +123,7 @@
                 <label for="fld5">{$extratext}:</label> {cms_help key='help_article_extra' title=$extratext}
             </p>
             <p class="pageinput">
-                <input type="text" id="fld5" name="{$actionid}extra" value="{$extra}" size="50" maxlength="255"/>
+                <input type="text" id="fld5" name="{$actionid}extra" value="{$extra|cms_escape}" size="50" maxlength="255"/>
             </p>
         </div>
 
