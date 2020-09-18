@@ -241,7 +241,7 @@
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label> {cms_help key2='settings_sitedownexcludes' title=lang('sitedownexcludes')}</p>
 			<p class="pageinput">
-				<input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}" />
+				<input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes|cms_escape}" />
 				<br /><strong>{lang('your_ipaddress')}:</strong>&nbsp;<span style="color: red;">{cms_utils::get_real_ip()}</span><br/>{$lang_info_sitedownexcludes}
 			</p>
 		</div>
