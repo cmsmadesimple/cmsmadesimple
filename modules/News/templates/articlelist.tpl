@@ -148,7 +148,7 @@ $(document).ready(function(){
                               {$entry->u_enddate|cms_date_format}
                             {/if}
                         </td>
-			<td>{$entry->category}</td>
+			<td>{$entry->category|cms_escape}</td>
 			<td>{if isset($entry->approve_link)}{$entry->approve_link}{/if}</td>
 			<td>
                           {if isset($entry->edit_url)}
