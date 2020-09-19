@@ -21,8 +21,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
 
-$CMS_VERSION = "2.2.14";
-$CMS_VERSION_NAME = "T'Sou-ke";
+$CMS_VERSION = "2.2.15.b.1";
+$CMS_VERSION_NAME = "NOT SET";
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
