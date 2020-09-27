@@ -25,7 +25,7 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
 require_once("../lib/include.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+//$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -52,7 +52,7 @@ if (isset($_REQUEST['mact'])) {
 $modinst = ModuleOperations::get_instance()->get_module_instance($module);
 if( !$modinst ) {
     trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
-    redirect('index.php'.$urlext);
+    redirect('index.php');
 }
 
 $USE_THEME = true;
