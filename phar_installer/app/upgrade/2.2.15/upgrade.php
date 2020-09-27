@@ -34,6 +34,8 @@ if (is_array($homepages) && count($homepages))  {
 
         $url = preg_replace('@^/[^/]+/@','',$url); //remove admin folder from the url (if applicable)
 
+        unset($tmp2,$tmp3);
+        
         $db->execute($update_statement,[$url,$homepage['user_id'],'homepage']);
     }
 }
