@@ -120,7 +120,7 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
         }
         else
         {
-          $ret[$id . $key] = rawurlencode($value);
+          $ret[$id . $key] = $value;
         }
       }
     }
