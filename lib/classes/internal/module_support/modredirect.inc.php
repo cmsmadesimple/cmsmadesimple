@@ -47,7 +47,7 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
         }
         else
         {
-          $ret[$key] = rawurlencode($value);
+          $ret[$key] = $value;
         }
       }
     }
