@@ -99,7 +99,7 @@ $(document).ready(function(){
 	<div id="bottom_nav">
         {if isset($retry_url)}
           {* <a class="action-button orange" href="{$retry_url}" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a> *}
-          <a href="#" onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
+          <a onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
         {/if}
         {if !isset($cmsms_info)}
             <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}" />
