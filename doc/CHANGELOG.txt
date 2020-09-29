@@ -2,25 +2,24 @@ Version 2.2.15 - No Name Yet
 -------------------------------
 Core - General
   - BR #12287 - Admin shortcuts popup refers to IRC.
+  - BR #12291 - Reflected Cross site scripting.
+  - BR #12292 - showbase parameter of metadata tag doesn't accept boolean value.
   - BR #12303 - No date displayed in the admin + category id not incremented.
+  - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages.
   - BR #12311 - log_performance_info - undefined variable: queries.
-  - BR #12357 - Filepicker dropzone size issue.
-  - Fix to the Admin home page landing after login.
-  - FR #12349 - Swap tabs on System Maintenance page.
-  - FR #12345 - More user friendly admin session handling (partly implemented).
-  - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore.
-  - Fix to admin redirection after login on Windows platform.
-  - BR #12338 - Allow http/2 responses .
-  - BR #12337 - GetContentBlockFieldInput $adding always false.
+  - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager.
+  - BR #12317 - XSS on Settings News Module.
+  - BR #12325 - Several XSS vulnerabilities.
   - BR #12335 - User pref admin homepage not properly displayed under certain conditions.
-  - BR #12325 - Several XSS vulnerabilities
-  - BR #12317 - XSS on Settings News Module
-  - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager
-  - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages
-  - Fix to the module API redirection to support arrays in parameters
-  - BR #12292 - showbase parameter of metadata tag doesn't accept boolean value
-  - BR #12291 - Reflected Cross site scripting
-  - (Error) messages in OneEleven won't dismiss on click
+  - BR #12337 - GetContentBlockFieldInput $adding always false.
+  - BR #12338 - Allow http/2 responses.
+  - BR #12357 - Filepicker dropzone size issue.
+  - FR #12345 - More user friendly admin session handling (partly implemented).
+  - FR #12349 - Swap tabs on System Maintenance page.
+  - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore.
+  - (Error) messages in OneEleven won't dismiss on click.
+  - Fix to Admin redirection after login on Windows platform.
+  - Fix to the module API redirection to support arrays in parameters.
   
 FileManager v...
   - Dropzone improvement like core FilePicker.
@@ -32,8 +31,7 @@ FilePicker v...
 News v...
   - Minor code fix to encoding title content. 
   - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
-  - BR #12325 - Several XSS vulnerabilities
-
+  - BR #12325 - Several XSS vulnerabilities.
 
 Module Manager v...
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
@@ -43,7 +41,7 @@ MicroTiny
   - BR #12351 - Escaping translation strings in tinymce_config.js.
 
 Search
-  - FR #11886 - include module and modulerecord fields for content pages.
+  - FR #11886 - Include module and modulerecord fields for content pages.
 
 
 Version 2.2.14 - T'Sou-ke
