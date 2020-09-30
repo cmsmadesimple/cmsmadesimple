@@ -43,6 +43,9 @@ MicroTiny
 Search
   - FR #11886 - Include module and modulerecord fields for content pages.
 
+Phar Installer v... 
+  - Fixes to the reload button: now prevents browser's caching 
+  - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled
 
 Version 2.2.14 - T'Sou-ke
 -------------------------------
