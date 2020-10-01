@@ -14,7 +14,7 @@ try {
     $modinstance = $ops->get_module_instance($mod,'',TRUE);
     if( !is_object($modinstance) ) {
         // uh-oh
-        $this->SetError($this->Lang('error_getmodule',$mod));
+        $this->SetError($this->Lang('error_getmodule',htmlspecialchars($mod)));
         $this->RedirectToAdminTab();
     }
 
