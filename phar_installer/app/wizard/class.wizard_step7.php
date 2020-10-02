@@ -57,7 +57,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
     {
         $languages = array('en_US');
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( is_array($siteinfo['languages']) && count($siteinfo['languages']) ) $languages = array_merge($languages,$siteinfo['languages']);
+        if(is_array($siteinfo) && is_array($siteinfo['languages']) && count($siteinfo['languages']) ) $languages = array_merge($languages,$siteinfo['languages']);
         if( is_array($langlist) && count($langlist) ) $languages = array_merge($languages,$langlist);
         $languages = array_unique($languages);
 
