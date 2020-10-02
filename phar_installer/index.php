@@ -43,7 +43,7 @@ try {
     _detect_bad_ioncube();
     
     // clear opcache before disabling it
-    if( opcache_get_status() ) opcache_reset();
+    if( function_exists( 'opcache_get_status' ) && opcache_get_status() ) opcache_reset();
     // disable some stuff.
     @ini_set('opcache.enable',0); // disable zend opcode caching.
     @ini_set('apc.enabled',0); // disable apc opcode caching (for later versions of APC)
