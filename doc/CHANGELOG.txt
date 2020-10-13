@@ -20,30 +20,33 @@ Core - General
   - Fix to Admin redirection after login on Windows platform.
   - Fix to the module API redirection to support arrays in parameters.
   
-FileManager v...
+FileManager v1.6.12
   - Dropzone improvement like core FilePicker.
 
-FilePicker v...
+FilePicker v1.0.5
   - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
   - BR #12312 - Stored XSS vulnerability in File Picker.
 
-News v...
+News v2.51.11
   - Minor code fix to encoding title content. 
   - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12325 - Several XSS vulnerabilities.
 
-Module Manager v...
+Design Manager v1.1.9
+  - Minor fixes for PHP warnings\notices;
+
+Module Manager v2.1.8
   - BR #12291 - Reflected Cross site scripting
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - Increased the Download Chunk Size field size to 4.
   
-MicroTiny
+MicroTiny v2.2.5
   - BR #12351 - Escaping translation strings in tinymce_config.js.
 
-Search
+Search v1.52
   - FR #11886 - Include module and modulerecord fields for content pages.
 
-Phar Installer v... 
+Phar Installer v...
   - Fixes to the reload button: now prevents browser's caching 
   - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled
 
