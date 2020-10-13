@@ -452,11 +452,10 @@ class CmsLayoutTemplate
 				$db = CmsApp::get_instance()->GetDb();
 				$query = 'SELECT user_id FROM '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' WHERE tpl_id = ?';
 				$col = $db->GetCol($query,array($this->get_id()));
-				$this->_addt_editors = array();
 				if( count($col) ) $this->_addt_editors = $col;
 			}
 		}
-		if( count($this->_addt_editors) ) return $this->_addt_editors;
+		if( is_array($this->_addt_editors) && count($this->_addt_editors) ) return $this->_addt_editors;
 	}
 
 	/**
