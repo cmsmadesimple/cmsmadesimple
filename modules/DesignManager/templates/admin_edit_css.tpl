@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    var do_locking = {if $css_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
+    var do_locking = {if $css_id|default:0 > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_editcss').dirtyForm({
         beforeUnload: function() {
             if( do_locking )$('#form_editcss').lockManager('unlock');
@@ -14,7 +14,7 @@ $(document).ready(function(){
     if( do_locking ) {
       $('#form_editcss').lockManager({
         type: 'stylesheet',
-        oid: {$css_id},
+        oid: {$css_id|default:0},
         uid: {get_userid(FALSE)},
         lock_timeout: {$lock_timeout|default:0},
         lock_refresh: {$lock_refresh|default:0},
