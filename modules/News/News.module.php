@@ -314,6 +314,7 @@ class News extends CMSModule
         if( is_object($mod) ) return $mod->Lang('type_'.$str);
     }
 
+/* did this become redundant with DM? @TODO Rolf
     public static function template_help_callback($str)
     {
         $str = trim($str);
@@ -323,7 +324,7 @@ class News extends CMSModule
             if( is_file($file) ) return file_get_contents($file);
         }
     }
-
+*/
     public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
     {
         if( $type->get_originator() != 'News' ) throw new CmsLogicException('Cannot reset contents for this template type');
