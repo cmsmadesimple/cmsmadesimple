@@ -6,6 +6,9 @@ Core - General
 News
   - Add URL Prefix option to News module.
 
+Phar Installer
+  - Added Russian NLS file.
+
 
 Version 2.2.15 - Bonaventure
 -------------------------------
