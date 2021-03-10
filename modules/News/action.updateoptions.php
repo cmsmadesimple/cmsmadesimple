@@ -39,6 +39,7 @@ $this->SetPreference('fesubmit_redirect', trim($params['fesubmit_redirect']));
 $this->SetPreference('detail_returnid',(int)$params['detail_returnid']);
 $this->SetPreference('allow_fesubmit',(int)$params['allow_fesubmit']);
 $this->SetPreference('alert_drafts',(int)$params['alert_drafts']);
+$this->SetPreference('url_prefix', ( !empty($params['url_prefix'] ) ? trim($params['url_prefix']) : 'news'));
 
 $this->CreateStaticRoutes();
 $params = array('tab_message'=> 'optionsupdated', 'active_tab' => 'options');

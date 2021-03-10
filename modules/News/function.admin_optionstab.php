@@ -97,6 +97,11 @@ $smarty->assign('title_detail_settings',$this->Lang('title_detail_settings'));
 $smarty->assign('allow_fesubmit',$this->GetPreference('allow_fesubmit',0));
 $smarty->assign('alert_drafts',$this->GetPreference('alert_drafts',0));
 
+$smarty->assign('title_general_settings',$this->Lang('title_general_settings'));
+$smarty->assign('title_url_prefix',$this->Lang('title_url_prefix'));
+$smarty->assign('url_prefix',$this->GetPreference('url_prefix','news'));
+$smarty->assign('info_url_prefix',$this->Lang('info_url_prefix'));
+
 // Display the populated template
 echo $this->ProcessTemplate ('adminprefs.tpl');
 

@@ -291,7 +291,7 @@ if( !$tpl_ob->IsCached() ) {
             $prettyurl = $row['news_url'];
             if( $prettyurl == '' ) {
                 $aliased_title = munge_string_to_url($row['news_title']);
-                $prettyurl = 'news/'.$row['news_id'].'/'.($detailpage!=''?$detailpage:$returnid)."/$aliased_title";
+                $prettyurl = $this->GetURLPrefix().'/'.$row['news_id'].'/'.($detailpage!=''?$detailpage:$returnid)."/$aliased_title";
                 if (isset($sendtodetail['detailtemplate'])) $prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
             }
 

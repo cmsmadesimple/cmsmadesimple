@@ -43,6 +43,8 @@ class News extends CMSModule
     function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
     function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
 
+    function GetURLPrefix() { return $this->GetPreference('url_prefix','news'); }
+
     function InitializeFrontend()
     {
         $this->RestrictUnknownParams();
@@ -283,6 +285,8 @@ class News extends CMSModule
         $x = substr($str,1);
         $x1 = '['.$c.strtolower($c).']'.$x;
 
+        $x1 = $this->GetPreference('url_prefix', $x1); // @todo Rolf TEST!
+
         $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)\/d,(?P<detailtemplate>.*?)$/',
                               $this->GetName());
         cms_route_manager::add_static($route);
@@ -313,7 +317,6 @@ class News extends CMSModule
         if( is_object($mod) ) return $mod->Lang('type_'.$str);
     }
 
-/* did this become redundant with DM? @TODO Rolf
     public static function template_help_callback($str)
     {
         $str = trim($str);
@@ -323,7 +326,7 @@ class News extends CMSModule
             if( is_file($file) ) return file_get_contents($file);
         }
     }
-*/
+
     public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
     {
         if( $type->get_originator() != 'News' ) throw new CmsLogicException('Cannot reset contents for this template type');

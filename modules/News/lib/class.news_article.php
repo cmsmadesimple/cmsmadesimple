@@ -85,7 +85,8 @@ class news_article
             $tmp = $this->news_url;
             if( $tmp == '' ) {
                 $aliased_title = munge_string_to_url($this->title);
-                $tmp = 'news/'.$this->id.'/'.$this->returnid."/{$aliased_title}";
+                $mod = cms_utils::get_module('News');
+                $tmp = $mod->GetURLPrefix().'/'.$this->id.'/'.$this->returnid."/{$aliased_title}";
             }
             $mod = cms_utils::get_module('News');
             $canonical = $mod->create_url($this->_inid,'detail',$this->returnid,$this->params,false,false,$tmp);

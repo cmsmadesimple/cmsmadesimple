@@ -1,3 +1,12 @@
+Version 3.0 - No NAME YET
+-------------------------------
+Core - General
+  -
+
+News
+  - Add URL Prefix option to News module.
+
+
 Version 2.2.15 - Bonaventure
 -------------------------------
 Core - General
@@ -49,6 +58,7 @@ Search v1.52
 Phar Installer v1.3.13
   - Fixes to the reload button: now prevents browser's caching 
   - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled
+
 
 Version 2.2.14 - T'Sou-ke
 -------------------------------

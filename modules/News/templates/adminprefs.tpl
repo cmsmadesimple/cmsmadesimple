@@ -122,5 +122,23 @@
           </p>
         </div>
 </fieldset>
+<br />
+
+<fieldset>
+	<legend>{$title_general_settings}:</legend>
+	<div class="pageoverflow">
+		<p class="pagetext"><label for="fld14">{$title_url_prefix}:</label> {cms_help key='info_url_prefix' title=$title_url_prefix}</p>
+		<p class="pageinput">
+			<input type="text" id="fld14" name="{$actionid}url_prefix" value="{$url_prefix}" size="50" maxlength="255"/>
+		</p>
+	</div>
+</fieldset>
+<br />
+
+<div class="pageoverflow">
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}optionssubmitbutton" value="{$mod->Lang('submit')}"/>
+  </p>
+</div>
 
 {$endform}
