@@ -1,8 +1,8 @@
 {* this is a sample detail template that works with the Simplex theme *}
 {* set a canonical variable that can be used in the head section if process_whole_template is false in the config.php *}
 {if isset($entry->canonical)}
-  {assign var='canonical' value=$entry->canonical scope=global}
-  {assign var='main_title' value=$entry->title scope=global}
+  {$canonical=$entry->canonical scope=global}
+  {$main_title=$entry->title scope=global}
 {/if}
 
 {* <h2>{$entry->title|cms_escape:htmlall}</h2> *}

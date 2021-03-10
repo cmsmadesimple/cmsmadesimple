@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 function parseTree(ul)
 {
   var tags = [];

@@ -1,7 +1,7 @@
 {* set a canonical variable that can be used in the head section if process_whole_template is false in the config.php *}
 {if isset($entry->canonical)}
   {* note this syntax ensures that the canonical variable is set into global scope *}
-  {assign var='canonical' value=$entry->canonical scope=global}
+  {$canonical=$entry->canonical scope=global}
 {/if}
 
 {if $entry->postdate}

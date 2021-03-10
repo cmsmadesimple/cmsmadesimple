@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 //<![CDATA[
 $(document).ready(function(){
 	$('#selall').cmsms_checkall();

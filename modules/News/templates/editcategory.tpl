@@ -5,7 +5,7 @@
 {/if}
 <div class="information">{$mod->Lang('info_categories')}</div>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   $('#{$actionid}cancel').click(function(){
     $(this).closest('form').attr('novalidate','novalidate');
