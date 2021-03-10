@@ -1,4 +1,5 @@
 <?php
+
 // A
 $lang['addarticle'] = 'Add Article';
 $lang['addcategory'] = 'Add Category';
@@ -74,7 +75,7 @@ $lang['email_template'] = 'The format of the email message';
 $lang['enddate'] = 'End Date';
 $lang['endrequiresstart'] = 'Entering an end date requires a start date also';
 $lang['entries'] = '%s Entries';
-$lang['error_categorynotfoun'] = 'The category specified was not found';
+$lang['error_categorynotfound'] = 'The category specified was not found';
 $lang['error_categoryparent'] = 'Invalid category parent';
 $lang['error_duplicatename'] = 'An item with that name already exists';
 $lang['error_filesize'] = 'An uploaded file exceeded the maximum allowed size';
@@ -426,4 +427,6 @@ $lang['viewfilter'] = 'View Filter';
 $lang['warning_preview'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour.  Navigating away from the initial page and returning will not give the expected results.<br/><strong>Note:</strong> The preview does not upload files you may have selected for upload.';
 $lang['with_selected'] = 'With Selected';
 
-?>
+#
+# EOF
+#

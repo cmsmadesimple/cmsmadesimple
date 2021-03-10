@@ -38,9 +38,8 @@ class News extends CMSModule
     function LazyLoadAdmin() { return TRUE; }
     function InstallPostMessage() { return $this->Lang('postinstall');  }
     function GetHelp() { return $this->Lang('help'); }
-    function GetAuthor() { return 'Ted Kulp'; }
-    function GetAuthorEmail() { return 'wishy@cmsmadesimple.org'; }
-    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    function GetAuthor() { return 'CMS Made Simple Foundation'; }
+    function GetAuthorEmail() { return 'info@cmsmadesimple.org'; }
     function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
     function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
 
