@@ -108,7 +108,7 @@ class microtiny_utils
       return $output;
   }
 
-  private static function _save_static_config($fn, $frontend=false, $selector, $css_name = '', $languageid='')
+  private static function _save_static_config($fn, $frontend, $selector, $css_name = '', $languageid='')
   {
     if( !$fn ) return;
     $configcontent = self::_generate_config($frontend, $selector, $css_name, $languageid);

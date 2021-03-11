@@ -1,8 +1,11 @@
 Version 3.0 - No NAME YET
 -------------------------------
 Core - General
-  -
+  - PHP 8 fixes
 
+MicroTiny
+  - PHP 8 fixes
+  
 News
   - Add URL Prefix option to News module.
 
