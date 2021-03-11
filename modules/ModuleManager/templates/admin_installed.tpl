@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   $('a.mod_upgrade').click( function(ev){
       ev.preventDefault();

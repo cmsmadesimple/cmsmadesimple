@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   {if !$advanced}$('#advhelp').hide();{/if}
   $('#advanced').click(function(){

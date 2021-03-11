@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   $(document).on('click','#reseturl',function(ev){
       ev.preventDefault();
@@ -17,6 +17,7 @@ $(document).ready(function(){
   });
 });
 </script>
+
 {if isset($message)}<p>{$message}</p>{/if}
 
 {form_start action='setprefs'}<input type="hidden" id="inp_reset" name="{$actionid}reseturl" value=""/>
