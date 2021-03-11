@@ -1,8 +1,11 @@
 <?php
-#-------------------------------------------------------------------------
-# Module: AdminSearch - A CMSMS addon module to provide admin side search capbilities.
-# (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
-#
+#---------------------------------------------------------------------------
+# CMS Made Simple - Power for the professional, Simplicity for the end user.
+# (c) 2004 - 2011 by Ted Kulp
+# (c) 2011 - 2018 by the CMS Made Simple Development Team
+# (c) 2018 and beyond by the CMS Made Simple Foundation
+# This project's homepage is: https://www.cmsmadesimple.org
+#---------------------------------------------------------------------------
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -16,25 +19,25 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
-#
-#-------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
 
 function status_error($msg)
 {
-  echo '<script type="text/javascript">parent.status_error(\''.$msg.'\')</script>';
+  echo '<script>parent.status_error(\''.$msg.'\')</script>';
 }
 
 function status_msg($msg)
 {
-  echo '<script type="text/javascript">parent.status_msg(\''.$msg.'\')</script>';
+  echo '<script>parent.status_msg(\''.$msg.'\')</script>';
 }
 
 function begin_section($id,$txt,$desc = '')
 {
   $desc = addslashes($desc);
-  echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
+  echo "<script>parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
 }
 
 function add_result($listid,$content,$title,$url,$text = '')
@@ -44,12 +47,12 @@ function add_result($listid,$content,$title,$url,$text = '')
   $title = preg_replace( "/\n/", '\\n', $title);
   $content = addslashes($content);
   $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}');";
-  echo '<script type="text/javascript">'.$tmp.'</script>';
+  echo '<script>'.$tmp.'</script>';
 }
 
 function end_section()
 {
-  echo '<script type="text/javascript">parent.end_section()</script>';
+  echo '<script>parent.end_section()</script>';
 }
 
 if( !isset($params['search_text']) || $params['search_text'] == '' ) {
@@ -103,4 +106,3 @@ exit;
 #
 # EOF
 #
-?>

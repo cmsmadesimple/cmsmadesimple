@@ -28,7 +28,7 @@
    }
  });
 </script>
-<script type="text/javascript" src="{$js_url}"></script>
+<script src="{$js_url}"></script>
 
 <div id="adminsearchform">
 {$formstart}
@@ -39,7 +39,7 @@
 <div class="pageoverflow">
   <p class="pagetext"><label for="searchtext">{$mod->Lang('search_text')}:</label></p>
   <p class="pageinput">
-    <input id="searchtext" type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''}" size="80" maxlength="80" id="searchtext"/>
+    <input id="searchtext" type="text" name="{$actionid}search_text" value="{*$saved_search.search_text|default:''*}" size="80" maxlength="80" id="searchtext"/>
   </p>
 </div>
 <div class="pageoverflow">
