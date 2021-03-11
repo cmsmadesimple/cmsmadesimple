@@ -1,32 +1,21 @@
 <?php
+
+# C
 $lang['created'] = 'Created';
+
+# E
 $lang['errors'] = 'Errors';
 $lang['evtdesc_CmsJobManager::OnJobFailed'] = 'Sent after a job is removed from the job queue after failing too many times';
 $lang['evthelp_CmsJobManager::OnJobFailed'] = '<h4>Parameters:</h4>
 <ul>
   <li>"job" - A reference to the \CMSMS\Async\Job job object that has failed</li>
 </ul>';
+
+# F
 $lang['frequency'] = 'Frequency';
 $lang['friendlyname'] = 'Background Job Manager';
-$lang['info_background_jobs'] = 'This panel lists information about all currently known background jobs. It is normal for jobs to appear and disappear on this list frequently. If a job has a high error count OR never started it may mean that you need to investigate the reasons for that error.';
-$lang['info_no_jobs'] = 'There are currently no jobs in the queue';
-$lang['jobs'] = 'Jobs';
-$lang['moddescription'] = 'A module for managing asynchronous processing jobs.';
-$lang['module'] = 'Module';
-$lang['name'] = 'Name';
-$lang['processing_freq'] = 'Maximum processing frequency (seconds)';
-$lang['recur_120m'] = 'Every 2 Hours';
-$lang['recur_15m'] = 'Every 15 Minutes';
-$lang['recur_180m'] = 'Every 3 Hours';
-$lang['recur_30m'] = 'Every 30 Minutes';
-$lang['recur_daily'] = 'Daily';
-$lang['recur_hourly'] = 'Hourly';
-$lang['recur_monthly'] = 'Monthly';
-$lang['recur_weekly'] = 'Weekly';
-$lang['settings'] = 'Settings';
-$lang['start'] = 'Start';
-$lang['until'] = 'Until';
 
+# H
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a CMSMS core module that provides functionality for processing jobs asynchronously (in the background) as the website is handling requests.</p>
@@ -44,4 +33,40 @@ $lang['help'] = <<<EOT
 <p>From time to time some applications may create jobs that fail, exiting with some sort of error.  CmsJobManager will remove the job after the job has failed a number of times.  At which time the originating code can re-create the job.  If you encounter a problematic job that continues to fail this is a bug that should be diagnosed, and reported in detail to the appropriate developers.</p>
 EOT;
 
-?>
+# I
+$lang['info_background_jobs'] = 'This panel lists information about all currently known background jobs. It is normal for jobs to appear and disappear on this list frequently. If a job has a high error count OR never started it may mean that you need to investigate the reasons for that error.';
+$lang['info_no_jobs'] = 'There are currently no jobs in the queue';
+
+# J
+$lang['jobs'] = 'Jobs';
+
+# M
+$lang['moddescription'] = 'A module for managing asynchronous processing jobs.';
+$lang['module'] = 'Module';
+
+# N
+$lang['name'] = 'Name';
+
+# P
+$lang['processing_freq'] = 'Maximum processing frequency (seconds)';
+
+# R
+$lang['recur_120m'] = 'Every 2 Hours';
+$lang['recur_15m'] = 'Every 15 Minutes';
+$lang['recur_180m'] = 'Every 3 Hours';
+$lang['recur_30m'] = 'Every 30 Minutes';
+$lang['recur_daily'] = 'Daily';
+$lang['recur_hourly'] = 'Hourly';
+$lang['recur_monthly'] = 'Monthly';
+$lang['recur_weekly'] = 'Weekly';
+
+# S
+$lang['settings'] = 'Settings';
+$lang['start'] = 'Start';
+
+# U
+$lang['until'] = 'Until';
+
+#
+# EOF
+#
