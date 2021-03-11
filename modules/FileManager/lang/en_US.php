@@ -330,4 +330,6 @@ $lang['view'] = 'View';
 $lang['writable'] = 'Writable';
 $lang['writeprotected'] = 'Write protected';
 
-?>
+#
+# EOF
+#
