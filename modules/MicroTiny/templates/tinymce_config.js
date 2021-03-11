@@ -95,5 +95,5 @@ tinymce.init({
             $(document).trigger('cmsms_formchange');
         });
     },
-    paste_as_text: true,
+    paste_as_text: true
 });
