@@ -1,4 +1,5 @@
 <?php
+
 // C
 $lang['clear'] = 'Clear';
 $lang['confirm_clearstats'] = 'Are you sure you want to permanently clear all statistics?';
@@ -124,4 +125,6 @@ $lang['use_or'] = 'Find results that match ANY word';
 // W
 $lang['word'] = 'Word';
 
-?>
+#
+# EOF
+#

@@ -1,5 +1,3 @@
-{* admin statistics tab *}
-
 {if isset($topwords)}
 {$formstart}
 <div class="pageoverflow">
