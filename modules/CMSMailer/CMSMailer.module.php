@@ -1,14 +1,11 @@
 <?php
-#-------------------------------------------------------------------------
-# Module: CMSMailer - a simple wrapper around phpmailer
-# Version: 1.73.10, Robert Campbell <rob@techcom.dyndns.org>
-#
-#-------------------------------------------------------------------------
-# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
-# Visit our homepage at: http://www.cmsmadesimple.org
-#
-#-------------------------------------------------------------------------
-#
+#---------------------------------------------------------------------------
+# CMS Made Simple - Power for the professional, Simplicity for the end user.
+# (c) 2004 - 2011 by Ted Kulp
+# (c) 2011 - 2018 by the CMS Made Simple Development Team
+# (c) 2018 and beyond by the CMS Made Simple Foundation
+# This project's homepage is: https://www.cmsmadesimple.org
+#---------------------------------------------------------------------------
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -22,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
-#
-#-------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
 if( !isset($gCms) ) exit;
 
 class CMSMailer extends CMSModule
@@ -38,11 +35,10 @@ class CMSMailer extends CMSModule
   function GetName() { return 'CMSMailer'; }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
   function GetVersion() { return '6.2.14'; }
-  function MinimumCMSVersion() { return '1.99-alpha0'; }
+  function MinimumCMSVersion() { return '2.0'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
   function IsPluginModule() { return FALSE; }
   function HasAdmin() { return FALSE; }
   function GetAdminSection() { return 'extensions'; }
@@ -125,6 +121,9 @@ class CMSMailer extends CMSModule
     throw new CmsException('Call to invalid method '.$method.' on '.get_class($this->the_mailer).' object');
     // todo, throw exception here.
   }
-} // class CMSMailer
 
-?>
+} // end of class
+
+#
+# EOF
+#

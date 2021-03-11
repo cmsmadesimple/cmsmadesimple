@@ -1,9 +1,10 @@
 <?php
+
+# F
 $lang['friendlyname'] = 'CMSMailer';
 
 // H
 $lang['help'] = '<h3>What Does This Do?</h3>
-<p><strong>NOTE:</strong> This module is deprecated and will be removed in later versions of CMSMS.</p>
 <p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  That\'s it, nothing more.</p>
 <h3>How Do I Use It</h3>
 <p>This module provides a simple wrapper around all of the methods and variables of phpmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the PHPMailer documentation included for more information.</p>
@@ -263,7 +264,13 @@ of the license for the full disclaimer.</p>
 <p>This module has been released under the <a href=\'http://www.gnu.org/licenses/licenses.html#GPL\'>GNU Public License</a>. You must agree to this license before using the module.</p>
 ';
 
+# M
 $lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.  This module is deprecated as of CMSMS 2.0';
 
+# P
 $lang['postinstall'] = 'CMSMailer module has been successfully installed';
 $lang['postuninstall'] = 'CMSMailer module uninstalled... sorry to see you leave';
+
+#
+# EOF
+#
