@@ -1,22 +1,27 @@
 <?php
-#CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#Visit our homepage at: http://www.cmsmadesimple.org
+#---------------------------------------------------------------------------
+# CMS Made Simple - Power for the professional, Simplicity for the end user.
+# (c) 2004 - 2011 by Ted Kulp
+# (c) 2011 - 2018 by the CMS Made Simple Development Team
+# (c) 2018 and beyond by the CMS Made Simple Foundation
+# This project's homepage is: https://www.cmsmadesimple.org
+#---------------------------------------------------------------------------
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 #
-#This program is free software; you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation; either version 2 of the License, or
-#(at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#---------------------------------------------------------------------------
 
-function smarty_function_recently_updated($params, &$smarty)
+function smarty_function_recently_updated($params, $smarty)
 {
     $number = 10;
 	if(!empty($params['number'])) $number = min(100,max(1,(int) $params['number']));
@@ -76,18 +81,6 @@ function smarty_function_recently_updated($params, &$smarty)
 	return $output;
 }
 
-function smarty_cms_about_function_recently_updated() {
-?>
-	<p>Author: Elijah Lofgren &lt;elijahlofgren@elijahlofgren.com&gt; Olaf Noehring &lt;http://www.team-noehring.de&gt;</p>
-
-	<p>Change History:</p>
-	<ul>
-		<li>added new parameters:<br />
-		&lt;leadin&gt;. The contents of leadin will be shown left of the modified date. Default is &lt;Modified:&gt;<br />
-		$showtitle='true' - if true, the titleattribute of the page will be shown if it exists (true|false)<br />
-		css_class<br />
-		dateformat - default is d.m.y h:m , use the format you whish (php format)</li>
-	</ul>
-<?php
-}
-?>
+#
+# EOF
+#
