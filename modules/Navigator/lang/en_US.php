@@ -1,17 +1,10 @@
 <?php
-#A
-#B
-#C
 
 #D
 $lang['description'] = 'This module provides a simple and easy way to generate the HTML needed for a website navigation directly, and dynamically from the CMSMS page structure.  It provides flexible filtering, and templating capabilities to build powerful, fast, and appealing website navigations with no interaction from the content editor.';
 
-#E
-
 #F
 $lang['friendlyname'] = 'CMSMS Navigation Builder';
-
-#G
 
 #H
 $lang['help'] = <<<EOT
@@ -93,31 +86,14 @@ $lang['help_start_page'] = 'Starts the menu displaying at the given start_page a
 $lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Navigator::Navigation will be used';
 $lang['help_start_text'] = 'Useful only in the breadcrumbs action, this parameter allows specifying some optional text to display at the beginning of the breadcrumb navigation.  An example would be &quot;You Are Here&quot;';
 
-#I
-#J
-#K
-#L
-#M
-#N
-#O
-#P
-#Q
-#R
-#S
-
 #T
 $lang['type_breadcrumbs'] = 'Breadcrumbs';
 $lang['type_Navigator'] = 'Navigator';
 $lang['type_navigation'] = 'Navigation';
 
-#U
-#V
-#W
-#X
-
 #Y
 $lang['youarehere'] = 'You are here';
 
-#Z
-
-?>
+#
+# EOF
+#
