@@ -3,6 +3,7 @@ Version 2.2.16 -
 
 Core - General
   - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
+  - Fixed an issue with specific characters in a content block tab name breaking the editor
 
 Admin Search v
   - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+)
