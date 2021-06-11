@@ -74,7 +74,7 @@ final class CmsLangOperations
 	private static function _load_realm($realm)
 	{
         $curlang = CmsNlsOperations::get_current_language();
-        if( !$realm ) $realm = self::$_curent_realm;
+        if( !$realm ) $realm = self::$_current_realm;
 
         if( is_array(self::$_langdata) && isset(self::$_langdata[$curlang][$realm]) ) return;
         if( !is_array(self::$_langdata) ) self::$_langdata = array();
