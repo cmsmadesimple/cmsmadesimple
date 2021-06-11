@@ -3,12 +3,15 @@ Version 2.2.16 -
 
 Core - General
   - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
-  
+
 Admin Search v
-  - BR #12443 Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+)
+  - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+)
   - Removed license and copyright notices from module help text
   - Escaping the search input field values
   - More content object attributes are searched 
+
+Navigator v
+  - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes php notice
   
 
 Version 2.2.15 - Bonaventure

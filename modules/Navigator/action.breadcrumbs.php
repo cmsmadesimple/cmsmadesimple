@@ -99,7 +99,8 @@ if( !$tpl->isCached() ) {
         // get the 'home' page and push it on the list
         $dflt_content_id = ContentOperations::get_instance()->GetDefaultContent();
         $node = $hm->GetNodeById($dflt_content_id);
-        $pagestack[$dflt_content_id] = Nav_utils::fill_node($node,$deep,0,$showall);
+        $dflt_content_node = Nav_utils::fill_node($node,$deep,0,$showall);
+        if ($dflt_content_node) $pagestack[$dflt_content_id] = $dflt_content_node;
     }
 
     $tpl->assign('starttext',$starttext);
