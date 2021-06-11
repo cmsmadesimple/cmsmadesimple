@@ -22,9 +22,10 @@ final class AdminSearch_template_slave extends AdminSearch_slave
 
     private function check_tpl_match(\CmsLayoutTemplate $tpl)
     {
-        if( strpos($tpl->get_name(),$this->get_text()) !== FALSE ) return TRUE;
-        if( strpos($tpl->get_content(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $this->search_descriptions() && strpos($tpl->get_description(),$this->get_text()) !== FALSE ) return TRUE;
+        $strposFunctionName = $this->search_casesensitive() ? 'strpos' : 'stripos';
+        if( $strposFunctionName($tpl->get_name(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName($tpl->get_content(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $this->search_descriptions() && $strposFunctionName($tpl->get_description(),$this->get_text()) !== FALSE ) return TRUE;
         return FALSE;
     }
 
@@ -38,31 +39,35 @@ final class AdminSearch_template_slave extends AdminSearch_slave
     private function get_tpl_match_info(\CmsLayoutTemplate $tpl)
     {
         $one = $tpl->get_id();
-        $intext = $this->get_text();
-        $text = '';
-        $content = $tpl->get_content();
-        $pos = strpos($content,$intext);
-        if( $pos !== FALSE ) {
-            $start = max(0,$pos - 50);
-            $end = min(strlen($content),$pos+50);
-            $text = substr($content,$start,$end-$start);
-            $text = htmlentities($text);
-            $text = str_replace($intext,'<span class="search_oneresult">'.$intext.'</span>',$text);
-            $text = str_replace("\r",'',$text);
-            $text = str_replace("\n",'',$text);
-        }
-        $url = $this->get_mod()->create_url( 'm1_','admin_edit_template','', [ 'tpl'=>$one ] );
-        $url = str_replace('&amp;','&',$url);
         $title = $tpl->get_name();
         if( $tpl->has_content_file() ) {
             $config = \cms_config::get_instance();
             $file = $tpl->get_content_filename();
             $title = $tpl->get_name().' ('.cms_relative_path($file,$config['root_path']).')';
         }
-        $tmp = [ 'title'=>$title,
-                 'description'=>AdminSearch_tools::summarize($tpl->get_description()),
-                 'edit_url'=>$url,'text'=>$text ];
-        return $tmp;
+        $resultSet = $this->get_resultset($title,AdminSearch_tools::summarize($this->get_description()),$this->get_mod()->create_url( 'm1_','admin_edit_template','', [ 'tpl'=>$one ] ));
+
+        $content = $tpl->get_name();
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[\CmsLangOperations::lang_from_realm('admin','name')] = $this->generate_snippets($content);
+        }
+
+        $content = $tpl->get_content();
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[\CmsLangOperations::lang_from_realm('admin','content')] = $this->generate_snippets($content);
+        }
+
+        if( $this->search_descriptions()) {
+            $content = $tpl->get_description();
+            $resultSet->count += $count = $this->get_number_of_occurrences($content);
+            if ($this->show_snippets() && $count > 0) {
+                $resultSet->locations[\CmsLangOperations::lang_from_realm('admin','description')] = $this->generate_snippets($content);
+            }
+        }
+
+        return $resultSet;
     }
 
     public function get_matches()
@@ -73,15 +78,21 @@ final class AdminSearch_template_slave extends AdminSearch_slave
         $sql = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.' ORDER BY name ASC';
         $all_ids = $db->GetCol($sql);
         $output = [];
+        $resultSets = array();
         if( count($all_ids) ) {
             $chunks = array_chunk($all_ids,15);
             foreach( $chunks as $chunk ) {
                 $tpl_list = CmsLayoutTemplate::load_bulk($chunk);
                 foreach( $tpl_list as $tpl ) {
-                    if( $this->check_tpl_match($tpl) ) $output[] = $this->get_tpl_match_info($tpl);
+                    if( $this->check_tpl_match($tpl) ) $resultSets[] = $this->get_tpl_match_info($tpl);
                 }
             }
         }
+        #processing the results
+        foreach ($resultSets as $result_object) {
+            $output[] = json_encode($result_object);
+        }
+
         return $output;
     }
 } // end of class

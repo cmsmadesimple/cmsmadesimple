@@ -22,9 +22,10 @@ final class AdminSearch_css_slave extends AdminSearch_slave
 
     private function check_css_matches(\CmsLayoutStylesheet $css)
     {
-        if( strpos($css->get_name(),$this->get_text()) !== FALSE ) return TRUE;
-        if( strpos($css->get_content(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $this->search_descriptions() && strpos($css->get_description(),$this->get_text()) !== FALSE ) return TRUE;
+        $strposFunctionName = $this->search_casesensitive() ? 'strpos' : 'stripos';
+        if( $strposFunctionName($css->get_name(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName($css->get_content(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $this->search_descriptions() && $strposFunctionName($css->get_description(),$this->get_text()) !== FALSE ) return TRUE;
         return FALSE;
     }
 
@@ -35,34 +36,40 @@ final class AdminSearch_css_slave extends AdminSearch_slave
         return $_mod;
     }
 
-    private function get_css_match_info(\CmsLayoutStylesheet $css)
+    private function get_css_match_info(\CmsLayoutStylesheet $css, &$mod)
     {
+
         $one = $css->get_id();
-        $intext = $this->get_text();
-        $text = '';
-        $content = $css->get_content();
-        $pos = strpos($content,$intext);
-        if( $pos !== FALSE ) {
-            $start = max(0,$pos - 50);
-            $end = min(strlen($content),$pos+50);
-            $text = substr($content,$start,$end-$start);
-            $text = htmlentities($text);
-            $text = str_replace($intext,'<span class="search_oneresult">'.$intext.'</span>',$text);
-            $text = str_replace("\r",'',$text);
-            $text = str_replace("\n",'',$text);
-        }
-        $url = $this->get_mod()->create_url( 'm1_','admin_edit_css','', [ 'css'=>$one ] );
-        $url = str_replace('&amp;','&',$url);
         $title = $css->get_name();
         if( $css->has_content_file() ) {
             $config = \cms_config::get_instance();
             $file = $css->get_content_filename();
             $title = $css->get_name().' ('.cms_relative_path($file,$config['root_path']).')';
         }
-        $tmp = [ 'title'=>$title,
-                 'description'=>AdminSearch_tools::summarize($css->get_description()),
-                 'edit_url'=>$url,'text'=>$text ];
-        return $tmp;
+        $resultSet = $this->get_resultset($title,AdminSearch_tools::summarize($this->get_description()),$this->get_mod()->create_url( 'm1_','admin_edit_css','', [ 'css'=>$one ] ));
+
+        $content = $css->get_name();
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[$mod->lang('name')] = $this->generate_snippets($content);
+        }
+
+        $content = $css->get_content();
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[$mod->lang('prompt_stylesheet')] = $this->generate_snippets($content);
+        }
+
+        if( $this->search_descriptions()) {
+            $content = $css->get_description();
+            $resultSet->count += $count = $this->get_number_of_occurrences($content);
+            if ($this->show_snippets() && $count > 0) {
+                $resultSet->locations[$mod->lang('prompt_description')] = $this->generate_snippets($content);
+            }
+        }
+
+        return $resultSet;
+
     }
 
     public function get_matches()
@@ -73,15 +80,23 @@ final class AdminSearch_css_slave extends AdminSearch_slave
         $sql = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME.' ORDER BY name ASC';
         $all_ids = $db->GetCol($sql);
         $output = [];
+        $resultSets = array();
+
         if( count($all_ids) ) {
             $chunks = array_chunk($all_ids,15);
             foreach( $chunks as $chunk ) {
                 $css_list = \CmsLayoutStylesheet::load_bulk($chunk);
                 foreach( $css_list as $css ) {
-                    if( $this->check_css_matches($css) ) $output[] = $this->get_css_match_info($css);
+                    if( $this->check_css_matches($css) ) $resultSets[] = $this->get_css_match_info($css,$mod);
                 }
             }
         }
-        return $output;
+
+            #processing the results
+            foreach ($resultSets as $result_object) {
+                $output[] = json_encode($result_object);
+            }
+
+            return $output;
     }
 } // end of class

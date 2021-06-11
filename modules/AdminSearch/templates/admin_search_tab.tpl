@@ -39,7 +39,7 @@
 <div class="pageoverflow">
   <p class="pagetext"><label for="searchtext">{$mod->Lang('search_text')}:</label></p>
   <p class="pageinput">
-    <input id="searchtext" type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''}" size="80" maxlength="80" id="searchtext"/>
+    <input id="searchtext" type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''|cms_escape}" size="80" maxlength="80" id="searchtext"/>
   </p>
 </div>
 <div class="pageoverflow">
@@ -53,12 +53,14 @@
 <div class="pageoverflow" id="filter_box">
   <p class="pagetext">{$mod->Lang('filter')}:</p>
   <p class="pageinput">
-    <input id="filter_all" type="checkbox" name="{$actionid}slaves[]" value="-1"/>&nbsp;<label for="filter_all" title="{$mod->Lang('desc_filter_all')}">{$mod->Lang('all')}</label><br />
+    <input id="filter_all" type="checkbox" name="{$actionid}slaves[]" value="-1" checked="checked"/>&nbsp;<label for="filter_all" title="{$mod->Lang('desc_filter_all')}">{$mod->Lang('all')}</label><br />
     {foreach from=$slaves item='slave' name='slaves'}
       <input class="filter_toggle" id="{$slave.class}" type="checkbox" name="{$actionid}slaves[]" value="{$slave.class}" {if isset($saved_search.slaves) && in_array($slave.class,$saved_search.slaves)}checked="checked"{/if}/>&nbsp;<label for="{$slave.class}" title="{$slave.description}">{$slave.name}</label>{if !$smarty.foreach.slaves.last}<br/>{/if}
     {/foreach}
     <br /><br />
-    <input type="checkbox" id="search_desc" name="{$actionid}search_descriptions" value="1">&nbsp;<label for="search_desc">{$mod->lang('lbl_search_desc')}</label>
+    <input type="checkbox" id="search_desc" name="{$actionid}search_descriptions" value="1" checked="checked">&nbsp;<label for="search_desc">{$mod->lang('lbl_search_desc')}</label><br/>
+    <input type="checkbox" id="search_case" name="{$actionid}search_casesensitive" value="1">&nbsp;<label for="search_casesensitive">{$mod->lang('lbl_search_casesensitive')}</label><br/>
+    <input type="checkbox" id="search_snippets" name="{$actionid}show_snippets" value="1">&nbsp;<label for="show_snippets">{$mod->lang('lbl_show_snippets')}</label>
   </p>
   <br />
 </div>

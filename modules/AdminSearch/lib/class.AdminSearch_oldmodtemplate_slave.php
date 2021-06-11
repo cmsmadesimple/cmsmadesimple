@@ -24,32 +24,42 @@ final class AdminSearch_oldmodtemplate_slave extends AdminSearch_slave
     $userid = get_userid();
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT module_name,template_name,content FROM '.CMS_DB_PREFIX.'module_templates WHERE content LIKE ?';
-    $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
+    $query = 'SELECT module_name,template_name,content FROM '.CMS_DB_PREFIX.'module_templates WHERE content LIKE ? OR template_name LIKE ?';
+    
+    $this->process_query_string($query);
+    $dbr = $db->GetArray($query,array_fill(0,2,'%'.$this->get_text().'%'));
     if( is_array($dbr) && count($dbr) ) {
       $output = array();
+      $resultSets = array();
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
       foreach( $dbr as $row ) {
-	// here we could actually have a smarty template to build the description.
-	$pos = strpos($row['content'],$this->get_text());
-	if( $pos !== FALSE ) {
-	  $start = max(0,$pos - 50);
-	  $end = min(strlen($row['content']),$pos+50);
-	  $text = substr($row['content'],$start,$end-$start);
-	  $text = cms_htmlentities($text);
-	  $text = str_replace($this->get_text(),'<span class="search_oneresult">'.$this->get_text().'</span>',$text);
-	  $text = str_replace("\r",'',$text);
-	  $text = str_replace("\n",'',$text);
-	}
+	
+        $resultSet = $this->get_resultset("{$row['module_name']} :: {$row['template_name']}",AdminSearch_tools::summarize($this->get_description()));
 
-	$tmp = array('title'=>"{$row['module_name']} + {$row['template_name']}",'text'=>$text);
+        $content = $row['template_name'];
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[\CmsLangOperations::lang_from_realm('admin','name')] = $this->generate_snippets($content);
+        }
 
-	$output[] = $tmp;
+        $content = $row['content'];
+        $resultSet->count += $count = $this->get_number_of_occurrences($content);
+        if ($this->show_snippets() && $count > 0) {
+            $resultSet->locations[\CmsLangOperations::lang_from_realm('admin','content')] = $this->generate_snippets($content);
+        }
+
+        $resultSets[] = $resultSet;
       }
 
-      return $output;
-    }
+
+		#processing the results
+      foreach ($resultSets as $result_object) {
+        $output[] = json_encode($result_object);
+      }
+    } 
+
+  return $output;
     
   }
 

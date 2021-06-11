@@ -30,8 +30,8 @@ final class News_AdminSearch_slave extends AdminSearch_slave
     if( !is_object($mod) ) return;
     $db = cmsms()->GetDb();
     // need to get the fielddefs of type textbox or textarea
-    $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE type IN (?,?)';
-    $fdlist = $db->GetCol($query,array('textbox','textarea'));
+    $query = 'SELECT id, name FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE type IN (?,?)';
+    $fdlist = $db->GetArray($query,array('textbox','textarea'));
 
     $fields = array('N.*');
     $joins = array();
@@ -40,10 +40,13 @@ final class News_AdminSearch_slave extends AdminSearch_slave
     $parms = array($str,$str,$str);
     
     // add in fields 
+    $fieldNames = array();
     for( $i = 0; $i < count($fdlist); $i++ ) {
       $tmp = 'FV'.$i;
-      $fdid = $fdlist[$i];
-      $fields[] = "$tmp.value";
+      //$fdid = $fdlist[$i];
+      $fdid = $fdlist[$i]['id'];
+      $fieldNames[$tmp] = $fdlist[$i]['name'];
+      $fields[] = "$tmp.value as $tmp";
       $joins[] = 'LEFT JOIN '.CMS_DB_PREFIX."module_news_fieldvals $tmp ON N.news_id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
       $where[] = "$tmp.value LIKE ?";
       $parms[] = $str;
@@ -55,33 +58,40 @@ final class News_AdminSearch_slave extends AdminSearch_slave
     if( count($where) ) $query .= ' WHERE '.implode(' OR ',$where);
     $query .= ' ORDER BY N.modified_date DESC';
 
+    $this->process_query_string($query);
+
     $dbr = $db->GetArray($query,array($parms));
     if( is_array($dbr) && count($dbr) ) {
       // got some results.
       $output = array();
-      foreach( $dbr as $row ) {
-	$text = null;
-	foreach( $row as $key => $value ) {
-	  // search for the keyword
-	  $pos = strpos($value,$this->get_text());
-	  if( $pos !== FALSE ) {
-	    // build the text
-	    $start = max(0,$pos - 50);
-	    $end = min(strlen($value),$pos+50);
-	    $text = substr($value,$start,$end-$start);
-	    $text = cms_htmlentities($text);
-	    $text = str_replace($this->get_text(),'<span class="search_oneresult">'.$this->get_text().'</span>',$text);
-	    $text = str_replace("\r",'',$text);
-	    $text = str_replace("\n",'',$text);
-	    break;
-	  }
-	}
-	$url = $mod->create_url('m1_','editarticle','',array('articleid'=>$row['news_id']));
-	$tmp = array('title'=>$row['news_title'],
-		     'description'=>AdminSearch_tools::summarize($row['summary']),
-		     'edit_url'=>$url,'text'=>$text);
-	$output[] = $tmp;
+      $resultSets = array();
+
+      if ($this->show_snippets()) {
+        $fieldNames['news_title'] = $mod->lang('title');
+        $fieldNames['news_data'] = $mod->lang('content');
+        $fieldNames['summary'] = $mod->lang('summary');
       }
+
+      foreach( $dbr as $row ) {
+
+        if (!isset($resultSets[$row['news_id']])) {
+          $resultSets[$row['news_id']] = $this->get_resultset($row['news_title'],AdminSearch_tools::summarize($row['summary']),$mod->create_url('m1_','editarticle','',array('articleid'=>$row['news_id'])));
+        }
+
+	      foreach( $fieldNames as $key => $value ) {
+          $content = $row[$key];
+          $resultSets[$row['news_id']]->count += $count = $this->get_number_of_occurrences($content);
+          if ($this->show_snippets() && $count > 0) {
+            $resultSets[$row['news_id']]->locations[$value] = $this->generate_snippets($content);
+          }
+        }
+      }
+      
+      #processing the results
+      foreach ($resultSets as $result_object) {
+        $output[] = json_encode($result_object);
+      }
+    
       return $output;
     }
   }

@@ -1,7 +1,6 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide admin side search capbilities.
-# (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,13 +36,9 @@ function begin_section($id,$txt,$desc = '')
   echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
 }
 
-function add_result($listid,$content,$title,$url,$text = '')
+function add_result($listid,$content)
 {
-  $title = addslashes($title);
-  $title = preg_replace( "/\r/", '', $title);
-  $title = preg_replace( "/\n/", '\\n', $title);
-  $content = addslashes($content);
-  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}');";
+  $tmp = "parent.add_result('{$listid}',{$content});";
   echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 
@@ -84,14 +79,24 @@ if( is_array($slaves) && count($slaves) ) {
         if( is_array($results) && count($results) ) {
             begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
             foreach( $results as $one ) {
-          debug_to_log($one);
-                $text = isset($one['text'])?$one['text']:'';
-                if( $text ) $text = addslashes($text);
-                $url = isset($one['edit_url'])?$one['edit_url']:'';
-                if( $url ) $url = str_replace('&amp;','&',$url);
-                add_result($one_slave['class'],$one['title'],
-                           isset($one['description'])?$one['description']:'',
-                           $url,$text);
+                debug_to_log($one);
+                if (is_array($one)) {
+                  //oldskool
+                  $text = isset($params['show_snippets']) && isset($one['text'])?$one['text']:'';
+                  //if( $text ) $text = addslashes($text);
+                  $url = isset($one['edit_url'])?$one['edit_url']:'';
+
+                  $tmp = array(
+                    'title' => $one['title'],
+                    'description' => $one['description'],
+                    'edit_url' => $url,
+                    'text' => $text
+                  );
+
+                  $one = json_encode($tmp);
+                  
+                }
+                add_result($one_slave['class'],$one);
             }
         }
         end_section();

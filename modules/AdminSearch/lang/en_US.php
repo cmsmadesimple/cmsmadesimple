@@ -2,6 +2,9 @@
 // A
 $lang['all'] = 'All';
 
+// C
+$lang['content'] = 'Content';
+
 // D
 $lang['desc_css_search'] = 'Search for matching text in stylesheets';
 $lang['desc_content_search'] = 'Search for matching text in content pages';
@@ -32,8 +35,7 @@ $lang['help'] = <<<EOT
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
 
-<h3>Copyright and License</h3>
-<p>Copyright &copy; 2012, calguy1000 <a href="mailto:calguy1000@hotmail.com">&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
+<h3>License</h3>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>
 EOT;
 
@@ -42,11 +44,16 @@ $lang['lbl_content_search'] = 'Search Content Pages';
 $lang['lbl_css_search'] = 'Search Stylesheets';
 $lang['lbl_gcb_search'] = 'Search Global Content Blocks';
 $lang['lbl_oldmodtemplate_search'] = 'Search module templates';
+$lang['lbl_search_casesensitive'] = 'Search is case-sensitive';
 $lang['lbl_search_desc'] = 'Search Descriptions <em>(where applicable)</em>';
+$lang['lbl_show_snippets'] = 'Show snippets with the results';
 $lang['lbl_template_search'] = 'Search Templates';
 
 // M
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';
+
+// N
+$lang['name'] = 'Name';
 
 // P
 $lang['placeholder_search_text'] = 'Enter Search Text';

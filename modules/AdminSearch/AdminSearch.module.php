@@ -1,7 +1,6 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide admin side search capbilities.
-# (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,13 +22,13 @@ if( !isset($gCms) ) exit;
 final class AdminSearch extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-  function GetVersion()  { return '1.0.5'; }
-  function MinimumCMSVersion()  { return '1.12-alpha0';  }
+  function GetVersion()  { return '1.0.6-beta'; }
+  function MinimumCMSVersion()  { return '2.2.15';  }
   function LazyLoadAdmin() { return TRUE; }
   function LazyLoadFrontend() { return TRUE; }
   function IsPluginModule() { return FALSE; }
-  function GetAuthor() { return 'Calguy1000'; }
-  function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
+  function GetAuthor() { return 'CMS Made Simple Foundation'; }
+  function GetAuthorEmail() { return ''; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'extensions'; }
   function GetHelp() { return $this->Lang('help'); }
