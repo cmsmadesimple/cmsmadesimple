@@ -23,15 +23,14 @@ final class AdminSearch_content_slave extends AdminSearch_slave
     {
         #key: db colums name, value: corresponding function name to get the value from the Content Object
         $content_db_fields = array(
-            'content_name' => \CmsLangOperations::lang_from_realm('admin','name'),
-            'menu_text' => \CmsLangOperations::lang_from_realm('admin','menutext'),
-            'content_alias' => \CmsLangOperations::lang_from_realm('admin','alias'),
-            'metadata' => \CmsLangOperations::lang_from_realm('admin','metadata'),
-            'titleattribute' => \CmsLangOperations::lang_from_realm('admin','titleattribute'),
-            'page_url'  => \CmsLangOperations::lang_from_realm('admin','page_url'),
+            'content_name' => [ 'function_name' => 'Name', 'translation' => \CmsLangOperations::lang_from_realm('admin','name') ],
+            'menu_text' => [ 'function_name' => 'MenuText', 'translation' => \CmsLangOperations::lang_from_realm('admin','menutext') ],
+            'content_alias' => [ 'function_name' => 'Alias', 'translation' => \CmsLangOperations::lang_from_realm('admin','alias') ],
+            'metadata' => [ 'function_name' => 'Metadata', 'translation' => \CmsLangOperations::lang_from_realm('admin','metadata') ],
+            'titleattribute' => [ 'function_name' => 'TitleAttribute', 'translation' => \CmsLangOperations::lang_from_realm('admin','titleattribute') ],
+            'page_url'  => [ 'function_name' => 'URL', 'translation' => \CmsLangOperations::lang_from_realm('admin','page_url') ]
         );
 
-       
         $userid = get_userid();
 
         $content_manager = cms_utils::get_module('CMSContentManager');
@@ -73,7 +72,8 @@ final class AdminSearch_content_slave extends AdminSearch_slave
                 }
 
                 // we're going to check several standard attributes of the content object
-                foreach ($content_db_fields as $db_field => $fname) { 
+                foreach ($content_db_fields as $db_field => $value) { 
+                    $fname = $value['function_name'];
                     $content = $content_obj->$fname(); //get the attribute value (text)
  
                     $resultSets[$content_id]->count += $count = $this->get_number_of_occurrences($content);
@@ -81,7 +81,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
                     if (!$this->show_snippets()) continue;
                     if( $count > 0 ) {
                         $snippets = $this->generate_snippets($content);
-                        $resultSets[$content_id]->locations[$db_field] = $snippets;
+                        $resultSets[$content_id]->locations[$content_db_fields[$db_field]['translation']] = $snippets;
                     }
                 }
               
