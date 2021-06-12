@@ -2,6 +2,7 @@ Version 2.2.16 -
 -------------------------------
 
 Core - General
+  - BR #12437 - Installer won't allow "<" symbol in database password
   - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
   - Fixed an issue with specific characters in a content block tab name breaking the editor
 
