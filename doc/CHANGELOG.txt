@@ -11,6 +11,8 @@ Admin Search v
   - Removed license and copyright notices from module help text
   - Escaping the search input field values
   - More content object attributes are searched 
+  - User defined tags can be searched
+  - Only places a user has permission to search are shown in the filter list (cached!)
 
 Navigator v
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes php notice

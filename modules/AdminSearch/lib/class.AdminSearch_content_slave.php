@@ -16,7 +16,9 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
     public function check_permission()
     {
-        return TRUE;
+        $userid = get_userid();
+        $mod = cms_utils::get_module('CMSContentManager');
+        return $mod->CanEditContent();
     }
 
     public function get_matches()

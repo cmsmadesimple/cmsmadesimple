@@ -11,8 +11,10 @@ $lang['desc_content_search'] = 'Search for matching text in content pages';
 $lang['desc_filter_all'] = 'Toggle all filters';
 $lang['desc_oldmodtemplate_search'] = 'Search old module templates.';
 $lang['desc_template_search'] = 'Search for matching text in templates';
+$lang['desc_usertag_search'] = 'Search for matching text in User Defined Tag';
 
 // E
+$lang['empty_list'] = 'The list of searchable places is empty';
 $lang['error_nosearchtext'] = 'Please enter a search term';
 $lang['error_select_slave'] = 'You must select at least one filter type';
 
@@ -48,6 +50,7 @@ $lang['lbl_search_casesensitive'] = 'Search is case-sensitive';
 $lang['lbl_search_desc'] = 'Search Descriptions <em>(where applicable)</em>';
 $lang['lbl_show_snippets'] = 'Show snippets with the results';
 $lang['lbl_template_search'] = 'Search Templates';
+$lang['lbl_usertag_search'] = 'Search User Defined Tags';
 
 // M
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';

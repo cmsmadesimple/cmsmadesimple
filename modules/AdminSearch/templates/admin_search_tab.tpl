@@ -1,3 +1,4 @@
+{if $slaves|@count > 0}
 <style type="text/css" scoped>
 #status_area,#searchresults_cont,#workarea {
   display: none;
@@ -81,3 +82,9 @@
 </div>
 
 <iframe id="workarea" name="workarea"></iframe>
+{else}
+<div class="pageoverflow">
+  <p class="pagetext">{$mod->Lang('empty_list')}</p>
+</div>
+  
+{/if}

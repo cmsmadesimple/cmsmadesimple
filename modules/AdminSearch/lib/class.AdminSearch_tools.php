@@ -29,6 +29,7 @@ final class AdminSearch_tools
 	      if( !is_subclass_of($class_name,'AdminSearch_slave') ) continue;
 	      $obj = new $class_name;
 	      if( !is_object($obj) ) continue;
+        if( !$obj->check_permission()) continue;
 
 	      $tmp = array();
 	      $tmp['module'] = $module_name;
