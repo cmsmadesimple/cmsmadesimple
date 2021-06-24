@@ -11,7 +11,7 @@ $lang['desc_content_search'] = 'Search for matching text in content pages';
 $lang['desc_filter_all'] = 'Toggle all filters';
 $lang['desc_oldmodtemplate_search'] = 'Search old module templates.';
 $lang['desc_template_search'] = 'Search for matching text in templates';
-$lang['desc_usertag_search'] = 'Search for matching text in User Defined Tag';
+$lang['desc_usertag_search'] = 'Search for matching text in User Defined Tags';
 
 // E
 $lang['empty_list'] = 'The list of searchable places is empty';
@@ -26,19 +26,19 @@ $lang['friendlyname'] = 'Admin Search';
 // H
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
-  <p>This module provides the ability to quickly find places in templates, content pages, and other database where a text string occurs.  It is particularly useful for finding smarty tags, class names, ids or other bits of HTML code that may be hard to find in a large website.</p>
-  <p>This module has no frontend interaction it is designed for use by CMSMS site developers or editors to find sub strings of text or code.  Not for use in finding text on the frontend of websites.</p>
+<p>This module provides the ability to quickly find places where a text string occurs in templates, content pages, and other database-stored items. It is particularly useful for finding smarty tags, class names, ids or other bits of HTML code that may be hard to find in a large website.</p>
+<p>This module has no frontend interaction. It is designed for use by CMSMS site developers or editors to find sub-strings of text or code. Not for use in finding text on the frontend of websites.</p>
 
 <h3>How Do I Use It</h3>
-  <p>This module is visible to most administrators of the website with at least some permissions to edit templates, stylesheets, or some content   Though the list of what can be searched may be reduced.</p>
-  <p>The module provides a text field where a single string can be entered (the string is not divided into words or otherwise parsed).  It also provides the ability to only search certain subsections of the website.</p>
-  <p>Searching will generate a nested, expandable list of sections where matches were found.  Under each section a description of the match is displayed.  Usually with a link that will direct you to a form to edit the item.</p>
+<p>This module is visible to most administrators of the website with at least some permissions to edit templates, stylesheets, or some content   Though the list of what can be searched may be reduced.</p>
+<p>The module provides a text field where a single string can be entered (the string is not divided into words or otherwise parsed).  It also provides the ability to only search certain subsections of the website.</p>
+<p>Searching will generate a nested, expandable list of sections where matches were found.  Under each section a description of the match is displayed.  Usually with a link that will direct you to a form to edit the item.</p>
 
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
 
 <h3>License</h3>
-<p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>
+<p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. This module may not be used otherwise than in accordance with that license, or a later version of it if such is granted by the module's distributor.</p>
 EOT;
 
 // L
@@ -73,5 +73,3 @@ $lang['starting'] = 'Starting';
 
 // W
 $lang['warn_clickthru'] = 'This will open another window. Cancelling from that window may not return you to this page. Your search results may be lost.';
-
-?>
