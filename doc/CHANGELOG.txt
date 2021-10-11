@@ -1,21 +1,24 @@
-Version 2.2.16 - 
+Version 2.2.16 - NO NAME SET
 -------------------------------
 
 Core - General
-  - BR #12437 - Installer won't allow "<" symbol in database password
-  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
-  - Fixed an issue with specific characters in a content block tab name breaking the editor
+  - BR #12437 - Installer won't allow "<" symbol in database password.
+  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by.
+  - Fixed an issue with specific characters in a content block tab name breaking the editor.
 
-Admin Search v
-  - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+)
-  - Removed license and copyright notices from module help text
-  - Escaping the search input field values
-  - More content object attributes are searched 
-  - User defined tags can be searched
-  - Only places a user has permission to search are shown in the filter list (cached!)
+Admin Search v...
+  - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+).
+  - Removed license and copyright notices from module help text.
+  - Escaping the search input field values.
+  - More content object attributes are searched.
+  - User Defined Tags can be searched.
+  - Only places a user has permission to search are shown in the filter list (cached!).
 
-Navigator v
-  - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes php notice
+FilePicker v...
+  - FR #12483 - Additional FilePicker Help for usage as Content Block.
+
+Navigator v...
+  - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
   
 
 Version 2.2.15 - Bonaventure
@@ -56,7 +59,7 @@ Design Manager v1.1.9
   - Minor fixes for PHP warnings\notices;
 
 Module Manager v2.1.8
-  - BR #12291 - Reflected Cross site scripting
+  - BR #12291 - Reflected Cross site scripting.
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - Increased the Download Chunk Size field size to 4.
   
@@ -67,8 +70,9 @@ Search v1.52
   - FR #11886 - Include module and modulerecord fields for content pages.
 
 Phar Installer v1.3.13
-  - Fixes to the reload button: now prevents browser's caching 
-  - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled
+  - Fixes to the reload button: now prevents browser's caching.
+  - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled.
+
 
 Version 2.2.14 - T'Sou-ke
 -------------------------------

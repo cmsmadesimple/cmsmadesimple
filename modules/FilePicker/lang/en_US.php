@@ -110,6 +110,12 @@ $lang['help'] = <<<EOT
 <p>This module is intended to be used in the core or third party modules via various core API's.  And via the {cms_filepicker} plugin.</p>
 <p>Additionally, this module can be called directly via the <code>{cms_module module=FilePicker action=select name=string [profile=string] [type=string] [value=string]}</code> tag, but this is not recommended.   See the {cms_filepicker} tag for information about the type, and other parameters.</p>
 
+<h3>Content Block for Page Templates</h3>
+<p>This module also provides a content block to enable the FilePicker to be used in page templates. This can be used as an alternative to the {content_image} plugin.</p>
+<p><code>{content_module module=FilePicker block=string
+[profile=string]}</code></p>
+<p>The standard content_module plugin parameters of label, required, tab, priority and assign are also available.</p>
+
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
 
