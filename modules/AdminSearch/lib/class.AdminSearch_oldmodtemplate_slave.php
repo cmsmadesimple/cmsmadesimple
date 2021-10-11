@@ -57,9 +57,9 @@ final class AdminSearch_oldmodtemplate_slave extends AdminSearch_slave
       foreach ($resultSets as $result_object) {
         $output[] = json_encode($result_object);
       }
-    } 
 
-  return $output;
+    return $output;
+    }
     
   }
 
