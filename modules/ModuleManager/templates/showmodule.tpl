@@ -30,7 +30,7 @@
 			<th>{$nametext}</th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
             <th><span title="{$ModuleManager->Lang('title_modulereleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
-            <th><span title="{$ModuleManager->Lang('title_moduledownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
+            {*<th><span title="{$ModuleManager->Lang('title_moduledownloads')}">{$ModuleManager->Lang('downloads')}</span></th>*}
 			<th>{$sizetext}</th>
 			<th>{$statustext}</th>
 			<th>&nbsp;</th>
@@ -46,7 +46,7 @@
 			<td><span title="{$entry->description|strip_tags|cms_escape|default:''}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
-			<td>{$entry->downloads}</td>
+			{*<td>{$entry->downloads}</td>*}
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>
 			<td><span title="{$ModuleManager->Lang('title_modulereleasedepends')}">{$entry->dependslink}</span></td>

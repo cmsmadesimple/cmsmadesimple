@@ -51,8 +51,8 @@ $(document).ready(function(){
 			<th>{$ModuleManager->Lang('nametext')}</th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$ModuleManager->Lang('vertext')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
-			<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
-            <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
+			{*<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>*}
+			<th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
@@ -66,7 +66,7 @@ $(document).ready(function(){
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
-			<td>{$entry->downloads}</td>
+			{*<td>{$entry->downloads}</td>*}
 			<td>{if $entry->candownload}
                               <span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
                             {else}

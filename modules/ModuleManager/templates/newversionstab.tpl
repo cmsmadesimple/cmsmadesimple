@@ -28,7 +28,7 @@
 			<th>{$nametext}</th>
 			<th><span title="{$ModuleManager->Lang('title_newmoduleversion')}">{$vertext}</span></th>
             <th><span title="{$ModuleManager->Lang('title_yourmoduledate')}">{$ModuleManager->Lang('releasedate')}</span></th>
-            <th><span title="{$ModuleManager->Lang('title_moduledownloads2')}">{$ModuleManager->Lang('downloads')}</span></th>
+            {*<th><span title="{$ModuleManager->Lang('title_moduledownloads2')}">{$ModuleManager->Lang('downloads')}</span></th>*}
 			<th><span title="{$ModuleManager->Lang('title_modulesize2')}">{$sizetext}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_yourmoduleversion')}">{$haveversion}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$statustext}</span></th>
@@ -48,7 +48,7 @@
 	  </td>
 	  <td>{$entry->version|default:''}</td>
 	  <td>{$entry->date|date_format:'%x'}</td>
-	  <td>{$entry->downloads}</td>
+	  {*<td>{$entry->downloads}</td>*}
 	  <td>{$entry->size|default:''}</td>
 	  <td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>
 	  <td>{$entry->status|default:''}</td>
