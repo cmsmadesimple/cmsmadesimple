@@ -42,7 +42,7 @@ final class AdminSearch_usertag_slave extends AdminSearch_slave
         $title = $udtprops['userplugin_name'];
         $gCms = cmsms();
         $config = $gCms->GetConfig();
-        $url = $config['root_url'].'/'.$config['admin_dir'].'/edituserplugin.php?userplugin_id='.$udtprops['userplugin_id'];
+        $url = $config['root_url'].'/'.$config['admin_dir'].'/editusertag.php?userplugin_id='.$udtprops['userplugin_id'].'&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
         $resultSet = $this->get_resultset($title,AdminSearch_tools::summarize($udtprops['description']),$url);
 
         $content = $title;
