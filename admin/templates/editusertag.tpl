@@ -57,7 +57,7 @@ $(document).ready(function(){
       var d = x.details;
       var txt = '';
       if( r == 'Success' ) {
-        txt = '<div class="pagemcontainer"><p class="pagemcessage">' + d + '<\/p><\/div>';
+        txt = '<div class="pagemcontainer"><span class="close-warning"></span><p class="pagemessage">' + d + '<\/p><\/div>';
         $('[name=cancel]').fadeOut();
         $('[name=cancel]').attr('value','{lang('close')}');
         $('[name=cancel]').button('option','label','{lang('close')}');
