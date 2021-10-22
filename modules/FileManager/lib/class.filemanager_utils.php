@@ -463,7 +463,7 @@ final class filemanager_utils
         return $output;
     }
 
-    public static function create_thumbnail($src,$dest = null)
+    public static function create_thumbnail($src, $dest = null, $force = FALSE)
     {
         if( !file_exists($src) ) return FALSE;
         if( !$dest ) {
@@ -471,8 +471,9 @@ final class filemanager_utils
             $dn = dirname($src);
             $dest = $dn.'/thumb_'.$bn;
         }
-        if( file_exists($dest) && !is_writable($dest) ) return FALSE;
 
+        if( !$force && (file_exists($dest) && !is_writable($dest) ) ) return FALSE;
+        
         $info = getimagesize($src);
         if( !$info || !isset($info['mime']) ) return FALSE;
 

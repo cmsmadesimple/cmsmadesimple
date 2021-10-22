@@ -43,7 +43,7 @@ class FileManagerUploadHandler extends jquery_upload_handler
 
           $thumb = null;
           if( $mod->GetPreference('create_thumbnails') ) {
-              $thumb = filemanager_utils::create_thumbnail($file);
+              $thumb = filemanager_utils::create_thumbnail($file, NULL, TRUE);
           }
 
           $str = basename($file).' uploaded to '.filemanager_utils::get_full_cwd();

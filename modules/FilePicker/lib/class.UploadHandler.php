@@ -47,7 +47,7 @@ class UploadHandler extends jquery_upload_handler
         if( !$this->_mod->is_image( $complete_path ) ) return;
 
         $mod = \cms_utils::get_module('FileManager');
-        $thumb = \filemanager_utils::create_thumbnail( $complete_path );
+        $thumb = \filemanager_utils::create_thumbnail($complete_path, NULL, TRUE);
 
         $str = basename($complete_path).' uploaded to '.\filemanager_utils::get_full_cwd();
         if( $thumb ) $str .= ' and a thumbnail was generated';

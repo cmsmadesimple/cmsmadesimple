@@ -62,7 +62,7 @@ if(empty($params['reset'])
 
   //Save it
   $res = imageEditor::save($instance, $src, $mimeType);
-  if( $this->GetPreference('create_thumbnails') ) filemanager_utils::create_thumbnail($src);
+  if( $this->GetPreference('create_thumbnails') ) filemanager_utils::create_thumbnail($src, NULL, TRUE);
 
   $this->Redirect($id,"defaultadmin",$returnid);
 }

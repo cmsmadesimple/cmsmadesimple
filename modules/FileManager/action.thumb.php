@@ -52,8 +52,8 @@ if( !file_exists($src) ) {
 $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
 
 if( isset($params['submit']) ) {
-  $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
-  $thumb = filemanager_utils::create_thumbnail($src);
+  //$thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename); // by mistake for sure... (JM)
+  $thumb = filemanager_utils::create_thumbnail($src, NULL, TRUE);
   
   if( !$thumb ) {
     $params["fmerror"]="thumberror";
