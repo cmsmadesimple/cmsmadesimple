@@ -18,6 +18,9 @@ Admin Search v...
   - User Defined Tags can be searched.
   - Only places a user has permission to search are shown in the filter list (cached!).
 
+FileManager v...
+  - BR #12435 - Replacing an image file in filepicker doesn't update thumbnail.
+
 FilePicker v...
   - FR #12483 - Additional FilePicker Help for usage as Content Block.
 
