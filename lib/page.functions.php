@@ -524,8 +524,10 @@ function preprocess_mact($returnid)
     $config = \cms_config::get_instance();
     if( !$config['startup_mact_processing'] ) return;
     if( !isset($_REQUEST['mact']) ) return;
-
-    list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
+    $tmp = explode(',',$_REQUEST['mact'],4);
+    
+    if( count($tmp) < 4) return;
+    list($module,$id,$action,$inline) = $tmp;
     if( !$module || $inline || $id != 'cntnt01' ) return;
 
     $modops = ModuleOperations::get_instance();
