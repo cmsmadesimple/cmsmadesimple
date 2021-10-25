@@ -128,8 +128,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $this->_config['dbhost'] = trim(\__appbase\utils::clean_string($_POST['dbhost']));
         $this->_config['dbname'] = trim(\__appbase\utils::clean_string($_POST['dbname']));
         $this->_config['dbuser'] = trim(\__appbase\utils::clean_string($_POST['dbuser']));
-        //$this->_config['dbpass'] = trim(\__appbase\utils::clean_string($_POST['dbpass']));
-        $this->_config['dbpass'] = $_POST['dbpass'];
+        $this->_config['dbpass'] = trim(\__appbase\utils::clean_password($_POST['dbpass']));
         $this->_config['timezone'] = trim(\__appbase\utils::clean_string($_POST['timezone']));
         if( isset($_POST['dbtype']) ) $this->_config['dbtype'] = trim(\__appbase\utils::clean_string($_POST['dbtype']));
         if( isset($_POST['dbport']) ) $this->_config['dbport'] = trim(\__appbase\utils::clean_string($_POST['dbport']));

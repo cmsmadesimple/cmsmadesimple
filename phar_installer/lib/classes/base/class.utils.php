@@ -76,10 +76,27 @@ class utils
         $val = str_replace("'", "'", $val);
         return strip_tags($val);
     }
+  
+  /**
+   * cleans passwords for config.php mainly db pass.
+   * we don't want quotes on the string
+   * @since 1.3.13
+   * @param $val
+   *
+   * @return string|string[]
+   */
+    public static function clean_password($val)
+    {
+      if( !$val ) return $val;
+      $val = trim( (string) $val );
+      $val = str_replace(["'", '"'], "", $val);
+  
+      return $val;
+    }
 
     public static function get_sys_tmpdir()
     {
-        $vars = array('TMP','TMPDIR','TEMP');
+        $vars = array("TMP','TMPDIR','TEMP');
         foreach( $vars as $var ) {
             if( isset($_ENV[$var]) && $_ENV[$var] ) {
                 $tmp = realpath($_ENV[$var]);
