@@ -96,7 +96,7 @@ class utils
 
     public static function get_sys_tmpdir()
     {
-        $vars = array("TMP','TMPDIR','TEMP');
+        $vars = array('TMP','TMPDIR','TEMP');
         foreach( $vars as $var ) {
             if( isset($_ENV[$var]) && $_ENV[$var] ) {
                 $tmp = realpath($_ENV[$var]);
