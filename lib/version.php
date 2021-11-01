@@ -21,8 +21,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
 
-$CMS_VERSION = "2.2.15";
-$CMS_VERSION_NAME = "Bonaventure";
+$CMS_VERSION = "2.2.16".beta.1;
+$CMS_VERSION_NAME = "No Name Set";
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
@@ -31,4 +31,4 @@ define('CMS_SCHEMA_VERSION', $CMS_SCHEMA_VERSION);
 
 #
 # EOF
-#
+#z
