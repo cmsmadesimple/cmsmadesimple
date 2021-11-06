@@ -60,6 +60,8 @@ $lang['name'] = 'Name';
 
 // P
 $lang['placeholder_search_text'] = 'Enter Search Text';
+$lang['prompt_code'] = 'Code';
+$lang['prompt_description'] = 'Description';
 $lang['postinstall'] = 'Admin Search module installed';
 $lang['postuninstall'] = 'Admin Search module uninstalled';
 
