@@ -5,6 +5,7 @@ Core - General
   - BR #12437 - Installer won't allow "<" symbol in database password.
   - BR #12457 - Event Manager empty list when mysql mode only_full_group_by.
   - BR #12484 - Cannot exit after Run UDT.
+  - BR #12504 - Function call notification.
   - Fixed an issue with specific characters in a content block tab name breaking the editor.
 
 Content Manager v...
@@ -26,6 +27,9 @@ FilePicker v...
 
 Navigator v...
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
+
+Search v...
+  - Added 'Manage Search' permission.
   
 
 Version 2.2.15 - Bonaventure
