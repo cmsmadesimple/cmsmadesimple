@@ -669,7 +669,11 @@ class CmsLayoutStylesheet
         $row = null;
         if( is_numeric($a) && (int)$a > 0 ) {
 			$a = (int)$a;
-			if( isset(self::$_css_cache[$a]) ) return self::$_css_cache[$a];
+			if( isset(self::$_css_cache[$a]) )
+      {
+        $ret = self::$_css_cache[$a];
+        return $ret;
+      }
 			// not in cache
             $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
             $row = $db->GetRow($query,array($a));
@@ -677,7 +681,11 @@ class CmsLayoutStylesheet
         else if( is_string($a) && strlen($a) > 0 ) {
 			if( isset(self::$_name_cache[$a]) ) {
 				$b = (int)self::$_name_cache[$a];
-				if( isset(self::$_css_cache[$b]) ) return self::$_css_cache[$b];
+				if( isset(self::$_css_cache[$b]) )
+        {
+          $ret = self::$_css_cache[$b];
+          return $ret;
+        }
 			}
 			// not in cache
             $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
@@ -685,7 +693,8 @@ class CmsLayoutStylesheet
         }
         if( !is_array($row) || count($row) == 0 ) throw new \CmsInvalidDataException('Could not find stylesheet identified by '.$a);
 
-        return self::_load_from_data($row);
+        $ret = self::_load_from_data($row);
+        return $ret;
     }
 
 	/**
