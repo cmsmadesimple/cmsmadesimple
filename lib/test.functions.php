@@ -556,7 +556,7 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
  * @param int     $unlimited
  * @param string  $error_fragment
 */
-function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null,
+function & testVersionRange( $required, $title, $var, $message = '', $minimum = '', $recommended = '', $ini = true, $unlimited = null,
 							 $error_fragment='' )
 {
 	$test = new CmsInstallTest();
@@ -607,7 +607,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
  * @param int     $unlimited
  * @param string  $error_fragment
 */
-function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null,
+function & testRange( $required, $title, $var, $message = '', $minimum = '', $recommended = '', $ini = true, $test_as_bytes = false, $unlimited = null,
 					  $error_fragment = '' )
 {
 	$test = new CmsInstallTest();
