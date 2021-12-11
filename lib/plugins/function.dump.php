@@ -33,7 +33,7 @@ function smarty_function_dump($params, &$smarty)
 			return $str;
 		}
 
-		function dump_object($params,&$obj,$level=1,$ignore=array(),$accessor)
+		function dump_object($params,&$obj,$level=1,$ignore=array(),$accessor = '')
 		{
 			$maxlevel = 3;
 			if( isset($params['maxlevel']) ) {
@@ -88,7 +88,7 @@ function smarty_function_dump($params, &$smarty)
 			return $str;
 		}
 
-		function dump_array($params,&$data,$level=1,$ignore=array(),$accessor)
+		function dump_array($params,&$data,$level=1,$ignore=array(),$accessor = '')
 		{
 			$maxlevel = 3;
 			if( isset($params['maxlevel']) ) {
