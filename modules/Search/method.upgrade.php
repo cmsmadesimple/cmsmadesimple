@@ -73,3 +73,10 @@ if( version_compare($oldversion,'1.51') < 0 ) {
         $db->Execute(sprintf($sql_i,$table));
     }
 }
+
+if( version_compare($oldversion,'1.52') < 1 ) {
+  #---------------------
+  # Permissions
+  #---------------------
+  $this->CreatePermission('Manage Search');
+}

@@ -17,6 +17,12 @@ $db->DropSequence( CMS_DB_PREFIX."module_search_items_seq" );
 
 $this->DeleteTemplate();
 $this->RemovePreference();
+
+#---------------------
+# Permissions
+#---------------------
+
+$this->RemovePermission('Manage Search');
 	
 $this->RemoveEvent('SearchInitiated');
 $this->RemoveEvent('SearchCompleted');

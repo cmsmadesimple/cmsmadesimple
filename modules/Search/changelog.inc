@@ -62,4 +62,9 @@
     <li>Minor bug fixes.</li>
   </ul>
 </li>
+<li>1.53.b.2 - December 2021 (geepers)
+  <ul>
+    <li>Added 'Manage Search' permission</li>
+  </ul>
+</li>
 </ul>

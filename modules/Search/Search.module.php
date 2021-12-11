@@ -48,10 +48,10 @@ class Search extends CMSModule
     public function IsPluginModule() { return true; }
     public function HasAdmin() { return true; }
     public function HandlesEvents () { return true; }
-    public function GetVersion() { return '1.52'; }
-    public function MinimumCMSVersion() { return '1.12-alpha0'; }
+    public function GetVersion() { return '1.53.b.2'; }
+    public function MinimumCMSVersion() { return '1.12'; }
     public function GetAdminDescription() { return $this->Lang('description'); }
-    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
+    public function VisibleToAdminUser() { return $this->CheckPermission('Manage Search'); }
     public function GetHelp($lang='en_US') { return $this->Lang('help'); }
     public function GetAuthor() { return 'Ted Kulp'; }
     public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }

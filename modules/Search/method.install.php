@@ -125,6 +125,12 @@ catch( CmsException $e ) {
     audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
+#---------------------
+# Permissions
+#---------------------
+
+$this->CreatePermission('Manage Search');
+
 $this->CreateEvent('SearchInitiated');
 $this->CreateEvent('SearchCompleted');
 $this->CreateEvent('SearchItemAdded');

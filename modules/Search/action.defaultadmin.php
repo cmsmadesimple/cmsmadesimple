@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-if (!$this->CheckPermission('Modify Site Preferences')) exit;
+if (!$this->CheckPermission('Manage Search')) exit;
 
 if (isset($params['reindex'])) {
     try {
