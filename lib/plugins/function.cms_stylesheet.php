@@ -275,7 +275,7 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 
 } // end of writeCache
 
-function cms_stylesheet_toString($filename, $media_query = '', $media_type = '', $root_url, &$stylesheet, &$params)
+function cms_stylesheet_toString($filename, $media_query = '', $media_type = '', $root_url = '', &$stylesheet = '', &$params = [])
 {
 	if( !endswith($root_url,'/') ) $root_url .= '/';
 	if( isset($params['nolinks']) )	{

@@ -1419,7 +1419,7 @@ abstract class CMSModule
      * @param Smarty_Internal_Template &$smarty The curernt smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty )
+    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty = NULL)
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
@@ -2061,7 +2061,8 @@ abstract class CMSModule
      * @deprecated
      * @return string
      */
-    function CreateInputDataList($id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
+
+    function CreateInputDataList($id, $name, $value='', $items = NULL, $size='10', $maxlength='255', $addttext='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputDataList($this, $id, $name, $value, $items, $size, $maxlength, $addttext);
@@ -2836,7 +2837,7 @@ abstract class CMSModule
      * @param string $itemname item name
      * @param string $action   action name
      */
-    final public function Audit($itemid = '', $itemname, $action)
+    final public function Audit($itemid = '', $itemname = '', $action = '')
     {
         audit($itemid,$itemname,$action);
     }
