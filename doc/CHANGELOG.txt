@@ -7,6 +7,8 @@ Core - General
   - BR #12484 - Cannot exit after Run UDT.
   - BR #12504 - Function call notification.
   - Fixed an issue with specific characters in a content block tab name breaking the editor.
+  - Fixed BR #12499 - adminlog.tpl Wrongly formed date
+  - Fixed BR #12370 - Admin Log-Download: now downloading the log honors all filters but doesn't process paging.
   - A number of fixes for PHP 8 compatibility.
 
 Content Manager v...
