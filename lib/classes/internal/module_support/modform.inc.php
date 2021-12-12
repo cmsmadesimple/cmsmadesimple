@@ -496,7 +496,7 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 /**
  * @access private
  */
-function cms_module_CreateInputDataList(&$modinstance, $id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
+function cms_module_CreateInputDataList(&$modinstance, $id, $name, $value='', $items = [], $size='10', $maxlength='255', $addttext='')
 {
   $value = cms_htmlentities($value);
   $id = cms_htmlentities($id);
