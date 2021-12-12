@@ -93,7 +93,8 @@ $(document).ready(function(){
           <td>{$line.itemid}</td>
           <td>{$line.itemname}</td>
           <td>{$line.action}</td>
-          <td>{$line.date|date_format:'%e %h. %Y %H:%M:%S'}</td>
+          <td>{$line.date|date_format:'j M Y H:i:s'}</td>
+{*          <td>{$line.date|date_format:'%e %h %Y %H:%M:%S'}</td>*}
         </tr>
         {/foreach}
 
