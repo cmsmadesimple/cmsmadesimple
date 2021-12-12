@@ -100,9 +100,14 @@ if( count($where) ) {
     $sql .= ' WHERE '.implode(' AND ',$where);
 }
 $sql .= ' ORDER BY timestamp DESC';
-$result = $db->SelectLimit($sql,$limit,$from,$parms);
+
+//$result = $db->SelectLimit($sql,$limit,$from,$parms);
 
 if (isset($_GET['download'])) {
+  
+    # so we are downloading: honor the filters but skip paging
+    $result = $db->Execute($sql, $parms);
+  
     header('Content-type: text/plain');
     header('Content-Disposition: attachment; filename="adminlog.txt"');
     if ($result && $result->RecordCount() > 0)	{
@@ -117,6 +122,9 @@ if (isset($_GET['download'])) {
     }
     return;
 }
+
+# this is not a download: process paging
+$result = $db->SelectLimit($sql,$limit,$from,$parms);
 
 // begin output
 include_once("header.php");
