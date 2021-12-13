@@ -1387,7 +1387,7 @@ abstract class CMSModule
         if ($name != '') {
             //Just in case DoAction is called directly and it's not overridden.
             //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
-            $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+            $name = preg_replace('/[^A-Za-z0-9_+-]/', '', $name);
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
             if( !is_file($filename) ) {
@@ -1421,7 +1421,7 @@ abstract class CMSModule
      */
     final public function DoActionBase($name, $id, $params, $returnid='', &$smarty = NULL)
     {
-        $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+        $name = preg_replace('/[^A-Za-z0-9_+-]/', '', $name);
         if( $returnid != '' ) {
             /*
             if( !$this->restrict_unknown_params ) {

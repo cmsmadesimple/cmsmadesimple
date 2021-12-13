@@ -1272,7 +1272,7 @@ function setup_session($cachable = FALSE)
 
     if( isset($_COOKIE[$session_name]) ) {
         // validate the contents of the cookie.
-        if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
+        if (!preg_match('/^[a-zA-Z0-9,-]{22,40}$/', $_COOKIE[$session_name]) ) {
             session_id( uniqid() );
             session_start();
             session_regenerate_id();
