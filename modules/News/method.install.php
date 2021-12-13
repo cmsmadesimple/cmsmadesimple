@@ -30,9 +30,9 @@ $flds = "
 	create_date " . CMS_ADODB_DT . ",
 	modified_date " . CMS_ADODB_DT . ",
 	author_id I,
-        news_extra C(255),
-        news_url C(255),
-        searchable I1
+	news_extra C(255),
+	news_url C(255),
+	searchable I1
 "; // icon is no longer used.
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -45,7 +45,7 @@ $flds = "
 	news_category_name C(255) NOTNULL,
 	parent_id I,
 	hierarchy C(255),
-    item_order I,
+	item_order I,
 	long_name X,
 	create_date T,
 	modified_date T
@@ -63,9 +63,9 @@ $flds = "
 	max_length I,
 	create_date " . CMS_ADODB_DT . ",
 	modified_date " . CMS_ADODB_DT . ",
-        item_order I,
-        public I,
-        extra  X
+	item_order I,
+	public I,
+	extra  X
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -110,14 +110,14 @@ catch( CmsException $e ) {
 try {
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_summary_template.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Summary Sample');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($summary_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
+	$template = @file_get_contents($fn);
+	$tpl = new CmsLayoutTemplate();
+	$tpl->set_name('News Summary Sample');
+	$tpl->set_owner($uid);
+	$tpl->set_content($template);
+	$tpl->set_type($summary_template_type);
+	$tpl->set_type_dflt(TRUE);
+	$tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -130,14 +130,14 @@ try {
   // Setup Simplex Theme HTML5 sample summary template
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Summary_Simplex_template.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simplex News Summary');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($summary_template_type);
+	$template = @file_get_contents($fn);
+	$tpl = new CmsLayoutTemplate();
+	$tpl->set_name('Simplex News Summary');
+	$tpl->set_owner($uid);
+	$tpl->set_content($template);
+	$tpl->set_type($summary_template_type);
 	$tpl->add_design('Simplex');
-    $tpl->save();
+	$tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -167,14 +167,14 @@ catch( CmsException $e ) {
 try {
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_detail_template.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Detail Sample');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($detail_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
+	$template = @file_get_contents($fn);
+	$tpl = new CmsLayoutTemplate();
+	$tpl->set_name('News Detail Sample');
+	$tpl->set_owner($uid);
+	$tpl->set_content($template);
+	$tpl->set_type($detail_template_type);
+	$tpl->set_type_dflt(TRUE);
+	$tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -187,14 +187,14 @@ try {
   // Setup Simplex Theme HTML5 sample detail template
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Simplex_Detail_template.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simplex News Detail');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($detail_template_type);
+	$template = @file_get_contents($fn);
+	$tpl = new CmsLayoutTemplate();
+	$tpl->set_name('Simplex News Detail');
+	$tpl->set_owner($uid);
+	$tpl->set_content($template);
+	$tpl->set_type($detail_template_type);
 	$tpl->add_design('Simplex');
-    $tpl->save();
+	$tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -224,15 +224,15 @@ catch( CmsException $e ) {
 try {
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_form_template.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Fesubmit Form Sample');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($form_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
+	$template = @file_get_contents($fn);
+	$template = @file_get_contents($fn);
+	$tpl = new CmsLayoutTemplate();
+	$tpl->set_name('News Fesubmit Form Sample');
+	$tpl->set_owner($uid);
+	$tpl->set_content($template);
+	$tpl->set_type($form_template_type);
+	$tpl->set_type_dflt(TRUE);
+	$tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -262,14 +262,14 @@ catch( CmsException $e ) {
 try {
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'browsecat.tpl';
   if( file_exists( $fn ) ) {
-      $template = @file_get_contents($fn);
-      $tpl = new CmsLayoutTemplate();
-      $tpl->set_name('News Browse Category Sample');
-      $tpl->set_owner($uid);
-      $tpl->set_content($template);
-      $tpl->set_type($browsecat_template_type);
-      $tpl->set_type_dflt(TRUE);
-      $tpl->save();
+	  $template = @file_get_contents($fn);
+	  $tpl = new CmsLayoutTemplate();
+	  $tpl->set_name('News Browse Category Sample');
+	  $tpl->set_owner($uid);
+	  $tpl->set_content($template);
+	  $tpl->set_type($browsecat_template_type);
+	  $tpl->set_type_dflt(TRUE);
+	  $tpl->save();
   }
 }
 catch( CmsException $e ) {
@@ -299,7 +299,7 @@ news_admin_ops::UpdateHierarchyPositions();
 
 # Setup permissions
 $perm_id = $db->GetOne("SELECT permission_id FROM ".CMS_DB_PREFIX."permissions WHERE permission_name = 'Modify News'");
-$group_id = $db->GetOne("SELECT group_id FROM ".CMS_DB_PREFIX."groups WHERE group_name = 'Admin'");
+$group_id = $db->GetOne("SELECT group_id FROM `".CMS_DB_PREFIX."groups` WHERE group_name = 'Admin'");
 
 $count = $db->GetOne("SELECT count(*) FROM " . CMS_DB_PREFIX . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
 if (isset($count) && intval($count) == 0) {
@@ -308,7 +308,7 @@ if (isset($count) && intval($count) == 0) {
   $db->Execute($query);
 }
 
-$group_id = $db->GetOne("SELECT group_id FROM ".CMS_DB_PREFIX."groups WHERE group_name = 'Editor'");
+$group_id = $db->GetOne("SELECT group_id FROM `".CMS_DB_PREFIX."groups` WHERE group_name = 'Editor'");
 
 $count = $db->GetOne("SELECT count(*) FROM " . CMS_DB_PREFIX . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
 if (isset($count) && intval($count) == 0) {

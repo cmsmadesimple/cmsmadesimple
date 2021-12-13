@@ -2,100 +2,100 @@
 
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
-  status_msg(ilang('install_dropping_tables'));
-  $db->DropSequence(CMS_DB_PREFIX."additional_users_seq");
-  $db->DropSequence(CMS_DB_PREFIX."admin_bookmarks_seq");
-  $db->DropSequence(CMS_DB_PREFIX."additional_users_seq");
-  $db->DropSequence(CMS_DB_PREFIX."content_seq");
-  $db->DropSequence(CMS_DB_PREFIX."content_props_seq");
-  $db->DropSequence(CMS_DB_PREFIX."events_seq");
-  $db->DropSequence(CMS_DB_PREFIX."event_handler_seq");
-  $db->DropSequence(CMS_DB_PREFIX."group_perms_seq");
-  $db->DropSequence(CMS_DB_PREFIX."groups_seq");
-  $db->DropSequence(CMS_DB_PREFIX."module_deps_seq");
-  $db->DropSequence(CMS_DB_PREFIX."module_templates_seq");
-  $db->DropSequence(CMS_DB_PREFIX."permissions_seq");
-  $db->DropSequence(CMS_DB_PREFIX."users_seq");
-  $db->DropSequence(CMS_DB_PREFIX."userplugins_seq");
+ status_msg(ilang('install_dropping_tables'));
+ $db->DropSequence(CMS_DB_PREFIX."additional_users_seq");
+ $db->DropSequence(CMS_DB_PREFIX."admin_bookmarks_seq");
+ $db->DropSequence(CMS_DB_PREFIX."additional_users_seq");
+ $db->DropSequence(CMS_DB_PREFIX."content_seq");
+ $db->DropSequence(CMS_DB_PREFIX."content_props_seq");
+ $db->DropSequence(CMS_DB_PREFIX."events_seq");
+ $db->DropSequence(CMS_DB_PREFIX."event_handler_seq");
+ $db->DropSequence(CMS_DB_PREFIX."group_perms_seq");
+ $db->DropSequence(CMS_DB_PREFIX."groups_seq");
+ $db->DropSequence(CMS_DB_PREFIX."module_deps_seq");
+ $db->DropSequence(CMS_DB_PREFIX."module_templates_seq");
+ $db->DropSequence(CMS_DB_PREFIX."permissions_seq");
+ $db->DropSequence(CMS_DB_PREFIX."users_seq");
+ $db->DropSequence(CMS_DB_PREFIX."userplugins_seq");
 
-  $dbdict = NewDataDictionary($db);
+ $dbdict = NewDataDictionary($db);
 
-  $sqlarray = $dbdict->DropIndexSQL("idx_template_id_modified_date");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropIndexSQL(CMS_DB_PREFIX."idx_template_id_modified_date");
-  $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropIndexSQL("idx_template_id_modified_date");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropIndexSQL(CMS_DB_PREFIX."idx_template_id_modified_date");
+ $dbdict->ExecuteSQLArray($sqlarray);
 
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."additional_users");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."adminlog");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."admin_bookmarks");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content_props");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."events");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."event_handlers");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."group_perms");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."groups");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."modules");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_deps");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_templates");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."permissions");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."siteprefs");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."user_groups");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userprefs");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."users");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userplugins");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."version");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_smarty_plugins");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."routes");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateCategory::TABLENAME);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TABLENAME);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE);
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLock::LOCK_TABLE);
-  $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."additional_users");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."adminlog");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."admin_bookmarks");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content_props");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."events");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."event_handlers");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."group_perms");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL("`".CMS_DB_PREFIX."groups`");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."modules");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_deps");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_templates");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."permissions");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."siteprefs");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."user_groups");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userprefs");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."users");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userplugins");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."version");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."module_smarty_plugins");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."routes");
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateCategory::TABLENAME);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TABLENAME);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE);
+ $dbdict->ExecuteSQLArray($sqlarray);
+ $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.CmsLock::LOCK_TABLE);
+ $dbdict->ExecuteSQLArray($sqlarray);
 }
 
 if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
-  status_msg(ilang('install_createtablesindexes'));
-  if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli') {
-    @$db->Execute("ALTER DATABASE `" . $db->database . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
-  }
+ status_msg(ilang('install_createtablesindexes'));
+ if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli') {
+	@$db->Execute("ALTER DATABASE `" . $db->database . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+ }
 
-  $dbdict = NewDataDictionary($db);
-  $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci', 'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
+ $dbdict = NewDataDictionary($db);
+ $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci', 'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
 
 	$flds = "
 		additional_users_id I KEY,
@@ -134,16 +134,16 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		item_id I,
 		item_name C(50),
 		action C(255),
-                ip_addr C(40)
+		ip_addr C(40)
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."adminlog", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	if( $return == 2 )
-	  {
-	    $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'index_adminlog1',CMS_DB_PREFIX."adminlog",'timestamp');
-	    $return = $dbdict->ExecuteSQLArray($sqlarray);
-	  }
+	 {
+		$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'index_adminlog1',CMS_DB_PREFIX."adminlog",'timestamp');
+		$return = $dbdict->ExecuteSQLArray($sqlarray);
+	 }
 	verbose_msg(ilang('install_created_table', 'adminlog', $ado_ret));
 
 	$flds = "
@@ -171,8 +171,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		last_modified_by I,
 		create_date DT,
 		modified_date DT,
-                secure I1,
-                page_url C(255)
+		secure I1,
+		page_url C(255)
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."content", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -290,12 +290,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		group_id I KEY,
 		group_name C(25),
-        group_desc C(255),
+		group_desc C(255),
 		active I1,
 		create_date DT,
 		modified_date DT
 	";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."groups", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL("`".CMS_DB_PREFIX."groups`", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', 'groups', $ado_ret));
@@ -308,8 +308,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		version C(255),
 		admin_only I1 DEFAULT 0,
 		active I1,
-                allow_fe_lazyload I1,
-                allow_admin_lazyload I1
+		allow_fe_lazyload I1,
+		allow_admin_lazyload I1
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."modules", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -359,7 +359,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		permission_id I KEY,
 		permission_name C(255),
 		permission_text C(255),
-        permission_source C(255),
+		permission_source C(255),
 		create_date DT,
 		modified_date DT
 	";
@@ -457,14 +457,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-                sig  C(80) KEY NOTNULL,
-                name C(80) NOTNULL,
-                module C(160) NOTNULL,
-                type C(40) NOTNULL,
-                callback C(255) NOTNULL,
-                available I,
-                cachable I1
-        ";
+		sig C(80) KEY NOTNULL,
+		name C(80) NOTNULL,
+		module C(160) NOTNULL,
+		type C(40) NOTNULL,
+		callback C(255) NOTNULL,
+		available I,
+		cachable I1
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."module_smarty_plugins", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
@@ -477,76 +477,76 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-                term C(255) KEY NOTNULL,
-                key1 C(50) KEY NOTNULL,
-                key2 C(50),
-                key3 C(50),
-                data X,
-                created ".CMS_ADODB_DT;
+		term C(255) KEY NOTNULL,
+		key1 C(50) KEY NOTNULL,
+		key2 C(50),
+		key3 C(50),
+		data X,
+		created ".CMS_ADODB_DT;
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."routes", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', 'routes', $ado_ret));
 
 	$flds = "
-         id I KEY AUTO,
-         originator C(50) NOTNULL,
-         name C(100) NOTNULL,
-         has_dflt I1,
-         dflt_contents X2,
-         description X,
-         lang_cb     C(255),
-         dflt_content_cb C(255),
-         requires_contentblocks I1,
-         help_content_cb C(255),
-         one_only I1,
-         owner   I,
-         created I,
-         modified I";
+		id I KEY AUTO,
+		originator C(50) NOTNULL,
+		name C(100) NOTNULL,
+		has_dflt I1,
+		dflt_contents X2,
+		description X,
+		lang_cb C(255),
+		dflt_content_cb C(255),
+		requires_contentblocks I1,
+		help_content_cb C(255),
+		one_only I1,
+		owner  I,
+		created I,
+		modified I";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME, $flds,
-					  $taboptarray);
+					 $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutTemplateType::TABLENAME, $ado_ret));
 
 	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_type_1', CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME,
-                                        'originator,name',array('UNIQUE'));
+										'originator,name',array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_type_1', $ado_ret));
 
 
 	$flds = "
-         id I KEY AUTO,
-         name C(100) NOTNULL,
-         description X,
-         item_order X,
-         modified I";
+		id I KEY AUTO,
+		name C(100) NOTNULL,
+		description X,
+		item_order X,
+		modified I";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplateCategory::TABLENAME, $flds,
-					  $taboptarray);
+					 $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	verbose_msg(ilang('install_created_table', CmsLayoutTemplateCategory::TABLENAME, $ado_ret));
 
 	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_tpl_cat_1', CMS_DB_PREFIX.CmsLayoutTemplateCategory::TABLENAME,
-                                        'name',array('UNIQUE'));
+										'name',array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_type_1', $ado_ret));
 
 	$flds = "
-         id I KEY AUTO,
-         name C(100) NOTNULL,
-         content X2,
-         description X,
-         type_id I NOTNULL,
-         type_dflt I1,
-         category_id I,
-         owner_id I NOTNULL,
-         listable I1 DEFAULT 1,
-         created I,
-         modified I";
+		id I KEY AUTO,
+		name C(100) NOTNULL,
+		content X2,
+		description X,
+		type_id I NOTNULL,
+		type_dflt I1,
+		category_id I,
+		owner_id I NOTNULL,
+		listable I1 DEFAULT 1,
+		created I,
+		modified I";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME, $flds,
-					  $taboptarray);
+					 $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutTemplate::TABLENAME, $ado_ret));
@@ -562,55 +562,55 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_2', $ado_ret));
 
 	$flds = "
-         id I KEY AUTO,
-         name C(100) NOTNULL,
-         content X2,
-         description X,
-  	     media_type C(255),
-	     media_query X,
-         created I,
-         modified I";
+		id I KEY AUTO,
+		name C(100) NOTNULL,
+		content X2,
+		description X,
+ 		media_type C(255),
+		media_query X,
+		created I,
+		modified I";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutStylesheet::TABLENAME, $ado_ret));
-    $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_css_1',CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, 'name', array('UNIQUE'));
+	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_css_1',CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, 'name', array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_index', 'idx_layout_css_1', $ado_ret));
 
 	$flds = "
-         tpl_id I KEY,
-         user_id I KEY
-        ";
+		tpl_id I KEY,
+		user_id I KEY
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE, $flds,
-					  $taboptarray);
+					 $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	verbose_msg(ilang('install_created_table', CmsLayoutTemplate::ADDUSERSTABLE, $ado_ret));
 
 
 	$flds = "
-         id   I KEY AUTO,
-         name C(100) NOTNULL,
-         description X,
-         dflt I1,
-         created I,
-         modified I
-        ";
+		id I KEY AUTO,
+		name C(100) NOTNULL,
+		description X,
+		dflt I1,
+		created I,
+		modified I
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TABLENAME, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutCollection::TABLENAME, $ado_ret));
-    $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_dsn_1',CMS_DB_PREFIX.CmsLayoutCollection::TABLENAME, 'name', array('UNIQUE'));
+	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_dsn_1',CMS_DB_PREFIX.CmsLayoutCollection::TABLENAME, 'name', array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_index', 'idx_layout_dsn_1', $ado_ret));
 
 
 	$flds = "
-         design_id I KEY NOTNULL,
-         tpl_id   I KEY NOTNULL
-        ";
+		design_id I KEY NOTNULL,
+		tpl_id  I KEY NOTNULL
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
@@ -621,25 +621,25 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	verbose_msg(ilang('install_created_index', 'index_dsnassoc1', $ado_ret));
 
 	$flds = "
-         design_id I KEY NOTNULL,
-         css_id   I KEY NOTNULL,
-         item_order I NOTNULL
-        ";
+		design_id I KEY NOTNULL,
+		css_id  I KEY NOTNULL,
+		item_order I NOTNULL
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutCollection::CSSTABLE, $ado_ret));
 
 	$flds = "
-                 id I AUTO KEY NOTNULL,
-                 type C(20) NOTNULL,
-                 oid  I NOTNULL,
-                 uid  I NOTNULL,
-                 created I NOTNULL,
-                 modified I NOTNULL,
-                 lifetime I NOTNULL,
-                 expires  I NOTNULL
-                ";
+		id I AUTO KEY NOTNULL,
+		type C(20) NOTNULL,
+		oid I NOTNULL,
+		uid I NOTNULL,
+		created I NOTNULL,
+		modified I NOTNULL,
+		lifetime I NOTNULL,
+		expires I NOTNULL
+	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLock::LOCK_TABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');

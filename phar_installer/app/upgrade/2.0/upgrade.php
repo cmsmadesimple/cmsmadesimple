@@ -35,8 +35,8 @@ $return = $dbdict->ExecuteSQLArray($sqlarray);
 
 verbose_msg('deleting old events');
 $tmp = array('AddGlobalContentPre','AddGlobalContentPost','EditGlobalContentPre','EditGlobalContentPost',
-	     'DeleteGlobalContentPre','DeleteGlobalContentPost','GlobalContentPreCompile','GlobalContentPostCompile',
-	     'ContentStylesheet');
+         'DeleteGlobalContentPre','DeleteGlobalContentPost','GlobalContentPreCompile','GlobalContentPostCompile',
+         'ContentStylesheet');
 $query = 'DELETE FROM '.CMS_DB_PREFIX.'events WHERE originator = \'Core\' AND event_name IN ('.implode(',',$tmp).')';
 $return = $db->Execute($query);
 
@@ -116,8 +116,8 @@ $flds = "
          name C(100) NOTNULL,
          content X2,
          description X,
-  	     media_type C(255),
-	     media_query X,
+         media_type C(255),
+         media_query X,
          created I,
          modified I";
 $sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, $flds, $taboptarray);
@@ -477,7 +477,7 @@ $modops = ModuleOperations::get_instance();
 $modops->UninstallModule('ThemeManager');
 
 verbose_msg('upgrading cms_groups table');
-$sqlarray = $dbdict->AddColumnSQL(CMS_DB_PREFIX.'groups','group_desc C(255)');
+$sqlarray = $dbdict->AddColumnSQL('`'.CMS_DB_PREFIX.'groups`','group_desc C(255)');
 $dbdict->ExecuteSQLArray($sqlarray);
 
 verbose_msg('Remove the CMSPrinting module from the database');
