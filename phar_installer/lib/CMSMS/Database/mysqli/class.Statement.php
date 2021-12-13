@@ -89,6 +89,7 @@ class Statement extends \CMSMS\Database\Statement
         $conn = $this->db->get_inner_mysql();
         if( !$conn || !$this->db->IsConnected() ) throw new \LogicException('Attempt to create prepared statement when database is not connected');
         $this->_stmt = $conn->prepare( (string) $sql );
+	if( !$this->_stmt ) throw new \LogicException('Could not prepare a statement: '.$conn->error);
         $this->_row = null;
         $this->_pos = 0;
     }

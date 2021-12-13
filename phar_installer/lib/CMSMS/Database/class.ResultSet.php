@@ -112,12 +112,48 @@ abstract class Resultset
     public function GetAll() { return $this->GetArray(); }
 
     /**
-     * An alias for the GetArray method.
-     * @see GetArray()
-     * @return array
+     * Get an associative array from a resultset.
+     *
+     * If only two columns are returned in the resultset, the keys of the returned associative array
+     * will be the value of the first column, and the value of each key will be the value from the second column.
+     *
+     * If more than 2 columns are returned, then the key of the returned associative array will be the
+     * value from the first column, and the value of each key will be an associative array of the remaining columns.
+     * This is known as array behavior.
+     *
      * @deprecated
+     * @param boolean force_array Force array behavior, even if there are only two columns in the resulting SQL.
+     * @param boolean first2cols The opposite of force_array.  Only output the data from the first 2 columns as an associative array.
+     * @return array
      */
-    public function GetAssoc() { return $this->GetArray(); }
+    public function GetAssoc($force_array = false, $first2cols = false)
+    {
+        $data = null;
+        $first_row = $this->Fields();
+        if( count($first_row) < 2 ) return $data;
+
+        $data = [];
+        $keys = array_keys($first_row);
+        $numeric_index = isset($row[0]);
+        if( !$first2cols && (count($keys) > 2 || $force_array) ) {
+            // output key is first column
+            // other columns as assoc
+            $first_key = $keys[0];
+            while( !$this->EOF() ) {
+                $row = $this->Fields();
+                $data[trim($row[$first_key])] = array_slice($row,1);
+                $this->MoveNext();
+            }
+        } else {
+            // only 2 columns... output a single associative
+            while( !$this->EOF() ) {
+                $row = $this->Fields();
+                $data[trim($row[$keys[0]])] = $row[$keys[1]];
+                $this->MoveNext();
+            }
+        }
+        return $data;
+    }
 
     /**
      * Test if we are at the end of a resultset, and there are no further matches.

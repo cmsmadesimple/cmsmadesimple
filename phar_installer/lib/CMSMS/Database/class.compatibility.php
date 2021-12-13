@@ -148,7 +148,7 @@ namespace {
     }
 
     /**
-     * A function to load the adodb library.
+     * A function forumerly used to load the adodb library.
      * This method currently has no functionality.
      *
      * @deprecated
@@ -160,7 +160,8 @@ namespace {
     }
 
     /**
-     * An old method to ensure that we are re-connected to the proper database
+     * An old method formerly used to ensure that we were re-connected to the proper database.
+     * This method currently has no functionality.
      *
      * @deprecated
      */
