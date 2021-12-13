@@ -34,8 +34,8 @@
  */
 class CmsStylesheetResource extends CMS_Fixed_Resource_Custom
 {
-	protected function fetch($name,&$source,&$mtime)
-	{
+    protected function fetch($name,&$source,&$mtime)
+    {
         // clean up the input
         $name = trim($name);
         if( !$name ) return;
@@ -45,13 +45,13 @@ class CmsStylesheetResource extends CMS_Fixed_Resource_Custom
 
         // by now everything should be in memory in the CmsLayoutStylesheet internal cache's
         // put it all together in the order specified.
-        $text = '/* cmsms stylesheet: '.$obj->get_name().' modified: '.strftime('%x %X',$obj->get_modified()).' */'."\n";
+        $text = '/* cmsms stylesheet: '.$obj->get_name().' modified: '.\locale_ftime('%x %X',$obj->get_modified()).' */'."\n";
         $text .= $obj->get_content();
         if( !endswith($text,"\n") ) $text .= "\n";
 
         $mtime = $obj->get_modified();
         $source = $text;
-	}
+    }
 
 } // end of class
 
