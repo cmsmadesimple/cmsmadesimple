@@ -1,20 +1,20 @@
 Version 2.2.16 - NO NAME SET
 -------------------------------
-
 Core - General
-  - BR #12437 - Installer won't allow "<" symbol in database password.
-  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by.
-  - BR #12484 - Cannot exit after Run UDT.
+  - BR #12370 - Admin Log-Download : now downloading the log honors all filters but doesn't process paging
+  - BR #12437 - Installer won't allow "<" symbol in database password
+  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
+  - BR #12484 - Cannot exit after Run UDT
+  - BR #12495 - MySQL 8.0.2+ breaks groups without table prefix
+  - BR #12499 - adminlog.tpl Wrongly formed date
+  - BR #12500 - NameQuote function does not work properly
   - BR #12504 - Function call notification.
-  - Fixed an issue with specific characters in a content block tab name breaking the editor.
-  - Fixed BR #12499 - adminlog.tpl Wrongly formed date
-  - Fixed BR #12370 - Admin Log-Download: now downloading the log honors all filters but doesn't process paging.
-  - A number of fixes for PHP 8 compatibility.
+  - Fixed an issue with specific characters in a content block tab name breaking the editor
+  - Adjust regex's incompatible with PCRE2
+  - Avoid deprecated strftime() - deploy new replacement function locale_ftime() and new modifier-plugin localedate_format
+  - A number of fixes for PHP 8 compatibility
 
-Content Manager v...
-  - Fix menu text/title setting.
-
-Admin Search v...
+Admin Search v1.0.6-beta
   - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+).
   - Removed license and copyright notices from module help text.
   - Escaping the search input field values.
@@ -22,18 +22,21 @@ Admin Search v...
   - User Defined Tags can be searched.
   - Only places a user has permission to search are shown in the filter list (cached!).
 
-FileManager v...
+Content Manager v1.1.9
+  - Fix menu text/title setting.
+
+FileManager v1.6.12
   - BR #12435 - Replacing an image file in filepicker doesn't update thumbnail.
 
-FilePicker v...
+FilePicker v1.0.5
   - FR #12483 - Additional FilePicker Help for usage as Content Block.
 
-Navigator v...
+Navigator v1.0.9
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
 
-Search v...
+Search
   - Added 'Manage Search' permission.
-  
+  - BR #12391 Core search issue page/entry titles that start with numbers
 
 Version 2.2.15 - Bonaventure
 -------------------------------
@@ -56,7 +59,7 @@ Core - General
   - (Error) messages in OneEleven won't dismiss on click.
   - Fix to Admin redirection after login on Windows platform.
   - Fix to the module API redirection to support arrays in parameters.
-  
+
 FileManager v1.6.12
   - Dropzone improvement like core FilePicker.
 
@@ -65,7 +68,7 @@ FilePicker v1.0.5
   - BR #12312 - Stored XSS vulnerability in File Picker.
 
 News v2.51.11
-  - Minor code fix to encoding title content. 
+  - Minor code fix to encoding title content.
   - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - BR #12325 - Several XSS vulnerabilities.
 
@@ -76,7 +79,7 @@ Module Manager v2.1.8
   - BR #12291 - Reflected Cross site scripting.
   - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
   - Increased the Download Chunk Size field size to 4.
-  
+
 MicroTiny v2.2.5
   - BR #12351 - Escaping translation strings in tinymce_config.js.
 
@@ -105,7 +108,7 @@ Core - General
 
 AdminSearch v1.0.5
   - Remove click thru warning.
-  
+
 CMSContentManager v1.1.9
   - Fix notices in edit content template.
   - Fix notice in default admin view.
