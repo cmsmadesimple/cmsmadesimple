@@ -130,23 +130,30 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_ziparchive';
         $tests[] = $obj;
     
-        // only perform the check bellow PHP 7.0 (we'll be removing this check on 2.3)
+        // only perform the check below PHP 7.0 (we'll be removing this check on 2.99+)
         if(version_compare(PHP_VERSION, '7.0.0') < 0)
         {
-          // required test...  magic_quotes_runtime
-          // TODO: remove on 2.3 if not removed already as it was removed from PHP since v 5.4.0 (JM)
+          // required test ... magic_quotes_runtime
+          // TODO: remove on 2.99+ if not removed already as it was removed from PHP since v 5.4.0 (JM)
           $obj = new _tests_\boolean_test('magic_quotes_runtime',function_exists('get_magic_quotes_runtime') && !get_magic_quotes_runtime());
           $obj->required = 1;
           $obj->fail_key = 'fail_magic_quotes_runtime';
           $tests[] = $obj;
         }
-        // required test... multibyte extensions
+        // required test ... multibyte extension
         $obj = new _tests_\boolean_test('multibyte_support',_tests_\test_extension_loaded('mbstring') && function_exists('mb_get_info'));
         $obj->required = 1;
         $obj->fail_key = 'fail_multibyte_support';
         $tests[] = $obj;
 
-        // required test... at least one supported database driver.
+        // recommended test ... intl extension
+        $obj = new _tests_\boolean_test('intl_support',_tests_\test_extension_loaded('intl') && class_exists('IntlDateFormatter'));
+        $obj->required = 0;
+        $obj->fail_key = 'fail_intl_support';
+        $obj->warn_key = 'fail_intl_support';
+        $tests[] = $obj;
+
+        // required test ... at least one supported database driver
         $obj = new _tests_\matchany_test('database_support');
         $obj->required = 1;
         $t1 = new _tests_\boolean_test('mysql',_tests_\test_extension_loaded('mysql'));
@@ -168,7 +175,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->required = 1;
         $tests[] = $obj;
 
-        // open basedir is recommended
+        // recommended test ... open basedir
         $obj = new _tests_\boolean_test('open_basedir',ini_get('open_basedir') == '');
         $obj->warn_key = 'warn_open_basedir';
         $obj->fail_key = 'fail_open_basedir';

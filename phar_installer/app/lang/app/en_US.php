@@ -120,6 +120,7 @@ $lang['fail_func_md5'] = 'md5 functionality was not found';
 $lang['fail_func_tempnam'] = 'The tempnam function does not exist. It is a required function for CMSMS functionality';
 $lang['fail_func_ziparchive'] = 'ZipArchive functionality was not found.  This may limit functionality';
 $lang['fail_ini_set'] = 'It appears that we cannot change ini settings. This could cause problems in third party modules (or when enabling debug mode)';
+$lang['fail_intl_support'] = 'PHP\'s internationalization extension is not available';
 $lang['fail_magic_quotes_runtime'] = 'It appears that magic quotes are enabled in your configuration. Please disable them and retry';
 $lang['fail_max_execution_time'] = 'Your max execution time of %s does not meet the minimum value of %s.  We recommend you increase it to %s or greater';
 $lang['fail_memory_limit'] = 'Your memory limit value is too low. You had %s, however a minimum of %s is required, and %s is recommended';
@@ -214,6 +215,7 @@ $lang['install_update_sequences'] = 'Update sequence tables';
 $lang['install_updatehierarchy'] = 'Update content hierarchy positions';
 $lang['install_updateseq'] = 'Update sequence for %s';
 $lang['installer_ver'] = 'Installer Version';
+$lang['intl_support'] = 'Check for internationalization capabilities';
 
 # J
 
@@ -250,6 +252,7 @@ $lang['pass_database_support'] = 'At least one compatible database driver found'
 $lang['pass_func_json'] = 'json functionality detected';
 $lang['pass_func_md5'] = 'md5 functionality was detected';
 $lang['pass_func_tempnam'] = 'The tempnam function exists';
+$lang['pass_intl_support'] = 'Internationalization capabilities appear to be enabled';
 $lang['pass_memory_limit_nolimit'] = 'There is no preset PHP memory limit';
 $lang['pass_multibyte_support'] = 'Multibyte support appears to be enabled';
 $lang['pass_php_version'] = 'The PHP version currently configured does not meet minimum requirements. At a minimum, PHP %s is required, though we recommend %s or higher';
