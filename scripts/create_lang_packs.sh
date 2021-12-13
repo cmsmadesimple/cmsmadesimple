@@ -26,7 +26,7 @@ build_file_list()
   _files=''
   for onefile in $_files1 ; do
     if [ `echo $onefile | grep -c admin/lang` = 1 ]; then
-      _files="$onefile $_files" 
+      _files="$onefile $_files"
     elif [ `echo $onefile | grep -c install/lang` = 1 ]; then
       _files="$onefile $_files"
     elif [ `echo $onefile | grep -c lib/nls` = 1 ]; then
@@ -81,7 +81,7 @@ _owd=`pwd`
 _workdir=/tmp/$_this.$$
 _destdir=/tmp
 _langs=''
-_coremodules='Search CMSPrinting News MicroTiny ModuleManager ThemeManager MenuManager FileManager CMSMailer'
+_coremodules='AdminSearch CMSContentManager CmsJobManager CMSMailer DesignManager FileManager FilePicker MenuManager MicroTiny ModuleManager Navigator News Search'
 
 # Process command line arguments
 while [ $# -gt 1 ]; do
@@ -90,11 +90,11 @@ while [ $# -gt 1 ]; do
     _startdir=$2
     shift 2
     ;;
-  
+
     "-d")
     _destdir=$2
     shift 2
-  esac  
+  esac
 done
 
 #
@@ -120,15 +120,15 @@ for onelang in $_langs ; do
     # build the file list
     file_list=''
     build_file_list $onelang $shortlang file_list
- 
+
     # create the file archive
     _destfile=$_destdir/cmsmadesimple-$_version-langpack-$onelang.tar.gz
     create_file_archive $_destfile file_list
-  
+
     # remove the files
     delete_files_in_list file_list
 
-    echo 
+    echo
     echo
   fi
 done

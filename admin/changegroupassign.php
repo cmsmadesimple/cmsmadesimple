@@ -111,7 +111,7 @@ if ($submitted == 1) {
     }
 
     // put mention into the admin log
-	audit($userid, 'Assignment User ID: '.$userid, 'Changed');
+    audit($userid, 'Assignment User ID: '.$userid, 'Changed');
     $message = lang('assignmentchanged');
     $gCms->clear_cached_files();
 }

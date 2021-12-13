@@ -72,35 +72,35 @@ final class UserTagOperations
 		$this->CallUserTag($name,$arguments);
 	}
 
-    /**
-     * @ignore
-     * @internal
-     */
-    public static function setup()
-    {
-        $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
-                $db = CmsApp::get_instance()->GetDb();
+	/**
+	 * @ignore
+	 * @internal
+	 */
+	public static function setup()
+	{
+		$obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
+			$db = CmsApp::get_instance()->GetDb();
 
-                $query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
-                $data = $db->GetArray($query);
-                if( is_array($data) ) {
-                    $out = array();
-                    foreach( $data as $row ) {
-                        $out[$row['userplugin_name']] = $row;
-                    }
-                    return $out;
-                }
-            });
-        \CMSMS\internal\global_cache::add_cachable($obj);
-    }
+			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
+			$data = $db->GetArray($query);
+			if( is_array($data) ) {
+				$out = array();
+				foreach( $data as $row ) {
+					$out[$row['userplugin_name']] = $row;
+				}
+				return $out;
+			}
+		});
+		\CMSMS\internal\global_cache::add_cachable($obj);
+	}
 
 	/**
 	 * Load all the information about user tags
 	 */
-    public function LoadUserTags()
-    {
-        $this->_cache = \CMSMS\internal\global_cache::get(__CLASS__);
-    }
+	public function LoadUserTags()
+	{
+		$this->_cache = \CMSMS\internal\global_cache::get(__CLASS__);
+	}
 
 
 	/**
@@ -167,7 +167,7 @@ final class UserTagOperations
 
 		if( $check_functions ) {
 			// registered by something else... maybe a module.
-            $smarty = \Smarty_CMS::get_instance();
+			$smarty = \Smarty_CMS::get_instance();
 			if( $smarty->is_registered($name) ) return TRUE;
 		}
 
@@ -181,35 +181,35 @@ final class UserTagOperations
 	 * @param string $name User defined tag name
 	 * @param string $text Body of user defined tag
 	 * @param string $description Description for the user defined tag.
-     * @param int    $id ID of existing user tag (for updates).
+	 * @param int    $id ID of existing user tag (for updates).
 	 * @return bool
 	 */
 	function SetUserTag( $name, $text, $description, $id = null )
 	{
 		$db = CmsApp::get_instance()->GetDb();
 
-        $existing = false;
-        if( $id > 0 ) {
-            // make sure we can find it.
-            $usertag = $this->_get_from_cache( $id );
-            if( !$usertag ) return false;
-            $existing = true;
-        }
+		$existing = false;
+		if( $id > 0 ) {
+			// make sure we can find it.
+			$usertag = $this->_get_from_cache( $id );
+			if( !$usertag ) return false;
+			$existing = true;
+		}
 		if (!$existing) {
 			$this->_cache = array(); // reset the cache.
 			$new_usertag_id = $db->GenID(CMS_DB_PREFIX."userplugins_seq");
 			$query = "INSERT INTO ".CMS_DB_PREFIX."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES (?,?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($new_usertag_id, $name, $text, $description));
 			if ($result) {
-                \CMSMS\internal\global_cache::clear(__CLASS__);
-                return true;
-            }
-            return false;
+				\CMSMS\internal\global_cache::clear(__CLASS__);
+				return true;
+			}
+			return false;
 		}
 		else {
 			$this->_cache = array(); // reset the cache.
 			$query = 'UPDATE '.CMS_DB_PREFIX.'userplugins SET code = ?, userplugin_name = ?';
-            $parms = [ $text, $name ];
+			$parms = array($text, $name);
 			if( $description ) {
 				$query .= ', description = ?';
 				$parms[] = $description;
@@ -218,9 +218,10 @@ final class UserTagOperations
 			$parms[] = $id;
 			$result = $db->Execute($query, $parms);
 			if ($result) {
-                \CMSMS\internal\global_cache::clear(__CLASS__);
-                return true;
-            }
+				\CMSMS\internal\global_cache::clear(__CLASS__);
+				return true;
+			}
+
 			return false;
 		}
 	}
@@ -242,9 +243,9 @@ final class UserTagOperations
 
 		$this->_cache = array();
 		if ($result) {
-            \CMSMS\internal\global_cache::clear(__CLASS__);
-            return true;
-        }
+			\CMSMS\internal\global_cache::clear(__CLASS__);
+			return true;
+		}
 
 		return false;
 	}
@@ -258,8 +259,8 @@ final class UserTagOperations
 	function ListUserTags()
 	{
 		$this->LoadUserTags();
+		if( !$this->_cache || !count( $this->_cache  ) ) return;
 		$plugins = array();
-        if( !$this->_cache || !count( $this->_cache  ) ) return;
 		foreach( $this->_cache as $key => $row ) {
 			$plugins[$row['userplugin_id']] = $row['userplugin_name'];
 		}
@@ -273,14 +274,14 @@ final class UserTagOperations
 	 *
 	 * @param string $name The name of the user defined tag
 	 * @param array  $params Optional parameters.
-	 * @return mixed|false The returned data from the user defined tag, or FALSE if the UDT could not be found. 
+	 * @return mixed|false The returned data from the user defined tag, or FALSE if the UDT could not be found.
 	 */
 	function CallUserTag($name, &$params)
 	{
 		$row = $this->_get_from_cache($name);
 		$result = FALSE;
 		if( $row ) {
-            $smarty = \Smarty_CMS::get_instance();
+			$smarty = \Smarty_CMS::get_instance();
 			$functionname = $this->CreateTagFunction($name);
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}

@@ -9,14 +9,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetScheme()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_scheme(),'http');
   }
 
   public function TestSetScheme()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $ob->set_scheme('ftp');
     $this->assertEqual($ob->get_scheme(),'ftp');
   }
@@ -24,14 +24,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetHost()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_host(),'subdomain.host.com');
   }
 
   public function TestSetHost()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = 'another.host2.com';
     $ob->set_host($str);
     $this->assertEqual($ob->get_host(),$str);
@@ -40,14 +40,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetPort()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_port(),5000);
   }
 
   public function TestSetPort()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $port = 1111;
     $ob->set_port($port);
     $this->assertEqual($ob->get_port(),$port);
@@ -56,14 +56,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetUser()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_user(),'someuser');
   }
 
   public function TestSetUser()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = 'fooo';
     $ob->set_user($str);
     $this->assertEqual($ob->get_user(),$str);
@@ -72,14 +72,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetPass()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_pass(),'somepass');
   }
 
   public function TestSetPass()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = 'fooo';
     $ob->set_pass($str);
     $this->assertEqual($ob->get_pass(),$str);
@@ -88,14 +88,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetPath()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_path(),'/foo.bar');
   }
 
   public function TestSetPath()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = 'fooo';
     $ob->set_path($str);
     $this->assertEqual($ob->get_path(),$str);
@@ -104,14 +104,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetQuery()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_query(),'foo=bar&a=2');
   }
 
   public function TestSetQuery()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = '?a=b&c=d';
     $ob->set_query($str);
     $this->assertEqual($ob->get_query(),$str);
@@ -120,14 +120,14 @@ class Test_cms_url extends UnitTestCase
   public function TestGetFragment()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $this->assertEqual($ob->get_fragment(),'frag');
   }
 
   public function TestSetFragment()
   {
     $ob = new cms_url(self::$TEST_URL);
-    
+
     $str = 'woot';
     $ob->set_fragment($str);
     $this->assertEqual($ob->get_fragment(),$str);
@@ -164,11 +164,10 @@ class Test_cms_url extends UnitTestCase
     $ob->set_queryvar('a','b');
     $ob->set_queryvar('c',1234);
     $ob->set_fragment('anchor');
-    
+
     $x1 = (string)$ob;
     $x2 = 'https://myusername:mypassword@www.cmsmadesimple.org:5000/path/a/b/c?a=b&c=1234#anchor';
     $this->assertEqual($x1,$x2);
   }
 }
 
-?>

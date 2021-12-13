@@ -31,4 +31,4 @@ define('CMS_SCHEMA_VERSION', $CMS_SCHEMA_VERSION);
 
 #
 # EOF
-#z
+#

@@ -30,31 +30,31 @@ $db = cmsms()->GetDb();
 $userplugin_id = -1;
 if (isset($_GET["userplugin_id"])) {
 
-	$userplugin_id = $_GET["userplugin_id"];
-	$userplugin_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Modify User-defined Tags');
+    $userplugin_id = $_GET["userplugin_id"];
+    $userplugin_name = "";
+    $userid = get_userid();
+    $access = check_permission($userid, 'Modify User-defined Tags');
 
-	if ($access) {
+    if ($access) {
 
-		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
-		$result = $db->Execute($query, array($userplugin_id));
+        $query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
+        $result = $db->Execute($query, array($userplugin_id));
 
-		if ($result && $result->RecordCount()) {
-			$row = $result->FetchRow();
-			$userplugin_name = $row['userplugin_name'];
-		}
+        if ($result && $result->RecordCount()) {
+            $row = $result->FetchRow();
+            $userplugin_name = $row['userplugin_name'];
+        }
 
         \CMSMS\HookManager::do_hook('Core::DeleteUserDefinedTagPre',  [ 'id'=>$userplugin_id, 'name'=>&$userplugin_name] );
 
-		$query = 'SELECT event_id,handler_id,handler_order FROM '.cms_db_prefix().'event_handlers
+        $query = 'SELECT event_id,handler_id,handler_order FROM '.cms_db_prefix().'event_handlers
                            WHERE tag_name = ?';
-		$handlers = $db->GetArray($query,array($userplugin_name));
-		if( is_array($handlers) && count($handlers) > 0 ) {
-		    $q1 = 'DELETE FROM '.cms_db_prefix().'event_handlers WHERE handler_id = ?';
-		    $q2 = 'UPDATE '.cms_db_prefix().'event_handlers SET handler_order = (handler_order - 1)
+        $handlers = $db->GetArray($query,array($userplugin_name));
+        if( is_array($handlers) && count($handlers) > 0 ) {
+            $q1 = 'DELETE FROM '.cms_db_prefix().'event_handlers WHERE handler_id = ?';
+            $q2 = 'UPDATE '.cms_db_prefix().'event_handlers SET handler_order = (handler_order - 1)
                             WHERE handler_order > ? AND event_id = ?';
-		    foreach( $handlers as $tmp ) {
+            foreach( $handlers as $tmp ) {
                 $hid = $tmp['handler_id'];
                 $eid = $tmp['event_id'];
 
@@ -63,15 +63,15 @@ if (isset($_GET["userplugin_id"])) {
             }
         }
 
-		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
-		$result = $db->Execute($query,array($userplugin_id));
-		if ($result) {
+        $query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
+        $result = $db->Execute($query,array($userplugin_id));
+        if ($result) {
             \CMSMS\internal\global_cache::clear(get_class(UserTagOperations::get_instance()));
             \CMSMS\HookManager::do_hook('Core::DeleteUserDefinedTagPost', [ 'id'=>$userplugin_id, 'name'=>&$userplugin_name ]);
-			// put mention into the admin log
-			audit($userplugin_id, 'User Defined Tag: '.$userplugin_name, 'Deleted');
-		}
-	}
+            // put mention into the admin log
+            audit($userplugin_id, 'User Defined Tag: '.$userplugin_name, 'Deleted');
+        }
+    }
 }
 
 redirect('listusertags.php'.$urlext.'&message=usertagdeleted');

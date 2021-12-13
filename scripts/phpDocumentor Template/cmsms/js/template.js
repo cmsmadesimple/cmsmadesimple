@@ -117,7 +117,7 @@ function initializeContents() {
 }
 
 
-$(document).ready(function() {
+$(function() {
     prettyPrint();
 
     initializeContents();

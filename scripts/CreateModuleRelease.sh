@@ -28,7 +28,7 @@ usage()
   echo "  -D|--nodoc                 : do not attempt to run phpdocs";
   echo "  -c|--configfile <filename> : source this file for config information"
   echo "  -d|--destdir <directory>   : place output file in directory"
-  echo "  -n|--name  <name>          : use name for module name (use caution)"
+  echo "  -n|--name <name>           : use name for module name (be careful)"
   echo "  -v|--version <version>     : use version for version tag"
   echo "  -e|--exclude <pattern>     : exclude files matching this pattern"
   echo "                               from the resulting archive"

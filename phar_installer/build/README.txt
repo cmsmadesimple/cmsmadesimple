@@ -2,10 +2,9 @@
 Creating a CMSMS Release
 ------------------------
 
-
 Creating a CMSMS release involves these steps:
   a: Do all of the required changes to the CMSMS branch in question (change the version.php, update the changelog, make sure those files are committed)
-  b: Create the <installer root>/app/upgrade/<version> directory and it's appropriate files
+  b: Create the <installer root>/app/upgrade/<version> directory and its appropriate files
      MANIFEST.DAT -- this file is created with the 'create_manifest.php' script (see below)
      (a MANIFEST.DAT.GZ file is acceptable too)
      upgrade.php  -- (optional) the script to do any changes to the database or settings
@@ -20,9 +19,9 @@ Creating a CMSMS release involves these steps:
      - remember to create an svn tag if distributing
 
 ---------------------
-Building the manifest
+Building the files manifest
 ---------------------
-  a: execute the create_manifest.php script 
+1. Execute the create_manifest.php script 
      - this requires the php-cli package
      - requires subversion installed
      - assumes unix/linux
@@ -33,7 +32,7 @@ Building the manifest
          to subpath:      trunk
      - the script exports the two directories, and (accounting for files that need to be excluded) compares the directories to
        find files that have been added/changed/deleted.
-  b: copy the generated MANIFEST.DAT.GZ file into the <root>/app/upgrade/<version> directory
+2. Copy the generated MANIFEST.DAT.GZ file into the <root>/app/upgrade/<version> directory
 
 -----------------------------
 Building the release packages
@@ -41,7 +40,7 @@ Building the release packages
 1.  Change dir into the build directory
     Note:  You only need the phar_installer directory to do a build... but use caution that it is from the proper branch of cmsms.
 
-2.  Executebuild_release.php
+2.  Execute build_release.php script
     -- execute build_release.php -h for help
     ** This script is only tested on linux (I'm allergic to windoze)
  
@@ -78,18 +77,16 @@ Building the release packages
 
     g: The installer, and the data.tar.gz is zipped into a zip file (allows CMSMS to be installed on older systems)
 
-    
-
 -----------------------
 Running the .phar file
 -----------------------
 
-Most Apache servers are not configured (by default) to execute php for .phar files.  so there are two
-solutions:
+Most Apache servers are not configured (by default) to execute php for .phar files.
+Here are two solutions:
   1.  Rename the .phar to .php and then browse to it.
       (the build_release script does that, and then encapsulates the .php file into a .zip file)
 
-  2.  Tell Apache to include .phar files in it's executable list. 
+  2.  Tell Apache to include .phar files in its executable list. 
       i.e: add this to the .htaccess (may require changing for different server configs)
 
       <FilesMatch "\.ph(ar|p3?|tml)$">

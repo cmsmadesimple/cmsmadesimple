@@ -92,28 +92,28 @@ if ($error != "") echo '<div class="pageerrorcontainer"><p class="pageerror">'.$
 ?>
 
 <div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
-	<form method="post" action="editbookmark.php">
+    <?php echo $themeObject->ShowHeader('editbookmark'); ?>
+    <form method="post" action="editbookmark.php">
         <div>
           <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
         </div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('title')?>:</p>
-			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('url')?>:</p>
-			<p class="pageinput"><input type="text" name="url" size="80" maxlength="255" value="<?php echo $myurl ?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
-			</p>
-		</div>
-	</form>
+        <div class="pageoverflow">
+            <p class="pagetext"><?php echo lang('title')?>:</p>
+            <p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+        </div>
+        <div class="pageoverflow">
+            <p class="pagetext"><?php echo lang('url')?>:</p>
+            <p class="pageinput"><input type="text" name="url" size="80" maxlength="255" value="<?php echo $myurl ?>" /></p>
+        </div>
+        <div class="pageoverflow">
+            <p class="pagetext">&nbsp;</p>
+            <p class="pageinput">
+                <input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
+                <input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+                <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+            </p>
+        </div>
+    </form>
 </div>
 <?php
 

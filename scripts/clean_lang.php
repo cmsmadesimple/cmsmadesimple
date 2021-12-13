@@ -14,7 +14,7 @@
 function output($str)
 {
   global $quiet;
-  if( !$quiet ) echo $str."\n";
+  if( !$quiet ) echo $str.PHP_EOL;
 }
 
 $options = getopt('nm:s:o:q');
@@ -119,7 +119,7 @@ foreach( $slave_strs as $key => $val ) {
     }
     echo "\$lang['{$key}'] = '{$val}';\n";
 }
-echo "?>";
+echo '?>';
 ob_end_flush();
 
 echo "Done: $slave\n";

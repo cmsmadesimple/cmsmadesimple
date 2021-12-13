@@ -11,15 +11,15 @@ class Test_cms_siteprefs extends UnitTestCase
 
     $config = cmsms()->GetConfig();
     $dbdict = NewDataDictionary(cmsms()->GetDb());
-    $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci', 
-			 'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
+    $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci',
+             'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
 
-    $flds = "
-	sitepref_name C(255) KEY,
-	sitepref_value text,
-	create_date DT,
-	modified_date DT
-    ";
+    $flds = '
+sitepref_name C(255) KEY,
+sitepref_value text,
+create_date DT,
+modified_date DT
+';
     $sqlarray = $dbdict->CreateTableSQL($config['db_prefix'].'siteprefs', $flds, $taboptarray);
     $return = $dbdict->ExecuteSQLArray($sqlarray);
   }
@@ -59,4 +59,3 @@ class Test_cms_siteprefs extends UnitTestCase
     $this->assertTrue(cms_siteprefs::exists('test1'));
   }
 } // end of class
-?>

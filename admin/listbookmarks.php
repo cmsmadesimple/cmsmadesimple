@@ -66,8 +66,8 @@ include_once("header.php");
 		$currow = "row1";
 
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+		$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+		$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		$counter=0;
 		foreach ($marklist as $onemark){
@@ -76,11 +76,11 @@ include_once("header.php");
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">";
-                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                echo "</a></td>\n";
+				echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+				echo "</a></td>\n";
 				echo "<td><a href=\"deletebookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $onemark->title) )."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
+				echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+				echo "</a></td>\n";
 				echo "</tr>\n";
 				($currow == "row1"?$currow="row2":$currow="row1");
 			}

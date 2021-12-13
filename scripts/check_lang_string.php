@@ -3,9 +3,9 @@ function usage() {
   echo "todo\n";
 }
 
-function error($str) 
+function error($str)
 {
-  echo $str."\n"; exit;
+  echo $str.PHP_EOL; exit;
 }
 
 if( $argc != 2 ) {
@@ -13,13 +13,13 @@ if( $argc != 2 ) {
 }
 $filename = $argv[1];
 
-if( !file_exists($filename) ) {
-  error("File not found: ".$filename);
+if( !is_file($filename) ) {
+  error('File not found: '.$filename);
 }
 
-require_once($filename);
+require_once $filename;
 if( !isset($lang) ) {
-  error("No lang variable: ".$filename);
+  error('No lang variable: '.$filename);
 }
 
 // check if there is a realm attached.
@@ -40,7 +40,7 @@ $dup_keys = array();
     }
   }
 }
-if( count($dup_keys) ) {
+if( $dup_keys ) {
   echo "DUPLICATE KEYS:\n";
   print_r($dup_keys);
   echo "\n=============\n\n";
@@ -49,7 +49,7 @@ if( count($dup_keys) ) {
 $dup_vals = array();
 {
   $vals = array_values($lang);
-  for( $i = 0; $i < count($vals); $i++ ) {
+  for( $i = 0, $n = count($vals); $i < $n; $i++ ) {
     $vals[$i] = strtolower($vals[$i]);
   }
   $vals2 = array_count_values($vals);
@@ -59,13 +59,12 @@ $dup_vals = array();
     }
   }
 }
-if( count($dup_vals) ) {
+if( $dup_vals ) {
   echo "DUPLICATE Values:\n";
   print_r($dup_vals);
   echo "\n=============\n\n";
 }
 
-if( !count($dup_keys) || !count($dup_vals) ) {
+if( !$dup_keys || !$dup_vals ) {
   echo "No duplicates found\n";
 }
-?>

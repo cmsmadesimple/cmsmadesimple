@@ -38,8 +38,8 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php".$urlext);
-	return;
+    redirect("listgroups.php".$urlext);
+    return;
 }
 
 $userid = get_userid();
