@@ -202,6 +202,20 @@ namespace CMSMS\Database {
         //// utilities
 
         /**
+         * Quote a string magically using the magic quotes flag.
+         * This method is now just a deprecated alias for the qstr flag
+         * as we now require magic quotes to be disabled.
+         *
+         * @deprecated
+         * @param string $str
+         * @return string
+         */
+        public function QMagic($str)
+        {
+            return $this->qstr($str);
+        }
+
+        /**
          * Quote a string in a database agnostic manner.
          * Warning: This method may require two way traffic with the database depending upon the database.
          * @param string $str
@@ -287,18 +301,18 @@ namespace CMSMS\Database {
                     foreach( $arr as $v ) {
                         $sql .= $sqlarr[$i];
                         switch(gettype($v)){
-						case 'string':
-							$sql .= $this->qstr($v);
-							break;
-						case 'double':
-							$sql .= str_replace(',', '.', $v);
-							break;
-						case 'boolean':
-							$sql .= $v ? 1 : 0;
-							break;
-						default:
-							if ($v === null) $sql .= 'NULL';
-							else $sql .= $v;
+                        case 'string':
+                            $sql .= $this->qstr($v);
+                            break;
+                        case 'double':
+                            $sql .= str_replace(',', '.', $v);
+                            break;
+                        case 'boolean':
+                            $sql .= $v ? 1 : 0;
+                            break;
+                        default:
+                            if ($v === null) $sql .= 'NULL';
+                            else $sql .= $v;
                         }
                         $i += 1;
                     }
@@ -356,6 +370,24 @@ namespace CMSMS\Database {
         }
 
         /**
+         * A method to return an associative array.
+         *
+         * @deprecated
+         * @see Pear::getAssoc()
+         * @param string $sql The SQL statement to execute
+         * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
+         * @param bool $force_array Force each element of the output to be an associative array.
+         * @param bool $first2cols Only output the first 2 columns in an associative array.  Does not work with force_array.
+         */
+        public function GetAssoc( $sql, $inputarr = null, $force_array = false, $first2cols = false )
+        {
+            $data = null;
+            $result = $this->SelectLimit($sql, -1, -1, $inputarr );
+            if( $result ) $data = $result->GetAssoc($force_array,$first2cols);
+            return $data;
+        }
+
+        /**
          * Execute an SQL statement that returns one column, and return all of the
          * matches as an array.
          *
@@ -369,7 +401,7 @@ namespace CMSMS\Database {
             $data = null;
             $result = $this->SelectLimit($sql, -1, -1, $inputarr);
             if ($result) {
-                $data = array();
+                $data = [];
                 $key = null;
                 while (!$result->EOF) {
                     $row = $result->Fields();
@@ -394,7 +426,7 @@ namespace CMSMS\Database {
             $nrows = 1;
             if( stripos( $sql, 'LIMIT' ) !== FALSE ) $nrows = -1;
             $rs = $this->SelectLimit( $sql, $nrows, -1, $inputarr );
-            if( !$rs ) return;
+            if( !$rs ) return FALSE;
             return $rs->Fields();
         }
 
@@ -408,7 +440,7 @@ namespace CMSMS\Database {
         public function GetOne($sql, $inputarr = null)
         {
             $res = $this->Getrow( $sql, $inputarr );
-            if( !$res ) return;
+            if( !$res ) return FALSE;
             $key = array_keys($res)[0];
             return $res[$key];
         }
@@ -427,10 +459,11 @@ namespace CMSMS\Database {
 
         /**
          * Complete a smart transaction.
-         * This method will either do a rollback or a commit depending upon if errors
-         * have been detected.
+         * This method will either do a rollback or a commit depending upon if errors have been detected.
+         *
+         * @param bool $autoComplete If no errors have been detected attempt to auto commit the transaction.
          */
-        abstract public function CompleteTrans();
+        abstract public function CompleteTrans($autoComplete = true);
 
         /**
          * Commit a simple transaction.
@@ -503,12 +536,15 @@ namespace CMSMS\Database {
 
             // strlen(14) allows YYYYMMDDHHMMSS format
             if( is_string($timestamp) ) {
-                if( !preg_match('/[0-9-\s:]*/',$timestamp) ) return 'null';
-                $tmp = strtotime($timestamp);
-                if( $tmp < 1 ) return;
-                $timestamp = $tmp;
+                if( strlen($timestamp) === 14 || preg_match('/[0-9\s:-]*/',$timestamp) ) {
+                    $tmp = strtotime($timestamp);
+                    if( $tmp < 1 ) return 'null';
+                    $timestamp = $tmp;
+                } else if( is_numeric($timestamp) ) {
+                    $timestamp = (int) $timestamp;
+                }
             }
-            if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
+            if( $timestamp > 0 ) return date('Y-m-d H:i:s',$timestamp);
         }
 
         /**
@@ -537,7 +573,7 @@ namespace CMSMS\Database {
                 if ($date === 'null' || strncmp($date, "'", 1) === 0) return $date;
                 $date = $this->UnixDate($date);
             }
-            return strftime('%x',$date);
+            return \locale_ftime('%x',$date);
         }
 
         /**
@@ -660,7 +696,7 @@ namespace CMSMS\Database {
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
-	 * @todo  Move this into a factory class
+     * @todo  Move this into a factory class
          */
         public static function &Initialize(ConnectionSpec $spec)
         {

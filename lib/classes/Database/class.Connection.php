@@ -301,18 +301,18 @@ namespace CMSMS\Database {
                     foreach( $arr as $v ) {
                         $sql .= $sqlarr[$i];
                         switch(gettype($v)){
-						case 'string':
-							$sql .= $this->qstr($v);
-							break;
-						case 'double':
-							$sql .= str_replace(',', '.', $v);
-							break;
-						case 'boolean':
-							$sql .= $v ? 1 : 0;
-							break;
-						default:
-							if ($v === null) $sql .= 'NULL';
-							else $sql .= $v;
+                        case 'string':
+                            $sql .= $this->qstr($v);
+                            break;
+                        case 'double':
+                            $sql .= str_replace(',', '.', $v);
+                            break;
+                        case 'boolean':
+                            $sql .= $v ? 1 : 0;
+                            break;
+                        default:
+                            if ($v === null) $sql .= 'NULL';
+                            else $sql .= $v;
                         }
                         $i += 1;
                     }
@@ -374,7 +374,7 @@ namespace CMSMS\Database {
          *
          * @deprecated
          * @see Pear::getAssoc()
-	 * @param string $sql The SQL statement to execute
+     * @param string $sql The SQL statement to execute
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @param bool $force_array Force each element of the output to be an associative array.
          * @param bool $first2cols Only output the first 2 columns in an associative array.  Does not work with force_array.
@@ -536,7 +536,7 @@ namespace CMSMS\Database {
 
             // strlen(14) allows YYYYMMDDHHMMSS format
             if( is_string($timestamp) ) {
-                if( strlen($timestamp) === 14 || preg_match('/[0-9-\s:]*/',$timestamp) ) {
+                if( strlen($timestamp) === 14 || preg_match('/[0-9\s:-]*/',$timestamp) ) {
                     $tmp = strtotime($timestamp);
                     if( $tmp < 1 ) return 'null';
                     $timestamp = $tmp;
@@ -573,7 +573,7 @@ namespace CMSMS\Database {
                 if ($date === 'null' || strncmp($date, "'", 1) === 0) return $date;
                 $date = $this->UnixDate($date);
             }
-            return strftime('%x',$date);
+            return \locale_ftime('%x',$date);
         }
 
         /**
@@ -696,7 +696,7 @@ namespace CMSMS\Database {
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
-	 * @todo  Move this into a factory class
+     * @todo  Move this into a factory class
          */
         public static function &Initialize(ConnectionSpec $spec)
         {

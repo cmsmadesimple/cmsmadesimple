@@ -27,9 +27,6 @@ $gCms = \CmsApp::get_instance();
 $db = $gCms->GetDb();
 $themeObject = \cms_utils::get_theme_object();
 
-$dateformat = trim(cms_userprefs::get_for_user(get_userid(),'date_format_string','%x %X'));
-if( empty($dateformat) ) $dateformat = '%x %X';
-
 // get the total number of records.
 $totalrows = $db->GetOne("SELECT count(timestamp) FROM ".cms_db_prefix()."adminlog");
 
@@ -101,18 +98,16 @@ if( count($where) ) {
 }
 $sql .= ' ORDER BY timestamp DESC';
 
-//$result = $db->SelectLimit($sql,$limit,$from,$parms);
-
-if (isset($_GET['download'])) {
-  
-    # so we are downloading: honor the filters but skip paging
+if( isset($_GET['download']) ) {
+    // we are downloading: honor the filters but skip paging
     $result = $db->Execute($sql, $parms);
-  
     header('Content-type: text/plain');
     header('Content-Disposition: attachment; filename="adminlog.txt"');
-    if ($result && $result->RecordCount() > 0)	{
+    if( $result && $result->RecordCount() > 0 ) {
+        $dateformat = trim(cms_userprefs::get_for_user(get_userid(),'date_format_string','%x %X'));
+        if( !$dateformat ) $dateformat = '%x %X';
         while ($row = $result->FetchRow()) {
-            echo strftime($dateformat,$row['timestamp'])."|";
+            echo locale_ftime($dateformat,$row['timestamp'])."|";
             echo $row['username'] . "|";
             echo (((int)$row['item_id']==-1)?'':$row['item_id']) . "|";
             echo $row['item_name'] . "|";
@@ -120,10 +115,11 @@ if (isset($_GET['download'])) {
             echo "\n";
         }
     }
+    if( $result ) $result->Close();
     return;
 }
 
-# this is not a download: process paging
+// this is not a download: process paging
 $result = $db->SelectLimit($sql,$limit,$from,$parms);
 
 // begin output
@@ -142,14 +138,13 @@ if ($result && $result->RecordCount() > 0) {
         for( $i = 1; $i <= 5; $i++ ) {
             $pagelist[$i] = $i;
         }
-	// around my current page
-	if( $page > 3 ) {
-	    for( $i = $page - 2; $i <= $page + 2; $i++ ) {
-		$pagelist[$i] = $i;
-            }  
+        // around my current page
+        if( $page > 3 ) {
+            for( $i = $page - 2; $i <= $page + 2; $i++ ) {
+                $pagelist[$i] = $i;
+            }
         }
-        
-	// middle 5
+        // middle 5
         $tpage = $page;
         if( $tpage <= 5 || $tpage >= ($npages - 5) ) $tpage = $npages / 2;
         $x1 = max(1,(int)($tpage - 5 / 2));
@@ -157,7 +152,7 @@ if ($result && $result->RecordCount() > 0) {
         for( $i = $x1; $i <= $x2; $i++ ) {
             $pagelist[] = $i;
         }
-	// last 5
+        // last 5
         for( $i = max(1,$npages - 5); $i <= $npages; $i++ ) {
             $pagelist[] = $i;
         }

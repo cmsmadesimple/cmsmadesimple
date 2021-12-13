@@ -525,7 +525,7 @@ function preprocess_mact($returnid)
     if( !$config['startup_mact_processing'] ) return;
     if( !isset($_REQUEST['mact']) ) return;
     $tmp = explode(',',$_REQUEST['mact'],4);
-    
+
     if( count($tmp) < 4) return;
     list($module,$id,$action,$inline) = $tmp;
     if( !$module || $inline || $id != 'cntnt01' ) return;
@@ -554,4 +554,20 @@ function preprocess_mact($returnid)
     $result = @ob_get_contents();
     @ob_end_clean();
     \CMS_Content_Block::set_primary_content($result);
+}
+
+/**
+ * Replacement for deprecated strftime function
+ * @since 2.2.16
+ *
+ * @param string $format strftime()- and/or date()-compatible format specifier
+ * @param mixed $datevar timestamp | date-time-string | DateTime object | empty to use time() value
+ * @return string
+ */
+function locale_ftime($format, $datevar = null)
+{
+    // hack to access shared code - do this properly in future!
+    $fp = cms_join_path(CMS_ROOT_PATH, 'lib', 'plugins', 'modifier.localedate_format.php');   
+    require_once $fp;
+    return smarty_modifier_localedate_format($datevar, $format);
 }

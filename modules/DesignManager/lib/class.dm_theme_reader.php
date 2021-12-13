@@ -353,9 +353,9 @@ class dm_theme_reader extends dm_reader_base
     {
       $description = $info['description'];
       if( $description ) $description .= "\n----------------------------------------\n";
-      $description .= 'Generated '.strftime('%x %X',$info['generated'])."\n";
+      $description .= 'Generated '.\locale_ftime('%x %X',$info['generated'])."\n";
       $description .= 'By CMSMS version: '.$info['cmsversion']."\n";
-      $description .= 'Imported '.strftime('%x %X');
+      $description .= 'Imported '.\locale_ftime('%x %X');
     }
 
     $design->set_description($description);
