@@ -45,13 +45,13 @@
     <div class="pageoverflow">
       <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label></p>
       <p class="pageinput">
-        <input type="text" id="tpl_created" value="{$tpl->get_created()|date_format:'%x %X'}" readonly="readonly"/>
+        <input type="text" id="tpl_created" value="{$tpl->get_created()|localedate_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label></p>
       <p class="pageinput">
-        <input type="text" id="tpl_modified" value="{$tpl->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
+        <input type="text" id="tpl_modified" value="{$tpl->get_modified()|localedate_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
   {/if}

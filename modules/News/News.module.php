@@ -141,8 +141,8 @@ class News extends CMSModule
         $text .= "Title:      {\$title}\n";
         $text .= "IP Address: {\$ipaddress}\n";
         $text .= "Summary:    {\$summary|strip_tags}\n";
-        $text .= "Start Date: {\$startdate|date_format}\n";
-        $text .= "End Date:   {\$enddate|date_format}\n";
+        $text .= "Start Date: {\$startdate|localedate_format}\n";
+        $text .= "End Date:   {\$enddate|localedate_format}\n";
         return $text;
     }
 

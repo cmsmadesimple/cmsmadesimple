@@ -5,9 +5,9 @@
 <p class="pagerows">
 {foreach $letter_urls as $key => $url}
   {if $key == $curletter}
-    <strong>{$key}</strong>&nbsp;
+	<strong>{$key}</strong>&nbsp;
   {else}
-    <a href="{$url}" title="{$ModuleManager->Lang('title_letter',$key)}">{$key}</a>&nbsp;
+	<a href="{$url}" title="{$ModuleManager->Lang('title_letter',$key)}">{$key}</a>&nbsp;
   {/if}
 {/foreach}
 </p>
@@ -46,18 +46,18 @@
 	<tbody>
 	{foreach from=$items item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
-	        <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-		    <td>{get_module_status_icon status=$entry->age}</td>
+			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+			<td>{get_module_status_icon status=$entry->age}</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
-			<td>{$entry->date|date_format:'%x'}</td>
+			<td>{$entry->date|localedate_format:'%x'}</td>
 			{*<td>{$entry->downloads}</td>*}
 			<td>{if $entry->candownload}
-                              <span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
-                            {else}
-                               {$entry->status}
-                            {/if}
-                        </td>
+				<span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
+			{else}
+				{$entry->status}
+			{/if}
+			</td>
 			<td><a href="{$entry->depends_url}" title="{$ModuleManager->Lang('title_moduledepends')}">{$ModuleManager->Lang('dependstxt')}</a></td>
 			<td><a href="{$entry->help_url}" title="{$ModuleManager->Lang('title_modulehelp')}">{$ModuleManager->Lang('helptxt')}</a></td>
 			<td><a href="{$entry->about_url}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a></td>

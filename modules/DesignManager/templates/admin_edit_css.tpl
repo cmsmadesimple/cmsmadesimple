@@ -24,7 +24,7 @@ $(document).ready(function(){
         lostlock_handler: function(err) {
             // we lost the lock on this stylesheet... make sure we can't save anything.
             // and display a nice message.
-	    console.debug('lost lock handler');
+        console.debug('lost lock handler');
             $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
             $('#form_editcss').dirtyForm('option','dirty',false);
             $('#submitbtn, #applybtn').attr('disabled','disabled');
@@ -121,16 +121,16 @@ $(document).ready(function(){
 
 {*
 {if !$css->get_id()}
-	<h3>{$mod->Lang('create_stylesheet')}</h3>
+    <h3>{$mod->Lang('create_stylesheet')}</h3>
 {else}
-	<h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
+    <h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
 {/if}
 *}
 
 {if isset($get_lock)}
-	<div class="warning lock-warning">
-		{$mod->Lang('lock_warning')}
-	</div>
+    <div class="warning lock-warning">
+        {$mod->Lang('lock_warning')}
+    </div>
 {/if}
 
 {form_start id='form_editcss' extraparms=$extraparms}
@@ -157,13 +157,13 @@ $(document).ready(function(){
         <div class="pageoverflow">
             <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2=help_stylesheet_created title=$mod->Lang('prompt_created')}</p>
             <p class="pageinput">
-                {$css->get_created()|date_format:'%x %X'}
+                {$css->get_created()|localedate_format:'%x %X'}
             </p>
         </div>
         <div class="pageoverflow">
             <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2=help_stylesheet_modified title=$mod->Lang('prompt_modified')}</p>
             <p class="pageinput">
-                {$css->get_modified()|date_format:'%x %X'}
+                {$css->get_modified()|localedate_format:'%x %X'}
             </p>
         </div>
     {/if}
@@ -228,29 +228,29 @@ $(document).ready(function(){
 </div>
 
 {if $has_designs_right}
-	{tab_start name='designs'}
-	<!-- designs -->
-	<div class="pageoverflow">
-		<p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs title=$mod->Lang('prompt_designs')}</p>
-		<p class="pageinput">
-			<select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
-				{html_options options=$design_list selected=$css->get_designs()}
-			</select>
-		</p>
-	</div>
+    {tab_start name='designs'}
+    <!-- designs -->
+    <div class="pageoverflow">
+        <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs title=$mod->Lang('prompt_designs')}</p>
+        <p class="pageinput">
+            <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
+                {html_options options=$design_list selected=$css->get_designs()}
+            </select>
+        </p>
+    </div>
 {/if}
 
 {tab_start name='advanced'}
 {if $css->get_id() > 0}
   <div class="pageoverflow">
-	<p class="pagetext">{$mod->Lang('prompt_cssfile')}:</p>
-	<p class="pageinput">
-		{if $css->has_content_file()}
-			<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
-		{else}
-			<input type="submit" id="exportbtn" name="{$actionid}export" value="{$mod->Lang('export')}"/>
-		{/if}
-	</p>
+    <p class="pagetext">{$mod->Lang('prompt_cssfile')}:</p>
+    <p class="pageinput">
+        {if $css->has_content_file()}
+            <input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+        {else}
+            <input type="submit" id="exportbtn" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+        {/if}
+    </p>
   </div>
 {/if}
 {tab_end}

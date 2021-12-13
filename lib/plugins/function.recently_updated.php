@@ -18,16 +18,20 @@
 
 function smarty_function_recently_updated($params, &$smarty)
 {
-    $number = 10;
+	$number = 10;
 	if(!empty($params['number'])) $number = min(100,max(1,(int) $params['number']));
 
-    $leadin = "Modified: ";
+	$leadin = "Modified: ";
 	if(!empty($params['leadin'])) $leadin = $params['leadin'];
 
-    $showtitle='true';
+	$showtitle='true';
 	if(!empty($params['showtitle'])) $showtitle = $params['showtitle'];
 
 	$dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m" ;
+	if( strpos($dateformat, '%') !== false ) {
+		require_once __DIR__.DIRECTORY_SEPARATOR.'modifier.localedate_format.php';
+	}
+
 	$css_class = isset($params['css_class']) ? $params['css_class'] : "" ;
 
 	if (isset($params['css_class'])) {
@@ -37,17 +41,17 @@ function smarty_function_recently_updated($params, &$smarty)
 		$output = '<ul>';
 	}
 
-    $gCms = CmsApp::get_instance();
+	$gCms = CmsApp::get_instance();
 	$hm = $gCms->GetHierarchyManager();
 	$db = $gCms->GetDb();
 
 	// Get list of most recently updated pages excluding the home page
 	$q = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE (type='content' OR type='link')
-        AND default_content != 1 AND active = 1 AND show_in_menu = 1
-        ORDER BY modified_date DESC LIMIT ".((int)$number);
+		AND default_content != 1 AND active = 1 AND show_in_menu = 1
+		ORDER BY modified_date DESC LIMIT ".((int)$number);
 	$dbresult = $db->Execute( $q );
 	if( !$dbresult ) {
-        // @todo: throw an exception here
+		// @todo: throw an exception here
 		echo 'DB error: '. $db->ErrorMsg()."<br/>";
 	}
 	while ($dbresult && $updated_page = $dbresult->FetchRow())
@@ -62,9 +66,16 @@ function smarty_function_recently_updated($params, &$smarty)
 		}
 		$output .= '<br />';
 		$output .= $leadin;
-		$output .= date($dateformat,strtotime($updated_page['modified_date']));
+		$datevar = strtotime($updated_page['modified_date']);
+		if( strpos($dateformat, '%') !== false ) {
+			$output .= smarty_modifier_localedate_format($datevar, $dateformat);
+		}
+		else {
+			$output .= date($dateformat, $datevar);
+		}
 		$output .= '</li>';
 	}
+	if( $dbresult ) $dbresult-<Close();
 
 	$output .= '</ul>';
 	if (isset($params['css_class'])) $output .= '</div>';

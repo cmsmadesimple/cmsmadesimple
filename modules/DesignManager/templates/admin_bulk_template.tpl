@@ -18,7 +18,7 @@
       <td>{$tpl->get_name()}</td>
       <td>{$tpl->get_type_id()}</td>
       <td>{$tpl->get_owner_id()}</td>
-      <td>{$tpl->get_modified()|date_format:'%x %X'}</td>
+      <td>{$tpl->get_modified()|localedate_format:'%x %X'}</td>
     </tr>
   {/foreach}
   </tbody>

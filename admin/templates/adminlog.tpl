@@ -26,23 +26,23 @@ $(document).ready(function(){
           <div class="c_full">
             <label>{$langfilteraction}</label>
             <input type="text" name="filteraction" value="{$filter->action}" class="grid_10"/>
-	    <div class="clearb"></div>
+            <div class="clearb"></div>
           </div>
           <div class="c_full">
             <label>{lang('item_name_contains')}</label>
             <input type="text" name="filteritem" value="{$filter->item_name}" class="grid_10"/>
-	    <div class="clearb"></div>
+            <div class="clearb"></div>
           </div>
           <div class="c_full">
-	    <label>{$langfilteruser}:</label>
+            <label>{$langfilteruser}:</label>
             <input type="text" name="filteruser" value="{$filter->user}" class="grid_10"/>
-	    <div class="clearb"></div>
+            <div class="clearb"></div>
           </div>
           <div class="pageoverflow">
             <p class="pageinput">
-	      <input type="submit" name="filterapply" value="{lang('apply')}"/>
-	      <input type="submit" name="filterreset" value="{lang('reset')}"/>
-	    </p>
+             <input type="submit" name="filterapply" value="{lang('apply')}"/>
+             <input type="submit" name="filterreset" value="{lang('reset')}"/>
+            </p>
           </div>
         </form>
     </div>
@@ -50,7 +50,7 @@ $(document).ready(function(){
     <div class="c_full">
       <div class="grid_8" style="padding-top: 8px;">
         <a id="toggle_filters">{admin_icon icon='view.gif' alt=""} {lang('filter')}</a>
-	{if $filter_applied}<span style="color: green;"><em>({lang('applied')})</em></span>{/if}
+        {if $filter_applied}<span style="color: green;"><em>({lang('applied')})</em></span>{/if}
         {if isset($downloadlink)}
           <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>&nbsp;
           <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
@@ -62,12 +62,12 @@ $(document).ready(function(){
         {/if}
       </div>
       {if !empty($pagelist)}
-        <div class="grid_4" style="text-align: right;">
-           <form method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
-  	     {lang('page')}:&nbsp;
-	     <select id="pagesel" name="page">{html_options options=$pagelist selected=$page}</select>
-	   </form>
-	</div>
+      <div class="grid_4" style="text-align: right;">
+        <form method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
+          {lang('page')}:&nbsp;
+          <select id="pagesel" name="page">{html_options options=$pagelist selected=$page}</select>
+        </form>
+      </div>
       {/if}
       <div class="clear"></div>
   </div>
@@ -93,8 +93,7 @@ $(document).ready(function(){
           <td>{$line.itemid}</td>
           <td>{$line.itemname}</td>
           <td>{$line.action}</td>
-          <td>{$line.date|date_format:'j M Y H:i:s'}</td>
-{*          <td>{$line.date|date_format:'%e %h %Y %H:%M:%S'}</td>*}
+          <td>{$line.date|localedate_format:'j %h Y H:i:s'}</td>
         </tr>
         {/foreach}
 

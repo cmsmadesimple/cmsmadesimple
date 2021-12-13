@@ -34,16 +34,16 @@ $('#css_selall').cmsms_checkall();
   <table class="pagetable">
     <thead>
       <tr>
- 	<th title="{$mod->Lang('title_css_id')}">{$mod->Lang('prompt_id')}</th>
- 	<th class="pageicon"></th>
- 	<th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
-  	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
-	<th title="{$mod->Lang('title_css_filename')}">{$mod->Lang('prompt_filename')}</th>
-	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
-	<th class="pageicon"></th>{* edit *}
-	<th class="pageicon"></th>{* copy *}
-	<th class="pageicon"></th>{* delete *}
-	<th class="pageicon"><label for="css_selall" style="display: none;">{$mod->Lang('title_css_selectall')}</label><input type="checkbox" value="1" id="css_selall" title="{$mod->Lang('title_css_selectall')}"/></th>{* multiple *}
+    <th title="{$mod->Lang('title_css_id')}">{$mod->Lang('prompt_id')}</th>
+    <th class="pageicon"></th>
+    <th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
+    <th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
+    <th title="{$mod->Lang('title_css_filename')}">{$mod->Lang('prompt_filename')}</th>
+    <th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
+    <th class="pageicon"></th>{* edit *}
+    <th class="pageicon"></th>{* copy *}
+    <th class="pageicon"></th>{* delete *}
+    <th class="pageicon"><label for="css_selall" style="display: none;">{$mod->Lang('title_css_selectall')}</label><input type="checkbox" value="1" id="css_selall" title="{$mod->Lang('title_css_selectall')}"/></th>{* multiple *}
       </tr>
     </thead>
     <tbody>
@@ -54,8 +54,8 @@ $('#css_selall').cmsms_checkall();
         {cms_action_url action='admin_copy_css' css=$css->get_id() assign='copy_css'}
         {cms_action_url action='admin_delete_css' css=$css->get_id() assign='delete_css'}
 
-	<tr class="{$rowclass}">
-	{if !$css->locked()}
+    <tr class="{$rowclass}">
+    {if !$css->locked()}
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css tooltip" title="{$mod->Lang('edit_stylesheet')}" data-cms-description='{$css_tooltip}'>{$css->get_id()}</a></td>
           <td></td>
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css tooltip" title="{$mod->Lang('edit_stylesheet')}" data-cms-description='{$css_tooltip}'>{$css->get_name()}</a></td>
@@ -66,50 +66,50 @@ $('#css_selall').cmsms_checkall();
         {/if}
 
         <td>
-	  {assign var='t1' value=$css->get_designs()}
-	  {if $t1 && count($t1) == 1}
-	    {assign var='t1' value=$t1[0]}
-	    {assign var='hn' value=$design_names.$t1}
-	    {if $manage_designs}
-	      {cms_action_url action=admin_edit_design design=$t1 assign='edit_design_url'}
-	      <a href="{$edit_design_url}" title="{$mod->Lang('edit_design')}">{$hn}</a>
-	    {else}
-	      {$hn}
-	    {/if}
-	  {elseif empty($t1)}
-	    <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
-	  {else}
-	    {capture assign='tooltip_designs'}{strip}
+      {assign var='t1' value=$css->get_designs()}
+      {if $t1 && count($t1) == 1}
+        {assign var='t1' value=$t1[0]}
+        {assign var='hn' value=$design_names.$t1}
+        {if $manage_designs}
+          {cms_action_url action=admin_edit_design design=$t1 assign='edit_design_url'}
+          <a href="{$edit_design_url}" title="{$mod->Lang('edit_design')}">{$hn}</a>
+        {else}
+          {$hn}
+        {/if}
+      {elseif empty($t1)}
+        <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
+      {else}
+        {capture assign='tooltip_designs'}{strip}
             <u>{$mod->Lang('prompt_attached_designs')}</u>:<br />
-	    {foreach $t1 as $dsn_id}
-	      {$design_names.$dsn_id}<br />
-	    {/foreach}
-	    {/strip}{/capture}
-	    <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})
-	  {/if}
-	</td>
+        {foreach $t1 as $dsn_id}
+          {$design_names.$dsn_id}<br />
+        {/foreach}
+        {/strip}{/capture}
+        <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})
+      {/if}
+    </td>
 
-	<td>
-	   {if $css->has_content_file()}
-	     {basename($css->get_content_filename())}
-	   {/if}
-	</td>
+    <td>
+       {if $css->has_content_file()}
+         {basename($css->get_content_filename())}
+       {/if}
+    </td>
 
-	<td>{$css->get_modified()|date_format:'%x %X'}</td>
+    <td>{$css->get_modified()|localedate_format:'%x %X'}</td>
 
-	{if !$css->locked()}
+    {if !$css->locked()}
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css" title="{$mod->Lang('edit_stylesheet')}">{admin_icon icon='edit.gif' title=$mod->Lang('edit_stylesheet')}</a></td>
-	  <td><a href="{$copy_css}" title="{$mod->Lang('copy_stylesheet')}">{admin_icon icon='copy.gif' title=$mod->Lang('copy_stylesheet')}</a></td>
-  	  <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
-  	  <td>
-	    <label for="css_select{$css@index}" style="display: none;">{$mod->Lang('prompt_select')}:</label>
-	    <input id="{$css@index}" type="checkbox" class="css_select" name="{$actionid}css_select[]" value="{$css->get_id()}"/>
-	  </td>
+      <td><a href="{$copy_css}" title="{$mod->Lang('copy_stylesheet')}">{admin_icon icon='copy.gif' title=$mod->Lang('copy_stylesheet')}</a></td>
+      <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
+      <td>
+        <label for="css_select{$css@index}" style="display: none;">{$mod->Lang('prompt_select')}:</label>
+        <input id="{$css@index}" type="checkbox" class="css_select" name="{$actionid}css_select[]" value="{$css->get_id()}"/>
+      </td>
         {else}
           <td>
             {$lock=$css->get_lock()}
             {if $lock.expires < $smarty.now}
-	      <a href="{$edit_css}" data-css-id="{$css->get_id()}" accesskey="e" class="steal_css_lock">{admin_icon icon='permissions.gif' class='edit_css steal_css_lock' title=$mod->Lang('prompt_steal_lock')}</a>
+          <a href="{$edit_css}" data-css-id="{$css->get_id()}" accesskey="e" class="steal_css_lock">{admin_icon icon='permissions.gif' class='edit_css steal_css_lock' title=$mod->Lang('prompt_steal_lock')}</a>
             {/if}
           </td>
           <td></td>

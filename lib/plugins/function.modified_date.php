@@ -19,17 +19,25 @@
 function smarty_function_modified_date($params, &$smarty)
 {
 	$content_obj = CmsApp::get_instance()->get_content_object();
-
-    $format = "%x %X";
-	if(!empty($params['format'])) $format = $params['format'];
-	if (is_object($content_obj) && $content_obj->GetModifiedDate() > -1) {
+	if( is_object($content_obj) && $content_obj->GetModifiedDate() > -1 ) {
 		$time = $content_obj->GetModifiedDate();
-		$str = cms_htmlentities(strftime($format, $time));
+
+		$format = "%x %X";
+		if(!empty($params['format'])) $format = $params['format'];
+
+		if( strpos($format, '%') !== false ) {
+			require_once __DIR__.DIRECTORY_SEPARATOR.'modifier.localedate_format.php';
+			$str = smarty_modifier_localedate_format($time, $format);
+		}
+		else {
+			$str = date($format, $time);
+		}
+		$str = cms_htmlentities($str);
 
 		if( isset($params['assign']) ) {
 			$smarty->assign($params['assign'],$str);
 			return;
-	    }
+		}
 		return $str;
 	}
 }
@@ -41,7 +49,7 @@ function smarty_cms_about_function_modified_date() {
 	<p>Change History:</p>
 		<ul>
 			<li>Added assign paramater (calguy1000)</li>
-        </ul>
+		</ul>
 <?php
 }
 ?>

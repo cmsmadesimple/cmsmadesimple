@@ -18,19 +18,26 @@
 
 function smarty_function_created_date($params, &$smarty)
 {
-    $content_obj = CmsApp::get_instance()->get_content_object();
-
-    $format = "%x %X";
-	if(!empty($params['format'])) $format = $params['format'];
+	$content_obj = CmsApp::get_instance()->get_content_object();
 
 	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1) {
 		$time = $content_obj->GetCreationDate();
-		$str = cms_htmlentities(strftime($format, $time));;
+
+		$format = "%x %X";
+		if(!empty($params['format'])) $format = $params['format'];
+		if( strpos($format, '%') !== false ) {
+			require_once __DIR__.DIRECTORY_SEPARATOR.'modifier.localedate_format.php';
+			$str = smarty_modifier_localedate_format($time, $format);
+		}
+		else {
+			$str = date($format, $time);
+		}
+		$str = cms_htmlentities($str);
 
 		if( isset($params['assign']) ) {
 			$smarty->assign(trim($params['assign']),$str);
 			return;
-	    }
+		}
 		return $str;
 	}
 }

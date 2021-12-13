@@ -14,7 +14,7 @@
     <tr>
       <td>{$tpl->get_id()}</td>
       <td>{$tpl->get_name()}</td>
-      <td>{$tpl->get_modified()|date_format:'%x %X'}</td>
+      <td>{$tpl->get_modified()|localedate_format:'%x %X'}</td>
     </tr>
   {/foreach}
   </tbody>

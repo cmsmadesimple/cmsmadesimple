@@ -42,11 +42,11 @@
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_type_createdate' title=$mod->Lang('prompt_created')}</p>
-      <p class="pageinput">{$type->get_create_date()|date_format:'%x %X'}</p>
+      <p class="pageinput">{$type->get_create_date()|localedate_format:'%x %X'}</p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_type_modifieddate' title=$mod->Lang('prompt_modified')}</p>
-      <p class="pageinput">{$type->get_modified_date()|date_format:'%x %X'}</p>
+      <p class="pageinput">{$type->get_modified_date()|localedate_format:'%x %X'}</p>
     </div>
   </div>{* right container *}
   <div style="clear: both;"></div>

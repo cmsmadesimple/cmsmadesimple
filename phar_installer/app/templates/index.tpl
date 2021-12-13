@@ -12,20 +12,20 @@
         <script src="app/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
         <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css"/>
         <title>
-	  {if !empty($browser_title)}
-  	    {$browser_title}
-	  {elseif !empty($title)}
-  	    {$title nocache} - CMS Made Simple&trade; {'apptitle'|tr}
-	  {else}
-	    CMS Made Simple&trade; {'apptitle'|tr}}
-	  {/if}
-	 </title>
+      {if !empty($browser_title)}
+        {$browser_title}
+      {elseif !empty($title)}
+        {$title nocache} - CMS Made Simple&trade; {'apptitle'|tr}
+      {else}
+        CMS Made Simple&trade; {'apptitle'|tr}}
+      {/if}
+     </title>
         <!--[if lt IE 9]>
             <script src="app/assets/js/html5.js"></script>
             <script src="app/assets/js/css3-mediaqueries.js"></script>
         <![endif]-->
         <link rel="stylesheet" type="text/css" href="app/assets/css/install.css"/>
-	<link rel="icon" type="image/ico" href="app/assets/images/favicon.ico"/>
+    <link rel="icon" type="image/ico" href="app/assets/images/favicon.ico"/>
     </head>
     <body class="cmsms-ui">
         <div class="row header-section">
@@ -58,7 +58,7 @@
             <main role="main" class="eight-col installer-content-section">
                 <div class="inner">
                     <h1>{if isset($title)}{$title}{else}{'install_upgrade'|tr}{/if}</h1>
-		    {if isset($subtitle)}<h3>{$subtitle}</h3>{/if}
+            {if isset($subtitle)}<h3>{$subtitle}</h3>{/if}
 
                     {if isset($dir) && ($in_phar || $cur_step > 1)}
                     <div class="message blue icon">
@@ -74,7 +74,7 @@
                     {/if}
                     <article>
                         {block name='contents'}WIZARD CONTENTS GO HERE{/block}
-			{block name='content-footer'}{/block}
+            {block name='content-footer'}{/block}
                     </article>
 
                 </div>
@@ -85,7 +85,7 @@
                 <a href="https://forum.cmsmadesimple.org" target="_blank">{'title_forum'|tr}</a> &bull; <a href="https://docs.cmsmadesimple.org" target="_blank">{'title_docs'|tr}</a> &bull; <a href="http://apidoc.cmsmadesimple.org" target="_blank">{'title_api_docs'|tr}</a>
             </div>
             <small>
-                &copy; Copyright {$smarty.now|date_format:'%Y'} <a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a>. All rights reserved{if isset($installer_version)} - {'installer_ver'|tr}:&nbsp;{$installer_version}{/if}{if isset($build_time)} - {'build_date'|tr}:&nbsp;{$build_time|date_format:'%x %X'}{/if}
+                &copy; Copyright {$smarty.now|date_format:'Y'} <a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a>. All rights reserved{if isset($installer_version)} - {'installer_ver'|tr}:&nbsp;{$installer_version}{/if}{if isset($build_time)} - {'build_date'|tr}:&nbsp;{$build_time|localedate_format:'%x %X'}{/if}
             </small>
         </footer>
     {block name='javascript'}
