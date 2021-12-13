@@ -40,13 +40,13 @@ function search_StemPhrase(&$module,$phrase)
                                     $phrase);
 
     // split into words
-    $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/u', $phrase);
+    $words = preg_split('/[\s,!.;:\?()+\-\/\\\\]+/u', $phrase);
     if( !is_array($words) ) return [];
 
-    // strip off anything 3 chars or less
+    // ignore 1-digit numbers and non-numbers < 3 bytes
     if( !function_exists('__search_stemphrase_filter') ) {
         function __search_stemphrase_filter($a) {
-            return (strlen($a) >= 3);
+            return ($l = strlen($a)) > 2 || ($l > 1 && is_numeric($a));
         }
     }
     $words = array_filter($words, '__search_stemphrase_filter');
@@ -89,7 +89,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
     if ($content != "") {
         //Clean up the content
-	// if( function_exists('utf8_decode') ) $content = utf8_decode($content);
+    // if( function_exists('utf8_decode') ) $content = utf8_decode($content);
         $content = html_entity_decode($content);
         $stemmed_words = $obj->StemPhrase($content);
         $tmp = array_count_values($stemmed_words);
