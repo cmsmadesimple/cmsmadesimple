@@ -3,35 +3,35 @@ CMS Made Simple PHAR Based Installation Assistant
 --------------------------------------------------
 This document describes using the CMS Made Simple PHAR Based installation assistant.
 
-The PHAR based installation assistant is an entire PHP application built to provide the ability to
-install, upgrade, or freshen CMS Made Simple from within a single, easy to use php script.
+The PHAR based installation assistant is a stand-alone PHP application built to provide
+the ability to install, upgrade, or freshen CMS Made Simple from within a single
+easy-to-use PHP script.
 
----------------------------
+-------------------
 NOTE:
----------------------------
+-------------------
 The PHAR based installation assistant is a binary file and must be transferred in binary mode!
 
----------------------------
+-------------------
 Requirements
----------------------------
-1.  The installation assistant requires a PHP environment with a minimum version of PHP 5.4.0 with the Phar library enabled.
-2.  For new installations of CMS Made Simple you should create a new mysql database and database user.
+-------------------
+1.  The installation assistant requires a PHP environment with a minimum version of PHP 7.1.
+2.  The website's PHP environment must include the PHAR extension.
+3.  For new installations of CMS Made Simple you should create a new mysql database and database user.
     - The database user must have ALL PRIVILEGES to all tables within the new database.
     - Your database user account must have a password.
-3.  CMS Made Simple itself requires at least PHP 5.6 with numerous libraries enabled (the install assistant will check for these) including json, tokenizer, xml, and gd.
-4.  Your PHP environment must include the PHAR extension
+4.  CMS Made Simple itself requires at least PHP 7.1 with numerous libraries enabled
+    (the install assistant will check for these) including json, tokenizer, xml, and gd.
 
----------------------------
+-------------------
 Instructions
----------------------------
-1.  Upload the cmsms-<version>-install.zip file to your web directory.
-2.  Extract the files from the .zip file
-    This will create a cmsms-<version>-install.php file, and another copy of this README file.
-3.  Using your browser, navigate to <your web directory>/cmsms-<version>-install.php
-    For Example: http://www.mywebsite.site/cmsms-2.0-install.php
+-------------------
+1.  Upload the cmsms-<version>-install.php file to your website top directory.
+2.  In your web browser, navigate to <your web directory>/cmsms-<version>-install.php
+    For example: http://www.mywebsite.site/cmsms-3.44.55-install.php
 
 You should now be presented with a welcome screen.  If, instead, you see a white screen it probably means that your
-server is running old, or incompatible software and that you may be forced to use the traditional installer.  It is a good
+server is running old, or incompatible, software and that you may be forced to use the traditional installer.  It is a good
 hint that if the Phar installer will not run you may have further problems with CMS Made Simple on that server.
 
 The installation assistant can then be used to guide you through the process of installing a new version of CMSMS,
@@ -39,8 +39,8 @@ Upgrading an existing installation of CMSMS, or freshening an existing version o
 for each path through the installation assistant and 9 steps
 
 Step 1:
-  Step 1 asks you to select a language and optionally allows you to enable "Advanced Mode". Advanced mode enables various
-  additional options throughout the assistant and increases the verbosity of the status output.
+  The first step asks you to select a language and optionally allows you to enable "Advanced Mode". Advanced Mode
+  enables several additional options throughout the assistant and increases the verbosity of status output.
 
 Step 2:
   The second step does checks for existing software in your installation directory.  If an existing installation of
@@ -49,17 +49,17 @@ Step 2:
   "installation" process.
 
 Step 3:
-  Step 3 performs various tests on your PHP environment to try to ensure that the PHP environment is compatible with
-  CMS Made Simple. If important tests fail you will be notified of them and not allowed to continue. However, if
-  some non critical tests fail you will be allowed to continue. We recommend that you adjust your PHP environment
+  Step 3 performs various tests on your PHP environment to try to ensure that it is compatible with
+  CMS Made Simple. If important tests fail, you will be notified of them and not allowed to continue. However, if
+  some non-critical tests fail you will be allowed to continue. We recommend that you adjust your PHP environment
   (you may need to contact your host for assistance) until all tests pass.
 
 Step 4:
-  This step is used only during the installation or freshen paths. It asks you to provide basic configuration information
+  This step is used only during installation and freshen sessions. It asks you to provide basic configuration information
   for the CMS Made Simple environment. This includes database information and credentials, and a server time zone.
 
-  As mentioned in the requirements above. CMSMS requires a mysql database to store data, and user credentials to access
-  it.  The user account provided must have ALL PRIVILEGES to the database.  You can normally create
+  As mentioned in the requirements above, CMSMS requires a mysql database to store data, and user credentials to access
+  that mysql database. The user account provided must have ALL PRIVILEGES to the database. You can normally create
   databases, and create user accounts for database from within your web host's control panel.
 
   Additionally, you are asked to specify the time zone of the server (not your local time zone). You may need to ask your
@@ -69,82 +69,81 @@ Step 4:
   you are not accidentally overwriting an existing installation of CMSMS.
 
 Step 5:
-  This step is used only during the installation path.  It asks you to provide basic credentials to the first Admin user
-  account. This Admin user account allows you to login to the CMSMS Admin console with all privileges and access to all
-  of its functionality. From within the CMSMS Admin console you can create user groups, and further user accounts
+  This step is used only during an installation session. It asks you to provide basic credentials of the first admin user
+  account. This admin user account allows you to log in to the CMSMS admin console with all privileges and access to all
+  of its functionality. From within the CMSMS admin console you can create user groups, and further user accounts
   for additional site managers or editors.
 
-  Unless you have enabled "Advanced mode" in step 1, you must also provide an email address. The email address will be
-  used to send you your login credentials in the event of a lost or forgotten password.  An email will also be sent to you
-  with your initial login credentials.
+  Unless you have enabled "advanced mode" in step 1, you must also provide an email address. The email address will be
+  used to send you your login credentials in the event of a lost or forgotten password.
 
 Step 6:
   This step asks you for a human readable name for your website, and allows you to select additional language packs to install.
 
-  Additional language packs allow users who login to the CMSMS Admin console to display the output in their native language.
-  Please note: though there are multiple languages available, not all of them are complete...
+  Additional language packs allow users who login to the CMSMS admin console to display the output in their native language.
+  Please note: although there are multiple languages available, not all of them are complete.
 
 Step 7:
-  This step copies all of the CMSMS core files from within the installation assistant into your CMS Made Simple install. It also
-  cleans up those files.
+  This step copies all of the CMSMS core files from within the installation assistant into your CMS Made Simple install.
+  It also cleans up those files.
 
 Step 8:
   This step interacts with the database to ensure that all tables and initial content are created properly.
 
-  During the installation process numerous tables and indexes are created in the database, and necessary initial data is installed.
-  Additionally (by default) sample data is installed.  The sample data provides useful instructions on how to interact with,
+  During the installation process numerous tables and indexes are created in the database, and necessary initial data are installed.
+  Additionally (if so selected) sample site-content is installed. That provides useful instruction on how to interact with,
   and build sites with, CMS Made Simple. It is recommended reading.
 
-  During the upgrade process, any necessary database changes are preformed to ensure that the database tables, and their contents,
+  During an upgrade session, any necessary database changes are performed to ensure that the database tables, and their contents,
   are compatible with the new version of CMSMS.
 
 Step 9:
   This step finishes the installation and performs a clean-up.
 
-  During the installation process all core modules are installed, necessary temporary directories created, and the configuration file
+  During the installation process all core modules and selected non-core modules (if any) are installed, necessary temporary directories created, and the configuration file
   is written.
 
-  During the upgrade process core modules are upgraded if necessary, and a new version of the configuration file is written.
+  During the upgrade process core modules and selected non-core modules (if any) are upgraded if necessary, and a new version of the configuration file is written.
   Any existing configuration file is backed up for safety.  Additionally, the CMSMS cache is cleared.
 
-  Once everything is complete you will be presented with links to either visit your CMSMS website, or to login to its Admin console.
+  After everything is complete you will be presented with links to either visit the CMSMS website, or to log in to its admin console.
 
-
----------------------------
+-----------
 Afterwards
----------------------------
-After successful completion of the installation assistant, you should delete the installation assistant .php file.
-It is important for security purposes that you delete the installation assistant .php file and this text file from your server after verifying that the operation has succeeded.
+-----------
 
----------------------------
+After confirming that the site is working as expected, confirm that the installer .php file and related folder (with all its contents)
+have been deleted from the server. If not so, delete them manually, using the site's file manager (in cPanel or the like).
+Likewise for any intaller.ini file, in the site-root folder, that was used to facilitate the installer session.
+
+---------------------
 Additional Features
----------------------------
+---------------------
 The single installation assistant package provides these features:
 1.  Installing a new version of CMSMS into an empty directory.
 2.  Upgrading an existing version of CMSMS to a new version
-3.  Freshening (or Repairing) an existing installation of CMSMS
+3.  Freshening (or repairing) an existing installation of CMSMS
     This option may be useful for fixing a corrupted installation of CMSMS.  Only available when the current version of CMSMS and the new version are identical, it will replace all of the core files with those distributed by the system and re-generate a new config.php file.
 4.  Installing additional language packages
     As part of the "Freshen" functionality, when repairing an installation you have the option to install additional language packs.
 5.  Advanced vs. Simple mode
 
 ---------------------------
-Available Options
+Parameter Details
 ---------------------------
-The installation assistant supports the following URL based options:
-1.  TMPDIR=/absolute/path
+
+1.  tmpdir=/absolute/path
     Specify the absolute path to the directory to be used for temporary files.  This directory must be writable by the PHP process.  This option should not be needed on most hosts.
-2.  debug=1
-    Attempt Turn on error reporting, and to display some meaningful help information.
-3.  nobase=1
+2.  debug=true
+    Attempt turn on error reporting, and to display some meaningful help information.
+3.  nobase=true
     Do not output a base href tag in the generated HTML.
 4.  dest=/absolute/path
     Allow specifying a custom destination directory (must be an absolute path).
-5.  nofiles=1
+5.  nofiles=true
     Do not overwrite files.  This is useful when needing to setup the database when the files have been manually extracted from the source code repository.
-6.  clear=1
+6.  clear=true
     Usable only on the first step, this will ensure that all preset config information is cleared from the session (for development purposes only).
-
 
 ---------------------------
 Frequently Asked Questions

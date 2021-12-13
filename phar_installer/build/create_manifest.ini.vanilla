@@ -1,0 +1,19 @@
+[config]
+;non-default parameters
+;do_md5 = 1
+;mode = "f"
+;outfile = "MANIFEST.DAT"
+;pack_type = "zip"
+;pack_type = "bzip2"
+;pack_type = "zlib"
+;pack_type = ""
+;svn_root = "http://svn.cmsmadesimple.org/svn/cmsmadesimple"
+;uri_from = "svn://"
+;uri_from = "svn://<pathto>"
+;uri_from = "svn://trunk"
+;uri_from = "file://<pathto>"
+;uri_to = "file://"
+;uri_to = "file://<pathto>"
+;uri_to = "file://local"
+;uri_to = "svn://<pathto>"
+;uninstallmodules[] = ""
