@@ -165,7 +165,7 @@ function copy_source_files()
   echo "INFO: Copying source files from $indir to $tmpdir\n";
   @mkdir($tmpdir);
   $dir = new RecursiveDirectoryIterator($indir,
-					FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::SKIP_DOTS );
+                                        FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::SKIP_DOTS );
 
   rrmdir($indir.'/tmp/cache');
   rrmdir($indir.'/tmp/templates_c');
