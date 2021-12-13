@@ -12,39 +12,39 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         $this->dropTable = 'DROP TABLE IF EXISTS %s'; // requires mysql 3.22 or later
 
         $this->dropIndex = 'DROP INDEX %s ON %s';
-        $this->renameColumn = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';	// needs column-definition!
+        $this->renameColumn = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';  // needs column-definition!
     }
 
     protected function ActualType($meta)
     {
         switch( $meta ) {
-		case 'C': return 'VARCHAR';
-		case 'XL':return 'LONGTEXT';
-		case 'X': return 'TEXT';
+        case 'C': return 'VARCHAR';
+        case 'XL':return 'LONGTEXT';
+        case 'X': return 'TEXT';
 
-		case 'C2': return 'VARCHAR';
-		case 'X2': return 'LONGTEXT';
+        case 'C2': return 'VARCHAR';
+        case 'X2': return 'LONGTEXT';
 
-		case 'B': return 'LONGBLOB';
+        case 'B': return 'LONGBLOB';
 
-		case 'D': return 'DATE';
-		case 'DT': return 'DATETIME';
-		case 'T': return 'TIME';
-		case 'TS': return 'TIMESTAMP';
-		case 'L': return 'TINYINT';
+        case 'D': return 'DATE';
+        case 'DT': return 'DATETIME';
+        case 'T': return 'TIME';
+        case 'TS': return 'TIMESTAMP';
+        case 'L': return 'TINYINT';
 
-		case 'R':
-		case 'I4':
-		case 'I': return 'INTEGER';
-		case 'I1': return 'TINYINT';
-		case 'I2': return 'SMALLINT';
-		case 'I8': return 'BIGINT';
+        case 'R':
+        case 'I4':
+        case 'I': return 'INTEGER';
+        case 'I1': return 'TINYINT';
+        case 'I2': return 'SMALLINT';
+        case 'I8': return 'BIGINT';
 
-		case 'F': return 'DOUBLE';
-		case 'N': return 'NUMERIC';
-		default:
-			return $meta;
-		}
+        case 'F': return 'DOUBLE';
+        case 'N': return 'NUMERIC';
+        default:
+            return $meta;
+        }
     }
 
     protected function MetaType($t,$len=-1,$fieldobj=false)
@@ -224,16 +224,46 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         }
     }
 
+    /*
+     * Arguably this method is counter-productive. Any correction here will
+     * probably not be replicated at runtime, and better to fail during installation.
+     * The name is not checked for a reserved-word.
+     * Permitted characters in unquoted identifiers are in accord with MySQL documentation.
+     */
+    protected function NameQuote($name = null, $allowBrackets = false)
+    {
+        if (!is_string($name)) {
+            return '';
+        }
+
+        // if name is already quoted, just trim
+        if (preg_match('/^\s*`.+`\s*$/', $name)) {
+            return trim($name);
+        }
+
+        $name = rtrim($name);
+        // if name contains special characters, quote it
+        $patn = ($allowBrackets) ? '\w$()\x80-\xff' : '\w$\x80-\xff';
+        if (preg_match('/[^'.$patn.']/', $name)) {
+            return '`'.$name.'`';
+        }
+        // if name contains only digits, quote it
+        if (preg_match('/^\s*\d+$/', $name)) {
+            return '`'.$name.'`';
+        }
+        return $name;
+    }
+
     protected function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
-	{
-		$suffix = '';
-		if ($funsigned) $suffix .= ' UNSIGNED';
-		if ($fnotnull) $suffix .= ' NOT NULL';
-		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
-		if ($fautoinc) $suffix .= ' AUTO_INCREMENT';
-		if ($fconstraint) $suffix .= ' '.$fconstraint;
-		return $suffix;
-	}
+    {
+        $suffix = '';
+        if ($funsigned) $suffix .= ' UNSIGNED';
+        if ($fnotnull) $suffix .= ' NOT NULL';
+        if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
+        if ($fautoinc) $suffix .= ' AUTO_INCREMENT';
+        if ($fconstraint) $suffix .= ' '.$fconstraint;
+        return $suffix;
+    }
 
     function _ProcessOptions($opts)
     {
@@ -248,43 +278,43 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         return $opts;
     }
 
-	function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
-	{
-		$sql = array();
+    function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
+    {
+        $sql = array();
 
-		if ( isset($idxoptions['REPLACE']) || isset($idxoptions['DROP']) ) {
-			if ($this->alterTableAddIndex) $sql[] = "ALTER TABLE $tabname DROP INDEX $idxname";
-			else $sql[] = sprintf($this->dropIndex, $idxname, $tabname);
+        if ( isset($idxoptions['REPLACE']) || isset($idxoptions['DROP']) ) {
+            if ($this->alterTableAddIndex) $sql[] = "ALTER TABLE $tabname DROP INDEX $idxname";
+            else $sql[] = sprintf($this->dropIndex, $idxname, $tabname);
 
-			if ( isset($idxoptions['DROP']) ) return $sql;
-		}
+            if ( isset($idxoptions['DROP']) ) return $sql;
+        }
 
-		if ( empty ($flds) ) return $sql;
+        if ( empty ($flds) ) return $sql;
 
-		if (isset($idxoptions['FULLTEXT'])) {
-			$unique = ' FULLTEXT';
-		} elseif (isset($idxoptions['UNIQUE'])) {
-			$unique = ' UNIQUE';
-		} else {
-			$unique = '';
-		}
+        if (isset($idxoptions['FULLTEXT'])) {
+            $unique = ' FULLTEXT';
+        } elseif (isset($idxoptions['UNIQUE'])) {
+            $unique = ' UNIQUE';
+        } else {
+            $unique = '';
+        }
 
-		if ( is_array($flds) ) $flds = implode(', ',$flds);
+        if ( is_array($flds) ) $flds = implode(', ',$flds);
 
-		if ($this->alterTableAddIndex) $s = "ALTER TABLE $tabname ADD $unique INDEX $idxname ";
-		else $s = 'CREATE' . $unique . ' INDEX ' . $idxname . ' ON ' . $tabname;
+        if ($this->alterTableAddIndex) $s = "ALTER TABLE $tabname ADD $unique INDEX $idxname ";
+        else $s = 'CREATE' . $unique . ' INDEX ' . $idxname . ' ON ' . $tabname;
 
-		$s .= ' (' . $flds . ')';
+        $s .= ' (' . $flds . ')';
 
         if( ($opts = $this->get_dbtype_options($idxoptions)) ) $s .= $opts;
 
-		$sql[] = $s;
+        $sql[] = $s;
 
-		return $sql;
-	}
+        return $sql;
+    }
 
-	function CreateTableSQL($tabname, $flds, $tableoptions=false)
-	{
+    function CreateTableSQL($tabname, $flds, $tableoptions=false)
+    {
         $str = 'ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
         $dbtype = $this->_DBType();
 
@@ -312,6 +342,6 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
         }
 
         return parent::CreateTableSQL($tabname, $flds, $tableoptions);
-	}
+    }
 
 } // end of class
