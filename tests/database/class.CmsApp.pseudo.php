@@ -3,7 +3,7 @@
   //require_once('cms_test_base.php');
 require_once(CMSMS.'/lib/adodb_lite/adodb.inc.php');
 
-function &cmsms()
+function cmsms()
 {
   return CmsApp::get_instance();
 }
@@ -19,10 +19,10 @@ final class CmsApp
   private $_db;
   private static $_instance;
 
-  public static function &get_instance()
+  public static function get_instance()
   {
     if( !self::$_instance ) {
-      self::$_instance = new CmsApp;
+      self::$_instance = new self();
     }
     return self::$_instance;
   }
@@ -31,17 +31,23 @@ final class CmsApp
   {
   }
 
-  public function &GetDb()
+  public function GetDb()
   {
     if( !$this->_db ) {
       $config = $this->GetConfig();
-      $this->_db = ADONewConnection('mysqli','pear:date:extend');
-      $r = $this->_db->Connect($config['db_host'],$config['db_user'],$config['db_pass'],$config['db_name']);
-      if( !$r ) {
-	$str = "Attempt to connect to database {$config['db_name']} on {$config['db_user']}@{$config['db_host']} failed";
-	throw new Exception($str);
+      if( empty($config['db_port']) ) {
+        $mysqli = new mysqli($config['db_hostname'], $config['db_username'],
+           $config['db_password'], $config['db_name']);
       }
-      $this->_db->SetFetchMode(ADODB_FETCH_ASSOC);
+      else {
+        $mysqli = new mysqli($config['db_hostname'], $config['db_username'],
+           $config['db_password'], $config['db_name'], (int)$config['db_port']);
+      }
+      if( !$mysqli || $mysqli->connect_errno ) {
+        $str = "Attempt to connect to database {$config['db_name']} on {$config['db_user']}@{$config['db_host']} failed";
+        throw new Exception($str);
+      }
+      $this->_db = $mysqli;
     }
     return $this->_db;
   }
@@ -52,7 +58,4 @@ final class CmsApp
     return $test_settings;
   }
 
-
 } // end of class
-
-?>
