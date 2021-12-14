@@ -75,7 +75,7 @@ function smarty_function_recently_updated($params, &$smarty)
 		}
 		$output .= '</li>';
 	}
-	if( $dbresult ) $dbresult-<Close();
+	if( $dbresult ) $dbresult->Close();
 
 	$output .= '</ul>';
 	if (isset($params['css_class'])) $output .= '</div>';
