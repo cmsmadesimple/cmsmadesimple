@@ -73,8 +73,8 @@ final class cms_cookies
 	  if( !is_array(self::$_parts) ) {
 		  self::$_parts = parse_url(CMS_ROOT_URL);
       }
-	  if( !isset(self::$_parts['path']) || self::$_parts['path'] == '' ) {
-		  self::$_parts['path'] = '/';
+	  if( empty(self::$_parts['path']) ) {
+		  self::$_parts['path'] = '/'; // default to whole domain
 	  }
 	  return self::$_parts['path'];
   }
@@ -87,8 +87,8 @@ final class cms_cookies
 	  if( !is_array(self::$_parts) ) {
 		  self::$_parts = parse_url(CMS_ROOT_URL);
       }
-	  if( !isset(self::$_parts['host']) || self::$_parts['host'] == '' ) {
-		  self::$_parts['host'] = CMS_ROOT_URL;
+	  if( empty(self::$_parts['host']) ) {
+		  self::$_parts['host'] = CMS_ROOT_URL; // default to whole domain (including all subdomains)
 	  }
 	  return self::$_parts['host'];
   }
@@ -154,7 +154,7 @@ final class cms_cookies
   public static function erase($key)
   {
     unset($_COOKIE[$key]);
-    self::__setcookie($key,null,time()-3600);
+    self::__setcookie($key,'',time()-3600);
   }
 
 } // end of class
