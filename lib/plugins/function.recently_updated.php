@@ -86,8 +86,15 @@ function smarty_function_recently_updated($params, &$smarty)
 	}
 	return $output;
 }
-
-function smarty_cms_about_function_recently_updated() {
+/*
+function smarty_cms_help_function_recently_updated()
+{
+?>
+<?php
+}
+*/
+function smarty_cms_about_function_recently_updated()
+{
 ?>
 	<p>Author: Elijah Lofgren &lt;elijahlofgren@elijahlofgren.com&gt; Olaf Noehring &lt;http://www.team-noehring.de&gt;</p>
 
@@ -96,8 +103,8 @@ function smarty_cms_about_function_recently_updated() {
 		<li>added new parameters:<br />
 		&lt;leadin&gt;. The contents of leadin will be shown left of the modified date. Default is &lt;Modified:&gt;<br />
 		$showtitle='true' - if true, the titleattribute of the page will be shown if it exists (true|false)<br />
-		css_class<br />
-		dateformat - default is d.m.y h:m , use the format you whish (php format)</li>
+		css_class</li>
+		<li>dateformat may be any PHP date()- and/or strftime()-compatible format, default is d.m.y h:m</li>
 	</ul>
 <?php
 }
