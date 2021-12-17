@@ -992,7 +992,7 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar aside {
 	padding-bottom: 30px;
-	position: relative
+	position: relative;
 	overflow: auto;
 	min-height: 40px;
 }
@@ -2454,7 +2454,7 @@ a.toggle-dropzone:focus {
 		width: auto
 	}
 	.sidebar-off #oe_sidebar nav.navigation {
-	        width: 40px
+		width: 40px;
 		overflow: hidden
 	}
 	header.header {
