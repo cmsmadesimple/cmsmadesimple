@@ -198,8 +198,7 @@ function localedate_ise ($st, $mode)
                 // force upper-case, any charset
                 if (!preg_match('/[\x80-\xff]/',$s)) { return strtoupper($s); }
                 elseif (function_exists('mb_strtoupper')) { return mb_strtoupper($s); }
-            }
-            else {
+            } else {
                 // force lower-case, any charset
                 if (!preg_match('/[\x80-\xff]/',$s)) { return strtolower($s); }
                 elseif (function_exists('mb_strtolower')) { return mb_strtolower($s); }
@@ -208,8 +207,7 @@ function localedate_ise ($st, $mode)
         default:
             return 'Unknown Format';
         }
-    }
-    elseif (function_exists('nl_langinfo')) { // not Windows OS
+    } elseif (function_exists('nl_langinfo')) { // not Windows OS
         switch ($mode) {
         case "\1": // short day name
             $n = date('w', $st) + 1;
@@ -242,14 +240,13 @@ function localedate_ise ($st, $mode)
         case "\x0e": // am/pm, upper-case
         case "\x0f": // am/pm, lower-case
             $s = date('A', $st);
-            $fmt ($s == 'AM') ? AM_STR : PM_STR;
+            $fmt = ($s == 'AM') ? AM_STR : PM_STR;
             $s = nl_langinfo($fmt);
             if ($mode == "\x0e") {
                 // force upper-case, any charset
                 if (!preg_match('/[\x80-\xff]/',$s)) { return strtoupper($s); }
                 elseif (function_exists('mb_strtoupper')) { return mb_strtoupper($s); }
-            }
-            else {
+            } else {
                 // force lower-case, any charset
                 if (!preg_match('/[\x80-\xff]/',$s)) { return strtolower($s); }
                 elseif (function_exists('mb_strtolower')) { return mb_strtolower($s); }
