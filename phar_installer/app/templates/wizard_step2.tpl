@@ -60,7 +60,7 @@ $(document).ready(function(){
       <li class="row"><div class="six-col">{'step2_pwd'|tr}:</div><div class="six-col"><span class="label blue"><i class="icon-folder-open"></i> {$pwd}</span></div></li>
       <li class="row"><div class="six-col">{'step2_version'|tr}:</div><div class="six-col"><span class="label blue"><i class="icon-info"></i> {$cmsms_info.version} <em>({$cmsms_info.version_name})</em></span></div></li>
       <li class="row"><div class="six-col">{'step2_schemaver'|tr}:</div><div class="six-col"><span class="label blue"><i class="icon-stack"></i> {$cmsms_info.schema_version}</span></div></li>
-      <li class="row"><div class="six-col">{'step2_installdate'|tr}:</div><div class="six-col"><span class="label blue"><i class="icon-calendar"></i> {$cmsms_info.mtime|localedate_format:'%x'}</span></div></li>
+      <li class="row"><div class="six-col">{'step2_installdate'|tr}:</div><div class="six-col"><span class="label blue"><i class="icon-calendar"></i> {$cmsms_info.mtime|localedate_format:'j %h Y'}</span></div></li>
     </ul>
 
     {if isset($cmsms_info.noupgrade)}
