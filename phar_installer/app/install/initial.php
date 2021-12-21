@@ -64,7 +64,7 @@ $template->set_owner(1);
 $template->save();
 
 //
-// Extra global tempaltes
+// Extra global templates
 //
 
 #
