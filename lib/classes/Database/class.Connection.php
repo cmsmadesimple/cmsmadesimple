@@ -374,7 +374,7 @@ namespace CMSMS\Database {
          *
          * @deprecated
          * @see Pear::getAssoc()
-     * @param string $sql The SQL statement to execute
+         * @param string $sql The SQL statement to execute
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @param bool $force_array Force each element of the output to be an associative array.
          * @param bool $first2cols Only output the first 2 columns in an associative array.  Does not work with force_array.
@@ -528,7 +528,7 @@ namespace CMSMS\Database {
          * for use in queries.
          *
          * @param int $timestamp
-         * @return string
+         * @return string single-quoted date-time or 'null'
          */
         public function DBTimeStamp($timestamp)
         {
@@ -563,7 +563,7 @@ namespace CMSMS\Database {
          * Convert a date into something that is suitable for writing to a database.
          *
          * @param mixed $date Either a string date, or an integer timestamp
-         * @return string
+         * @return string single-quoted localized date or 'null'
          */
         public function DBDate($date)
         {
@@ -573,7 +573,7 @@ namespace CMSMS\Database {
                 if ($date === 'null' || strncmp($date, "'", 1) === 0) return $date;
                 $date = $this->UnixDate($date);
             }
-            return \locale_ftime('%x',$date);
+            return \locale_ftime("'%x'",$date);
         }
 
         /**

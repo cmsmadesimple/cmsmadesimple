@@ -528,7 +528,7 @@ namespace CMSMS\Database {
          * for use in queries.
          *
          * @param int $timestamp
-         * @return string
+         * @return string single-quoted date-time or 'null'
          */
         public function DBTimeStamp($timestamp)
         {
@@ -544,7 +544,7 @@ namespace CMSMS\Database {
                     $timestamp = (int) $timestamp;
                 }
             }
-            if( $timestamp > 0 ) return date('Y-m-d H:i:s',$timestamp);
+            if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
         }
 
         /**
@@ -563,7 +563,7 @@ namespace CMSMS\Database {
          * Convert a date into something that is suitable for writing to a database.
          *
          * @param mixed $date Either a string date, or an integer timestamp
-         * @return string
+         * @return string single-quoted localized date or 'null'
          */
         public function DBDate($date)
         {
@@ -573,7 +573,7 @@ namespace CMSMS\Database {
                 if ($date === 'null' || strncmp($date, "'", 1) === 0) return $date;
                 $date = $this->UnixDate($date);
             }
-            return \locale_ftime('%x',$date);
+            return \locale_ftime("'%x'",$date);
         }
 
         /**
