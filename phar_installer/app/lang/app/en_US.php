@@ -325,7 +325,12 @@ $lang['step2_schemaver'] = 'Database Schema version';
 $lang['step2_version'] = 'Your version';
 $lang['step3_failed'] = 'This package has performed numerous tests of your PHP environment, and one or more of those tests have failed. You will need to rectify these errors in your configuration before continuing. Once you have rectified the errors, click &quot;Retry&quot; below.';
 $lang['step3_passed'] = 'This package has performed numerous tests of your PHP environment, and they have all passed. This is great news! Although this is not an all-encompassing test, you should have no difficulty running the core installation of CMSMS.';
+$lang['step9_get_help'] = 'Connect with other CMSMS developers and get help in the following ways';
+$lang['step9_get_support'] = 'Support channels';
+$lang['step9_join_community'] = 'Join our community';
+$lang['step9_love_cmsms'] = 'Love CMS Made Simple';
 $lang['step9_removethis'] = '<strong>Warning</strong> For security reasons it is important that you remove the installation assistant from your browseable website as soon as you have verified that the operation has succeeded.';
+$lang['step9_support_us'] = 'Click here to find out how you can support us';
 $lang['symbol'] = 'Symbol';
 $lang['social_message'] = 'I have successfully installed CMS Made Simple!';
 
