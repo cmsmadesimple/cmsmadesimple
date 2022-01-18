@@ -665,6 +665,8 @@ class ContentOperations
 			if( $all ) $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
 		}
+		
+		if( !is_array($contentrows)  ) $contentrows = [$contentrows];
 
 		// get the content ids from the returned data
 		$contentprops = null;
