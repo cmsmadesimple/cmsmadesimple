@@ -21,8 +21,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
 
-$CMS_VERSION = "2.2.16.beta.3";
-$CMS_VERSION_NAME = "No Name Set";
+$CMS_VERSION = "2.2.16";
+$CMS_VERSION_NAME = "Truro";
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
