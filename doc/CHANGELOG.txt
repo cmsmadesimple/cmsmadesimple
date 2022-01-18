@@ -1,4 +1,4 @@
-Version 2.2.16 - NO NAME SET
+Version 2.2.16 - Truro
 -------------------------------
 Core - General
   - BR #12370 - Admin Log-Download : now downloading the log honors all filters but doesn't process paging
@@ -35,8 +35,15 @@ Navigator v1.0.9
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
 
 Search
-  - Added 'Manage Search' permission.
-  - BR #12391 Core search issue page/entry titles that start with numbers
+  - Added 'Manage Search' permission;
+  - BR #12391 - Core search issue page/entry titles that start with numbers;
+  
+Phar Installer v1.3.15  
+  - Fixed BR #12437 - Installer won't allow "<" symbol in database password; 
+  - Added Russian lang file to installer;
+  - use locale_ftime() instead of deprecated strftime();
+  - escape name of groups table, to prevent reserved-word conflict when table-prefix is empty;
+  - alterations to the links in final step, we now privilege links to CMSMS channels of contact and support;
 
 Version 2.2.15 - Bonaventure
 -------------------------------
