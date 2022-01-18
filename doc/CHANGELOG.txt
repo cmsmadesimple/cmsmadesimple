@@ -34,7 +34,7 @@ FilePicker v1.0.5
 Navigator v1.0.9
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
 
-Search
+Search v1.53
   - Added 'Manage Search' permission;
   - BR #12391 - Core search issue page/entry titles that start with numbers;
   
