@@ -14,7 +14,7 @@ Core - General
   - Avoid deprecated strftime() - deploy new replacement function locale_ftime() and new modifier-plugin localedate_format
   - A number of fixes for PHP 8 compatibility
 
-Admin Search v1.0.6-beta
+Admin Search v1.0.6
   - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+).
   - Removed license and copyright notices from module help text.
   - Escaping the search input field values.
@@ -43,7 +43,7 @@ Phar Installer v1.3.15
   - Added Russian lang file to installer;
   - use locale_ftime() instead of deprecated strftime();
   - escape name of groups table, to prevent reserved-word conflict when table-prefix is empty;
-  - alterations to the links in final step, we now privilege links to CMSMS channels of contact and support;
+  - alterations to the links in final step: we now privilege links to CMSMS channels of contact and support;
 
 Version 2.2.15 - Bonaventure
 -------------------------------
