@@ -420,7 +420,7 @@ abstract class DataDictionary
 	public function CreateIndexSQL($idxname, $tabname, $flds, $idxoptions = false)
 	{
 		if (!is_array($flds)) {
-			$flds = explode(',',$flds);
+      $flds = array_map( 'trim', explode(',',$flds) );
 		}
 		foreach($flds as $key => $fld) {
 			# some indexes can use partial fields, eg. index first 32 chars of "name" with NAME(32)
