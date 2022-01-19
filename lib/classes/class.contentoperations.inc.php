@@ -666,8 +666,6 @@ class ContentOperations
 			$contentrows = $db->GetArray($query, array($id));
 		}
 		
-		if( !is_array($contentrows)  ) $contentrows = [$contentrows];
-
 		// get the content ids from the returned data
 		$contentprops = null;
 		if( $loadprops ) {
