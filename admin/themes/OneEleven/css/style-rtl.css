@@ -1106,7 +1106,8 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar aside {
 	padding-bottom: 30px;
-	position: relative
+	overflow: hidden;
+	position: relative;
 }
 #oe_sidebar nav.navigation {
 	height: auto;
