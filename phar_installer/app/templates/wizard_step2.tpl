@@ -67,7 +67,7 @@ $(document).ready(function(){
       <div class="message yellow">{'step2_minupgradever'|tr:$config.min_upgrade_version}</div>
     {else}
       {$label='upgrade'|tr}
-      {if isset($upgrade_info)}
+      {if !empty($upgrade_info)}
         <div class="message blue icon">
           <i class="icon-info message-icon"></i>
           <div class="content"><strong>{'step2_hdr_upgradeinfo'|tr}</strong><br />{'step2_info_upgradeinfo'|tr}</div>
