@@ -255,7 +255,7 @@ class cms_content_tree extends cms_tree
 	{
 		if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
 			// not in cache
-			$parent = $this->getParent();
+			$parent = $this->get_parent();
 			if( !$loadsiblings || !$parent ) {
 				// only load this content object
 				// todo: LoadContentFromId should use content cache.
