@@ -123,7 +123,7 @@ abstract class Alert
         case 'name':
             return trim($this->_name);
         case 'module':
-            return trim($this->_module);
+            return trim((string)$this->_module);
         case 'priority':
             return trim($this->_priority);
         case 'created':

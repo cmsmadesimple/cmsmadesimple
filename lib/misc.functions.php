@@ -818,6 +818,7 @@ function endswith( $str, $sub )
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
+  $alias = $alias ?? '';
   if ($tolower == true) $alias = mb_strtolower($alias);
 
   // remove invalid chars

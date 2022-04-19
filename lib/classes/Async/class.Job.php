@@ -116,7 +116,7 @@ abstract class Job
 
         case 'name':
         case 'module':
-            return trim($this->$tkey);
+            return trim((string)$this->$tkey);
 
         default:
             throw new \LogicException("$key is not a gettable member of ".get_class($this));
