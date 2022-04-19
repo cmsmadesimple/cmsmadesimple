@@ -58,6 +58,7 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
 }
 
 // sanitize $_SERVER and $_GET
+# TODO: FILTER_SANITIZE_STRING bound to be removed on PHP 9
 $_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
 $_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
