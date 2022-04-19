@@ -102,7 +102,7 @@ final class cms_userprefs
 	 *
 	 * @param string $key The preference name
 	 * @param string $dflt A default value if the preference could not be found
-	 * @return strung
+	 * @return string
 	 */
 	public static function get($key,$dflt = '')
 	{
