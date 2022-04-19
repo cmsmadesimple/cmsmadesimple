@@ -173,7 +173,7 @@ function getTestReturn( &$test, $required, $message = '', $error_fragment = '', 
  * @return object
  * @param boolean $required
  * @param string  $title
- * @param string  $db
+ * @param object  $db
  * @param string  $message
 */
 function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
@@ -561,6 +561,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum = 
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
+	global $lang_fn;
 
 	if($ini) {
 		testIni($test, $var, 'string');
@@ -1362,8 +1363,8 @@ function & testFileUploads( $inputname )
 		UPLOAD_ERR_CANT_WRITE => $lang_fn('upload_err_cant_write'), //at least PHP 5.1.0
 		UPLOAD_ERR_EXTENSION => $lang_fn('upload_err_extension'), //at least PHP 5.2.0
 	);
-
-	$fn = function(&$file_upl) {
+	
+	$sortfn = function(&$file_upl) {
 		$_ary = array();
 		$_count = count($file_upl['name']);
 		$_keys = array_keys($file_upl);
