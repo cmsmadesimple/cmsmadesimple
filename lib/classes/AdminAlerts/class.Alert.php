@@ -290,7 +290,7 @@ abstract class Alert
     public static function load_all()
     {
         $list = \cms_siteprefs::list_by_prefix('adminalert_');
-        if( !$list || !count($list) ) return;
+        if( !$list || !count($list) ) return [];
 
         $out = [];
         foreach( $list as $prefname ) {
