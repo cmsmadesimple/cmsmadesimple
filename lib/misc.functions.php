@@ -1259,7 +1259,6 @@ function setup_session($cachable = FALSE)
         $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
         @session_cache_expire($expiry);
         @session_cache_limiter('public');
-        @header_remove('Last-Modified');
     }
 
     #Setup session with different id and start it
@@ -1279,6 +1278,8 @@ function setup_session($cachable = FALSE)
         }
     }
     if(!@session_id()) session_start();
+    
+    if($cachable) header_remove('Last-Modified');
     $_setup_already = true;
 }
 
