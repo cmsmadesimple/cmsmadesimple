@@ -65,7 +65,7 @@ class FileTypeHelper
      */
     public function __construct( \cms_config $config )
     {
-        $this->_use_mimetype = $this->_mime_ok = function_exists('finfo_open') && function_exists('finfo_file');
+        $this->_use_mimetype = $this->_mime_ok = (function_exists('finfo_open') && function_exists('finfo_file'));
         $this->_use_mimetype = $this->_use_mimetype && !$config['FileTypeHelper_usemimetype'];
 
         $this->update_config_extensions('_image_extensions', $config['FileTypeHelper_image_extensions']);
@@ -81,9 +81,9 @@ class FileTypeHelper
      * @param string $member One of (_archive_extensions, _audio_extensions, _video_extensions, _xml_extensions, _document_extensions)
      * @param string $str A comma separated string of extensions for that file type
      */
-    protected function update_config_extensions( $member, $str )
+    protected function update_config_extensions( $member, $str = '' )
     {
-        $str = trim($str);
+        $str = trim($str ?? '');
         if( !$str ) return;
 
         $out = $this->$member;
