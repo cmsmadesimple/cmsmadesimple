@@ -131,7 +131,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 
         if( $key == 'deprecated' ) {
             // test if this module is deprecated
-            if(in_array($this['name'], self::$_deprecated, TRUE)) return TRUE;
+            if(in_array($this['name'], self::$_deprecated)) return TRUE;
             return FALSE;
         }
     }
@@ -146,7 +146,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     public function OffsetExists($key)
     {
         if( !in_array($key,self::$_mmkeys) ) return parent::OffsetExists($key);
-        if( $key != 'e_status' && $key != 'deprecated' ) return; // dynamic
+        if( $key != 'e_status' && $key != 'deprecated' ) return false; // dynamic
         return isset($this->_mmdata[$key]);
     }
 
