@@ -11,17 +11,15 @@ class Profile extends \CMSMS\FilePickerProfile
     {
         switch( $key ) {
         case 'name':
-        case 'file_extensions':
+          case 'prefix':
+          case 'file_extensions':
             $this->_data[$key] = trim($val);
             break;
         case 'create_date':
         case 'modified_date':
             $this->_data[$key] = (int) $val;
             break;
-        case 'prefix':
-            $this->_data[$key] = trim($val);
-            break;
-        default:
+          default:
             parent::setValue( $key, $val );
             break;
         }
@@ -135,14 +133,22 @@ class Profile extends \CMSMS\FilePickerProfile
         $data = array_merge($data,$this->_data);
         return $data;
     }
-
+  
+  /**
+   * Note: Doesn't seem to be used anywhere
+   *       we may keep this for external API purposes though (JoMorg)
+   *
+   * @param $filename
+   *
+   * @return bool
+   */
     public function is_filename_acceptable( $filename )
     {
-        if( !parent::is_filename_acceptable( $filename) ) return FALSE;
+        //if( !parent::is_filename_acceptable( $filename) ) return FALSE;
         if( !$this->file_extensions ) return FALSE;
 
         // file must have this extension
-        $ext = strtolower(substr(strrchr($file_name, '.'), 1));
+        $ext = strtolower(substr(strrchr($filename, '.'), 1));
         if( !$ext ) return FALSE; // uploaded file has no extension.
         $list = explode(',',$this->_profile->file_extensions);
 
