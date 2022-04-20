@@ -73,7 +73,8 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         if( is_array($missing) && count($missing) ) return FALSE;
         return TRUE;
     }
-
+  
+  #[\ReturnTypeWillChange]
     public function OffsetGet($key)
     {
         if( !in_array($key,self::$_mmkeys) ) return parent::OffsetGet($key);
@@ -130,7 +131,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 
         if( $key == 'deprecated' ) {
             // test if this module is deprecated
-            if( in_array($this['name'],self::$_deprecated) ) return TRUE;
+            if(in_array($this['name'], self::$_deprecated, TRUE)) return TRUE;
             return FALSE;
         }
     }
