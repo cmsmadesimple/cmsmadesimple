@@ -336,6 +336,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
+  #[\ReturnTypeWillChange]
   public function offsetExists($key)
   {
     return isset($this->_types[$key]) || isset($this->_data[$key]);
@@ -344,6 +345,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
+  #[\ReturnTypeWillChange]
   public function offsetGet($key)
   {
     // hardcoded config vars
