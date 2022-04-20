@@ -184,7 +184,7 @@ final class modmgr_utils
 
         if( $md5sum != $dl_md5 ) {
             @unlink($xml_filename);
-            throw new CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
+            throw new CmsInvalidDataException($mod->Lang('error_checksum',array($md5sum,$dl_md5)));
         }
 
         return $xml_filename;
