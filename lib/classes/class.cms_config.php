@@ -336,7 +336,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
-  public function offsetExists($key) : bool
+  public function offsetExists($key)
   {
     return isset($this->_types[$key]) || isset($this->_data[$key]);
   }
@@ -344,7 +344,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
-  public function offsetGet($key) : mixed
+  public function offsetGet($key)
   {
     // hardcoded config vars
     // usually old values valid in past versions.
@@ -561,7 +561,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
-  public function offsetSet($key,$value) : void
+  public function offsetSet($key,$value)
   {
     global $CMS_INSTALL_PAGE;
     if( !isset($CMS_INSTALL_PAGE) ) {
@@ -574,7 +574,7 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
-  public function offsetUnset($key) : void
+  public function offsetUnset($key)
   {
     trigger_error('Unsetting config variable "'.$key.'" is invalid',E_USER_ERROR);
   }
