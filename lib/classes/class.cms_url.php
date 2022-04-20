@@ -255,7 +255,7 @@ class cms_url
      */
     public function get_query()
     {
-        if( is_countable($this->_query) ) return http_build_query($this->_query);
+        if( count($this->_query) ) return http_build_query($this->_query);
         
         return '';
     }
