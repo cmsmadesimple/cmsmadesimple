@@ -39,7 +39,7 @@ final class CMS_Content_Block
     private static $_primary_content_flag; // indicates that content has been generated once, do not repeat.  ready by preprocess_mact and here.
     private function __construct() {}
 
-    private static function content_return($result, &$params, &$smarty)
+    private static function content_return($result, &$params, $smarty)
     {
         // this is a smarty tempalte, not the global smarty instance
         if ( !empty($params['assign']) ) {
@@ -219,7 +219,7 @@ final class CMS_Content_Block
      * @internal
      * @ignore
      */
-    public static function smarty_internal_fetch_contentblock($params,&$smarty)
+    public static function smarty_internal_fetch_contentblock($params, $smarty)
     {
         $contentobj = CmsApp::get_instance()->get_content_object();
         $result = null;
@@ -259,7 +259,7 @@ final class CMS_Content_Block
                     }
 
                     if (!$modobj->IsPluginModule() ) {
-                        @trigger_error('Attempt to access module '.$key.' which could not be found (is it properly installed and configured?');
+                        @trigger_error('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
                         return self::content_return("<!-- Not a tag module -->\n", $params, $smarty);
                     }
 
@@ -283,7 +283,7 @@ final class CMS_Content_Block
                             break;
                         default:
                             if( startswith($key,'data-') ) break;
-                            $parms[$key] = $val;
+                            $parms[$key] = $value;
                         }
                     }
                     $parms = array_merge($parms, $modops->GetModuleParameters($id));
@@ -321,7 +321,7 @@ final class CMS_Content_Block
         return self::content_return($result, $params, $smarty);
     }
 
-    public static function smarty_fetch_pagedata($params,&$smarty)
+    public static function smarty_fetch_pagedata($params,$smarty)
     {
         $contentobj = CmsApp::get_instance()->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
@@ -334,7 +334,7 @@ final class CMS_Content_Block
         return $result;
     }
 
-    public static function smarty_fetch_imageblock($params,&$smarty)
+    public static function smarty_fetch_imageblock($params,$smarty)
     {
         $ignored = [ 'block','type','name','label','upload','dir','default','tab','priority','exclude','sort', 'profile', 'urlonly','assign' ];
         $gCms = CmsApp::get_instance();
@@ -397,7 +397,7 @@ final class CMS_Content_Block
         return $out;
     }
 
-    public static function smarty_fetch_moduleblock($params,&$smarty)
+    public static function smarty_fetch_moduleblock($params,$smarty)
     {
         $result = '';
         $key = '';
