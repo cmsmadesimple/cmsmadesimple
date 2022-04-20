@@ -80,7 +80,7 @@ if( !function_exists('__cms_function_output_var') ) {
     }
 }
 
-function smarty_cms_function_get_template_vars($params, &$smarty)
+function smarty_cms_function_get_template_vars($params, $smarty)
 {
 	$tpl_vars = $smarty->getTemplateVars();
 	$str = '<pre>';

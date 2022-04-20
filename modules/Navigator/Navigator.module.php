@@ -104,7 +104,7 @@ final class Navigator extends CMSModule
         $this->CreateParameter('excludeprefix','',$this->Lang('help_excludeprefix'));
     }
 
-    final static public function nav_breadcrumbs($params,&$smarty)
+    final static public function nav_breadcrumbs($params,$smarty)
     {
         $params['action'] = 'breadcrumbs';
         $params['module'] = __CLASS__;

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_jquery($params, &$smarty)
+function smarty_function_cms_jquery($params, $smarty)
 {
 	$exclude = trim(get_parameter_value($params,'exclude'));
 	$cdn = cms_to_bool(get_parameter_value($params,'cdn'));

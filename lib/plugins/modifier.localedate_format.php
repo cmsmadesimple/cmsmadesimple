@@ -170,7 +170,7 @@ function localedate_ise ($st, $mode)
         $gCms = \CmsApp::get_instance();
         $config = $gCms->GetConfig();
         $zone = $config['timezone'];
-        $dt = new DateTime(null, new DateTimeZone($zone));
+        $dt = new DateTime('', new DateTimeZone($zone));
         $dt->setTimestamp($st);
         $locale = \CmsNlsOperations::get_current_language();
         switch ($mode) {

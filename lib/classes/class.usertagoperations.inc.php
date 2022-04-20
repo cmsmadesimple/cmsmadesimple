@@ -283,7 +283,7 @@ final class UserTagOperations
 		if( $row ) {
 			$smarty = \Smarty_CMS::get_instance();
 			$functionname = $this->CreateTagFunction($name);
-			$result = call_user_func_array($functionname, array(&$params, &$smarty));
+			$result = call_user_func_array($functionname, array(&$params, $smarty));
 		}
 		return $result;
 	}
@@ -302,7 +302,7 @@ final class UserTagOperations
 		if( !function_exists($functionname) ) {
 			if( startswith($row['code'],'<?php') ) $row['code'] = substr($row['code'],5);
 			if( endswith($row['code'],'?>') ) $row['code'] = substr($row['code'],0,-2);
-			$code = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
+			$code = 'function '.$functionname.'($params,$smarty) {'.$row['code']."\n}";
 			@eval($code);
 		}
 		return $functionname;

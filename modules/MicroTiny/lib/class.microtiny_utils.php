@@ -174,7 +174,6 @@ class microtiny_utils
       }
 
       return $tpl_ob->fetch();
-      return $result;
   }
 
   /**

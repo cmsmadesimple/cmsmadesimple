@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_page_image($params, &$smarty)
+function smarty_function_page_image($params, $smarty)
 {
     $get_bool = function(array $params,$key,$dflt) {
         if( !isset($params[$key]) ) return (bool) $dflt;

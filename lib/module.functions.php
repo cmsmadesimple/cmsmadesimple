@@ -35,7 +35,7 @@
  * @param object The smarty template object
  * @return string The module output
  */
-function cms_module_plugin($params,&$smarty)
+function cms_module_plugin($params,$smarty)
 {
     if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
 

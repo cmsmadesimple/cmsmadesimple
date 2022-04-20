@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_textarea($params, &$smarty)
+function smarty_function_cms_textarea($params, $smarty)
 {
   if( !isset($params['name']) ) throw new CmsInvalidDataException('syntax_area misssing parameter: name');
   if( isset($params['prefix']) ) $params['name'] = $params['prefix'].$params['name'];

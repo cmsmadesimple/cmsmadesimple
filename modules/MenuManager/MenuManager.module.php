@@ -288,7 +288,7 @@ final class MenuManager extends CMSModule
     return $reverse ? $size-1-$pos : $pos;
   }
 
-  final static public function smarty_cms_breadcrumbs($params,&$smarty)
+  final static public function smarty_cms_breadcrumbs($params,$smarty)
   {
     $params['action'] = 'breadcrumbs';
     $params['module'] = 'MenuManager';

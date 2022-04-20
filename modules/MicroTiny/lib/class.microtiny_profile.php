@@ -15,7 +15,8 @@ class microtiny_profile implements ArrayAccess
           }
       }
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function OffsetGet($key)
   {
     switch( $key ) {

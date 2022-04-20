@@ -35,7 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
-function smarty_function_cms_selflink($params, &$smarty)
+function smarty_function_cms_selflink($params, $smarty)
 {
     $gCms = \CmsApp::get_instance();
 	$manager = $gCms->GetHierarchyManager();

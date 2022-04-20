@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-function smarty_cms_function_breadcrumbs($params, &$smarty)
+function smarty_cms_function_breadcrumbs($params, $smarty)
 {
 echo '<span style="font-weight: bold; color: #f00;">WARNING:<br />The &#123breadcrumbs&#125 tag is removed from CMSMS Core<br />Instead, now use in your HTML template: &#123nav_breadcrumbs&#125 !</span>';
 

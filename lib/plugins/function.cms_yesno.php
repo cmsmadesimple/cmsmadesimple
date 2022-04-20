@@ -15,7 +15,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_yesno($params, &$smarty)
+function smarty_cms_function_cms_yesno($params, $smarty)
 {
     $opts = array(0=>lang('no'),1=>lang('yes'));
 

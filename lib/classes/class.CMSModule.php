@@ -1416,10 +1416,10 @@ abstract class CMSModule
      * @param string $id The action identifier
      * @param array  $params The action params
      * @param int $returnid The current page id.  Empty for admin requests.
-     * @param Smarty_Internal_Template &$smarty The curernt smarty template object.
+     * @param Smarty_Internal_Template $smarty The current smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty = NULL)
+    final public function DoActionBase($name, $id, $params, $returnid='', $smarty = NULL)
     {
         $name = preg_replace('/[^A-Za-z0-9_+-]/', '', $name);
         if( $returnid != '' ) {

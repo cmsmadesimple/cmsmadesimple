@@ -44,7 +44,7 @@ function installerHelpLanguage( $lang, $default_null=null )
         return substr($lang, 0, 2);
 }
 
-function systeminfo_lang($params,&$smarty)
+function systeminfo_lang($params, $smarty)
 {
 	if( count($params) )
 	{
