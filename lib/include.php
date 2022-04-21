@@ -66,7 +66,7 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
  * a replacement for filter_var_array FILTER_SANITIZE_STRING
  * temporary as we will revisit the security measures used
  * (JoMorg)
- * 
+ *
  * @param string $string
  *
  * @return string
@@ -78,7 +78,7 @@ $sanitize_fn = static function (string &$string): string
   return $string;
 };
 array_walk($_SERVER,  $sanitize_fn);
-array_walk($_SERVER,  $sanitize_fn);
+array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
