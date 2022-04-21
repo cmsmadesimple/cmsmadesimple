@@ -95,7 +95,7 @@ final class CmsLock implements ArrayAccess
     /**
      * @ignore
      */
-    const LOCK_TABLE = 'locks';
+    public const LOCK_TABLE = 'locks';
 
     /**
      * @ignore
@@ -111,31 +111,39 @@ final class CmsLock implements ArrayAccess
      * @ignore
      */
     private static $_keys = array('id','type','oid','uid','created','modified','lifetime','expires');
-
-    /**
-     * Constructor
-     *
-     * @param string $type
-     * @param int    $oid Object Id
-     * @param int    $lifetime (in minutes) The lifetime of the lock before it can be stolen.  If not specified, the system default value will be used.
-     */
+  
+  /**
+   * Constructor
+   *
+   * @param string $type
+   * @param int    $oid      Object Id
+   * @param int    $lifetime (in minutes) The lifetime of the lock before it can be stolen.  If not specified, the
+   *                         system default value will be used.
+   *
+   * @throws \CmsInvalidDataException
+   */
     public function __construct($type,$oid,$lifetime = null)
     {
         $type = trim($type);
         $oid = trim($oid);
-        if( $type == '' ) throw new CmsInvalidDataException('CMSEX_L003');
+        if( $type === '' ) throw new CmsInvalidDataException('CMSEX_L003');
 
         $this->_data['type'] = $type;
         $this->_data['oid'] = $oid;
         $this->_data['uid'] = get_userid(FALSE);
-        if( $lifetime == null ) $lifetime = cms_siteprefs::get('lock_timeout',60);
+        if( $lifetime === null ) { $lifetime = cms_siteprefs::get('lock_timeout',60); }
         $this->_data['lifetime'] = max(1,(int)$lifetime);
         $this->_dirty = TRUE;
     }
-
-    /**
-     * @ignore
-     */
+  
+  /**
+   * @param $key
+   *
+   * @return mixed
+   * @throws \CmsLogicException
+   * @ignore
+   */
+    #[\ReturnTypeWillChange]
     public function OffsetGet($key)
     {
         switch( $key ) {
@@ -153,11 +161,15 @@ final class CmsLock implements ArrayAccess
             return $this->_data[$key];
         }
     }
-
-    /**
-     * @ignore
-     */
-    public function OffsetSet($key,$value)
+  
+  /**
+   * @param $key
+   * @param $value
+   *
+   * @throws \CmsInvalidDataException
+   * @ignore
+   */
+    public function OffsetSet($key,$value) : void
     {
         switch( $key ) {
         case 'type':
@@ -181,19 +193,24 @@ final class CmsLock implements ArrayAccess
             break;
         }
     }
-
-    /**
-     * @ignore
-     */
-    public function OffsetExists($key)
+  
+  /**
+   * @param $key
+   *
+   * @return bool
+   * @ignore
+   */
+    public function OffsetExists($key) : bool
     {
         return isset($this->_data[$key]);
     }
-
-    /**
-     * @ignore
-     */
-    public function OffsetUnset($key)
+  
+  /**
+   * @param $key
+   *
+   * @ignore
+   */
+    public function OffsetUnset($key) : void
     {
         // do nothing.
     }
@@ -203,19 +220,20 @@ final class CmsLock implements ArrayAccess
      *
      * @return bool
      */
-    public function expired()
+    public function expired() : bool
     {
         if( !isset($this->_data['expires']) ) return FALSE;
         if( $this->_data['expires'] < time() ) return TRUE;
         return FALSE;
     }
-
-    /**
-     * Save the current lock object
-     *
-     * @throws CmsSqlErrorException
-     */
-    public function save()
+  
+  /**
+   * Save the current lock object
+   *
+   * @throws CmsSqlErrorException
+   * @throws \Exception
+   */
+    public function save() : void
     {
         if( !$this->_dirty ) return;
 
@@ -240,15 +258,17 @@ final class CmsLock implements ArrayAccess
         if( !$dbr ) throw new CmsSqlErrorException('CMSEX_SQL001',null,$db->ErrorMsg());
         $this->_dirty = FALSE;
     }
-
-    /**
-     * Create a lock object from a database row
-     *
-     * @internal
-     * @param array $row An array representing a database lock
-     * @return CmsLock
-     */
-    public static function &from_row($row)
+  
+  /**
+   * Create a lock object from a database row
+   *
+   * @param array $row An array representing a database lock
+   *
+   * @return CmsLock
+   * @throws \CmsInvalidDataException
+   * @internal
+   */
+    public static function &from_row($row) : CmsLock
     {
         $obj = new CmsLock($row['type'],$row['oid'],$row['lifetime']);
         $obj->_dirty = TRUE;
@@ -257,12 +277,14 @@ final class CmsLock implements ArrayAccess
         }
         return $obj;
     }
-
-
-    /**
-     * Delete the current lock from the database.
-     */
-    public function delete()
+  
+  
+  /**
+   * Delete the current lock from the database.
+   *
+   * @throws \Exception
+   */
+    public function delete() : void
     {
         if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) throw new CmsLogicException('CMSEX_L002');
 
@@ -283,16 +305,19 @@ final class CmsLock implements ArrayAccess
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }
-
-    /**
-     * Create a lock object given it's id, type, and object id
-     *
-     * @param int $lock_id
-     * @param string $type  The lock type (type of object being locked)
-     * @param int $oid  The object id
-     * @param int $uid  An optional user identifier.
-     * @return CmsLock
-     */
+  
+  /**
+   * Create a lock object given it's id, type, and object id
+   *
+   * @param int    $lock_id
+   * @param string $type The lock type (type of object being locked)
+   * @param int    $oid  The object id
+   * @param int    $uid  An optional user identifier.
+   *
+   * @return CmsLock
+   * @throws \CmsInvalidDataException
+   * @throws \CmsNoLockException
+   */
     public static function &load_by_id($lock_id,$type,$oid,$uid = NULL)
     {
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::LOCK_TABLE.' WHERE id = ? AND type = ? AND oid = ?';
@@ -307,16 +332,20 @@ final class CmsLock implements ArrayAccess
 
         return self::from_row($row);
     }
-
-    /**
-     * Load a lock based on type and object id.
-     *
-     * @param string $type  The lock type (type of object being locked)
-     * @param int $oid  The object id
-     * @param int $uid  An optional user identifier.
-     * @return CmsLock
-     */
-    public static function &load($type,$oid,$uid = null)
+  
+  /**
+   * Load a lock based on type and object id.
+   *
+   * @param string $type The lock type (type of object being locked)
+   * @param int    $oid  The object id
+   * @param int    $uid  An optional user identifier.
+   *
+   * @return CmsLock
+   * @throws \CmsInvalidDataException
+   * @throws \CmsNoLockException
+   * @throws \Exception
+   */
+    public static function &load($type,$oid,$uid = null) : CmsLock
     {
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::LOCK_TABLE.' WHERE type = ? AND oid = ?';
         $db = CmsApp::get_instance()->GetDb();
@@ -330,7 +359,7 @@ final class CmsLock implements ArrayAccess
 
         return self::from_row($row);
     }
-} // end of clsss
+} // end of class
 
 #
 # EOF
