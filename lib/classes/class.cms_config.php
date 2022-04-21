@@ -27,7 +27,7 @@
 /**
  * A singleton class for interacting with the CMSMS config.php file.
  *
- * This class usses the ArrayAccess interface to behave like a PHP array.
+ * This class uses the ArrayAccess interface to behave like a PHP array.
  *
  * @since 1.9
  * @package CMS
@@ -39,17 +39,17 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
-  const TYPE_STRING = 'STRING';
+  public const TYPE_STRING = 'STRING';
 
   /**
    * @ignore
    */
-  const TYPE_INT = 'INT';
+  public const TYPE_INT = 'INT';
 
   /**
    * @ignore
    */
-  const TYPE_BOOL = 'BOOL';
+  public const TYPE_BOOL = 'BOOL';
 
   /**
    * ignore
@@ -116,13 +116,13 @@ final class cms_config implements ArrayAccess
     // $_SERVER['HTTP_HOST'] can be spoofed... so if a root_url is not specified
     // we determine if the requested host is in a whitelist.
     // if all else fails, we use $_SERVER['SERVER_NAME']
-    $whitelist = (isset($this['host_whitelist']))?$this['host_whitelist'] : null;
+    $whitelist = $this['host_whitelist'] ?? NULL;
     if( !$whitelist ) return $_SERVER['SERVER_NAME'];
     $requested = $_SERVER['HTTP_HOST'];
 
     $out = null;
     if( is_callable($whitelist) ) {
-      $out = call_user_func($whitelist,$requested);
+      $out = $whitelist($requested);
     }
     else if( is_array($whitelist) ) {
       // could use array_search here, but can't rely on the quality of the input (empty strings, whitespace etc).
@@ -144,7 +144,7 @@ final class cms_config implements ArrayAccess
         if( !is_string($item) ) continue;
         $item = strtolower(trim($item));
         if( !$item ) continue;
-        if( strcasecmp($requested,$item) == 0 ) {
+        if( strcasecmp($requested,$item) === 0 ) {
           $out = $item;
           break;
         }
@@ -158,54 +158,55 @@ final class cms_config implements ArrayAccess
   }
 
   /**
+   * used in get_instance
    * @ignore
    */
   private function load_config()
   {
-    $this->_types = array();
-    $this->_types['dbms'] = self::TYPE_STRING;
-    $this->_types['db_hostname'] = self::TYPE_STRING;
-    $this->_types['db_username'] = self::TYPE_STRING;
-    $this->_types['db_password'] = self::TYPE_STRING;
-    $this->_types['db_name'] = self::TYPE_STRING;
-    $this->_types['db_port'] = self::TYPE_INT;
-    $this->_types['db_prefix'] = self::TYPE_STRING;
-    $this->_types['root_url'] = self::TYPE_STRING;
-    $this->_types['ssl_url'] = self::TYPE_STRING;
-    $this->_types['root_path'] = self::TYPE_STRING;
-    $this->_types['admin_dir'] = self::TYPE_STRING;
-    $this->_types['uploads_path'] = self::TYPE_STRING;
-    $this->_types['uploads_url'] = self::TYPE_STRING;
-    $this->_types['ssl_uploads_url'] = self::TYPE_STRING;
-    $this->_types['image_uploads_path'] = self::TYPE_STRING;
-    $this->_types['image_uploads_url'] = self::TYPE_STRING;
-    $this->_types['ssl_image_uploads_url'] = self::TYPE_STRING;
-    $this->_types['debug'] = self::TYPE_BOOL;
-    $this->_types['debug_to_log'] = self::TYPE_BOOL;
-    $this->_types['timezone'] = self::TYPE_STRING;
-    $this->_types['persist_db_conn'] = self::TYPE_BOOL;
-    $this->_types['max_upload_size'] = self::TYPE_INT;
+    $this->_types                              = [];
+    $this->_types['dbms']                      = self::TYPE_STRING;
+    $this->_types['db_hostname']               = self::TYPE_STRING;
+    $this->_types['db_username']               = self::TYPE_STRING;
+    $this->_types['db_password']               = self::TYPE_STRING;
+    $this->_types['db_name']                   = self::TYPE_STRING;
+    $this->_types['db_port']                   = self::TYPE_INT;
+    $this->_types['db_prefix']                 = self::TYPE_STRING;
+    $this->_types['root_url']                  = self::TYPE_STRING;
+    $this->_types['ssl_url']                   = self::TYPE_STRING;
+    $this->_types['root_path']                 = self::TYPE_STRING;
+    $this->_types['admin_dir']                 = self::TYPE_STRING;
+    $this->_types['uploads_path']              = self::TYPE_STRING;
+    $this->_types['uploads_url']               = self::TYPE_STRING;
+    $this->_types['ssl_uploads_url']           = self::TYPE_STRING;
+    $this->_types['image_uploads_path']        = self::TYPE_STRING;
+    $this->_types['image_uploads_url']         = self::TYPE_STRING;
+    $this->_types['ssl_image_uploads_url']     = self::TYPE_STRING;
+    $this->_types['debug']                     = self::TYPE_BOOL;
+    $this->_types['debug_to_log']              = self::TYPE_BOOL;
+    $this->_types['timezone']                  = self::TYPE_STRING;
+    $this->_types['persist_db_conn']           = self::TYPE_BOOL;
+    $this->_types['max_upload_size']           = self::TYPE_INT;
     $this->_types['default_upload_permission'] = self::TYPE_STRING;
-    $this->_types['auto_alias_content'] = self::TYPE_BOOL;
-    $this->_types['url_rewriting'] = self::TYPE_STRING;
-    $this->_types['page_extension'] = self::TYPE_STRING;
-    $this->_types['query_var'] = self::TYPE_STRING;
-    $this->_types['locale'] = self::TYPE_STRING;
-    $this->_types['default_encoding'] = self::TYPE_STRING;
-    $this->_types['admin_encoding'] = self::TYPE_STRING;
-    $this->_types['set_names'] = self::TYPE_BOOL;
-    $this->_types['set_db_timezone'] = self::TYPE_BOOL;
-    $this->_types['admin_url'] = self::TYPE_STRING;
-    $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
-    $this->_types['tmp_cache_location'] = self::TYPE_STRING;
-    $this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
-    $this->_types['public_cache_location'] = self::TYPE_STRING;
-    $this->_types['public_cache_url'] = self::TYPE_STRING;
-    $this->_types['assets_dir'] = self::TYPE_STRING;
-    $this->_types['assets_path'] = self::TYPE_STRING;
-    $this->_types['permissive_smarty'] = self::TYPE_BOOL;
-    $this->_types['startup_mact_processing'] = self::TYPE_BOOL;
-
+    $this->_types['auto_alias_content']        = self::TYPE_BOOL;
+    $this->_types['url_rewriting']             = self::TYPE_STRING;
+    $this->_types['page_extension']            = self::TYPE_STRING;
+    $this->_types['query_var']                 = self::TYPE_STRING;
+    $this->_types['locale']                    = self::TYPE_STRING;
+    $this->_types['default_encoding']          = self::TYPE_STRING;
+    $this->_types['admin_encoding']            = self::TYPE_STRING;
+    $this->_types['set_names']                 = self::TYPE_BOOL;
+    $this->_types['set_db_timezone']           = self::TYPE_BOOL;
+    $this->_types['admin_url']                 = self::TYPE_STRING;
+    $this->_types['ignore_lazy_load']          = self::TYPE_BOOL;
+    $this->_types['tmp_cache_location']        = self::TYPE_STRING;
+    $this->_types['tmp_templates_c_location']  = self::TYPE_STRING;
+    $this->_types['public_cache_location']     = self::TYPE_STRING;
+    $this->_types['public_cache_url']          = self::TYPE_STRING;
+    $this->_types['assets_dir']                = self::TYPE_STRING;
+    $this->_types['assets_path']               = self::TYPE_STRING;
+    $this->_types['permissive_smarty']         = self::TYPE_BOOL;
+    $this->_types['startup_mact_processing']   = self::TYPE_BOOL;
+  
     $config = array();
     if( defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION) ) {
       include(CONFIG_FILE_LOCATION);
@@ -226,20 +227,24 @@ final class cms_config implements ArrayAccess
           }
         }
       }
-      unset($config['max_upload_size']);
-      unset($config['upload_max_filesize']);
+      unset(
+        $config['max_upload_size'],
+        $config['upload_max_filesize']
+      );
     }
 
     $this->_data = $config;
   }
-
-
+  
+  
   /**
-   * @ignore
+   * @param $newconfig
+   *
    * @internal
    * @access private
+   * @ignore
    */
-  public function merge($newconfig)
+  public function merge($newconfig) : void
   {
     if( !is_array($newconfig) ) return;
 
@@ -259,7 +264,7 @@ final class cms_config implements ArrayAccess
    *
    * @return cms_config
    */
-  public static function &get_instance()
+  public static function &get_instance() : cms_config
   {
     if( !isset(self::$_instance) ) {
       $c = __CLASS__;
@@ -270,7 +275,7 @@ final class cms_config implements ArrayAccess
 
       if( !defined('TMP_CACHE_LOCATION') ) {
         /**
-         * A constant to indicate the location where private cachable files can be written.
+         * A constant to indicate the location where private cacheable files can be written.
          *
          * @return string
          */
@@ -332,17 +337,22 @@ final class cms_config implements ArrayAccess
 
     return self::$_instance;
   }
-
+  
   /**
+   * @param $key
+   *
+   * @return bool
    * @ignore
    */
-  #[\ReturnTypeWillChange]
-  public function offsetExists($key)
+  public function offsetExists($key) : bool
   {
     return isset($this->_types[$key]) || isset($this->_data[$key]);
   }
-
+  
   /**
+   * @param $key
+   *
+   * @return bool|mixed|string|null
    * @ignore
    */
   #[\ReturnTypeWillChange]
@@ -350,6 +360,7 @@ final class cms_config implements ArrayAccess
   {
     // hardcoded config vars
     // usually old values valid in past versions.
+    // marked for removal in CMSMS 3
     switch( $key ) {
       case 'use_adodb_lite':
       case 'use_hierarchy':
@@ -368,11 +379,11 @@ final class cms_config implements ArrayAccess
 
       case 'assume_mod_rewrite':
         // deprecated, backwards compat only
-        return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
+        return $this['url_rewriting'] === 'mod_rewrite';
 
       case 'internal_pretty_urls':
         // deprecated, backwards compat only
-        return ($this['url_rewriting'] == 'internal')?true:false;
+        return $this['url_rewriting'] === 'internal';
     }
 
     // from the config file.
@@ -400,15 +411,18 @@ final class cms_config implements ArrayAccess
         return 'page';
 
       case 'permissive_smarty':
+      case 'ignore_lazy_load':
+      case 'debug':
       case 'persist_db_conn':
         return false;
 
       case 'set_names':
+      case 'auto_alias_content':
       case 'startup_mact_processing':
         return true;
 
       case 'root_path':
-        $out = dirname(dirname(__DIR__)); // realpath here?
+        $out = dirname(__DIR__, 2); // realpath here?
         $this->_cache[$key] = $out;
         return $out;
 
@@ -424,13 +438,13 @@ final class cms_config implements ArrayAccess
           else if( endswith($path,$this->offsetGet('admin_dir')) ) {
             $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
           }
-          else if( strstr($path,'/lib') !== FALSE ) {
-            while( strstr($path,'/lib') !== FALSE ) {
+          else if(strpos($path, '/lib') !== FALSE) {
+            while(strpos($path, '/lib') !== FALSE) {
               $path = dirname($path);
             }
           }
           while( endswith($path,DIRECTORY_SEPARATOR) ) {
-            $path = substr($path,0,strlen($path)-1);
+            $path = substr($path, 0, -1);
           }
           if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
         }
@@ -481,10 +495,10 @@ final class cms_config implements ArrayAccess
 
       case 'admin_dir':
         return 'admin';
-
-      case 'debug':
-        return false;
-
+  
+      case 'locale':
+      case 'page_extension':
+      case 'db_port':
       case 'timezone':
         return '';
 
@@ -494,27 +508,15 @@ final class cms_config implements ArrayAccess
       case 'assets_path':
         $this->_cache[$key] = $this->OffsetGet('root_path').'/'.$this->OffsetGet('assets_dir');
         return $this->_cache[$key];
-
-      case 'db_port':
-        return '';
-
+  
       case 'max_upload_size':
       case 'upload_max_filesize':
         $this->_cache[$key] = $this->get_upload_size();
         return $this->_cache[$key];
-
-      case 'auto_alias_content':
-        return true;
-
+  
       case 'url_rewriting':
         return 'none';
-
-      case 'page_extension':
-        return '';
-
-      case 'locale':
-        return '';
-
+  
       case 'default_encoding':
       case 'admin_encoding':
         return 'utf-8';
@@ -526,10 +528,7 @@ final class cms_config implements ArrayAccess
       case 'admin_url':
         $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
         return $this->_cache[$key];
-
-      case 'ignore_lazy_load':
-        return false;
-
+  
       case 'css_path':
         return PUBLIC_CACHE_LOCATION.'/';
 
@@ -559,11 +558,14 @@ final class cms_config implements ArrayAccess
         return null;
       }
     }
-
+  
   /**
+   * @param $key
+   * @param $value
+   *
    * @ignore
    */
-  public function offsetSet($key,$value)
+  public function offsetSet($key, $value) : void
   {
     global $CMS_INSTALL_PAGE;
     if( !isset($CMS_INSTALL_PAGE) ) {
@@ -572,38 +574,43 @@ final class cms_config implements ArrayAccess
     }
     $this->_data[$key] = $value;
   }
-
+  
   /**
+   * @param $key
+   *
    * @ignore
    */
-  public function offsetUnset($key)
+  public function offsetUnset($key) : void
   {
     trigger_error('Unsetting config variable "'.$key.'" is invalid',E_USER_ERROR);
   }
-
+  
   /**
+   * @param $key
+   * @param $value
+   *
+   * @return int|string
    * @ignore
    */
-  private function _printable_value($key,$value)
+  private function _printable_value($key, $value)
   {
-    $type = self::TYPE_STRING;
-    if( isset($this->_types[$key]) ) $type = $this->_types[$key];
-
-    $str = '';
+    $type = $this->_types[$key] ?? self::TYPE_STRING;
+  
+    $ret = '';
     switch( $type ) {
       case self::TYPE_STRING:
-        $str = "'".$value."'";
+        $ret = "'".$value."'";
         break;
 
       case self::TYPE_BOOL:
-        $str = ($value)?'true':'false';
+        $ret = ($value)?'true':'false';
         break;
 
       case self::TYPE_INT:
-        $str = (int)$value;
+        $ret = (int)$value;
         break;
     }
-    return $str;
+    return $ret;
   }
 
 
@@ -612,10 +619,10 @@ final class cms_config implements ArrayAccess
    * before overwriting.
    *
    *
-   * @param bool $verbose indicates whether comments should be stored in the config.php file.
+   * @param bool $verbose indicates whether comments should be stored in the config.php file. (Note: this parameter at its current form is not being used at all[JoMorg])
    * @param string $filename An optional complete file specification.  If not specified the standard config file location will be used.
    */
-  public function save($verbose = true,$filename = '')
+  public function save($verbose = true,$filename = '') : void
   {
     if( !$filename ) $filename = CONFIG_FILE_LOCATION;
 
