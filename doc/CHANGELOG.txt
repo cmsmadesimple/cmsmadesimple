@@ -1,18 +1,39 @@
+Version 2.2.17 - NO NAME SET
+-------------------------------
+Core - General
+ - BR #12529 - Cacheable Pages have Bad Header Last-Modified.
+ - BR #12543 - Lib file corrections.
+ - Compatibility fixes for PHP 8.1.
+ - Smarty upgraded to version 3.1.44.
+
+Design Manager v
+ - BR #12545 - Module: DesignManager typo info on top file.
+
+FilePicker v
+ - BR #12539 - Module FilePicker 1.0.5 files corrections.
+
+Module Manager v
+ - BR #12541 - Module ModuleManager 2.1.8 : corrections + compatible php 7.1.0 to 8.1.4.
+
+News v
+ - BR #12543 - Lib file corrections.
+
+
 Version 2.2.16 - Truro
 -------------------------------
 Core - General
-  - BR #12370 - Admin Log-Download : now downloading the log honors all filters but doesn't process paging
-  - BR #12437 - Installer won't allow "<" symbol in database password
-  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by
-  - BR #12484 - Cannot exit after Run UDT
-  - BR #12495 - MySQL 8.0.2+ breaks groups without table prefix
-  - BR #12499 - adminlog.tpl Wrongly formed date
-  - BR #12500 - NameQuote function does not work properly
+  - BR #12370 - Admin Log-Download : now downloading the log honors all filters but doesn't process paging.
+  - BR #12437 - Installer won't allow "<" symbol in database password.
+  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by.
+  - BR #12484 - Cannot exit after Run UDT.
+  - BR #12495 - MySQL 8.0.2+ breaks groups without table prefix.
+  - BR #12499 - adminlog.tpl Wrongly formed date.
+  - BR #12500 - NameQuote function does not work properly.
   - BR #12504 - Function call notification.
-  - Fixed an issue with specific characters in a content block tab name breaking the editor
-  - Adjust regex's incompatible with PCRE2
-  - Avoid deprecated strftime() - deploy new replacement function locale_ftime() and new modifier-plugin localedate_format
-  - A number of fixes for PHP 8 compatibility
+  - Fixed an issue with specific characters in a content block tab name breaking the editor.
+  - Adjust regex's incompatible with PCRE2.
+  - Avoid deprecated strftime() - deploy new replacement function locale_ftime() and new modifier-plugin localedate_format.
+  - A number of fixes for PHP 8 compatibility.
 
 Admin Search v1.0.6
   - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+).
@@ -35,15 +56,16 @@ Navigator v1.0.9
   - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
 
 Search v1.53
-  - Added 'Manage Search' permission;
-  - BR #12391 - Core search issue page/entry titles that start with numbers;
+  - Added 'Manage Search' permission.
+  - BR #12391 - Core search issue page/entry titles that start with numbers.
   
-Phar Installer v1.3.15  
-  - Fixed BR #12437 - Installer won't allow "<" symbol in database password; 
-  - Added Russian lang file to installer;
-  - use locale_ftime() instead of deprecated strftime();
-  - escape name of groups table, to prevent reserved-word conflict when table-prefix is empty;
-  - alterations to the links in final step: we now privilege links to CMSMS channels of contact and support;
+Phar Installer v1.3.15
+  - Fixed BR #12437 - Installer won't allow "<" symbol in database password.
+  - Added Russian lang file to installer.
+  - use locale_ftime() instead of deprecated strftime().
+  - escape name of groups table, to prevent reserved-word conflict when table-prefix is empty.
+  - alterations to the links in final step: we now privilege links to CMSMS channels of contact and support.
+
 
 Version 2.2.15 - Bonaventure
 -------------------------------
@@ -80,7 +102,7 @@ News v2.51.11
   - BR #12325 - Several XSS vulnerabilities.
 
 Design Manager v1.1.9
-  - Minor fixes for PHP warnings\notices;
+  - Minor fixes for PHP warnings\notices.
 
 Module Manager v2.1.8
   - BR #12291 - Reflected Cross site scripting.
