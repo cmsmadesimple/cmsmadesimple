@@ -58,9 +58,27 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
 }
 
 // sanitize $_SERVER and $_GET
-# TODO: FILTER_SANITIZE_STRING bound to be removed on PHP 9
-$_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
-$_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
+// FILTER_SANITIZE_STRING bound to be removed on PHP 9
+//$_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
+//$_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
+
+/**
+ * a replacement for filter_var_array FILTER_SANITIZE_STRING
+ * temporary as we will revisit the security measures used
+ * (JoMorg)
+ * 
+ * @param string $string
+ *
+ * @return string
+ */
+$sanitize_fn = static function (string &$string): string
+{
+  $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
+  $string = str_replace(["'", '"'], ['&#39;', '&#34;'], $string);
+  return $string;
+};
+array_walk($_SERVER,  $sanitize_fn);
+array_walk($_SERVER,  $sanitize_fn);
 
 // include some stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
