@@ -54,7 +54,7 @@ function smarty_cms_about_function_last_modified_by() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 
-	<ul>Change History:</p>
+	<p>Change History:</p>
 		<ul>
 			<li>Added assign parameter (Calguy)</li>
         </ul>
