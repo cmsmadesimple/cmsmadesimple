@@ -65,7 +65,7 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
         }
         else if (isset($contentobj) && $contentobj !== FALSE) {
             $mtime = $contentobj->GetModifiedDate();
-            $source = $contentobj->Show($name);
+            $source = $contentobj->Show($name)??'';
             $source = preg_replace('/\{\/?php\}/', '', $source);
             if( !$contentobj->Cachable() ) $mtime = time();
             $source = trim($source);
