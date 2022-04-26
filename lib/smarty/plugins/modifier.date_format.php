@@ -26,6 +26,7 @@
  * @return string |void
  * @uses   smarty_make_timestamp()
  */
+use function \CMSMS\strftime;
 function smarty_modifier_date_format($string, $format = null, $default_date = '', $formatter = 'auto')
 {
     if ($format === null) {
