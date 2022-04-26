@@ -48,7 +48,7 @@ class microtiny_profile implements ArrayAccess
     }
   }
 
-  public function OffsetSet($key,$value)
+  public function OffsetSet($key,$value) : void
   {
     switch( $key ) {
     case 'menubar':
@@ -77,7 +77,7 @@ class microtiny_profile implements ArrayAccess
     }
   }
 
-  public function OffsetExists($key)
+  public function OffsetExists($key) : bool
   {
     switch( $key ) {
     case 'menubar':
@@ -91,14 +91,14 @@ class microtiny_profile implements ArrayAccess
     case 'name':
     case 'label':
     case 'system':
-      return (isset($this->_data[$key]))?TRUE:FALSE;
+      return isset($this->_data[$key]);
 
     default:
       throw new CmsInvalidDataException('invalid key '.$key.' for '.__CLASS__.' object');
     }
   }
 
-  public function OffsetUnset($key)
+  public function OffsetUnset($key) : void
   {
     switch( $key ) {
     case 'menubar':
@@ -122,7 +122,7 @@ class microtiny_profile implements ArrayAccess
     }
   }
 
-  public function save()
+  public function save() : void
   {
     if( !isset($this->_data['name']) || $this->_data['name'] == '' ) {
       throw new CmsInvalidDataException('Invalid microtiny profile name');
@@ -132,13 +132,20 @@ class microtiny_profile implements ArrayAccess
     self::_get_module()->SetPreference('profile_'.$this->_data['name'],$data);
   }
 
-  public function delete()
+  public function delete() : void
   {
       if( $this['name'] == '' ) return;
       self::_get_module()->RemovePreference('profile_'.$this['name']);
       unset($this->_data['name']);
   }
-
+  
+  /**
+   * @param $data
+   *
+   * @return \microtiny_profile
+   * @throws \CmsInvalidDataException
+   * @todo: make sure this method is used or needed at all JoMorg
+   */
   private static function &_load_from_data($data)
   {
     if( !is_array($data) || !count($data) ) throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
@@ -151,12 +158,12 @@ class microtiny_profile implements ArrayAccess
     return $obj;
   }
 
-  public static function set_module(MicroTiny $module)
+  public static function set_module(MicroTiny $module) : void
   {
     self::$_module = $module;
   }
 
-  private static function &_get_module()
+  private static function &_get_module() : \CmsModule
   {
     if( is_object(self::$_module) ) return self::$_module;
     return cms_utils::get_module('MicroTiny');
