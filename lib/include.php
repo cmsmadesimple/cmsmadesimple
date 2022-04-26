@@ -82,6 +82,7 @@ array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
 require_once($dirname . DIRECTORY_SEPARATOR . 'compat.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'internal' .  DIRECTORY_SEPARATOR . 'class.cms_strftime.php'); # added for compatibility with PHP 8.1
 require_once($dirname . DIRECTORY_SEPARATOR . 'misc.functions.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'version.php'); // tells us where the config file is and other things.
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsException.php');
