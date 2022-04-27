@@ -24,6 +24,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 /**
  * This file contains the class that wraps PHPMailer usage for CMSMS.
@@ -57,7 +59,10 @@ class cms_mailer
   public function __construct($exceptions = true)
   {
     $dir = dirname(__DIR__).'/phpmailer/';
-    require_once($dir.'/PHPMailerAutoload.php');
+    
+    require_once($dir.'Exception.php');
+    require_once($dir.'PHPMailer.php');
+    require_once($dir.'SMTP.php');
 
     $this->_mailer = new PHPMailer($exceptions);
     $this->reset();
