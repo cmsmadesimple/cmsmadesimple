@@ -452,7 +452,7 @@ $modules = ModuleOperations::get_instance()->get_modules_with_capability('search
 if( is_array($modules) && count($modules) ) {
   $tmp = array();
   $tmp['-1'] = lang('none');
-  for( $i = 0; $i < count($modules); $i++ ) {
+  for($i = 0, $iMax = count($modules); $i < $iMax; $i++ ) {
     $tmp[$modules[$i]] = $modules[$i];
   }
   $smarty->assign('search_modules',$tmp);
@@ -479,13 +479,13 @@ $smarty->assign('pretty_urls',$pretty_urls);
 {
   $tmp = module_meta::get_instance()->module_list_by_capability('wysiwyg');
   $tmp2 = array(-1=>lang('none'));
-  for( $i = 0; $i < count($tmp); $i++ ) {
+  for($i = 0, $iMax = count($tmp); $i < $iMax; $i++ ) {
     $tmp2[$tmp[$i]] = $tmp[$i];
   }
   $smarty->assign('wysiwyg',$tmp2);
 }
 
-if ($dir=opendir(dirname(__FILE__)."/themes/"))
+if ($dir=opendir(__DIR__ . "/themes/"))
 {
   $themes = array();
   while (($file = readdir($dir)) !== false ) {
@@ -570,7 +570,7 @@ $all_attributes = null;
 	if( is_array($list) && count($list) ) {
 		// pre-remove some items.
 		$all_attributes = array();
-		for( $i = 0; $i < count($list); $i++ ) {
+		for($i = 0, $iMax = count($list); $i < $iMax; $i++ ) {
 			$obj = $list[$i];
 			if( $obj->tab == $content_obj::TAB_PERMS ) continue;
 			if( !isset($all_attributes[$obj->tab]) ) $all_attributes[$obj->tab] = array('label'=>lang($obj->tab),'value'=>array());
