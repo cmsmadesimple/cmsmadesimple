@@ -84,7 +84,7 @@ $to_obj->SetDefaultContent(0);
 $to_obj->SetOwner(get_userid());
 $to_obj->SetLastModifiedBy(get_userid());
 $_SESSION['__cms_copy_obj__'] = ['type'=>$to_obj->Type(), 'obj'=>serialize($to_obj)];
-$this->Redirect($id,'admin_editcontent','',array('content_id'=>'copy'));
+$this->Redirect($id,'admin_editcontent','',array('content_id'=>-1)); // do not resemble a new page (id == 0)
 
 #
 # EOF
