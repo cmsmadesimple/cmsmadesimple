@@ -56,7 +56,6 @@ class Profile extends \CMSMS\FilePickerProfile
         case 'modified_date':
             return (int) $this->_data[$key];
 
-
         case 'relative_top':
         case 'reltop':
             // parent top is checked for relative or absolute
@@ -138,18 +137,19 @@ class Profile extends \CMSMS\FilePickerProfile
    * Note: Doesn't seem to be used anywhere
    *       we may keep this for external API purposes though (JoMorg)
    *
-   * @param $filename
+   * @param $file_name
    *
    * @return bool
    */
-    public function is_filename_acceptable( $filename )
+    public function is_filename_acceptable( $file_name )
     {
-        //if( !parent::is_filename_acceptable( $filename) ) return FALSE;
-        if( !$this->file_extensions ) return FALSE;
+        $mod = cms_utils::get_module('FilePicker');
+        if( !$mod->is_acceptable_filename($this, $file_name) ) return FALSE;
+        if( !$this->file_extensions ) return FALSE; // OR TRUE if we don't have anything to care about? 
 
-        // file must have this extension
-        $ext = strtolower(substr(strrchr($filename, '.'), 1));
-        if( !$ext ) return FALSE; // uploaded file has no extension.
+        // file must have an extension
+        $ext = strtolower(substr(strrchr($file_name, '.'), 1));
+        if( !$ext ) return FALSE; // file has no extension.
         $list = explode(',',$this->_profile->file_extensions);
 
         foreach( $list as $one ) {
