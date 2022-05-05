@@ -111,7 +111,6 @@ try {
         $smarty->assign('error',$this->Lang('err_nomatchingcontent'));
     }
 
-    $opts = array();
     if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
         bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
     }
@@ -129,9 +128,9 @@ try {
         bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
     }
     $opts = bulkcontentoperations::get_operation_list();
-    if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
+    if( $opts ) $smarty->assign('bulk_options',$opts);
 
-    $out = $this->ProcessTemplate('ajax_get_content.tpl');
+    $out = $this->ProcessTemplate('ajax_get_content.tpl'); // check: ok without $opts?
     echo $out;
 }
 catch( \Exception $e ) {
