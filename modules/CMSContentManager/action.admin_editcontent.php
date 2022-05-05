@@ -216,12 +216,12 @@ try {
     }
 }
 catch( CmsEditContentException $e ) {
-    /*
+/*
     if( isset($params['submit']) ) {
         $this->SetError($e->getMessage());
         $this->RedirectToAdminTab();
     };
-    */
+*/
     $error = $e->GetMessage();
     if( isset($params['ajax']) ) {
         $tmp = array('response'=>'Error','details'=>$error);
@@ -230,15 +230,7 @@ catch( CmsEditContentException $e ) {
     }
 }
 catch( CmsContentException $e ) {
-    $error = $e->GetMessage();
-    if( isset($params['ajax']) ) {
-        $tmp = array('response'=>'Error','details'=>$error);
-        echo json_encode($tmp);
-        exit;
-    }
-}
-catch( ContentException $e ) {
-    $error = $e->GetMessage();
+    $error = $e->getMessage();
     if( isset($params['ajax']) ) {
         $tmp = array('response'=>'Error','details'=>$error);
         echo json_encode($tmp);
