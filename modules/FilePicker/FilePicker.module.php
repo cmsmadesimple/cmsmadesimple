@@ -64,7 +64,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
     {
         $ret = $this->GetActionTemplateObject();
         if( is_object($ret) ) return $ret;
-        return CmsApp::get_instance()->GetSmarty();
+        return cmsms()->GetSmarty();
     }
 
     /**
@@ -140,7 +140,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 
         // store the profile as a 'useonce' and add it's signature to the params on the url
         $sig = TemporaryProfileStorage::set( $profile );
-        $smarty = \cms_utils::get_smarty(); // $this->_GetTemplateObject();
+        $smarty = cmsms()->GetSmarty(); // $this->_GetTemplateObject();
         $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource('contentblock.tpl'),null,null,$smarty);
         $tpl_ob->assign('mod',$this);
         $tpl_ob->assign('sig',$sig);
@@ -176,8 +176,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
             $tpl_ob->assign('title',$this->Lang('select_a_file'));
             break;
         }
-        $out = $tpl_ob->fetch();
-        return $out;
+        return $tpl_ob->fetch();
     }
 
     // INTERNAL UTILITY FUNCTION
