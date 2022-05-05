@@ -114,7 +114,7 @@ EOT;
             $out = preg_replace_callback("/href\s*=[\\\"']{0,1}(ignore\:\:[a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
                                          function($matches) use ($ob) {
                                              $rep = substr($matches[1],8);
-                                             return str_replace($matches[1],$reo,$matches[0]);
+                                             return str_replace($matches[1],$rep,$matches[0]);
                                          },$matches[0]);
             return $out;
         };
@@ -366,7 +366,7 @@ EOT;
         if( is_array($this->_tpl_list) && count($this->_tpl_list) ) {
             $out = array();
             foreach( $this->_tpl_list as $rec ) {
-                $out[] = $one['obj']->get_name();
+                $out[] = $rec['obj']->get_name();
             }
             return $out;
         }

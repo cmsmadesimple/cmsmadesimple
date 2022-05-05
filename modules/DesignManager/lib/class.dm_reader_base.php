@@ -41,7 +41,7 @@ abstract class dm_reader_base
 
   public function get_filename()
   {
-    return $_filename;
+    return $this->_filename;
   }
 
   public function get_suggested_name()
