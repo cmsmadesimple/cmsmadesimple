@@ -95,7 +95,7 @@ $(document).ready(function(){
       <td>
           {if !$item.installed || $item.e_status == 'need_upgrade'}
             <span title="{$item.description}" class="important">{$item.name}</span>
-	  {elseif $item.notavailable}
+          {elseif $item.notavailable}
             <span title="{$item.description}" style="color: red;">{$item.name}</span>
           {elseif $item.deprecated}
             <span title="{$item.description}" style="color: orange;">{$item.name}</span>
