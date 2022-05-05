@@ -42,6 +42,7 @@ if( isset($params['cancel']) ) {
 }
 if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
 
+    // this function is unused
     function ordercontent_get_node_rec($str,$prefix = 'page_')
     {
         $gCms = cmsms();
@@ -55,8 +56,8 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
         if( $tmp ) {
             $content = $tmp->getContent(false,true,true);
             if( $content ) {
-                $rec = aray();
-                $rec['id'] = (int)$str;
+                $rec = array();
+                $rec['id'] = (int)$str;//WHAT FOR?
             }
         }
     }
@@ -98,7 +99,7 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
         }
     }
 
-    if( !is_array($changelist) || count($changelist) == 0 ) {
+    if( !$changelist ) {
         echo $this->ShowErrors($this->Lang('error_ordercontent_nothingtodo'));
     }
     else {
