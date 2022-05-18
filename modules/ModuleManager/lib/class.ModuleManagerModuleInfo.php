@@ -40,8 +40,9 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     private function _get_missing_dependencies()
     {
         $depends = $this['depends'];
+        $out = [];
         if( is_array($depends) && count($depends) ) {
-            $out = array();
+            
             foreach( $depends as $name => $ver ) {
                 $rec = self::get_module_info($name);
                 if( !is_object($rec) ) {
@@ -62,11 +63,12 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
                 if( version_compare($rec['version'],$ver) >= 0 ) continue;
                 $out[$name] = $ver;
             } // foreach
-            if( count($out) ) return $out;
         }
+  
+      return $out;
     }
 
-    private function _check_dependencies()
+    private function _check_dependencies() : bool
     {
         // check if all module dependants are installed and are of sufficient version.
         $missing = $this->_get_missing_dependencies();
@@ -136,21 +138,21 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         }
     }
 
-    public function OffsetSet($key,$value)
+    public function OffsetSet($key,$value) : void
     {
         if( !in_array($key,self::$_mmkeys) ) parent::OffsetSet($key,$value);
         if( $key != 'e_status' && $key != 'deprecated' ) return; // dynamic
         $this->_mmdata[$key] = $value;
     }
 
-    public function OffsetExists($key)
+    public function OffsetExists($key) : bool
     {
         if( !in_array($key,self::$_mmkeys) ) return parent::OffsetExists($key);
         if( $key != 'e_status' && $key != 'deprecated' ) return false; // dynamic
         return isset($this->_mmdata[$key]);
     }
 
-    public static function get_all_module_info($can_check_forge = TRUE)
+    public static function get_all_module_info($can_check_forge = TRUE) : array
     {
         if( is_array(self::$_minfo) ) return self::$_minfo;
 

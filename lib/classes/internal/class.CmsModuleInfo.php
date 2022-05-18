@@ -6,7 +6,8 @@ class CmsModuleInfo implements ArrayAccess
                                   'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable','root_writable',
                                   'description','has_meta','has_custom','notavailable');
     private $_data = array();
-
+    
+    #[\ReturnTypeWillChange]
     public function OffsetGet($key)
     {
         if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
@@ -33,7 +34,7 @@ class CmsModuleInfo implements ArrayAccess
         }
     }
 
-    public function OffsetSet($key,$value)
+    public function OffsetSet($key,$value) : void
     {
         if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
         if( $key == 'about' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
