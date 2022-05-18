@@ -109,8 +109,8 @@ class CmsRoute implements ArrayAccess
 	 * @param bool $is_absolute Flag indicating wether the term is a regular expression or an absolute string
 	 * @param string $key3 The second key
 	 */
-	public static function &new_builder($term,$key1,$key2 = '',$defaults = null,$is_absolute = FALSE,$key3 = '')
-	{
+	public static function &new_builder($term,$key1,$key2 = '',$defaults = null,$is_absolute = FALSE,$key3 = '') : CmsRoute
+  {
 		$obj = new CmsRoute($term,$key1,$defaults,$is_absolute,$key2,$key3);
 		return $obj;
 	}
@@ -118,8 +118,8 @@ class CmsRoute implements ArrayAccess
 	/**
 	 * Return the signature for a route
 	 */
-	public function signature()
-	{
+	public function signature() : string
+  {
 		$tmp = serialize($this->_data);
 		$tmp = md5($tmp);
 		return $tmp;
@@ -128,6 +128,7 @@ class CmsRoute implements ArrayAccess
 	/**
 	 * @ignore
 	 */
+  #[\ReturnTypeWillChange]
 	public function OffsetGet($key)
 	{
 		if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) return $this->_data[$key];
@@ -136,7 +137,7 @@ class CmsRoute implements ArrayAccess
 	/**
 	 * @ignore
 	 */
-	public function OffsetSet($key,$value)
+	public function OffsetSet($key,$value) : void
 	{
 		if( in_array($key,self::$_keys) ) $this->_data[$key] = $value;
 	}
@@ -144,7 +145,7 @@ class CmsRoute implements ArrayAccess
 	/**
 	 * @ignore
 	 */
-	public function OffsetExists($key)
+	public function OffsetExists($key) : bool
 	{
 		if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) return TRUE;
 		return FALSE;
@@ -154,7 +155,7 @@ class CmsRoute implements ArrayAccess
 	/**
 	 * @ignore
 	 */
-	public function OffsetUnset($key)
+	public function OffsetUnset($key) : void
 	{
 		if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) unset($this->_data[$key]);
 	}
@@ -165,8 +166,8 @@ class CmsRoute implements ArrayAccess
 	 * @deprecated
 	 * @return string
 	 */
-	public function get_term()
-	{
+	public function get_term() : string
+  {
 		return $this->_term;
 	}
 
@@ -176,6 +177,7 @@ class CmsRoute implements ArrayAccess
 	 * @deprecated
 	 * @return string Destination module name. or null.
 	 */
+  #[\ReturnTypeWillChange]
 	public function get_dest()
 	{
 		return $this->_data['key1'];
@@ -187,6 +189,7 @@ class CmsRoute implements ArrayAccess
 	 * @deprecated
 	 * @return int Page id, or null.
 	 */
+  #[\ReturnTypeWillChange]
 	public function get_content()
 	{
 		if( $this->is_content() ) return $this->_data['key2'];
@@ -198,20 +201,21 @@ class CmsRoute implements ArrayAccess
 	 * @deprecated
 	 * @return array The default parameters for the route.. Null if no defaults specified.
 	 */
+  #[\ReturnTypeWillChange]
 	public function get_defaults()
 	{
 		if( isset($this->_data['defaults']) ) return $this->_data['defaults'];
 	}
 
 	/**
-	 * Test wether this route is for a page.
+	 * Test whether this route is for a page.
 	 *
 	 * @deprecated
 	 * @return bool
 	 */
-	public function is_content()
-	{
-		return ($this->_data['key1'] == '__CONTENT__')?TRUE:FALSE;
+	public function is_content() : bool
+  {
+		return $this->_data['key1'] === '__CONTENT__';
 	}
 
 	/**
@@ -220,6 +224,7 @@ class CmsRoute implements ArrayAccess
 	 * @deprecated
 	 * @return array Matching parameters... or Null
 	 */
+  #[\ReturnTypeWillChange]
 	public function get_results()
 	{
 		return $this->_results;
@@ -234,8 +239,8 @@ class CmsRoute implements ArrayAccess
 	 * @param bool $exact Perform an exact string match rather than depending on the route values.
 	 * @return bool
 	 */
-	public function matches($str,$exact = false)
-	{
+	public function matches($str,$exact = false) : bool
+  {
 		$this->_results = null;
 		if( (isset($this->_data['absolute']) && $this->_data['absolute']) || $exact ) {
 			$a = trim($this->_data['term']);
