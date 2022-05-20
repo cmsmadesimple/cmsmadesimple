@@ -67,12 +67,31 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	else {
 	    $text .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
 	}
+ 
 	foreach ($params as $key=>$value) {
-		$value = cms_htmlentities($value);
-		if ($key != 'module' && $key != 'action' && $key != 'id') {
-			$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
-		}
-	}
+    $value = cms_htmlentities($value);
+    if ($key != 'module' && $key != 'action' && $key != 'id') {
+      if( is_array($value))
+      {
+        foreach($value as $one)
+        {
+          $text .= '<input type="hidden" name="'.$id.$key.'[]" value="'.$one.'" />'."\n";
+        }
+      }
+      else
+      {
+        $text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
+      }
+
+    }
+  }
+	
+//	foreach ($params as $key=>$value) {
+//		$value = cms_htmlentities($value);
+//		if ($key != 'module' && $key != 'action' && $key != 'id') {
+//			$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
+//		}
+//	}
 	$text .= "</div>\n";
 
 	return $text;

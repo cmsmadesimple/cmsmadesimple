@@ -67,16 +67,27 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
  * temporary as we will revisit the security measures used
  * (JoMorg)
  *
- * @param string $string
+ * Note: the closure is recursive to allow for parameters with arrays
  *
- * @return string
+ * @param $param
+ *
+ * @return array|string
  */
-$sanitize_fn = static function (string &$string): string
+$sanitize_fn = static function (&$param) use (&$sanitize_fn)
 {
-  $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
-  $string = str_replace(["'", '"'], ['&#39;', '&#34;'], $string);
-  return $string;
+  if( is_array($param) )
+  {
+    array_walk($param,  $sanitize_fn);
+  }
+  else
+  {
+    $param = preg_replace('/\x00|<[^>]*>?/', '', $param);
+    $param = str_replace(["'", '"'], ['&#39;', '&#34;'], $param);
+  }
+
+  return $param;
 };
+
 array_walk($_SERVER,  $sanitize_fn);
 array_walk($_GET,  $sanitize_fn);
 
