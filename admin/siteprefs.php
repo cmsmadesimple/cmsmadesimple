@@ -95,7 +95,7 @@ $thumbnail_height = 96;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
 $disallowed_contenttypes = '';
-$basic_attributes = null;
+$basic_attributes = '';
 $xmlmodulerepository = "";
 $checkversion = 1;
 $defaultdateformat = "";
@@ -310,7 +310,7 @@ if (isset($_POST["editsiteprefs"])) {
                 $basic_attributes = implode(',',($_POST['basic_attributes']));
             }
             else {
-                $basic_attributes = null;
+                $basic_attributes = '';
             }
             cms_siteprefs::set('basic_attributes',$basic_attributes);
             $disallowed_contenttypes = '';
@@ -522,6 +522,7 @@ $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('lock_timeout',$lock_timeout);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
+
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('disallowed_contenttypes',explode(',',$disallowed_contenttypes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
