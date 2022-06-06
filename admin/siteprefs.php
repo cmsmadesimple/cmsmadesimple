@@ -522,7 +522,6 @@ $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('lock_timeout',$lock_timeout);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
-
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('disallowed_contenttypes',explode(',',$disallowed_contenttypes));
 $smarty->assign('thumbnail_width',$thumbnail_width);

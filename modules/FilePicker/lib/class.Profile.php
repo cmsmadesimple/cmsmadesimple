@@ -138,26 +138,28 @@ class Profile extends \CMSMS\FilePickerProfile
    * Note: Doesn't seem to be used anywhere
    *       we may keep this for external API purposes though (JoMorg)
    *
-   * @param $filename
+   * @param $file_name
    *
    * @return bool
    */
-    public function is_filename_acceptable( $filename )
-    {
-        //if( !parent::is_filename_acceptable( $filename) ) return FALSE;
-        if( !$this->file_extensions ) return FALSE;
-
-        // file must have this extension
-        $ext = strtolower(substr(strrchr($filename, '.'), 1));
-        if( !$ext ) return FALSE; // uploaded file has no extension.
-        $list = explode(',',$this->_profile->file_extensions);
-
-        foreach( $list as $one ) {
-            $one = strtolower(trim($one));
-            if( !$one ) continue;
-            if( startswith( $one, '.') ) $one = substr($one,1);
-            if( $ext == $one ) return TRUE;
-        }
-        return FALSE;
+  public function is_filename_acceptable( $file_name )
+  {
+    $mod = cms_utils::get_module('FilePicker');
+    if( !$mod->is_acceptable_filename($this, $file_name) ) return FALSE;
+    if( !$this->file_extensions ) return FALSE; // OR TRUE if we don't have anything to care about?
+    
+    // file must have an extension
+    $ext = strtolower(substr(strrchr($file_name, '.'), 1));
+    if( !$ext ) return FALSE; // file has no extension.
+    $list = explode(',',$this->_profile->file_extensions);
+    
+    foreach( $list as $one ) {
+      $one = strtolower(trim($one));
+      if( !$one ) continue;
+      if( startswith( $one, '.') ) $one = substr($one,1);
+      if( $ext == $one ) return TRUE;
     }
+    return FALSE;
+  }
 } // end of class
+

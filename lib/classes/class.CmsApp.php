@@ -277,29 +277,31 @@ final class CmsApp {
 	{
 		return ModuleOperations::get_instance()->get_module_instance($module_name,$version);
 	}
-
-
+	
+	
 	/**
 	 * Set the database connection object.
 	 *
 	 * @final
-	 * @internal
+	 *
+	 * @param \CMSMS\Database\Connection $conn
+	 *
 	 * @ignore
-	 * @param ADOConnection $connection
+	 * @internal
 	 */
 	final public function _setDb(\CMSMS\Database\Connection $conn)
 	{
 		$this->db = $conn;
 	}
-
+	
 	/**
-	* Get a handle to the ADODB database object. You can then use this
-	* to perform all kinds of database operations.
-	*
-	* @link http://phplens.com/lens/adodb/docs-adodb.htm
-	* @final
-	* @return ADOConnection a handle to the ADODB database object
-	*/
+	 * Get a handle to the ADODB database object. You can then use this
+	 * to perform all kinds of database operations.
+	 *
+	 * @link http://phplens.com/lens/adodb/docs-adodb.htm
+	 * @final
+	 * @return \CMSMS\Database\Connection a handle to the ADODB database object
+	 */
 	final public function &GetDb()
 	{
 		/* Check to see if we have a valid instance.

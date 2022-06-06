@@ -6,6 +6,9 @@ Core - General
  - Compatibility fixes for PHP 8.1.
  - Smarty upgraded to version 3.1.44.
 
+Content Manager v
+ - Differentiate new page from cloned page.
+
 Design Manager v
  - BR #12545 - Module: DesignManager typo info on top file.
 

@@ -52,14 +52,14 @@ if( isset($_REQUEST['term']) ) {
 
   if( !$this->CheckPermission('Manage All Content') && !$this->CheckPermission('Modify Any Page') ) {
     $pages = author_pages(get_userid(FALSE));
-    if( count($pages) == 0 ) return;
+    if( !$pages ) exit;
 
     // query only these pages.
     $query .= ' AND content_id IN ('.implode(',',$pages).')';
   }
 
   $list = $db->GetArray($query,$parms);
-  if( is_array($list) && count($list) ) {
+  if( $list ) {
     $builder = new ContentListBuilder($this);
     $builder->expand_all(); // it'd be cool to open all parents to each item.
     $contentops = ContentOperations::get_instance();

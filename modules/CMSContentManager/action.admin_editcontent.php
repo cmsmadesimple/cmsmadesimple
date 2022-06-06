@@ -42,7 +42,7 @@ $this->SetCurrentTab('pages');
 //
 try {
     $user_id = get_userid();
-    $content_id = null;
+    $content_id = 0;
     $content_obj = null;
     $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
     $content_type = $pagedefaults['contenttype'];
@@ -58,7 +58,7 @@ try {
     }
 
     if( $content_id < 1 ) {
-        // adding.
+      // adding or copying.
         if( !$this->CheckPermission('Add Pages') ) {
             // no permission to add pages.
             $this->SetError($this->Lang('error_editpage_permission'));
@@ -78,7 +78,7 @@ try {
     //
     // load or create the initial content object
     //
-    if( $content_id === 0 && isset($_SESSION['__cms_copy_obj__']) ) {
+  if( $content_id === -1 && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $tmp = $_SESSION['__cms_copy_obj__'];
         $type_name = get_parameter_value($tmp,'type');
@@ -90,7 +90,7 @@ try {
         $content_type = $content_obj->Type();
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     }
-    else if( $content_id < 1 ) {
+  else if( $content_id === 0 ) {
         // creating a new content object
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
         $content_obj = $contentops->CreateNewContent($content_type);
@@ -230,26 +230,18 @@ catch( CmsEditContentException $e ) {
     }
 }
 catch( CmsContentException $e ) {
-    $error = $e->GetMessage();
-    if( isset($params['ajax']) ) {
-        $tmp = array('response'=>'Error','details'=>$error);
-        echo json_encode($tmp);
-        exit;
-    }
-}
-catch( ContentException $e ) {
-    $error = $e->GetMessage();
-    if( isset($params['ajax']) ) {
-        $tmp = array('response'=>'Error','details'=>$error);
-        echo json_encode($tmp);
-        exit;
-    }
+  $error = $e->getMessage();
+  if( isset($params['ajax']) ) {
+    $tmp = array('response'=>'Error','details'=>$error);
+    echo json_encode($tmp);
+    exit;
+  }
 }
 
 //
 // BUILD THE DISPLAY
 //
-if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+if( $content_id > 0 && CmsContentManagerUtils::locking_enabled() ) {
     try {
         $lock_id = null;
         for( $i = 0; $i < 3; $i++ ) {

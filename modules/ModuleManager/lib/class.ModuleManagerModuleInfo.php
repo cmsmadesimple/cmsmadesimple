@@ -148,7 +148,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     public function OffsetExists($key) : bool
     {
         if( !in_array($key,self::$_mmkeys) ) return parent::OffsetExists($key);
-        if( $key != 'e_status' && $key != 'deprecated' ) return false; // dynamic
+        if( $key != 'e_status' && $key != 'deprecated' ) return FALSE;
         return isset($this->_mmdata[$key]);
     }
 

@@ -54,7 +54,7 @@ final class CMSContentManager extends CMSModule
     function UninstallPreMessage() { return $this->Lang('preuninstall'); }
 
     /**
-     * Tests wether the currently logged in user has the ability to edit ANY content page
+     * Tests whether the current user is authorized to edit the content page whose id is specified
      */
     public function CanEditContent($content_id = -1)
     {
@@ -62,18 +62,18 @@ final class CMSContentManager extends CMSModule
         if( $this->CheckPermission('Modify Any Page') ) return TRUE;
 
         $pages = author_pages(get_userid(FALSE));
-        if( count($pages) == 0 ) return FALSE;
-
-        if( $content_id > 0 && !in_array($content_id,$pages) ) return FALSE;
-        return TRUE;
+        if( !$pages ) return FALSE;
+        // user has 'some' edit authority - assume copy/add page is ok without 'Add Pages' check
+        if( $content_id <= 0 ) return TRUE;
+        return in_array($content_id,$pages);
     }
 
     public function GetAdminMenuItems()
     {
         $out = array();
-
+  
+      if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
         // user is entitled to see the main page in the navigation.
-        if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
             $obj = CmsAdminMenuItem::from_module($this);
             $out[] = $obj;
         }

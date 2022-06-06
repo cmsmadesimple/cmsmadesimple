@@ -41,7 +41,8 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab('pages');
 }
 if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
-
+  
+    // this function is unused
     function ordercontent_get_node_rec($str,$prefix = 'page_')
     {
         $gCms = cmsms();
@@ -51,12 +52,12 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
 
         $id = (int)$str;
         $tmp = $tree->find_by_tag('id',$id);
-        $content = '';
+        $content = ''; // Not used either (JM)
         if( $tmp ) {
             $content = $tmp->getContent(false,true,true);
             if( $content ) {
-                $rec = aray();
-                $rec['id'] = (int)$str;
+              $rec = array();
+              $rec['id'] = (int)$str;//WHAT FOR?
             }
         }
     }
@@ -85,7 +86,8 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
     $orderlist = ordercontent_create_flatlist($orderlist);
 
     // step 2, merge in old orders, and old parents
-    $hm = $gCms->GetHierarchyManager();
+  /** @var cms_content_tree $hm */
+  $hm           = $gCms->GetHierarchyManager();
     $changelist = array();
     foreach( $orderlist as &$rec ) {
         $node = $hm->find_by_tag('id',$rec['id']);
@@ -98,7 +100,7 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
         }
     }
 
-    if( !is_array($changelist) || count($changelist) == 0 ) {
+    if( !$changelist ) {
         echo $this->ShowErrors($this->Lang('error_ordercontent_nothingtodo'));
     }
     else {
