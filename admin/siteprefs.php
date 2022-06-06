@@ -597,7 +597,7 @@ $smarty->assign('titlemenu',$titlemenu);
 $smarty->assign('backurl', $themeObject->backUrl());
 $smarty->assign('formurl', $thisurl);
 
-# begin outputg
+# begin output
 $smarty->display('siteprefs.tpl');
 include_once("footer.php");
 
