@@ -120,14 +120,14 @@ class TranslatableAlert extends Alert
             $this->_msgargs = $val; // accept string or array...
             break;
         case 'perms':
-            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
             $tmp = [];
             foreach( $val as $one ) {
                 $one = trim($one);
                 if( !$one ) continue;
                 if( !in_array($one,$tmp) ) $tmp[] = $one;
             }
-            if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+            if( !count($tmp) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
             $this->_perms = $tmp;
             break;
 
