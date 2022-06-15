@@ -69,7 +69,7 @@ class SimpleAlert extends Alert
      */
     public function __construct($perms = null)
     {
-        if( $perms && (!is_array($perms) || !count($perms)) ) \InvalidArgumentExcecption('perms must be an array of permission name strings');
+        if( $perms && (!is_array($perms) || !count($perms)) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
         $this->_perms = $perms;
         parent::__construct();
     }
@@ -120,14 +120,14 @@ class SimpleAlert extends Alert
             $this->_msg = trim($val);
             break;
         case 'perms':
-            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+            if( !is_array($val) || !count($val) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
             $tmp = [];
             foreach( $val as $one ) {
                 $one = trim($one);
                 if( !$one ) continue;
                 if( !in_array($one,$tmp) ) $tmp[] = $one;
             }
-            if( !count($tmp) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
+            if( !count($tmp) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
             $this->_perms = $tmp;
             break;
 
