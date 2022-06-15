@@ -455,11 +455,11 @@ final class CmsApp {
 	*
 	* @final
 	* @see HierarchyManager
-	* @return HierarchyManager handle to the HierarchyManager object
+	* @return cms_content_tree HierarchyManager handle to the HierarchyManager object
 	*/
 	public function & GetHierarchyManager()
 	{
-		/* Check to see if a HierarchyManager has been instantiated yet,
+		/* Check to see if a HierarchyManager (cms_content_tree) has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
         if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
         return $this->_hrinstance;
@@ -496,7 +496,7 @@ final class CmsApp {
 	final public function clear_cached_files($age_days = 0)
 	{
         $age_days = max(-1,(int) $age_days);
-		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
+		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE; # not used?... todo remove
 		if( !defined('TMP_CACHE_LOCATION') ) return;
         	$age_days = max(0,(int)$age_days);
         	\CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);

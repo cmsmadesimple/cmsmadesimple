@@ -844,14 +844,16 @@ abstract class CMSModule
     {
         return \cms_config::get_instance();
     }
-
-    /**
-     * Returns the cms->db object as a reference
-     *
-     * @final
-     * @deprecated
-     * @return ADOConnection Adodb Database object.
-     */
+  
+  /**
+   * Returns the cms->db object as a reference
+   *
+   * @final
+   *
+   * @throws \Exception
+   * @deprecated
+   * @return \CMSMS\Database\Connection ADOConnection Adodb Database object
+   */
     final public function &GetDb()
     {
         return CmsApp::get_instance()->GetDb();
