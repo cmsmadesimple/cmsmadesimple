@@ -61,7 +61,8 @@
     <br /><br />
     <input type="checkbox" id="search_desc" name="{$actionid}search_descriptions" value="1" checked="checked">&nbsp;<label for="search_desc">{$mod->lang('lbl_search_desc')}</label><br/>
     <input type="checkbox" id="search_case" name="{$actionid}search_casesensitive" value="1">&nbsp;<label for="search_casesensitive">{$mod->lang('lbl_search_casesensitive')}</label><br/>
-    <input type="checkbox" id="search_snippets" name="{$actionid}show_snippets" value="1">&nbsp;<label for="show_snippets">{$mod->lang('lbl_show_snippets')}</label>
+    <input type="checkbox" id="search_snippets" name="{$actionid}show_snippets" value="1">&nbsp;<label for="show_snippets">{$mod->lang('lbl_show_snippets')}</label><br/>
+    <input type="checkbox" id="include_inactive_items" name="{$actionid}include_inactive_items" value="1" checked="checked">&nbsp;<label for="include_inactive_items">{$mod->lang('lbl_include_inactive_items')}</label>
   </p>
   <br />
 </div>

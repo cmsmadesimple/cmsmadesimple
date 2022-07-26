@@ -6,6 +6,9 @@ Core - General
  - Compatibility fixes for PHP 8.0 (and 8.1).
  - Smarty upgraded to version 3.1.44.
 
+ Admin Search v
+ - Option to filter out inactive items.
+
 Content Manager v
  - Differentiate new page from cloned page.
 

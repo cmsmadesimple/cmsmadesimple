@@ -69,6 +69,8 @@ final class AdminSearch_content_slave extends AdminSearch_slave
                 $content_obj = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
                 if( !is_object($content_obj) ) continue;
 
+                if (!$this->include_inactive_items() && !$content_obj->Active()) continue;
+
                 if (!isset($resultSets[$content_id])) {
                     $resultSets[$content_id] = $this->get_resultset($content_obj->Name(),$content_obj->Name(),$content_manager->create_url('m1_','admin_editcontent','',array('content_id'=>$content_id)));
                 }
@@ -107,6 +109,8 @@ final class AdminSearch_content_slave extends AdminSearch_slave
                 $content_obj = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
                 if( !is_object($content_obj) ) continue;
                 //if( !$content_obj->HasSearchableContent() ) continue;
+
+                if (!$this->include_inactive_items() && !$content_obj->Active()) continue;
                 
                 if (!isset($resultSets[$content_id])) {
                     $resultSets[$content_id] = $this->get_resultset($content_obj->Name(),$content_obj->Name(),$content_manager->create_url('m1_','admin_editcontent','',array('content_id'=>$content_id)));
