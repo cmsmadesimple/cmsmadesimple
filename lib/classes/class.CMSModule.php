@@ -36,7 +36,7 @@
  * @property    CmsApp $cms A reference to the application object (deprecated)
  * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
- * @property    ADOConnection $db  A reference to the global database configuration object (deprecated)
+ * @property    \CMSMS\Database\Connection $db  A reference to the global database configuration object (deprecated)
  */
 abstract class CMSModule
 {
@@ -246,10 +246,10 @@ abstract class CMSModule
      * @internal
      * @return mixed module call output.
      */
-    final static public function function_plugin($params,&$template)
+    final static public function function_plugin($params, $template)
     {
         $class = get_called_class();
-        if( $class != 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
+        if($class !== 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
         return cms_module_plugin($params,$template);
     }
 
@@ -407,7 +407,7 @@ abstract class CMSModule
      */
     final public function GetModulePath()
     {
-        if (is_subclass_of($this, 'CMSModule')) {
+        if ($this instanceof self) {
             return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
         }
         return __DIR__;
@@ -571,7 +571,7 @@ abstract class CMSModule
                     // Key not found in the map
                     // see if one matches via regular expressions
                     foreach( $map as $mk => $mv ) {
-                        if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
+                        if(FALSE === strpos($mk, CLEAN_REGEXP)) continue;
 
                         // mk is a regular expression
                         $ss = substr($mk,strlen(CLEAN_REGEXP));
@@ -609,11 +609,11 @@ abstract class CMSModule
                         break;
                     case 'CLEAN_FILE':
                         $value = realpath($value);
-                        if( $realpath === FALSE ) {
+                        if( $value === FALSE ) {
                             $value = CLEANED_FILENAME;
                         }
                         else {
-                            if( strpos($realpath, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
+                            if( strpos($value, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
                         }
                         $mappedcount++;
                         $mapped = true;
@@ -837,8 +837,8 @@ abstract class CMSModule
      * Returns the cms->config object as a reference
      *
      * @final
+     * @return \cms_config
      * @deprecated
-     * @return array The config hash.
      */
     final public function &GetConfig()
     {
@@ -1011,19 +1011,21 @@ abstract class CMSModule
     {
         return FALSE;
     }
-
-    /**
-     * Function that will get called as module is uninstalled. This function should
-     * remove any database tables that it uses and perform any other cleanup duties.
-     * It should return a string message if there is a failure. Returning nothing
-     * (FALSE) will allow the uninstall procedure to proceed.
-     *
-     * The default behaviour of this function is to include a file called method.uninstall.php
-     * in your module directory to do uninstall operations.
-     *
-     * @abstract
-     * @return string|false A result of FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
-     */
+  
+  /**
+   * Function that will get called as module is uninstalled. This function should
+   * remove any database tables that it uses and perform any other cleanup duties.
+   * It should return a string message if there is a failure. Returning nothing
+   * (FALSE) will allow the uninstall procedure to proceed.
+   *
+   * The default behaviour of this function is to include a file called method.uninstall.php
+   * in your module directory to do uninstall operations.
+   *
+   * @abstract
+   * @return string|false A result of FALSE indicates that the module uninstalled correctly, any other value indicates
+   *                      an error message.
+   * @throws \Exception
+   */
     public function Uninstall()
     {
         $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
