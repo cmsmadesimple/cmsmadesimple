@@ -812,7 +812,11 @@ class cms_mailer
    */
   function Send()
   {
-    return $this->_mailer->Send();
+    try {
+      return $this->_mailer->Send();
+    } catch (\Exception $e) {
+      return false;
+    }
   }
 
   /**
