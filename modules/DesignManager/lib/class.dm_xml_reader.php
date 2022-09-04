@@ -50,7 +50,8 @@ class dm_xml_reader extends XMLReader
       set_error_handler($this->_old_err_handler);
   }
 
-  public function read()
+  #[\ReturnTypeWillChange]
+  public function read()//: bool
   {
     $this->__setup();
     return parent::read();

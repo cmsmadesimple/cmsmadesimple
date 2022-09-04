@@ -40,7 +40,7 @@ class dm_design_reader extends dm_reader_base
     {
         while( $this->_xml->read() ) {
             if( !$this->_xml->isValid() ) {
-        throw new CmsException('Invalid XML FILE ');
+                throw new CmsException('Invalid XML FILE ');
             }
         }
         // it validates.
@@ -52,9 +52,8 @@ class dm_design_reader extends dm_reader_base
         $cur_key = null;
 
         $__get_in = function() use ($in) {
-            global $in;
-            if( ($n = count($in)) ) {
-                return $in[$n-1];
+            if( $in ) {
+                return end($in);
             }
         };
 
@@ -216,7 +215,7 @@ class dm_design_reader extends dm_reader_base
                     case 'template':
                     case 'stylesheet':
                     case 'file':
-                        if( count($in) ) {
+                        if( $in ) {
                             array_pop($in);
                         }
                         $cur_key = null;

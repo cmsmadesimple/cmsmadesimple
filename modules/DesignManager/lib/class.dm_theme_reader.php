@@ -41,8 +41,9 @@ class dm_theme_reader extends dm_reader_base
     $cur_key = null;
 
     $__get_in = function() use ($in) {
-      global $in;
-      if( ($n = count($in)) ) return $in[$n-1];
+      if( $in ) {
+        return end($in);
+      }
     };
 
     if( $this->_scanned ) return;
@@ -190,7 +191,7 @@ class dm_theme_reader extends dm_reader_base
           case 'assoc':
           case 'reference':
           case 'mmtemplate':
-            if( count($in) ) {
+            if( $in ) {
               array_pop($in);
             }
             $cur_key = null;
