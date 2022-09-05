@@ -52,9 +52,10 @@ class cms_mailer
   /**
    * Constructor
    *
-   * @param bool $exceptions Optionally disable exceptions, and rely on error strings.
+   * @param bool $exceptions Optionally enable phpmailer exceptions.
+   * @since 2.2.17 Default false
    */
-  public function __construct($exceptions = true)
+  public function __construct($exceptions = false)
   {
     $dir = dirname(__DIR__).'/phpmailer/';
     require_once($dir.'/PHPMailerAutoload.php');
@@ -72,8 +73,8 @@ class cms_mailer
    */
   public function __call($method,$args)
   {
-    if(method_exists($this->_mailer, $method))
-		return call_user_func_array(array($this->_mailer,$method), $args);
+    if( method_exists($this->_mailer, $method) )
+        return call_user_func_array(array($this->_mailer,$method), $args);
   }
 
   /**
