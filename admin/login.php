@@ -94,10 +94,10 @@ function find_recovery_user($hash)
 
 //Redirect to the normal login screen if we hit cancel on the forgot pw one
 //Otherwise, see if we have a forgotpw hit
-if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel'])) {
+if( (isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel']) ) {
     redirect('login.php');
 }
-else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'])) {
+else if( isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername']) ) {
     $userops = $gCms->GetUserOperations();
     $forgot_username = cms_html_entity_decode($_REQUEST['forgottenusername']);
     unset($_REQUEST['forgottenusername'],$_POST['forgottenusername']);
@@ -105,11 +105,11 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     $oneuser = $userops->LoadUserByUsername($forgot_username);
     unset($_REQUEST['loginsubmit'],$_POST['loginsubmit']);
 
-    if ($oneuser != null) {
-        if ($oneuser->email == '') {
+    if( $oneuser ) {
+        if( $oneuser->email == '' ) {
             $error = lang('nopasswordforrecovery');
         }
-        else if (send_recovery_email($oneuser)) {
+        else if( send_recovery_email($oneuser) ) {
             $warningLogin = lang('recoveryemailsent');
         }
         else {
@@ -119,26 +119,23 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     else {
         unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
         \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$forgot_username ] );
-        $error = lang('usernotfound');
+        sleep(2); // delay to inhibit brute-forcing, then restart login
     }
 }
-else if (isset($_REQUEST['recoverme']) && $_REQUEST['recoverme']) {
+else if( isset($_REQUEST['recoverme']) && $_REQUEST['recoverme'] ) {
     $user = find_recovery_user($_REQUEST['recoverme']);
-    if ($user == null) {
-        $error = lang('usernotfound');
+    if( $user ) {
+        $changepwhash = $_REQUEST['recoverme'];
     }
     else {
-        $changepwhash = $_REQUEST['recoverme'];
+        sleep(2);
     }
 }
 else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform']) {
     $user = find_recovery_user($_REQUEST['changepwhash']);
-    if ($user == null) {
-        $error = lang('usernotfound');
-    }
-    else {
-        if ($_REQUEST['password'] != '') {
-            if ($_REQUEST['password'] == $_REQUEST['passwordagain']) {
+    if( $user ) {
+        if( $_REQUEST['password'] != '' ) {
+            if( $_REQUEST['password'] == $_REQUEST['passwordagain'] ) {
                 $user->SetPassword($_REQUEST['password']);
                 $user->Save();
                 // put mention into the admin log
@@ -159,9 +156,12 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
             $changepwhash = $_REQUEST['changepwhash'];
         }
     }
+    else {
+        sleep(2);
+    }
 }
 
-if (isset($_SESSION['logout_user_now'])) {
+if( isset($_SESSION['logout_user_now']) ) {
     // this does the actual logout stuff.
     unset($_SESSION['logout_user_now']);
     debug_buffer("Logging out.  Cleaning cookies and session variables.");
@@ -190,44 +190,47 @@ else if( isset($_POST['loginsubmit']) ) {
     class CmsLoginError extends \CmsException {}
 
     try {
-        if( !$username || !$password ) throw new \LogicException(lang('usernameincorrect'));
+        if( !$username || !$password ) throw new \LogicException(lang('informationmissing'));
 
         // load user by name
         // do hooks for authentication
         $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
-        // $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
-        if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
+        if( $oneuser ) {
+            \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$oneuser  ] );
 
-        \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$oneuser  ] );
+            $login_ops->save_authentication($oneuser);
 
-        $login_ops->save_authentication($oneuser);
+            // put mention into the admin log
+            audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
-        // put mention into the admin log
-        audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
+            // send the post login event
+            \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>$oneuser ] );
 
-        // send the post login event
-        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>$oneuser ] );
+            // redirect outa here somewhere
+            if( isset($_SESSION['login_redirect_to']) ) {
+                // we previously attempted a URL but didn't have the user key in the request.
+                $url_ob = new \cms_url($_SESSION['login_redirect_to']);
+                unset($_SESSION['login_redirect_to']);
+                $url_ob->erase_queryvar('_s_');
+                $url_ob->erase_queryvar('sp_');
+                $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
+                $url = (string) $url_ob;
+                redirect($url);
+            }
+            else {
+                // find the users homepage, if any, and redirect there.
+                $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
+                if( !$homepage ) $homepage = $config['admin_url'];
 
-        // redirect outa hre somewhere
-        if( isset($_SESSION['login_redirect_to']) ) {
-            // we previously attempted a URL but didn't have the user key in the request.
-            $url_ob = new \cms_url($_SESSION['login_redirect_to']);
-            unset($_SESSION['login_redirect_to']);
-            $url_ob->erase_queryvar('_s_');
-            $url_ob->erase_queryvar('sp_');
-            $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
-            $url = (string) $url_ob;
-            redirect($url);
-        } else {
-            // find the users homepage, if any, and redirect there.
-            $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
-            if( !$homepage ) $homepage = $config['admin_url'];
+                $homepage = \CmsAdminUtils::get_session_url($homepage);
 
-            $homepage = \CmsAdminUtils::get_session_url($homepage);
-
-            // and redirect.
-            $homepage = html_entity_decode($homepage);
-            redirect($homepage);
+                // and redirect.
+                $homepage = html_entity_decode($homepage);
+                redirect($homepage);
+            }
+        }
+        else {
+            sleep(2);
         }
     }
     catch( \Exception $e ) {
