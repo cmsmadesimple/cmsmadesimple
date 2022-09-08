@@ -42,7 +42,7 @@ final class dm_reader_factory
     if( $p === FALSE ) throw new CmsException($mod->Lang('error_readxml'));  // highly unlikely.
     $word = substr($str,0,$p);
 
-		$ob = null;
+    $ob = null;
     switch( $word ) {
     case 'theme':
       $ob = new dm_theme_reader($xmlfile);
@@ -52,7 +52,7 @@ final class dm_reader_factory
       $ob = new dm_design_reader($xmlfile);
       break;
     }
-		return $ob;
+    return $ob;
   }
 } // end of class
 

@@ -247,7 +247,6 @@ class dm_design_reader extends dm_reader_base
         $this->_scan();
         $out = array();
         foreach( $this->_tpl_info as $key => $one ) {
-            $name = $this->_get_name($key);
             $rec = array();
             $rec['name'] = base64_decode($one['name']);
             $rec['newname'] = \CmsLayoutTemplate::generate_unique_name($rec['name']);
@@ -266,7 +265,6 @@ class dm_design_reader extends dm_reader_base
         $this->_scan();
         $out = array();
         foreach( $this->_css_info as $key => $one ) {
-            $name = $this->_get_name($key);
             $rec = array();
             $rec['name'] = base64_decode($one['name']);
             $rec['newname'] = \CmsLayoutStylesheet::generate_unique_name($rec['name']);
@@ -274,7 +272,7 @@ class dm_design_reader extends dm_reader_base
             $rec['desc'] = base64_decode($one['desc']);
             $rec['data'] = base64_decode($one['data']);
             $rec['mediatype'] = base64_decode($one['mediatype']);
-            $rec['medisaquery'] = base64_decode($one['mediaquery']);
+            $rec['mediaquery'] = base64_decode($one['mediaquery']);
             $out[] = $rec;
         }
         return $out;
@@ -305,6 +303,7 @@ class dm_design_reader extends dm_reader_base
         }
       }
     }
+    unset($rec);
   }
 
   protected function validate_stylesheet_names()
@@ -332,6 +331,7 @@ class dm_design_reader extends dm_reader_base
         }
       }
     }
+    unset($rec);
   }
 
   public function get_destination_dir()
@@ -387,6 +387,7 @@ class dm_design_reader extends dm_reader_base
       $rec['tpl_url'] = "{uploads_url}/designs/$destdir/{$rec['value']}";
       $rec['css_url'] = "[[uploads_url]]/designs/$destdir/{$rec['value']}";
     }
+    unset($rec);
 
     // expand stylesheets
     foreach( $this->get_stylesheet_list() as $css ) {
@@ -400,6 +401,7 @@ class dm_design_reader extends dm_reader_base
         if( !isset($rec['css_url']) ) continue;
         $content = str_replace($key,$rec['css_url'],$content);
       }
+      unset($rec);
 
       if( $css['mediatype'] ) {
           $tmp = explode(',',$css['mediatype']);
@@ -419,7 +421,7 @@ class dm_design_reader extends dm_reader_base
 
     // expand templates
     $tpl_recs = $this->get_template_list();
-    foreach( $tpl_recs as $tpl ) {
+    foreach( $tpl_recs as &$tpl ) {
       $template = new CmsLayoutTemplate();
       $template->set_name($tpl['newname']);
       if( isset($tpl['desc']) && $tpl['desc'] != '' ) $template->set_description($tpl['desc']);
@@ -444,6 +446,7 @@ class dm_design_reader extends dm_reader_base
             $content = str_replace($key,$rec['value'],$content);
         }
       }
+      unset($rec);
 
       // substitute other tpl keys in this content
       foreach( $tpl_recs as $tpl2 ) {
@@ -451,12 +454,12 @@ class dm_design_reader extends dm_reader_base
           $content = str_replace($tpl2['key'],$tpl2['newname'],$content);
       }
 
-      // substitute CSS keys for their values.  This should handle
+      // substitute CSS keys for their values.  This should handle ?
       $template->set_content($content);
 
       // template type:
       // - try to find the template type
-            // - if not, set the type to 'generic'.
+      // - if not, set the type to 'generic'.
       try {
         $typename = $tpl['type_originator'].'::'.$tpl['type_name'];
         $type_obj = CmsLayoutTemplateType::load($typename);
@@ -470,9 +473,10 @@ class dm_design_reader extends dm_reader_base
 
       if( $owner_id > 0 ) $template->set_owner( $owner_id );
       $template->save();
-      $tpl_recs['newname'] = $template->get_name();
+      $tpl['newname'] = $template->get_name(); // useless ?
       $design->add_template($template);
     }
+    unset($tpl);
 
     $design->save();
   } // end of import
