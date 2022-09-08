@@ -21,7 +21,7 @@
 
 class dm_xml_reader extends XMLReader
 {
-  private $_setup;
+  private $_setup = 0;
   private $_old_err_handler;
   private $_old_internal_errors;
 
