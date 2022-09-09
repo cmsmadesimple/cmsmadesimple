@@ -57,10 +57,10 @@ $limit = 25;
 $npages = ceil($totalrows / $limit);
 $page = max(1,min($npages,$page));
 $from = ($page-1) * $limit;
-$orig_filter = new StdClass;
+$orig_filter = new stdClass();
 $orig_filter->user = $orig_filter->action = $orig_filter->item_name = null;
-$filter = clone $orig_filter;
 if( !empty($_SESSION['adminlog_filter']) ) $filter = $_SESSION['adminlog_filter'];
+else $filter = clone $orig_filter;
 
 // handle filtering dialog.
 if( isset($_POST['filterapply']) ) {
@@ -76,7 +76,7 @@ if( isset($_POST['filterapply']) ) {
     $page = 1;
     unset($_SESSION['adminlog_page']);
 }
-$filter_applied = ($filter == $orig_filter) ? FALSE : TRUE;
+$filter_applied = ($filter != $orig_filter);
 
 // now do the query
 $sql = 'SELECT * FROM '.cms_db_prefix().'adminlog ';
