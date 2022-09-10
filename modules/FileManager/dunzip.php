@@ -189,8 +189,8 @@ class dUnzip2{
 				$dir['file_comment']        = $fileCommentLength[1]?fread($fh, $fileCommentLength[1]):''; // file comment
 
 				// Convert the date and time, from MS-DOS format to UNIX Timestamp
-				$BINlastmod_date = str_pad(decbin($file['lastmod_date'][1]), 16, '0', STR_PAD_LEFT);
-				$BINlastmod_time = str_pad(decbin($file['lastmod_time'][1]), 16, '0', STR_PAD_LEFT);
+				$BINlastmod_date = str_pad(decbin($dir['lastmod_date'][1]), 16, '0', STR_PAD_LEFT);
+				$BINlastmod_time = str_pad(decbin($dir['lastmod_time'][1]), 16, '0', STR_PAD_LEFT);
 				$lastmod_dateY = bindec(substr($BINlastmod_date,  0, 7))+1980;
 				$lastmod_dateM = bindec(substr($BINlastmod_date,  7, 4));
 				$lastmod_dateD = bindec(substr($BINlastmod_date, 11, 5));
@@ -201,13 +201,13 @@ class dUnzip2{
 				$this->centralDirList[$dir['file_name']] = Array(
 					'version_madeby'=>$dir['version_madeby'][1],
 					'version_needed'=>$dir['version_needed'][1],
-					'general_bit_flag'=>str_pad(decbin($file['general_bit_flag'][1]), 8, '0', STR_PAD_LEFT),
+					'general_bit_flag'=>str_pad(decbin($dir['general_bit_flag'][1]), 8, '0', STR_PAD_LEFT),
 					'compression_method'=>$dir['compression_method'][1],
 					'lastmod_datetime'  =>mktime($lastmod_timeH, $lastmod_timeM, $lastmod_timeS, $lastmod_dateM, $lastmod_dateD, $lastmod_dateY),
-					'crc-32'            =>str_pad(dechex(ord($file['crc-32'][3])), 2, '0', STR_PAD_LEFT).
-										  str_pad(dechex(ord($file['crc-32'][2])), 2, '0', STR_PAD_LEFT).
-										  str_pad(dechex(ord($file['crc-32'][1])), 2, '0', STR_PAD_LEFT).
-										  str_pad(dechex(ord($file['crc-32'][0])), 2, '0', STR_PAD_LEFT),
+					'crc-32'            =>str_pad(dechex(ord($dir['crc-32'][3])), 2, '0', STR_PAD_LEFT).
+										  str_pad(dechex(ord($dir['crc-32'][2])), 2, '0', STR_PAD_LEFT).
+										  str_pad(dechex(ord($dir['crc-32'][1])), 2, '0', STR_PAD_LEFT).
+										  str_pad(dechex(ord($dir['crc-32'][0])), 2, '0', STR_PAD_LEFT),
 					'compressed_size'=>$dir['compressed_size'][1],
 					'uncompressed_size'=>$dir['uncompressed_size'][1],
 					'disk_number_start'=>$dir['disk_number_start'][1],

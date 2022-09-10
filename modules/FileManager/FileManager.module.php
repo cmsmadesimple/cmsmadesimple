@@ -105,7 +105,7 @@ final class FileManager extends CMSModule {
         $config = cmsms()->GetConfig();
         $realpath=$this->Slash($config["root_path"],$path);
         $statinfo=stat($this->Slash($realpath,$file));
-        return filemanager_util::format_permissions($statinfo["mode"]);
+        return filemanager_utils::format_permissions($statinfo["mode"]);
     }
 
     public function GetModeWin($path,$file) {

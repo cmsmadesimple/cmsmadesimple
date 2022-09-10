@@ -42,20 +42,21 @@ $test->extractTar('./toto.Tar', './new/');
 				$result[$infos['name']]=$infos;
 			}
 		}
-		if (is_file($tmp)) unlink($tmp);
+		if (isset($tmp) && is_file($tmp)) unlink($tmp);
 		return $result;
 	}
 	function makeTar($src, $dest=false)
 	{
 		$src = is_array($src) ? $src : array($src);
 		$src = array_map('realpath', $src);
+		$Tar = '';
 		foreach ($src as $item)
 			$Tar .= $this->addTarItem($item.((is_dir($item) && substr($item, -1)!='/')?'/':''), dirname($item).'/');
 
 		$Tar = str_pad($Tar, floor((strlen($Tar) + 10240 - 1) / 10240) * 10240, "\0");
 		if (empty($dest)) return $Tar;
 		elseif (file_put_contents($dest, $Tar)) return $dest;
-		else false;
+		return false;
 	}
 	function extractTar ($src, $dest)
 	{
@@ -145,25 +146,27 @@ $test->extractTar('./toto.Tar', './new/');
 		$infos['name100'] = str_replace($racine, '', $item);
 		list (, , $infos['mode8'], , $infos['uid8'], $infos['gid8'], , , , $infos['mtime12'] ) = stat($item);
 		$infos['size12'] = is_dir($item) ? 0 : filesize($item);
-		$infos['link1'] = is_link($item) ? 2 : is_dir ($item) ? 5 : 0;
+		$infos['link1'] = is_link($item) ? 2 : (is_dir ($item) ? 5 : 0);
 		$infos['link100'] == 2 ? readlink($item) : "";
 
-			$a=function_exists('posix_getpwuid')?posix_getpwuid (fileowner($item)):array('name'=>'Unknown');
+		$a=function_exists('posix_getpwuid')?posix_getpwuid (fileowner($item)):array('name'=>'Unknown');
 		$infos['userName32'] = $a['name'];
 
-			$a=function_exists('posix_getgrgid')?posix_getgrgid (filegroup($item)):array('name'=>'Unknown');
+		$a=function_exists('posix_getgrgid')?posix_getgrgid (filegroup($item)):array('name'=>'Unknown');
 		$infos['groupName32'] = $a['name'];
 		$infos['prefix155'] = '';
 
 		$header = $this->tarHeader512($infos);
 		$data = str_pad(file_get_contents($item), floor(($infos['size12'] + 512 - 1) / 512) * 512, "\0");
+		$sub = '';
 		if (is_dir($item))
 		{
 			$lst = scandir($item);
 			array_shift($lst); // remove  ./  of $lst
 			array_shift($lst); // remove ../  of $lst
-			foreach ($lst as $subitem)
+			foreach ($lst as $subitem) {
 				$sub .= $this->addTarItem($item.$subitem.(is_dir($item.$subitem)?'/':''), $racine);
+			}
 		}
 		return $header.$data.$sub;
 	}
