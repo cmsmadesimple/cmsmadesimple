@@ -108,7 +108,7 @@ if ($_cli) {
     'to',
     ]);
     // parse config-file argument
-    $val = $opts['c'] ?? $opts['config'] ?? null;
+    $val = (isset($opts['c'])) ? $opts['c'] : ((isset($opts['config'])) ? $opts['config'] : null);
     if ($val !== null) {
         $_configfile = $val;
     }
@@ -651,7 +651,7 @@ options
 EOT;
 }
 
-function output(string $str)
+function output($str)
 {
     global $_tmpfile;
     static $_mode = 'a';
@@ -664,7 +664,7 @@ function output(string $str)
     fclose($fh);
 }
 
-function info(string $str)
+function info($str)
 {
     if (defined('STDOUT')) {
         fwrite(STDOUT, "INFO: $str\n");
@@ -673,7 +673,7 @@ function info(string $str)
     }
 }
 
-function debug(string $str)
+function debug($str)
 {
     global $_debug;
     if ($_debug) {
@@ -685,7 +685,7 @@ function debug(string $str)
     }
 }
 
-function fatal(string $str)
+function fatal($str)
 {
     if (defined('STDERR')) {
         fwrite(STDERR, "FATAL: $str\n");
@@ -696,12 +696,12 @@ function fatal(string $str)
     exit(1);
 }
 
-function startswith(string $haystack, string $needle) : bool
+function startswith($haystack, $needle)
 {
     return (strncmp($haystack, $needle, strlen($needle)) == 0);
 }
 
-function endswith(string $haystack, string $needle) : bool
+function endswith($haystack, $needle)
 {
     $o = strlen($needle);
     if ($o > 0 && $o <= strlen($haystack)) {
@@ -719,7 +719,7 @@ function joinpath(...$segs)
     return str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
 }
 
-function rrmdir(string $dir)
+function rrmdir($dir)
 {
     if (is_dir($dir)) {
         $objects = scandir($dir);
@@ -752,7 +752,7 @@ function cleanup($signum = null)
     rrmdir($_tmpdir);
 }
 
-function ask_string(string $prompt, $dflt = null, bool $allow_empty = false)
+function ask_string($prompt, $dflt = null, $allow_empty = false)
 {
     while (1) {
         if ($dflt) {
@@ -776,7 +776,7 @@ function ask_string(string $prompt, $dflt = null, bool $allow_empty = false)
     }
 }
 
-function ask_options(string $prompt, array $options, $dflt)
+function ask_options($prompt, array $options, $dflt)
 {
     while (1) {
         if ($dflt) {
@@ -797,7 +797,7 @@ function ask_options(string $prompt, array $options, $dflt)
     }
 }
 
-function write_config_file(array $config_data, string $filename)
+function write_config_file(array $config_data, $filename)
 {
     @copy($filename, $filename.'.bak');
     $fh = fopen($filename, 'w');
@@ -823,7 +823,7 @@ function write_config_file(array $config_data, string $filename)
     chmod($filename, 0666); // generic perms pending installation
 }
 
-function get_config_file() : string
+function get_config_file()
 {
     global $_configname;
     // detect user's home directory
@@ -844,7 +844,7 @@ function get_config_file() : string
     return '';
 }
 
-function rcopy(string $srcdir, string $tmpdir)
+function rcopy($srcdir, $tmpdir)
 {
     global $src_excludes;
 
@@ -884,15 +884,15 @@ function rcopy(string $srcdir, string $tmpdir)
     }
 }
 
-function get_version(string $basedir) : array
+function get_version($basedir)
 {
     global  $CMS_VERSION, $CMS_VERSION_NAME, $CMS_SCHEMA_VERSION;
 
     $file = joinpath($basedir, 'lib', 'version.php');
     if (is_file($file)) {
-        $A = $CMS_VERSION ?? '';
-        $B = $CMS_VERSION_NAME ?? '';
-        $C = $CMS_SCHEMA_VERSION ?? '';
+        $A = (isset($CMS_VERSION)) ? $CMS_VERSION : '';
+        $B = (isset($CMS_VERSION_NAME)) ? $CMS_VERSION_NAME : '';
+        $C = (isset($CMS_SCHEMA_VERSION)) ? $CMS_SCHEMA_VERSION : '';
         include $file;
         $ret = [$CMS_VERSION, $CMS_VERSION_NAME];
         if ($A) {
@@ -905,7 +905,7 @@ function get_version(string $basedir) : array
     return ['', ''];
 }
 
-function get_sources(string $sourceuri, string $tmpdir) : bool
+function get_sources($sourceuri, $tmpdir)
 {
     if (strncmp($sourceuri, 'file://', 7) == 0) {
         $dir = substr($sourceuri, 7);
@@ -961,7 +961,7 @@ function get_sources(string $sourceuri, string $tmpdir) : bool
     return false;
 }
 
-function get_svn_branch() : string
+function get_svn_branch()
 {
     $cmd = "svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
     $out = exec($cmd);
@@ -981,7 +981,7 @@ class compare_dirs
     private $_ignored = [];
     private $_donotdelete = [];
 
-    public function __construct(string $dir_a, string $dir_b, bool $do_md5 = false)
+    public function __construct($dir_a, $dir_b, $do_md5 = false)
     {
         if (!is_dir($dir_a)) {
             throw new Exception('Invalid directory '.$dir_a);
@@ -1048,7 +1048,7 @@ class compare_dirs
         $this->_list_b = $this->_read_dir($this->_b);
     }
 
-    public function get_new_files() : array
+    public function get_new_files()
     {
         $this->run();
 
@@ -1058,7 +1058,7 @@ class compare_dirs
         return array_diff($tmp_b, $tmp_a);
     }
 
-    public function get_deleted_files() : array
+    public function get_deleted_files()
     {
         $this->run();
 
@@ -1087,7 +1087,7 @@ class compare_dirs
         return $out;
     }
 
-    public function get_changed_files() : array
+    public function get_changed_files()
     {
         $this->run();
 
@@ -1105,7 +1105,7 @@ class compare_dirs
         return $out;
     }
 
-    private function _set_base(string $dir)
+    private function _set_base($dir)
     {
         $this->_base_dir = $dir;
     }
@@ -1115,7 +1115,7 @@ class compare_dirs
         return $this->_base_dir;
     }
 
-    private function _is_ignored(string $filename) : bool
+    private function _is_ignored($filename)
     {
         foreach ($this->_ignored as $pattern) {
             if ($pattern == $filename || fnmatch($pattern, $filename, FNM_CASEFOLD)) {
