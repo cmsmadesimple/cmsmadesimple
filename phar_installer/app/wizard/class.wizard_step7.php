@@ -118,20 +118,21 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                             $nmissing++;
                         }
                         else if( !is_writable($fn) ) {
-                            $this->error("$file $fn is not writable, could not delete it");
+                            $this->error("file $fn is not writable, could not delete it");
                             $nfailed++;
                         }
                         else {
                             if( is_dir($fn) ) {
-				if( is_file($fn.'/index.html') ) @unlink($fn.'/index.html');
-                                $res = @rmdir($fn);
-				if( !$res ) {
-				    $this->error('problem removing directory: '.$fn);
-				    $nfailed++;
- 				} else {
+                                if( is_file($fn.'/index.html') ) @unlink($fn.'/index.html');
+                                                $res = @rmdir($fn);
+                                if( !$res ) {
+                                    $this->error('problem removing directory: '.$fn);
+                                    $nfailed++;
+                                }
+                                else {
                                     $this->verbose('removed directory: '.$fn);
                                     $ndeleted++;
-				}
+                                }
                             }
                             else {
                                 $res = @unlink($fn);
