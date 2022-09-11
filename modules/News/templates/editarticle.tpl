@@ -1,30 +1,125 @@
-<script type="text/javascript">
-    $(document).ready(function () {
+<script type="text/javascript">{literal}
+    $(document).ready(function() {
         $('[name$=apply],[name$=submit]').hide();
 
         $('#edit_news').dirtyForm({
-            onDirty : function () {
+            onDirty : function() {
                 $('[name$=apply],[name$=submit]').show('slow');
             }
         });
-        $(document).on('cmsms_textchange', function (event) {
+        $(document).on('cmsms_textchange', function(event) {
             // editor text change, set the form dirty.
             $('#edit_news').dirtyForm('option', 'dirty', true);
         });
-        $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function () {
+        $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function() {
             $('#edit_news').dirtyForm('option', 'disabled', true);
         });
-        $('#fld11').click(function () {
+        $('#fld11').on('click', function() {
             $('#expiryinfo').toggle('slow');
         });
-        $('[name$=cancel]').click(function () {
+        $('[name$=cancel]').on('click', function() {
             $(this).closest('form').attr('novalidate', 'novalidate');
         });
     });
+{/literal}
+{if isset($start_tab_preview)}
+{literal}
+    $(document).ready(function() {
+        $(document).on('click', '[name=m1_apply]', function(e){
+
+            e.preventDefault();
+
+            if (typeof tinyMCE !== 'undefined') {
+                tinyMCE.triggerSave();
+            }
+
+            var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
+                url = $('form').attr('action');
+
+            data.push({ 'name': 'm1_ajax', 'value': 1 });
+            data.push({ 'name': 'm1_apply', 'value': 1 });
+            data.push({ 'name': 'showtemplate', 'value': 'false' });
+
+            $.post(url,data,function(resultdata,text) {
+
+                var resp = $(resultdata).find('Response').text(),
+                    details = $(resultdata).find('Details').text(),
+                    htmlShow;
+
+                if (resp === 'Success' && details !== '' ) {
+                    htmlShow = '<div class="pagemcontainer"><p class="pagemessage">'+details+'<\/p><\/div>';
+                } else {
+                    htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
+                }
+                htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
+                $('#editarticle_result').html(htmlShow).show();
+                $('#resultcloser').on('click', function(e) {
+                    e.preventDefault();
+                    $('#editarticle_result').hide().empty();
+                });
+            },'xml');
+
+        });
+
+        $('#preview').on('click', function(e){
+            e.preventDefault();
+            news_dopreview();
+        });
+
+        $(document).on('change', "input[name='preview_returnid'],#preview_template", function(e){
+            e.preventDefault();
+            news_dopreview();
+        });
+    });
+
+    function news_dopreview() {
+
+        if (typeof tinyMCE != 'undefined') {
+            tinyMCE.triggerSave();
+        }
+
+        var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
+            url = $('form').attr('action');
+
+        data.push({ 'name': 'm1_ajax', 'value': 1 });
+        data.push({ 'name': 'm1_preview', 'value': 1 });
+        data.push({ 'name': 'showtemplate', 'value': 'false' });
+        data.push({ 'name': 'm1_previewpage', 'value': $("input[name='preview_returnid']").val() });
+        data.push({ 'name': 'm1_detailtemplate', 'value': $('#preview_template').val() });
+
+        $.post(url,data,function(resultdata,text){
+
+            var resp = $(resultdata).find('Response').text(),
+                details = $(resultdata).find('Details').text(),
+
+            if (resp === 'Success' && details !== '' ) {
+
+                // preview worked... now the details should contain the url
+                details = details.replace(/amp;/g,'');
+                $('#previewframe').attr('src',details);
+            } else {
+                if (details === '' ) {
+                    details = 'An unknown error occurred';
+                }
+
+                // preview save did not work.
+                var htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
+                htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
+                $('#editarticle_result').html(htmlShow).show();
+                $('#resultcloser').on('click', function(e) {
+                    e.preventDefault();
+                    $('#editarticle_result').hide().empty();
+                });
+            }
+        },'xml');
+    }
+{/literal}
+{/if}
 </script>
+
 <h3>{if isset($articleid)}{$mod->Lang('editarticle')}{else}{$mod->Lang('addarticle')}{/if}</h3>
 {strip}
-<div id="editarticle_result"></div>
+<div id="editarticle_result" style="display:none"></div>
 
 <div id="edit_news">
     {$startform}
@@ -32,7 +127,7 @@
         <p class="pageinput">
             {$hidden|default:''}
             <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-			<input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+            <input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
             {if isset($articleid)}
                 <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
             {/if}
@@ -195,11 +290,11 @@
                         <option value="-1">{$select_option}</option>
                         {html_options options=$field->options selected=$field->value}
                     </select>
-		{elseif $field->type == 'linkedfile'}
-		    {if $field->value}
-		       {thumbnail_url file=$field->value assign=tmp}
-		       {if $tmp}<img src="{$tmp}" alt="{$field->value}"/>{/if}
-		    {/if}
+        {elseif $field->type == 'linkedfile'}
+            {if $field->value}
+               {thumbnail_url file=$field->value assign=tmp}
+               {if $tmp}<img src="{$tmp}" alt="{$field->value}"/>{/if}
+            {/if}
                     {cms_filepicker name="{$field->nameattr}" value=$field->value}
                 {/if}
             </p>
@@ -212,102 +307,9 @@
     {/if}
 
 {/strip}
-
     {if isset($start_tab_preview)}
     {$start_tab_preview}
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(document).on('click', '[name=m1_apply]', function(e){
-
-            e.preventDefault();
-
-            if (typeof tinyMCE !== 'undefined') {
-                tinyMCE.triggerSave();
-            }
-
-            var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
-                url = $('form').attr('action');
-
-            data.push({ 'name': 'm1_ajax', 'value': 1 });
-            data.push({ 'name': 'm1_apply', 'value': 1 });
-            data.push({ 'name': 'showtemplate', 'value': 'false' });
-
-            $.post(url,data,function(resultdata,text){
-
-                var resp = $(resultdata).find('Response').text(),
-                    details = $(resultdata).find('Details').text(),
-                    htmlShow = '';
-
-                if (resp === 'Success' && details !== '' ) {
-                    $('[name$=cancel]').button('option','label','{$mod->Lang('close')}');
-                    $('[name$=cancel]').val('{$mod->Lang('close')}');
-                    htmlShow = '<div class="pagemcontainer"><p class="pagemessage">'+details+'<\/p><\/div>';
-                } else {
-                    htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-                    htmlShow += details;
-                    htmlShow += '<\/ul><\/div>';
-                }
-
-                $('#editarticle_result').html(htmlShow);
-            },'xml');
-
-        });
-
-    function news_dopreview() {
-
-        if (typeof tinyMCE != 'undefined') {
-            tinyMCE.triggerSave();
-        }
-
-        var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
-            url = $('form').attr('action');
-
-        data.push({ 'name': 'm1_ajax', 'value': 1 });
-        data.push({ 'name': 'm1_preview', 'value': 1 });
-        data.push({ 'name': 'showtemplate', 'value': 'false' });
-        data.push({ 'name': 'm1_previewpage', 'value': $("input[name='preview_returnid']").val() });
-        data.push({ 'name': 'm1_detailtemplate', 'value': $('#preview_template').val() });
-
-        $.post(url,data,function(resultdata,text){
-
-            var resp = $(resultdata).find('Response').text(),
-                details = $(resultdata).find('Details').text(),
-                htmlShow = '';
-
-            if (resp === 'Success' && details !== '' ) {
-
-                // preview worked... now the details should contain the url
-                details = details.replace(/amp;/g,'');
-                $('#previewframe').attr('src',details);
-            } else {
-                if (details === '' ) {
-                    details = 'An unknown error occurred';
-                }
-
-                // preview save did not work.
-                htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-                htmlShow += details;
-                htmlShow += '<\/ul><\/div>';
-
-                $('#editarticle_result').html(htmlShow);
-            }
-        },'xml');
-    }
-
-    $('#preview').click(function(e){
-        news_dopreview();
-        e.preventDefault();
-    });
-
-    $(document).on('change', "input[name='preview_returnid'],#preview_template", function(e){
-        news_dopreview();
-        e.preventDefault();
-    });
-});
-</script>
-
 {strip}
-
     {* display a warning *}
     <div class="pagewarning">
         {$warning_preview}
@@ -337,5 +339,4 @@
     </div>
     {$endform}
 </div>
-
 {/strip}
