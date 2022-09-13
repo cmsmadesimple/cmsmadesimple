@@ -1,118 +1,118 @@
 <script type="text/javascript">{literal}
-    $(document).ready(function() {
-        $('[name$=apply],[name$=submit]').hide();
+  $(function() {
+    $('[name$=apply],[name$=submit]').hide();
 
-        $('#edit_news').dirtyForm({
-            onDirty : function() {
-                $('[name$=apply],[name$=submit]').show('slow');
-            }
-        });
-        $(document).on('cmsms_textchange', function(event) {
-            // editor text change, set the form dirty.
-            $('#edit_news').dirtyForm('option', 'dirty', true);
-        });
-        $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function() {
-            $('#edit_news').dirtyForm('option', 'disabled', true);
-        });
-        $('#fld11').on('click', function() {
-            $('#expiryinfo').toggle('slow');
-        });
-        $('[name$=cancel]').on('click', function() {
-            $(this).closest('form').attr('novalidate', 'novalidate');
-        });
+    $('#edit_news').dirtyForm({
+      onDirty : function() {
+        $('[name$=apply],[name$=submit]').show('slow');
+      }
     });
+    $(document).on('cmsms_textchange', function(event) {
+      // editor text change, set the form dirty.
+      $('#edit_news').dirtyForm('option', 'dirty', true);
+    });
+    $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function() {
+      $('#edit_news').dirtyForm('option', 'disabled', true);
+    });
+    $('#fld11').on('click', function() {
+      $('#expiryinfo').toggle('slow');
+    });
+    $('[name$=cancel]').on('click', function() {
+      $(this).closest('form').attr('novalidate', 'novalidate');
+    });
+  });
 {/literal}
 {if isset($start_tab_preview)}
 {literal}
-    $(document).ready(function() {
-        $(document).on('click', '[name=m1_apply]', function(e){
+  $(function() {
+    $(document).on('click', '[name=m1_apply]', function(e){
 
-            e.preventDefault();
+      e.preventDefault();
 
-            if (typeof tinyMCE !== 'undefined') {
-                tinyMCE.triggerSave();
-            }
+      if (typeof tinyMCE !== 'undefined') {
+        tinyMCE.triggerSave();
+      }
 
-            var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
-                url = $('form').attr('action');
+      var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
+        url = $('form').attr('action');
 
-            data.push({ 'name': 'm1_ajax', 'value': 1 });
-            data.push({ 'name': 'm1_apply', 'value': 1 });
-            data.push({ 'name': 'showtemplate', 'value': 'false' });
+      data.push({ 'name': 'm1_ajax', 'value': 1 });
+      data.push({ 'name': 'm1_apply', 'value': 1 });
+      data.push({ 'name': 'showtemplate', 'value': 'false' });
 
-            $.post(url,data,function(resultdata,text) {
+      $.post(url,data,function(resultdata,text) {
 
-                var resp = $(resultdata).find('Response').text(),
-                    details = $(resultdata).find('Details').text(),
-                    htmlShow;
+        var resp = $(resultdata).find('Response').text(),
+          details = $(resultdata).find('Details').text(),
+          htmlShow;
 
-                if (resp === 'Success' && details !== '' ) {
-                    htmlShow = '<div class="pagemcontainer"><p class="pagemessage">'+details+'<\/p><\/div>';
-                } else {
-                    htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
-                }
-                htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
-                $('#editarticle_result').html(htmlShow).show();
-                $('#resultcloser').on('click', function(e) {
-                    e.preventDefault();
-                    $('#editarticle_result').hide().empty();
-                });
-            },'xml');
-
+        if (resp === 'Success' && details !== '' ) {
+          htmlShow = '<div class="pagemcontainer"><p class="pagemessage">'+details+'<\/p><\/div>';
+        } else {
+          htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
+        }
+        htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
+        $('#editarticle_result').html(htmlShow).show();
+        $('#resultcloser').on('click', function(e) {
+          e.preventDefault();
+          $('#editarticle_result').hide().empty();
         });
+      },'xml');
 
-        $('#preview').on('click', function(e){
-            e.preventDefault();
-            news_dopreview();
-        });
-
-        $(document).on('change', "input[name='preview_returnid'],#preview_template", function(e){
-            e.preventDefault();
-            news_dopreview();
-        });
     });
 
-    function news_dopreview() {
+    $('#preview').on('click', function(e){
+      e.preventDefault();
+      news_dopreview();
+    });
 
-        if (typeof tinyMCE != 'undefined') {
-            tinyMCE.triggerSave();
+    $(document).on('change', "input[name='preview_returnid'],#preview_template", function(e){
+      e.preventDefault();
+      news_dopreview();
+    });
+  });
+
+  function news_dopreview() {
+
+    if (typeof tinyMCE != 'undefined') {
+      tinyMCE.triggerSave();
+    }
+
+    var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
+      url = $('form').attr('action');
+
+    data.push({ 'name': 'm1_ajax', 'value': 1 });
+    data.push({ 'name': 'm1_preview', 'value': 1 });
+    data.push({ 'name': 'showtemplate', 'value': 'false' });
+    data.push({ 'name': 'm1_previewpage', 'value': $("input[name='preview_returnid']").val() });
+    data.push({ 'name': 'm1_detailtemplate', 'value': $('#preview_template').val() });
+
+    $.post(url,data,function(resultdata,text){
+
+      var resp = $(resultdata).find('Response').text(),
+        details = $(resultdata).find('Details').text();
+
+      if (resp === 'Success' && details !== '' ) {
+
+        // preview worked... now the details should contain the url
+        details = details.replace(/amp;/g,'');
+        $('#previewframe').attr('src',details);
+      } else {
+        if (details === '' ) {
+          details = 'An unknown error occurred';
         }
 
-        var data = $('form').find('input:not([type=submit]), select, textarea').serializeArray(),
-            url = $('form').attr('action');
-
-        data.push({ 'name': 'm1_ajax', 'value': 1 });
-        data.push({ 'name': 'm1_preview', 'value': 1 });
-        data.push({ 'name': 'showtemplate', 'value': 'false' });
-        data.push({ 'name': 'm1_previewpage', 'value': $("input[name='preview_returnid']").val() });
-        data.push({ 'name': 'm1_detailtemplate', 'value': $('#preview_template').val() });
-
-        $.post(url,data,function(resultdata,text){
-
-            var resp = $(resultdata).find('Response').text(),
-                details = $(resultdata).find('Details').text(),
-
-            if (resp === 'Success' && details !== '' ) {
-
-                // preview worked... now the details should contain the url
-                details = details.replace(/amp;/g,'');
-                $('#previewframe').attr('src',details);
-            } else {
-                if (details === '' ) {
-                    details = 'An unknown error occurred';
-                }
-
-                // preview save did not work.
-                var htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
-                htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
-                $('#editarticle_result').html(htmlShow).show();
-                $('#resultcloser').on('click', function(e) {
-                    e.preventDefault();
-                    $('#editarticle_result').hide().empty();
-                });
-            }
-        },'xml');
-    }
+        // preview save did not work.
+        var htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">'+details+'<\/ul><\/div>';
+        htmlShow += '<button id="resultcloser">{/literal}{$mod->Lang('close')}{literal}</button>';
+        $('#editarticle_result').html(htmlShow).show();
+        $('#resultcloser').on('click', function(e) {
+          e.preventDefault();
+          $('#editarticle_result').hide().empty();
+        });
+      }
+    },'xml');
+  }
 {/literal}
 {/if}
 </script>
