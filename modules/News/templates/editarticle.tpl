@@ -102,14 +102,15 @@
   });
 
   function escapeHtml(text) {
-//  '&': '&amp;', needed here ?
+   //'&' ignored - no double-escaping
     var map = {
+      '"': '&quot;',
+      "'": '&#039;',
       '<': '&lt;',
       '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
+      '\\': ''
     };
-    return text.replace(/["'<>]/g, function(m) { return map[m]; }); //&
+    return text.replace(/["'<>\\]/g, function(m) { return map[m]; });
   }
 
   function news_dopreview() {
