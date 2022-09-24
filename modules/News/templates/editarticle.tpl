@@ -22,49 +22,65 @@
 
       $.ajax({
         url: url,
-        type: "POST",
+        type: 'POST',
         data: data,
         dataType: 'json'
       }).done(function(resultdata) {
-        var htmlShow, details, list;
+        var htmlShow, details, list, tid = 0;
+        var tip = escapeHtml('{$mod->Lang("close")}');
         if (resultdata) {
           details = resultdata.details;
-          if (resultdata.success) {
-            if (!details) {
-              list = false;
-              details = '{$mod->Lang('articleupdated')}';
+          if (resultdata.response === 'Success') {
+            if (details) {
+              details = escapeHtml(details);
+            } else {
+              details = escapeHtml('{$mod->Lang("articleupdated")}');
             }
             htmlShow = '<div class="pagemcontainer">' +
-            '<span id="resultcloser" class="close-warning" title="{$mod->Lang('close')}"></span>' +
+            '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>' +
             '<p class="pagemessage">' + details + '</p></div>';
           } else {
-            if (!details) {
-              list = false;
-              details = 'Error: {$mod->Lang("unknown")}';
+            var out;
+            if (details) {
+              list = details.constructor === Array;
+              if (list) {
+                out = '';
+                for (var i = 0; i < details.length; ++i) {
+                  out += '<li>' + escapeHtml(details[i]) + '</li>';
+                }
+              } else {
+                details = escapeHtml(details);
+              }
             } else {
-              list = details.indexOf('<li>') > -1;
+              list = false;
+              details = escapeHtml('{$mod->Lang("error_unknown")}');
             }
             htmlShow = '<div class="pageerrorcontainer">' +
-            '<span id="resultcloser" class="close-warning" title="{$mod->Lang('close')}"></span>';
+            '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>';
             if (list) {
-              htmlShow += '<ul class="pageerror">' + details + '</ul></div>';
+              htmlShow += '<ul class="pageerror">' + out + '</ul></div>';
             } else {
               htmlShow += '<p class="pageerror">' + details + '</p></div>';
             }
           }
         } else {
+          details = escapeHtml('{lang("error_internal")}');
           htmlShow = '<div class="pageerrorcontainer">' +
-          '<span id="resultcloser" class="close-warning" title="{$mod->Lang('close')}"></span>' +
-          '<p class="pagemessage">' + '{lang("error_internal")}' + '</p></div>';
+          '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>' +
+          '<p class="pageerror">' + details + '</p></div>';
         }
         $('#editarticle_result').html(htmlShow).slideDown(600);
         $('#resultcloser').on('click', function(e) {
+          if (tid > 0) {
+            clearTimeout(tid);
+          }
           e.preventDefault();
           $('#editarticle_result').slideUp(600, function() {
             $(this).empty();
           });
         });
-        setTimeout(function() {
+        tid = setTimeout(function() {
+          tid = 0;
           $('#editarticle_result').slideUp(1500, function() {
             $(this).empty();
           });
@@ -85,6 +101,17 @@
     });
   });
 
+  function escapeHtml(text) {
+//  '&': '&amp;', needed here ?
+    var map = {
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/["'<>]/g, function(m) { return map[m]; }); //&
+  }
+
   function news_dopreview() {
 
     if (typeof tinyMCE !== 'undefined') {
@@ -102,36 +129,54 @@
     );
 
     $.ajax({
-      type: "POST",
       url: url,
+      type: 'POST',
       data: data,
-      dataType: 'xml' //TODO use json instead
+      dataType: 'json'
     }).done(function(resultdata) {
-      var el = $(resultdata),
-        resp = el.find('Response').text(),
-        details = el.find('Details').text();
-
-      if (resp === 'Success' && details !== '' ) {
+      var details = resultdata.details;
+      if (resultdata.response === 'Success' && details) {
         // preview worked... details should contain the url
         details = details.replace(/amp;/g,'');
         $('#previewframe').attr('src',details);
       } else {
         // preview save did not work
-        if (details === '') {
-          details = '<li>An unknown error occurred</li>';
+        var list, out, tid = 0;
+        if (details) {
+          list = details.constructor === Array;
+          if (list) {
+            out = '';
+            for (var i = 0; i < details.length; ++i) {
+              out += '<li>' + escapeHtml(details[i]) + '</li>';
+            }
+          } else {
+            details = escapeHtml(details); 
+          }
+        } else {
+          list = false;
+          details = escapeHtml('{$mod->Lang("error_unknown")}');
         }
         //TODO do not hardcode OneEleven-theme style notification
+        var tip = escapeHtml('{$mod->Lang("close")}');
         var htmlShow = '<div class="pageerrorcontainer">' +
-         '<span id="resultcloser" class="close-warning" title="{$mod->Lang('close')}"></span>' +
-         '<ul class="pageerror">' + details + '</ul></div>';
+         '<span id="resultcloser" class="close-warning" title="' + tip + ' "></span>';
+        if (list) {
+          htmlShow += '<ul class="pageerror">' + out + '</ul></div>';
+        } else {
+          htmlShow += '<p class="pageerror">' + details + '</p></div>';
+        }
         $('#editarticle_result').html(htmlShow).slideDown(600);
         $('#resultcloser').on('click', function(e) {
+          if (tid > 0) {
+            clearTimeout(tid);
+          }
           e.preventDefault();
           $('#editarticle_result').slideUp(600, function() {
             $(this).empty();
           });
         });
-        setTimeout(function() {
+        tid = setTimeout(function() {
+          tid = 0;
           $('#editarticle_result').slideUp(1500, function() {
             $(this).empty();
           });

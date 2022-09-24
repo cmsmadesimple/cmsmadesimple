@@ -251,17 +251,21 @@ if (isset($params['submit'])) {
             $tparms['detailtemplate'] = trim($params['detailtemplate']);
         }
         $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
-
-        $response = array('success' => 1, 'details' => $url);
+        $url = str_replace('&amp;', '&', $url);
+        $out = array('response'=>'Success', 'details' => $url);
+        $flags = 0;
     } else {
-        $response = array('success' => 0, 'details' => $error);
+        $out = array('response'=>'Error', 'details' => $error);
+        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
+        if (defined('JSON_INVALID_UTF8_IGNORE')) {
+            $flags |= JSON_INVALID_UTF8_IGNORE;
+        }
     }
 
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < count($handlers); $cnt++) {
-        ob_end_clean();
-    }
-    echo json_encode($response);
+    for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
+
+    echo json_encode($out, $flags);
     exit;
 }
 

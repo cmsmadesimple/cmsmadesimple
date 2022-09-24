@@ -164,7 +164,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
                     $fldid
                 ));
                 $dbr = TRUE;
-                if ($tmp === false) {
+                if ($tmp === FALSE) {
                     if (!empty($value)) {
                         $query = "INSERT INTO " . CMS_DB_PREFIX . "module_news_fieldvals (news_id,fielddef_id,value,create_date,modified_date) VALUES (?,?,?,$now,$now)";
                         $dbr = $db->Execute($query, array(
@@ -254,15 +254,20 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
     }// no error
 
     if (isset($params['apply']) && isset($params['ajax'])) {
-        if (!empty($error)) {
-            $response = array('success' => 0, 'details' => $error);
+        if (empty($error)) {
+            $out = array('response' => 'Success', 'details' => $this->Lang('articleupdated'));
         } else {
-            $response = array('success' => 1, 'details' => $this->Lang('articleupdated'));
+            $out = array('response' => 'Error', 'details' => $error);
         }
+        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
+        if (defined('JSON_INVALID_UTF8_IGNORE')) {
+            $flags |= JSON_INVALID_UTF8_IGNORE;
+        }
+
         $handlers = ob_list_handlers();
         for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
-        echo json_encode($response);
+        echo json_encode($out, $flags);
         exit;
     }
 
@@ -273,9 +278,9 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
         return;
     }
 
-    if ($error)
+    if ($error) {
         echo $this->ShowErrors($error);
-
+    }
 // end submit or apply
 } elseif (isset($params['preview'])) {
     // save data for preview.
@@ -303,15 +308,21 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
         if (isset($params['detailtemplate']))
             $tparms['detailtemplate'] = trim($params['detailtemplate']);
         $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
-
-        $response = array('success' => 1, 'details' => $url);
+        $url = str_replace('&amp;', '&', $url);
+        $out = array('response' => 'Success', 'details' => $url);
+        $flags = 0;
     } else {
-        $response = array('success' => 0, 'details' => $error);
+        $out = array('response' => 'Error', 'details' => $error);
+        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
+        if (defined('JSON_INVALID_UTF8_IGNORE')) { //PHP 7.2+
+            $flags |= JSON_INVALID_UTF8_IGNORE;
+        }
     }
-        
+
     $handlers = ob_list_handlers();
     for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
-    echo json_encode($response);
+
+    echo json_encode($out, $flags);
     exit;
 } else {
     //
