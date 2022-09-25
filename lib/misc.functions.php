@@ -52,7 +52,7 @@ function redirect($to)
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);
-    if(count($components) > 0) {
+    if($components) {
         $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
         $to .= isset($components['host']) ? $components['host'] : $host;
         $to .= isset($components['port']) ? ':' . $components['port'] : '';
@@ -112,11 +112,11 @@ function redirect($to)
                 echo $error;
             }
             echo '</div> <!-- end DebugFooter -->';
-            exit();
+            exit;
         }
         else {
             header("Location: $to");
-            exit();
+            exit;
         }
     }
 }
@@ -638,9 +638,9 @@ function is_directory_writable( $path )
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
-    if( !is_dir($dir) ) return false;
+    if( !is_dir($dir) ) return [];
     $dh = opendir($dir);
-    if( !$dh ) return false;
+    if( !$dh ) return [];
 
     if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
     $results = array();
@@ -654,12 +654,11 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
         }
 
         $ext = strtolower(substr($file,strrpos($file,'.')+1));
-        if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
+        if( $extensions && is_array($extensions) && !in_array($ext,$extensions) ) continue;
 
         $results[] = $file;
     }
     closedir($dh);
-    if( !count($results) ) return false;
     return $results;
 }
 
@@ -818,7 +817,6 @@ function endswith( $str, $sub )
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
-  $alias = $alias ?? '';
   if ($tolower == true) $alias = mb_strtolower($alias);
 
   // remove invalid chars
@@ -887,11 +885,13 @@ function cleanValue($val) {
  */
 function can_admin_upload()
 {
-  # first, check to see if safe mode is enabled
-  # if it is, then check to see the owner of the index.php, moduleinterface.php
-  # and the uploads and modules directory.  if they all match, then we
-  # can upload files.
-  # if safe mode is off, then we just have to check the permissions.
+  /*
+  first, check to see if safe mode is enabled
+  if it is, then check to see the owner of the index.php, moduleinterface.php
+  and the uploads and modules directory.  if they all match, then we
+  can upload files.
+  if safe mode is off, then we just have to check the permissions.
+  */
   $config = CmsApp::get_instance()->GetConfig();
   $file_index = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'index.php';
   $file_moduleinterface = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.
@@ -1150,21 +1150,22 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 {
   $config = cms_config::get_instance();
   $scripts = array();
-  $base_url = $config->smart_root_url();
-  if( $ssl === true || $ssl === TRUE ) $base_url = $config['ssl_url'];
-  $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
+  $base_url = $config->smart_root_url(); // deprecated
+  if( $ssl ) $base_url = $config['ssl_url']; // deprecated
+  $basePath = $custom_root ? trim($custom_root,'/') : $base_url;
 
   // Scripts to include
-  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.1.min.js',
+  // TODO better CDN, with SRI hashes etc
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.12.4.min.js',
 			     'aliases'=>array('jquery.min.js','jquery',));
-  $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
-				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
+  $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
+				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.12.1.min.js',
 				'aliases'=>array('jquery-ui.min.js','ui'),
-				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
+				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.12.1.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
-  $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
+  $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.4.1.min.js');
 
   if( CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
       global $CMS_LOGIN_PAGE;
