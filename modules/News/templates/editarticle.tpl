@@ -22,19 +22,19 @@
 
       $.ajax({
         url: url,
-        type: 'POST',
+        method: 'POST',
         data: data,
         dataType: 'json'
       }).done(function(resultdata) {
         var htmlShow, details, list, tid = 0;
-        var tip = escapeHtml('{$mod->Lang("close")}');
+        var tip = '{$mod->Lang("close")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
         if (resultdata) {
           details = resultdata.details;
           if (resultdata.response === 'Success') {
             if (details) {
               details = escapeHtml(details);
             } else {
-              details = escapeHtml('{$mod->Lang("articleupdated")}');
+              details = '{$mod->Lang("articleupdated")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
             }
             htmlShow = '<div class="pagemcontainer">' +
             '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>' +
@@ -53,7 +53,7 @@
               }
             } else {
               list = false;
-              details = escapeHtml('{$mod->Lang("error_unknown")}');
+              details = '{$mod->Lang("error_unknown")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
             }
             htmlShow = '<div class="pageerrorcontainer">' +
             '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>';
@@ -64,7 +64,7 @@
             }
           }
         } else {
-          details = escapeHtml('{lang("error_internal")}');
+          details = '{lang("error_internal")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
           htmlShow = '<div class="pageerrorcontainer">' +
           '<span id="resultcloser" class="close-warning" title="' + tip + '"></span>' +
           '<p class="pageerror">' + details + '</p></div>';
@@ -103,14 +103,14 @@
 
   function escapeHtml(text) {
    //'&' ignored - no double-escaping
-    var map = {
+    var subs = {
       '"': '&quot;',
       "'": '&#039;',
       '<': '&lt;',
       '>': '&gt;',
       '\\': ''
     };
-    return text.replace(/["'<>\\]/g, function(m) { return map[m]; });
+    return text.replace(/["'<>\\]/g, function(m) { return subs[m]; });
   }
 
   function news_dopreview() {
@@ -131,7 +131,7 @@
 
     $.ajax({
       url: url,
-      type: 'POST',
+      method: 'POST',
       data: data,
       dataType: 'json'
     }).done(function(resultdata) {
@@ -155,10 +155,10 @@
           }
         } else {
           list = false;
-          details = escapeHtml('{$mod->Lang("error_unknown")}');
+          details = '{$mod->Lang("error_unknown")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
         }
         //TODO do not hardcode OneEleven-theme style notification
-        var tip = escapeHtml('{$mod->Lang("close")}');
+        var tip = '{$mod->Lang("close")|htmlspecialchars:(ENT_QUOTES+ENT_SUBSTITUTE):"UTF-8":false}';
         var htmlShow = '<div class="pageerrorcontainer">' +
          '<span id="resultcloser" class="close-warning" title="' + tip + ' "></span>';
         if (list) {
@@ -217,10 +217,9 @@
 
 <div id="edit_news">
   {$startform}
-{strip}
+  {strip}{$hidden|default:''}
   <div class="pageoptions">
     <p class="pageinput">
-      {$hidden|default:''}
       <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}" />
       <input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}" />
       {if isset($articleid)}
