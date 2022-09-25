@@ -57,17 +57,16 @@ tinymce.PluginManager.add('cmsms_linker', function(editor, url) {
                         dataType: 'json',
                         data: {
                             term: request.term
-                        },
-                        success: function(data) {
-                            response(data);
                         }
+                    }).done(function(data) {
+                        response(data);
                     });
                 },
                 focus: function(event, ui) {
                     event.preventDefault();
                 },
                 select: function(event, ui) {
-		    if( typeof ui.item != 'undefined' ) {
+                    if( typeof ui.item != 'undefined' ) {
                         $(el).val(ui.item.label);
                         $('.mce-cmsms-linker-alias').val(ui.item.value);
                         $('.mce-cmsms-linker-href').val("{cms_selflink href='" + ui.item.value + "'}");
@@ -151,20 +150,19 @@ tinymce.PluginManager.add('cmsms_linker', function(editor, url) {
                     dataType: 'json',
                     data: {
                         alias: data.alias
-                    },
-                    success: function(res) {
-                        // update values for alias and page.
-			data.page = data.href = '';
-			$('.mce-cmsms-linker-page').val('');
-			$('.mce-cmsms-linker-alias').val('');
-			$('.mce-cmsms-linker-href').val('');
-			if( res && res.label ) {
-                            data.page = res.label;
-                            data.href= "{cms_selflink href='" + data.alias + "'}";
-                            $('.mce-cmsms-linker-page').val(data.page);
-                            $('.mce-cmsms-linker-alias').val(data.alias);
-                            $('.mce-cmsms-linker-href').val(data.href);
-			}
+                    }
+                }).done(function(res) {
+                    // update values for alias and page.
+                    data.page = data.href = '';
+                    $('.mce-cmsms-linker-page').val('');
+                    $('.mce-cmsms-linker-alias').val('');
+                    $('.mce-cmsms-linker-href').val('');
+                    if( res && res.label ) {
+                        data.page = res.label;
+                        data.href= "{cms_selflink href='" + data.alias + "'}";
+                        $('.mce-cmsms-linker-page').val(data.page);
+                        $('.mce-cmsms-linker-alias').val(data.alias);
+                        $('.mce-cmsms-linker-href').val(data.href);
                     }
                 });
             }

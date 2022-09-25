@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(function($) {
 	// shake error
 	$('#error').effect('shake', {
 		times: '6',

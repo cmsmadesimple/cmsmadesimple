@@ -161,7 +161,7 @@
 	    $('.filepicker-cmd').on('click',function(ev) {
 		var $trigger = $(this), $data = $trigger.data();
 		var fun = '_cmd_'+$data.cmd;
-		if( typeof(self[fun]) != 'undefined' ) self[fun](ev);
+		if( typeof self[fun] === 'function' ) self[fun](ev);
 	    });
 	};
 

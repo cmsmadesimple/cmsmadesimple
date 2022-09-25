@@ -77,10 +77,10 @@ function add_result(listid,content) {
 function end_section() {
   cur_section = '';
 }
-$(document).ready(function(){
+$(function() {
   $('#adminsearchform > form').attr('target','workarea');
   $('#workarea').attr('src',ajax_url);
-  if( typeof(sel_all) != undefined ) {
+  if( typeof sel_all !== 'undefined' ) {
     $('#filter_box input.filter_toggle:checkbox').attr('checked','checked');
   }
   $('#filter_box input:checkbox').on('click',function(e){

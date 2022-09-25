@@ -43,7 +43,7 @@
 
       // Read options
       var destroy = false;
-      if ( typeof(options) == 'object' ) {
+      if ( typeof options === 'object' ) {
         $.extend( settings, options );
       }
       else if (options == 'destroy') {
