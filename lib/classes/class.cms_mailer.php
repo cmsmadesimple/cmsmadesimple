@@ -25,16 +25,10 @@
 #
 #-------------------------------------------------------------------------
 
-/**
- * This file contains the class that wraps PHPMailer usage for CMSMS.
- *
- * @package CMS
- * @license GPL
- */
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
- * A class for sending email.
- *
+ * A class for sending email. It wraps PHPMailer usage for CMSMS.
  * Prior to CMSMS 2.0 this class was implemented as a core module.
  *
  * @package CMS
@@ -57,11 +51,13 @@ class cms_mailer
    */
   public function __construct($exceptions = false)
   {
-    $dir = dirname(__DIR__).'/phpmailer/';
-    require_once($dir.'/PHPMailerAutoload.php');
-
-    $this->_mailer = new PHPMailer($exceptions);
-    $this->reset();
+    if (spl_autoload_register([__CLASS__, 'MailerAutoload'], false)) {
+      $this->_mailer = new PHPMailer($exceptions);
+      $this->reset();
+    } else {
+      $this->_mailer = null;
+      //TODO handle error e.g. throw
+    }
   }
 
   /**
@@ -71,12 +67,39 @@ class cms_mailer
    * @param string $method Call method to call from PHP Mailer
    * @param array $args Arguments passed to PHP Mailer method
    */
+  #[\ReturnTypeWillChange]
   public function __call($method,$args)
   {
     if( method_exists($this->_mailer, $method) )
         return call_user_func_array(array($this->_mailer,$method), $args);
   }
 
+  /**
+   * Autoloader for PHPMailer 6+
+   * @since 2.2.17
+   * @param string $classname
+   */
+  public function MailerAutoload($classname)
+  {
+    if ($classname[0] === 'P' && strpos($classname, 'PHPMailer') === 0) {
+      $class = basename(strtr($classname, '\\', DIRECTORY_SEPARATOR));
+      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'src', $class.'.php');
+      if (is_readable($filename)) {
+        require_once $filename;
+      }
+      return;
+    }
+    if ($classname[0] === 'L' && strpos($classname, 'League\OAuth2\Client') === 0) {
+      //League\OAuth2\Client\A\class
+      $sp = str_replace('League\OAuth2\Client\\', '', $classname);
+      $bp = strtr($sp, '\\', DIRECTORY_SEPARATOR);
+      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'ouath2', $sp.'.php');
+      if (is_readable($filename)) {
+        require_once $filename;
+      }
+    }
+  }
+  
   /**
    * Reset the mailer to standard settings
    */
@@ -166,7 +189,7 @@ class cms_mailer
   /**
    * Retrieve the reading confirmation email address
    *
-   * @return string The email address (if any) that will recieve the reading confirmation.
+   * @return string The email address (if any) that will receive the reading confirmation.
    */
   function GetConfirmReadingTo()
   {
