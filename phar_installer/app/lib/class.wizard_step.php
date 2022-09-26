@@ -2,26 +2,35 @@
 
 namespace cms_autoinstaller;
 
-abstract class wizard_step extends \__appbase\wizard_step
+use __appbase\app;
+use __appbase\wizard;
+use __appbase\wizard_step;
+use Exception;
+use function __appbase\get_app;
+use function __appbase\lang;
+use function __appbase\smarty;
+
+abstract class wizard_step extends wizard_step
 {
   static $_registered;
 
   public function __construct()
   {
-    $dd = \__appbase\get_app()->get_destdir();
-    if( !$dd ) throw new \Exception('Session Failure');
+    $dd = get_app()->get_destdir();
+    if( !$dd ) throw new Exception('Session Failure');
 
     if( !self::$_registered ) {
-      \__appbase\smarty()->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'));
-      \__appbase\smarty()->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'));
+      smarty()->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'));
+      smarty()->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'));
+      smarty()->addPluginsDir(app::get_rootdir().'/lib/plugins');
       self::$_registered = 1;
     }
 
-    \__appbase\smarty()->assign('version',\__appbase\get_app()->get_dest_version());
-    \__appbase\smarty()->assign('version_name',\__appbase\get_app()->get_dest_name());
-    \__appbase\smarty()->assign('dir',\__appbase\get_app()->get_destdir());
-    \__appbase\smarty()->assign('in_phar',\__appbase\get_app()->in_phar());
-    \__appbase\smarty()->assign('cur_step',$this->cur_step());
+    smarty()->assign('version',get_app()->get_dest_version());
+    smarty()->assign('version_name',get_app()->get_dest_name());
+    smarty()->assign('dir',get_app()->get_destdir());
+    smarty()->assign('in_phar',get_app()->in_phar());
+    smarty()->assign('cur_step',$this->cur_step());
   }
 
   public function fn_wizard_form_start($params, $smarty)
@@ -36,28 +45,28 @@ abstract class wizard_step extends \__appbase\wizard_step
 
   protected function get_primary_title()
   {
-      $app = \__appbase\get_app();
+      $app = get_app();
       $action = $this->get_wizard()->get_data('action');
       $str = null;
       switch( $action ) {
       case 'upgrade':
-          $str = \__appbase\lang('action_upgrade',$app->get_dest_version());
+          $str = lang('action_upgrade',$app->get_dest_version());
           break;
       case 'freshen':
-          $str = \__appbase\lang('action_freshen',$app->get_dest_version());
+          $str = lang('action_freshen',$app->get_dest_version());
           break;
       case 'install':
       default:
-          $str = \__appbase\lang('action_install',$app->get_dest_version());
+          $str = lang('action_install',$app->get_dest_version());
       }
       return $str;
   }
 
   protected function display()
   {
-      $app = \__appbase\get_app();
-      \__appbase\smarty()->assign('wizard_steps',$this->get_wizard()->get_nav());
-      \__appbase\smarty()->assign('title',$this->get_primary_title());
+      $app = get_app();
+      smarty()->assign('wizard_steps',$this->get_wizard()->get_nav());
+      smarty()->assign('title',$this->get_primary_title());
   }
 
   public function error($msg)
@@ -70,7 +79,7 @@ abstract class wizard_step extends \__appbase\wizard_step
   public static function verbose($msg)
   {
       $msg = addslashes($msg);
-      $verbose = \__appbase\wizard::get_instance()->get_data('verbose');
+      $verbose = wizard::get_instance()->get_data('verbose');
       if( $verbose )  echo '<script type="text/javascript">add_verbose(\''.$msg.'\');</script>'."\n";
       flush();
   }
