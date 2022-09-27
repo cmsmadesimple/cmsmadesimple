@@ -56,7 +56,8 @@ class cms_mailer
       $this->reset();
     } else {
       $this->_mailer = null;
-      //TODO handle error e.g. throw
+      //TODO handle error more-publicly e.g. throw
+      audit('', 'cms_mailer', 'PHPMailer-autoload registration failed');
     }
   }
 
@@ -93,13 +94,13 @@ class cms_mailer
       //League\OAuth2\Client\A\class
       $sp = str_replace('League\OAuth2\Client\\', '', $classname);
       $bp = strtr($sp, '\\', DIRECTORY_SEPARATOR);
-      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'ouath2', $sp.'.php');
+      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'oauth2', $bp.'.php');
       if (is_readable($filename)) {
         require_once $filename;
       }
     }
   }
-  
+
   /**
    * Reset the mailer to standard settings
    */
