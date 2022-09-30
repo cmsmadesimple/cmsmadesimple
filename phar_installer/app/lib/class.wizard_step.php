@@ -4,13 +4,13 @@ namespace cms_autoinstaller;
 
 use __appbase\app;
 use __appbase\wizard;
-use __appbase\wizard_step;
+use __appbase\wizard_step as parent_step;
 use Exception;
 use function __appbase\get_app;
 use function __appbase\lang;
 use function __appbase\smarty;
 
-abstract class wizard_step extends wizard_step
+abstract class wizard_step extends parent_step
 {
   static $_registered;
 
