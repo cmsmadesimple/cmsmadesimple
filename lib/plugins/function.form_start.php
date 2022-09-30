@@ -95,7 +95,7 @@ function smarty_function_form_start($params, $smarty)
             break;
 
         case 'extraparms':
-            if( is_array($value) && count($value) ) {
+            if( $value && is_array($value) ) {
                 foreach( $value as $key=>$value2 ) {
                     $parms[$key] = $value2;
                 }
@@ -116,7 +116,7 @@ function smarty_function_form_start($params, $smarty)
         }
     }
 
-    $out = '<form';
+    $out = "\n<form";
     foreach( $tagparms as $key => $value ) {
         if( $value ) {
             $out .= " $key=\"$value\"";
@@ -124,27 +124,33 @@ function smarty_function_form_start($params, $smarty)
             $out .= " $key";
         }
     }
-    $out .= '><div class="hidden">';
+    $out .= ">\n <div class=\"hidden\">\n";
     if( $mactparms['module'] && $mactparms['action'] ) {
         $mact = $mactparms['module'].','.$mactparms['mid'].','.$mactparms['action'].','.(int)$mactparms['inline'];
-        $out .= '<input type="hidden" name="mact" value="'.$mact.'"/>';
-        if( $mactparms['returnid'] != '' ) {
-            $out .= '<input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid'].'"/>';
+        $out .= '  <input type="hidden" name="mact" value="'.$mact."\">\n";
+        if( $mactparms['returnid'] ) {
+            $out .= '  <input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid']."\">\n";
         }
     }
     if( !$gCms->is_frontend_request() ) {
         if( !isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
-            $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
+            $out .= '  <input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY]."\">\n";
         }
     }
     foreach( $parms as $key => $value ) {
-        $out .= '<input type="hidden" name="'.$mactparms['mid'].$key.'" value="'.$value.'"/>'; // @todo Notice: Array to string conversion in /lib/plugins/function.form_start.php on line 141 -> $value
+        if( is_scalar($value) ) {
+            $out .= '  <input type="hidden" name="'.$mactparms['mid'].$key.'" value="'.$value."\">\n";
+        } else {
+            foreach( $value as $value2 ) {
+                $out .= '  <input type="hidden" name="'.$mactparms['mid'].$key.'"[] value="'.$value2."\">\n";
+            }
+        }
     }
-    $out .= '</div>';
+    $out .= ' </div>'."\n";
 
     if( isset($params['assign']) ) {
         $smarty->assign($params['assign'],$out);
-        return;
+        return '';
     }
     return $out;
 }
