@@ -88,6 +88,7 @@ $test->extractTar('./toto.Tar', './new/');
 	{
 		$block = substr($str,0, 512);
 		if (strlen($block)!=512) return false;
+		error_reporting(E_ALL ^ E_DEPRECATED); //PHP 7.4+ silence
 		$realchecksum = octdec(substr($str,148,8));
 		$checksum = 0;
 		$block = substr_replace($block, '        ', 148, 8);
@@ -149,10 +150,10 @@ $test->extractTar('./toto.Tar', './new/');
 		$infos['link1'] = is_link($item) ? 2 : (is_dir ($item) ? 5 : 0);
 		$infos['link100'] == 2 ? readlink($item) : "";
 
-		$a=function_exists('posix_getpwuid')?posix_getpwuid (fileowner($item)):array('name'=>'Unknown');
+			$a=function_exists('posix_getpwuid')?posix_getpwuid (fileowner($item)):array('name'=>'Unknown');
 		$infos['userName32'] = $a['name'];
 
-		$a=function_exists('posix_getgrgid')?posix_getgrgid (filegroup($item)):array('name'=>'Unknown');
+			$a=function_exists('posix_getgrgid')?posix_getgrgid (filegroup($item)):array('name'=>'Unknown');
 		$infos['groupName32'] = $a['name'];
 		$infos['prefix155'] = '';
 
@@ -175,12 +176,13 @@ $test->extractTar('./toto.Tar', './new/');
 		$block = fread($ptr, 512);
 		if (strlen($block)!=512) return false;
 		$hdr = unpack ("a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100symlink/a6magic/a2version/a32uname/a32gname/a8devmajor/a8devminor/a155prefix/a12temp", $block);
-			$hdr['mode']=$hdr['mode']+0;
-			$hdr['uid']=octdec($hdr['uid']);
-			$hdr['gid']=octdec($hdr['gid']);
-			$hdr['size']=octdec($hdr['size']);
-			$hdr['mtime']=octdec($hdr['mtime']);
-			$hdr['checksum']=octdec($hdr['checksum']);
+		$hdr['mode']=$hdr['mode']+0;
+		error_reporting(E_ALL ^ E_DEPRECATED); //PHP 7.4+ silence
+		$hdr['uid']=octdec($hdr['uid']);
+		$hdr['gid']=octdec($hdr['gid']);
+		$hdr['size']=octdec($hdr['size']);
+		$hdr['mtime']=octdec($hdr['mtime']);
+		$hdr['checksum']=octdec($hdr['checksum']);
 		$checksum = 0;
 		$block = substr_replace($block, '        ', 148, 8);
 		for ($i = 0; $i < 512; $i++)
