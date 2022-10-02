@@ -23,8 +23,8 @@ html {
 }
 body { margin: 0 }
 body, button, input, select, textarea {
-    -webkit-font-smoothing: subpixel-antialiased;
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: subpixel-antialiased;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 a:focus { outline: thin dotted }
 a:hover, a:active {	outline: 0 }
@@ -39,7 +39,6 @@ mark {
 }
 pre, code, kbd, samp {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
-	_font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 1em
 }
 pre {
