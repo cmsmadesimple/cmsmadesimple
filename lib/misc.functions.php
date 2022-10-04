@@ -42,8 +42,8 @@ function redirect($to)
 {
     $app = cmsms();
     if( $app->is_cli() ) {
-	// cannot redirect cli based scripts
-	die("ERROR: no redirect on cli based scripts ---\n");
+    // cannot redirect cli based scripts
+    die("ERROR: no redirect on cli based scripts ---\n");
     }
     $_SERVER['PHP_SELF'] = null;
 
@@ -105,8 +105,8 @@ function redirect($to)
     }
     else {
         if ( $debug ) {
-            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-            echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
+            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br>";
+            echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br>";
             echo '<div id="DebugFooter">';
             foreach (CmsApp::get_instance()->get_errors() as $error) {
                 echo $error;
@@ -134,7 +134,7 @@ function redirect_to_alias($alias)
   $manager = CmsApp::get_instance()->GetHierarchyManager();
   $node = $manager->sureGetNodeByAlias($alias);
   if( !$node ) {
-	// put mention into the admin log
+    // put mention into the admin log
     audit('','Core','Attempt to redirect to invalid alias: '.$alias);
     return;
   }
@@ -308,7 +308,7 @@ function debug_bt()
         echo "
         <dt><b>$function</b>($args) </dt>
         <dd>$file on line $line</dd>
-		";
+        ";
     }
     echo "</dl></pre>\n";
 }
@@ -443,7 +443,7 @@ function debug_buffer($var, $title="")
 
 /**
 * Return $value if it's set and same basic type as $default_value,
-* Otherwise return $default_value. Note. Also will trim($value)	if $value is not numeric.
+* Otherwise return $default_value. Note. Also will trim($value) if $value is not numeric.
 *
 * @ignore
 * @param string $value
@@ -847,12 +847,12 @@ function cleanValue($val) {
   //Replace odd spaces with safe ones
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);
-  //Encode any HTML to entities (including \n --> <br />)
+  //Encode any HTML to entities (including \n --> <br>)
   $_cleanHtml = function($string,$remove = false) {
     if ($remove) {
       $string = strip_tags($string);
     } else {
-      $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
+      $patterns = array("/&(?!amp;)/", "/%/", "/</", "/>/", '/"/', "/'/", "/(/", "/)/", "/+/", "/-/");
       $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
       $string = preg_replace($patterns, $replacements, $string);
     }
@@ -917,8 +917,8 @@ function can_admin_upload()
   if( $safe_mode ) {
     // we're in safe mode.
     if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
-	($stat_moduleinterface[4] != $stat_uploads[4]) ||
-	($my_uid != $stat_moduleinterface[4]) ) {
+    ($stat_moduleinterface[4] != $stat_uploads[4]) ||
+    ($my_uid != $stat_moduleinterface[4]) ) {
       // owners don't match
       return FALSE;
     }
@@ -961,10 +961,10 @@ function stack_trace()
   foreach( $stack as $elem ) {
     if( $elem['function'] == 'stack_trace' ) continue;
     if( isset($elem['file'])  ) {
-      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br>';
     }
     else {
-      echo ' - '.$elem['function'].'<br/>';
+      echo ' - '.$elem['function'].'<br>';
     }
   }
 }
@@ -980,11 +980,17 @@ function stack_trace()
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
-   $config = CmsApp::get_instance()->GetConfig();
+  $config = CmsApp::get_instance()->GetConfig();
+  // reject browser-executable files
+  $helper = new \CMSMS\FileTypeHelper($config);
+  if( $helper->is_executable($destination) ) {
+    //TODO report|log error or throw new Exception(lang(''))
+    return FALSE;
+  }
 
-   if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
-   @chmod($destination,octdec($config['default_upload_permission']));
-   return true;
+  if( !@move_uploaded_file( $tmpfile, $destination ) ) return FALSE;
+  @chmod($destination,octdec($config['default_upload_permission']));
+  return TRUE;
 }
 
 
@@ -1028,13 +1034,13 @@ function cms_ipmatches($ip,$checklist)
       $maskl = 0;
 
       for ($i = 0; $i< 31; $i++) {
-	if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
+        if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
       }
 
       if (($maskl & $rangel) == ($maskl & $ipl)) {
-	return 1;
+        return 1;
       } else {
-	return 0;
+        return 0;
       }
     } else {
       // range based
@@ -1045,12 +1051,12 @@ function cms_ipmatches($ip,$checklist)
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
-	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
-	}
-	else {
-	  if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
-	}
+    if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+      if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+    }
+    else {
+      if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
+    }
       }
     }
     return $result;
@@ -1071,13 +1077,13 @@ function cms_ipmatches($ip,$checklist)
  * @param string  $email
  * @param bool $checkDNS
 */
-function is_email( $email, $checkDNS=false )
+function is_email( $email, $checkDNS=FALSE )
 {
    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
    if ($checkDNS && function_exists('checkdnsrr')) {
        list($user,$domain) = explode('@',$email,2);
        if( !$domain ) return FALSE;
-       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
+       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE; // Domain doesn't actually exist
    }
 
    return TRUE;
@@ -1146,7 +1152,7 @@ function cms_to_bool($str)
  * @param string  $custom_root A custom root URL for all scripts (when using local mode).  If this is spefied the $ssl param will be ignored.
  * @param bool $include_css Optionally output stylesheet tags for the included javascript libraries.
  */
-function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
+function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$custom_root='',$include_css = TRUE)
 {
   $config = cms_config::get_instance();
   $scripts = array();
@@ -1157,12 +1163,12 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   // Scripts to include
   // TODO better CDN, with SRI hashes etc
   $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.12.4.min.js',
-			     'aliases'=>array('jquery.min.js','jquery',));
+                 'local'=>$basePath.'/lib/jquery/js/jquery-1.12.4.min.js',
+                 'aliases'=>array('jquery.min.js','jquery',));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
-				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.12.1.min.js',
-				'aliases'=>array('jquery-ui.min.js','ui'),
-				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.12.1.min.css');
+                'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.12.1.min.js',
+                'aliases'=>array('jquery-ui.min.js','ui'),
+                'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.12.1.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.4.1.min.js');
@@ -1221,7 +1227,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   // Output
   $output = '';
   $fmt_js = '<script type="text/javascript" src="%s"></script>';
-  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s"/>';
+  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s">';
   foreach($scripts as $script) {
       $url_js = $script['local'];
       if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
@@ -1242,7 +1248,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 function setup_session($cachable = FALSE)
 {
     global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE;
-    static $_setup_already = false;
+    static $_setup_already = FALSE;
     if( $_setup_already ) return;
 
     $_f = $_l = null;
@@ -1282,7 +1288,7 @@ function setup_session($cachable = FALSE)
     if(!@session_id()) session_start();
     
     if($cachable) header_remove('Last-Modified');
-    $_setup_already = true;
+    $_setup_already = TRUE;
 }
 
 /**
@@ -1294,5 +1300,5 @@ function setup_session($cachable = FALSE)
  */
 function is_base64($s)
 {
-      return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+    return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
 }
