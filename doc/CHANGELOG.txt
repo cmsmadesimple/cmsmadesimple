@@ -1,10 +1,15 @@
 Version 2.2.17 - NO NAME SET
 -------------------------------
+
 Core - General
+ - BR etc TODO
  - BR #12529 - Cacheable Pages have Bad Header Last-Modified.
  - BR #12543 - Lib file corrections.
- - Compatibility fixes for PHP 8.0 (and 8.1).
- - Smarty upgraded to version 3.1.44.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+ - jQuery deprecation fixes
+ - Smarty upgraded to version 3.1.47.
+ - jQuery upgraded to version 1.2.4.
+ - PHPMailer upgraded to version 6.6.4.
 
  Admin Search v
  - Option to filter out inactive items.
