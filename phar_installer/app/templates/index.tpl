@@ -2,12 +2,12 @@
 <!--[if IE 8]>         <html lang="en" class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
     <head>
-        {if isset($BASE_HREF)}<base href="{$BASE_HREF}"/>{/if}
-        <meta charset="utf-8">
-        <meta name='HandheldFriendly' content='True'>
-        <meta name='MobileOptimized' content='320'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <meta http-equiv='cleartype' content='on'>
+        {if isset($BASE_HREF)}<base href="{$BASE_HREF}">{/if}
+        <meta charset="UTF-8">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="cleartype" content="on">
         <script src="app/assets/vendor/jquery.min.js"></script>
         <script src="app/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
         <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css">
@@ -43,7 +43,7 @@
                         <ol id="installer-indicator">
                             {foreach $wizard_steps as $classname => $step}
                             {strip}
-                            <li class="step {if $step.active} current-step{/if}{if isset($current_step) && $current_step > $step@iteration} done-step{/if}">
+                            <li class="step{if $step.active} current-step{/if}{if isset($current_step) && $current_step > $step@iteration} done-step{/if}">
                                 <h4 class="step-title">{$step.classname|tr}{if isset($current_step) && $current_step > $step@iteration} <i class="icon-checkmark">&#x2713;</i>{/if}</h4>
                                 <p class="step-description"><em>{'desc_'|cat:$step.classname|tr}</em></p>
                             </li>
@@ -63,7 +63,7 @@
                     {if isset($dir) && ($in_phar || $cur_step > 1)}
                     <div class="message blue icon">
                         <i class="icon-folder-open message-icon"></i>
-                        <div class="content"><strong>{'prompt_dir'|tr}:</strong> <br>{$dir}</div>
+                        <div class="content"><strong>{'prompt_dir'|tr}:</strong><br>{$dir}</div>
                     </div>
                     {/if}
 

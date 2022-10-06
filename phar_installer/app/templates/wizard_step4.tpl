@@ -32,7 +32,7 @@
                 <label>{'prompt_dbhost'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="dbhost" value="{$config.dbhost}" required="required" />
+                <input class="form-field required full-width" type="text" name="dbhost" value="{$config.dbhost}" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -43,7 +43,7 @@
                 <label>{'prompt_dbname'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="dbname" value="{$config.dbname}" required="required" />
+                <input class="form-field required full-width" type="text" name="dbname" value="{$config.dbname}" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -54,7 +54,7 @@
                 <label>{'prompt_dbuser'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" required="required" autocomplete="off"/>
+                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" autocomplete="off" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -65,7 +65,7 @@
                 <label>{'prompt_dbpass'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="password" name="dbpass" value="" autocomplete="false" required="required"/>
+                <input class="form-field required full-width" type="password" name="dbpass" value="" autocomplete="off" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -77,7 +77,7 @@
                 <label>{'prompt_dbport'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field full-width" type="text" name="dbport" value="{$config.dbport}" />
+                <input class="form-field full-width" type="text" name="dbport" value="{$config.dbport}">
             </div>
         </div>
         <div class="row form-row">
@@ -85,7 +85,7 @@
                 <label>{'prompt_dbprefix'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field full-width" type="text" name="dbprefix" value="{$config.dbprefix}" />
+                <input class="form-field full-width" type="text" name="dbprefix" value="{$config.dbprefix}">
             </div>
         </div>
         {/if}
@@ -111,7 +111,7 @@
             <label>{'prompt_queryvar'|tr}</label>
         </div>
         <div class="eight-col">
-            <input class="form-field" type="text" name="query_var" value="{$config.query_var}" />
+            <input class="form-field" type="text" name="query_var" value="{$config.query_var}">
         </div>
     </div>
     {/if}
@@ -129,7 +129,7 @@
     {/if}
 
     <div id="bottom_nav">
-    <input class="action-button positive" type="submit" name="next" value="{'next'|tr} &rarr;" />
+    <input class="action-button positive" type="submit" name="next" value="{'next'|tr} &rarr;">
     </div>
 
 {wizard_form_end}

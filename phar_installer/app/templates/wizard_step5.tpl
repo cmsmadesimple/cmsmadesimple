@@ -19,7 +19,7 @@
                 <label>{'username'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="username" required="required" />
+                <input class="form-field required full-width" type="text" name="username" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -31,9 +31,9 @@
             </div>
             <div class="eight-col">
             {if $verbose}
-                <input class="form-field full-width" type="email" name="emailaddr" />
+                <input class="form-field full-width" type="email" name="emailaddr">
             {else}
-                <input class="form-field required full-width" type="email" name="emailaddr" required="required" />
+                <input class="form-field required full-width" type="email" name="emailaddr" required>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -45,7 +45,7 @@
                 <label>{'password'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="password" name="password" required="required" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="password" required autocomplete="off">
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -56,7 +56,7 @@
                 <label>{'repeatpw'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="password" name="repeatpw" required="required" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="repeatpw" required autocomplete="off">
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -86,7 +86,7 @@
         {/if}
 
 	<div id="bottom_nav">
-        <input class="action-button positive" type="submit" name="next" value="{'next'|tr} &rarr;" />
+        <input class="action-button positive" type="submit" name="next" value="{'next'|tr} &rarr;">
 	</div>
 
 {wizard_form_end}

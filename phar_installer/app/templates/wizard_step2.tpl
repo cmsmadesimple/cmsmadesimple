@@ -8,13 +8,13 @@
 {block name='contents'}
 
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#upgrade_info .link').css('cursor','pointer').click(function(){
-     var e = '#'+$(this).data('content');
-     $(e).dialog({
-       minWidth: 500,
-       modal: 'true'
-     })
+$(function() {
+  $('#upgrade_info .link').css('cursor','pointer').on('click',function() {
+    var e = '#'+$(this).data('content');
+    $(e).dialog({
+      minWidth: 500,
+      modal: 'true'
+    });
   });
 });
 </script>
@@ -70,7 +70,7 @@ $(document).ready(function(){
       {if !empty($upgrade_info)}
         <div class="message blue icon">
           <i class="icon-info message-icon"></i>
-          <div class="content"><strong>{'step2_hdr_upgradeinfo'|tr}</strong><br />{'step2_info_upgradeinfo'|tr}</div>
+          <div class="content"><strong>{'step2_hdr_upgradeinfo'|tr}</strong><br>{'step2_info_upgradeinfo'|tr}</div>
         </div>
         <ul id="upgrade_info" class="no-list">
           {foreach $upgrade_info as $ver => $data}
@@ -102,11 +102,11 @@ $(document).ready(function(){
       {* <a class="action-button orange" href="{$retry_url}" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a> *}
       <a onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
       {/if}
-      <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}" />
+      <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}">
     {elseif !isset($cmsms_info.error_status)}
-      <input class="action-button positive" id="upgrade" type="submit" name="upgrade" value="{'upgrade'|tr} &rarr;" />
+      <input class="action-button positive" id="upgrade" type="submit" name="upgrade" value="{'upgrade'|tr} &rarr;">
     {elseif $cmsms_info.error_status == 'same_ver'}
-      <input class="action-button positive" id="freshen" type="submit" name="freshen" value="{'freshen'|tr} &rarr;" />
+      <input class="action-button positive" id="freshen" type="submit" name="freshen" value="{'freshen'|tr} &rarr;">
     {/if}
   </div>
 
