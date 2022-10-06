@@ -231,7 +231,7 @@ function cms_html_entity_decode($text_to_convert) {
     "&Mu;" => "".chr(206).chr(156)."",
     "&mu;" => "".chr(206).chr(188)."",
     "&nabla;" => "".chr(226).chr(136).chr(135)."",
-        //"&nbsp;" => "".chr(194).chr(160)."", // don't actually know why (Jo Morg)
+//"&nbsp;" => "".chr(194).chr(160)."", // don't actually know why (Jo Morg) 194 160 sequence is the UTF-8 encoding of a non-break space
     "&nbsp;" => "".chr(32)."",
     "&ndash;" => "".chr(226).chr(128).chr(147)."",
     "&ne;" => "".chr(226).chr(137).chr(160)."",
@@ -364,8 +364,8 @@ function cms_html_entity_decode($text_to_convert) {
 
   $return_text = html_entity_decode($text_to_convert, (ENT_QUOTES | ENT_HTML5), 'UTF-8');
 
-  # just to be on the safe side if html_entity_decode still missed something
-  # and also converts &nbsp; to chr(32) which seems correct (Jo Morg)
+  // just to be on the safe side if html_entity_decode still missed something
+  // and also convert &nbsp; to chr(32) which seems correct (Jo Morg)
   $return_text = strtr($return_text, $htmlentities_table);
 
   // convert hex, and numeric entities to their character values.
