@@ -852,7 +852,7 @@ function cleanValue($val) {
     if ($remove) {
       $string = strip_tags($string);
     } else {
-      $patterns = array("/&(?!amp;)/", "/%/", "/</", "/>/", '/"/', "/'/", "/(/", "/)/", "/+/", "/-/");
+      $patterns = array("/&(?!amp;)/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
       $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
       $string = preg_replace($patterns, $replacements, $string);
     }
