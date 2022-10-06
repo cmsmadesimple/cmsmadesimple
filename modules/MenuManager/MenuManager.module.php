@@ -104,13 +104,11 @@ final class MenuManager extends CMSModule
     $nadded = 0;
     if (isset($parentnode)) {
       $children = $parentnode->getChildren($deep);
-      if (isset($children) && count($children)) {
-	reset($children);
+      if ($children) {
 	$nchildren = count($children);
 	$nc = -1;
-	while (list($key) = each($children)) {
+	foreach ($children as &$onechild) {
 	  $nc++;
-	  $onechild =& $children[$key];
 	  $content = $onechild->GetContent($deep);
 	  if( !is_object($content) ) {
 	    // uhm, couldn't get the content object... this is strange
@@ -176,6 +174,7 @@ final class MenuManager extends CMSModule
 	    }
 	  }
 	}
+        unset($onechild);
       }
     }
     return $nadded;

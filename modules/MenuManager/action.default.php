@@ -34,10 +34,10 @@ if( !$tpl->isCached() ) {
     if (isset($params['childrenof']) ) {
         $parent = $hm->sureGetNodeByAlias($params['childrenof']);;
         if( $parent ) {
+            if( !is_array($rootnode) ) $rootnode = array();
             // get the children.
             $children = $parent->GetChildren($deep);
-            if( !is_array($rootnode) )  $rootnode = array();
-            if( is_array($children) && count($children) ) {
+            if( $children && is_array($children) ) {
                 foreach( $children as $onechild ) {
                     $obj = $onechild->GetContent();
                     if( is_object($obj) && $obj->Active() &&
@@ -103,10 +103,8 @@ if( !$tpl->isCached() ) {
         }
 
         $items = explode(',', $params['items']);
-        if (count($items) > 0) {
-            reset($items);
-            while (list($key) = each($items)) {
-                $oneitem = $items[$key];
+        if ($items) {
+            foreach ($items as $oneitem) {
                 $curnode = $hm->sureGetNodeByAlias(trim($oneitem));
                 if( !$curnode ) continue;
                 $content = $curnode->GetContent();
@@ -121,12 +119,12 @@ if( !$tpl->isCached() ) {
                     $mnode = $this->FillNode($content,$curnode,$nodelist,$count,$prevdepth,1,$deep,$params);
                     $mnode->depth = 1;
                 }
-            } // while
+            }
         }
     }
     else {
         // load all content
-        $rootnode =& $hm;
+        $rootnode = &$hm;
         $prevdepth = 1;
     }
 
@@ -150,7 +148,7 @@ if( !$tpl->isCached() ) {
     if ($origdepth == 0) $origdepth = $prevdepth;
 
     if (isset($rootnode) && $getchildren) {
-        if( is_array($rootnode) && count($rootnode) ) {
+        if( $rootnode && is_array($rootnode) ) {
             $first = 1;
             for( $n = 0; $n < count($rootnode); $n++ ) {
                 $onenode = $rootnode[$n];
@@ -185,7 +183,7 @@ if( !$tpl->isCached() ) {
         }
     }
 
-    if (count($nodelist) > 0) {
+    if ($nodelist) {
         $tpl->assign('menuparams',$params);
         $tpl->assign('count', count($nodelist));
         $tpl->assign('nodelist', $nodelist);

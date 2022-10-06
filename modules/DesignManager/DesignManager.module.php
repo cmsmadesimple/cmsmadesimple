@@ -96,7 +96,7 @@ final class DesignManager extends CMSModule
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
 
 			$handlers = ob_list_handlers();
-			for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+			for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 			header('Content-type:application/json; charset=utf-8');
 
@@ -107,7 +107,7 @@ final class DesignManager extends CMSModule
 			}
 
 			echo $json;
-			exit();
+			exit;
 		}
 
 		return false;

@@ -33,7 +33,7 @@ $ref_map = array();
 function _ref_map_get_sig($fn,$type = 'URL')
 {
   global $ref_map;
-  if( count($ref_map) > 0 ) {
+  if( ref_map ) {
     foreach( $ref_map as $key => $val ) {
       if( $fn == $val ) return $key;
     }
@@ -48,17 +48,17 @@ function _get_css_urls($css_content)
   $content = $css_content;
   $regex='/url\s*\(\"*(.*)\"*\)/i';
   $content = preg_replace_callback($regex,
-				   function($matches) {
-				     $config = cmsms()->GetConfig();
-				     $url = $matches[1];
-				     if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
-				       $sig = _ref_map_get_sig($url);
-				       $sig = "url(".$sig.")";
-				       return $sig;
-				     }
-				     return $matches[0];
-				   },
-				   $content);
+    function($matches) {
+      $config = cmsms()->GetConfig();
+      $url = $matches[1];
+      if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
+        $sig = _ref_map_get_sig($url);
+        $sig = "url(".$sig.")";
+        return $sig;
+      }
+      return $matches[0];
+    },
+    $content);
 
   return $content;
 }
@@ -69,36 +69,36 @@ function _get_sub_templates( $template )
 
   $replace_fn = function($matches) {
     $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				 function($matches){
-				   $type = 'TPL';
-				   if( endswith($matches[1],'.tpl') ) $type = 'MM';
-				   $sig = _ref_map_get_sig($matches[1],$type);
-				   return str_replace($matches[1],$sig,$matches[0]);
-				 },$matches[0]);
+      function($matches) {
+        $type = 'TPL';
+        if( endswith($matches[1],'.tpl') ) $type = 'MM';
+        $sig = _ref_map_get_sig($matches[1],$type);
+        return str_replace($matches[1],$sig,$matches[0]);
+      },$matches[0]);
     return $out;
   };
 
   $replace_fn2 = function($matches) {
     $out = preg_replace_callback("/name\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				 function($matches){
-				   $sig = _ref_map_get_sig($matches[1],'TPL');
-				   return str_replace($matches[1],$sig,$matches[0]);
-				 },$matches[0]);
+      function($matches) {
+        $sig = _ref_map_get_sig($matches[1],'TPL');
+        return str_replace($matches[1],$sig,$matches[0]);
+      },$matches[0]);
     return $out;
   };
 
   $replace_fn3 = function($matches) {
     $out = preg_replace_callback("/file\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				 function($matches){
-				   $bad = array('string:','startswith','module_db_tpl','module_file_tpl',
-						'tpl_top','tpl_body','tpl_head','file:http');
-				   foreach( $bad as $badone ) {
-				     if( endswith($matches[1],$badone) ) return $matches[0];
-				   }
+      function($matches) {
+        $bad = array('string:','startswith','module_db_tpl','module_file_tpl',
+             'tpl_top','tpl_body','tpl_head','file:http');
+        foreach( $bad as $badone ) {
+          if( endswith($matches[1],$badone) ) return $matches[0];
+        }
 
-				   $sig = _ref_map_get_sig($matches[1],'TPL');
-				   return str_replace($matches[1],$sig,$matches[0]);
-				 },$matches[0]);
+        $sig = _ref_map_get_sig($matches[1],'TPL');
+        return str_replace($matches[1],$sig,$matches[0]);
+      },$matches[0]);
     return $out;
   };
 
@@ -121,42 +121,41 @@ function _get_sub_templates( $template )
 function _get_tpl_urls($tpl_content)
 {
   $content = $tpl_content;
-  $types = array("href", "src", "url");
-  while(list(,$type) = each($types)) {
+  foreach (array("href", "src", "url") as $type) {
     $innerT = '[a-z0-9:?=&@/._-]+?';
     $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
-				     function($matches) {
-				       $config = cmsms()->GetConfig();
-				       $url = $matches[2];
-				       if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
-					 $sig = _ref_map_get_sig($url);
-					 return $sig;
-				       }
-				       return $matches[0];
-				     },
-				     $content);
+      function($matches) {
+        $config = cmsms()->GetConfig();
+        $url = $matches[2];
+        if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
+          $sig = _ref_map_get_sig($url);
+          return $sig;
+        }
+        return $matches[0];
+      },
+      $content);
   }
   return $content;
 }
 
 try {
-	// and the work...
-    $the_design = CmsLayoutCollection::load($params['design']);
-    $exporter = new dm_design_exporter($the_design);
-	$xml = $exporter->get_xml();
+  // and the work...
+  $the_design = CmsLayoutCollection::load($params['design']);
+  $exporter = new dm_design_exporter($the_design);
+  $xml = $exporter->get_xml();
 
-	// clear any output buffers.
-	$handlers = ob_list_handlers();
-	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+  // clear any output buffers.
+  $handlers = ob_list_handlers();
+  for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
-	// headers
-	header('Content-Description: File Transfer');
-	header('Content-Type: application/force-download');
-	header('Content-Disposition: attachment; filename='.munge_string_to_url($the_design->get_name()).'.xml');
+  // headers
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/force-download');
+  header('Content-Disposition: attachment; filename='.munge_string_to_url($the_design->get_name()).'.xml');
 
-	// output
-	echo $xml;
-    exit();
+  // output
+  echo $xml;
+  exit;
 }
 catch( \Exception $e ) {
   $this->SetError($e->GetMessage());

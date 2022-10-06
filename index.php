@@ -42,10 +42,10 @@ if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
 
 if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) {
     echo '<html><title>Error</title></head><body>';
-    echo '<p>The following directories must be writable by the web server:<br />';
-    echo 'tmp/cache<br />';
-    echo 'tmp/templates_c<br /></p>';
-    echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivalent for your platform before continuing.</p>';
+    echo '<p>The following directories must be writable by the web server:<br>';
+    echo 'tmp/cache<br>';
+    echo 'tmp/templates_c<br></p>';
+    echo '<p>Please correct by executing:<br><em>chmod 777 tmp/cache<br>chmod 777 tmp/templates_c</em><br>or the equivalent for your platform before continuing.</p>';
     echo '</body></html>';
     exit;
 }
@@ -181,7 +181,7 @@ while( $trycount < 2 ) {
         unset($_REQUEST['module']);
         unset($_REQUEST['action']);
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+        for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
         // specified page not found, load the 404 error page
         $contentobj = $contentops->LoadContentFromAlias('error404',true);
@@ -195,14 +195,14 @@ while( $trycount < 2 ) {
             @ob_end_clean();
             header("HTTP/1.0 404 Not Found");
             header("Status: 404 Not Found");
-            echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-	    <html><head>
-	    <title>404 Not Found</title>
-	    </head><body>
-	    <h1>Not Found</h1>
-	    <p>The requested URL was not found on this server.</p>
-	    </body></html>';
-            exit();
+            echo '<!DOCTYPE html>
+            <html><head>
+            <title>404 Not Found</title>
+            </head><body>
+            <h1>Not Found</h1>
+            <p>The requested URL was not found on this server.</p>
+            </body></html>';
+            exit;
         }
     }
 
@@ -216,7 +216,7 @@ while( $trycount < 2 ) {
         unset($_REQUEST['module']);
         unset($_REQUEST['action']);
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+        for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
         // specified page not found, load the 404 error page.
         $contentobj = $contentops->LoadContentFromAlias('error403',true);
@@ -237,22 +237,22 @@ while( $trycount < 2 ) {
             header("Cache-Control: post-check=0, pre-check=0", false);
             header("HTTP/1.0 403 Forbidden");
             header("Status: 403 Forbidden");
-            echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+            echo '<!DOCTYPE html>
 <html><head>
 <title>403 Forbidden</title>
 </head><body>
 <h1>Forbidden</h1>'.$msg.'
 </body></html>';
-            exit();
+            exit;
         }
     }
 
     catch (Exception $e) {
         // Catch rest of exceptions
         $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+        for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
         echo $smarty->errorConsole($e);
-        exit();
+        exit;
     }
 } // end while trycount
 
@@ -297,7 +297,7 @@ if ( $debug && !is_sitedown() ) {
     }
 }
 
-exit();
+exit;
 
 #
 # EOF

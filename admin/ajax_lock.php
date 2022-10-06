@@ -19,7 +19,7 @@
 #$Id: moduleinterface.php 8558 2012-12-10 00:59:49Z calguy1000 $
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
@@ -71,7 +71,7 @@ try {
       }
       else {
           $tmp = CmsLockOperations::get_locks($type);
-          if( is_array($tmp) && count($tmp) ) $out['lock_id'] = -1;
+          if( $tmp && is_array($tmp) ) $out['lock_id'] = -1;
       }
       break;
 

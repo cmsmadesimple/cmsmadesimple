@@ -16,16 +16,16 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-use \FilePicker\TemporaryInstanceStorage;
-use \FilePicker\TemporaryProfileStorage;
-use \FilePicker\PathAssistant;
-use \FilePicker\utils;
-use \CMSMS\FileType;
+use FilePicker\TemporaryInstanceStorage;
+use FilePicker\TemporaryProfileStorage;
+use FilePicker\PathAssistant;
+use FilePicker\utils;
+use CMSMS\FileType;
 if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
 //$handlers = ob_list_handlers();
-//for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+//for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 $clean_str = function( $in ) {
     $in = cleanValue($in);
@@ -39,7 +39,7 @@ $clean_str = function( $in ) {
 $sesskey = md5(__FILE__);
 if( isset($_GET['_enc']) ) {
    $parms = json_decode(base64_decode($_GET['_enc']),TRUE);
-   if( is_array($parms) && count($parms) ) $_GET = array_merge($_GET,$parms);
+   if( $parms && is_array($parms) ) $_GET = array_merge($_GET,$parms);
    unset($_GET['_enc']);
 }
 
@@ -125,7 +125,7 @@ $get_thumbnail_tag = function($file,$path,$url) {
     $imagetag = null;
     $imagepath = $path.'/thumb_'.$file;
     $imageurl = $url.'/thumb_'.$file;
-    if( is_file($imagepath) ) $imagetag="<img src='".$imageurl."' alt='".$file."' title='".$file."' />";
+    if( is_file($imagepath) ) $imagetag="<img src='".$imageurl."' alt='".$file."' title='".$file."'>";
     return $imagetag;
 };
 
@@ -203,7 +203,7 @@ while( false !== ($filename = $dh->read()) ) {
     $files[$filename] = $file;
 }
 
-if( $profile->show_thumbs && count($thumbs) ) {
+if( $profile->show_thumbs && $thumbs ) {
     // remove thumbnails that are not orphaned from the list
     foreach( $thumbs as $thumb ) {
         if( isset($files[$thumb]) ) unset($files[$thumb]);

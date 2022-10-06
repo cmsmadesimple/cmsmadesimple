@@ -20,7 +20,7 @@ if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 $out = null;
 $term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));
@@ -30,7 +30,7 @@ if( $alias ) {
     $query = 'SELECT content_id,content_name,menu_text,content_alias,id_hierarchy FROM '.CMS_DB_PREFIX.'content
               WHERE content_alias = ? AND active = 1';
     $dbr = $db->GetRow($query,array($alias));
-    if( is_array($dbr) && count($dbr) ) {
+    if( $dbr ) {
         $lbl = "{$dbr['content_name']} ({$dbr['id_hierarchy']})";
         $out = array('label'=>$lbl, 'value'=>$dbr['content_alias']);
         echo json_encode($out);
@@ -43,7 +43,7 @@ else if( $term ) {
               AND active = 1
             ORDER BY default_content DESC, hierarchy ASC';
     $dbr = $db->GetArray($query,array($term,$term,$term));
-    if( is_array($dbr) && count($dbr) ) {
+    if( $dbr ) {
         // found some pages to match
         $out = array();
         // load the content objects

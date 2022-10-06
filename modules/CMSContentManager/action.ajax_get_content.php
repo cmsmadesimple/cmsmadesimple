@@ -37,7 +37,7 @@ if( !isset($gCms) ) exit;
 // no permissions checks here.
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
@@ -86,7 +86,7 @@ try {
 
     $smarty->assign('indent',!$filter && cms_userprefs::get('indent',1));
     $locks = $builder->get_locks();
-    $have_locks = (is_array($locks) && count($locks))?1:0;
+    $have_locks = ($locks && is_array($locks))?1:0;
     $smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
     $smarty->assign('have_locks',$have_locks);
     $smarty->assign('pagelimit',$pagelimit);

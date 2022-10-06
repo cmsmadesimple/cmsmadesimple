@@ -44,7 +44,7 @@ try {
 catch( \Exception $e ) {
     // do 500 error.
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+    for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
     header("HTTP/1.0 500 ".$e->GetMessage());
     header("Status: 500 Server Error");

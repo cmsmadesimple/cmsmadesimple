@@ -22,11 +22,11 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Templates') ) return;
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
 
 $out = null;
 try {
-	if( isset($_GET['cat']) && is_array($_GET['cat']) && count($_GET['cat']) > 0 ) {
+	if( !empty($_GET['cat']) && is_array($_GET['cat']) ) {
 		foreach( $_GET['cat'] as $idx => $cat_id ) {
 			$cat = CmsLayoutTemplateCategory::load($cat_id);
 			$cat->set_item_order($idx+1);
