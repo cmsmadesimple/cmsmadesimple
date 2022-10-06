@@ -4,13 +4,13 @@
     <head>
         {if isset($BASE_HREF)}<base href="{$BASE_HREF}"/>{/if}
         <meta charset="utf-8">
-        <meta name='HandheldFriendly' content='True' />
-        <meta name='MobileOptimized' content='320' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <meta http-equiv='cleartype' content='on' />
-        <script src="app/assets/vendor/jquery-1.11.2.min.js"></script>
+        <meta name='HandheldFriendly' content='True'>
+        <meta name='MobileOptimized' content='320'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta http-equiv='cleartype' content='on'>
+        <script src="app/assets/vendor/jquery.min.js"></script>
         <script src="app/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css"/>
+        <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css">
         <title>
       {if !empty($browser_title)}
         {$browser_title}
@@ -24,13 +24,13 @@
             <script src="app/assets/js/html5.js"></script>
             <script src="app/assets/js/css3-mediaqueries.js"></script>
         <![endif]-->
-        <link rel="stylesheet" type="text/css" href="app/assets/css/install.css"/>
-    <link rel="icon" type="image/ico" href="app/assets/images/favicon.ico"/>
+        <link rel="stylesheet" type="text/css" href="app/assets/css/install.css">
+    <link rel="icon" type="image/ico" href="app/assets/images/favicon.ico">
     </head>
     <body class="cmsms-ui">
         <div class="row header-section">
             <a href="http://www.cmsmadesimple.org" rel="external" target="_blank" class="cmsms-logo" title="CMS Made Simple&trade;">
-                <img src="app/assets/images/cmsms-logo.png" alt="CMS Made Simple&trade;" title="CMS Made Simple&trade;" width="332" height="77" />
+                <img src="app/assets/images/cmsms-logo.png" alt="CMS Made Simple&trade;" title="CMS Made Simple&trade;" width="332" height="77">
             </a>
             <span class="installer-title">{'apptitle'|tr}</span>
         </div>
@@ -63,7 +63,7 @@
                     {if isset($dir) && ($in_phar || $cur_step > 1)}
                     <div class="message blue icon">
                         <i class="icon-folder-open message-icon"></i>
-                        <div class="content"><strong>{'prompt_dir'|tr}:</strong> <br />{$dir}</div>
+                        <div class="content"><strong>{'prompt_dir'|tr}:</strong> <br>{$dir}</div>
                     </div>
                     {/if}
 
@@ -89,8 +89,8 @@
             </small>
         </footer>
     {block name='javascript'}
-    <script>
-    var cmsms_lang = {
+    <script type="text/javascript">
+        var cmsms_lang = {
         freshen : '{'confirm_freshen'|tr|addslashes}',
         upgrade : '{'confirm_upgrade'|tr|addslashes}',
         message : '{'social_message'|tr|addslashes}'
