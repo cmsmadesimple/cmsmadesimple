@@ -78,7 +78,7 @@ class dUnzip2{
 	}
 
 	Function getList($stopOnFile=false){
-		if(sizeof($this->compressedList)){
+		if($this->compressedList){
 			$this->debugMsg(1, "Returning already loaded file list.");
 			return $this->compressedList;
 		}
@@ -110,7 +110,7 @@ class dUnzip2{
 
 			// If signature of a 'Local File Header'
 			if($signature == $this->zipSignature){
-				# $this->debugMsg(1, "Zip Signature!");
+				// $this->debugMsg(1, "Zip Signature!");
 
 				// Get information about the zipped file
 				$file['version_needed']     = unpack("v", fread($fh, 2)); // version needed to extract
@@ -165,7 +165,7 @@ class dUnzip2{
 
 			// If signature of a 'Central Directory Structure'
 			elseif($signature == $this->dirSignature){
-				# $this->debugMsg(1, "Dir Signature!");
+				// $this->debugMsg(1, "Dir Signature!");
 
 				$dir['version_madeby']      = unpack("v", fread($fh, 2)); // version made by
 				$dir['version_needed']      = unpack("v", fread($fh, 2)); // version needed to extract
@@ -222,7 +222,7 @@ class dUnzip2{
 			}
 
 			elseif($signature == $this->dirSignatureE){
-				# $this->debugMsg(1, "EOF Dir Signature!");
+				// $this->debugMsg(1, "EOF Dir Signature!");
 
 				$eodir['disk_number_this']   = unpack("v", fread($fh, 2)); // number of this disk
 				$eodir['disk_number']        = unpack("v", fread($fh, 2)); // number of the disk with the start of the central directory
@@ -256,7 +256,7 @@ class dUnzip2{
 		}
 
 		if($this->debug){
-			#------- Debug compressedList
+			//------- Debug compressedList
 			$kkk = 0;
 			echo "<table border='0' style='font: 11px Verdana; border: 1px solid #000'>";
 			foreach($this->compressedList as $fileName=>$item){
@@ -277,9 +277,9 @@ class dUnzip2{
 			}
 			echo "</table>";
 
-			#------- Debug centralDirList
+			//------- Debug centralDirList
 			$kkk = 0;
-			if(sizeof($this->centralDirList)){
+			if(count($this->centralDirList)){
 				echo "<table border='0' style='font: 11px Verdana; border: 1px solid #000'>";
 				foreach($this->centralDirList as $fileName=>$item){
 					if(!$kkk && $kkk=1){
@@ -300,9 +300,9 @@ class dUnzip2{
 				echo "</table>";
 			}
 
-			#------- Debug endOfCentral
+			//------- Debug endOfCentral
 			$kkk = 0;
-			if(sizeof($this->endOfCentral)){
+			if(count($this->endOfCentral)){
 				echo "<table border='0' style='font: 11px Verdana' style='border: 1px solid #000'>";
 				echo "<tr style='background: #DAA'><td colspan='2'>dUnzip - End of file</td></tr>";
 				foreach($this->endOfCentral as $field=>$value){
@@ -332,7 +332,7 @@ class dUnzip2{
 	Function unzip($compressedFileName, $targetFileName=false){
 		$fdetails = &$this->compressedList[$compressedFileName];
 
-		if(!sizeof($this->compressedList)){
+		if(!count($this->compressedList)){
 			$this->debugMsg(1, "Trying to unzip before loading file list... Loading it!");
 			$this->getList(false, $compressedFileName);
 		}
@@ -364,7 +364,7 @@ class dUnzip2{
 			$targetDir = dirname(__FILE__)."/";
 
 		$lista = $this->getList();
-		if(sizeof($lista)) foreach($lista as $fileName=>$trash){
+		if(count($lista)) foreach($lista as $fileName=>$trash){
 			$dirname  = dirname($fileName);
 			$outDN    = "$targetDir/$dirname";
 
@@ -444,7 +444,7 @@ class dUnzip2{
 		}
 	}
 	Function debugMsg($level, $string){
-		if ($level==2) $this->debugstrings.="<br/>".$string;
+		if ($level==2) $this->debugstrings.="<br>".$string;
 		if($this->debug)
 			if($level == 1)
 				echo "<b style='color: #777'>dUnzip2:</b> $string<br>";
