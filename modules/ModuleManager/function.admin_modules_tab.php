@@ -181,13 +181,14 @@ if( count( $data ) ) {
     if( isset( $row['description'] ) ) $onerow->description=$row['description'];
     $rowarray[] = $onerow;
   } // for
-
-  $smarty->assign('items', $rowarray);
-  $smarty->assign('itemcount', count($rowarray));
+  
 }
 else {
   $smarty->assign('message', $this->Lang('error_connectnomodules'));
 }
+
+$smarty->assign('items', $rowarray);
+$smarty->assign('itemcount', count($rowarray));
 
 // Setup search form
 $searchstart = $this->CreateFormStart( $id, 'searchmod', $returnid );
