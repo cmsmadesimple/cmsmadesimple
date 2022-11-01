@@ -21,7 +21,7 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
 
-$CMS_VERSION = "2.2.17-b.1";
+$CMS_VERSION = "2.2.17-b.2";
 $CMS_VERSION_NAME = "NOT SET";
 $CMS_SCHEMA_VERSION = '202';
 
