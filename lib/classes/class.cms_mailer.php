@@ -51,7 +51,7 @@ class cms_mailer
    */
   public function __construct($exceptions = false)
   {
-    if (spl_autoload_register([__CLASS__, 'MailerAutoload'], false)) {
+    if (@spl_autoload_register([__CLASS__, 'MailerAutoload'], false)) {
       $this->_mailer = new PHPMailer($exceptions);
       $this->reset();
     } else {
