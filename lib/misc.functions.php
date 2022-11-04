@@ -320,9 +320,9 @@ function debug_bt()
 *
 * @param mixed $var The data to display
 * @param string $title (optional) title for the output.  If null memory information is output.
-* @param bool $echo_to_screen (optional) Flag indicating wether the output should be echoed to the screen or returned.
-* @param bool $use_html (optional) flag indicating wether html or text should be used in the output.
-* @param bool $showtitle (optional) flag indicating wether the title field should be displayed in the output.
+* @param bool $echo_to_screen (optional) Flag indicating whether the output should be echoed to the screen or returned.
+* @param bool $use_html (optional) flag indicating whether html or text should be used in the output.
+* @param bool $showtitle (optional) flag indicating whether the title field should be displayed in the output.
 * @return string
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
