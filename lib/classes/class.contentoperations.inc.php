@@ -645,7 +645,7 @@ class ContentOperations
 	{
 		$db = CmsApp::get_instance()->GetDb();
 
-		$contentrows = null;
+		$contentrows = [];
 		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
 			if( is_array($loaded_ids) && count($loaded_ids) ) $explicit_ids = array_diff($explicit_ids,$loaded_ids);
@@ -670,6 +670,8 @@ class ContentOperations
 		$contentprops = null;
 		if( $loadprops ) {
 		    $child_ids = array();
+			if(!is_array($contentrows) ) { $contentrows = []; }
+			
 		    for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
 				$child_ids[] = $contentrows[$i]['content_id'];
 			}
@@ -683,7 +685,7 @@ class ContentOperations
 
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
-				$contentprops = array();
+				$contentprops = [];
 				for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
 					$content_id = $tmp[$i]['content_id'];
 					if( in_array($content_id,$child_ids) ) {
@@ -711,7 +713,8 @@ class ContentOperations
 					foreach( $contentprops[$id] as $oneprop ) {
 						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
 					}
-                    unset($contentprops[$id]);
+					
+					unset($contentprops[$id]);
 				}
 
 				// cache the content objects
