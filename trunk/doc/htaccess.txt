@@ -1,0 +1,106 @@
+# This file is specific to Apache configurations.
+# It attempts to optimize traffic and configuration for your CMS Made Simple™ website.
+# Many options are disabled by default as some providers do not allow you to override some of these settings in the .htaccess file.
+
+#
+# Attempt to override some PHP settings.
+# These settings may be helpful on some hosts if your default configuration does not meet CMSMS's minimum requirements,
+# and your host has given your account appropriate permissions.
+#
+#php_value upload_max_filesize "10M"
+#php_value session_save_path "tmp/cache"
+#php_value session.cookie_httponly true
+#php_flag magic_quotes_gpc Off
+#php_flag register_globals Off
+#php_flag session.use_trans_sid Off
+
+#
+# Disallow directory indexes. This can be an important security enhancement.
+#
+#Options -Indexes
+
+#
+# Don't allow the browser to know the type of signature.
+#
+ServerSignature Off
+
+#
+# Allow the Apache server to follow symbolic links. This is usually not necessary.
+#
+#Options +FollowSymLinks
+
+#
+# The following is to enable pretty URLs, only applicable if url_rewriting is set to 'mod_rewrite' in the config.php
+#
+<IfModule rewrite_module>
+	RewriteEngine on
+	# If your CMSMS installation is in a subdirectory of your domain, you need to specify the relative path (from the root of the domain) here.
+	# In example: RewriteBase /[subdirectory name]
+	RewriteBase /
+	
+	# Rewrites URLs in the form of /parent/child/grandchild but only rewrites if the requested URL is not a file or directory.
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.+)$ index.php?page=$1 [QSA]
+</IfModule>
+
+#
+# The following are highly recommended security settings for files in your CMSMS install that should not be browsed directly.
+#
+RedirectMatch 403 ^/.*\.htaccess$
+RedirectMatch 403 ^/.*\.log$
+RedirectMatch 403 ^/.*\.ini$
+RedirectMatch 403 ^/.*config\.php$
+RedirectMatch 403 ^.*/doc/.*$
+RedirectMatch 403 ^.*/lib/.*\.php$
+RedirectMatch 403 ^.*/tmp/.*\.php$
+RedirectMatch 403 ^.*/modules/.*\.php$
+RedirectMatch 403 ^.*/uploads/.*\.php$
+RedirectMatch 403 ^.*/assets/.*\.php$
+RedirectMatch 403 ^.*/assets/.*\.tpl$
+
+#
+# The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.
+#
+<IfModule mod_headers.c>
+    # Disable Last-Modified for performance
+    Header unset Last-Modified
+	# Disable ETags
+	Header unset ETag
+	FileEtag None
+	# For Security
+	Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+#
+# The following setups compression for content, if compression is enabled on the server.
+#
+<IfModule deflate_module>
+	AddOutputFilterByType DEFLATE text/html text/css text/plain text/html text/xml image/gif image/jpeg image/png image/ico text/javascript application/x-javascript application/javascript application/json application/pdf
+</IfModule>
+
+#
+# The following allows the browser to cache images, scripts, stylesheets and videos. If the expires module is enabled on the server.
+# Note, this applies to admin directory stuff too.
+# however, for php files in the admin directory we explicitly st the header to not expire
+#
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault "access plus 1 month"
+	# Set expires tags on various file types... so that the browser won't attempt to reload them.
+	ExpiresByType image/jpg "access plus 1 year"
+	ExpiresByType image/gif "access plus 1 year"
+	ExpiresByType image/ico "access plus 1 year"
+	ExpiresByType image/png "access plus 1 year"
+	ExpiresByType video/x-flv "access plus 1 year"
+	ExpiresByType application/pdf "access plus 1 year"
+	ExpiresByType application/x-shockwave-flash "access plus 1 year"
+	ExpiresByType application/javascript "access plus 1 month"
+	ExpiresByType application/x-javascript "access plus 1 month"
+	ExpiresByType text/javascript "access plus 1 month"
+	ExpiresByType text/css "access plus 1 month"
+	<IfModule mod_headers.c>
+		# Setting cache control to public allows proxy servers to cache the items too.
+		Header set Cache-Control "public"
+	</IfModule>
+</IfModule>

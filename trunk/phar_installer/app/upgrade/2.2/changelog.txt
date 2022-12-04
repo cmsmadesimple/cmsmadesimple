@@ -1,0 +1,197 @@
+Version 2.2 - Canada
+----------------------------------
+Core - General
+  - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
+    NOTE:  On systems using archaic filesystems such as FAT and FAT32 CMSMS may no longer operate.
+  - cms_filecache_driver now caches for 2 hours by default and has an improved cooperative locking test
+  - Implement new database abstraction library that is compatible with (functionality wise) but improves upon adodb-lite.
+  - Implement protocol-less URL's in the config.
+  - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
+  - Minor fix to the {form_start} plugin.
+  - Minor change to the {admin_icon} plugin (default image class).
+  - Cache more items that are queried from the database, to reduce mysql load.
+  - Minor change to tree operations functionality to reduce memory usage.
+  - Fixed problem with order of content blocks when using {content_module} stuff.
+  - Adds get_usage_string and the concept of a type assistant to template types.
+  - Minor change to auto-alias determination routine.
+  - Detect module_custom enhancements in the CmsModuleInfo stuff.
+  - Refactor Admin authentication.
+  - More fixes to the cms_url class.
+  - Optimize the include.php file.
+  - Adds built-in asynchronous task processing system.
+  - Adds the ability to reduce redundant mentions in the Admin log (runs asynchronously).
+  - Refactor the Admin log page to allow for better filtering and pagination.
+  - Admin log now uses cms_date_format and cleans output.
+  - Notification functions in the CmsAdminThemeBase function are now just stubs and do nothing. Will be removed at a later date.
+  - Removed the GetNotificationOutput() method from the module API.
+  - Adds classes for creating Alerts. This is much more advanced than the old Notifications system.
+  - Minor accessibility tweaks to the OneEleven theme.
+  - Fix numerous minor problems with the OneEleven theme.
+  - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
+  - Refactor the OneEleven Admin theme to display an alert icon in the shortcut bar, instead of in the navigation area.
+  - Fixed sidenav in the one OneEleven theme now works properly. If sidenav is larger than viewport then don't use fixed... easy.
+  - In OneEleven Now revert to small sidebar navigation (still floating) if screen is too narrow.
+  - Removed notification settings from MyAccount and Global Settings.
+  - Removed pseudocron granularity preferences.
+  - cms_alert() and the new cms_confirm() JavaScript functions now return promises.
+  - Revises much code to use cms_alert and cms_confirm() instead of the standard, but browser specific functions.
+  - Fixes to the cache clearing methodology.
+  - No longer check for duplicate content blocks in templates... NEEDS TESTING
+  - New core events: ContentPreRender, LostPassword, LostPasswordReset, StylesheetPostRender.
+  - Fix problem with the default parameter to the {content} tag.
+  - Fix problem with the use_smartycache thing in system information.
+  - Fix notice in useroperations.
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+  - Fixes minor notice in user operations.
+  - Fixes for namespaced modules.
+  - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
+  - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
+  - More fixes to cms_url class.
+  - Numerous minor optimizations.
+  - Add to content types the ability to set basic attributes for properties from within the page type definition.
+  - Fixes problems with pagelink and link content types not being properly editable by additional editors.
+  - Adds more type and content cleaning into the content types FillParams method(s).
+  - Pass an explicit cacheid in to createtemplate in index.php.
+  - Fix an error message in the autorefresh JavaScript class.
+  - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
+  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
+  - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax highlighter and WYSIWYG modules. i.e: {content data-foo="bar"}.
+  - Refactoring of the Admin login code to be cleaner, more efficient, more secure.
+  - No longer allow any modules to auto-upgrade on frontend requests.
+  - Fix problem with cms_filecache_driver::clear().
+  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks.
+  - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook).
+  - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the Admin theme class.
+  - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php.
+  - now use hooks so that loaded modules can now add text to the head area of any Admin page output.
+  - Change the help for the basic attributes.
+  - Adds new 'switch user' functionality for members of the Admin group.
+  - Re-factor the content page selector ... now supports two modes (one for a simple list, and the previous dynamic one that is faster for large sites)
+    the simple list mode is used for users with limited edit capabilities on pages.
+  - Adds a new Smarty plugin {page_selector} to the Admin lib.
+  - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
+  - Content pages now have the ability to control whether or not the page wants any more children.
+  - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type.
+  - Permissions are now grouped logically by module/originator in ChangeGroupPermissions.
+  - Now use HTTPS for the latest version check.
+  - Adds the public_cache_url config entry,  and make sure that the css_url uses that by default.
+  - Adds many core hooks.
+  - Enhance the {page_image} plugin to optionally output a full HTML img tag if there is a value for the respective property.
+  - Improve the {content_image} plugin to output nothing if there is no value for the property, and to output any non-internal arguments as attributes to the HTML img tag.
+  - Upgrade to an un-modified version of smarty v3.1.31.
+  - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  Upgrading should preserve any custom plugins in the /plugins directory.
+  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker).
+  - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL.
+  - Minor improvements to the asynchronous behaviour of the locking functionality.
+  - #11295 - Cannot change the name of a UDT, always creates new UDT.
+  - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
+  - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
+  - #11133 - is_email() fails on domain check.
+  - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
+  - #11287 - Password reset form's password fields have different lengths.
+  - Fix issue with module actions if 'content_en' block name was given on the default content block.
+  - Better security when saving content pages.  Most primary fields are cast to their appropriate data type (int, bool, etc).  MenuText, and TitleAttribute can no longer contain html tags like <strong>foo</strong>.
+  - Fixes issue with entities in redirecting links
+  - The href/page argument to {cms_selflink} is now decoded before resolving to a page id.
+
+Navigator v1.0.5
+  - Minor optimizations.
+  - Now use pageid in calculations of cacheid.
+  - Now output template help to Navigator.
+
+Installation Assistant v1.3
+  - Only create dummy index.html files in subdirectories we created.
+  - Clear cache after step 9.
+  - Upgrade routine now asks for, and tests database credentials.
+  - Upgrade routine now rewrites the config.php file (but keeps a backup).
+  - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
+  - On installation, now insure that tmp/cache and tmp/templates_c directories are empty.
+  - Now displays if files are going to be skipped.
+  - Adds clear option for development purposes.
+  - No longer ask to save database password.
+  - On install now create the assets directory structure.
+  - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, admin/custom, etc. within it.
+  - When using the expanded installer allow changing the destination directory on step 1.
+  - Check for existing files in the installation directory for new installations.
+  - Added more notes to aide in diagnosing white screens
+  - Modify package .zip files so that extracted files will usually have 644 permission (depends on the unzip routine used).
+
+CmsJobManager
+  - New core module to handle queued asynchronous tasks.
+
+Content Manager
+  - Minor tweak to bulk delete pages.
+  - Minor fix to the active tab when changing a template or design.
+  - Now listen to the 'default parent page' user preference.
+  - Fix minor XSS problem in the Admin if some loser puts JavaScript into the title field or alias field or menu text field.
+  - Now allow filtering pages by owner, editor, template, or design.  Only for Administrators with Modify any page, or Manage all content permissions.
+  - Fix problems with auto-refresh being too fast for some operations.
+  - Now auto scroll to the first matched page in a find.
+  - Additional editors of a page cannot change the content type. Only owners, or users with the Manage all Content permissions.
+  - Fix a problem with the call to GetTabElements.
+
+DesignManager
+  - Move the designs tab of the main interface into third position.
+  - Implement sorting in edit design.
+  - Remove option menus (for now) from templates, stylesheets, and designs tab.
+  - Modify the template list functionality in edit-design to allow using keyboard control. Space or + to select an item on the left, and right arrow to move.
+  - Modify the edit-design functionality to allow clicking on an attached template or stylesheet to edit it.
+  - Generic templates now display a usage string.
+  - When creating a new template, associate the new template with the default design.
+  - Add reset buttons to the filter forms.
+  - No longer check for default content block in a template.
+  - Adds the ability to export a template to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing.
+  - Add bulk actions to allow importing and exporting multiple templates.
+  - In the template list, if a file exists for a template... display it in the filename column.
+  - Adds the ability to export a stylesheet to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/css directory corresponding to a stylesheet name, do not allow in-browser editing.
+  - Add bulk actions to allow importing and exporting multiple stylesheets.
+  - In the stylesheet list, if a file exists for a stylesheet display it in the filename column.
+
+News v2.51
+  - Minor fix to add category.
+  - Removes GetNotificationOutput method.
+  - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
+  - Add an option to never create alerts about draft News articles.
+  - Minor optimizations.
+  - Adds postdate as parameters in events.
+  - now output template help to Navigator.
+  - Adds new 'linked file' type field that allows selecting a file using the filepicker.
+  - Changes the default summary and detail templates to support the linked_file field type, and uses {thumbnail_url} and {file_url}.
+
+FileManager v1.6.3
+  - Move settings to it's own menu item under Site Admin.
+  - Fix minor problem with moving a directory.
+  - Minor fix to move file functionality.
+  - Adds OnFileDeleted event.
+  - Adds 'view raw file' icon in each viewable row.
+  - Minor formatting changes in file list.
+  - Now display clickable path entries for easier navigation.
+
+Search
+  - Convert to store all data using the InnoDB engine.
+  - Use transactions for the addwords and deletewords stuff for performance.
+  - Fix problem with query and record expiry.
+
+AdminSearch v1.0.3
+  - Fixes problem with use of 'Use Admin Search' permission.
+  - Now searches for matching strings within templates and stylesheets that are stored as files.
+  - Now listens to the HasSearchableContent metod when searching content pages.
+
+ModuleManager
+  - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
+  - Minor string changes.
+  - Improvements to error handling in the new versions tab.
+  - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
+  - Now don't allow disabling / uninstalling myself.
+  - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
+  - Now use HTTPS for requests to ModuleRepository.
+  - Trigger a hook before exporting a module to XML.
+
+MicroTiny v2.1
+  - New version of the tinymce wysiwyg editor.
+  - Adds a mailto plugin.
+  - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin.
+  - Enable the title attribute on the image plugin.
+  - Now uses PUBLIC_CACHE_LOCATION for cache files instead of hardcoding tmp/cache

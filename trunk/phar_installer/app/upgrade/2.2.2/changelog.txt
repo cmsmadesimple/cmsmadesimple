@@ -1,0 +1,51 @@
+Version 2.2.2 - Hearts Content
+----------------------------------
+Core - General
+ - Additional security improvement in CMSModule::GetTemplateResource().
+ - Now Smarty_CMS is no longer derived from SmartyBC (uses our own wrapper class) which prevents all occurrences of {php} tags from running.
+ - Adds an admin directory .htaccess file to explicitly disable browser caching of any resources.
+ - Fixes a relative path vulnerability in module_file_tpl resource.
+ - Fixes a path building issue in CmsModuleInfo.
+ - Fixes to parsing and generating moduleinfo.ini files.
+ - Disallow any resource specifications with a * or a /.
+     * This also means that no file resource specifications with path information will be permitted.
+ - Move mact preprocessing to AFTER the template_top has been processed.  So order of processing (for module actions on the frontend is)
+     a:  template top
+     b:  mact preprocessing (if enabled, which is the default)
+     c:  template body
+     d:  template head
+ - Fix sureGetNodeByAlias to check if the input is numeric. If it is, assume that it is a page id, not an alias.
+ - Fix alias generation in the ContentBase class to check if the input page title is numeric... If it is, prepend a character to it to ensure that integer casting will return 0.
+ - Fix listtags to show tags using smarty_nocache_  function name prefix.
+ - Improvements to the {form_start} plugin.
+ - Fix silly, old issue in recursive_delete function.
+ - Clean up more parameters from the content tag before passing to module action.
+ - Fix local file inclusion vulnerability in listtags.
+ - now call get_userid() in debug_to_log instead of check_login()
+
+AdminSearch v1.0.3
+ - Now search the metadata field of content pages.
+ - Fixes for single quotes in search results.
+
+DesignManager v1.1.3
+ - Set title attribute tags for edit/create template, stylesheet, design.
+ - Remove debug statements.
+
+MicroTiny v2.2
+ - Upgrade tinymce to v4.6.x.
+ - Adds new tabfocus and hr plugins.
+
+News v2.51.2
+ - Fixes so that all cancel buttons work properly on new news articles.
+
+Navigator v1.0.7
+ - Adds a silly __get() method to the NavigatorNode class squash some notifications in the error logs.
+
+ModuleManager v2.1.1
+ - Now handlle remote module installs upgrades, and activates via a 2 request process to allow new module versions to be read into memory.
+
+Installation Assistant v1.3.2
+ - Correction to assets warning
+
+Search v1.51.2
+ - Now do an html entity decode on all content added to AddWords.

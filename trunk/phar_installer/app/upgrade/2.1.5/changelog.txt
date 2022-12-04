@@ -1,0 +1,37 @@
+Version 2.1.5 - High Rock
+----------------------------------
+Core - General
+  - Fix fatal error if an extcss stylesheet was placed in the Admin theme.
+  - Another minor fix to clearing cached files.
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+  - Fixes minor notice in user operations.
+  - Fixes for namespaced modules.
+  - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
+  - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
+  - More fixes to cms_url class.
+  - Improve the way page aliases are munged when they are supplied.
+  - Improve the error generated when a page alias cannot be generated.
+  - Minor fixes to the form_start plugin.
+  - Minor fixes to generation of moduleinfo.ini.
+  - Fix an error message in the autorefresh JavaScript class.
+  - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
+  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
+
+  - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
+  - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
+
+Content Manager
+  - Improve error handling in Edit Content.
+  - Fix a problem with the call to GetTabElements.
+
+Design Manager
+  - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
+
+Module Manager
+  - Improve the way modules with dependencies are installed and upgraded. (Got rid of the queue stuff).
+
+AdminSearch
+  - Use 'Manage Stylesheets' permission, not 'Modify Stylesheets' when searching stylesheets.
+
+Phar Installer
+  - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
