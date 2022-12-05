@@ -1,19 +1,20 @@
 /*
  * Theme: OneEleven 2012 (c)
  * Author: Goran Ilic (ja@ich-mach-das.at) - http://dev.cmsmadesimple.org/users/uniqu3
- * Version: 1.1
+ * Version: 1.0
+ *
  */
 
 /* NORMALIZE BROWSER
  * normalize.css 2011-11-04T15:38 UTC - http://github.com/necolas/normalize.css
  */
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block }
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {	display: block }
 audio, canvas, video {
 	display: inline-block;
-	display: inline;
-	zoom: 1
+	*display: inline;
+	*zoom: 1
 }
-audio:not([controls]) { display: none }
+audio:not([controls]) {	display: none }
 [hidden] { display: none }
 html {
 	font-size: 100%;
@@ -22,14 +23,14 @@ html {
 }
 body { margin: 0 }
 body, button, input, select, textarea {
-	-webkit-font-smoothing: subpixel-antialiased;
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 a:focus { outline: thin dotted }
-a:hover, a:active { outline: 0 }
+a:hover, a:active {	outline: 0 }
 h1 { font-size: 2em }
 abbr[title] { border-bottom: 1px dotted }
-b, strong { font-weight: bold }
+b, strong {	font-weight: bold }
 blockquote { margin: 1em 40px }
 dfn { font-style: italic }
 mark {
@@ -38,6 +39,7 @@ mark {
 }
 pre, code, kbd, samp {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
+	_font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 1em
 }
 pre {
@@ -50,7 +52,7 @@ q:before, q:after {
 	content: '';
 	content: none
 }
-small { font-size: 75% }
+small {	font-size: 75% }
 sub, sup {
 	font-size: 75%;
 	line-height: 0;
@@ -82,19 +84,19 @@ fieldset {
 }
 legend {
 	border: 0;
-	margin-left: -7px
+	*margin-left: -7px
 }
 button, input, select, textarea {
 	font-size: 100%;
 	margin: 0;
 	vertical-align: baseline;
-	vertical-align: middle
+	*vertical-align: middle
 }
-button, input { line-height: normal }
+button, input {	line-height: normal }
 button, input[type="button"], input[type="reset"], input[type="submit"] {
 	cursor: pointer;
 	-webkit-appearance: button;
-	overflow: visible
+	*overflow: visible
 }
 input[type="checkbox"], input[type="radio"] {
 	box-sizing: border-box;
@@ -154,7 +156,7 @@ table {
 	margin-right: 1%
 }
 
-/* Alpha = no margin left, Omega = no margin right */
+/* Alpha = no margin left, Omega = no margin right  */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 
@@ -175,28 +177,28 @@ table {
 /* Prefix to add extra space left
  * Example (same for other like suffix, push or pull): <div class='grid_1 prefix_1'>
  */
-.c_full .prefix_1 { padding-left: 8.333% }
-.c_full .prefix_2 { padding-left: 16.667% }
-.c_full .prefix_3 { padding-left: 25.0% }
-.c_full .prefix_4 { padding-left: 33.333% }
-.c_full .prefix_5 { padding-left: 41.667% }
-.c_full .prefix_6 { padding-left: 50.0% }
-.c_full .prefix_7 { padding-left: 58.333% }
-.c_full .prefix_8 { padding-left: 66.667% }
-.c_full .prefix_9 { padding-left: 75.0% }
+.c_full .prefix_1 {	padding-left: 8.333% }
+.c_full .prefix_2 {	padding-left: 16.667% }
+.c_full .prefix_3 {	padding-left: 25.0% }
+.c_full .prefix_4 {	padding-left: 33.333% }
+.c_full .prefix_5 {	padding-left: 41.667% }
+.c_full .prefix_6 {	padding-left: 50.0% }
+.c_full .prefix_7 {	padding-left: 58.333% }
+.c_full .prefix_8 {	padding-left: 66.667% }
+.c_full .prefix_9 {	padding-left: 75.0% }
 .c_full .prefix_10 { padding-left: 83.333% }
 .c_full .prefix_11 { padding-left: 91.667% }
 
 /* Suffix to add extra space right */
-.c_full .suffix_1 { padding-right: 8.333% }
-.c_full .suffix_2 { padding-right: 16.667% }
-.c_full .suffix_3 { padding-right: 25.0% }
-.c_full .suffix_4 { padding-right: 33.333% }
-.c_full .suffix_5 { padding-right: 41.667% }
-.c_full .suffix_6 { padding-right: 50.0% }
-.c_full .suffix_7 { padding-right: 58.333% }
-.c_full .suffix_8 { padding-right: 66.667% }
-.c_full .suffix_9 { padding-right: 75.0% }
+.c_full .suffix_1 {	padding-right: 8.333% }
+.c_full .suffix_2 {	padding-right: 16.667% }
+.c_full .suffix_3 {	padding-right: 25.0% }
+.c_full .suffix_4 {	padding-right: 33.333% }
+.c_full .suffix_5 {	padding-right: 41.667% }
+.c_full .suffix_6 {	padding-right: 50.0% }
+.c_full .suffix_7 {	padding-right: 58.333% }
+.c_full .suffix_8 {	padding-right: 66.667% }
+.c_full .suffix_9 {	padding-right: 75.0% }
 .c_full .suffix_10 { padding-right: 83.333% }
 .c_full .suffix_11 { padding-right: 91.667% }
 
@@ -295,7 +297,7 @@ table {
  * Colors:
  * #f6f6f6 Body/Content Background
  * #232323 Dark background
- * #cccccc Grey background
+ * #cecece Grey background
  * #ddd Grey background
  * #585858 Dark grey titles
  * #fa8004 Orange (links, title)
@@ -304,8 +306,8 @@ table {
 
 html, body {
 	width: 100%;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	min-height: 100%;
 	height: 100%
 }
@@ -341,7 +343,7 @@ hr {
 	display: block;
 	height: 1px;
 	border: 0;
-	border-top: 1px solid #cccccc;
+	border-top: 1px solid #cecece;
 	margin: 10px 0;
 	padding: 0
 }
@@ -383,7 +385,7 @@ h4 {
 	font-size: 14px
 }
 h5 {
-	font-size: 13px
+	font-size: 12px
 }
 h6 {
 	font-size: 12px
@@ -402,7 +404,7 @@ tr {
 	text-align: left
 }
 form {
-	margin: 0;
+	margin: 0px;
 	display: inline
 }
 a,
@@ -433,9 +435,9 @@ a.external {
 	font-weight: normal
 }
 .smallgrey {
-	font-weight: normal;
-	font-size: 10px;
-	margin: 10px 0 0 0
+        font-weight: normal;
+        font-size: 10px;
+		margin: 10px 0 0 0
 }
 div.pagecontainer .h-inside {
 	float: left;
@@ -459,7 +461,7 @@ div.pagecontainer .h-inside {
 }
 
 .hidden {
-	display: none !important;
+    display: none !important;
 }
 
 /* Format code chunks */
@@ -469,19 +471,19 @@ pre, code, samp, kbd {
 	color: #232323;
 	height: auto;
 	font-size: 14px
-}
+	}
 pre code {
 
-}
+	}
 pre {
 	padding: 5px 20px;
-	border-left: 10px solid #cccccc;
+	border-left: 10px solid #cecece;
 	background: #eee;
 	margin: 5px;
 	overflow: auto;
 	display: inline-block;
 	width: auto
-}
+	}
 /* border radius */
 table.pagetable,
 table.pagetable a.tooltip span,
@@ -500,19 +502,19 @@ menu,
 .pagewarning,
 .green,
 .red,
-.yellow {
+.yellow  {
 	border-radius: 4px
 }
 /* forms */
 form {
-	margin: 0;
+	margin: 0px;
 	display: inline
 }
 input,
 textarea,
 select,
 menu {
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;;
 	font-size: 14px;
 	margin: 2px 5px 2px 0;
 	padding: 4px 5px;
@@ -564,7 +566,7 @@ input[type="submit"],
 .ui-button
  {
 	border: 1px solid #d3d3d3;
-	background: #cccccc url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_ccccc_1x100.png) 50% 50% repeat-x;
+	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x;
 	font-weight: normal;
 	color: #555;
 	cursor: pointer;
@@ -581,7 +583,7 @@ input[type="submit"],
 }
 button.ui-button.ui-state-active {
 	border: 1px solid #d3d3d3;
-	background: #cccccc url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x;
 	font-weight: normal;
 	color: #147fdb
 }
@@ -597,6 +599,13 @@ textarea {
 	min-width: 10em;
 	min-height: 3em;
 }
+/*
+textarea {
+	width: 48em;
+	height: 30em;
+	overflow: auto
+}
+*/
 /* Notification messages */
 .tooltip {
 	cursor: help;
@@ -611,7 +620,7 @@ a.tooltip {
 .red,
 .text-red,
 a.text-red,
-table.pagetable a.text-red {
+table.pagetable a.text-red  {
 	color: #ae432e
 }
 .blue {
@@ -705,7 +714,7 @@ table.pagetable a.text-red {
 aside.message,
 .pagemcontainer,
 .pageerrorcontainer,
-.pageerrorinstalldir {
+.pageerrorinstalldir  {
 	position: fixed;
 	z-index: 9999;
 	border-top: none;
@@ -719,7 +728,7 @@ aside.message,
 	left: 35%
 }
 aside .no-slide,
-.no-slide {
+.no-slide  {
 	position: inherit;
 	left: auto;
 	top: auto;
@@ -738,30 +747,30 @@ aside .no-slide,
 	background: none
 }
 .errorDialog {
-	border: 1px solid red;
-	color: red;
-	height: 100%;
-	line-height: 100%;
+  border: 1px solid red;
+  color: red;
+  height: 100%;
+  line-height: 100%;
 }
 #cms_busy, .busy {
-	position: fixed;
-	z-index: 999;
-	height: 50px;
-	width: 50px;
-	overflow: visible;
-	margin: auto;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
+    position: fixed;
+    z-index: 999;
+    height: 50px;
+    width: 50px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
 	background-size: 50px 50px;
-	cursor: wait;
+    cursor: wait;
 }
 
 /* close notification */
 .close-warning {
-	float: right;
+	float:right;
 	display: inline-block;
 	width: 16px;
 	height: 16px;
@@ -799,11 +808,11 @@ aside .no-slide,
 /*** header ***/
 header.header {
 	height: 100px;
-	background: #cccccc
+	background: #cecece
 }
 header .header-top {
 	height: 69px;
-	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #cecece;
 	background: #eee url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -10px repeat-x
 }
 header .cms-logo {
@@ -941,11 +950,11 @@ header .shortcuts li.view-site a {
 	background-position: -10px -124px
 }
 header .shortcuts li.notifications {
-	position: relative;
+        position: relative;
 }
 header .shortcuts li.notifications a {
-	background-position: -10px -1058px;
-	color: #fff !important;
+        background-position: -10px -1058px;
+        color: #fff !important;
 }
 header .shortcuts li.notifications span.bubble {
 	position: absolute;
@@ -1109,7 +1118,7 @@ nav ul#oe_pagemenu li a {
 	height: 33px;
 	font-weight: bold;
 	display: block;
-	text-shadow: 1px 1px 0 #fff;
+	text-shadow: 1px 1px 0px #fff;
 	padding-left: 30px;
 	text-decoration: none;
 	border: 1px solid transparent;
@@ -1138,9 +1147,9 @@ nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
 }
 nav ul#oe_pagemenu li a:focus {
-	color: #147fdb !important;
-	border: 1px solid #147fdb;
-	margin-right: 10px;
+        color: #147fdb !important;
+        border: 1px solid #147fdb;
+        margin-right: 10px;
 }
 nav ul#oe_pagemenu li a.main {
 	background-position: -10px -484px
@@ -1202,7 +1211,7 @@ nav ul#oe_pagemenu li:hover a.extensions {
 }
 nav ul#oe_pagemenu li a.siteadmin:hover,
 nav ul#oe_pagemenu li.current a.siteadmin,
-nav ul#oe_pagemenu li:hover a.siteadmin {
+nav ul#oe_pagemenu li:hover a.siteadmin  {
 	background-position: -10px -921px
 }
 nav ul#oe_pagemenu li a.myprefs:hover,
@@ -1231,10 +1240,10 @@ nav ul#oe_pagemenu li li.module {
 nav ul#oe_pagemenu li.current li a,
 nav ul#oe_pagemenu li li a,
 nav ul#oe_pagemenu li:hover li a {
-	height: auto;
-	line-height: 1.3;
-	white-space: pre-line;
-	word-break: normal;
+    height: auto;
+    line-height: 1.3;
+    white-space: pre-line;
+    word-break: normal;
 	padding: 5px 5px 5px 30px;
 	color: #232323;
 	font-weight: normal;
@@ -1248,7 +1257,7 @@ nav ul#oe_pagemenu li li.current a {
 nav ul#oe_pagemenu li li a:hover,
 nav ul#oe_pagemenu li li a:active,
 nav ul#oe_pagemenu li.current li a:hover,
-nav ul#oe_pagemenu li.current li a:active {
+nav ul#oe_pagemenu li.current li a:active  {
 	padding-left: 30px
 }
 /*** page content ***/
@@ -1343,7 +1352,7 @@ footer#oe_footer a:hover, footer#oe_footer a:active {
 	max-height: 32px
 }
 #oe_mainarea header.pageheader span.helptext,
-.pageheader span.helptext {
+.pageheader span.helptext  {
 	display: inline;
 	line-height: 63px;
 	float:right;
@@ -1395,7 +1404,7 @@ div.pageoverflow {
 	overflow: hidden
 }
 div.pageoverflow img {
-	border: 0
+	border: 0px
 }
 div.pageoptions,
 p.pageoptions {
@@ -1437,14 +1446,14 @@ div.alert-dialog ul li {
 	margin: 10px 0
 }
 div.alert-dialog .alert-icon {
-	float: left;
-	cursor: pointer;
-	margin-right: 4px;
+    float: left;
+    cursor: pointer;
+    margin-right: 4px;
 }
 div.alert-dialog .alert-remove {
-	float: right;
-	cursor: pointer;
-	margin-left: 4px;
+    float: right;
+    cursor: pointer;
+    margin-left: 4px;
 }
 div.alert-dialog span.ui-icon {
 }
@@ -1473,10 +1482,10 @@ table th:last-child {
 }
 table tr:last-child td:first-child {
 	border-bottom-left-radius:4px
-}
+	}
 table tr:last-child td:last-child {
 	border-bottom-right-radius:4px
-}
+	}
 table.pagetable {
 	border-collapse: inherit;
 	font-size: 14px;
@@ -1509,7 +1518,7 @@ table.pagetable th.active {
 	color: #147fdb
 }
 table.pagetable th input:focus {
-	outline: 2px solid #fa8004;
+        outline: 2px solid #fa8004;
 }
 table.pagetable th.active a,
 table.pagetable th a:hover {
@@ -1528,7 +1537,7 @@ table.pagetable a {
 	color: #232323
 }
 table.pagetable td a:focus {
-	color: #147fdb;
+        color: #147fdb;
 }
 /*
 table.pagetable a.tooltip {
@@ -1609,7 +1618,7 @@ td.icons_wide {
 
 /*** Design manager ***/
 .pointer {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #oe_mainarea ul.sortable-list {
@@ -1739,7 +1748,7 @@ div.pagecontainer legend {
 .group_memberships {
 	margin: 0;
 	height: 1%; /*IE*/
-	padding: 5px 10px;
+	padding: 5px  10px;
 	background: #fefefe;
 	border: 1px solid #ddd;
 }
@@ -1824,8 +1833,8 @@ textarea.pageextrasmalltextarea {
 }
 /*** topcontent - dashboard ***/
 #topcontent_wrap {
-	display: flex;
-	flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 .dashboard-box {
 	min-height: 100px;
@@ -1846,27 +1855,27 @@ textarea.pageextrasmalltextarea {
 .dashboard-box img {
 	max-height: 48px;
 	padding: 20px;
-	box-shadow: inset 0 1px 15px 1px #ddd;
-	-webkit-box-shadow: inset 0 1px 15px 1px #ddd;
+	box-shadow: inset 0px 1px 15px 1px #ddd;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
 	margin-right: 10px;
 	float: left;
 	border: 1px solid #ddd;
 	background: #fff
 }
 .dashboard-box:hover img {
-	box-shadow: inset 0 1px 15px 1px #ffd8b0;
-	-webkit-box-shadow: inset 0 1px 15px 1px #ffd8b0;
+	box-shadow: inset 0px 1px 15px 1px #ffd8b0;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ffd8b0;
 	transition: all 600ms ease-in-out;
 	-webkit-transition: all 600ms ease-in-out;
-	-moz-transition: all 600ms ease-in-out;
-	-o-transition: all 600ms ease-in-out
+	   -moz-transition: all 600ms ease-in-out;
+	     -o-transition: all 600ms ease-in-out
 }
 .dashboard-box h3 {
 	text-shadow: 0 1px 0 #fff;
 	margin:0 0 5px 0
 }
 .dashboard-box h3 a:focus {
-	border: 1px solid #147fdb;
+        border: 1px solid #147fdb;
 }
 .dashboard-box span.description {
 	color: #585858;
@@ -1913,7 +1922,7 @@ ul.sortableList div.label {
 	border-radius: 4px;
 	cursor: move;
 	padding: 3px 10px 3px 35px;
-	background: #eee url(themes/OneEleven/images/icons/extra/reorder.gif) no-repeat 10px 50%;
+	background: #eee url(themes/OneEleven/images/icons/extra/reorder.gif) no-repeat  10px 50%;
 	text-shadow: 0 1px 0 #fff;
 	font-weight: bold;
 	color: #585858
@@ -1933,7 +1942,7 @@ ul.sortable .placeholder {
 .version {
 	background: #f1f1f1;
 	border: 1px solid #ddd;
-	margin: 15px 0;
+	margin: 15px  0;
 	padding: 20px;
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	line-height: 1.5
@@ -2048,15 +2057,15 @@ a.toggle-dropzone:focus {
 	top: -29px
 }
 #login div.login-box {
-	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
-	position: relative;
-	border-radius: 4px 4px 0 4px;
-	border: 1px solid #aaa;
-	box-shadow: #999 0 0 6px;
-	-webkit-box-shadow: #999 0 0 6px;
-	margin: 0 auto;
-	padding: 10px 20px;
-	width: 310px
+  background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
+  position: relative;
+  border-radius: 4px 4px 0 4px;
+  border: 1px solid #aaa;
+  box-shadow: #999 0 0 6px;
+  -webkit-box-shadow: #999 0 0 6px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  width: 310px
 }
 #login h1 {
 	color: #585858;
@@ -2080,7 +2089,7 @@ a.toggle-dropzone:focus {
 #login input[type="password"] {
 	margin: 5px 0;
 	border-bottom: 1px solid #fff;
-	border-right: 1px solid #fff;
+	border-right: 1px solid  #fff;
 	width: 300px
 }
 #login input[type="text"]:focus,
@@ -2091,8 +2100,8 @@ a.toggle-dropzone:focus {
 	-webkit-box-shadow:0 0 5px #147fdb;
 	transition: all 0.2s ease-in-out;
 	-webkit-transition: all 200ms ease-in-out;
-	-moz-transition: all 200ms ease-in-out;
-	-o-transition: all 200ms ease-in-out
+	   -moz-transition: all 200ms ease-in-out;
+	     -o-transition: all 200ms ease-in-out
 }
 #login input.loginsubmit {
 	border: 1px solid #838282;
@@ -2126,8 +2135,8 @@ a.toggle-dropzone:focus {
 	outline: none;
 	border-radius: 4px 0 0 4px;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top:0;
+	left:0;
 	border: 1px solid #aaa;
 	border-right: none;
 	height: 25px;
@@ -2251,8 +2260,8 @@ a.toggle-dropzone:focus {
 }
 
 #oe_mainarea .options-menu li.parent:hover {
-	background: #fafafa;
-	cursor: pointer;
+    background: #fafafa;
+    cursor: pointer;
 }
 
 #oe_mainarea .options-menu li:hover ul {
@@ -2260,7 +2269,7 @@ a.toggle-dropzone:focus {
 	top: 32px;
 	width: 240px;
 	background: #fafafa;
-	border: 1px solid #d0d0d0;
+        border: 1px solid #d0d0d0;
 }
 
 #oe_mainarea .options-menu li li {
@@ -2309,11 +2318,11 @@ a.toggle-dropzone:focus {
 		color: #fff;
 		background: #147fdb
 	}
-/*
+	/*
 	textarea {
 		width: 43em;
 	}
-*/
+	*/
 	header .header-top {
 		overflow: hidden
 	}
@@ -2393,6 +2402,7 @@ a.toggle-dropzone:focus {
 		margin: 0;
 		min-width: 100%;
 		padding: 0;
+
 	}
 	a {
 		outline: 0
@@ -2423,7 +2433,7 @@ a.toggle-dropzone:focus {
 	#oe_sidebar .toggle-button,
 	header .admin-title,
 	#oe_admin-content .shadow,
-	.drop {
+	.drop   {
 		display: none
 	}
 	#oe_admin-content {
@@ -2536,9 +2546,9 @@ a.toggle-dropzone:focus {
 		height: auto
 	}
 	select {
-		-webkit-appearance: listbox;
-		-moz-appearance: listbox;
-	}
+    	-webkit-appearance: listbox;
+    	-moz-appearance: listbox;
+    }
 	#login #wrapper {
 		padding-top: 2%
 	}
@@ -2597,11 +2607,11 @@ a.toggle-dropzone:focus {
 }
 
 .cmsfp_dlg {
-	padding: 0 !important;
+    padding: 0 !important;
 }
 .cmsfp_dlg iframe {
-	width: 100% !important;
-	height: 100% !important;
-	max-width: none !important;
-	border: none;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    border: none;
 }

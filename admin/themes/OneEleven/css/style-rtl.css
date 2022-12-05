@@ -7,13 +7,13 @@
 /* NORMALIZE BROWSER
  * normalize.css 2011-11-04T15:38 UTC - http://github.com/necolas/normalize.css
  */
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block }
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {	display: block }
 audio, canvas, video {
 	display: inline-block;
-	display: inline;
-	zoom: 1
+	*display: inline;
+	*zoom: 1
 }
-audio:not([controls]) { display: none }
+audio:not([controls]) {	display: none }
 [hidden] { display: none }
 html {
 	font-size: 100%;
@@ -21,15 +21,12 @@ html {
 	-ms-text-size-adjust: 100%
 }
 body { margin: 0 }
-body, button, input, select, textarea {
-	-webkit-font-smoothing: subpixel-antialiased;
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+body, button, input, select, textarea {	font-family: tahoma }
 a:focus { outline: thin dotted }
-a:hover, a:active { outline: 0 }
+a:hover, a:active {	outline: 0 }
 h1 { font-size: 2em }
 abbr[title] { border-bottom: 1px dotted }
-b, strong { font-weight: bold }
+b, strong {	font-weight: bold }
 blockquote { margin: 1em 40px }
 dfn { font-style: italic }
 mark {
@@ -38,6 +35,7 @@ mark {
 }
 pre, code, kbd, samp {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
+	_font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 1em
 }
 pre {
@@ -50,7 +48,7 @@ q:before, q:after {
 	content: '';
 	content: none
 }
-small { font-size: 75% }
+small {	font-size: 75% }
 sub, sup {
 	font-size: 75%;
 	line-height: 0;
@@ -60,10 +58,10 @@ sub, sup {
 sup { top: -0.5em }
 sub { bottom: -0.25em }
 ul, ol {
-	margin-right: 0;
-	padding: 0 40px 0 0
+	margin-left: 0;
+	padding: 0 0 0 40px
 }
-dd { margin: 0 40px 0 0 }
+dd { margin: 0 0 0 40px }
 nav ul, nav ol {
 	list-style: none;
 	list-style-image: none
@@ -82,19 +80,19 @@ fieldset {
 }
 legend {
 	border: 0;
-	margin-right: -7px
+	*margin-left: -7px
 }
 button, input, select, textarea {
 	font-size: 100%;
 	margin: 0;
 	vertical-align: baseline;
-	vertical-align: middle
+	*vertical-align: middle
 }
-button, input { line-height: normal }
+button, input {	line-height: normal }
 button, input[type="button"], input[type="reset"], input[type="submit"] {
 	cursor: pointer;
 	-webkit-appearance: button;
-	overflow: visible
+	*overflow: visible
 }
 input[type="checkbox"], input[type="radio"] {
 	box-sizing: border-box;
@@ -116,7 +114,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 textarea {
 	overflow: auto;
 	vertical-align: top;
-	direction: rtl
+	direction: ltr
 }
 table {
 	border-collapse: collapse;
@@ -149,15 +147,15 @@ table {
 .grid_11,
 .grid_12 {
 	display: inline;
-	float: right;
+	float: left;
 	position: relative;
-	margin-right: 1%;
-	margin-left: 1%
+	margin-left: 1%;
+	margin-right: 1%
 }
 
-/* Alpha = no margin left, Omega = no margin right */
-.alpha { margin-right: 0 }
-.omega { margin-left: 0 }
+/* Alpha = no margin left, Omega = no margin right  */
+.alpha { margin-left: 0 }
+.omega { margin-right: 0 }
 
 /* Grids up to 12 columns */
 .c_full .grid_1 { width: 6.333% }
@@ -300,7 +298,7 @@ table {
  * Colors:
  * #f6f6f6 Body/Content Background
  * #232323 Dark background
- * #cccccc Grey background
+ * #cecece Grey background
  * #ddd Grey background
  * #585858 Dark grey titles
  * #fa8004 Orange (links, title)
@@ -309,8 +307,8 @@ table {
 
 html, body {
 	width: 100%;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	min-height: 100%;
 	height: 100%
 }
@@ -336,7 +334,7 @@ del {
 abbr[title],
 dfn[title] {
 	border-bottom: 1px dotted;
-	cursor: help
+	cursor: help;
 }
 table {
 	border-collapse: collapse;
@@ -346,9 +344,9 @@ hr {
 	display: block;
 	height: 1px;
 	border: 0;
-	border-top: 1px solid #cccccc;
+	border-top: 1px solid #cecece;
 	margin: 10px 0;
-	padding: 0
+	padding: 0;
 }
 ul, ol {
 	list-style: none;
@@ -397,25 +395,20 @@ p {
 	font-size: 14px;
 	margin: 2px 0
 }
-a,
-span {
-	outline: none
-}
 table,
 td,
 tr {
 	text-align: right
 }
 form {
-	margin: 0;
+	margin: 0px;
 	display: inline
 }
 a,
 a:link,
 a:visited {
 	color: #147fdb;
-	text-decoration: none;
-	cursor: pointer
+	text-decoration: none
 }
 a:hover,
 a:active {
@@ -438,18 +431,18 @@ a.external {
 	font-weight: normal
 }
 .smallgrey {
-	font-weight: normal;
-	font-size: 10px;
-	margin: 10px 0 0 0
+        font-weight: normal;
+        font-size: 10px;
+		margin: 10px 0 0 0
 }
 div.pagecontainer .h-inside {
-	float: right;
+	float: left;
 	padding-top: 8px;
 	padding-left: 10px;
 	margin-right: 10%;
 	width: 18em;
 	margin-bottom: 0.5em;
-	text-align: left
+	text-align: right
 }
 .visible {
 	position: static
@@ -464,29 +457,29 @@ div.pagecontainer .h-inside {
 }
 
 .hidden {
-	display: none !important;
+    display: none !important;
 }
 
 /* Format code chunks */
 pre, code, samp, kbd {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
-	text-align: right;
+	text-align: left;
 	color: #232323;
 	height: auto;
 	font-size: 14px
-}
+	}
 pre code {
 
-}
+	}
 pre {
 	padding: 5px 20px;
-	border-right: 10px solid #cccccc;
+	border-right: 10px solid #cecece;
 	background: #eee;
 	margin: 5px;
 	overflow: auto;
 	display: inline-block;
 	width: auto
-}
+	}
 /* border radius */
 table.pagetable,
 table.pagetable a.tooltip span,
@@ -505,25 +498,25 @@ menu,
 .pagewarning,
 .green,
 .red,
-.yellow {
+.yellow  {
 	border-radius: 4px
 }
 /* forms */
 form {
-	margin: 0;
+	margin: 0px;
 	display: inline
 }
 input,
 textarea,
 select,
 menu {
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: sans-serif;
 	font-size: 14px;
-	margin: 2px 0 2px 5px;
+	margin: 2px 5px 2px 0;
 	padding: 4px 5px;
 	border: 1px solid #aaa;
 	border-bottom: 1px solid #ddd;
-	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
 	background: #f0f0f0
 }
 textarea {
@@ -566,27 +559,20 @@ input[type="password"] {
 }
 input[type="button"],
 input[type="submit"],
-.ui-button
- {
-	border: 1px solid #d3d3d3;
-	background: #cccccc url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_ccccc_1x100.png) 50% 50% repeat-x;
-	font-weight: normal;
-	color: #555;
+.ui-button  {
+    outline: none;
 	cursor: pointer;
 	height: 28px;
-	font-size: 12px
-}
-.ui-button {
-	outline: none;
-	margin: 4px 0
+	font-size: 13px;
+	line-height: 28px
 }
 .ui-button-text {
-	font-size: 12px;
+	font-size: 13px;
 	margin-right: 2px;
 }
 button.ui-button.ui-state-active {
 	border: 1px solid #d3d3d3;
-	background: #cccccc url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+	background: #cecece url(/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x;
 	font-weight: normal;
 	color: #147fdb
 }
@@ -599,14 +585,14 @@ input[type="checkbox"] {
 	border: none
 }
 textarea {
-	min-width: 10em;
-	min-height: 3em;
+	width: 48em;
+	height: 30em;
+	overflow: auto
 }
 /* Notification messages */
 .tooltip {
 	cursor: help;
 }
-
 a.tooltip {
 	cursor: pointer;
 }
@@ -655,7 +641,7 @@ table.pagetable a.text-red {
 }
 .warning,
 .pagewarning {
-	background: #faf6d4 url(themes/OneEleven/images/icons/extra/warning.png) right 10px top 50% no-repeat;
+	background: #faf6d4 url(themes/OneEleven/images/icons/extra/warning.png) right 50% no-repeat;
 	border: 1px solid #e6c26e
 }
 .yellow {
@@ -666,7 +652,7 @@ table.pagetable a.text-red {
 .error,
 .pageerrorcontainer,
 .pageerrorinstalldir {
-	background: #f2d4ce url(themes/OneEleven/images/icons/extra/block.png) right 10px top 50% no-repeat;
+	background: #f2d4ce url(themes/OneEleven/images/icons/extra/block.png) right 50% no-repeat;
 	border: 1px solid #ae432e
 }
 .red {
@@ -676,7 +662,7 @@ table.pagetable a.text-red {
 }
 .success,
 .pagemcontainer {
-	background: #d9e6c3 url(themes/OneEleven/images/icons/extra/accept.png) right 10px top 50% no-repeat;
+	background: #d9e6c3 url(themes/OneEleven/images/icons/extra/accept.png) right 50% no-repeat;
 	border: 1px solid #77ab13
 }
 .green {
@@ -685,20 +671,18 @@ table.pagetable a.text-red {
 	border: 1px solid #77ab13
 }
 .information {
-	background: #cee6f2 url(themes/OneEleven/images/icons/extra/info.png) right 10px top 50% no-repeat;
+	background: #cee6f2 url(themes/OneEleven/images/icons/extra/info.png) right 50% no-repeat;
 	border: 1px solid #058dc7
 }
 .message:hover {
 	cursor: help
 }
-.warning p,
 .pagewarning p,
 .message p {
 	color: #232323;
 	margin: 0;
 	font-size: 14px
 }
-.warning h3,
 .pagewarning h3 {
 	margin: 2px 0;
 	font-size: 14px;
@@ -710,23 +694,23 @@ table.pagetable a.text-red {
 aside.message,
 .pagemcontainer,
 .pageerrorcontainer,
-.pageerrorinstalldir {
+.pageerrorinstalldir  {
 	position: fixed;
 	z-index: 9999;
 	border-top: none;
 	width: 30%;
 	font-size: 12px;
 	border-radius: 0 0 4px 4px;
-	box-shadow: -1px 1px 3px 1px #444;
-	-webkit-box-shadow: -1px 1px 3px 1px #444;
+	box-shadow: 1px 1px 3px 1px #444;
+	-webkit-box-shadow: 1px 1px 3px 1px #444;
 	top:0;
 	margin:0;
 	right: 35%
 }
 aside .no-slide,
-.no-slide {
+.no-slide  {
 	position: inherit;
-	right: auto;
+	left: auto;
 	top: auto;
 	border-radius: 4px;
 	box-shadow: none;
@@ -737,43 +721,199 @@ aside .no-slide,
 	display: block;
 	z-index: 0
 }
+.p
 .pageerrorcontainer ul {
 	border: none;
 	margin-right: 25px;
 	background: none
 }
-.errorDialog {
-	border: 1px solid red;
-	color: red;
-	height: 100%;
-	line-height: 100%;
-}
+
 #cms_busy, .busy {
-	position: fixed;
-	z-index: 999;
-	height: 50px;
-	width: 50px;
-	overflow: visible;
-	margin: auto;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
+    position: fixed;
+    z-index: 999;
+    height: 50px;
+    width: 50px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
 	background-size: 50px 50px;
-	cursor: wait;
+    cursor: wait;
 }
 
 /* close notification */
 .close-warning {
-	float: left;
+	float:left;
 	display: inline-block;
 	width: 16px;
 	height: 16px;
+	overflow: hidden;
 	text-indent: -9999em;
-	background: transparent url(themes/OneEleven/images/icons/extra/close.png) no-repeat;
+	background: transparent url(themes/OneEleven/images/icons/extra/close.gif) no-repeat;
 	cursor: pointer;
 	margin:5px
+}
+/* LAYOUT */
+
+/* Login Page */
+/* TO DO, Rework login page, to much info, simple toggle of messages and other stuff should do it to */
+body.login {
+	background: #f6f6f6;
+	font: normal 14px/1.3 Tahoma, sans-serif;
+}
+.login .top {
+	height: 45px;
+	background: #e5e5e5 url(themes/OneEleven/images/layout/login-top-bg.gif) repeat-x;
+	color: #222;
+	border-bottom: 1px solid #fff;
+	padding: 0 20px;
+	line-height: 45px
+}
+.login .top a.logo {
+	display: inline-block;
+	height: 45px;
+	width: 146px;
+	float: left
+}
+.login .top a.home {
+	display: block;
+	height: 45px;
+	width: 32px;
+	float: right;
+	overflow: hidden;
+	text-indent: -9999em;
+	background: url(themes/OneEleven/images/layout/home-button.png) no-repeat center
+}
+.login .top h1 {
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 0 0 20px;
+	float: left;
+	height: 45px;
+	color: #8d8d8d
+}
+.login .bottom {
+	width: 690px;
+	margin: 10em auto 20px auto;
+	padding-bottom: 18px;
+	font: normal 11px  /1.3 sans-serif;
+	background: url(themes/OneEleven/images/layout/bottom-shadow.png) no-repeat center bottom
+}
+.login .bottom .container {
+	width: 500px;
+	padding: 15px;
+	margin: auto;
+	background: #ededed url(themes/OneEleven/images/layout/login-bg.gif) repeat-x top;
+	border: 2px solid #efefef;
+	border-radius: 0 25px 0 0
+}
+.login .bottom h2 {
+	color: #f79838;
+	margin-top: 0
+}
+p.login-info {
+	background: url(themes/OneEleven/images/layout/info-icon.png) no-repeat left;
+	padding-left: 38px;
+	font: bold 14px  /30px sans-serif;
+	color: #8d8d8d;
+	text-shadow: 0 1px 1px #fff
+}
+.login .bottom ol {
+	padding: 0;
+	margin-left: 20px
+}
+.login p.forgotpw {
+	text-align: right;
+	margin-bottom: 0
+}
+.login p.forgotpw a {
+	padding-left: 20px;
+	background: url(themes/OneEleven/images/layout/help.png) left 50% no-repeat;
+	color: #222;
+	text-decoration: none
+}
+.login .copyright {
+	width: 690px;
+	margin: auto;
+	text-align: center
+}
+.login .copyright .small {
+	background: #feffc8 url(themes/OneEleven/images/layout/exclamation.png) no-repeat 10px 50%;
+	border: 1px solid #f1aa2d;
+	color: #8d8d8d;
+	border-radius: 3px;
+	display: inline-block;
+	text-align: center;
+	width: auto;
+	padding: 5px 5px 5px 30px;
+	font-size: 11px
+}
+.login small {
+	text-align: center;
+	font-size: 1px;
+	color: #8d8d8d;
+	display: block
+}
+.login small a {
+	color: #8d8d8d;
+	text-decoration: none;
+	font-weight: bold
+}
+/* login form */
+.login fieldset {
+	border: none;
+	border-bottom: 1px solid #fff
+}
+.login p.left, .login p.right {
+	float: left;
+	width: 50%;
+	display: inline
+}
+.login label {
+	color: #8d8d8d;
+	font-size: 13px;
+	margin-bottom: 5px;
+	display: inline-block;
+	font-weight: bold
+}
+.login input[type="password"], .login input.focus, .login input[type="text"] {
+	border: 1px solid #bbb;
+	border-radius: 3px;
+	line-height: 28px;
+	height: 28px;
+	width: 220px;
+	background: #efefef;
+	outline: 0;
+	text-indent: 10px;
+	font: normal 11px/22px 'Lucida Console', 'Monaco', monospace;
+	margin-bottom: 5px
+}
+.login input[type="password"]:focus, .login input[type="text"]:focus {
+	background: #fff
+}
+.login input[type="submit"] {
+	height: 28px;
+	color: #8d8d8d;
+	font-weight: bold;
+	width: auto;
+	padding: 0 15px;
+	margin-right: 8px;
+	border: 1px solid #bbb;
+	border-top: 1px solid #fff;
+	border-left: 1px solid #fff;
+	border-radius: 3px;
+	outline: 0;
+	background: #dddbdb url(themes/OneEleven/images/layout/submit-bg.gif) repeat-x bottom
+}
+.login input[type="submit"]:focus, .login input[type="submit"]:hover {
+	background: #ff9223 url(themes/OneEleven/images/layout/submit-hover.gif) repeat-x bottom;
+	border: 1px solid #fd860d;
+	border-top: 1px solid #fdd580;
+	border-left: 1px solid #fdd580;
+	color: #fff
 }
 /* --- LAYOUT --- */
 /* full height */
@@ -793,7 +933,7 @@ aside .no-slide,
 	height: 100%
 }
 #oe_admin-content .shadow {
-	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) right 831px top -148px repeat-x;
+	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
 	z-index: 50;
 	position: absolute;
 	top: 100px;
@@ -804,30 +944,30 @@ aside .no-slide,
 /*** header ***/
 header.header {
 	height: 100px;
-	background: #cccccc
+	background: #cecece
 }
 header .header-top {
 	height: 69px;
-	border-bottom: 1px solid #cccccc;
-	background: #eee url(themes/OneEleven/images/layout/sprite_repeatx.png) right 831px top -10px repeat-x
+	border-bottom: 1px solid #cecece;
+	background: #eee url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -10px repeat-x
 }
 header .cms-logo {
 	width: 240px;
 	height: 70px;
 	padding-right: 10px;
-	background: transparent url(themes/OneEleven/images/layout/cms-logo-bg.gif) no-repeat top left;
+	background: transparent url(themes/OneEleven/images/layout/cms-logo-bg.gif) no-repeat top right;
 	float: right
 }
 header .admin-title {
-	text-align: left;
+	text-align: right;
+	display: inline-block;
 	max-width: 70%;
 	overflow: hidden;
-	display: inline-block;
 	height: 70px;
 	font: bold 14px/70px sans-serif;
 	margin-left: 20px;
 	color: #585858;
-	text-shadow: -1px 1px 0 #fff;
+	text-shadow: 1px 1px 0 #fff;
 	float: left
 }
 header .header-bottom {
@@ -836,11 +976,10 @@ header .header-bottom {
 	border-bottom: 1px solid #0f0f0f;
 	position: relative;
 	width: 100%;
-	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) right 831px top -99px repeat-x
+	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -99px repeat-x
 }
 header .welcome {
 	width: 250px;
-	overflow: hidden;
 	float: right;
 	color: #fff;
 	background: transparent url(themes/OneEleven/images/layout/welcome-bg.gif) no-repeat top left
@@ -859,9 +998,10 @@ header a.welcome-user {
 	height: 18px;
 	width: 18px;
 	display: inline-block;
+	overflow: hidden;
 	text-indent: -999em;
 	margin-left: 10px;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) right -10px top -336px no-repeat
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat
 }
 /* breadcrumbs nav */
 header .breadcrumbs {
@@ -878,25 +1018,26 @@ header .breadcrumbs ul li {
 	float: right;
 	color: #fff;
 	font-size: 11px;
-	padding: 0 4px 0 8px
+	padding: 0 8px 0 4px
 }
 header .breadcrumbs ul li.home {
 	padding: 0 0 0 10px;
-	background: url(themes/OneEleven/images/layout/breadcrubms-divider.png) no-repeat left;
+	background: url(themes/OneEleven/images/layout/breadcrubms-divider-rtl.png) no-repeat left;
 }
 header .breadcrumbs ul li.home a {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) right -10px top -367px no-repeat;
+	background: url(themes/OneEleven/images/layout/home-icon.png) right no-repeat;
 	width: 18px;
+	overflow: hidden;
 	text-indent: -999em
 }
 header .breadcrumbs ul li.first {
-	padding-right: 18px
+	padding-right: 14px
 }
 header .breadcrumbs ul li a {
 	color: #fff;
 	text-decoration: none;
 	display: inline-block;
-	background: url(themes/OneEleven/images/layout/breadcrubms-divider.png) no-repeat left;
+	background: url(themes/OneEleven/images/layout/breadcrubms-divider-rtl.png) no-repeat left;
 	padding-left: 24px
 }
 header .breadcrumbs ul li a:hover, header .breadcrumbs ul li a:active {
@@ -907,17 +1048,18 @@ header .breadcrumbs ul li.current, header .breadcrumbs ul li.current a {
 }
 /* shortcut icons */
 header .shortcuts {
-	line-height: 25px;
 	float: left
 }
 header .shortcuts ul {
 	width: auto;
+	line-height: 25px;
 	text-align: right;
 	margin-left: 20px
 }
 header .shortcuts li {
 	padding: 0 12px;
 	display: inline-block;
+	line-height: 29px;
 	float: right
 }
 header .shortcuts li:last-child, header .shortcuts li.last {
@@ -927,56 +1069,32 @@ header .shortcuts li a {
 	display: block;
 	margin-top: 5px;
 	width: 18px;
+	height: 18px;
 	height: 25px;
 	text-indent: -9999em;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
-	overflow: hidden;
-	cursor: pointer;
+	overflow: hidden
 }
 header .shortcuts li.help a {
-	background-position: right -10px top -737px
+	background-position: -10px -737px
 }
 header .shortcuts li.settings a {
-	background-position: right -10px top -10px
+	background-position: -10px -10px
 }
 header .shortcuts li.logout a {
-	background-position: right -10px top -86px
+	background-position: -10px -86px
 }
 header .shortcuts li.view-site a {
-	background-position: right -10px top -124px
-}
-header .shortcuts li.notifications {
-	position: relative;
-}
-header .shortcuts li.notifications a {
-	background-position: right -10px top -1058px;
-	color: #fff !important;
-}
-header .shortcuts li.notifications span.bubble {
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin-left: 0;
-	text-align: center;
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: 0.8em;
-	-moz-border-radius: 0.8em;
-	-webkit-border-radius: 0.8em;
-	background: #990000;
-	font-size: .9em;
-	line-height: 1.2em;
-	font-weight: bold;
-	text-indent: initial;
+	background-position: -10px -124px
 }
 header .shortcuts li.favorites a {
-	background-position: right -10px top -48px
+	background-position: -10px -48px
 }
 /*** sidebar ***/
 #oe_sidebar {
 	width: 249px;
 	border-left: 1px solid #fff;
-	background: #ddd url(themes/OneEleven/images/layout/sidebar-shadow.png) repeat-y left;
+	background: #ddd url(themes/OneEleven/images/layout/sidebar-shadow-rtl.png) -3px repeat-y;
 	position: absolute;
 	right: 0;
 	top: 100px;
@@ -988,9 +1106,8 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar aside {
 	padding-bottom: 30px;
-	position: relative;
 	overflow: hidden;
-	min-height: 40px;
+	position: relative;
 }
 #oe_sidebar nav.navigation {
 	height: auto;
@@ -1000,7 +1117,8 @@ header .shortcuts li.favorites a {
 /* toggle sidebar */
 #oe_sidebar .toggle-button {
 	text-indent: -9999em;
-	z-index: 99;
+	overflow: hidden;
+	z-index: 60;
 	display: block;
 	cursor: pointer;
 	width: 24px;
@@ -1012,22 +1130,18 @@ header .shortcuts li.favorites a {
 #oe_sidebar .toggle-button.top {
 	top: -33px
 }
-#oe_sidebar .toggle-button{
-	background-image: url(themes/OneEleven/images/layout/sprite_norepeat.png);
-	background-repeat: no-repeat
+#oe_sidebar .toggle-button.close {
+	background: url(themes/OneEleven/images/layout/close-sidebar-rtl.png) no-repeat
 }
-.sidebar-on #oe_sidebar .toggle-button {
-	background-position: right -9px top -254px
-}
-.sidebar-off #oe_sidebar .toggle-button {
-	background-position: right -9px top -216px
+#oe_sidebar .toggle-button.open-sidebar {
+	background: url(themes/OneEleven/images/layout/open-sidebar-rtl.png) no-repeat
 }
 /* sidebar notifications */
 #oe_sidebar .notification a {
 	text-decoration: none;
 	display: block;
 	height: 35px;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) right -10px top -446px no-repeat;
+	background: url(themes/OneEleven/images/layout/email-icon.png) right no-repeat;
 	color: #fff
 }
 #oe_sidebar .notification a span {
@@ -1039,7 +1153,7 @@ header .shortcuts li.favorites a {
 	line-height: 35px;
 	position: relative;
 	padding: 14px 10px;
-	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) right 122px top -175px repeat-x;
+	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 122px -175px repeat-x;
 	color: #fff
 }
 #oe_sidebar div.notification .box-shadow,
@@ -1050,7 +1164,7 @@ header .shortcuts li.favorites a {
 	left: 0;
 	top: 0;
 	bottom: 0;
-	background: url(themes/OneEleven/images/layout/sidebar-shadow.png) repeat-y left
+	background: url(themes/OneEleven/images/layout/sidebar-shadow-rtl.png) -3px repeat-y
 }
 #oe_sidebar .notification span {
 	font-size: 11px;
@@ -1059,6 +1173,8 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar .alert-dialog {
 	visibility: hidden;
+	display: block;
+	overflow: hidden;
 	text-indent: -9999em
 }
 #oe_sidebar .alert-dialog strong {
@@ -1080,7 +1196,7 @@ nav ul#oe_pagemenu li {
 .sidebar-on #oe_sidebar nav.navigation {
 	width: 249px
 }
-.sidebar-off #oe_sidebar nav.navigation {
+.sidebar-off #oe_sidebar nav.navigation{
 	width: 40px;
 	overflow: hidden
 }
@@ -1093,31 +1209,28 @@ nav ul#oe_pagemenu li span.open-nav {
 	position: absolute;
 	left: 5px;
 	top: 0;
+	overflow: hidden;
 	text-indent: -9999em
 }
-
 nav ul#oe_pagemenu li span.open-nav.open-sub,
 nav ul#oe_pagemenu li.current span.open-nav,
 nav ul#oe_pagemenu li:hover span.open-nav,
 nav ul#oe_pagemenu li.current span.open-nav,
-nav ul#oe_pagemenu li.current:hover span.open-nav,
-nav ul#oe_pagemenu li a span:hover {
+nav ul#oe_pagemenu li.current:hover span.open-nav {
 	cursor: pointer;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) right 180px top -176px no-repeat
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
 }
 /*** menu style ***/
 nav ul#oe_pagemenu li a {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
 	color: #232323;
 	outline: 0;
-	margin-right: 9px;
-	height: 33px;
+	margin-right: 10px;
+	height: 36px;
 	font-weight: bold;
 	display: block;
-	text-shadow: -1px 1px 0 #fff;
+	text-shadow: 1px 1px 0 #fff;
 	padding-right: 30px;
-	text-decoration: none;
-	border: 1px solid transparent;
+	text-decoration: none
 }
 nav ul#oe_pagemenu li.current li a {
 	color: #232323
@@ -1142,92 +1255,86 @@ nav ul#oe_pagemenu li.current li a,
 nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
 }
+
 nav ul#oe_pagemenu li a:focus {
-	color: #147fdb !important;
-	border: 1px solid #147fdb;
-	margin-left: 10px;
+        color: #147fdb !important;
+        border: 1px solid #147fdb;
+        margin-right: 10px;
 }
+
 nav ul#oe_pagemenu li a.main {
-	background-position: right -10px top -484px
+	background: url(themes/OneEleven/images/layout/home-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.content {
-	background-position: right -10px top -520px
+	background: url(themes/OneEleven/images/layout/content-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.layout {
-	background-position: right -10px top -556px
+	background: url(themes/OneEleven/images/layout/layout-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.files {
-	background-position: right -10px top -520px
+	background: url(themes/OneEleven/images/layout/content-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.usersgroups {
-	background-position: right -10px top -592px
+	background: url(themes/OneEleven/images/layout/users-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.extensions {
-	background-position: right -10px top -628px
+	background: url(themes/OneEleven/images/layout/extensions-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.siteadmin {
-	background-position: right -10px top -664px
+	background: url(themes/OneEleven/images/layout/admin-off.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.myprefs {
-	background-position: right -10px top -700px
-}
-nav ul#oe_pagemenu li a.ecommerce {
-	background-position: right -10px top -990px
+	background: url(themes/OneEleven/images/layout/preferences-off.png) right no-repeat;
 }
 /* hover, active */
 nav ul#oe_pagemenu li a.main:hover,
 nav ul#oe_pagemenu li.current a.main,
 nav ul#oe_pagemenu li:hover a.main {
-	background-position: right -10px top -278px
+	background: url(themes/OneEleven/images/layout/home-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.content:hover,
 nav ul#oe_pagemenu li.current a.content,
 nav ul#oe_pagemenu li:hover a.content {
-	background-position: right -10px top -758px
+	background: url(themes/OneEleven/images/layout/content-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.layout:hover,
 nav ul#oe_pagemenu li.current a.layout,
 nav ul#oe_pagemenu li:hover a.layout {
-	background-position: right -10px top -790px
+	background: url(themes/OneEleven/images/layout/layout-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.files:hover,
 nav ul#oe_pagemenu li.current a.files,
 nav ul#oe_pagemenu li:hover a.files {
-	background-position: right -10px top -758px
+	background: url(themes/OneEleven/images/layout/content-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.usersgroups:hover,
 nav ul#oe_pagemenu li.current a.usersgroups,
 nav ul#oe_pagemenu li:hover a.usersgroups {
-	background-position: right -10px top -823px
+	background: url(themes/OneEleven/images/layout/users-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.extensions:hover,
 nav ul#oe_pagemenu li.current a.extensions,
 nav ul#oe_pagemenu li:hover a.extensions {
-	background-position: right -10px top -854px
+	background: url(themes/OneEleven/images/layout/extensions-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.siteadmin:hover,
 nav ul#oe_pagemenu li.current a.siteadmin,
-nav ul#oe_pagemenu li:hover a.siteadmin {
-	background-position: right -10px top -921px
+nav ul#oe_pagemenu li:hover a.siteadmin  {
+	background: url(themes/OneEleven/images/layout/admin-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.myprefs:hover,
-nav ul#oe_pagemenu li.current a.myprefs,
+nav ul#oe_pagemenu li.current a.myprefs ,
 nav ul#oe_pagemenu li:hover a.myprefs {
-	background-position: right -10px top -885px
+	background: url(themes/OneEleven/images/layout/preferences-on.png) right no-repeat;
 }
-nav ul#oe_pagemenu li a.ecommerce:hover,
-nav ul#oe_pagemenu li.current a.ecommerce,
-nav ul#oe_pagemenu li:hover a.ecommerce {
-	background-position: right -10px top -953px
-}
-/* second level & collapsed sidebar */
+/* second level & colapsed sidebar */
 nav ul#oe_pagemenu ul {
 	padding: 8px 0;
 	background: #f0f0f0
 }
 nav ul#oe_pagemenu li li {
 	background: none;
-	line-height: 1;
+	line-height: 22px
 }
 nav ul#oe_pagemenu li li.module {
 	background-color: #e5e5e5;
@@ -1236,24 +1343,24 @@ nav ul#oe_pagemenu li li.module {
 nav ul#oe_pagemenu li.current li a,
 nav ul#oe_pagemenu li li a,
 nav ul#oe_pagemenu li:hover li a {
-	height: auto;
-	line-height: 1.3;
-	white-space: pre-line;
-	word-break: normal;
-	padding: 5px 30px 5px 5px;
-	color: #232323;
-	font-weight: normal;
-	background-image: none;
-	background: none
+    height: auto;
+    line-height: 1.3;
+    white-space: pre-line;
+    word-break: normal;
+    padding: 5px 30px 5px 5px;
+    color: #232323;
+    font-weight: normal;
+    background-image: none;
+    background: none
 }
-nav ul#oe_pagemenu li li a:hover,
+nav ul#oe_pagemenu li li:hover a,
 nav ul#oe_pagemenu li li.current a {
 	color: #147fdb;
 }
 nav ul#oe_pagemenu li li a:hover,
 nav ul#oe_pagemenu li li a:active,
 nav ul#oe_pagemenu li.current li a:hover,
-nav ul#oe_pagemenu li.current li a:active {
+nav ul#oe_pagemenu li.current li a:active  {
 	padding-right: 30px
 }
 /*** page content ***/
@@ -1264,10 +1371,10 @@ nav ul#oe_pagemenu li.current li a:active {
 	margin: 0 40px 0 0
 }
 #oe_mainarea .content-inner {
-	padding: 0 25px 0 20px
+	padding: 0 20px 0 25px
 }
 #oe_mainarea header.pageheader {
-	max-height: 63px;
+	height: 63px;
 	margin-bottom: 15px;
 	position: relative;
 	border-bottom: 1px solid #fa8004
@@ -1280,7 +1387,7 @@ footer#oe_footer {
 	width: 100%;
 	z-index: 50;
 	height: 30px;
-	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) right 829px top -259px repeat-x;
+	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 829px -259px repeat-x;
 	padding-top: 5px;
 	clear: both;
 	position: fixed;
@@ -1328,7 +1435,7 @@ footer#oe_footer a:hover, footer#oe_footer a:active {
 	float: right
 }
 #oe_footer ul.links li:last-child, #oe_footer ul.links li.last {
-	padding: 0 8px 0 0
+	padding: 0 0 0 8px
 }
 /* --- CONTENT --- */
 #oe_mainarea header.pageheader h1 {
@@ -1344,23 +1451,23 @@ footer#oe_footer a:hover, footer#oe_footer a:active {
 }
 #oe_mainarea header.pageheader .module-icon {
 	vertical-align: middle;
-	margin-left: 15px;
+	margin-right: 15px;
 	max-height: 32px
 }
 #oe_mainarea header.pageheader span.helptext,
-.pageheader span.helptext {
+.pageheader span.helptext  {
 	display: inline;
 	line-height: 63px;
 	float:left;
 	width: auto;
 	color: #232323;
-	font-size: 12px
+	font-size: 13px
+}
+#oe_mainarea header.pageheader span.helptext {
+	margin-left: 210px
 }
 #oe_mainarea header.pageheader.drop-hidden span.helptext {
 	margin-left: 0
-}
-#oe_mainarea header.subheader h3 {
-	color: #147fdb
 }
 span.helptext a.external,
 span.helptext a {
@@ -1376,8 +1483,6 @@ span.helptext a {
 .pageheader span.helptext {
 	display: inline-block;
 	line-height: 1.3;
-	padding-left: 0;
-	margin-right: 8px;
 	background: none
 }
 .pageheader span.helptext a img{
@@ -1394,13 +1499,13 @@ span.helptext a {
 	color: #147fdb
 }
 div.pageoverflow {
-	clear: right;
+	clear: left;
 	padding-top: 1px;
 	width: auto;
 	overflow: hidden
 }
 div.pageoverflow img {
-	border: 0
+	border: 0px
 }
 div.pageoptions,
 p.pageoptions {
@@ -1416,7 +1521,16 @@ a.pageoptions {
 }
 img.systemicon {
 	border: none;
+	direction: rtl;
 	vertical-align: top
+}
+.expand {
+	text-indent: -999em;
+	overflow: hidden;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(themes/OneEleven/images/icons/system/expand-rtl.gif) no-repeat
 }
 #copy_paste_in_forum {
 	width: 80%;
@@ -1441,17 +1555,8 @@ img.systemicon {
 div.alert-dialog ul li {
 	margin: 10px 0
 }
-div.alert-dialog .alert-icon {
-	float: right;
-	cursor: pointer;
-	margin-left: 4px;
-}
-div.alert-dialog .alert-remove {
-	float: left;
-	cursor: pointer;
-	margin-right: 4px;
-}
 div.alert-dialog span.ui-icon {
+	float:right
 }
 div.dialog h3 {
 	margin:5px 0;
@@ -1478,43 +1583,40 @@ table th:last-child {
 }
 table tr:last-child td:first-child {
 	border-bottom-right-radius:4px
-}
+	}
 table tr:last-child td:last-child {
 	border-bottom-left-radius:4px
-}
+	}
 table.pagetable {
 	border-collapse: inherit;
 	font-size: 14px;
 	border: 1px solid #ddd;
 	width: 100%;
+	direction: rtl;
 	margin: 5px 0
 }
 table.pagetable caption {
 	color: #585858;
 	text-align: right;
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 13px;
 	padding: 5px 0
 }
 table.pagetable th,
 table.pagetable thead tr {
 	color: #fa8004;
-	text-shadow: 1px -1px 0 #000;
-	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) right 831px top -99px repeat-x;
+	text-shadow: -1px -1px 0 #000;
+	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -99px repeat-x;
 	height: 45px;
-	text-align: right;
 	white-space: nowrap;
-	padding-right: 5px;
-	padding-left: 5px
+	padding-left: 5px;
+	padding-right: 5px
 }
 table.pagetable th a {
 	color: #fa8004
 }
 table.pagetable th.active {
 	color: #147fdb
-}
-table.pagetable th input:focus {
-	outline: 2px solid #fa8004;
 }
 table.pagetable th.active a,
 table.pagetable th a:hover {
@@ -1526,16 +1628,12 @@ table.pagetable tr {
 }
 table.pagetable td {
 	color: #585858;
-	padding-right: 5px;
-	padding-left: 5px
+	padding-left: 5px;
+	padding-right: 5px
 }
 table.pagetable a {
 	color: #232323
 }
-table.pagetable td a:focus {
-	color: #147fdb;
-}
-/*
 table.pagetable a.tooltip {
 	position: relative
 }
@@ -1544,7 +1642,7 @@ table.pagetable a.tooltip span {
 	text-decoration: none;
 	position: absolute;
 	background: #efefef;
-	left: 110%;
+	right: 110%;
 	bottom: 10px;
 	box-shadow: 1px 1px 3px 1px #222;
 	-webkit-box-shadow: 1px 1px 3px 1px #222;
@@ -1555,7 +1653,6 @@ table.pagetable a.tooltip span {
 	width: auto;
 	line-height: 1.3
 }
-*/
 table.pagetable th.pagepos {
 	text-align: center
 }
@@ -1611,19 +1708,14 @@ td.pageicon {
 td.icons_wide {
 	width: 25px
 }
-
 /*** Design manager ***/
-.pointer {
-	cursor: pointer;
-}
-
 #oe_mainarea ul.sortable-list {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	max-height: 321px;
-	overflow: auto;
 	min-height: 25px;
+	overflow: auto;
 }
 
 #oe_mainarea .sortable-list li {
@@ -1683,7 +1775,7 @@ a.pageback {
 	line-height: 26px;
 	color: #232323;
 	text-decoration: none;
-	padding: 0 20px 0 8px
+	padding: 0 8px 0 20px
 }
 a.pageback .ui-icon {
 	position: absolute;
@@ -1703,11 +1795,12 @@ div.pagecontainer .pagetext {
 div.pagecontainer .pageshowrows {
 	color: #585858;
 	font-size: 14px;
-	text-align: left;
+	text-align: right;
 	margin-bottom: 5px
 }
+/* in tags page help is displayed twice, let's hide one*/
 div.pagecontainer span.helptext {
-	display: inline-block
+	display: none
 }
 /*** content forms ***/
 div.pagecontainer .pageinput {
@@ -1744,7 +1837,7 @@ div.pagecontainer legend {
 .group_memberships {
 	margin: 0;
 	height: 1%; /*IE*/
-	padding: 5px 10px;
+	padding: 5px  10px;
 	background: #fefefe;
 	border: 1px solid #ddd;
 }
@@ -1792,7 +1885,6 @@ textarea.pageextrasmalltextarea {
 #page_tabs div {
 	color: #585858;
 	border-radius: 4px 4px 0 0;
-	text-shadow: 1px 1px 0 #fff;
 	background: #ddd;
 	font-weight: bold;
 	text-align: center;
@@ -1806,18 +1898,14 @@ textarea.pageextrasmalltextarea {
 #page_tabs div img {
 	height: 14px;
 	margin-top: 2px;
-	margin-right: 5px;
-	margin-left: 5px
+	margin-left: 5px;
+	margin-right: 5px
 }
 #page_tabs div:hover {
 	color: #147fdb
 }
-#page_tabs div:focus {
-	color: #147fdb
-}
 #page_tabs div.active {
 	color: #fff;
-	text-shadow: 1px -1px 0 #054882;
 	background: #147fdb url(themes/OneEleven/images/layout/tab-active.png) no-repeat center bottom
 }
 #page_content {
@@ -1828,10 +1916,6 @@ textarea.pageextrasmalltextarea {
 	border-top: 3px solid #ddd
 }
 /*** topcontent - dashboard ***/
-#topcontent_wrap {
-	display: flex;
-	flex-wrap: wrap;
-}
 .dashboard-box {
 	min-height: 100px;
 	width: 31.513%;
@@ -1839,7 +1923,7 @@ textarea.pageextrasmalltextarea {
 	border-radius: 4px;
 	margin-left: 2.29%;
 	margin-bottom: 10px;
-	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) right 214px top -339px repeat-x;
+	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
 .dashboard-box.last {
@@ -1851,16 +1935,16 @@ textarea.pageextrasmalltextarea {
 .dashboard-box img {
 	max-height: 48px;
 	padding: 20px;
-	box-shadow: inset 0 1px 15px 1px #ddd;
-	-webkit-box-shadow: inset 0 1px 15px 1px #ddd;
+	box-shadow: inset 0px 1px 15px 1px #ddd;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
 	margin-left: 10px;
 	float: right;
 	border: 1px solid #ddd;
 	background: #fff
 }
 .dashboard-box:hover img {
-	box-shadow: inset 0 1px 15px 1px #ffd8b0;
-	-webkit-box-shadow: inset 0 1px 15px 1px #ffd8b0;
+	box-shadow: inset 0px 1px 15px 1px #ffd8b0;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ffd8b0;
 	transition: all 600ms ease-in-out;
 	-webkit-transition: all 600ms ease-in-out;
 	-moz-transition: all 600ms ease-in-out;
@@ -1869,9 +1953,6 @@ textarea.pageextrasmalltextarea {
 .dashboard-box h3 {
 	text-shadow: 0 1px 0 #fff;
 	margin:0 0 5px 0
-}
-.dashboard-box h3 a:focus {
-	border: 1px solid #147fdb;
 }
 .dashboard-box span.description {
 	color: #585858;
@@ -1890,7 +1971,7 @@ textarea.pageextrasmalltextarea {
 	list-style: none;
 	margin: 0 4px;
 	line-height: 1.4;
-	float:right
+	float:left
 }
 .dashboard-box ul.subitems li a {
 	font-size: 13px;
@@ -1918,7 +1999,7 @@ ul.sortableList div.label {
 	border-radius: 4px;
 	cursor: move;
 	padding: 3px 35px 3px 10px;
-	background: #eee url(themes/OneEleven/images/icons/extra/reorder.gif) no-repeat right 10px top 50%;
+	background: #eee url(themes/OneEleven/images/icons/extra/reorder.gif) no-repeat  430px 50%;
 	text-shadow: 0 1px 0 #fff;
 	font-weight: bold;
 	color: #585858
@@ -1938,7 +2019,7 @@ ul.sortable .placeholder {
 .version {
 	background: #f1f1f1;
 	border: 1px solid #ddd;
-	margin: 15px 0;
+	margin: 15px  0;
 	padding: 20px;
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	line-height: 1.5
@@ -1948,7 +2029,7 @@ ul.sortable .placeholder {
 	color: #147fdb;
 	margin: 0;
 	padding: 0;
-	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: sans-serif;
 }
 /*** theme dropzone ***/
 .drop {
@@ -1959,9 +2040,8 @@ ul.sortable .placeholder {
 	left: 0;
 	top:0
 }
-
-.drop-inner + a.toggle-dropzone {
-	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat right -15px top 0;
+.drop a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat -15px 0;
 	border: 1px solid #ccc;
 	border-top: none;
 	text-indent: -9999em;
@@ -1975,8 +2055,8 @@ a.toggle-dropzone:active,
 a.toggle-dropzone:focus {
 	outline: none
 }
-.drop-inner.hidden + a.toggle-dropzone {
-	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat 100% 0;
+.drop.hidden a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat 0 0;
 }
 .drop .drop-inner {
 	float:none;
@@ -1985,16 +2065,16 @@ a.toggle-dropzone:focus {
 	background: #ddd;
 	font-size: 10px;
 	color: #585858;
-	text-shadow: -1px 1px 0 #fff;
+	text-shadow: 1px 1px 0 #fff;
 	padding: 5px 10px;
 	width: 240px
 }
 .drop div.zone {
 	display: block;
-	float:right;
-	width: 210px;
+	float:left;
+	width: 200px;
 	border: 1px dashed #ccc;
-	text-align: center
+	text-align: center;
 }
 .drop div.zone:hover,
 .drop div.zone:focus {
@@ -2004,289 +2084,36 @@ a.toggle-dropzone:focus {
 	width: 200px;
 	overflow: visible;
 	line-height: 30px;
-	text-align: center;
 	height: 30px;
-	background: #ddd
+	background: #ddd;
 }
 .drop span.folder-selection {
 	display: inline-block;
 	float:right;
-	margin-left: 10px;
+	margin-right: 10px;
 	width: 16px;
 	cursor: pointer;
 	height: 30px;
-	text-align: right;
-	background: transparent url(themes/OneEleven/images/layout/folder-horizontal-open.png) no-repeat right
+	text-align: left;
+	background: transparent url(themes/OneEleven/images/layout/folder-horizontal-open.png) no-repeat left
 }
 .drop.hidden .drop-inner {
 	display: none
 }
 .drop #theme_dropzone .ui-progressbar-value {
-	margin: 10px 0 5px 5px;
-	max-width: 190px;
+	margin: 10px 5px 5px 0;
+	max-width: 130px;
 	text-shadow: none;
 	height: 12px;
 	line-height: 12px;
 	font-weight: normal;
-	font-size: 12px;
+	font-size: 11px;
 	text-align: center;
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	display: none
-}
+	}
 
-/* --- LOGIN PAGE --- */
-#login #wrapper {
-	padding-top: 10%
-}
-#login div.login-container,
-#login div.login-container#error {
-	width: 352px;
-	padding-top: 36px;
-	margin: auto;
-}
-#login .logo {
-	width: 180px;
-	height: 36px;
-	position: absolute;
-	left: 10px;
-	top: -29px
-}
-#login div.login-box {
-	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) right 214px top -339px repeat-x;
-	position: relative;
-	border-radius: 4px 4px 4px 0;
-	border: 1px solid #aaa;
-	box-shadow: #999 0 0 6px;
-	-webkit-box-shadow: #999 0 0 6px;
-	margin: 0 auto;
-	padding: 10px 20px;
-	width: 310px
-}
-#login h1 {
-	color: #585858;
-	margin-bottom: 20px;
-	font-size: 12px;
-	text-shadow: 0 1px 0 #fff;
-}
-#login aside.info {
-	display: none
-}
-#login fieldset {
-	margin:0 0 10px 0;
-	padding:0;
-	border: none
-}
-#login label {
-	color: #585858;
-	font-size: 13px
-}
-#login input[type="text"],
-#login input[type="password"] {
-	margin: 5px 0;
-	border-bottom: 1px solid #fff;
-	border-left: 1px solid #fff;
-	width: 300px
-}
-#login input[type="text"]:focus,
-#login input[type="password"]:focus {
-	margin: 5px 0;
-	border: 1px solid #147fdb;
-	box-shadow:0 0 5px #147fdb;
-	-webkit-box-shadow:0 0 5px #147fdb;
-	transition: all 0.2s ease-in-out;
-	-webkit-transition: all 200ms ease-in-out;
-	-moz-transition: all 200ms ease-in-out;
-	-o-transition: all 200ms ease-in-out
-}
-#login input.loginsubmit {
-	border: 1px solid #838282;
-	color: #fff;
-	text-indent: 0;
-	line-height: 28px;
-	height: 28px;
-	width: auto;
-	padding: 0 14px;
-	margin-top: 15px;
-	background: #838282 url(themes/OneEleven/images/layout/input-bg.gif) repeat-x top
-}
-#login input.loginsubmit:hover,
-#login input.loginsubmit:focus {
-	border: 1px solid #e87602;
-	background: #fa8106 url(themes/OneEleven/images/layout/input-hover-bg.gif) repeat-x top
-}
-#login div.info-wrapper {
-	position: absolute;
-	width: 25px;
-	right: -27px;
-	top: 10px
-}
-#login div.info-wrapper.open {
-	right: -302px;
-	padding-right: 25px;
-	width: 275px
-}
-#login a.toggle-info {
-	width: 25px;
-	outline: none;
-	border-radius: 0 4px 4px 0;
-	position: absolute;
-	top: 0;
-	right: 0;
-	border: 1px solid #aaa;
-	border-left: none;
-	height: 25px;
-	display: block;
-	text-indent: -9999em;
-	background: #ececec url(themes/OneEleven/images/layout/information.png) no-repeat center
-}
-#login aside.info {
-	font-size: 12px;
-	color: #585858;
-	background: #ececec;
-	width: 255px;
-	padding: 0 10px 10px 10px;
-	border: 1px solid #aaa;
-	border-left: none;
-	border-radius: 0 0 4px 0
-}
-#login aside.info p {
-	font-size: 12px
-}
-#login aside.info p.warning {
-	background-image: none;
-	margin-top: 5px;
-	padding: 5px
-}
-#login aside.info ol {
-	margin-bottom: 0;
-	list-style: decimal
-}
-#login div.info-wrapper h2 {
-	font-size: 12px;
-	margin: 5px 0 10px 0
-}
-#login img.goback {
-	padding-top: 2px;
-	float:right
-}
-#login p.forgotpw {
-	display: inline-block;
-	width: auto;
-	float: left;
-	margin-bottom: 0
-}
-#login p.forgotpw a {
-	padding-right: 20px;
-	background: url(themes/OneEleven/images/layout/help.png) right 50% no-repeat;
-	color: #585858;
-	text-shadow: 0 1px 0 #fff;
-	font-size: 12px;
-	text-decoration: none
-}
-#login .copyright {
-	margin: 5px auto;
-	text-align: center
-}
-#login small {
-	text-align: center;
-	font-size: 12px;
-	color: #585858;
-	display: block
-}
-#login small a {
-	color: #fa8004;
-	text-decoration: none;
-	font-weight: bold
-}
-#login .message {
-	display: block
-}
-
-/* 2.0 STYLES, moved from inline .tpl, please do not add inline styles, thank you
- * and this needs more work
- */
-
-.row {
-	width: 100%;
-	margin: 0 auto;
-	position: relative;
-}
-
-.row:before, .row:after {
-	content: " ";
-	display: table;
-}
-
-.row:after {
-	clear: both;
-}
-
-.half {
-	width: 50%;
-	float: right;
-}
-
-.options-form {
-	text-align: left;
-}
-
-#oe_mainarea .options-menu {
-	margin: 0;
-	padding: 0;
-	height: 35px;
-	z-index: 999;
-	list-style-type: none;
-}
-
-#oe_mainarea .options-menu > li {
-	line-height: 35px;
-	float: right;
-	display: block;
-	padding: 0 1em;
-	position: relative;
-}
-
-#oe_mainarea .options-menu li ul {
-	position: absolute;
-	right: -999em;
-	top: 0;
-	margin: 0;
-	padding: 15px;
-}
-
-#oe_mainarea .options-menu li.parent:hover {
-	background: #fafafa;
-	cursor: pointer;
-}
-
-#oe_mainarea .options-menu li:hover ul {
-	right: 0;
-	top: 32px;
-	width: 240px;
-	background: #fafafa;
-	border: 1px solid #d0d0d0;
-}
-
-#oe_mainarea .options-menu li li {
-	display: block;
-	cursor: pointer;
-}
-
-/* --- CMS_HELP --- */
-
-.cms_helptext ul{
-
-	padding: 0 10px;
-	list-style: disc;
-}
-
-.cms_helptext ul li{
-
-	margin-bottom: 8px;
-}
-
-/* --- SCREEN UP TO 1024px --- */
 @media screen and (max-width: 1024px) {
 	@-ms-viewport {
 		width: device-width;
@@ -2306,19 +2133,19 @@ a.toggle-dropzone:focus {
 	/* change tabs to full width on smaller screen size */
 	.sidebar-on #page_tabs div {
 		text-align: right;
-		/* float: none; */
+		float: none;
 		border-radius: 0;
-		margin-left: 0
+		margin-right: 0
 	}
 	.sidebar-on #page_tabs div.active {
-		color: #fff;
-		background: #147fdb
+		color: #147fdb;
+		background: #f2f2f2
 	}
-/*
+	/*
 	textarea {
 		width: 43em;
 	}
-*/
+	*/
 	header .header-top {
 		overflow: hidden
 	}
@@ -2326,13 +2153,10 @@ a.toggle-dropzone:focus {
 		font-size: 12px
 	}
 	#oe_sidebar {
-		bottom: 30px
+		bottom: 55px
 	}
 	#oe_sidebar aside {
 		padding: 0
-	}
-	#oe_mainarea header.pageheader span.helptext em{
-		display: none
 	}
 	.dashboard-box {
 		float: none;
@@ -2346,7 +2170,7 @@ a.toggle-dropzone:focus {
 		position: static
 	}
 	#oe_footer .footer-left {
-		margin-right: 0
+		margin-left: 0
 	}
 	.move {
 		width: auto;
@@ -2373,7 +2197,7 @@ a.toggle-dropzone:focus {
 		overflow: hidden
 	}
 	.checkbox {
-		padding-right: 0
+		padding-left: 0
 	}
 }
 /* --- SCREEN UP TO 768px --- */
@@ -2398,6 +2222,7 @@ a.toggle-dropzone:focus {
 		margin: 0;
 		min-width: 100%;
 		padding: 0;
+
 	}
 	a {
 		outline: 0
@@ -2428,8 +2253,12 @@ a.toggle-dropzone:focus {
 	#oe_sidebar .toggle-button,
 	header .admin-title,
 	#oe_admin-content .shadow,
-	.drop {
+	.drop   {
 		display: none
+	}
+	#oe_sidebar,
+	#oe_sidebar aside {
+		width: 100%
 	}
 	#oe_admin-content {
 		height: auto
@@ -2441,15 +2270,16 @@ a.toggle-dropzone:focus {
 		border: none;
 		width: 100%;
 		background: #ddd;
+		position: static
 	}
 	#oe_sidebar aside {
 		padding: 0
 	}
 	.sidebar-on #oe_sidebar nav.navigation {
-		width: auto
+		width: 100%
 	}
 	.sidebar-off #oe_sidebar nav.navigation {
-		width: 40px;
+		width: 100%;
 		overflow: hidden
 	}
 	header.header {
@@ -2502,7 +2332,6 @@ a.toggle-dropzone:focus {
 	footer#oe_footer {
 		clear: both;
 		overflow: hidden;
-		line-height: 20px;
 		position: static
 	}
 	#oe_footer .footer-left {
@@ -2531,9 +2360,6 @@ a.toggle-dropzone:focus {
 		min-width: auto;
 		max-width: 40em
 	}
-	iframe {
-		max-width: 90%
-	}
 	input,
 	textarea,
 	select,
@@ -2541,9 +2367,9 @@ a.toggle-dropzone:focus {
 		height: auto
 	}
 	select {
-		-webkit-appearance: listbox;
-		-moz-appearance: listbox;
-	}
+    	-webkit-appearance: listbox;
+    	-moz-appearance: listbox;
+    }
 	#login #wrapper {
 		padding-top: 2%
 	}
@@ -2568,9 +2394,9 @@ a.toggle-dropzone:focus {
 	.pagemcontainer,
 	.pageerrorcontainer,
 	.pageerrorinstalldir {
-		right: 5%;
-		left: 5%;
-		width: auto
+		left:5%;
+		right:5%;
+		width:auto
 	}
 	#oe_mainarea header.pageheader span.helptext {
 		display: none;
@@ -2594,19 +2420,4 @@ a.toggle-dropzone:focus {
 	#login div.info-wrapper {
 		display: none
 	}
-}
-
-/* TinyMCE override for filepicker iframe*/
-.mce-container-body iframe {
-	max-width: none !important;
-}
-
-.cmsfp_dlg {
-	padding: 0 !important;
-}
-.cmsfp_dlg iframe {
-	width: 100% !important;
-	height: 100% !important;
-	max-width: none !important;
-	border: none;
 }
