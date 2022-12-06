@@ -71,20 +71,21 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
  *
  * @return string
  */
-$sanitize_fn = static function (&$part) use($sanitize_fn)
+$sanitize_fn = static function (&$param) use (&$sanitize_fn)
 {
-  if( is_array($part) )
+  if( is_array($param) )
   {
-    array_walk($part,  $sanitize_fn);
+    array_walk($param,  $sanitize_fn);
   }
   else
   {
-    $part = preg_replace('/\x00|<[^>]*>?/', '', $part);
-    $part = str_replace(["'", '"'], ['&#39;', '&#34;'], $part);
+    $param = preg_replace('/\x00|<[^>]*>?/', '', $param);
+    $param = str_replace(["'", '"'], ['&#39;', '&#34;'], $param);
   }
-
-  return $part;
+  
+  return $param;
 };
+
 array_walk($_SERVER,  $sanitize_fn);
 array_walk($_GET,  $sanitize_fn);
 
