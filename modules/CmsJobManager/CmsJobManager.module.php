@@ -165,6 +165,7 @@ final class CmsJobManager extends \CMSModule
 		if (!$modules) return;
 		foreach( $modules as $one ) {
 			if( !is_object($one) ) $one = \cms_utils::get_module($one);
+      if( !is_object($one) ) continue; # for some reason the module exists but cannot be loaded
 			if( !method_exists($one,'get_tasks') ) continue;
 
 			$tasks = $one->get_tasks();
@@ -187,7 +188,7 @@ final class CmsJobManager extends \CMSModule
 
 
     //////////////////////////////////////////////////////////////////////////
-    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
+    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or at least an interface
     //////////////////////////////////////////////////////////////////////////
 
     public function load_job_by_id( $job_id )
