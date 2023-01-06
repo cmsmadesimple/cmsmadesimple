@@ -55,7 +55,7 @@ class Smarty_CMS extends CMSSmartyBase
         $this->setCacheDir(TMP_CACHE_LOCATION);
         $this->assignGlobal('app_name','CMSMS');
 
-        if (CMS_DEBUG == true) $this->error_reporting = 'E_ALL';
+        if (CMS_DEBUG == true) $this->error_reporting = E_ALL;
 
         // set our own template class with some funky stuff in it
         // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.

@@ -50,8 +50,10 @@ namespace CMSMS;
  * \setlocale('fr_FR.UTF-8', LC_TIME);
  * echo \strftime('%A %e %B %Y %X', strtotime('2021-09-28 00:00:00'));
  *
- * @param  string $format Date format
- * @param  integer|string|DateTime $timestamp Timestamp
+ * @param string      $format    Date format
+ * @param null        $timestamp Timestamp
+ * @param string|null $locale
+ *
  * @return string
  * @author BohwaZ <https://bohwaz.net/>
  */

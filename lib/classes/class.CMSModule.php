@@ -1213,7 +1213,7 @@ abstract class CMSModule
      * Returns true or false, depending on whether the user has the
      * right permissions to see the module in their Admin menus.
      *
-     * Typically permission checks are done in the overriden version of
+     * Typically, permission checks are done in the overridden version of
      * this method.
      *
      * Defaults to true.
