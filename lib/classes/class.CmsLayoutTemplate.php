@@ -491,7 +491,7 @@ class CmsLayoutTemplate
 		}
 		else {
 			$tmp = array();
-			for( $i = 0; $i < count($a); $i++ ) {
+			for($i = 0, $iMax = count($a); $i < $iMax; $i++ ) {
                 if( !is_numeric($a[$i]) ) continue;
                 $tmp2 = (int)$a[$i];  // intentional cast to int, may have negative values.
 				if( $tmp2 != 0 ) {
@@ -1096,8 +1096,7 @@ class CmsLayoutTemplate
 	 */
 	public static function process_by_name($name)
 	{
-		$smarty = \Smarty_CMS::get_instance();
-		return $smarty->fetch('cms_template:name='.$this->get_name());
+    return \Smarty_CMS::get_instance()->fetch('cms_template:name=' . $name);
 	}
 
 	/**

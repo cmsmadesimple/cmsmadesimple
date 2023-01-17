@@ -139,7 +139,7 @@ class CmsLayoutTemplateType
      * Set the template type name
      *
      * @throws CmsInvalidDataException
-     * @param sting $str The template type name.
+     * @param string $str The template type name.
      */
     public function set_name($str)
     {
