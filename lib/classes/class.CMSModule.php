@@ -1370,7 +1370,7 @@ abstract class CMSModule
      * @abstract
      * @param string $name The Name of the action to perform
      * @param string $id The ID of the module
-     * @param string $params The parameters targeted for this module
+     * @param array $params The parameters targeted for this module
      * @param int $returnid The current page id that is being displayed.
      * @return string output XHTML.
      */

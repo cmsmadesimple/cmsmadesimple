@@ -26,7 +26,6 @@
  * @return string |void
  * @uses   smarty_make_timestamp()
  */
-use function \CMSMS\strftime;
 function smarty_modifier_date_format($string, $format = null, $default_date = '', $formatter = 'auto')
 {
     if ($format === null) {
@@ -79,7 +78,8 @@ function smarty_modifier_date_format($string, $format = null, $default_date = ''
             }
             $format = str_replace($_win_from, $_win_to, $format);
         }
-        return strftime($format, $timestamp);
+        // @ to suppress deprecation errors when running in PHP8.1 or higher.
+        return @strftime($format, $timestamp);
     } else {
         return date($format, $timestamp);
     }

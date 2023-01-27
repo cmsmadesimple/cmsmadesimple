@@ -213,7 +213,7 @@ class CMSSmartyBase extends \Smarty
      * Registers a resource to fetch a template
      *
      * @param string $type      name of resource
-     * @param array  $functions array of functions to handle resource
+     * @param mixed  $functions array of functions to handle resource
      */
     public function register_resource($type, $functions)
     {

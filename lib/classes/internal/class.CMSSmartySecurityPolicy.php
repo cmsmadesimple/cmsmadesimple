@@ -38,7 +38,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
         parent::__construct($smarty);
         //$this->php_handling = Smarty::PHP_REMOVE;
         $this->secure_dir = null;
-        $this->php_modifiers = [];
+        $this->php_modifiers = ['lang'];
         $this->streams = null;
         $this->allow_constants = false;
         $this->allow_php_tag = FALSE;
