@@ -1,0 +1,11 @@
+Version 2.2.13 - Moosomin
+-------------------------------
+DesignManger v1.1.7
+   - Fix a warning in PHP 7.3+
+
+FileManager v1.6.10
+   - Fix minor XSS vulnerabilities in FileManager.
+
+News v2.51.8
+   - Fix a security issue in the default action with the idlist param
+   (This version was also separately released in the forge)

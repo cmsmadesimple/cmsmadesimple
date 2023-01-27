@@ -1,0 +1,19 @@
+Version 2.1.1 - Nicholls Town
+----------------------------------
+Core - General
+- Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag.
+- Fix minor problem with checksum verification.
+- Fix to the cms_cache_handler class
+- Minor fix to SetAllPageHierarchies()
+- Correct location where session was started in frontend displays.
+- Fix the default option for {content_image}
+- Modify the locker to use a beacon if supported, when unlocking.
+- Fix missing permissions when a 1.12 site was upgraded (installation assistant)
+
+CMSContentmanager v1.1
+- Minor template changes in edit content wrt. locking
+- Adds ability to clear content locks (admins can clear all locks, regular users can only clear their locks)
+
+DesignManager v1.1.1
+- Minor template changes in edit content wrt. locking
+- Adds ability to clear template and css locks (admins can clear all locks, regular users can only clear their locks)

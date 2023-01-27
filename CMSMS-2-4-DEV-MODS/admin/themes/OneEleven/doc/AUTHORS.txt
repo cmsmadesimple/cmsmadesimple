@@ -1,0 +1,76 @@
+AUTHORS
+--------------------------------------
+
+- Goran ilic <uniqu3e [AT] cmsmadesimple [DOT] org>
+- Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
+
+THANKS
+--------------------------------------
+
+- My family
+
+First i want to give a big "THANK YOU" to my Wife and my little Boy for 
+having so much patience with me! I love you!
+
+**************************************
+
+- DEV Team
+
+If there wouldn't be CMS Made Simple there wouldn't be this theme,
+as simple as that.
+
+**************************************
+
+- Nuno Costa
+for creating a perfect colorsheme!
+
+*************************************
+
+
+- CMSMS Community
+
+Thanks to community for supporting this software!
+
+*************************************
+
+- Yusuke Kamiyamane http://p.yusukekamiyamane.com/
+ 
+for creating great Fugue Iconset used as system icons
+
+Fugue Icons
+(C) 2011 Yusuke Kamiyamane. All rights reserved.
+These icons are licensed under a Creative Commons
+Attribution 3.0 License.
+<http://creativecommons.org/licenses/by/3.0/>
+If you can't or don't want to provide attribution, please
+purchase a royalty-free license.
+<http://p.yusukekamiyamane.com/>
+I'm unavailable for custom icon design work. But your
+suggestions are always welcome!
+<mailto:p@yusukekamiyamane.com>
+
+*************************************
+
+- Khodjaev Stanislav (Kurumizawa) http://www.icojoy.com
+for great OneBit Iconset used for Dashboard
+
+License: These icons are free to use in any kind of commercial or non-commercial project unlimited times.
+
+*************************************
+
+- Mark James http://www.famfamfam.com/lab/icons/silk/
+for Silk Icons set used in login area.
+
+Creative Commons Attribution 2.5 License.
+http://creativecommons.org/licenses/by/2.5/
+
+************************************
+
+- jQuery Team 
+for Providing amazing Framework
+
+************************************
+- Anyone else
+if i missed someone, sorry but here catch a THANK YOU! ;-)
+
+

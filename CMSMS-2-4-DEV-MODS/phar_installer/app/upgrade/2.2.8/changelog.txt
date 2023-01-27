@@ -1,0 +1,44 @@
+Version 2.2.8 - Flin Flon
+----------------------------------
+Core - General
+  - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
+  - Minor fix to pagination in Admin log.
+  - Change Finnish locale priorities so that UTF-8 is first.
+  - Minor fix to calling hooks with a single associative array parameter.
+  - Adds new HookManager::do_hook_first_result() method
+  - cangegroupperms now calls HookManager::do_hook_first_result
+  - Minor enhancement to moduleoperations::_load_module() to check if the class exists.
+  - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
+  - Deprecate CMSModule::SetParameterType and CMSModule::CreateParameter methods.
+  - Deprecate ModuleOperations::GetModuleParameters() method.
+  - CMSModule::RestrictUnknownParameters() now does nothing.
+  - No longer warn if a module is sent a parameter that is not registered.
+  Note: modules should now be cleaning parameters directly (see filter_var) from $_POST and $_REQUEST ($_GET is automatically cleaned).
+  Note: In the future,  $params in module actions will only consist of parameters passed on the module tag.
+  - PHP 7.2+ fixes.
+  - Fix the inactive param in the page_attr plugin.
+
+FilePicker v1.0.3
+  - Minor fix to delete action.
+
+Search v1.51.5
+  - Now enforce utf-8 on preg_split.
+  - Minor parameter check.
+  - Removed deprecated each() function.
+
+CMSJobManager v0.1.3
+  - Notices fixed.
+  - PHP 7.2+ fixes.
+
+FileManager v1.6.7
+  - Remove un-necessary files that may cause a security vulnerability.
+  - prevent creating directories with leading or trailing whitespace in the name.
+
+Module Manager v2.1.4
+  - PHP 7.2+ fixes.
+
+Navigator v1.0.9
+  - Template fix simple_navigation.tpl. Output correct class for parent without active children.
+
+News v2.51.4
+  - Notices fixed.

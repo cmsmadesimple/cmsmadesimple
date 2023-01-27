@@ -1,0 +1,5 @@
+# To deny public access
+<Files ~ "\.(php|php3|php4|php5|phtml|pl|cgi|txt|pdf)$">                                                                           
+  order deny,allow                                                                                                            
+  deny from all                                                                                                               
+</Files>

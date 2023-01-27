@@ -1,0 +1,218 @@
+{% extends 'layout.html.twig' %}
+
+{% macro elementSummary(element, type) %}
+<div id="{{ type }}_{{ element.name }}" class="element ajax clickable {{ type }}" data-toggle="collapse" data-target="#{{ type }}_{{ element.name }} .collapse">
+  <h1>{{ element.name }}{% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}">¶</a>{% endif %}</h1> 
+  <pre>{{ element.name }}{% if element.arguments|length > 0 %}({% for argument in element.arguments %}{{ argument.types ? argument.types|join('|')~' ' }}{{ argument.byReference ? '&' }}{{ argument.name }}{{ argument.default ? ' = '~argument.default }}{% if not loop.last %}, {% endif %}{% endfor %}){% endif %} {{ element.response.types ? ': '~element.response.types|join('|') }}</pre>
+  <h4>{{ element.summary ?: element.name }}</h4>
+  <div class="labels">
+    {% if element.parent.name != node.name %}<span class="label label-default">inherited</span>{% endif %}
+    {% if element.tags.deprecated is defined %}<span class="label label-default">deprecated</span>{% endif %}
+    {% if element.static %}<span class="label label-default">static</span>{% endif %}
+    {% if element.final %}<span class="label label-default">final</span>{% endif %}
+    {% if element.abstract %}<span class="label label-default">abstract</span>{% endif %}
+    {% if element.tags.api is defined %}<span class="label label-info">api</span>{% endif %}
+  </div>
+  <div class="row collapse">
+    <div class="detail-description">
+      <div class="long_description">
+        {{ element.description|markdown|raw }}
+      </div>
+      {% if tagList|length > 0 %}
+      <table class="table">
+        {% for tagList in element.tags if tagList.0.name not in ['param', 'return', 'api'] %}
+        <tr>
+          <th> {{ tagList.0.name }} </th>
+          <td>
+            {% for tag in tagList %}
+            {% if (tag.name == "since" or "deprecated") %}
+            {{ tag.version }}
+            {% endif %}
+            {% if (tag.name == "see") %}
+            {{ tag.reference|route|raw }}
+            {% endif %}
+            {{ tag.description|markdown|raw }}
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+
+      {% if element.arguments|length > 0 %}
+      <h4>Arguments</h4>
+      {% for argument in element.arguments %}
+      <div class="subelement argument">
+        <h4>{% if argument.types %}<code>{{ argument.types|route|join('|')|raw }}</code>{% endif %} {{ argument.name }}</h4>
+        <p>{{ argument.description|markdown|raw }}</p>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% if element.response.types and element.response.types|join() != 'void' %}
+      <h4>Response</h4>
+      <p> {% if element.response.types %}<code>{{ element.response.types|route|join('|')|raw }}</code>{% endif %} {{ element.response.description|markdown|raw }}</p>
+      {% endif %}
+    </div>
+    {% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}" class="more">« More »</a>{% endif %}
+  </div>
+
+</div>
+{% endmacro %}
+
+{% macro elementSidebar(element, type) %}
+    <li class="{{ type }} {{ element.visibility }}{{ element.parent.name != node.name ? ' inherited' : '' }}"><a href="#{{ type }}_{{ element.name }}" title="{{ element.name }} :: {{ element.summary }}"> <pre>{{ element.name }}</pre> {% if element.summary|length > 0 %}<span class="description">{{ element.summary }}</span>{% endif %}</a></li>
+{% endmacro %}
+
+{% macro buildBreadcrumb(element) %}
+{% import _self as self %}
+
+{% if element.parent and element.parent.name != '\\' %}
+    {{ self.buildBreadcrumb(element.parent) }}
+{% endif %}
+
+<li><a href="{{ path(element) }}">{{ element.name }}</a></li>
+{% endmacro %}
+
+{% macro renderNamespaceDetails(node) %}
+    {% import _self as self %}
+
+    {% if node.classes|length > 0 or node.interfaces|length > 0 or node.traits|length > 0 or node.functions|length > 0 or node.constants|length > 0 %}
+
+        <ul class="breadcrumb">
+            <li><a href="{{ path('index.html') }}"><i class="glyphicon glyphicon-th"></i></a></li>
+            {{ self.buildBreadcrumb(node) }}
+        </ul>
+
+        {% if node.functions|length > 0 %}
+        <div class="namespace-indent">
+            <h3><i class="glyphicon glyphicon-custom icon-function"></i> Functions</h3>
+            {% for function in node.functions %}
+                {{ self.elementSummary(function, 'function') }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if node.constants|length > 0 %}
+        <div class="namespace-indent">
+            <h3><i class="glyphicon glyphicon-custom icon-constant"></i> Constants</h3>
+            {% for constant in node.constants %}
+                {{ self.elementSummary(constant, 'constant') }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if node.classes|length > 0 or node.interfaces|length > 0 or node.traits|length > 0 %}
+        <div class="namespace-indent">
+            <h3><i class="glyphicon glyphicon-custom icon-class"></i> Classes, interfaces and traits</h3>
+            {% for trait in node.traits %}
+                {{ self.elementSummary(trait, 'trait') }}
+            {% endfor %}
+
+            {% for interface in node.interfaces %}
+                {{ self.elementSummary(interface, 'interface') }}
+            {% endfor %}
+
+            {% for class in node.classes %}
+                {{ self.elementSummary(class, 'class') }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endif %}
+
+    {% for namespace in node.children %}
+        {{ self.renderNamespaceDetails(namespace) }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro renderNamespaceSidebar(node) %}
+    {% import _self as self %}
+
+    {% for namespace in node.children %}
+    <li><a href="{{ path(namespace) }}" title="{{ namespace.name }}"> <i class="glyphicon glyphicon-th"></i> {{ namespace.name }} </a>
+        <ul class="nav nav-list nav-namespaces">
+            {{ self.renderNamespaceSidebar(namespace) }}
+        </ul>
+    </li>
+    {% endfor %}
+{% endmacro %}
+
+{% block title %}
+    {{ project.title }} &raquo; {{ node.FullyQualifiedStructuralElementName }}
+{% endblock %}
+
+{% block content %}
+    {% import _self as self %}
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="btn btn-group view pull-right" data-toggle="buttons-radio">
+                <button class="btn btn-default details" title="Show descriptions and method names">
+                    <i class="glyphicon glyphicon-list"></i>
+                </button>
+                <button class="btn btn-default simple" title="Show only method names">
+                    <i class="glyphicon glyphicon-align-justify"></i>
+                </button>
+            </div>
+            <ul class="side-nav nav nav-list">
+                {% if node.children|length > 0 %}
+                    <li class="nav-header"><i class="glyphicon glyphicon-map-marker"></i> Namespaces </li>
+                    {{ self.renderNamespaceSidebar(node) }}
+                {% endif %}
+
+                {% if node.functions|length > 0 %}
+                <li class="nav-header"><i class="glyphicon glyphicon-custom icon-function"></i> Functions
+                    <ul class="collapse">
+                    {% for function in node.functions %}
+                        {{ self.elementSidebar(function, 'function') }}
+                    {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if node.constants|length > 0 %}
+                <li class="nav-header"><i class="glyphicon glyphicon-custom icon-constant"></i> Constants
+                    <ul class="collapse">
+                    {% for constant in node.constants %}
+                        {{ self.elementSidebar(constant, 'constant') }}
+                    {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if node.traits|length > 0 %}
+                <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Traits
+                    <ul class="collapse">
+                    {% for trait in node.traits %}
+                        {{ self.elementSidebar(trait, 'trait') }}
+                    {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if node.interfaces|length > 0 %}
+                <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Interfaces
+                    <ul class="collapse">
+                    {% for interface in node.interfaces %}
+                        {{ self.elementSidebar(interface, 'interface') }}
+                    {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if node.classes|length > 0 %}
+                <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Classes
+                    <ul class="collapse">
+                    {% for class in node.classes %}
+                        {{ self.elementSidebar(class, 'class') }}
+                    {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="col-lg-8 namespace-contents">
+            {{ self.renderNamespaceDetails(node) }}
+        </div>
+    </div>
+{% endblock %}

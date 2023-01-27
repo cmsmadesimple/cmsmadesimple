@@ -1,0 +1,30 @@
+Version 2.2.11 - Vulcan
+-------------------------------
+Core - General
+  - Fix minor bug in copying content objects.
+  - Minor fix to array indexes when filling params in ContentBase.
+  - Fix to the {cms_filepicker} plugin.
+  - Minor fix to the 'my account' form.
+  - Fix error in cmsms_filepicker.js encountered in LISE.
+  - PHP 7.3 fix to DataDictionary::RenameColumnSQL.
+
+CMSContentManager v1.1.8
+  - Fix an issue with copying non-core content objects.
+  - Minor fixes for php 7.3.
+
+ModuleManager v2.1.7
+  - Minor exception handling improvements.
+  - Minor improvement to dependency detection with modules that do not exist in ModuleRepository.
+  - Minor fixes for php 7.3
+
+News v2.51.6
+  - Minor improvements for CMSMS v2.3 compatibility.
+
+Phar Installer v1.3.8
+  - Minor change to use include() instead of include_once()... not sure why.
+
+FilePicker v1.0.4.1
+  - Fix type error.
+
+Search v1.51.7
+  - Minor fixes for php 7.3.

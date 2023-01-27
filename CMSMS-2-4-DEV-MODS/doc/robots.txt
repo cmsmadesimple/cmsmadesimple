@@ -1,0 +1,9 @@
+User-agent: *
+
+Disallow: /assets/
+Disallow: /doc/
+Disallow: /lib/
+Disallow: /modules/
+Disallow: /tmp/
+
+Allow: /tmp/cache/

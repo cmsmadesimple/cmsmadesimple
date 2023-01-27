@@ -1,0 +1,14 @@
+*~
+*.bak
+\#*\#
+tmp/
+#.htaccess
+config.php
+index.html
+moduleinfo.ini
+MANIFEST*
+uploads/
+assets/resources/
+phar_installer/out/
+#non-en translations
+#ext/

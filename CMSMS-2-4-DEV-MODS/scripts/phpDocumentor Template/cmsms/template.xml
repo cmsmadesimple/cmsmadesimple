@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+  <author>Goran Ilic</author>
+  <email>uniqu3e@gmail.com</email>
+  <version>1.0</version>
+  <copyright>Goran Ilic 2014</copyright>
+  <description><![CDATA[
+      A custom CMS Made Simple template forked from "Responsive" template from Mike van Riel
+  ]]></description>
+  <transformations>
+    <transformation query="copy" writer="FileIo" source="templates/cmsms/img" artifact="img"/>
+    <transformation query="copy" writer="FileIo" source="templates/cmsms/css" artifact="css"/>
+    <transformation query="copy" writer="FileIo" source="templates/cmsms/js" artifact="js"/>
+    <transformation query="copy" writer="FileIo" source="templates/cmsms/fonts" artifact="fonts"/>
+    <transformation writer="twig" source="templates/cmsms/index.html.twig" artifact="index.html"/>
+    <transformation query="indexes.namespaces" writer="twig" source="templates/cmsms/namespace.html.twig" />
+    <transformation query="indexes.packages" writer="twig" source="templates/cmsms/package.html.twig" />
+    <transformation query="indexes.classes" writer="twig" source="templates/cmsms/class.html.twig" />
+    <transformation query="indexes.interfaces" writer="twig" source="templates/cmsms/class.html.twig" />
+    <transformation writer="twig" query="files" source="templates/cmsms/file.source.txt.twig" artifact="files/{{path}}.txt"/>
+    <transformation writer="twig" source="templates/cmsms/reports/markers.html.twig" artifact="markers.html"/>
+    <transformation writer="twig" source="templates/cmsms/reports/errors.html.twig" artifact="errors.html"/>
+    <transformation writer="twig" source="templates/cmsms/reports/deprecated.html.twig" artifact="deprecated.html"/>
+    <transformation writer="twig" source="templates/cmsms/graphs/class.html.twig" artifact="graph_class.html"/>
+    <transformation writer="Graph" source="Class" artifact="classes.svg" />
+  </transformations>
+</template>
