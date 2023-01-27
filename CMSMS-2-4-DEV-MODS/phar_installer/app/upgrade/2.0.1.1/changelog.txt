@@ -1,4 +1,0 @@
-v2.0.1.1
---------
-Fix to the $this->smarty magic method in the module class to resolve to the 
-action template or the global smarty.
