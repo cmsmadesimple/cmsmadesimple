@@ -338,7 +338,6 @@ $smarty->assign('tab_message_array',$tab_message_array);
 $factory = new ContentAssistantFactory($content_obj);
 /* $assistant = $factory->getEditContentAssistant(); */
 /* if( is_object($assistant) ) $smarty->assign('extra_content',$assistant->getExtraCode()); */
-
 echo $this->ProcessTemplate('admin_editcontent.tpl');
 
 #

@@ -39,6 +39,8 @@ if( !isset($gCms) ) exit;
 $handlers = ob_list_handlers();
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
+$opts = NULL;
+
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
     $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));

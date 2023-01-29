@@ -36,16 +36,14 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     public function __construct($smarty)
     {
         parent::__construct($smarty);
-        //$this->php_handling = Smarty::PHP_REMOVE;
         $this->secure_dir = null;
         $this->php_modifiers = ['lang'];
         $this->streams = null;
         $this->allow_constants = false;
-        $this->allow_php_tag = FALSE;
         $gCms = CmsApp::get_instance();
         if($gCms->is_frontend_request() ) {
-            $this->static_classes = array(); // allow all static classes
-            $this->php_functions = array(); // allow any php functions
+            $this->static_classes = []; // allow all static classes
+            $this->php_functions = []; // allow any php functions
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
