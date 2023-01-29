@@ -12,6 +12,7 @@ abstract class wizard_step extends \__appbase\wizard_step
     if( !$dd ) throw new \Exception('Session Failure');
 
     if( !self::$_registered ) {
+      \__appbase\smarty()->addPluginsDir(app::get_rootdir().'/lib/plugins');
       \__appbase\smarty()->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'));
       \__appbase\smarty()->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'));
       self::$_registered = 1;
