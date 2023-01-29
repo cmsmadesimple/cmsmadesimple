@@ -93,7 +93,6 @@ array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
 require_once($dirname . DIRECTORY_SEPARATOR . 'compat.functions.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'internal' .  DIRECTORY_SEPARATOR . 'class.cms_strftime.php'); # added for compatibility with PHP 8.1
 require_once($dirname . DIRECTORY_SEPARATOR . 'misc.functions.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'version.php'); // tells us where the config file is and other things.
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsException.php');
@@ -113,7 +112,7 @@ debug_buffer('done loading basic files');
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 
-if ($config["debug"] == true) {
+if (true == $config["debug"]) {
     @ini_set('display_errors',1);
     @error_reporting(E_ALL);
 }
@@ -187,7 +186,7 @@ UserTagOperations::setup();
 ContentOperations::setup_cache();
 
 // Set the timezone
-if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
+if('' != $config['timezone']) @date_default_timezone_set(trim($config['timezone']));
 
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));

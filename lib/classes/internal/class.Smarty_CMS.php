@@ -70,7 +70,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         // register default plugin handler
         $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
-
+        
         // Load User Defined Tags
         $_gCms = CmsApp::get_instance();
         if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
@@ -130,7 +130,7 @@ class Smarty_CMS extends CMSSmartyBase
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
-            $this->setConfigDir($admin_dir.'/configs');;
+            $this->setConfigDir($admin_dir.'/configs');
         }
     }
 
@@ -229,7 +229,7 @@ class Smarty_CMS extends CMSSmartyBase
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
-
+        
         // plugins with the smarty_cms_function
         $cachable = TRUE;
         $dirs = [];
@@ -352,6 +352,8 @@ class Smarty_CMS extends CMSSmartyBase
     {
         $name = $template; if( startswith($name,'string:') ) $name = 'string:';
         debug_buffer('','Fetch '.$name.' start');
+      //$this->unregister_modifier('date_format');
+      //$this->registerPlugin('modifier', 'date_format', [$this, '_modifier_date_format']);
 
         // we called the root smarty fetch method instead of some template object's fetch method directly.
         // which is the case for things like Module::ProcessTemplate and Module::ProcessTemplateFromDatabase etc..()
@@ -540,5 +542,4 @@ class Smarty_CMS extends CMSSmartyBase
         // no plugin loaded
         return false;
     }
-
 } // end of class
