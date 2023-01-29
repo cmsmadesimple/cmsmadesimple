@@ -60,27 +60,31 @@ final class session implements \ArrayAccess
       self::clear();
       $this->_expand();
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetExists($key)
   {
     $this->_expand();
     if( isset($this->_data[$key]) ) return TRUE;
     return FALSE;
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetGet($key)
   {
     $this->_expand();
     if( isset($this->_data[$key]) ) return $this->_data[$key];
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetSet($key,$value)
   {
     $this->_expand();
     $this->_data[$key] = $value;
     $this->_collapse();
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetUnset($key)
   {
     $this->_expand();

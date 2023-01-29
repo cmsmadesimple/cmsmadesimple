@@ -18,24 +18,28 @@ class request implements \ArrayAccess
     if( !self::$_instance ) self::$_instance = new request();
     return self::$_instance;
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetExists($key)
   {
     if( isset($_REQUEST[$key]) ) return TRUE;
     return FALSE;
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetGet($key)
   {
     if( isset($_REQUEST[$key]) ) return $_REQUEST[$key];
   }
-
+  
+  #[\ReturnTypeWillChange]
   public function offsetSet($key,$value)
   {
     if( isset($_REQUEST[$key]) ) return $_REQUEST[$key];
   }
-
-
+  
+  
+  #[\ReturnTypeWillChange]
   public function offsetUnset($key)
   {
     throw new \Exception('Attempt to unset a request variable');
