@@ -44,20 +44,17 @@ class Profile extends \CMSMS\FilePickerProfile
     public function __get($key)
     {
         switch( $key ) {
-        case 'id':
+          case 'modified_date':
+          case 'create_date':
+          case 'id':
             return (int) $this->_data[$key];
 
         case 'name':
         case 'file_extensions':
         case 'prefix':
-            return trim($this->_data[$key]);
-
-        case 'create_date':
-        case 'modified_date':
-            return (int) $this->_data[$key];
-
-
-        case 'relative_top':
+            return \trim((string)$this->_data[$key]);
+            
+          case 'relative_top':
         case 'reltop':
             // parent top is checked for relative or absolute
             // return relative to uploads path
