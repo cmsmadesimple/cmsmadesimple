@@ -168,7 +168,7 @@ $(document).ready(function () {
 		<tbody>
 		{foreach from=$files item=file}
 			{cycle values="row1,row2" assign=rowclass}
-			{$thedate=str_replace(' ','&nbsp;',$file->filedate|cms_date_format)}{$thedate=str_replace('-','&minus;',$thedate)}
+			{$thedate=str_replace(' ','&nbsp;',(string)$file->filedate|cms_date_format)}{$thedate=str_replace('-','&minus;',(string)$thedate)}
 			<tr class="{$rowclass}">
 				<td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
 				<td class="clickable" valign="middle">{$file->txtlink}</td>
