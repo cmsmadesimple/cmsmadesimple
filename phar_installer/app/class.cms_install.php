@@ -282,7 +282,7 @@ class cms_install extends \__appbase\app
 
     public function has_custom_destdir() {
         $p1 = \realpath((string)\getcwd());
-        $p2 = \realpath($this->_custom_destdir);
+        $p2 = \realpath((string)$this->_custom_destdir);
         return ($p1 !== $p2);
     }
 
