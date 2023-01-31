@@ -77,8 +77,9 @@ class cms_install extends \__appbase\app
 
         // handle debug mode
         if( $config['debug'] ) {
-            @ini_set('display_errors',1);
-            @error_reporting(E_ALL);
+            @\ini_set('display_errors', 1);
+            @\error_reporting(\E_ALL);
+            @\ini_set('error_log', \Phar::running(FALSE) . '/error.log');
         }
 
         if( $this->in_phar() && !$config['nobase'] ) {
@@ -208,9 +209,6 @@ class cms_install extends \__appbase\app
     {
         foreach( $config as $key => $val ) {
             switch( $key ) {
-            case 'timezone':
-                // do nothing
-                break;
             case 'tmpdir':
                 if( !$val ) {
                     // no tmpdir set... gotta find or create one.
@@ -233,11 +231,12 @@ class cms_install extends \__appbase\app
                     throw new \RuntimeException('Invalid config value for '.$key.' - not a directory, or not writable');
                 }
                 break;
-            case 'debug':
-            case 'nofiles':
-            case 'nobase':
+              case 'nobase':
+              case 'nofiles':
+              case 'debug':
+              case 'timezone':
                 // do nothing
-                break;
+              break;
             }
         }
         return $config;
