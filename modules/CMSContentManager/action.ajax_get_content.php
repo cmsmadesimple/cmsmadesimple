@@ -130,6 +130,9 @@ try {
         bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
         bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
     }
+  
+  $opts = bulkcontentoperations::get_operation_list();
+    
   if( $opts ) $smarty->assign('bulk_options',$opts);
   
   $out = $this->ProcessTemplate('ajax_get_content.tpl'); // check: ok without $opts?
