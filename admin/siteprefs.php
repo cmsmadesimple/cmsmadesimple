@@ -36,15 +36,16 @@ $userid = get_userid(); // <- Checks also login
  * A convenience function to interpret octal permissions, and return
  * a human readable string.  Uses the lang() function for translation.
  *
- * @internal
  * @param int The permissions to test.
- * @return string
+ *
+ * @return array[]
+ * @internal
  */
 function siteprefs_interpret_permissions($perms)
 {
-  $owner = array();
-  $group = array();
-  $other = array();
+  $owner = [];
+  $group = [];
+  $other = [];
 
   if( $perms & 0400 ) $owner[] = lang('read');
   if( $perms & 0200 ) $owner[] = lang('write');
@@ -56,13 +57,13 @@ function siteprefs_interpret_permissions($perms)
   if( $perms & 0002 ) $other[] = lang('write');
   if( $perms & 0001 ) $other[] = lang('execute');
 
-  return array($owner,$group,$other);
+  return [$owner, $group, $other];
 }
 
 
 function siteprefs_display_permissions($permsarr)
 {
-  $tmparr = array(lang('owner'),lang('group'),lang('other'));
+  $tmparr = [lang('owner'), lang('group'), lang('other')];
   if( count($permsarr) != 3 ) return lang('permissions_parse_error');
 
   $result = array();
@@ -81,108 +82,116 @@ if (!$access) {
   return;
 }
 
-$gCms = cmsms();
-$db = $gCms->GetDb();
+$gCms   = cmsms();
+$db     = $gCms->GetDb();
 $config = $gCms->GetConfig();
 
-$pretty_urls = $config['url_rewriting'] == 'none' ? 0 : 1;
-$error = "";
-$message = "";
-$mail_is_set = cms_siteprefs::get('mail_is_set',0);
-$testresults = lang('untested');
-$thumbnail_width = 96;
-$thumbnail_height = 96;
-$sitedownexcludes = '';
-$sitedownexcludeadmins = '';
-$disallowed_contenttypes = '';
-$basic_attributes = '';
-$xmlmodulerepository = "";
-$checkversion = 1;
-$defaultdateformat = "";
-$enablesitedownmessage = "0";
-$lock_timeout = 60;
-$use_wysiwyg = 1;
-$sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
-$sitedownmessagetemplate = "-1";
-$metadata = '';
-$sitename = 'CMSMS Website';
-$frontendlang = '';
-$frontendwysiwyg = '';
-$global_umask = '022';
-$logintheme = "default";
-$backendwysiwyg = '';
-$auto_clear_cache_age = 0;
-$allow_browser_cache = 0;
-$browser_cache_expiry = 60;
-$content_autocreate_urls = 0;
+$pretty_urls                 = $config['url_rewriting'] === 'none' ? 0 : 1;
+$error                       = '';
+$message                     = '';
+$mail_is_set                 = cms_siteprefs::get('mail_is_set', 0);
+$testresults                 = lang('untested');
+$thumbnail_width             = 96;
+$thumbnail_height            = 96;
+$sitedownexcludes            = '';
+$sitedownexcludeadmins       = '';
+$disallowed_contenttypes     = '';
+$basic_attributes            = '';
+$xmlmodulerepository         = '';
+$checkversion                = 1;
+$defaultdateformat           = '';
+$enablesitedownmessage       = '0';
+$lock_timeout                = 60;
+$use_wysiwyg                 = 1;
+$sitedownmessage             = '<p>Site is currently down.  Check back later.</p>';
+$sitedownmessagetemplate     = '-1';
+$metadata                    = '';
+$sitename                    = 'CMSMS Website';
+$frontendlang                = '';
+$frontendwysiwyg             = '';
+$global_umask                = '022';
+$logintheme                  = 'default';
+$backendwysiwyg              = '';
+$auto_clear_cache_age        = 0;
+$allow_browser_cache         = 0;
+$browser_cache_expiry        = 60;
+$content_autocreate_urls     = 0;
 $content_autocreate_flaturls = 0;
-$content_mandatory_urls = 0;
-$contentimage_useimagepath = 0;
-$content_imagefield_path = '';
+$content_mandatory_urls      = 0;
+$contentimage_useimagepath   = 0;
+$content_imagefield_path     = '';
 $content_thumbnailfield_path = '';
-$content_cssnameisblockname = 1;
-$contentimage_path = '';
-$adminlog_lifetime = (3600*24*31);
-$search_module = 'Search';
-$use_smartycache = 0;
-$use_smartycompilecheck = 1;
-$mailprefs = array('mailer'=>'mail',
-		   'host'=>'localhost',
-		   'port'=>25,
-		   'from'=>'root@localhost.localdomain',
-		   'fromuser'=>'CMS Administrator',
-		   'sendmail'=>'/usr/sbin/sendmail',
-		   'smtpauth'=>0,
-		   'username'=>'',
-		   'password'=>'',
-		   'secure'=>'',
-		   'timeout'=>60,
-		   'charset'=>'utf-8');
+$content_cssnameisblockname  = 1;
+$contentimage_path           = '';
+$adminlog_lifetime           = (3600 * 24 * 31);
+$search_module               = 'Search';
+$use_smartycache             = 0;
+$use_smartycompilecheck      = 1;
+$mailprefs                   = [
+                                  'mailer'      => 'mail',
+                                  'host'        => 'localhost',
+                                  'port'        => 25,
+                                  'from'        => 'root@localhost.localdomain',
+                                  'fromuser'    => 'CMS Administrator',
+                                  'sendmail'    => '/usr/sbin/sendmail',
+                                  'smtpauth'    => 0,
+                                  'smtpautotls' => 1,
+                                  'username'    => '',
+                                  'password'    => '',
+                                  'secure'      => '',
+                                  'timeout'     => 60,
+                                  'charset'     => 'utf-8'
+                                ];
 
-if (isset($_POST["cancel"])) {
-  redirect("index.php".$urlext);
+if(isset($_POST['cancel']))
+{
+  redirect('index.php' . $urlext);
+  
   return;
 }
 
 /**
  * Get preferences
  */
-$allow_browser_cache = cms_siteprefs::get('allow_browser_cache',$allow_browser_cache);
-$browser_cache_expiry = cms_siteprefs::get('browser_cache_expiry',$browser_cache_expiry);
-$auto_clear_cache_age = cms_siteprefs::get('auto_clear_cache_age',$auto_clear_cache_age);
-$thumbnail_width = cms_siteprefs::get('thumbnail_width',$thumbnail_width);
-$thumbnail_height = cms_siteprefs::get('thumbnail_height',$thumbnail_height);
-$global_umask = cms_siteprefs::get('global_umask',$global_umask);
-$frontendlang = cms_siteprefs::get('frontendlang',$frontendlang);
-$frontendwysiwyg = cms_siteprefs::get('frontendwysiwyg',$frontendwysiwyg);
-$enablesitedownmessage = cms_siteprefs::get('enablesitedownmessage',$enablesitedownmessage);
-$use_wysiwyg = cms_siteprefs::get('sitedown_use_wysiwyg',$use_wysiwyg);
-$sitedownmessage = cms_siteprefs::get('sitedownmessage',$sitedownmessage);
-$xmlmodulerepository = cms_siteprefs::get('xmlmodulerepository',$xmlmodulerepository);
-$checkversion = cms_siteprefs::get('checkversion',$checkversion);
-$defaultdateformat = cms_siteprefs::get('defaultdateformat',$defaultdateformat);
-$logintheme = cms_siteprefs::get('logintheme',$logintheme);
-$backendwysiwyg = cms_siteprefs::get('backendwysiwyg',$backendwysiwyg);
-$metadata = cms_siteprefs::get('metadata',$metadata);
-$sitename = cms_html_entity_decode(cms_siteprefs::get('sitename',$sitename));
-$lock_timeout = (int)cms_siteprefs::get('lock_timeout',$lock_timeout);
-$sitedownexcludes = cms_siteprefs::get('sitedownexcludes',$sitedownexcludes);
-$sitedownexcludeadmins = cms_siteprefs::get('sitedownexcludeadmins',$sitedownexcludeadmins);
-$disallowed_contenttypes = cms_siteprefs::get('disallowed_contenttypes',$disallowed_contenttypes);
-$basic_attributes = cms_siteprefs::get('basic_attributes',$basic_attributes);
-$content_autocreate_urls = cms_siteprefs::get('content_autocreate_urls',$content_autocreate_urls);
-$content_autocreate_flaturls = cms_siteprefs::get('content_autocreate_flaturls',$content_autocreate_flaturls);
-$content_mandatory_urls = cms_siteprefs::get('content_mandatory_urls',$content_mandatory_urls);
-$content_imagefield_path = cms_siteprefs::get('content_imagefield_path',$content_imagefield_path);
-$content_thumbnailfield_path = cms_siteprefs::get('content_thumbnailfield_path',$content_thumbnailfield_path);
-$content_cssnameisblockname = cms_siteprefs::get('content_cssnameisblockname',$content_cssnameisblockname);
-$contentimage_path = cms_siteprefs::get('contentimage_path',$contentimage_path);
-$adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
-$search_module = cms_siteprefs::get('searchmodule',$search_module);
-$use_smartycache = cms_siteprefs::get('use_smartycache',$use_smartycache);
-$use_smartycompilecheck = cms_siteprefs::get('use_smartycompilecheck',$use_smartycompilecheck);
-$tmp = cms_siteprefs::get('mailprefs');
-if( $tmp ) $mailprefs = unserialize($tmp);
+$allow_browser_cache         = cms_siteprefs::get('allow_browser_cache', $allow_browser_cache);
+$browser_cache_expiry        = cms_siteprefs::get('browser_cache_expiry', $browser_cache_expiry);
+$auto_clear_cache_age        = cms_siteprefs::get('auto_clear_cache_age', $auto_clear_cache_age);
+$thumbnail_width             = cms_siteprefs::get('thumbnail_width', $thumbnail_width);
+$thumbnail_height            = cms_siteprefs::get('thumbnail_height', $thumbnail_height);
+$global_umask                = cms_siteprefs::get('global_umask', $global_umask);
+$frontendlang                = cms_siteprefs::get('frontendlang', $frontendlang);
+$frontendwysiwyg             = cms_siteprefs::get('frontendwysiwyg', $frontendwysiwyg);
+$enablesitedownmessage       = cms_siteprefs::get('enablesitedownmessage', $enablesitedownmessage);
+$use_wysiwyg                 = cms_siteprefs::get('sitedown_use_wysiwyg', $use_wysiwyg);
+$sitedownmessage             = cms_siteprefs::get('sitedownmessage', $sitedownmessage);
+$xmlmodulerepository         = cms_siteprefs::get('xmlmodulerepository', $xmlmodulerepository);
+$checkversion                = cms_siteprefs::get('checkversion', $checkversion);
+$defaultdateformat           = cms_siteprefs::get('defaultdateformat', $defaultdateformat);
+$logintheme                  = cms_siteprefs::get('logintheme', $logintheme);
+$backendwysiwyg              = cms_siteprefs::get('backendwysiwyg', $backendwysiwyg);
+$metadata                    = cms_siteprefs::get('metadata', $metadata);
+$sitename                    = cms_html_entity_decode(cms_siteprefs::get('sitename', $sitename));
+$lock_timeout                = (int)cms_siteprefs::get('lock_timeout', $lock_timeout);
+$sitedownexcludes            = cms_siteprefs::get('sitedownexcludes', $sitedownexcludes);
+$sitedownexcludeadmins       = cms_siteprefs::get('sitedownexcludeadmins', $sitedownexcludeadmins);
+$disallowed_contenttypes     = cms_siteprefs::get('disallowed_contenttypes', $disallowed_contenttypes);
+$basic_attributes            = cms_siteprefs::get('basic_attributes', $basic_attributes);
+$content_autocreate_urls     = cms_siteprefs::get('content_autocreate_urls', $content_autocreate_urls);
+$content_autocreate_flaturls = cms_siteprefs::get('content_autocreate_flaturls', $content_autocreate_flaturls);
+$content_mandatory_urls      = cms_siteprefs::get('content_mandatory_urls', $content_mandatory_urls);
+$content_imagefield_path     = cms_siteprefs::get('content_imagefield_path', $content_imagefield_path);
+$content_thumbnailfield_path = cms_siteprefs::get('content_thumbnailfield_path', $content_thumbnailfield_path);
+$content_cssnameisblockname  = cms_siteprefs::get('content_cssnameisblockname', $content_cssnameisblockname);
+$contentimage_path           = cms_siteprefs::get('contentimage_path', $contentimage_path);
+$adminlog_lifetime           = cms_siteprefs::get('adminlog_lifetime', $adminlog_lifetime);
+$search_module               = cms_siteprefs::get('searchmodule', $search_module);
+$use_smartycache             = cms_siteprefs::get('use_smartycache', $use_smartycache);
+$use_smartycompilecheck      = cms_siteprefs::get('use_smartycompilecheck', $use_smartycompilecheck);
+$tmp                         = cms_siteprefs::get('mailprefs');
+if($tmp)
+{
+  $mailprefs = unserialize($tmp);
+}
 
 /**
  * Check tab
@@ -227,7 +236,7 @@ if( isset($_POST['testmail']) ) {
     }
 }
 
-if (isset($_POST["testumask"])) {
+if (isset($_POST['testumask'])) {
   $testdir = TMP_CACHE_LOCATION;
   $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
   if( !is_writable($testdir) ) {
@@ -248,18 +257,18 @@ if (isset($_POST["testumask"])) {
       if(function_exists("posix_getpwuid")) {
 	//function posix_getpwuid not available on WAMP systems
 	$userinfo = @posix_getpwuid($filestat[4]);
-	$username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+	$username = $userinfo['name'] ?? lang('unknown');
 	$permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
-	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),$username,lang('permissions'),$permsstr);
+	$testresults = sprintf('%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s', lang('owner'), $username, lang('permissions'), $permsstr);
       } else {
-	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),"N/A",lang('permissions'),"N/A");
+	$testresults = sprintf('%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s', lang('owner'), 'N/A', lang('permissions'), 'N/A');
       }
       @unlink($testfile);
     }
   }
 }
 
-if (isset($_POST["editsiteprefs"])) {
+if (isset($_POST['editsiteprefs'])) {
 	if ($access) {
 		switch( $tab ) {
 		case 'general':
@@ -349,7 +358,7 @@ if (isset($_POST["editsiteprefs"])) {
 
                 $mailprefs[$key] = trim(filter_var($val,FILTER_SANITIZE_STRING));
             }
-
+            
             // validate
             if( $mailprefs['from'] == '' ) {
                 $error  .= '<li>'.lang('error_fromrequired').'</li>';
@@ -450,7 +459,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
 if( is_array($modules) && count($modules) ) {
-  $tmp = array();
+  $tmp = [];
   $tmp['-1'] = lang('none');
   for($i = 0, $iMax = count($modules); $i < $iMax; $i++ ) {
     $tmp[$modules[$i]] = $modules[$i];
@@ -458,13 +467,13 @@ if( is_array($modules) && count($modules) ) {
   $smarty->assign('search_modules',$tmp);
 }
 
-$maileritems = array();
-$maileritems['mail'] = 'mail';
+$maileritems             = [];
+$maileritems['mail']     = 'mail';
 $maileritems['sendmail'] = 'sendmail';
-$maileritems['smtp'] = 'smtp';
-$smarty->assign('maileritems',$maileritems);
-$opts = array();
-$opts[''] = lang('none');
+$maileritems['smtp']     = 'smtp';
+$smarty->assign('maileritems', $maileritems);
+$opts        = [];
+$opts['']    = lang('none');
 $opts['ssl'] = 'SSL';
 $opts['tls'] = 'TLS';
 $smarty->assign('secure_opts',$opts);

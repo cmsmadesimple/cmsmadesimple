@@ -87,6 +87,7 @@ $lang['autoclearcache'] = "Automatically clear the cache every <em>N</em> days";
 $lang['autoclearcache2'] = "Remove cache files that are older than the specified number of days";
 $lang['autoinstallupgrade'] = "Automatically install or upgrade";
 $lang['automatedtask_success'] = "Automated task performed";
+$lang['settings_smtpautotls'] = "Auto TLS Encryption";
 
 ## B
 $lang['back'] = "Back to Menu";
