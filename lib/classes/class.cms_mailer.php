@@ -75,31 +75,70 @@ class cms_mailer
    * @param string $method Call method to call from PHP Mailer
    * @param array $args Arguments passed to PHP Mailer method
    */
-  public function __call($method,$args)
+  public function __call($method, $args)
   {
     if(method_exists($this->_mailer, $method))
-		return call_user_func_array(array($this->_mailer,$method), $args);
+    {
+      return call_user_func_array([$this->_mailer, $method], $args);
+    }
+  }
+  
+  /**
+   * @param $name
+   * @param $value
+   */
+  public function __set($name, $value)
+  {
+    if(property_exists($this->_mailer, $name))
+    {
+      $this->_mailer->$name = $value;
+    }
+  }
+  
+  /**
+   * @param $name
+   */
+  public function __get($name)
+  {
+    if(property_exists($this->_mailer, $name))
+    {
+      return $this->_mailer->$name;
+    }
+    
+    return null;
+  }
+  
+  /**
+   * @param $name
+   *
+   * @return bool
+   */
+  public function __isset($name)
+  {
+    return property_exists($this->_mailer, $name);
   }
 
   /**
    * Reset the mailer to standard settings
+   * We use the set global preferences here
    */
   public function reset()
   {
-    $prefs = unserialize(cms_siteprefs::get('mailprefs'));
-    $this->_mailer->Mailer = get_parameter_value($prefs,'mailer','mail');
-    $this->_mailer->Sendmail = get_parameter_value($prefs,'sendmail','/usr/sbin/sendmail');
-    $this->_mailer->Timeout = get_parameter_value($prefs,'timeout',60);
-    $this->_mailer->Port = get_parameter_value($prefs,'port',25);
-    $this->_mailer->FromName = get_parameter_value($prefs,'fromuser');
-    $this->_mailer->From = get_parameter_value($prefs,'from');
-    $this->_mailer->Host = get_parameter_value($prefs,'host');
-    $this->_mailer->SMTPAuth = get_parameter_value($prefs,'smtpauth',0);
-    $this->_mailer->Username = get_parameter_value($prefs,'username');
-    $this->_mailer->Password = get_parameter_value($prefs,'password');
-    $this->_mailer->SMTPSecure = get_parameter_value($prefs,'secure');
-    $this->_mailer->CharSet = get_parameter_value($prefs,'charset','utf-8');
-    $this->_mailer->ErrorInfo = '';
+    $prefs                      = unserialize(cms_siteprefs::get('mailprefs'));
+    $this->_mailer->Mailer      = get_parameter_value($prefs, 'mailer', 'mail');
+    $this->_mailer->Sendmail    = get_parameter_value($prefs, 'sendmail', '/usr/sbin/sendmail');
+    $this->_mailer->Timeout     = get_parameter_value($prefs, 'timeout', 60);
+    $this->_mailer->Port        = get_parameter_value($prefs, 'port', 25);
+    $this->_mailer->FromName    = get_parameter_value($prefs, 'fromuser');
+    $this->_mailer->From        = get_parameter_value($prefs, 'from');
+    $this->_mailer->Host        = get_parameter_value($prefs, 'host');
+    $this->_mailer->SMTPAuth    = get_parameter_value($prefs, 'smtpauth', 0);
+    $this->_mailer->SMTPAutoTLS = get_parameter_value($prefs, 'smtpautotls', 1);
+    $this->_mailer->Username    = get_parameter_value($prefs, 'username');
+    $this->_mailer->Password    = get_parameter_value($prefs, 'password');
+    $this->_mailer->SMTPSecure  = get_parameter_value($prefs, 'secure');
+    $this->_mailer->CharSet     = get_parameter_value($prefs, 'charset', 'utf-8');
+    $this->_mailer->ErrorInfo   = '';
     $this->_mailer->ClearAllRecipients();
     $this->_mailer->ClearAttachments();
     $this->_mailer->ClearCustomHeaders();
