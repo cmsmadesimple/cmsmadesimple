@@ -39,7 +39,7 @@ $_outfile = OUTBASE;
 $_notdeleted = [];
 // modules to be kept for uninstallation, before any related files go away
 $uninstallmodules = [];
-
+// note careful not to exclude class.cms_config.php
 $src_excludes = [
 '/\.git.*/',
 '/\.md$/i',

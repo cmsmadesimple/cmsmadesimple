@@ -1,40 +1,134 @@
 #!/usr/bin/php
 <?php
-// WARNING: this is certainly not my best code.
-// todo: make this interactive via cli.
-
-//  check to make sure we are in the correct directory.
-$owd = getcwd();
-if( php_sapi_name() != 'cli' ) throw new Exception('This script must be executed via the CLI');
-if( !isset($argv) ) throw new Exception('This script must be executed via the CLI');
+$cli = (php_sapi_name() == 'cli');
+//if( !$cli ) throw new Exception('This script must be executed via the CLI');
+//if( $cli && !isset($argv) ) throw new Exception('This script must be executed via the CLI');
 if( ini_get('phar.readonly') ) throw new Exception('phar.readonly must be turned OFF in the php.ini');
-
-$script_file = basename($argv[0]);
+// make sure we are in the correct directory
+//if( $cli ) $script_file = basename($argv[0]);
 $owd = getcwd();
-if( !file_exists("$owd/$script_file") ) throw new Exception('This script must be executed from the same directory as the '.$script_file.' script');
-$rootdir = dirname(dirname(__FILE__));
+//if( !file_exists("$owd/$script_file") ) throw new Exception('This script must be executed from the same directory as the '.$script_file.' script');
+$rootdir = dirname(__DIR__);
 $repos_root='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
-$repos_branch="/trunk";
-$repos_branch = null;
+//$repos_branch = "/trunk";
+$repos_branch = '';
 $srcdir = $rootdir;
 $tmpdir = $rootdir.'/tmp';
 $datadir = $rootdir.'/data';
-$outdir = $rootdir."/out";
+$outdir = $rootdir.'/out';
+//TODO update these lists, per the following variables
+//TODO do not skip class.cms_config.php
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
 $exclude_from_zip = array('*~','tmp/','.#*','#*'.'*.bak');
-$src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
+$src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/', '/\/installer\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
                       '/^\/tests\/.*/', '/^\/build\/.*/', '/^\.htaccess/', '/\.svn/', '/^config\.php$/','/.*~$/', '/\.\#.*/', '/\#.*/', '/.*\.bak/');
-$priv_file = dirname(__FILE__).'/priv.pem';
-$pub_file = dirname(__FILE__).'/pub.pem';
-$verbose = 0;
-$rename = 1;
-$indir = '';
-$archive_only = 0;
-$zip = 1;
-$clean = 0;
-$checksums = 1;
-$version_num = null;
 
+// regex patterns for source files/dirs to NOT be processed by the installer.
+// all exclusion checks are against sources-tree root-dir-relative filepaths,
+// after converting any windoze path-sep's to *NIX form
+// NOTE: otherwise empty folders retain, or are given, respective index.html's
+// so that they are not ignored by PharData when processing
+$all_excludes = [
+'~\.git.*~',
+'~\.md$~i',
+'~\.svn~',
+'~svn\-~',
+'~index\.html?$~',
+'~[^_]config\.php$~',
+'~siteuuid\.dat$~',
+'~\.htaccess$~',
+'~web\.config$~',
+'~\.bak$~',
+'/~$/',
+'~\.#~',
+'~UNUSED~',
+'~DEVELOP~',
+'~HIDE~',
+];
+
+// members of $src_excludes which need double-check before exclusion to confirm they're 'ours'
+$src_checks = ['scripts', 'tmp', 'tests'];
+
+$s = basename($rootdir);
+$src_excludes = [
+-4 => "~$s~",
+-3 => '~scripts~',
+-2 => '~tmp~',
+-1 => '~tests~',
+] + $all_excludes;
+
+// root-relative sub-paths of source dirs whose actual contents are NOT for installation with sources in general.
+// instead their real contents will be handled by the site-importer, and pending that, just an empty 'index.html'
+$folder_excludes = [
+'assets/templates',
+'assets/styles',
+'assets/themes',
+'assets/user_plugins',
+];
+/*
+$phar_excludes = [
+'~build~',
+'~data~',
+'~out~',
+] + $all_excludes;
+//'/README.*  REMOVE THIS GAP IF UNCOMMENTED  /',
+$phar_excludes = $all_excludes;
+// members of $phar_excludes which need double-check before exclusion to confirm they're 'ours'
+$phar_checks = ['build', 'data', 'out'];
+*/
+
+$archive_only = 0;
+$checksums = 1;
+$clean = 0;
+$indir = ''; // hence default to latest release in svn
+$priv_file = __DIR__.'/priv.pem'; //seems unused
+$pub_file = __DIR__.'/pub.pem'; //seems unused
+$rename = 1;
+$sourceuri = 'file://'; // sources file-set locator
+$verbose = 0;
+$version_num = '';
+$zip = 1;
+// custom settings
+$fp = __DIR__.DIRECTORY_SEPARATOR.'build_release.ini';
+$xconfig = ( is_file($fp) ) ? parse_ini_file($fp, false, INI_SCANNER_TYPED) : [];
+foreach( $xconfig as $k => $v ) {
+    switch( $k ) {
+    case 'archive_only':
+        $archive_only = (int)$v;
+        break;
+    case 'checksums':
+        $checksums = (int)$v;
+        break;
+    case 'clean':
+        $clean = (int)$v;
+        break;
+    case 'pack':
+        $zip = (int)$v;
+        break;
+    case 'rename':
+        $rename = (int)$v;
+        break;
+    case 'sourceuri':
+        $v = trim($v);
+        if( $v == "file://local" ) {
+            $indir = dirname($rootdir);
+        }
+        else {
+            //TODO parse 'file://*','svn://*','git://*'
+            //$indir =
+        }
+        break;
+    case 'verbose':
+        $verbose = (int)$v;
+        break;
+    case 'version_num':
+        $version_num = trim($v);
+        break;
+    default:
+        break;
+    }
+}
+// command-line overrides
 $options = getopt('ab:nckhrvozs:',array('archive','branch:','help','clean','checksums','verbose','src:','rename','nobuild','out:','zip'));
 if( is_array($options) && count($options) ) {
   foreach( $options as $k => $v ) {
@@ -94,6 +188,7 @@ if( is_array($options) && count($options) ) {
   }
 }
 
+$svn_url = $repos_root;
 if( !$repos_branch ) {
     // attempt to get repository branch from cwd.
     $repos_branch = get_svn_branch();
@@ -119,24 +214,32 @@ function output_usage()
 
 function startswith($haystack,$needle)
 {
-    return (substr($haystack,0,strlen($needle)) == $needle);
+    return (strncmp($haystack,$needle,strlen($needle)) == 0);
 }
 
 function endswith($haystack,$needle)
 {
-    return (substr($haystack,-1*strlen($needle)) == $needle);
+    $o = strlen($needle);
+    return ($o > 0) ? substr_compare($haystack,$needle,-$o,$o) : false;
 }
 
 function rrmdir($dir)
 {
-    if (is_dir($dir)) {
+    if( is_dir($dir) ) {
         $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
+        foreach( $objects as $object ) {
+            if( $object != '.' && $object != '..' ) {
+                $fp = "$dir/$object";
+                if( filetype($fp) == "dir" ) {
+                    rrmdir($fp);
+                }
+                else {
+                    //TODO deal with links to dirs?
+                    unlink($fp);
+                }
             }
         }
-        reset($objects);
+//      reset($objects);
         rmdir($dir);
     }
 }
@@ -147,14 +250,18 @@ function export_source_files()
     echo "INFO: exporting data from SVN ($svn_url)\n";
     $cmd = "svn export -q $svn_url $tmpdir";
     $cmd = escapeshellcmd($cmd);
-
     system($cmd);
 }
 
+//this function seems useless ATM, and perhaps always so (formerly, no $svn_url)
 function get_svn_branch()
 {
-    $cmd = "svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
-    $out = exec($cmd);
+    global $svn_url;
+    echo "INFO: identifying SVN branch\n";
+//BAD TODO $cmd = "svn info $svn_url | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
+    $cmd = "svn info $svn_url | grep '^URL:'";
+//BAD $cmd = escapeshellcmd($cmd);
+    $out = system($cmd);
     return $out;
 }
 
@@ -162,56 +269,69 @@ function copy_source_files()
 {
   global $indir,$tmpdir,$src_excludes;
   $excludes = $src_excludes;
-  echo "INFO: Copying source files from $indir to $tmpdir\n";
-  @mkdir($tmpdir);
-  $dir = new RecursiveDirectoryIterator($indir,
-                                        FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::SKIP_DOTS );
-
+  // contents to be skipped but not in $excludes ?
   rrmdir($indir.'/tmp/cache');
   rrmdir($indir.'/tmp/templates_c');
-  foreach( $it = new RecursiveIteratorIterator($dir) as $file => $inf ) {
-      $file = substr($file,strlen($indir));
-      $test = false;
-      foreach( $excludes as $excl ) {
-          if( preg_match($excl,$file) ) {
-              verbose(1,"EXCLUDED: $file (matched pattern $excl)");
-              $test = TRUE;
-              break;
+  $l = strlen($indir);
+  @mkdir($tmpdir);
+  echo "INFO: Copying source files from $indir to $tmpdir\n";
+
+  $rdi = new RecursiveDirectoryIterator($indir,
+      FilesystemIterator::KEY_AS_FILENAME |
+      FilesystemIterator::CURRENT_AS_PATHNAME |
+      FilesystemIterator::FOLLOW_SYMLINKS |
+      FilesystemIterator::UNIX_PATHS |
+      FilesystemIterator::SKIP_DOTS);
+  $rii = new RecursiveIteratorIterator($rdi);
+  foreach( $rii as $name => $fp ) {
+      foreach( $excludes as $patn ) {
+          if( preg_match($patn,$fp) ) {
+              verbose(1,"EXCLUDED: $name (matched pattern $patn)");
+              continue 2;
           }
       }
-      if( $test ) continue;
-      $dir = $tmpdir.'/'.dirname($file);
+
+      $tp = $tmpdir.substr($fp, $l);
+      $dir = dirname($tp);
       @mkdir($dir,0777,TRUE);
-      copy($indir.$file,$tmpdir.'/'.$file);
-      verbose(2,"COPIED $file to {$tmpdir}/{$file}");
+      copy($fp,$tp);
+      verbose(2,"COPIED $name to $tmpdir");
   }
 }
 
 function cleanup_source_files()
 {
     global $tmpdir,$src_excludes;
-    echo "INFO: Cleaning files we dont need to package from directory\n";
+    echo "INFO: Cleaning source files we don't need to package\n";
     $excludes = $src_excludes;
     chdir($tmpdir);
+    $l = strlen($tmpdir);
 
-    $dir = new RecursiveDirectoryIterator($tmpdir,
-                                          FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::SKIP_DOTS );
-    foreach( $it = new RecursiveIteratorIterator($dir) as $name => $ob ) {
-        foreach($excludes as $excl) {
-            $tmp = substr($name,strlen($tmpdir));
-            if( !preg_match($excl,$tmp) ) continue;
-            @unlink($name);
-            verbose(1,"DELETED: $name");
+    $rdi = new RecursiveDirectoryIterator($tmpdir,
+        FilesystemIterator::KEY_AS_FILENAME |
+        FilesystemIterator::CURRENT_AS_PATHNAME |
+        FilesystemIterator::FOLLOW_SYMLINKS |
+        FilesystemIterator::UNIX_PATHS |
+        FilesystemIterator::SKIP_DOTS);
+    $rii = new RecursiveIteratorIterator($rdi);
+    foreach( $rii as $name => $fp ) {
+        $tmp = substr($fp, $l);
+        foreach( $excludes as $patn ) {
+            if( preg_match($patn,$tmp) ) {
+                @unlink($fp);
+                verbose(1,"DELETED: $name");
+            }
         }
     }
 
     // now clean empty directories (bottom up)
     $_remove_empty_subdirs = function($dir) use(&$_remove_empty_subdirs) {
         $empty = true;
-        foreach(glob($dir.DIRECTORY_SEPARATOR.'*') AS $file) {
+        foreach( glob($dir.DIRECTORY_SEPARATOR.'*') as $file ) {
             if( is_dir($file) ) {
                 if( !$_remove_empty_subdirs($file) ) $empty = false;
-            } else {
+            }
+            else {
                 $empty = false;
             }
         }
@@ -240,6 +360,7 @@ function create_checksum_dat()
     $salt = md5_file($version_php).md5_file("$tmpdir/index.php");
 
     $_create_checksums = function($dir,$salt) use (&$_create_checksums,$tmpdir) {
+        $l = strlen($tmpdir);
         $out = array();
         $dh = opendir($dir);
         while( ($file = readdir($dh)) !== FALSE ) {
@@ -251,7 +372,7 @@ function create_checksum_dat()
                 if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
             }
             else {
-                $relpath = substr($fs,strlen($tmpdir));
+                $relpath = substr($fs,$l);
                 $out[$relpath] = md5($salt.md5_file($fs));
             }
         }
@@ -288,21 +409,20 @@ function create_source_archive()
         copy_source_files();
     }
     $version_php = get_version_php($tmpdir);
-    if( !is_file($version_php) ) throw new Exception('Could not find version.php file');
-
-    {
-        @include($version_php);
-        $version_num = $CMS_VERSION;
-        echo "INFO: found version: $version_num\n";
+    if( !is_file($version_php) ) {
+        throw new Exception('Could not find version.php file');
     }
+    @include($version_php);
+    $version_num = $CMS_VERSION;
+    echo "INFO: found version: $version_num\n";
 
     // here we would build any externals etc.
     cleanup_source_files();
     create_checksum_dat();
 
-    echo "INFO: Creating tar archive of CMSMS core files\n";
+    echo "INFO: Creating tar.gz archive of core files\n";
     chdir($tmpdir);
-    $cmd = "tar zcCf $tmpdir $datadir/data.tar.gz *";
+    $cmd = escapeshellcmd("tar -zcf $datadir/data.tar.gz") . ' *';
     system($cmd);
 
     chdir($owd);
@@ -321,9 +441,14 @@ function verbose($lvl,$msg)
 try {
     if( !is_dir($srcdir) && !is_file($srcdir.'/index.php') ) throw new Exception('Problem finding source files in '.$srcdir);
 
-    if( $clean && is_dir($outdir) ) {
+    if( is_dir($outdir) ) {
         echo "INFO: Removing old output file(s)\n";
-        rrmdir($outdir);
+        if( $clean ) {
+            rrmdir($outdir);
+        }
+        else {
+            array_map('unlink', glob("$outdir/*"));
+        }
     }
 
     @mkdir($outdir);
@@ -336,80 +461,105 @@ try {
         $destname = $tmp.'.phar';
         $destname2 = $tmp.'.php';
 
-        echo "INFO: Writing build.ini\n";
         $fn = "$srcdir/app/build.ini";
-        $fh = fopen($fn,"w");
-        fwrite($fh,"[build]\n");
-        fwrite($fh,"build_time = ".time()."\n");
-        fwrite($fh,"build_user = ".get_current_user()."\n");
-        fwrite($fh,"build_host = ".gethostname()."\n");
-        fclose($fh);
+        $fh = fopen($fn,'w');
+        if( $fh ) {
+            echo "INFO: Writing build.ini\n";
+            fwrite($fh,"[build]\n");
+            fwrite($fh,'build_time = '.time()."\n");
+            fwrite($fh,'build_user = '.get_current_user()."\n");
+            fwrite($fh,'build_host = '.gethostname()."\n");
+            fclose($fh);
+        }
+        else {
+            echo "DEBUG: Failed to save $srcdir/app/build.ini\n";
+        }
 
         // change permissions
-        echo "RECURSIVELY changing permissions to be more restrictive\n";
+        echo "INFO: Recursively applying more-restrictive permissions\n";
         $cmd = "chmod -R g-w,o-w {$srcdir}";
         echo "DEBUG: $cmd\n";
         $junk = null;
         $cmd = escapeshellcmd($cmd);
         exec($cmd,$junk);
 
+        $l = strlen($srcdir) + 1;
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
         // a brand new phar file.
         $phar = new Phar("$outdir/$destname");
         $phar->startBuffering();
 
-        echo "INFO: Creating PHAR file\n";
+        echo "INFO: Creating phar file\n";
         $rdi = new RecursiveDirectoryIterator($srcdir,
-                                              FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::SKIP_DOTS );
-        $rii = new RecursiveIteratorIterator($rdi); // make the directories flat
-
-        foreach( $rii as $fname => $file ) {
-            $relname = substr($fname,strlen($srcdir)+1);
-            $relpath = dirname($relname);
-            $extension = substr($relname,strrpos($relname,'.')+1);
-
+            FilesystemIterator::KEY_AS_FILENAME |
+            FilesystemIterator::CURRENT_AS_PATHNAME |
+            FilesystemIterator::FOLLOW_SYMLINKS |
+            FilesystemIterator::UNIX_PATHS |
+            FilesystemIterator::SKIP_DOTS);
+        $rii = new RecursiveIteratorIterator($rdi);
+        foreach( $rii as $name => $fp ) {
+            if( !is_file($fp) ) {
+                continue;
+            }
             // trivial exclusion.
-            $found = 0;
-            foreach( $exclude_patterns as $pattern ) {
-                if( preg_match($pattern,$relname) ) {
-                    $found = 1;
-                    break;
+            foreach( $exclude_patterns as $patn ) {
+                if( preg_match($patn,$fp) ) {
+                    continue 2;
                 }
             }
-            if( $found ) continue;
 
+            $relname = substr($fp,$l);
             verbose(1,"ADDING: $relname to the archive");
-            $phar[$relname] = file_get_contents($fname);
-            $mimetype = 'unknown';
-            $tmp = finfo_open(FILEINFO_MIME_TYPE);
-            if( $tmp ) {
-                $mimetype = finfo_file($tmp,$fname);
-                finfo_close($tmp);
+            $phar[$relname] = file_get_contents($fp);
+
+            $p = strrpos($relname,'.');
+            if( $p !== FALSE ) {
+                $extension = substr($relname,$p+1);
+            }
+            else {
+                $extension = '';
             }
             switch( strtolower($extension) ) {
-            case 'inc':
-            case 'php':
-            case 'php4':
-            case 'php5':
-            case 'phps':
-                $mimetype = Phar::PHP;
-                break;
+                case 'inc':
+                case 'php':
+                case 'php4':
+                case 'php5':
+                case 'phps':
+                    $mimetype = Phar::PHP;
+                    break;
 
-            case 'js':
-                $mimetype = 'text/javascript';
-                break;
+                case 'js':
+                    $mimetype = 'text/javascript';
+                    break;
 
-            case 'css':
-                $mimetype = 'text/css';
-                break;
+                case 'css':
+                    $mimetype = 'text/css';
+                    break;
+
+                default:
+                    if( $finfo ) {
+                        $mimetype = finfo_file($finfo,$fp);
+                        if( !$mimetype ) {
+                            $mimetype = 'application/octet-stream';
+                        }
+                    }
+                    else {
+                        $mimetype = 'application/octet-stream';
+                    }
+                    break;
             }
-            if( $mimetype == 'unknown' || $mimetype == 0 ) $mimetype = 'text/plain';
             $phar[$relname]->setMetaData(array('mime-type'=>$mimetype));
+        }
+        if( $finfo ) {
+            finfo_close($finfo);
         }
 
         $phar->setMetaData(array('bootstrap'=>'index.php'));
-        $stub = $phar->createDefaultStub('index.php','index.php');
-        $phar->setSignatureAlgorithm(Phar::SHA1);
+//      $stub = $phar->createDefaultStub('index.php','index.php');
+        $stub = Phar::createDefaultStub('index.php','index.php');
         $phar->setStub($stub);
+        $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->stopBuffering();
         unset($phar);
 
@@ -446,9 +596,9 @@ try {
             system($cmd);
             unlink($tmpfile);
         } // zip
-    } // archive only
-
-    echo "INFO: Done\n";
+        rrmdir($datadir);
+    } // !archive only
+    echo "INFO: Done, see files in $outdir\n";
 }
 catch( Exception $e ) {
     echo "ERROR: Problem building phar file ".$outdir.": ".$e->GetMessage()."\n";

@@ -16,3 +16,4 @@
 ;uri_to = "file://<pathto>"
 ;uri_to = "file://local"
 ;uri_to = "svn://<pathto>"
+;uninstallmodules[] = ""
