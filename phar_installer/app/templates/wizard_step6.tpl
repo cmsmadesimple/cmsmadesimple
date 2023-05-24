@@ -24,6 +24,7 @@
         </div>
     {/if}
 
+{if !empty($language_list)}
     <h3>{'prompt_addlanguages'|tr}</h3>
     <p>{'info_addlanguages'|tr}</p>
 
@@ -32,6 +33,7 @@
             {html_options options=$language_list selected=$siteinfo.languages}
         </select>
     </div>
+{/if}
 
     <div id="bottom_nav">
     <input class="action-button positive" type="submit" name="next" value="{'next'|tr} &rarr;">
