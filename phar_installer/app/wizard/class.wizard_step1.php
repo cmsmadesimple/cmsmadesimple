@@ -2,23 +2,32 @@
 
 namespace cms_autoinstaller;
 
-class wizard_step1 extends \cms_autoinstaller\wizard_step
+use __appbase\utils;
+use cms_autoinstaller\wizard_step;
+use Exception;
+use function __appbase\get_app;
+use function __appbase\lang;
+use function __appbase\smarty;
+use function __appbase\startswith;
+use function __appbase\translator;
+
+class wizard_step1 extends wizard_step
 {
     public function __construct()
     {
         parent::__construct();
-        if( !class_exists('PharData') ) throw new \Exception('It appears that the phar extensions have not been enabled in this version of php.  Please correct this.');
+        if( !class_exists('PharData') ) throw new Exception('It appears that the phar extensions have not been enabled in this version of php.  Please correct this.');
     }
 
     protected function process()
     {
         if( isset($_POST['lang']) ) {
-            $lang = trim(\__appbase\utils::clean_string($_POST['lang']));
-            if( $lang ) \__appbase\translator()->set_selected_language($lang);
+            $lang = trim(utils::clean_string($_POST['lang']));
+            if( $lang ) translator()->set_selected_language($lang);
         }
 
         if( isset($_POST['destdir']) ) {
-            $app = \__appbase\get_app();
+            $app = get_app();
             $app->set_destdir($_POST['destdir']);
         }
 
@@ -28,14 +37,14 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
 
         if( isset($_POST['next']) ) {
             // redirect to the next step.
-            \__appbase\utils::redirect($this->get_wizard()->next_url());
+            utils::redirect($this->get_wizard()->next_url());
         }
         return TRUE;
     }
 
     private function get_valid_install_dirs()
     {
-        $app = \__appbase\get_app();
+        $app = get_app();
         $start = realpath($app->get_rootdir());
         $parent = realpath(dirname($start));
 
@@ -114,7 +123,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
             $out = array();
             while( ($file = readdir($dh)) !== FALSE ) {
                 if( $file == '.' || $file == '..' ) continue;
-                if( \__appbase\startswith($file,'.') || \__appbase\startswith($file,'_') ) continue;
+                if( startswith($file,'.') || startswith($file,'_') ) continue;
                 $dn = $start.DIRECTORY_SEPARATOR.$file;  // cuz windows blows, and windoze guys are whiners :)
                 if( !@is_readable($dn) ) continue;
                 if( !@is_dir($dn) ) continue;
@@ -145,23 +154,23 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         parent::display();
 
         // get the list of directories we can install to.
-        $smarty = \__appbase\smarty();
-        $app = \__appbase\get_app();
+        $smarty = smarty();
+        $app = get_app();
         if( !$app->in_phar() ) {
             // get the list of directories we can install to
             $dirlist = $this->get_valid_install_dirs();
-            if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
+            if( !$dirlist ) throw new Exception('No possible installation directories found.  This could be a permissions issue');
             $smarty->assign('dirlist',$dirlist);
 
             $custom_destdir = $app->has_custom_destdir();
-            $smarty->assign('custom_destdir',$custom_destdir);
-            $smarty->assign('destdir',$app->get_destdir());
+            $smarty->assign('custom_destdir',$custom_destdir)
+             ->assign('destdir',$app->get_destdir());
         }
-        $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
-        $smarty->assign('languages',\__appbase\translator()->get_language_list(\__appbase\translator()->get_allowed_languages()));
-        $smarty->assign('curlang',\__appbase\translator()->get_current_language());
-        $smarty->assign('yesno',array(0=>\__appbase\lang('no'),1=>\__appbase\lang('yes')));
-        $smarty->display('wizard_step1.tpl');
+        $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0))
+          ->assign('languages',translator()->get_language_list(translator()->get_allowed_languages()))
+          ->assign('curlang',translator()->get_current_language())
+          ->assign('yesno',array(0=>lang('no'),1=>lang('yes')))
+          ->display('wizard_step1.tpl');
 
         $this->finish();
     }

@@ -16,21 +16,23 @@ abstract class wizard_step extends parent_step
 
   public function __construct()
   {
-    $dd = get_app()->get_destdir();
+    $app = get_app();
+    $dd = $app->get_destdir();
     if( !$dd ) throw new Exception('Session Failure');
 
+    $smarty = smarty();
     if( !self::$_registered ) {
-      smarty()->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'));
-      smarty()->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'));
-      smarty()->addPluginsDir(app::get_rootdir().'/lib/plugins');
+      $smarty->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'))
+       ->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'))
+       ->addPluginsDir(app::get_rootdir().'/lib/plugins');
       self::$_registered = 1;
     }
 
-    smarty()->assign('version',get_app()->get_dest_version());
-    smarty()->assign('version_name',get_app()->get_dest_name());
-    smarty()->assign('dir',get_app()->get_destdir());
-    smarty()->assign('in_phar',get_app()->in_phar());
-    smarty()->assign('cur_step',$this->cur_step());
+    $smarty->assign('version',$app->get_dest_version())
+     ->assign('version_name',$app->get_dest_name())
+     ->assign('dir',$dd)
+     ->assign('in_phar',$app->in_phar())
+     ->assign('cur_step',$this->cur_step());
   }
 
   public function fn_wizard_form_start($params, $smarty)
@@ -47,7 +49,6 @@ abstract class wizard_step extends parent_step
   {
       $app = get_app();
       $action = $this->get_wizard()->get_data('action');
-      $str = null;
       switch( $action ) {
       case 'upgrade':
           $str = lang('action_upgrade',$app->get_dest_version());
@@ -64,9 +65,8 @@ abstract class wizard_step extends parent_step
 
   protected function display()
   {
-      $app = get_app();
-      smarty()->assign('wizard_steps',$this->get_wizard()->get_nav());
-      smarty()->assign('title',$this->get_primary_title());
+      smarty()->assign('wizard_steps',$this->get_wizard()->get_nav())
+        ->assign('title',$this->get_primary_title());
   }
 
   public function error($msg)
@@ -78,10 +78,12 @@ abstract class wizard_step extends parent_step
 
   public static function verbose($msg)
   {
-      $msg = addslashes($msg);
       $verbose = wizard::get_instance()->get_data('verbose');
-      if( $verbose )  echo '<script type="text/javascript">add_verbose(\''.$msg.'\');</script>'."\n";
-      flush();
+      if( $verbose ) {
+          $msg = addslashes($msg);
+          echo '<script type="text/javascript">add_verbose(\''.$msg.'\');</script>'."\n";
+          flush();
+      }
   }
 
   public function message($msg)

@@ -2,6 +2,11 @@
 
 namespace cms_autoinstaller;
 
+use Exception;
+use function __appbase\get_app;
+use function __appbase\lang;
+use function __appbase\startswith;
+
 class manifest_reader
 {
     private $_filename;
@@ -18,7 +23,7 @@ class manifest_reader
 
     public function __construct($dir)
     {
-        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal','mr100'));
+        if( !is_dir($dir) ) throw new Exception(lang('error_internal','mr100'));
         $fn = "$dir/MANIFEST.DAT.gz";
         if( file_exists($fn) ) {
             $this->_filename = $fn;
@@ -31,7 +36,7 @@ class manifest_reader
                 $this->_compressed = false;
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal','mr101'));
+                throw new Exception(lang('error_internal','mr101'));
             }
         }
     }
@@ -42,7 +47,7 @@ class manifest_reader
         foreach( $cols as &$col ) {
             $col = trim($col);
         }
-        if( count($cols) != 2 ) throw new \Exception(\__appbase\lang('error_internal','mr105'));
+        if( count($cols) != 2 ) throw new Exception(lang('error_internal','mr105'));
 
         switch( $cols[0] ) {
         case 'MANIFEST_GENERATED':
@@ -81,10 +86,10 @@ class manifest_reader
     protected function handle_line($line)
     {
         if( !$line ) return;
-        if( \__appbase\startswith($line,'MANIFEST') ) return $this->handle_header($line);
+        if( startswith($line,'MANIFEST') ) return $this->handle_header($line);
 
         $fields = explode(' :: ',$line);
-        if( count($fields) != 3 ) throw new \Exception(\__appbase\lang('error_internal','mr103'));
+        if( count($fields) != 3 ) throw new Exception(lang('error_internal','mr103'));
 
         switch( $fields[0] ) {
         case 'ADDED':
@@ -97,7 +102,7 @@ class manifest_reader
             return $this->handle_deleted($fields);
             break;
         default:
-            throw new \Exception(\__appbase\lang('error_internal','mr104'));
+            throw new Exception(lang('error_internal','mr104'));
         }
     }
 
@@ -119,13 +124,13 @@ class manifest_reader
             }
 
             // copy the manifest file to a temporary location
-            $tmpdir = \__appbase\get_app()->get_tmpdir();
+            $tmpdir = get_app()->get_tmpdir();
             $tmpname = tempnam($tmpdir,'man');
             @copy($this->_filename,$tmpname);
             $fh = $fopen($tmpname,'r');
             if( !$fh )  {
               echo "DEBUG: $fopen on ".$this->_filename."<br/>"; die();
-              throw new \Exception(\__appbase\lang('error_internal','mr102'));
+              throw new Exception(lang('error_internal','mr102'));
             }
             while( !$feof($fh) ) {
                 $line = $fgets($fh);
