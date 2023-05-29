@@ -40,13 +40,11 @@ class Smarty_CMS extends CMSSmartyBase
 
     /**
      * Constructor
-     *
-     * @param array The hash of CMSMS config settings
      */
     public function __construct()
     {
         parent::__construct();
-        $this->direct_access_security = TRUE;
+//      $this->direct_access_security = TRUE; unused upstream now
 
         global $CMS_INSTALL_PAGE;
 
@@ -55,7 +53,7 @@ class Smarty_CMS extends CMSSmartyBase
         $this->setCacheDir(TMP_CACHE_LOCATION);
         $this->assignGlobal('app_name','CMSMS');
 
-        if (CMS_DEBUG == true) $this->error_reporting = E_ALL;
+        if (CMS_DEBUG) $this->error_reporting = E_ALL;
 
         // set our own template class with some funky stuff in it
         // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
@@ -77,12 +75,12 @@ class Smarty_CMS extends CMSSmartyBase
             $utops = UserTagOperations::get_instance();
             $usertags = $utops->ListUserTags();
 
-	    if( !empty( $usertags ) ) {
-            	foreach( $usertags as $id => $name ) {
-                	$function = $utops->CreateTagFunction($name);
-                	$this->registerPlugin('function',$name,$function,false);
-            	}
-	    }	
+            if( !empty( $usertags ) ) {
+                foreach( $usertags as $id => $name ) {
+                    $function = $utops->CreateTagFunction($name);
+                    $this->registerPlugin('function',$name,$function,false);
+                }
+            }   
         }
 
         $config = cms_config::get_instance();
@@ -120,18 +118,16 @@ class Smarty_CMS extends CMSSmartyBase
 
             // compile check can only be enabled, if using smarty cache... just for safety.
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
-
-            // Enable security object
-            if( !$config['permissive_smarty'] ) $this->enableSecurity('CMSSmartySecurityPolicy');
         }
         else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
-            $config = cms_config::get_instance();
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
-            $this->setConfigDir($admin_dir.'/configs');;
+            $this->setConfigDir($admin_dir.'/configs');
         }
+        // Enable security object, permissive or not
+        $this->enableSecurity('CMSSmartySecurityPolicy');
     }
 
     /**
@@ -540,5 +536,4 @@ class Smarty_CMS extends CMSSmartyBase
         // no plugin loaded
         return false;
     }
-
 } // end of class
