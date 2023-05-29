@@ -26,8 +26,8 @@
 /**
  * Generic smarty security policy.
  *
- * @since		1.11
- * @package		CMS
+ * @since       1.11
+ * @package     CMS
  * @internal
  * @ignore
  */
@@ -36,18 +36,20 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     public function __construct($smarty)
     {
         parent::__construct($smarty);
-        $this->php_handling = Smarty::PHP_REMOVE;
-        $this->secure_dir = null;
-        $this->php_modifiers = [];
-        $this->streams = null;
-        $this->allow_constants = false;
-        $this->allow_php_tag = FALSE;
+//2,3 only $this->php_handling = Smarty::PHP_REMOVE;
+        $this->secure_dir = [];
+        $this->php_modifiers = []; //any php function, but deprecated?
+        $this->streams = null; // disable all
+//2,3 only $this->allow_php_tag = FALSE;
         $gCms = CmsApp::get_instance();
-        if($gCms->is_frontend_request() ) {
-            $this->static_classes = array(); // allow all static classes
-            $this->php_functions = array(); // allow any php functions
+        if( $gCms->is_frontend_request() ) {
+            $this->allow_constants = false;
             $config = $gCms->GetConfig();
-            if( !$config['permissive_smarty'] ) {
+            if( $config['permissive_smarty'] ) {
+                $this->static_classes = []; // allow all static classes
+                $this->php_functions = []; // allow any php function
+            }
+            else {
                 $this->static_classes = null;
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
@@ -62,7 +64,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'implode','in_array','is_array','is_dir','is_email','is_file','is_object','is_string','isset',
                     'json_decode','json_encode',
                     'ksort',
-                    'lang',
+                    'lang', //TODO relevant for frontend use?
                     'max','min',
                     'nl2br','number_format',
                     'print_r',
@@ -74,8 +76,8 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
             }
         }
         else {
-            $this->php_functions = [];
-            $this->static_classes = [];
+            $this->php_functions = []; // allow any php function
+            $this->static_classes = []; // allow all static classes
             $this->allow_constants = true;
         }
     }
