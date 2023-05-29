@@ -1,32 +1,28 @@
-Version 2.2.17 - NO NAME SET
+Version 2.2.17 - Iqaluit
 -------------------------------
-
 Core - General
- - BR etc TODO
  - BR #12529 - Cacheable Pages have Bad Header Last-Modified.
  - BR #12543 - Lib file corrections.
  - Compatibility fixes for PHP 7, 8.0 and 8.1.
- - jQuery deprecation fixes
- - Smarty upgraded to version 3.1.47.
- - jQuery upgraded to version 1.2.4.
- - PHPMailer upgraded to version 6.6.4.
+ - Smarty upgraded to version 4.2.1.
+ - PHPMailer upgraded to version 6.6.0.
 
- Admin Search v
+ Admin Search v1.0.6
  - Option to filter out inactive items.
 
-Content Manager v
+Content Manager v1.1.9
  - Differentiate new page from cloned page.
 
-Design Manager v
+Design Manager v1.1.9
  - BR #12545 - Module: DesignManager typo info on top file.
 
-FilePicker v
+FilePicker v1.0.5
  - BR #12539 - Module FilePicker 1.0.5 files corrections.
 
-Module Manager v
+Module Manager v2.1.9
  - BR #12541 - Module ModuleManager 2.1.8 : corrections + compatible php 7.1.0 to 8.1.4.
 
-News v
+News v2.51.11
  - BR #12543 - Lib file corrections.
 
 
