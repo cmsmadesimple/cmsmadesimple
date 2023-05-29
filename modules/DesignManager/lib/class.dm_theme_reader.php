@@ -41,9 +41,7 @@ class dm_theme_reader extends dm_reader_base
     $cur_key = null;
 
     $__get_in = function() use ($in) {
-      if( $in ) {
-        return end($in);
-      }
+      if( ($n = count($in)) ) return $in[$n-1];
     };
 
     if( $this->_scanned ) return;
@@ -191,7 +189,7 @@ class dm_theme_reader extends dm_reader_base
           case 'assoc':
           case 'reference':
           case 'mmtemplate':
-            if( $in ) {
+            if( count($in) ) {
               array_pop($in);
             }
             $cur_key = null;
@@ -210,10 +208,10 @@ class dm_theme_reader extends dm_reader_base
       throw new CmsException('Invalid XML FILE (test1)');
     }
     if( count($this->_tpl_info) == 0 ) {
-      throw new CmsException('Invalid XML file (test2)');
+      throw new CmsException('Invalid XML FILE (test2)');
     }
     if( count($this->_css_info) == 0 ) {
-      throw new CmsException('Invalid XML file (test3)');
+      throw new CmsException('Invalid XML FILE (test3)');
     }
     // it validates.
   }
@@ -257,13 +255,13 @@ class dm_theme_reader extends dm_reader_base
     $this->_scan();
 
     $out = array();
-    foreach( $this->_css_info as $one ) {
+    foreach( $this->_css_info as $key => $one ) {
       $rec = array();
       $rec['name'] = $one['name'];
       $rec['desc'] = '';
       $rec['data'] = base64_decode($one['data']);
       $rec['mediatype'] = base64_decode($one['mediatype']);
-      $rec['mediaquery'] = '';
+      $rec['medisaquery'] = '';
       $out[] = $rec;
     }
     return $out;
@@ -290,7 +288,7 @@ class dm_theme_reader extends dm_reader_base
     $templates = CmsLayoutTemplate::template_query(array('as_list'=>1));
     $tpl_names = array_values($templates);
 
-    foreach( $this->_tpl_info as &$rec ) {
+    foreach( $this->_tpl_info as $key => &$rec ) {
       // make sure that this  template doesn't already exist.
       $name = $rec['name'];
       if( in_array($name,$tpl_names) ) {
@@ -307,7 +305,6 @@ class dm_theme_reader extends dm_reader_base
         }
       }
     }
-    unset($rec);
   }
 
   protected function validate_stylesheet_names()
@@ -317,7 +314,7 @@ class dm_theme_reader extends dm_reader_base
     $stylesheets = CmsLayoutStylesheet::get_all(TRUE);
     $css_names = array_values($stylesheets);
 
-    foreach( $this->_css_info as &$rec ) {
+    foreach( $this->_css_info as $key => &$rec ) {
       if( in_array($rec['name'],$css_names) ) {
         // gotta come up with a new name
         $orig_name = $rec['name'];
@@ -333,7 +330,6 @@ class dm_theme_reader extends dm_reader_base
         }
       }
     }
-    unset($rec);
   }
 
   public function import()
@@ -364,7 +360,7 @@ class dm_theme_reader extends dm_reader_base
     $design->set_description($description);
 
     // part2 .. expand files.
-    foreach( $this->_ref_map as &$rec ) {
+    foreach( $this->_ref_map as $key => &$rec ) {
       if( !isset($rec['data']) || $rec['data'] == '' ) continue;
 
       $destfile = cms_join_path($config['uploads_path'],'themes',$destdir,$rec['name']);
@@ -372,17 +368,18 @@ class dm_theme_reader extends dm_reader_base
       $rec['tpl_url'] = "{uploads_url}/themes/$destdir/{$rec['name']}";
       $rec['css_url'] = "[[uploads_url]]/themes/$destdir/{$rec['name']}";
     }
-    unset($rec);
 
     // part3 .. process stylesheets
     $css_info = $this->get_stylesheet_list();
-    foreach( $css_info as &$css_rec ) {
+    foreach( $css_info as $name => &$css_rec ) {
       $stylesheet = new CmsLayoutStylesheet();
       $stylesheet->set_name($css_rec['name']);
 
+      $ob = &$this;
       $regex='/url\s*\(\"*(.*)\"*\)/i';
       $css_rec['data'] = preg_replace_callback($regex,
-                           function($matches) use ($config,$ref_map,$destdir) {
+                           function($matches) use ($ob,$ref_map,$destdir) {
+                             $config = cmsms()->GetConfig();
                              $url = $matches[1];
                              if( !startswith($url,'http') || startswith($url,$config['root_url']) ||
                                  startswith($url,'[[root_url]]') ) {
@@ -399,12 +396,11 @@ class dm_theme_reader extends dm_reader_base
       $stylesheet->save();
       $design->add_stylesheet($stylesheet);
     }
-    unset($css_rec);
 
     // part4 .. process templates
-    $fn1 = function($matches) use (&$tpl_info) {
+    $fn1 = function($matches) use ($ob,&$tpl_info) {
       $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-        function($matches) use (&$tpl_info) {
+        function($matches) use ($ob,&$tpl_info) {
            if( isset($tpl_info[$matches[1]]) ) {
             $rec = $tpl_info[$matches[1]];
             $out = str_replace($matches[1],$rec['name'],$matches[0]);
@@ -416,7 +412,8 @@ class dm_theme_reader extends dm_reader_base
       return $out;
     };
 
-    $fn2 = function($matches) use ($config,&$type,$ref_map,$destdir) {
+    $fn2 = function($matches) use ($ob,&$type,$ref_map,$destdir) {
+      $config = cmsms()->GetConfig();
       $url = $matches[2];
       if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
         $bn = basename($url);
@@ -431,7 +428,7 @@ class dm_theme_reader extends dm_reader_base
 
     $tpl_info = $this->get_template_list();
     $have_mm_template = FALSE;
-    foreach( $tpl_info as &$tpl_rec ) {
+    foreach( $tpl_info as $name => &$tpl_rec ) {
       if( $tpl_rec['type_originator'] == 'MenuManager' ) $have_mm_template = TRUE;
 
       $template = new CmsLayoutTemplate();
@@ -441,6 +438,7 @@ class dm_theme_reader extends dm_reader_base
       $types = array("href", "src", "url");
       $content = $tpl_rec['data'];
       foreach( $types as $type ) {
+        $tmp_type = $type;
         $innerT = '[a-z0-9:?=&@/._-]+?';
         $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", $fn2,$content);
       }
@@ -459,7 +457,6 @@ class dm_theme_reader extends dm_reader_base
       $template->save();
       $design->add_template($template);
     }
-    unset($tpl_rec);
 
     // part5 ... save design
     $design->save();

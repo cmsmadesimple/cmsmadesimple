@@ -40,7 +40,7 @@ class dm_design_reader extends dm_reader_base
     {
         while( $this->_xml->read() ) {
             if( !$this->_xml->isValid() ) {
-                throw new CmsException('Invalid XML FILE ');
+        throw new CmsException('Invalid XML FILE ');
             }
         }
         // it validates.
@@ -52,8 +52,8 @@ class dm_design_reader extends dm_reader_base
         $cur_key = null;
 
         $__get_in = function() use ($in) {
-            if( $in ) {
-                return end($in);
+            if( ($n = count($in)) ) {
+                return $in[$n-1];
             }
         };
 
@@ -454,12 +454,12 @@ class dm_design_reader extends dm_reader_base
           $content = str_replace($tpl2['key'],$tpl2['newname'],$content);
       }
 
-      // substitute CSS keys for their values.  This should handle ?
+      // substitute CSS keys for their values.  This should handle
       $template->set_content($content);
 
       // template type:
       // - try to find the template type
-      // - if not, set the type to 'generic'.
+            // - if not, set the type to 'generic'.
       try {
         $typename = $tpl['type_originator'].'::'.$tpl['type_name'];
         $type_obj = CmsLayoutTemplateType::load($typename);
@@ -473,7 +473,7 @@ class dm_design_reader extends dm_reader_base
 
       if( $owner_id > 0 ) $template->set_owner( $owner_id );
       $template->save();
-      $tpl['newname'] = $template->get_name(); // useless ?
+      $tpl['newname'] = $template->get_name();
       $design->add_template($template);
     }
     unset($tpl);
