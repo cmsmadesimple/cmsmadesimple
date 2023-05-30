@@ -44,7 +44,7 @@ class Smarty_CMS extends CMSSmartyBase
     public function __construct()
     {
         parent::__construct();
-//      $this->direct_access_security = TRUE; unused upstream now
+//2,3      $this->direct_access_security = TRUE; unused upstream now
 
         global $CMS_INSTALL_PAGE;
 
@@ -80,7 +80,7 @@ class Smarty_CMS extends CMSSmartyBase
                     $function = $utops->CreateTagFunction($name);
                     $this->registerPlugin('function',$name,$function,false);
                 }
-            }   
+            }
         }
 
         $config = cms_config::get_instance();
@@ -118,6 +118,9 @@ class Smarty_CMS extends CMSSmartyBase
 
             // compile check can only be enabled, if using smarty cache... just for safety.
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
+
+            // Enable frontend security, permissive or not
+            $this->enableSecurity('CMSSmartySecurityPolicy');
         }
         else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
@@ -125,9 +128,10 @@ class Smarty_CMS extends CMSSmartyBase
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');
+            // Enable admin security, permissive or not
+            $this->enableSecurity('CMSSmartySecurityPolicy');
         }
-        // Enable security object, permissive or not
-        $this->enableSecurity('CMSSmartySecurityPolicy');
+        // No security change during installer session
     }
 
     /**
