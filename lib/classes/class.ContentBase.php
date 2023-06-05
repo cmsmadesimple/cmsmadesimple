@@ -1933,7 +1933,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Return a list of all of the properties that may be edited by the current user when editing this content item
+	 * Return a list of all the properties that may be edited by the current user when editing this content item
 	 * in a content editor form.
 	 *
 	 * Other content types may override this method, but should call the base method at the start.
@@ -2047,7 +2047,7 @@ abstract class ContentBase
 	public function GetTabElements($key,$adding = FALSE)
 	{
 		$props = $this->_GetEditableProperties();
-		$out = array();
+		$out = [];
 		foreach( $props as $one ) {
 			if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
 			if( $key != $one->tab ) continue;
@@ -2387,7 +2387,7 @@ abstract class ContentBase
             else {
                 $input = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
             }
-			if( !$input ) return FALSE;
+			if( !$input ) return [];
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
 			return array('<label for="image">'.lang('image').':</label>'.$help,$input);
 /*
@@ -2411,7 +2411,7 @@ abstract class ContentBase
             else {
                 $input = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
             }
-			if( !$input ) return FALSE;
+			if( !$input ) return [];
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_thumbnail',lang('help_title_content_thumbnail'));
 			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$input);
 
