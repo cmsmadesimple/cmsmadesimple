@@ -207,6 +207,7 @@ abstract class CmsAdminThemeBase
 	 */
 	private function _fix_url_userkey($url)
 	{
+		if(NULL === $url) $url = '';
 		$newurl = $url;
 		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
 			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16,19}/i';
