@@ -878,7 +878,7 @@ abstract class CMSModule
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param array  $params    Associative array containing content block parameters
-     * @param bool   $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+     * @param bool   $adding   A flag indicating whether the content editor is in create mode (adding) vs. edit mod.
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
      */
