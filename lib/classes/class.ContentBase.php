@@ -2064,7 +2064,7 @@ abstract class ContentBase
 	 */
 	public function HasChildren($activeonly = false)
 	{
-        	$node = ContentOperations::get_instance()->quickfind_node_by_id($id);
+        	$node = ContentOperations::get_instance()->quickfind_node_by_id($this->mId);
 		if( !$node->has_children() ) return false;
 		if( $activeonly == false) return true;
 
