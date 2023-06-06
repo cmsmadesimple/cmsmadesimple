@@ -2,7 +2,9 @@
 
 namespace __appbase;
 
-class langtools_Exception extends \Exception {}
+use Exception;
+
+class langtools_Exception extends Exception {}
 
 class langtools
 {
@@ -360,7 +362,7 @@ class langtools
   public function translate()
   {
     $args = func_get_args();
-    if( count($args) == 0 ) return;
+    if( count($args) == 0 ) return '';
     if( count($args) == 1 && is_array($args[0]) ) $args = $args[0];
 
     if( !$this->_langdata ) $this->_langdata = array();
@@ -368,7 +370,7 @@ class langtools
 
     // check to see if the key is available.
     $key = array_shift($args);
-    if( !$key ) return;
+    if( !$key ) return '';
 
     if( !isset($this->_langdata[$this->_realm][$key]) ) {
       return '-- Missing Languagestring - '.$key.' --';
