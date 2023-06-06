@@ -111,7 +111,7 @@ class cms_install extends app
         // (some environments)
         $tmpdir = $this->get_tmpdir().'/m'.md5(__FILE__.session_id());
         $src_archive = (isset($config['archive']))?$config['archive']:'data/data.tar.gz';
-        $src_archive = dirname(__DIR__).DIRECTORY_SEPARATOR.$src_archive;
+        $src_archive = \dirname(__DIR__).DIRECTORY_SEPARATOR.$src_archive;
         if( !file_exists($src_archive) ) throw new Exception('Could not find installation archive at '.$src_archive);
         $dest_archive = $tmpdir.DIRECTORY_SEPARATOR."f".md5($src_archive.session_id()).'.tgz';
         $src_md5 = md5_file($src_archive);
@@ -137,7 +137,7 @@ class cms_install extends app
             $this->_dest_schema = $ver['schema_version'];
         }
         else {
-            $verfile = dirname($src_archive).'/version.php';
+            $verfile = \dirname($src_archive).'/version.php';
             if( !is_file($verfile) ) throw new Exception('Could not find version file');
             include_once($verfile);
             $ver = array('version' => $CMS_VERSION, 'version_name' => $CMS_VERSION_NAME, 'schema_version' => $CMS_SCHEMA_VERSION);
@@ -191,7 +191,7 @@ class cms_install extends app
         $request = request::get();
         $list = [ 'TMPDIR', 'tmpdir', 'timezone', 'tz', 'dest', 'destdir', 'debug', 'nofiles', 'no_files', 'nobase' ];
         foreach( $list as $key ) {
-	    if( !isset($request[$key]) ) continue;
+            if( !isset($request[$key]) ) continue;
             $val = $request[$key];
             switch( $key ) {
             case 'TMPDIR':
@@ -362,27 +362,28 @@ class cms_install extends app
 
     public function get_root_url()
     {
-        $prefix = null;
-        //if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) $prefix = 'https';
-        $prefix .= '//'.$_SERVER['HTTP_HOST'];
-
-        // if we are putting files somewhere else, we cannot determine the root url of the site
-        // via the $_SERVER variables.
+        // if we are putting files somewhere unrelated to the dest dir,
+        // we cannot determine the root url of the site via $_SERVER members.
+        $a = getcwd();
         $b = $this->get_destdir();
-        if( $b != getcwd() ) {
-            if( startswith($b,$_SERVER['DOCUMENT_ROOT']) ) $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
-            $b = str_replace('\\','/',$b); // cuz windows blows
-            if( !endswith($prefix,'/') && !startswith($b,'/') ) $prefix .= '/';
-            return $prefix.$b;
+        if( $b != $a ) {
+            //TODO failure here
+            if( startswith($b,$_SERVER['DOCUMENT_ROOT']) ) {
+                $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
+            }
         }
-
-        $b = dirname($_SERVER['PHP_SELF']);
-        if( $this->in_phar() ) {
-            $tmp = basename($_SERVER['SCRIPT_NAME']);
-            if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
+        else {
+            $b = \dirname($_SERVER['PHP_SELF']);
+             if( $this->in_phar() ) {
+                 $tmp = basename($_SERVER['SCRIPT_NAME']);
+                 if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
+             }
         }
-
         $b = str_replace('\\','/',$b); // cuz windows blows.
+
+        if( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) { $prefix = 'https:'; }
+        else { $prefix = 'http:'; }
+        $prefix .= '//'.$_SERVER['HTTP_HOST'];
         if( !endswith($prefix,'/') && !startswith($b,'/') ) $prefix .= '/';
         return $prefix.$b;
     }
