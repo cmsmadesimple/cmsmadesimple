@@ -2,9 +2,12 @@
 
 namespace __appbase;
 
-require_once(dirname(dirname(__FILE__)).'/Smarty/Smarty.class.php');
+use Exception;
+use Smarty;
 
-class cms_smarty extends \Smarty
+require_once \dirname(__DIR__).'/Smarty/Smarty.class.php';
+
+class cms_smarty extends Smarty
 {
   private static $_instance;
 
@@ -16,7 +19,7 @@ class cms_smarty extends \Smarty
     $rootdir = $app->get_rootdir();
     $tmpdir = $app->get_tmpdir().'/m'.md5(__FILE__);
     $appdir = $app->get_appdir();
-    $basedir = dirname(dirname(dirname(__FILE__)));
+    $basedir = \dirname(__DIR__,2);
 
     $this->setTemplateDir($appdir.'/templates');
     $this->setConfigDir($appdir.'/configs');
@@ -27,7 +30,7 @@ class cms_smarty extends \Smarty
     $dirs = array($this->compile_dir,$this->cache_dir);
     for( $i = 0; $i < count($dirs); $i++ ) {
       @mkdir($dirs[$i],0777,TRUE);
-      if( !is_dir($dirs[$i]) ) throw new \Exception('Required directory '.$dirs[$i].' does not exist');
+      if( !is_dir($dirs[$i]) ) throw new Exception('Required directory '.$dirs[$i].' does not exist');
     }
   }
 
