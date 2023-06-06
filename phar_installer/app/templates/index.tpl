@@ -1,4 +1,4 @@
-{block name='logic'}{/block}<!DOCTYPE html>
+{block name='logic'}{/block}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <!--[if IE 8]>         <html lang="en" class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
     <head>
@@ -10,7 +10,7 @@
         <meta http-equiv="cleartype" content="on">
         <script src="app/assets/vendor/jquery.min.js"></script>
         <script src="app/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css" />
         <title>
       {if !empty($browser_title)}
         {$browser_title}
@@ -24,13 +24,13 @@
             <script src="app/assets/js/html5.js"></script>
             <script src="app/assets/js/css3-mediaqueries.js"></script>
         <![endif]-->
-        <link rel="stylesheet" type="text/css" href="app/assets/css/install.css">
-    <link rel="icon" type="image/ico" href="app/assets/images/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="app/assets/css/install.css" />
+        <link rel="icon" type="image/ico" href="app/assets/images/favicon.ico" />
     </head>
     <body class="cmsms-ui">
         <div class="row header-section">
             <a href="http://www.cmsmadesimple.org" rel="external" target="_blank" class="cmsms-logo" title="CMS Made Simple&trade;">
-                <img src="app/assets/images/cmsms-logo.png" alt="CMS Made Simple&trade;" title="CMS Made Simple&trade;" width="332" height="77">
+                <img src="app/assets/images/cmsms-logo.png" alt="CMS Made Simple&trade;" title="CMS Made Simple&trade;" width="332" height="77" />
             </a>
             <span class="installer-title">{'apptitle'|tr}</span>
         </div>
@@ -63,7 +63,7 @@
                     {if isset($dir) && ($in_phar || $cur_step > 1)}
                     <div class="message blue icon">
                         <i class="icon-folder-open message-icon"></i>
-                        <div class="content"><strong>{'prompt_dir'|tr}:</strong><br>{$dir}</div>
+                        <div class="content"><strong>{'prompt_dir'|tr}:</strong><br />{$dir}</div>
                     </div>
                     {/if}
 
