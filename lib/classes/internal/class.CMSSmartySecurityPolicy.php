@@ -67,12 +67,12 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'print_r',
                     'shuffle','sizeof','sort','startswith','str_replace','strcasecmp','strcmp','strftime','strlen','strpos','strtolower','strtotime','strtoupper','substr',
                     'time',
+                    'trim','ltrim','rtrim', //since 2.2.17
                     'urlencode',
                     'var_dump'
                 ];
                 
                 $this->php_modifiers = $this->php_functions;
-                
             }
         }
         else {
