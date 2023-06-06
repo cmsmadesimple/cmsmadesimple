@@ -45,8 +45,8 @@ class wizard_step1 extends wizard_step
     private function get_valid_install_dirs()
     {
         $app = get_app();
-        $start = realpath($app->get_rootdir());
-        $parent = realpath(dirname($start));
+        $start = realpath($app->get_rootdir()); // real.. might be a problem?
+        $parent = realpath(dirname($start)); // ditto
 
         $_is_valid_dir = function($dir) {
             // this routine attempts to exclude most cmsms core directories
@@ -117,7 +117,7 @@ class wizard_step1 extends wizard_step
         };
 
         $_find_dirs = function($start,$depth = 0) use( &$_find_dirs, &$_get_annotation, $_is_valid_dir ) {
-            if( !is_readable( $start ) ) return;
+            if( !is_readable( $start ) ) return [];
             $dh = opendir($start);
             if( !$dh ) return;
             $out = array();
@@ -138,7 +138,7 @@ class wizard_step1 extends wizard_step
                     if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
                 }
             }
-            if( count($out) ) return $out;
+            return $out;
         };
 
         $out = array();
