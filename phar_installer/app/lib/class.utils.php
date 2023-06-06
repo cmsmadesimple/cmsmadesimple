@@ -34,8 +34,8 @@ final class utils
         closedir($dh);
         if( count($versions) ) {
             usort($versions,'version_compare');
-            return $versions;
         }
+        return $versions;
     }
 
     public static function get_upgrade_changelog($version)
@@ -53,6 +53,7 @@ final class utils
                 return $tmp;
             }
         }
+        return '';
     }
 
     public static function get_upgrade_readme($version)
@@ -71,6 +72,7 @@ final class utils
             $tmp = nl2br(wordwrap(htmlspecialchars($tmp),80));
             return $tmp;
         }
+        return '';
     }
 } // end of class
 
