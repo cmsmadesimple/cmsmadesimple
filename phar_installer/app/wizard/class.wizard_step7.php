@@ -165,38 +165,45 @@ class wizard_step7 extends wizard_step
 
     protected function display()
     {
-        // here, we do either the upgrade, or the install stuff.
         parent::display();
-        $action = $this->get_wizard()->get_data('action');
+        $wiz = $this->get_wizard();
+        $action = $wiz->get_data('action');
 
         $smarty = smarty();
         if( $action == 'freshen' ) {
-            $smarty->assign('next_url',$this->get_wizard()->step_url(9));
+            $smarty->assign('next_url',$wiz->step_url(9));
         } else {
-            $smarty->assign('next_url',$this->get_wizard()->next_url());
+            $smarty->assign('next_url',$wiz->next_url());
         }
         $smarty->display('wizard_step7.tpl');
         flush();
 
-        // create index.html files in directories.
         try {
-            $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
-                $languages = $this->detect_languages();
-                $this->do_manifests();
-                $this->do_files($languages);
-            }
-            else if( $action == 'freshen' ) {
+            switch( $action ) {
+            case 'upgrade':
+                $tmp = $wiz->get_data('version_info'); // valid only for upgrades
+                if( is_array($tmp) && count($tmp) ) {
+                    $languages = $this->detect_languages();
+                    $this->do_manifests();
+                    $this->do_files($languages);
+                    break; 
+                }
+                else {
+                    throw new Exception(lang('error_internal',703)); 
+                }
+                // no break here
+            case 'freshen':
                 $inst_languages = $this->detect_languages();
                 $this->do_files($inst_languages);
-            }
-            else if( $action == 'install' ) {
+                break;
+            case 'install':
                 $this->do_files();
-            }
-            else {
+                break;
+            default:
                 throw new Exception(lang('error_internal',705));
             }
 
+            // create index.html files in directories.
             $this->do_index_html();
         }
         catch( Exception $e ) {
