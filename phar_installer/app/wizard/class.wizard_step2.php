@@ -14,12 +14,12 @@ class wizard_step2 extends wizard_step
 {
     private function get_cmsms_info($dir)
     {
-        if( !$dir ) return;
-        if( !is_dir($dir.'/modules') ) return;
-        if( !is_file($dir.'/version.php') && !is_file("$dir/lib/version.php") ) return;
-        if( !is_file($dir.'/include.php') && !is_file("$dir/lib/include.php") ) return;
-        if( !is_file($dir.'/config.php') ) return;
-        if( !is_file($dir.'/moduleinterface.php') ) return;
+        if( !$dir ) return [];
+        if( !is_dir($dir.'/modules') ) return [];
+        if( !is_file($dir.'/version.php') && !is_file("$dir/lib/version.php") ) return [];
+        if( !is_file($dir.'/include.php') && !is_file("$dir/lib/include.php") ) return [];
+        if( !is_file($dir.'/config.php') ) return [];
+        if( !is_file($dir.'/moduleinterface.php') ) return [];
 
         $info = array();
         if( is_file("$dir/version.php") ) {
