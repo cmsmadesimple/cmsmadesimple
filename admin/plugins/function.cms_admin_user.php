@@ -1,6 +1,6 @@
 <?php
 
-function smarty_function_cms_admin_user($params,&$template)
+function smarty_function_cms_admin_user($params,$template)
 {
   $smarty = $template->smarty;
   $out = null;
