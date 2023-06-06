@@ -139,36 +139,37 @@ final class CmsJobManager extends \CMSModule
         $now = time();
         $res = false;
 
-		// 1.  Get task objects from files.
-		$dir = CMS_ROOT_PATH.'/lib/tasks';
+        // 1.  Get task objects from files.
+        $dir = CMS_ROOT_PATH.'/lib/tasks';
 
         // fairly expensive as we have to iterate a directory and load files and create objects.
-		$tmp = new DirectoryIterator($dir);
-		$iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
-		foreach( $iterator as $match ) {
-			$tmp = explode('.',basename($match->current()));
-			if( is_array($tmp) && count($tmp) == 4 ) {
-				$classname = $tmp[1].'Task';
-				require_once($dir.'/'.$match->current());
-				$obj = new $classname;
-				if( !$obj instanceof CmsRegularTask ) continue;
+        $tmp = new DirectoryIterator($dir);
+        $iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
+        foreach( $iterator as $match ) {
+            $tmp = explode('.',basename($match->current()));
+            if( is_array($tmp) && count($tmp) == 4 ) {
+                $classname = $tmp[1].'Task';
+                require_once($dir.'/'.$match->current());
+                $obj = new $classname;
+                if( !$obj instanceof CmsRegularTask ) continue;
                 if( !$obj->test($now) ) continue;
                 $job = new \CMSMS\Async\RegularTask($obj);
                 $job->save();
                 $res = true;
-			}
-		}
+            }
+        }
 
-		// 2.  Get task objects from modules.
-		$opts = ModuleOperations::get_instance();
-		$modules = $opts->get_modules_with_capability('tasks');
-		if (!$modules) return;
-		foreach( $modules as $one ) {
-			if( !is_object($one) ) $one = \cms_utils::get_module($one);
-			if( !method_exists($one,'get_tasks') ) continue;
+        // 2.  Get task objects from modules.
+        $opts = ModuleOperations::get_instance();
+        $modules = $opts->get_modules_with_capability('tasks');
+        if (!$modules) return;
+        foreach( $modules as $one ) {
+            if( !is_object($one) ) $one = \cms_utils::get_module($one);
+            if( !is_object($one) ) continue; // for some reason the module exists but cannot be loaded
+            if( !method_exists($one,'get_tasks') ) continue;
 
-			$tasks = $one->get_tasks();
-			if( !$tasks ) continue;
+            $tasks = $one->get_tasks();
+            if( !$tasks ) continue;
             if( !is_array($tasks) ) $tasks = array($tasks);
 
             foreach( $tasks as $onetask ) {
@@ -180,14 +181,14 @@ final class CmsJobManager extends \CMSModule
                 $job->save();
                 $res = true;
             }
-		}
+        }
 
         return $res;
     }
 
 
     //////////////////////////////////////////////////////////////////////////
-    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
+    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or at least an interface
     //////////////////////////////////////////////////////////////////////////
 
     public function load_job_by_id( $job_id )
