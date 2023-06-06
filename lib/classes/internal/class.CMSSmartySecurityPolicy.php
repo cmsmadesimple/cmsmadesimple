@@ -47,6 +47,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
+
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
                 $this->php_functions = [
@@ -69,11 +70,18 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'urlencode',
                     'var_dump'
                 ];
+                
+                $this->php_modifiers = $this->php_functions;
+                
             }
         }
         else {
             $this->php_functions = [];
-            $this->static_classes = [];
+            $this->static_classes = [
+              'Smarty',
+              'CmsLayoutTemplateType'
+            ];
+            $this->php_modifiers = [];
             $this->allow_constants = true;
         }
     }
