@@ -52,7 +52,6 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
 
         $id = (int)$str;
         $tmp = $tree->find_by_tag('id',$id);
-        $content = '';
         if( $tmp ) {
             $content = $tmp->getContent(false,true,true);
             if( $content ) {
