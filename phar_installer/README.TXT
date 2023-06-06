@@ -23,13 +23,13 @@ WARNINGS:
 -------------------
 Requirements:
 -------------------
-1.  The installation assistant requires a PHP environment with a minimum version of PHP 5.4.0.
+1.  The installation assistant requires a PHP environment with a minimum version of PHP 7.0.
 2.  For new installations of CMS Made Simple you should create a new mysql database and database user.
     - The database user must have ALL PRIVILEGES to all tables within the new database.
     - Your database user account must have a password.
-3.  CMS Made Simple itself requires at least PHP 5.6 with numerous libraries enabled (the install assistant will
+3.  CMS Made Simple  (or more specifically the associated Smarty library) requires at least PHP 7.0, with numerous libraries enabled (the install assistant will
     check for these) including json, tokenizer, xml, and gd.
-4.  Your PHP environment must include the PHAR extension (yes, even for the expanded installer).  This is for expanding the archive(s) included within the installation assistant.
+4.  The website's PHP environment must include the PHAR extension (yes, even for the expanded installer).  This is for expanding the archive(s) included within the installation assistant.
 
 
 -------------------

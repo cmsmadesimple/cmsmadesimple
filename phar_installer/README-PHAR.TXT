@@ -15,12 +15,12 @@ The PHAR based installation assistant is a binary file and must be transferred i
 -------------------
 Requirements
 -------------------
-1.  The installation assistant requires a PHP environment with a minimum version of PHP 7.1.
+1.  The installation assistant requires a PHP environment with a minimum version of PHP 7.0.
 2.  The website's PHP environment must include the PHAR extension.
 3.  For new installations of CMS Made Simple you should create a new mysql database and database user.
     - The database user must have ALL PRIVILEGES to all tables within the new database.
     - Your database user account must have a password.
-4.  CMS Made Simple itself requires at least PHP 7.1 with numerous libraries enabled
+4.  CMS Made Simple (or more specifically the associated Smarty library) requires at least PHP 7, with numerous libraries enabled
     (the install assistant will check for these) including json, tokenizer, xml, and gd.
 
 -------------------
