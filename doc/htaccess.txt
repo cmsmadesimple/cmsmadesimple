@@ -37,7 +37,7 @@ ServerSignature Off
 	# If your CMSMS installation is in a subdirectory of your domain, you need to specify the relative path (from the root of the domain) here.
 	# In example: RewriteBase /[subdirectory name]
 	RewriteBase /
-	
+
 	# Rewrites URLs in the form of /parent/child/grandchild but only rewrites if the requested URL is not a file or directory.
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
