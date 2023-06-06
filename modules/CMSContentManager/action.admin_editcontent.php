@@ -264,13 +264,12 @@ if( $content_id > 0 && CmsContentManagerUtils::locking_enabled() ) {
     }
 }
 
-$tab_names = null;
-$tab_contents_array = array();
-$tab_message_array = array();
+$tab_names          = NULL;
+$tab_contents_array = [];
+$tab_message_array  = [];
 try {
-    $tab_names = $content_obj->GetTabNames();
-    $tab_contents_array = array();
-    $tab_message_array = array();
+  $tab_names          = $content_obj->GetTabNames();
+
 
     // the content object may not have a main tab, but we require one
     if( !in_array($content_obj::TAB_MAIN,$tab_names) ) {
@@ -283,6 +282,7 @@ try {
         if( $tmp ) $tab_message_array[$currenttab] = $tmp;
 
         $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() < 1 );
+        
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
             if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {

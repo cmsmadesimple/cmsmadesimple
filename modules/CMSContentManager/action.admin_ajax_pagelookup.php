@@ -59,6 +59,7 @@ if( isset($_REQUEST['term']) ) {
   }
 
   $list = $db->GetArray($query,$parms);
+  
   if( $list ) {
     $builder = new ContentListBuilder($this);
     $builder->expand_all(); // it'd be cool to open all parents to each item.
