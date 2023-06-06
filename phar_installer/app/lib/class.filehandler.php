@@ -64,6 +64,7 @@ abstract class filehandler
     foreach( $excludes as $excl ) {
       if( preg_match($excl,$filespec) ) return TRUE;
     }
+    return FALSE;
   }
 
   protected function dir_exists($filespec)
