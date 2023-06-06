@@ -1,11 +1,15 @@
 Version 2.2.17 - Iqaluit
 -------------------------------
 Core - General
+ - BR #12618 - HasChildren() is broken
+ - BR #12587 - can't uninstall modules
  - BR #12529 - Cacheable Pages have Bad Header Last-Modified.
  - BR #12543 - Lib file corrections.
  - Compatibility fixes for PHP 7, 8.0 and 8.1.
+ - Add function CMSMS\strftime to replace deprecated PHP function. PHP Intl extension recommended to support this.
  - Smarty upgraded to version 4.2.1.
- - PHPMailer upgraded to version 6.6.0.
+    Note: Smarty 2 syntax is still supported, but deprecated
+ - PHPMailer upgraded to version 6.6.5.
 
  Admin Search v1.0.6
  - Option to filter out inactive items.
@@ -65,7 +69,7 @@ Navigator v1.0.9
 Search v1.53
   - Added 'Manage Search' permission.
   - BR #12391 - Core search issue page/entry titles that start with numbers.
-  
+
 Phar Installer v1.3.15
   - Fixed BR #12437 - Installer won't allow "<" symbol in database password.
   - Added Russian lang file to installer.
