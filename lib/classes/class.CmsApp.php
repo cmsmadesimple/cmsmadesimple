@@ -55,7 +55,7 @@ final class CmsApp {
 	/**
 	 * A constant indicating that we are currently parsing page templates
 	 */
-    const STATE_PARSE_TEMPLATE = 'parse_page_template';
+	const STATE_PARSE_TEMPLATE = 'parse_page_template';
 
 	/**
 	 * @ignore
@@ -95,10 +95,10 @@ final class CmsApp {
 	 */
 	private $dbprefix;
 
-    /**
-     * @ignore
-     */
-    private $hrinstance;
+	/**
+	 * @ignore
+	 */
+	private $hrinstance;
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
@@ -145,18 +145,18 @@ final class CmsApp {
 	 */
 	public function get_installed_schema_version()
 	{
-        if( self::test_state(self::STATE_INSTALL) ) {
-            $db = $this->GetDb();
-            $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
-            return $db->GetOne($query);
-        }
-        return \CMSMS\internal\global_cache::get('schema_version');
+		if( self::test_state(self::STATE_INSTALL) ) {
+			$db = $this->GetDb();
+			$query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+			return $db->GetOne($query);
+		}
+		return \CMSMS\internal\global_cache::get('schema_version');
 	}
 
 	/**
 	 * Retrieve the list of errors
 	 *
-     * @ignore
+	 * @ignore
 	 * @since 1.9
 	 * @internal
 	 * @access private.
@@ -171,7 +171,7 @@ final class CmsApp {
 	/**
 	 * Add an error to the list
 	 *
-     * @ignore
+	 * @ignore
 	 * @since 1.9
 	 * @internal
 	 * @access private
@@ -219,7 +219,7 @@ final class CmsApp {
 	 */
 	public function set_content_object(ContentBase &$content)
 	{
-        if( !$this->_current_content_page || $content instanceof ErrorPage ) $this->_current_content_page = $content;
+		if( !$this->_current_content_page || $content instanceof ErrorPage ) $this->_current_content_page = $content;
 	}
 
 	/**
@@ -285,7 +285,7 @@ final class CmsApp {
 	 * @final
 	 * @internal
 	 * @ignore
-	 * @param ADOConnection $connection
+	 * @param \CMSMS\Database\Connection $conn
 	 */
 	final public function _setDb(\CMSMS\Database\Connection $conn)
 	{
@@ -293,24 +293,24 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the ADODB database object. You can then use this
-	* to perform all kinds of database operations.
-	*
-	* @link http://phplens.com/lens/adodb/docs-adodb.htm
-	* @final
-	* @return ADOConnection a handle to the ADODB database object
-	*/
+	 * Get a handle to the ADODB database object. You can then use this
+	 * to perform all kinds of database operations.
+	 *
+	 * @link http://phplens.com/lens/adodb/docs-adodb.htm
+	 * @final
+	 * @return \CMSMS\Database\Connection a handle to the database Connection object
+	 */
 	final public function &GetDb()
 	{
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection
-         */
+		 */
 		if (isset($this->db)) return $this->db;
 		global $DONT_LOAD_DB;
 
 		if( !isset($DONT_LOAD_DB) ) {
-            $config = \cms_config::get_instance();
-            $this->db = \CMSMS\Database\compatibility::init($config);
+			$config = \cms_config::get_instance();
+			$this->db = \CMSMS\Database\compatibility::init($config);
 		}
 
 		return $this->db;
@@ -324,7 +324,7 @@ final class CmsApp {
 	public function GetDbPrefix()
 	{
 		return CMS_DB_PREFIX;
-    }
+	}
 
 	/**
 	* Get a handle to the global CMS config.
@@ -347,7 +347,7 @@ final class CmsApp {
 	* @final
 	* @see ModuleOperations
 	* @return ModuleOperations handle to the ModuleOperations object
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetModuleOperations()
 	{
@@ -362,7 +362,7 @@ final class CmsApp {
 	* @final
 	* @see UserOperations
 	* @return UserOperations handle to the UserOperations object
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetUserOperations()
 	{
@@ -376,7 +376,7 @@ final class CmsApp {
 	* @final
 	* @see ContentOperations::get_instance()
 	* @return ContentOperations handle to the ContentOperations object
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetContentOperations()
 	{
@@ -390,11 +390,11 @@ final class CmsApp {
 	* @final
 	* @see BookmarkOperations
 	* @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetBookmarkOperations()
 	{
-        if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
+		if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
 		return $this->bookmarkoperations;
 	}
 
@@ -406,7 +406,7 @@ final class CmsApp {
 	* @final
 	* @see GroupOperations
 	* @return GroupOperations handle to the GroupOperations object
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetGroupOperations()
 	{
@@ -420,7 +420,7 @@ final class CmsApp {
 	* @final
 	* @see UserTagOperations
 	* @return UserTagOperations handle to the UserTagOperations object
-    * @deprecated
+	* @deprecated
 	*/
 	public function & GetUserTagOperations()
 	{
@@ -459,8 +459,8 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
-        return $this->_hrinstance;
+		if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
+		return $this->_hrinstance;
 	}
 
 	/**
@@ -468,7 +468,7 @@ final class CmsApp {
 	*
 	* @final
 	* @internal
-    * @ignore
+	* @ignore
 	* @access private
 	*/
 	public function dbshutdown()
@@ -493,11 +493,11 @@ final class CmsApp {
 	 */
 	final public function clear_cached_files($age_days = 0)
 	{
-        $age_days = max(-1,(int) $age_days);
-		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
+		$age_days = max(-1,(int) $age_days);
+		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE; // not used?... todo remove
 		if( !defined('TMP_CACHE_LOCATION') ) return;
-        	$age_days = max(0,(int)$age_days);
-        	\CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
+		$age_days = max(0,(int)$age_days);
+		\CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
 		$the_time = time() - $age_days * 24*60*60;
 
 		$dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
@@ -507,7 +507,7 @@ final class CmsApp {
 			foreach( $dirContents as $one ) {
 				if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
 			}
-            		@touch(cms_join_path($start_dir,'index.html'));
+			@touch(cms_join_path($start_dir,'index.html'));
 		}
 	}
 
@@ -518,7 +518,7 @@ final class CmsApp {
 	 * @internal
 	 * @since 1.11.3
 	 * @return Smarty_Parser handle to the Smarty object
-         * @deprecated
+	 * @deprecated
 	 */
 	final public function &get_template_parser()
 	{
@@ -548,7 +548,7 @@ final class CmsApp {
 		}
 	}
 
-    /**
+	/**
 	 * Test if the current application state matches the requested value.
 	 * This method will throw an exception if invalid data is passed in.
 	 *
@@ -565,20 +565,20 @@ final class CmsApp {
 		return FALSE;
 	}
 
-    /**
+	/**
 	 * Get a list of all current states.
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
 	 * @return stringp[] Array of state strings, or null.
 	 */
-    public function get_states()
-    {
+	public function get_states()
+	{
 		$this->set_states();
 		if( isset($this->_states) ) return $this->_states;
 	}
 
-    /**
+	/**
 	 * Add a state to the list of states.
 	 *
 	 * This method will throw an exception if an invalid state is passed in.
@@ -589,14 +589,14 @@ final class CmsApp {
 	 * @author Robert Campbell
 	 * @param string The state.  We recommend you use the class constants for this.
 	 */
-    public function add_state($state)
-    {
+	public function add_state($state)
+	{
 		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		$this->_states[] = $state;
-    }
+	}
 
-    /**
+	/**
 	 * Remove a state to the list of states.
 	 *
 	 * This method will throw an exception if an invalid state is passed in.
@@ -607,8 +607,8 @@ final class CmsApp {
 	 * @author Robert Campbell
 	 * @param string The state.  We recommend you use the class constants for this.
 	 */
-    public function remove_state($state)
-    {
+	public function remove_state($state)
+	{
 		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		if( !is_array($this->_states) || !in_array($state,$this->_states) ) {
@@ -617,45 +617,45 @@ final class CmsApp {
 			return TRUE;
 		}
 		return FALSE;
-    }
+	}
 
-    /**
-     * A convenience method to test if the current request was executed via the CLI.
-     *
-     * @since 2.2.9
-     * @author Robert Campbell
-     * @return bool
-     */
-    public function is_cli()
-    {
+	/**
+	 * A convenience method to test if the current request was executed via the CLI.
+	 *
+	 * @since 2.2.9
+	 * @author Robert Campbell
+	 * @return bool
+	 */
+	public function is_cli()
+	{
 	return (php_sapi_name() == 'cli');
-    }
+	}
 
-    /**
+	/**
 	 * A convenience method to test if the current request is a frontend request.
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
 	 * @return bool
 	 */
-    public function is_frontend_request()
-    {
+	public function is_frontend_request()
+	{
 		$tmp = $this->get_states();
 		if( !is_array($tmp) || count($tmp) == 0 ) return TRUE;
 		return FALSE;
 	}
 
-    /** A convenience method to test if the current request was over HTTPS.
-     *
+	/** A convenience method to test if the current request was over HTTPS.
+	 *
 	 * @since 1.11.12
 	 * @author Robert Campbell
 	 * @return bool
 	 */
-    public function is_https_request()
-    {
-        if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
-        return FALSE;
-    }
+	public function is_https_request()
+	{
+		if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
+		return FALSE;
+	}
 }
 
 
@@ -709,7 +709,7 @@ function &cmsms()
  * @see CmsApp::GetDbPrefix();
  */
 function cms_db_prefix() {
-    return CMS_DB_PREFIX;
+	return CMS_DB_PREFIX;
 }
 
 ?>
