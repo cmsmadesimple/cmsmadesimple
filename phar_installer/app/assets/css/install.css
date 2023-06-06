@@ -615,8 +615,8 @@ h1, h2, h3, h4, h5, h6 {
 .cmsms-ui .bigtext {
     max-height: 20em;
     max-width: 60em;
-    overflow-y: none;
-    overflow-x: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 /* --- Buttons --- */
