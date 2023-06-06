@@ -33,13 +33,39 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-#$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
+#$Id:$
 
 class NavigatorNode
 {
+    // Declared properties prevent deprecation warnings
+    public $accesskey;
+    public $alias;
+    public $children;
+    public $children_exist;
+    public $created;
+    public $current;
+    public $default;
+    public $depth;
+    public $extra1;
+    public $extra2;
+    public $extra3;
+    public $has_children;
+    public $hierarchy;
+    public $id;
+    public $menutext;
+    public $modified;
+    public $parent;
+    public $raw_menutext;
+    public $tabindex;
+    public $target;
+    public $titleattribute;
+    public $type;
+    public $url;
+
     /**
      * This little function will remove all silly notices in smarty.
      */
+    #[\ReturnTypeWillChange]
     public function __get($key) { return null; }
 }
 
@@ -59,7 +85,7 @@ final class Navigator extends CMSModule
     function LazyLoadAdmin() { return TRUE; }
     function GetHelp($lang='en_US') { return $this->Lang('help'); }
     function GetAuthor() { return 'Robert Campbell'; }
-    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
+    function GetAuthorEmail() { return ''; }
     function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
 
     public function InitializeFrontend()
@@ -144,6 +170,4 @@ final class Navigator extends CMSModule
             if( is_file($file) ) return file_get_contents($file);
         }
     }
-
-
 } // End of class
