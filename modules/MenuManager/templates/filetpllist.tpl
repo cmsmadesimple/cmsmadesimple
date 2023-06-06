@@ -8,7 +8,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	{foreach from=$items item=entry}
+	{foreach $items as $entry}
 		<tr class="{$entry->rowclass}">
 			<td>{$entry->filename}</td>
 			<td>{if isset($entry->importlink)}{$entry->importlink}{/if}</td>
@@ -16,9 +16,6 @@
 	{/foreach}
 	</tbody>
 </table>
-
 {else}
-
 <h4>{$nofilestext}</h4>
-
 {/if}
