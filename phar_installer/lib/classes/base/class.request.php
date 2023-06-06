@@ -2,7 +2,10 @@
 
 namespace __appbase;
 
-class request implements \ArrayAccess
+use ArrayAccess;
+use Exception;
+
+class request implements ArrayAccess
 {
   private static $_instance;
   private $_data;
@@ -19,26 +22,29 @@ class request implements \ArrayAccess
     return self::$_instance;
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetExists($key)
   {
     if( isset($_REQUEST[$key]) ) return TRUE;
     return FALSE;
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetGet($key)
   {
     if( isset($_REQUEST[$key]) ) return $_REQUEST[$key];
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetSet($key,$value)
   {
     if( isset($_REQUEST[$key]) ) return $_REQUEST[$key];
   }
 
-
+  #[\ReturnTypeWillChange]
   public function offsetUnset($key)
   {
-    throw new \Exception('Attempt to unset a request variable');
+    throw new Exception('Attempt to unset a request variable');
   }
 
   public function raw_server($key)
@@ -47,11 +53,12 @@ class request implements \ArrayAccess
       return $_SERVER[$key];
   }
 
+  #[\ReturnTypeWillChange]
   public function __call($fn,$args)
   {
     $key = strtoupper($fn);
     if( isset($_SERVER[$key]) )	return $this->raw_server($key);
-    throw new \Exception('Call to unknown method '.$fn.' in request object');
+    throw new Exception('Call to unknown method '.$fn.' in request object');
   }
 
   public function self()
@@ -67,7 +74,7 @@ class request implements \ArrayAccess
     elseif( $this->raw_server('REQUEST_METHOD') == 'GET' ) {
       return self::METHOD_GET;
     }
-    throw new \Exception('Unhandled request method '.$_SERVER['REQUEST_METHOD']);
+    throw new Exception('Unhandled request method '.$_SERVER['REQUEST_METHOD']);
   }
 
   public function is_post()
@@ -117,7 +124,7 @@ class request implements \ArrayAccess
 
   public function https()
   {
-    if( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'on' ) return TRUE;
+    if( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
     return FALSE;
   }
 
