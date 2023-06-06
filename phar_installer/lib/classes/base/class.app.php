@@ -2,9 +2,14 @@
 
 namespace __appbase;
 
-require_once(__DIR__.'/compat.functions.php');
-require_once(__DIR__.'/misc.functions.php');
-require_once(dirname(__DIR__).'/accessor.functions.php');
+use __appbase\utils;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+require_once __DIR__.'/compat.functions.php';
+require_once __DIR__.'/misc.functions.php';
+require_once dirname(__DIR__).'/accessor.functions.php';
 
 abstract class app
 {
@@ -16,7 +21,7 @@ abstract class app
 
     public function __construct($filename)
     {
-        if( is_object(self::$_instance) ) throw new \Exception('Cannot create another object of type app');
+        if( is_object(self::$_instance) ) throw new Exception('Cannot create another object of type app');
         self::$_instance = $this;
 
         spl_autoload_register(__NAMESPACE__.'\app::autoload');
@@ -30,7 +35,7 @@ abstract class app
 
     public static function &get_instance()
     {
-        if( !is_object(self::$_instance) )	throw new \Exception('There is no registered app instance');
+        if( !is_object(self::$_instance) ) throw new Exception('There is no registered app instance');
         return self::$_instance;
     }
 
@@ -42,7 +47,7 @@ abstract class app
     public function get_tmpdir()
     {
         // not modifyiable, ye
-        return \__appbase\utils::get_sys_tmpdir();
+        return utils::get_sys_tmpdir();
     }
 
     public static function get_appdir()
@@ -52,10 +57,10 @@ abstract class app
 
     public static function get_rootdir()
     {
-        return dirname(dirname(dirname(__DIR__)));
+        return dirname(__DIR__,3);
     }
 
-    static public function get_rooturl()
+    public static function get_rooturl()
     {
         $config = self::$_instance->config();
         if( $config && isset($config[self::CONFIG_ROOT_URL]) ) return $config[self::CONFIG_ROOT_URL];
@@ -70,31 +75,31 @@ abstract class app
         return $this->_config;
     }
 
-    static public function clear_cache($do_index_html = TRUE)
+    public static function clear_cache($do_index_html = TRUE)
     {
-        $rdi = new \RecursiveDirectoryIterator($this->get_tmpdir());
-        $rii = new \RecursiveIteratorIterator($rdi);
+        $rdi = new RecursiveDirectoryIterator($this->get_tmpdir());
+        $rii = new RecursiveIteratorIterator($rdi);
         foreach( $rii as $file => $info ) {
             if( $info->isFile() ) @unlink($info->getPathInfo());
         }
 
         if( $do_index_html ) {
-            $rdi = new \RecursiveDirectoryIterator($this->get_tmpdir());
-            $rii = new \RecursiveIteratorIterator($rdi);
+            $rdi = new RecursiveDirectoryIterator($this->get_tmpdir());
+            $rii = new RecursiveIteratorIterator($rdi);
             foreach( $rii as $file => $info ) {
                 if( $info->isFile() ) @touch($info->getPathInfo().'/index.html');
             }
         }
     }
 
-    static public function autoload($classname)
+    public static function autoload($classname)
     {
         $dirsuffix = dirname(str_replace('\\','/',$classname));
         $classname = basename(str_replace('\\','/',$classname));
         $dirsuffix = str_replace('__appbase','.',$dirsuffix);
         //if( $dirsuffix == "__appbase" ) $dirsuffix = '.';
 
-        $dirs = array(__DIR__,dirname(__DIR__),dirname(__DIR__).'/tests',dirname(__DIR__).'/base',dirname(dirname(__DIR__)) );
+        $dirs = array(__DIR__,dirname(__DIR__),dirname(__DIR__).'/tests',dirname(__DIR__).'/base',dirname(__DIR__,2) );
         foreach( $dirs as $dir ) {
             $fn = "$dir/$dirsuffix/class.$classname.php";
             if( file_exists($fn) ) {
@@ -104,13 +109,8 @@ abstract class app
         }
     }
 
-    abstract function run();
+    abstract public function run();
 
 } // end of class
-
-function &get_app()
-{
-    return app::get_instance();
-}
 
 ?>
