@@ -546,7 +546,7 @@ if (defined('STDOUT') && $_outfile == STDOUT) {
                     touch($file.DIRECTORY_SEPARATOR.'changelog.txt');
                 }
                 $file .= DIRECTORY_SEPARATOR.$_outfile;
-            } elseif (mkdir($file, 0777, true)) { // generic perms, pending actuals for istallation
+            } elseif (mkdir($file, 0777, true)) { // generic perms, pending actuals for installation
                 touch($file.DIRECTORY_SEPARATOR.'changelog.txt');
                 $file .= DIRECTORY_SEPARATOR.$_outfile;
             } else {
@@ -993,6 +993,8 @@ class compare_dirs
 {
     private $_a;
     private $_b;
+    private $_list_a;
+    private $_list_b;
     private $_do_md5;
     private $_has_run = null;
     private $_base_dir;
