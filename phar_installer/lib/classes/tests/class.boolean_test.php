@@ -2,20 +2,21 @@
 
 namespace __appbase\tests;
 
+use __appbase\utils;
+
 class boolean_test extends test_base
 {
-  private $_data = array();
+//  private $_data = array();
 
   public function __construct($name,$value)
   {
-    $value = (bool)$value;
-    parent::__construct($name,$value);
+    parent::__construct($name,(bool)$value);
   }
 
   public function execute()
   {
-    $val = \__appbase\utils::to_bool($this->value);
-    if( $val ) return self::TEST_PASS;
-    return self::TEST_FAIL;
+    $val = utils::to_bool($this->value);
+    if( $val ) return parent::TEST_PASS;
+    return parent::TEST_FAIL;
   }
 }
