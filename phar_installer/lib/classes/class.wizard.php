@@ -2,6 +2,10 @@
 
 namespace __appbase;
 
+use DirectoryIterator;
+use Exception;
+use RegexIterator;
+
 class wizard
 {
   private static $_instance = null;
@@ -21,7 +25,7 @@ class wizard
   private function __construct($classdir,$namespace)
   {
     $this->_namespace = $namespace;
-    if( !is_dir($classdir) ) throw new \Exception('Could not find wizard steps in '.$classdir);
+    if( !is_dir($classdir) ) throw new Exception('Could not find wizard steps in '.$classdir);
 
     $this->_classdir = $classdir;
     $this->_name = basename($classdir);
@@ -30,7 +34,7 @@ class wizard
 
   final public static function &get_instance($classdir = '', $namespace = '')
   {
-    if( !self::$_instance ) self::$_instance = new wizard($classdir,$namespace);
+    if( !self::$_instance ) self::$_instance = new self($classdir,$namespace);
     return self::$_instance;
   }
 
@@ -40,13 +44,13 @@ class wizard
       $this->_initialized = true;
 
       // find all of the classes in the wizard directory.
-      $di = new \DirectoryIterator($this->_classdir);
-      $ri = new \RegexIterator($di,'/^class\.wizard.*\.php$/');
+      $di = new DirectoryIterator($this->_classdir);
+      $ri = new RegexIterator($di,'/^class\.wizard.*\.php$/');
       $files = array();
       foreach( $ri as $one ) {
           $files[] = $one->getFilename();
       }
-      if( !count($files) ) throw new \Exception('Could not find wizard steps in '.$classdir);
+      if( !count($files) ) throw new Exception('Could not find wizard steps in '.$classdir);
       sort($files);
 
       $_data = array();
@@ -110,10 +114,11 @@ class wizard
     if( isset($rec['class']) && class_exists($rec['class']) ) {
       $obj = new $rec['class'];
       if( is_object($obj) ) {
-	$this->_stepobj = $obj;
-	return $obj;
+        $this->_stepobj = $obj;
+        return $obj;
       }
     }
+    return null;
   }
 
   public function get_data($key,$dflt = null)
@@ -148,7 +153,7 @@ class wizard
 
       // get the url to the specified step index
       $idx = (int)$idx;
-      if( $idx < 1 || $idx > $this->num_steps() ) return;
+      if( $idx < 1 || $idx > $this->num_steps() ) return '';
 
       $request = request::get();
       $url = $request->raw_server('REQUEST_URI');
@@ -174,7 +179,7 @@ class wizard
 
       $parts = parse_str($url,$parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
-      if( $parts[$this->_stepvar] > $this->num_steps() ) return;
+      if( $parts[$this->_stepvar] > $this->num_steps() ) return '';
 
       $tmp = array();
       foreach( $parts as $k => $v ) {
@@ -193,7 +198,7 @@ class wizard
 
       parse_str($url,$parts);
       $parts[$this->_stepvar] = $this->cur_step() - 1;
-      if( $parts[$this->_stepvar] <= 0 ) return;
+      if( $parts[$this->_stepvar] <= 0 ) return '';
 
       $tmp = array();
       if( count($parts) ) {
