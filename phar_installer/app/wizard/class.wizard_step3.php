@@ -19,8 +19,9 @@ class wizard_step3 extends wizard_step
     protected function perform_tests($verbose,&$infomsg,&$tests)
     {
         $app = get_app();
-        $version_info = $this->get_wizard()->get_data('version_info');
-        $action = $this->get_wizard()->get_data('action');
+        $wiz = $this->get_wizard();
+        $version_info = $wiz->get_data('version_info'); // only present for upgrades
+        $action = $wiz->get_data('action');
         $informational = array();
         $tests = array();
 
@@ -93,7 +94,7 @@ class wizard_step3 extends wizard_step
                 if( !$dir ) return FALSE;  // fail on invalid dir
                 if( !is_dir($dir) ) return TRUE; // pass on dir not existing yet
                 $files = glob($dir.'/*' );
-                if( !count($files) ) return TRUE; // no files yet.
+                if( !is_array($files) || count($files) == 0 ) return TRUE; // no files yet.
                 if( count($files) > 1 ) return FALSE; // morre than one file
                 // trivial check for index.html
                 $bn = strtolower(basename($files[0]));
