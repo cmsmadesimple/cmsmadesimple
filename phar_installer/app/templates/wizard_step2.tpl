@@ -24,13 +24,13 @@ $(function() {
   {$label='install'|tr}
 
   {if $nofiles}
-    <div class="message yellow">{'step2_nofiles'|tr}</div>
+    <div class="message blue">{'step2_nofiles'|tr}</div>
   {/if}
 
   {if !isset($cmsms_info)}
-    <div class="message yellow">{'step2_nocmsms'|tr}</div>
+    <div class="message blue">{'step2_nocmsms'|tr}</div>
     {if !$install_empty_dir}
-    <div class="message red">{'step2_install_dirnotempty2'|tr}
+    <div class="message yellow">{'step2_install_dirnotempty2'|tr}
       {if !empty($existing_files)}
       <ul>
         {foreach $existing_files as $one}
@@ -70,7 +70,7 @@ $(function() {
       {if !empty($upgrade_info)}
         <div class="message blue icon">
           <i class="icon-info message-icon"></i>
-          <div class="content"><strong>{'step2_hdr_upgradeinfo'|tr}</strong><br>{'step2_info_upgradeinfo'|tr}</div>
+          <div class="content"><strong>{'step2_hdr_upgradeinfo'|tr}</strong><br />{'step2_info_upgradeinfo'|tr}</div>
         </div>
         <ul id="upgrade_info" class="no-list">
           {foreach $upgrade_info as $ver => $data}
@@ -102,11 +102,11 @@ $(function() {
       {* <a class="action-button orange" href="{$retry_url}" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a> *}
       <a onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
       {/if}
-      <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}">
+      <input class="action-button positive" id="install" type="submit" name="install" value="{'install'|tr}" />
     {elseif !isset($cmsms_info.error_status)}
-      <input class="action-button positive" id="upgrade" type="submit" name="upgrade" value="{'upgrade'|tr} &rarr;">
+      <input class="action-button positive" id="upgrade" type="submit" name="upgrade" value="{'upgrade'|tr} &rarr;" />
     {elseif $cmsms_info.error_status == 'same_ver'}
-      <input class="action-button positive" id="freshen" type="submit" name="freshen" value="{'freshen'|tr} &rarr;">
+      <input class="action-button positive" id="freshen" type="submit" name="freshen" value="{'freshen'|tr} &rarr;" />
     {/if}
   </div>
 

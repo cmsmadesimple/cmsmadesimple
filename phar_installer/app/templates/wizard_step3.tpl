@@ -33,7 +33,7 @@
                 {$test->name|tr}
                 {$str = $test->msg()}
                 {if $str != '' && ($verbose || $test->status != 'test_pass')}
-                  <br>
+                  <br />
                   <span class="tests-infotext">{$str}</span>
                 {/if}
             </td>
