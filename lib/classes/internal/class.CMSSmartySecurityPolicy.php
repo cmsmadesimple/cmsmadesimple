@@ -22,69 +22,64 @@
  * @package CMS
  */
 
-
 /**
  * Generic smarty security policy.
  *
- * @since       1.11
- * @package     CMS
+ * @since   1.11
+ * @package CMS
  * @internal
  * @ignore
  */
 final class CMSSmartySecurityPolicy extends Smarty_Security
 {
-  public function __construct($smarty)
-  {
-    parent::__construct($smarty);
-    //2,3 only $this->php_handling = Smarty::PHP_REMOVE;
-    $this->secure_dir = [];
-    # $this->php_modifiers = []; //any php function, but deprecated?
-    $this->php_modifiers = ['lang'];
-    $this->streams = null; // disable all
-    //2,3 only $this->allow_php_tag = FALSE;
-    $gCms = CmsApp::get_instance();
-    if( $gCms->is_frontend_request() ) {
-      $this->allow_constants = false;
-      $config = $gCms->GetConfig();
-      $this->static_classes = []; // allow all static classes
-      if( $config['permissive_smarty'] ) {
-        $this->php_functions = []; // allow any php function
-      }
-      else {
-        // this should allow most stuff that does modification to data or formatting.
-        // i.e: string searches, array searches, string comparison, sorting, etc.
-        $this->php_functions = [
-          'array_sum','array_combine','array_diff','array_flip','array_rand','array_reverse','array_search','asort',
-          'cms_html_entity_decode','cms_to_bool','count',
-          'date','debug_display',
-          'empty','endswith','explode',
-          'file_exists','function_exists',
-          'getimagesize',
-          'htmlspecialchars','htmlspecialchars_decode',
-          'implode','in_array','is_array','is_dir','is_email','is_file','is_object','is_string','isset',
-          'json_decode','json_encode',
-          'ksort',
-          'lang', //TODO relevant for frontend use?
-          'max','min',
-          'nl2br','number_format',
-          'print_r',
-          'shuffle','sizeof','sort','startswith','str_replace','strcasecmp','strcmp','strftime','strlen','strpos','strtolower','strtotime','strtoupper','substr',
-          'time',
-          'urlencode',
-          'var_dump'
-        ];
-        
-        $this->php_modifiers = $this->php_functions;
-      }
+    public $smarty; // used by ancestor, prevent undeclared property
+
+    public function __construct($smarty)
+    {
+        parent::__construct($smarty);
+//Smarty 2,3 only $this->php_handling = Smarty::PHP_REMOVE;
+        $this->secure_dir = null; // don't trust anywhere not explicitly whitelisted
+        $this->php_modifiers = [];  // allow any php function TODO consider same as php_functions (breaker)
+        $this->streams = null; // no usable streams
+//Smarty 2,3 only $this->allow_php_tag = false;
+        $gCms = CmsApp::get_instance();
+        if($gCms->is_frontend_request() ) {
+            // some permissive settings
+            $this->static_classes = []; // allow all classes' static method-calls
+            $this->php_functions = []; // allow any php functions
+            $this->allow_constants = false; // prohibit php const's (2.2.16) prob (2.2.17) >> true when permissive, false otherwise
+            $config = $gCms->GetConfig();
+            if( !$config['permissive_smarty'] ) {
+                $this->static_classes = null; // no class static-method calls
+                // allow most methods that do modification of data to be displayed.
+                // e.g. string searches, array searches, string comparison, formatting, sorting, etc.
+                $this->php_functions = [
+                    'array_sum','array_combine','array_diff','array_flip','array_rand','array_reverse','array_search','asort',
+                    'cms_html_entity_decode','cms_to_bool','count',
+                    'date','debug_display',
+                    'empty','endswith','explode',
+                    'file_exists','function_exists',
+                    'getimagesize',
+                    'htmlspecialchars','htmlspecialchars_decode',
+                    'implode','in_array','is_array','is_dir','is_email','is_file','is_object','is_string','isset',
+                    'json_decode','json_encode',
+                    'ksort',
+                    'lang', //TODO irrelevant for frontend use?
+                    'max','min',
+                    'nl2br','number_format',
+                    'print_r',
+                    'shuffle','sizeof','sort','startswith','str_replace','strcasecmp','strcmp','strftime','strlen','strpos','strtolower','strtotime','strtoupper','substr',
+                    'time',
+                    'trim','ltrim','rtrim', //since 2.2.17
+                    'urlencode',
+                    'var_dump'
+                ];
+            }
+        }
+        else {
+            $this->php_functions = []; // allow any php function
+            $this->static_classes = []; // allow any static-method call (Smarty default)
+            $this->allow_constants = true;
+        }
     }
-    else {
-      $this->php_functions = []; // allow any php function
-      $this->static_classes = [
-        'Smarty',
-        'CmsLayoutTemplateType'
-      ]; // allow all static classes
-      $this->php_modifiers = [];
-      $this->allow_constants = true;
-    }
-  }
 } // end of class

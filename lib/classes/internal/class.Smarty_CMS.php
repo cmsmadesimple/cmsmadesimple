@@ -43,11 +43,10 @@ class Smarty_CMS extends CMSSmartyBase
      */
     public function __construct()
     {
-        parent::__construct();
-//2,3      $this->direct_access_security = TRUE; unused upstream now
-
         global $CMS_INSTALL_PAGE;
+        parent::__construct();
 
+//Smarty 2,3      $this->direct_access_security = TRUE;
         // Set template_c and cache dirs
         $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
         $this->setCacheDir(TMP_CACHE_LOCATION);
@@ -94,7 +93,7 @@ class Smarty_CMS extends CMSSmartyBase
             $this->addTemplateDir($config['assets_path'].'/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
-            if(isset($CMS_INSTALL_PAGE)) return;
+//see below            if(isset($CMS_INSTALL_PAGE)) return;
 
             if (is_sitedown()) {
                 $this->setCaching(false);
@@ -119,30 +118,33 @@ class Smarty_CMS extends CMSSmartyBase
             // compile check can only be enabled, if using smarty cache... just for safety.
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
 
-            // Enable frontend security, permissive or not
+            // Enable custom security, permissive or not
             $this->enableSecurity('CMSSmartySecurityPolicy');
         }
-        else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
+        else if( $_gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
             $this->setCaching(false);
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');
-            // Enable admin security, permissive or not
-            $this->enableSecurity('CMSSmartySecurityPolicy');
+// TODO next release enable custom security (might be a breaker)
+//            $this->enableSecurity('CMSSmartySecurityPolicy');
         }
-        // No security change during installer session
+        else if( $_gCms->test_state(CmsApp::STATE_INSTALL) ) {
+            $this->addTemplateDir($config['assets_path'].'/templates');
+            // no change to default security during installer run
+        }
     }
 
     /**
      * get_instance method
      *
-     * @return object $this
+     * @return reference to object $this
      */
     public static function &get_instance()
     {
         if( !self::$_instance ) {
-            self::$_instance = new \Smarty_CMS;
+            self::$_instance = new self();
         }
         return self::$_instance;
     }
