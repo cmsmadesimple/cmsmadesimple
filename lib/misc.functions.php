@@ -25,8 +25,6 @@
  * @license GPL
  */
 
-
-
 /**
  * Redirects to relative URL on the current site.
  *
@@ -42,8 +40,8 @@ function redirect($to)
 {
     $app = cmsms();
     if( $app->is_cli() ) {
-    // cannot redirect cli based scripts
-    die("ERROR: no redirect on cli based scripts ---\n");
+        // cannot redirect cli based scripts
+        die("ERROR: no redirect on cli based scripts ---\n");
     }
     $_SERVER['PHP_SELF'] = null;
 
@@ -52,7 +50,7 @@ function redirect($to)
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);
-    if($components) {
+    if( $components ) {
         $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
         $to .= isset($components['host']) ? $components['host'] : $host;
         $to .= isset($components['port']) ? ':' . $components['port'] : '';
@@ -66,7 +64,7 @@ function redirect($to)
                 $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
             }
             else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) { //Lighttpd
-                if (endswith($_SERVER['REQUEST_URI'], '/')) {
+                if( endswith($_SERVER['REQUEST_URI'], '/') ) {
                     $to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
                 }
                 else {
@@ -105,8 +103,8 @@ function redirect($to)
     }
     else {
         if ( $debug ) {
-            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br>";
-            echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br>";
+            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+            echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
             echo '<div id="DebugFooter">';
             foreach (CmsApp::get_instance()->get_errors() as $error) {
                 echo $error;
@@ -122,7 +120,6 @@ function redirect($to)
 }
 
 
-
 /**
  * Given a page ID or an alias, redirect to it.
  * Retrieves the URL of the specified page, and performs a redirect
@@ -131,21 +128,20 @@ function redirect($to)
  */
 function redirect_to_alias($alias)
 {
-  $manager = CmsApp::get_instance()->GetHierarchyManager();
-  $node = $manager->sureGetNodeByAlias($alias);
-  if( !$node ) {
-    // put mention into the admin log
-    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
-    return;
-  }
-  $content = $node->GetContent();
-  if (!is_object($content)) {
-    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
-    return;
-  }
-  if ($content->GetURL() != '') redirect($content->GetURL());
+    $manager = CmsApp::get_instance()->GetHierarchyManager();
+    $node = $manager->sureGetNodeByAlias($alias);
+    if( !$node ) {
+        // put mention into the admin log
+        audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+        return;
+    }
+    $content = $node->GetContent();
+    if (!is_object($content)) {
+        audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+        return;
+    }
+    if ($content->GetURL() != '') redirect($content->GetURL());
 }
-
 
 
 /**
@@ -162,7 +158,6 @@ function microtime_diff($a, $b)
     list($b_dec, $b_sec) = explode(" ", $b);
     return $b_sec - $a_sec + $b_dec - $a_dec;
 }
-
 
 
 /**
@@ -183,6 +178,7 @@ function cms_join_path()
     $args = func_get_args();
     return implode(DIRECTORY_SEPARATOR,$args);
 }
+
 
 /**
  * Return the relative portion of a path
@@ -221,26 +217,26 @@ function cms_relative_path($in,$relative_to = null)
  */
 function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
-  if ($val == "") return "";
+    if ($val == "") return "";
 
-  $val = str_replace( "&#032;", " ", $val );
-  $val = str_replace( "&"            , "&amp;"         , $val );
-  $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
-  $val = str_replace( "-->"          , "--&#62;"       , $val );
-  $val = str_ireplace( "<script"     , "&#60;script"   , $val );
-  $val = str_replace( ">"            , "&gt;"          , $val );
-  $val = str_replace( "<"            , "&lt;"          , $val );
-  $val = str_replace( "\""           , "&quot;"        , $val );
-  $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-  $val = str_replace( "!"            , "&#33;"         , $val );
-  $val = str_replace( "'"            , "&#39;"         , $val );
+    $val = str_replace( "&#032;", " ", $val );
+    $val = str_replace( "&"            , "&amp;"         , $val );
+    $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
+    $val = str_replace( "-->"          , "--&#62;"       , $val );
+    $val = str_ireplace( "<script"     , "&#60;script"   , $val );
+    $val = str_replace( ">"            , "&gt;"          , $val );
+    $val = str_replace( "<"            , "&lt;"          , $val );
+    $val = str_replace( "\""           , "&quot;"        , $val );
+    $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
+    $val = str_replace( "!"            , "&#33;"         , $val );
+    $val = str_replace( "'"            , "&#39;"         , $val );
 
-  if ($convert_single_quotes) {
-    $val = str_replace("\\'", "&apos;", $val);
-    $val = str_replace("'", "&apos;", $val);
-  }
+    if ($convert_single_quotes) {
+        $val = str_replace("\\'", "&apos;", $val);
+        $val = str_replace("'", "&apos;", $val);
+    }
 
-  return $val;
+    return $val;
 }
 
 
@@ -284,7 +280,6 @@ function debug_bt_to_log()
 }
 
 
-
 /**
  * A function to generate a backtrace in a readable format.
  *
@@ -312,7 +307,6 @@ function debug_bt()
     }
     echo "</dl></pre>\n";
 }
-
 
 
 /**
@@ -387,7 +381,6 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 }
 
 
-
 /**
  * Display $var nicely only if $config["debug"] is set.
  *
@@ -399,7 +392,6 @@ function debug_output($var, $title="")
     $config = \cms_config::get_instance();
     if( $config["debug"] == true) debug_display($var, $title, true);
 }
-
 
 
 /**
@@ -425,7 +417,6 @@ function debug_to_log($var, $title='',$filename = '')
         }
     }
 }
-
 
 
 /**
@@ -486,7 +477,6 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
 }
 
 
-
 /**
  * Retrieve the $value from the $parameters array checking for $parameters[$value] and
  * $params[$id.$value].
@@ -544,7 +534,6 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 }
 
 
-
 /**
  * A method to remove a permission from the database.
  *
@@ -563,7 +552,6 @@ function cms_mapi_remove_permission($permission_name)
     catch( Exception $e ) {
     }
 }
-
 
 
 /**
@@ -591,7 +579,6 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
         return false;
     }
 }
-
 
 
 /**
@@ -736,7 +723,6 @@ function recursive_delete( $dirname )
 }
 
 
-
 /**
  * A function to recursively chmod all files and folders in a directory.
  *
@@ -774,7 +760,6 @@ function chmod_r( $path, $mode )
 }
 
 
-
 /**
  * A convenience function to test wether one string starts with another.
  *
@@ -788,7 +773,6 @@ function startswith( $str, $sub )
 {
     return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
-
 
 
 /**
@@ -806,7 +790,6 @@ function endswith( $str, $sub )
 }
 
 
-
 /**
  * Convert a human readable string into something that is suitable for use in URLS.
  *
@@ -817,7 +800,8 @@ function endswith( $str, $sub )
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
-  if ($tolower == true) $alias = mb_strtolower($alias);
+  $alias = (string)$alias;
+  if( $tolower ) $alias = mb_strtolower($alias);
 
   // remove invalid chars
   $expr = '/[^\p{L}_\-\.\ \d]/u';
@@ -847,7 +831,7 @@ function cleanValue($val) {
   //Replace odd spaces with safe ones
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);
-  //Encode any HTML to entities (including \n --> <br>)
+  //Encode any HTML to entities (including \n --> <br />)
   $_cleanHtml = function($string,$remove = false) {
     if ($remove) {
       $string = strip_tags($string);
@@ -873,7 +857,6 @@ function cleanValue($val) {
   $val = preg_replace("/\\\(?!&amp;#|\?#)/", "\\", $val);
   return $val;
 }
-
 
 
 /**
@@ -917,8 +900,8 @@ function can_admin_upload()
   if( $safe_mode ) {
     // we're in safe mode.
     if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
-    ($stat_moduleinterface[4] != $stat_uploads[4]) ||
-    ($my_uid != $stat_moduleinterface[4]) ) {
+        ($stat_moduleinterface[4] != $stat_uploads[4]) ||
+        ($my_uid != $stat_moduleinterface[4]) ) {
       // owners don't match
       return FALSE;
     }
@@ -961,10 +944,10 @@ function stack_trace()
   foreach( $stack as $elem ) {
     if( $elem['function'] == 'stack_trace' ) continue;
     if( isset($elem['file'])  ) {
-      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br>';
+      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br />';
     }
     else {
-      echo ' - '.$elem['function'].'<br>';
+      echo ' - '.$elem['function'].'<br />';
     }
   }
 }
@@ -1051,12 +1034,12 @@ function cms_ipmatches($ip,$checklist)
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
-    if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-      if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
-    }
-    else {
-      if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
-    }
+        if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+          if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+        }
+        else {
+          if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
+        }
       }
     }
     return $result;
@@ -1090,7 +1073,6 @@ function is_email( $email, $checkDNS=FALSE )
 }
 
 
-
 /**
  * A convenience method to output the secure param tag that is used on all admin links.
  *
@@ -1109,7 +1091,6 @@ function get_secure_param()
 }
 
 
-
 /**
  * A simple function to convert a string to a bool.
  * accepts, 'y','yes','true',1 as TRUE (case insensitive) all other values represent FALSE.
@@ -1125,7 +1106,6 @@ function cms_to_bool($str)
   if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' || $str === 'on' ) return TRUE;
   return FALSE;
 }
-
 
 
 /**
@@ -1161,13 +1141,13 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
 
   // Scripts to include
-  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.1.min.js',
-			     'aliases'=>array('jquery.min.js','jquery',));
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
+                             'local'=>$basePath.'/lib/jquery/js/jquery-1.11.3.min.js',
+                             'aliases'=>array('jquery.min.js','jquery',));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
-				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
-				'aliases'=>array('jquery-ui.min.js','ui'),
-				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
+                                'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
+                                'aliases'=>array('jquery-ui.min.js','ui'),
+                                'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
@@ -1226,7 +1206,7 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   // Output
   $output = '';
   $fmt_js = '<script type="text/javascript" src="%s"></script>';
-  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s">';
+  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s" />';
   foreach($scripts as $script) {
       $url_js = $script['local'];
       if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
@@ -1239,6 +1219,7 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   }
   return $output;
 }
+
 
 /**
  * @ignore
@@ -1285,10 +1266,11 @@ function setup_session($cachable = FALSE)
         }
     }
     if(!@session_id()) session_start();
-    
+
     if($cachable) header_remove('Last-Modified');
     $_setup_already = TRUE;
 }
+
 
 /**
  * Test if a string is a base64 encoded string
