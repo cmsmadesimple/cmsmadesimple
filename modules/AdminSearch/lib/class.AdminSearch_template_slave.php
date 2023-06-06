@@ -23,9 +23,9 @@ final class AdminSearch_template_slave extends AdminSearch_slave
     private function check_tpl_match(\CmsLayoutTemplate $tpl)
     {
         $strposFunctionName = $this->search_casesensitive() ? 'strpos' : 'stripos';
-        if( $strposFunctionName($tpl->get_name(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $strposFunctionName($tpl->get_content(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $this->search_descriptions() && $strposFunctionName($tpl->get_description(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName((string)$tpl->get_name(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName((string)$tpl->get_content(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $this->search_descriptions() && $strposFunctionName((string)$tpl->get_description(),$this->get_text()) !== FALSE ) return TRUE;
         return FALSE;
     }
 
