@@ -1,12 +1,12 @@
 <?php
 /**
+ * Smarty2 back compatibility class adapted from SmartyBC.class.php
  * Project:     Smarty: the PHP compiling template engine
- * File:        SmartyBC.class.php
  * SVN:         $Id: $
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 3.0 of the License, or (at your option) any later version.
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -25,32 +25,30 @@
  * @author    Rodney Rehm
  * @package   Smarty
  */
-require_once(dirname(dirname(__DIR__)).'/smarty/Smarty.class.php');
+require_once dirname(__DIR__,2).'/smarty/Smarty.class.php';
 
 /**
- * Smarty Backward Compatibility Wrapper Class
+ * Smarty backward compatibility wrapper class
+ * Adapted from the SmartyBC class used with Smarty 3
  *
  * @package Smarty
  */
-class CMSSmartyBase extends \Smarty
+class CMSSmartyBase extends Smarty
 {
     /**
-     * Smarty 2 BC
-     *
      * @var string
      */
     public $_version = Smarty::SMARTY_VERSION;
 
-    /**
+    /* *
      * This is an array of directories where trusted php scripts reside.
      *
      * @var array
      */
-    public $trusted_dir = array();
+//see smarty_security class   public $trusted_dir = array();
 
     /**
-     * Initialize new SmartyBC object
-     *
+     * Pass any child-constructor up the tree
      */
     public function __construct()
     {
@@ -97,6 +95,8 @@ class CMSSmartyBase extends \Smarty
      * @param string $function_impl the name of the PHP function to register
      * @param bool   $cacheable
      * @param mixed  $cache_attrs
+     *
+     * @throws \SmartyException
      */
     public function register_function($function, $function_impl, $cacheable = true, $cache_attrs = null)
     {
@@ -125,9 +125,13 @@ class CMSSmartyBase extends \Smarty
      * @throws SmartyException
      * @internal param array $block_functs list of methods that are block format
      */
-    public function register_object($object, $object_impl, $allowed = array(), $smarty_args = true,
-                                    $block_methods = array())
-    {
+    public function register_object(
+        $object,
+        $object_impl,
+        $allowed = array(),
+        $smarty_args = true,
+        $block_methods = array()
+    ) {
         settype($allowed, 'array');
         settype($smarty_args, 'boolean');
         $this->registerObject($object, $object_impl, $allowed, $smarty_args, $block_methods);
@@ -150,6 +154,8 @@ class CMSSmartyBase extends \Smarty
      * @param string $block_impl PHP function to register
      * @param bool   $cacheable
      * @param mixed  $cache_attrs
+     *
+     * @throws \SmartyException
      */
     public function register_block($block, $block_impl, $cacheable = true, $cache_attrs = null)
     {
@@ -172,6 +178,8 @@ class CMSSmartyBase extends \Smarty
      * @param string $function      name of template function
      * @param string $function_impl name of PHP function to register
      * @param bool   $cacheable
+     *
+     * @throws \SmartyException
      */
     public function register_compiler_function($function, $function_impl, $cacheable = true)
     {
@@ -193,6 +201,8 @@ class CMSSmartyBase extends \Smarty
      *
      * @param string $modifier      name of template modifier
      * @param string $modifier_impl name of PHP function to register
+     *
+     * @throws \SmartyException
      */
     public function register_modifier($modifier, $modifier_impl)
     {
@@ -235,6 +245,8 @@ class CMSSmartyBase extends \Smarty
      * to a template before compiling
      *
      * @param callable $function
+     *
+     * @throws \SmartyException
      */
     public function register_prefilter($function)
     {
@@ -256,6 +268,8 @@ class CMSSmartyBase extends \Smarty
      * to a compiled template after compilation
      *
      * @param callable $function
+     *
+     * @throws \SmartyException
      */
     public function register_postfilter($function)
     {
@@ -277,6 +291,8 @@ class CMSSmartyBase extends \Smarty
      * to a template output
      *
      * @param callable $function
+     *
+     * @throws \SmartyException
      */
     public function register_outputfilter($function)
     {
@@ -298,6 +314,8 @@ class CMSSmartyBase extends \Smarty
      *
      * @param string $type filter type
      * @param string $name filter name
+     *
+     * @throws \SmartyException
      */
     public function load_filter($type, $name)
     {
@@ -338,7 +356,9 @@ class CMSSmartyBase extends \Smarty
      * @param  string $cache_id
      * @param  string $compile_id
      *
-     * @return boolean
+     * @return bool
+     * @throws \Exception
+     * @throws \SmartyException
      */
     public function is_cached($tpl_file, $cache_id = null, $compile_id = null)
     {
@@ -374,7 +394,8 @@ class CMSSmartyBase extends \Smarty
      *
      * @param  string $tpl_file
      *
-     * @return boolean
+     * @return bool
+     * @throws \SmartyException
      */
     public function template_exists($tpl_file)
     {
