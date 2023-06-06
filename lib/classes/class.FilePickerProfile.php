@@ -57,6 +57,7 @@ class FilePickerProfile
      */
     protected function setValue( $key, $val )
     {
+      $val = (string) $val;
         switch( $key ) {
         case 'top':
             $val = trim($val);
