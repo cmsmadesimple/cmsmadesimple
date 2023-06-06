@@ -13,7 +13,7 @@ class Profile extends \CMSMS\FilePickerProfile
         case 'name':
           case 'prefix':
           case 'file_extensions':
-            $this->_data[$key] = trim($val);
+            $this->_data[$key] = trim((string)$val);
             break;
         case 'create_date':
         case 'modified_date':
