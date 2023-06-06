@@ -204,7 +204,7 @@ $move_directory_files = function($srcdir,$destdir) {
     if( !is_dir($srcdir) ) return;
 
     $files = glob($srcdir.'/*');
-    if( !count($files) ) return;
+    if( !$files ) return;
 
     foreach( $files as $src ) {
         $bn = basename($src);
