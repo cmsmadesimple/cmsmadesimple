@@ -28,7 +28,7 @@ class wizard_step9 extends wizard_step
         $destdir = $app->get_destdir();
         if( !$destdir ) throw new Exception(lang('error_internal',900));
 
-        $this->connect_to_cmsms();
+        $this->connect_to_cmsms($destdir);
 
         // upgrade modules
         $this->message(lang('msg_upgrademodules'));
@@ -57,7 +57,6 @@ class wizard_step9 extends wizard_step
         // todo: write history
 
         // set the finished message.
-        $app = get_app();
         if( $app->has_custom_destdir() || !$app->in_phar() ) {
             $this->set_block_html('bottom_nav',lang('finished_custom_upgrade_msg'));
         }
@@ -70,22 +69,22 @@ class wizard_step9 extends wizard_step
         }
     }
 
-    public function do_install()
+    private function do_install()
     {
         // create tmp directories
         $app = get_app();
-        $destdir = get_app()->get_destdir();
+        $destdir = $app->get_destdir();
         if( !$destdir ) throw new Exception(lang('error_internal',901));
+        $siteinfo = $this->get_wizard()->get_data('siteinfo');
+        if( !$siteinfo ) throw new Exception(lang('error_internal',902));
+
         $this->message(lang('install_createtmpdirs'));
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
         @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
 
-        $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new Exception(lang('error_internal',902));
-
         // install modules
         $this->message(lang('install_modules'));
-        $this->connect_to_cmsms();
+        $this->connect_to_cmsms($destdir);
         $modops = cmsms()->GetModuleOperations();
         $allmodules = $modops->FindAllModules();
         foreach( $allmodules as $name ) {
@@ -100,31 +99,34 @@ class wizard_step9 extends wizard_step
         // write protect config.php
         @chmod("$destdir/config.php",0444);
 
-        $adminacct = $this->get_wizard()->get_data('adminaccount');
         $root_url = $app->get_root_url();
         if( !endswith($root_url,'/') ) $root_url .= '/';
         $admin_url = $root_url.'admin';
+        $adminacct = $this->get_wizard()->get_data('adminaccount');
 
         if( is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo'] && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
             try {
-                $this->message(lang('send_admin_email'));
                 $mailer = new cms_mailer();
                 $mailer->AddAddress($adminacct['emailaddr']);
                 $mailer->SetSubject(lang('email_accountinfo_subject'));
-                $body = null;
                 if( $app->in_phar() ) {
                     $body = lang('email_accountinfo_message',
-                                            $adminacct['username'],$adminacct['password'],
-                                            $destdir, $root_url);
+                                 $adminacct['username'],$adminacct['password'],
+                                 $destdir, $root_url);
                 }
                 else {
                     $body = lang('email_accountinfo_message_exp',
-                                            $adminacct['username'],$adminacct['password'],
-                                            $destdir);
+                                 $adminacct['username'],$adminacct['password'],
+                                 $destdir);
                 }
                 $body = html_entity_decode($body, ENT_QUOTES);
                 $mailer->SetBody($body);
-                $mailer->Send();
+                if( $mailer->Send() ) {
+                    $this->message(lang('send_admin_email'));
+                }
+                else {
+                    $this->error(lang('error_sendingmail'));
+                }
             }
             catch( Exception $e ) {
                 $this->error(lang('error_sendingmail').': '.$e->GetMessage());
@@ -143,8 +145,13 @@ class wizard_step9 extends wizard_step
         if( !$root_url || !$app->in_phar() ) {
             // find the common part of the SCRIPT_FILENAME and the destdir
             // /var/www/phar_installer/index.php
-            // /var/www/foo
-            $this->set_block_html('bottom_nav',lang('finished_custom_install_msg'));
+            if( $root_url ) {
+                $msg = lang('finished_install_msg',$root_url,$admin_url);
+            }
+            else {
+                $msg = lang('finished_custom_install_msg');
+            }
+            $this->set_block_html('bottom_nav',$msg);
         }
         else {
             if( endswith($root_url,'/') ) $admin_url = $root_url.'admin';
@@ -156,7 +163,7 @@ class wizard_step9 extends wizard_step
     {
         // create tmp directories
         $app = get_app();
-        $destdir = get_app()->get_destdir();
+        $destdir = $app->get_destdir();
         if( !$destdir ) throw new Exception(lang('error_internal',901));
         $this->message(lang('install_createtmpdirs'));
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
@@ -166,7 +173,7 @@ class wizard_step9 extends wizard_step
         @chmod("$destdir/config.php",0444);
 
         // clear the cache
-        $this->connect_to_cmsms();
+        $this->connect_to_cmsms($destdir);
         cmsms()->clear_cached_files();
         $this->message(lang('msg_clearedcache'));
 
@@ -185,29 +192,29 @@ class wizard_step9 extends wizard_step
         }
     }
 
-    private function connect_to_cmsms()
+    private function connect_to_cmsms($destdir)
     {
-        // this loads the standard CMSMS stuff, except smarty cuz it's already done.
-        // we do this here because both upgrade and install stuff needs it.
-        global $CMS_INSTALL_PAGE, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
-        $CMS_INSTALL_PAGE = 1;
-        $CMS_PHAR_INSTALLER = 1;
-        $DONT_LOAD_SMARTY = 1;
-        $CMS_VERSION = $this->get_wizard()->get_data('destversion');
-        $app = get_app();
-        $destdir = $app->get_destdir();
         if( is_file("$destdir/lib/include.php") ) {
-            include_once($destdir.'/lib/include.php');
+            // this loads the standard CMSMS stuff, except smarty cuz it's already done.
+            // we do this here because both upgrade and install stuff needs it.
+            // NOTE in this connection, we don't disable database loading
+            global $CMS_INSTALL_PAGE, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
+            $CMS_INSTALL_PAGE = 1;
+            $DONT_LOAD_SMARTY = 1;
+            $CMS_PHAR_INSTALLER = 1; //TODO unused anywhere TODO if extended installer ?
+            $CMS_VERSION = get_app()->get_dest_version();
+            // setup and initialize the cmsms API's
+            // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
+            require_once "$destdir/lib/include.php";
+            if( !defined('CMS_DB_PREFIX') ) {
+                // $config does not define this when installer is running.
+                $config = cms_config::get_instance();
+                define('CMS_DB_PREFIX',$config['db_prefix']);
+            }
         }
         else {
-            // do not need to test /include.php as if it still exists, it is bad... and
-            // and it should have been deleted by now.
-            throw new RuntimeException("Could not find $destdir/lib/include.php");
+            throw new RuntimeException('Could not find include.php file in destination');
         }
-        $config = cms_config::get_instance();
-
-        // we do this here, because the config.php class may not set the define when in an installer.
-        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$config['db_prefix']);
     }
 
     protected function display()
@@ -216,28 +223,35 @@ class wizard_step9 extends wizard_step
         $destdir = $app->get_destdir();
         if( !$destdir ) throw new Exception(lang('error_internal',903));
 
+        $wiz = $this->get_wizard();
         // display the template right off the bat.
         parent::display();
         $smarty = smarty();
-        $smarty->assign('back_url',$this->get_wizard()->prev_url())
+        $smarty->assign('back_url',$wiz->prev_url())
           ->display('wizard_step9.tpl');
 
-
-        // here, we do either the upgrade, or the install stuff.
+        // here, we do the action-specific stuff.
         try {
-            $action = $this->get_wizard()->get_data('action');
-            $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
-                $this->do_upgrade($tmp);
-            }
-            else if( $action == 'freshen' ) {
-                $this->do_freshen();
-            }
-            else if( $action == 'install' ) {
-                $this->do_install();
-            }
-            else {
-                throw new Exception(lang('error_internal',910));
+            $action = $wiz->get_data('action');
+            switch( $action ) {
+             case 'upgrade':
+                 $tmp = $wiz->get_data('version_info'); //valid only for upgrades
+                 if( is_array($tmp) && count($tmp) ) {
+                     $this->do_upgrade($tmp);
+                     break;
+                 }
+                 else {
+                     throw new Exception(lang('error_internal',908));
+                 }
+                 //no break here
+             case 'freshen':
+                 $this->do_freshen();
+                 break;
+             case 'install':
+                 $this->do_install();
+                 break;
+             default:
+                 throw new Exception(lang('error_internal',910));
             }
 
             // clear the session.
