@@ -66,8 +66,12 @@ class wizard_step4 extends wizard_step
         if( !isset($config['dbname']) || !$config['dbname'] ) throw new Exception(lang('error_nodbname'));
         if( !isset($config['dbuser']) || !$config['dbuser'] ) throw new Exception(lang('error_nodbuser'));
         if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new Exception(lang('error_nodbpass'));
-        if( $action == 'install' && ( !isset($config['dbprefix']) || !$config['dbprefix'] ) ) throw new Exception(lang('error_nodbprefix'));
-        if( !isset($config['timezone']) || !$config['timezone'] ) throw new Exception(lang('error_notimezone'));
+        if( $action == 'install' && ( !isset($config['dbprefix']) || !$config['dbprefix'] ) ) {
+            throw new Exception(lang('error_nodbprefix'));
+        }
+        if( !isset($config['timezone']) || !$config['timezone'] ) {
+            throw new Exception(lang('error_notimezone'));
+        }
 
         $re = '/^[a-zA-Z0-9_\.]*$/';
         if( isset($config['query_var']) && $config['query_var'] && !preg_match($re,$config['query_var']) ) {
