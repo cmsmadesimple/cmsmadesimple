@@ -2,6 +2,10 @@
 
 namespace __appbase;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use function __appbase\endswith;
+
 class nlstools
 {
   private static $_instance;
@@ -29,8 +33,8 @@ class nlstools
   {
     if( is_array($this->_nls) ) return;
 
-    $rdi = new \RecursiveDirectoryIterator($this->get_nls_dir());
-    $rii = new \RecursiveIteratorIterator($rdi);
+    $rdi = new RecursiveDirectoryIterator($this->get_nls_dir());
+    $rii = new RecursiveIteratorIterator($rdi);
 
     $this->_nls = array();
     foreach( $rii as $file => $info ) {
@@ -63,6 +67,7 @@ class nlstools
       if( $str == $name ) return $nls;
       if( $nls->matches($str) ) return $nls;
     }
+    unset($nls);
     $obj = null;
     return $obj;
   }
