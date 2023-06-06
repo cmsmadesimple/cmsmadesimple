@@ -45,7 +45,7 @@ final class CmsApp {
 	/**
 	 * A constant indicating that the request is taking place during the installation process
 	 */
-	const STATE_INSTALL    = 'install_request';
+	const STATE_INSTALL = 'install_request';
 
 	/**
 	 * A constant indicating that the request is for a stylesheet
@@ -73,7 +73,7 @@ final class CmsApp {
 	private $_content_type;
 
 	/**
-	 * List of currrent states.
+	 * List of current states.
 	 * @ignore
 	 */
 	private $_states;
@@ -84,7 +84,7 @@ final class CmsApp {
 	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET, self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
 
 	/**
-	 * Database object - adodb reference to the current database
+	 * Database Connection object
 	 * @ignore
 	 */
 	private $db;
@@ -109,6 +109,7 @@ final class CmsApp {
 	/**
 	 * @ignore
 	 */
+	#[\ReturnTypeWillChange]
 	public function __get($key)
 	{
 		switch($key) {
@@ -127,7 +128,7 @@ final class CmsApp {
 	}
 
 	/**
-	 * Retrieve the single app instancce.
+	 * Retrieve the single app instance.
 	 *
 	 * @since 1.10
 	 */
@@ -187,7 +188,7 @@ final class CmsApp {
 	/**
 	 * Retrieve the request content type (for frontend requests)
 	 *
-	 * If no content type is explicity set, text/html is assumed.
+	 * If no content type is explicitly set, text/html is assumed.
 	 *
 	 * @since 2.0
 	 */
@@ -248,7 +249,7 @@ final class CmsApp {
 	 * Get a list of all installed and available modules
 	 *
 	 * This method will return an array of module names that are installed, loaded and ready for use.
-	 * suotable for iteration with GetModuleInstance
+	 * suitable for iteration with GetModuleInstance
 	 *
 	 * @see CmsApp::GetModuleInstance()
 	 * @since 1.9
@@ -264,7 +265,7 @@ final class CmsApp {
 	 * Get a reference to an installed module instance.
 	 *
 	 * This method will return a reference to the module object specified if it is installed, and available.
-	 * Optionally, a version check can be performed to test if the version of the requeted module matches
+	 * Optionally, a version check can be performed to test if the version of the requested module matches
 	 * that specified.
 	 *
 	 * @since 1.9
@@ -459,8 +460,8 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-		if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
-		return $this->_hrinstance;
+		if( !isset($this->hrinstance) ) $this->hrinstance = \CMSMS\internal\global_cache::get('content_tree');
+		return $this->hrinstance;
 	}
 
 	/**
@@ -475,7 +476,7 @@ final class CmsApp {
 	{
 		if (isset($this->db)) {
 			$db = $this->db;
-			if ($db->IsConnected())	$db->Close();
+			if ($db->IsConnected()) $db->Close();
 		}
 	}
 
@@ -672,6 +673,10 @@ class CmsContentTypePlaceholder
 	public $type;
 
 	/**
+	 */
+	public $class;
+
+	/**
 	 * @var string The filename containing the type class
 	 */
 	public $filename;
@@ -680,6 +685,10 @@ class CmsContentTypePlaceholder
 	 * @var string A friendly name for the type
 	 */
 	public $friendlyname;
+
+	/**
+	 */
+	public $friendlyname_key;
 
 	/**
 	 * @var Wether the type has been loaded
@@ -697,7 +706,7 @@ class CmsContentTypePlaceholder
  */
 function &cmsms()
 {
-   return CmsApp::get_instance();
+	return CmsApp::get_instance();
 }
 
 
