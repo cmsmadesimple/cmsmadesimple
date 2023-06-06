@@ -47,7 +47,6 @@ class wizard_step8 extends wizard_step
         }
         if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$spec->prefix);
         $db = Connection::initialize($spec);
-        $obj =& $this;
         $db->SetErrorHandler(function() { /* do nohing */ });
         $db->Execute("SET NAMES 'utf8'");
         compatibility::noop();
@@ -57,22 +56,25 @@ class wizard_step8 extends wizard_step
 
     private function connect_to_cmsms($destdir)
     {
-        global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
-        $CMS_INSTALL_PAGE = 1;
-        $DONT_LOAD_DB = 1;
-        $DONT_LOAD_SMARTY = 1;
-        $CMS_PHAR_INSTALLER = 1;
-        $CMS_VERSION = $this->get_wizard()->get_data('destversion');
-
-        // setup and initialize the cmsms API's
-        // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
         if( is_file("$destdir/lib/include.php") ) {
-            include_once("$destdir/lib/include.php");
+            global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
+            $CMS_INSTALL_PAGE = 1;
+            $DONT_LOAD_DB = 1;
+            $DONT_LOAD_SMARTY = 1;
+            $CMS_PHAR_INSTALLER = 1; //TODO unused anywhere TODO if extended installer ?
+            $CMS_VERSION = get_app()->get_dest_version();
+            // setup and initialize the cmsms API's
+            // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
+            require_once "$destdir/lib/include.php";
+            if( !defined('CMS_DB_PREFIX') ) {
+                // $config does not define this when installer is running.
+                $config = cms_config::get_instance();
+                define('CMS_DB_PREFIX',$config['db_prefix']);
+            }
         }
         else {
             throw new RuntimeException('Could not find include.php file in destination');
         }
-
     }
 
     private function do_install()
@@ -101,8 +103,6 @@ class wizard_step8 extends wizard_step
         try {
             // create some variables that the sub functions need.
             if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT','DT');
-            $admin_user = null;
-            $db_prefix = CMS_DB_PREFIX;
 
             // install the schema
             $this->message(lang('install_schema'));
@@ -157,13 +157,13 @@ class wizard_step8 extends wizard_step
     {
         global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
         $CMS_INSTALL_PAGE = 1;
-        $CMS_PHAR_INSTALLER = 1;
+        $CMS_PHAR_INSTALLER = 1; // TODO never used elsewhere
         $DONT_LOAD_DB = 1;
         $DONT_LOAD_SMARTY = 1;
-        $CMS_VERSION = $this->get_wizard()->get_data('destversion');
+        $app = get_app();
+        $CMS_VERSION = $app->get_dest_version();
 
         // get the list of all available versions that this upgrader knows about
-        $app = get_app();
         $dir =  $app->get_appdir().'/upgrade';
         if( !is_dir($dir) ) throw new Exception(lang('error_internal',710));
         $destdir = $app->get_destdir();
@@ -268,25 +268,33 @@ class wizard_step8 extends wizard_step
     protected function display()
     {
         parent::display();
+        $wiz = $this->get_wizard();
         $smarty = smarty();
-        $smarty->assign('next_url',$this->get_wizard()->next_url())
+        $smarty->assign('next_url',$wiz->next_url())
          ->display('wizard_step8.tpl');
 
-        // here, we do either the upgrade, or the install stuff.
+        // here, we do the action-specific stuff.
         try {
-            $action = $this->get_wizard()->get_data('action');
-            $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
-                $this->do_upgrade($tmp);
-            }
-            else if( $action == 'freshen' ) {
-                $this->do_freshen();
-            }
-            else if( $action == 'install' ) {
-                $this->do_install();
-            }
-            else {
-                throw new Exception(lang('error_internal',705));
+            $action = $wiz->get_data('action');
+            switch( $action ) {
+             case 'upgrade':
+                 $tmp = $wiz->get_data('version_info'); //valid only for upgrades
+                 if( is_array($tmp) && count($tmp) ) {
+                     $this->do_upgrade($tmp);
+                     break;
+                 }
+                 else {
+                     throw new Exception(lang('error_internal',908));
+                 }
+                 //no break here
+             case 'freshen':
+                 $this->do_freshen();
+                 break;
+             case 'install':
+                 $this->do_install();
+                 break;
+             default:
+                 throw new Exception(lang('error_internal',910));
             }
         }
         catch( Exception $e ) {
