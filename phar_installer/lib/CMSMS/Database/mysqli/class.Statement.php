@@ -56,14 +56,14 @@ class Statement extends \CMSMS\Database\Statement
         if( !$this->_stmt ) $this->prepare($this->sql);
 
         // get the type string
-        $this->types = '';
-        $keys = null;
+        $this->_types = '';
+        $keys = [];
         $args = func_get_args();
-        if( count($args) == 1 && is_array($args) && is_array($args[0]) ) {
+        if( is_array($args) && count($args) == 1 && is_array($args[0]) ) {
             // we expect that the data is an associtive array
             $row = $args[0];
             foreach( $row as $key => $val ) {
-            	$this->_types .= $this->get_type_char($val);
+                $this->_types .= $this->get_type_char($val);
             }
             $this->_bind = array_values($row);
             $keys = array_keys($row);
