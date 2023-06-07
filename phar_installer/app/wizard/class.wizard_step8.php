@@ -103,6 +103,8 @@ class wizard_step8 extends wizard_step
         try {
             // create some variables that the sub functions need.
             if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT','DT');
+//          $admin_user = null;
+//          $db_prefix = CMS_DB_PREFIX;
 
             // install the schema
             $this->message(lang('install_schema'));
