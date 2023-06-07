@@ -1,7 +1,6 @@
 <?php
 #-------------------------------------------------------------------------
-# Module: CMSMailer - a simple wrapper around phpmailer
-# Version: 1.73.10, Robert Campbell <rob@techcom.dyndns.org>
+# Module: CMSMailer - a simple wrapper around cms_mailer class and PHPMailer
 #
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -24,25 +23,37 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
-if( !isset($gCms) ) exit;
 
 class CMSMailer extends CMSModule
 {
-  private $the_mailer = null;
+  protected $the_mailer;
 
   public function __construct()
   {
+    parent::__construct();
     $this->the_mailer = new cms_mailer(FALSE);
+  }
+
+  #[\ReturnTypeWillChange]
+  public function __call($method,$args)
+  {
+    if( method_exists($this->the_mailer,$method) ) {
+      return call_user_func_array(array($this->the_mailer,$method),$args);
+    }
+    if( is_callable('parent::__call') ) {
+      return parent::__call($method,$args);
+    }
+    throw new CmsException('Call to invalid method '.$method.' on '.get_class($this->the_mailer).' object');
   }
 
   function GetName() { return 'CMSMailer'; }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '6.2.14'; }
+  function GetVersion() { return '6.2.15'; }
   function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Calguy1000'; }
-  function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+  function GetAuthorEmail() { return ''; }
+  function GetChangeLog() { return file_get_contents(__DIR__.'/changelog.inc'); }
   function IsPluginModule() { return FALSE; }
   function HasAdmin() { return FALSE; }
   function GetAdminSection() { return 'extensions'; }
@@ -53,78 +64,69 @@ class CMSMailer extends CMSModule
   function LazyLoadAdmin() { return TRUE; }
   function UninstallPostMessage() { return $this->Lang('postuninstall'); }
 
-  //////////////////////////////////////////////////////////////////////
-  //// BEGIN API SECTION
-  //////////////////////////////////////////////////////////////////////
+  //// API SECTION - cms_mailer CLASS METHODS ACCESSIBLE VIA AN ALTERNATE NAME
+  // these were deprecated in May 2013, when the cms_mailer class was released
+  // instead use the methods of that class directly
 
   public function GetHost()
   {
-    return $this->GetSMTPHost();
+    return $this->the_mailer->GetSMTPHost();
   }
 
   public function SetHost($txt)
   {
-    return $this->SetSMTPHost($txt);
+    $this->the_mailer->SetSMTPHost($txt);
   }
 
   public function GetPort()
   {
-    return $this->GetSMTPPort();
+    return $this->the_mailer->GetSMTPPort();
   }
 
   public function SetPort($txt)
   {
-    return $this->SetSMTPPort($txt);
+    $this->the_mailer->SetSMTPPort($txt);
   }
 
   public function GetTimeout()
   {
-    return $this->GetSMTPTimeout();
+    return $this->the_mailer->GetSMTPTimeout();
   }
 
   public function SetTimeout($txt)
   {
-    return $this->SetSMTPTimeout($txt);
+    $this->the_mailer->SetSMTPTimeout($txt);
   }
 
   public function GetUsername()
   {
-    return $this->GetSMTPUsername();
+    return $this->the_mailer->GetSMTPUsername();
   }
 
   public function SetUsername($txt)
   {
-    return $this->SetSMTPUsername($txt);
+    $this->the_mailer->SetSMTPUsername($txt);
   }
 
   public function GetPassword()
   {
-    return $this->GetSMTPPassword();
+    return $this->the_mailer->GetSMTPPassword();
   }
 
   public function SetPassword($txt)
   {
-    return $this->SetSMTPPassword($txt);
+    $this->the_mailer->SetSMTPPassword($txt);
   }
 
   public function GetSecure()
   {
-    return $this->GetSMTPSecure();
+    return $this->the_mailer->GetSMTPSecure();
   }
 
   public function SetSecure($txt)
   {
-    return $this->SetSMTPSecure($txt);
+    $this->the_mailer->SetSMTPSecure($txt);
   }
-
-  public function __call($method,$args)
-  {
-    if( method_exists($this->the_mailer,$method) ) {
-      return call_user_func_array(array($this->the_mailer,$method),$args);
-    }
-    throw new CmsException('Call to invalid method '.$method.' on '.get_class($this->the_mailer).' object');
-    // todo, throw exception here.
-  }
-} // class CMSMailer
+} // end of class
 
 ?>
