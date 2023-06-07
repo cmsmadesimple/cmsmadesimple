@@ -72,6 +72,7 @@ class ConnectionSpec
     /**
      * @ignore
      */
+    #[\ReturnTypeWillChange]
     public function __get($key)
     {
         if( !array_key_exists($key,$this->_data) ) throw new \InvalidArgumentException("$key is not a valid member of ".__CLASS__);
@@ -81,6 +82,7 @@ class ConnectionSpec
     /**
      * @ignore
      */
+    #[\ReturnTypeWillChange]
     public function __set($key,$val)
     {
         if( !array_key_exists($key,$this->_data) ) throw new \InvalidArgumentException("$key is not a valid member of ".__CLASS__);
