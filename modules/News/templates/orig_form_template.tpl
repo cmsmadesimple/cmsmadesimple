@@ -2,25 +2,25 @@
 <h3>{$mod->Lang('title_fesubmit_form')}</h3>
 
 {if isset($error)}
-  <div class="error>{$error}</div>
+<div class="error">{$error}</div>
 {elseif isset($message)}
-  <div class="message>{$message}</div>
+<div class="message">{$message}</div>
 {/if}
 
 {form_start category_id=$category_id}
 	<div class="row">
 		<p class="col4"><label for="news_title">*{$mod->Lang('title')}:</label></p>
 		<p class="col8">
-			<input id="news_title" type="text" name="{$actionid}title" value="{$title}" size="30" required/>
-                </p>
+			<input id="news_title" type="text" name="{$actionid}title" value="{$title}" size="30" required="required" />
+		</p>
 	</div>
 	<div class="row">
 		<p class="col4"><label for="news_category">{$mod->Lang('category')}:</label></p>
 		<p class="col8">
 			<select id="news_category" name="{$actionid}input_category">
-                        {html_options options=$categorylist selected=$category_id}
+				{html_options options=$categorylist selected=$category_id}
 			</select>
-                </p>
+		</p>
 	</div>
 
 {if !isset($hide_summary_field) or $hide_summary_field == 0}
@@ -37,13 +37,13 @@
 		<p class="col8">
 			{$tmp=$actionid|cat:'content'}
 			{cms_textarea enablewysiwyg=true id=news_content name=$tmp value=$content required=true}
-                </p>
+		</p>
 	</div>
 	<div class="row">
 		<p class="col4"><label for="news_extra">{$mod->Lang('extra')}:</label></p>
 		<p class="col8">
 			<input id="news_extra" type="text" name="{$actionid}extra" value="{$extra}" size="30"/>
-                </p>
+		</p>
 	</div>
 	<div class="row">
 		<p class="col4">{$mod->Lang('startdate')}:</p>
@@ -62,8 +62,8 @@
 		</p>
 	</div>
 	{if isset($customfields)}
-	   {foreach from=$customfields item='field'}
-	      <div class="row">
+		{foreach $customfields as $field}
+		<div class="row">
 		<p class="col4"><label for="news_fld_{$field->id}">{$field->name}:</label></p>
 		<p class="col8">
 		{if $field->type == 'file'}
@@ -76,10 +76,10 @@
 			{cms_textarea id=$tmp1 name=$tmp2 enablewysiwyg=true}
 		{elseif $field->type == 'textbox'}
 			<input id="news_fld_{$field->id}" type="text"" name="{$actionid}news_customfield_{$field->id}" maxlength="{$field->max_length}"/>
-                {/if}
+		{/if}
 		</p>
-	      </div>
-	   {/foreach}
+		</div>
+		{/foreach}
 	{/if}
 	<div class="row">
 		<p class="col4">&nbsp;</p>
