@@ -9,7 +9,7 @@ Core - General
  - Add function CMSMS\strftime to replace deprecated PHP function. PHP Intl extension recommended to support this.
  - Smarty upgraded to version 4.2.1.
     Note: Smarty 2 syntax is still supported, but deprecated
- - PHPMailer upgraded to version 6.6.5.
+ - PHPMailer upgraded to version 6.6.0.
 
  Admin Search v1.0.6
  - Option to filter out inactive items.
