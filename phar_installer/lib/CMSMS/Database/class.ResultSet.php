@@ -210,6 +210,7 @@ abstract class Resultset
     /**
      * @ignore
      */
+    #[\ReturnTypeWillChange]
     public function __get($key)
     {
         if( $key == 'EOF' ) return $this->EOF();
