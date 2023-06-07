@@ -11,6 +11,7 @@ final class news_field
     if( isset($this->_data[$key]) ) return $this->_data[$key];
   }
 
+  #[\ReturnTypeWillChange]
   public function __get($key)
   {
     $fielddefs = news_ops::get_fielddefs(FALSE);
@@ -34,8 +35,8 @@ final class news_field
 
     case 'extra':
       if( isset($this->_data['extra']) ) {
-	if( !is_array($this->_data['extra']) ) $this->_data['extra'] = unserialize($this->_data['extra']);
-	return $this->_data['extra'];
+        if( !is_array($this->_data['extra']) ) $this->_data['extra'] = unserialize($this->_data['extra']);
+        return $this->_data['extra'];
       }
       break;
 
@@ -46,14 +47,14 @@ final class news_field
 
     case 'displayvalue':
       if( !$this->_displayvalue ) {
-	if( isset($this->_data['value']) ) {
-	  $value = $this->_data['value'];
-	  $this->_displayvalue = $value;
-	  if( $this->type == 'dropdown' ) {
-	    // dropdowns may have a different displayvalue than actual value.
-	    if( is_array($this->options) && isset($this->options[$value]) ) $this->_displayvalue = $this->options[$value];
-	  }
-	}
+        if( isset($this->_data['value']) ) {
+          $value = $this->_data['value'];
+          $this->_displayvalue = $value;
+          if( $this->type == 'dropdown' ) {
+            // dropdowns may have a different displayvalue than actual value.
+            if( is_array($this->options) && isset($this->options[$value]) ) $this->_displayvalue = $this->options[$value];
+          }
+        }
       }
       return $this->_displayvalue;
       break;
@@ -63,6 +64,7 @@ final class news_field
     }
   }
 
+  #[\ReturnTypeWillChange]
   public function __isset($key)
   {
     switch( $key ) {
@@ -86,6 +88,7 @@ final class news_field
     }
   }
 
+  #[\ReturnTypeWillChange]
   public function __set($key,$value)
   {
     switch( $key ) {
@@ -128,11 +131,11 @@ final class news_field
       $num = (int)$db->GetOne($query);
       $this->item_order = $num+1;
     }
-    $query = 'INSERT INTO '.CMS_DB_PREFIX."module_news_fielddefs 
-              (name,type,max_length,create_date,modified_date,item_order,public,extra) 
+    $query = 'INSERT INTO '.CMS_DB_PREFIX."module_news_fielddefs
+              (name,type,max_length,create_date,modified_date,item_order,public,extra)
               VALUES (?,?,?,NOW(),NOW(),?,?,?)";
     $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
-				     serialize($this->extra)));
+                                     serialize($this->extra)));
     $this->_data['id'] = $db->Insert_ID();
     $this->create_date = $this->modified_date = $db->DbTimeStamp(time());
   }
@@ -143,7 +146,7 @@ final class news_field
     $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = NOW(),
               item_orderr = ?, public = ?, extra = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
-				     serialize($this->extra),$this->id));
+                                     serialize($this->extra),$this->id));
     $this->modified_date = $db->DbTimeStamp(time());
   }
 
