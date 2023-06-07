@@ -145,6 +145,7 @@ namespace CMSMS\Database {
         /**
          * @ignore
          */
+        #[\ReturnTypeWillChange]
         public function __get($key)
         {
             if( $key == 'query_time_total' ) return $this->query_time_total;
@@ -154,6 +155,7 @@ namespace CMSMS\Database {
         /**
          * @ignore
          */
+        #[\ReturnTypeWillChange]
         public function __isset($key)
         {
             if( $key == 'query_time_total' ) return TRUE;
