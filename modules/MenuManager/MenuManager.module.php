@@ -120,9 +120,10 @@ final class MenuManager extends CMSModule
           $includeit = 1;
           if( $includeprefix != '' ) {
             $includeit = 0;
+            $alias = $content->Alias();
             $prefixes = explode(',',$includeprefix);
             foreach( $prefixes as $oneprefix ) {
-              if( strstr($content->Alias(),$oneprefix) !== false ) { // TODO strpos()
+              if( strpos($alias,$oneprefix) !== false ) {
                 $includeit = 1;
                 break;
               }
@@ -132,9 +133,10 @@ final class MenuManager extends CMSModule
           // see if we need to explicitly exclude this content
           $excludeit = 0;
           if( $excludeprefix != '' ) {
+            $alias = $content->Alias();
             $prefixes = explode(',',$excludeprefix);
             foreach( $prefixes as $oneprefix ) {
-              if( strstr($content->Alias(),$oneprefix) !== false ) { // TODO strpos()
+              if( strpos($alias,$oneprefix) !== false ) {
                 $excludeit = 1;
                 break;
               }
