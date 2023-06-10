@@ -17,7 +17,7 @@ $tmpdir = $rootdir.'/tmp';
 $datadir = $rootdir.'/data';
 $outdir = $rootdir.'/out';
 //TODO update these lists, per the following variables
-//TODO do not skip class.cms_config.php
+//do not skip class.cms_config.php or Smarty files like smarty_internal_method*config.php
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
 $exclude_from_zip = array('*~','tmp/','.#*','#*'.'*.bak');
 $src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/', '/\/installer\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
@@ -34,7 +34,7 @@ $all_excludes = [
 '~\.svn~',
 '~svn\-~',
 '~index\.html?$~',
-'~[^_]config\.php$~',
+'~[\\/]config\.php$~',
 '~siteuuid\.dat$~',
 '~\.htaccess$~',
 '~web\.config$~',

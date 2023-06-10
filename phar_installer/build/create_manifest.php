@@ -39,33 +39,33 @@ $_outfile = OUTBASE;
 $_notdeleted = [];
 // modules to be kept for uninstallation, before any related files go away
 $uninstallmodules = [];
-// note careful not to exclude class.cms_config.php
+// note careful not to exclude class.cms_config.php or Smarty files like smarty_internal_method*config.php
 $src_excludes = [
-'/\.git.*/',
-'/\.md$/i',
-'/\.svn/',
-'/svn\-.*/',
-'/index\.html?$/',
-'/config\.php$/',
-'/siteuuid\.dat$/',
-'/master\.dat$/',
-'/master\.ini$/',
-'/\.htccess$/',
-'/web\.config$/i',
-'/phar_installer/',
-'/installer/',
-'/scripts/',
-'/tests/',
-'/UNUSED/',
-'/HIDE/',
-'/DEVELOP/',
-'/uploads/',
+'~\.git.*~',
+'~\.md$~i',
+'~\.svn~',
+'~svn\-.*~',
+'~index\.html?$~',
+'~[\\/]config\.php$~',
+'~siteuuid\.dat$~',
+'~master\.dat$~',
+'~master\.ini$~',
+'~\.htccess$~',
+'~web\.config$~i',
+'~phar_installer~',
+'~installer~',
+'~scripts~',
+'~tests~',
+'~UNUSED~',
+'~HIDE~',
+'~DEVELOP~',
+'~uploads~',
 '/~$/',
-'/\.bak$/',
-'/#.*/',
-'/\.#.*/',
+'~\.bak$~',
+'~#.*~',
+'~\.#.*~',
 ];
-//TODO root-dir  '/\.htaccess$/',
+//TODO root-dir etc '~\.htaccess$~',
 
 // TODO completely ignore some places c.f. build_release script:
 $folder_excludes = [
