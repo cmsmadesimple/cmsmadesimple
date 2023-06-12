@@ -96,7 +96,7 @@ $gcb = new CmsLayoutTemplate();
 $gcb->set_name('footer');
 $gcb->set_type($gcb_template_type);
 $gcb->set_owner(1);
-$gcb->set_content("<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\nThis site is powered by <a class=\"external\" href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>");
+$gcb->set_content("<p>Copyright &copy; {custom_copyright} - CMS Made Simple<br />\nThis site is powered by <a class=\"external\" href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>");
 $gcb->save();
 
 $css_menuleft_1col_theme->add_template($gcb);
@@ -243,7 +243,7 @@ $gcb_sx_slideshow->save();
 $simplex_theme->add_template($gcb_sx_slideshow);
 
 $txt = <<<EOT
-{* Logic *}\n{\$start_year = '2004'}\n{\$current_year = \$smarty.now|date_format:'Y'}\n\n{* Template *}\n<ul class='social cf'>\n    <li class='twitter'><a title='Twitter' href='http://twitter.com/#!/cmsms'><i class='icon-twitter'></i><span class='visuallyhidden'>Twitter</span></a></li>\n    <li class='facebook'><a title='Facebook' href='https://www.facebook.com/cmsmadesimple'><i class='icon-facebook'></i><span class='visuallyhidden'>Facebook</span></a></li>\n    <li class='linkedin'><a title='LinkedIn' href='http://www.linkedin.com/groups?gid=1139537'><i class='icon-linkedin'></i><span class='visuallyhidden'>LinkedIn</span></a></li>\n</ul>\n<p class='copyright-info'>&copy; Copyright {\$start_year}{if \$start_year !== \$current_year} - {\$current_year}{/if} - CMS Made Simple<br /> This site is powered by <a href='http://www.cmsmadesimple.org'>CMS Made Simple</a> version {cms_version}</p>
+{* Logic *}\n{\$start_year = '2004'}\n{\$current_year = \$smarty.now|date_format:'Y'}\n\n{* Template *}\n<ul class='social cf'>\n    <li class='twitter'><a title='Twitter' href='http://twitter.com/#!/cmsms'><i class='icon-twitter'></i><span class='visuallyhidden'>Twitter</span></a></li>\n    <li class='facebook'><a title='Facebook' href='https://www.facebook.com/cmsmadesimple'><i class='icon-facebook'></i><span class='visuallyhidden'>Facebook</span></a></li>\n    <li class='linkedin'><a title='LinkedIn' href='http://www.linkedin.com/groups?gid=1139537'><i class='icon-linkedin'></i><span class='visuallyhidden'>LinkedIn</span></a></li>\n</ul>\n<p class='copyright-info'>Copyright &copy; {\$start_year}{if \$start_year !== \$current_year} - {\$current_year}{/if} - CMS Made Simple<br /> This site is powered by <a href='http://www.cmsmadesimple.org'>CMS Made Simple</a> version {cms_version}</p>
 EOT;
 $gcb_sx_footer = new CmsLayoutTemplate();
 $gcb_sx_footer->set_name('Simplex Footer');
