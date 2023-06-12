@@ -72,7 +72,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'var_dump'
                 ];
                 
-                $this->php_modifiers = $this->php_functions;
+                $this->php_modifiers = [];
             }
         }
         else {
