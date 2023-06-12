@@ -82,7 +82,7 @@ class wizard_step2 extends wizard_step
         $smarty->assign('nofiles',$config['nofiles']);
 
         if( $info ) {
-            // its an upgrade
+            // it's an upgrade
             $wizard->set_data('version_info',$info);
             $smarty->assign('cmsms_info',$info);
             if( !isset($info['error_status']) || $info['error_status'] != 'same_ver' ) {
@@ -134,6 +134,7 @@ class wizard_step2 extends wizard_step
                 foreach( $files as &$file ) {
                     $file = basename($file);
                 }
+                unset($file);
                 return $files;
             };
             $empty_dir = $is_dir_empty($rpwd,$app->get_phar());
