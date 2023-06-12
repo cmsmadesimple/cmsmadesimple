@@ -1,10 +1,10 @@
 <?php
-global $admin_user;
+//global $admin_user;
 
 //
 // Stylesheets
 //
-# no stylesheets for a no sample content option
+// no stylesheets when no sample content
 
 //
 // Designs
@@ -67,7 +67,7 @@ $template->save();
 // Extra global templates
 //
 
-#
+// no templates when no sample content
 
 //
 // Default Content Object
