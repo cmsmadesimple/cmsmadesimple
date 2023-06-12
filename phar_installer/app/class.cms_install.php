@@ -284,7 +284,6 @@ class cms_install extends app
         $sess['config'] = $config;
     }
 
-
     public function get_orig_error_level() { return $this->_orig_error_level; }
 
     public function get_orig_tz() { return $this->_orig_tz; }
@@ -319,9 +318,7 @@ class cms_install extends app
 
     public function in_phar()
     {
-        $x = $this->get_phar();
-        if( !$x ) return FALSE;
-        return TRUE;
+        return Phar::running() != FALSE;
     }
 
     public function get_nls()
