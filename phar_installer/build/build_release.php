@@ -582,6 +582,8 @@ try {
             $arch->setExternalAttributesName(basename($infile), ZipArchive::OPSYS_UNIX, 0644 << 16);
             $arch->addFile("$rootdir/README-PHAR.TXT",'README-PHAR.TXT');
             $arch->setExternalAttributesName('README-PHAR.TXT', ZipArchive::OPSYS_UNIX, 0644 << 16);
+            $arch->addFile("$rootdir/README-PHARDEBUG.TXT",'README-PHARDEBUG.TXT');
+            $arch->setExternalAttributesName('README-PHARDEBUG.TXT', ZipArchive::OPSYS_UNIX, 0644 << 16);
             $arch->close();
             @unlink($infile);
 
