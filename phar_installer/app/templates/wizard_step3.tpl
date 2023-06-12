@@ -45,7 +45,7 @@
   <div class="message green">{'step3_passed'|tr}</div>
 {/if}
 
-{if $tests_failed }
+{if $tests_failed}
 <table class="table bordered-table installer-test-legend small-font">
     <caption>
         {'legend'|tr}
@@ -72,14 +72,10 @@
     </tbody>
 </table>
 {/if}
-<div class="message yellow">{'warn_tests'|tr}</div>
+<div class="message {if $tests_failed}yellow{else}blue{/if}">{'warn_tests'|tr}</div>
 
 <div id="bottom_nav">
 {if $tests_failed}
-{*
-  <button onclick="window.location.reload();">{'refresh_page'|tr}</button>
-  <a href="{$retry_url}" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
-*}
   <a onclick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
 {/if}
 {if $can_continue} <a href="{$next_url}" class="action-button positive" title="{'next'|tr}">{'next'|tr} &rarr;</a>{/if}
