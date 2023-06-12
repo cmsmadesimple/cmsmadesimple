@@ -1,25 +1,43 @@
-Version 2.2.17 - NO NAME SET
+Version 2.2.17 - Iqaluit
 -------------------------------
 Core - General
- - BR #12529 - Cacheable Pages have Bad Header Last-Modified.
- - BR #12543 - Lib file corrections.
- - Compatibility fixes for PHP 8.1.
- - Smarty upgraded to version 3.1.44.
+ - BR #12529 - Cacheable Pages have Bad Header Last-Modified;
+ - BR #12543 - Lib file corrections;
+ - BR #12618 - HasChildren() is broken;
+ - BR #12587 - can't uninstall modules;
+ - Compatibility fixes for PHP 7, 8.0 and 8.1;
+ - Smarty upgraded to version 4.2.1;
+    Note: Smarty 2 syntax is still supported, but deprecated
+ - Add function CMSMS\strftime to replace deprecated PHP function. PHP Intl extension recommended to support this.
+ - Enabled use of PHP functions trim,ltrim,rtrim in smarty templates
+ - PHPMailer upgraded to version 6.6.0.
+ - fixes BR #12529 Cacheable Pages have Bad Header Last-Modified;
+ - added module's support for arrays in parameters;
+ - Fixes to cms_mailer class mainly in terms of proxy design pattern getters and setters and autotls settings;
+ - Smarty security policies changes: due to some modifications in the way updated Smarty now behaves, all static classes need to be registered for its use to be allowed in templates.
 
-Content Manager v
+Content Manager 1.1.10
  - Differentiate new page from cloned page.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
 
-Design Manager v
+Design Manager 1.1.10
  - BR #12545 - Module: DesignManager typo info on top file.
+ - fixes typo BR #12545
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
 
-FilePicker v
+FilePicker 1.0.6
  - BR #12539 - Module FilePicker 1.0.5 files corrections.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
 
-Module Manager v
+Module Manager 2.1.9
  - BR #12541 - Module ModuleManager 2.1.8 : corrections + compatible php 7.1.0 to 8.1.4.
 
-News v
+News 2.51.12
  - BR #12543 - Lib file corrections.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+FileManager 1.6.13
+- Compatibility fixes for PHP 7, 8.0 and 8.1.
 
 
 Version 2.2.16 - Truro
