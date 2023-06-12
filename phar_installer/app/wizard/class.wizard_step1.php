@@ -16,7 +16,7 @@ class wizard_step1 extends wizard_step
     public function __construct()
     {
         parent::__construct();
-        if( !class_exists('PharData') ) throw new Exception('It appears that the phar extensions have not been enabled in this version of php.  Please correct this.');
+        if( !class_exists('PharData') ) throw new Exception('It appears that the Phar extension has not been enabled in this version of PHP. Please correct this.');
     }
 
     protected function process()
@@ -45,8 +45,8 @@ class wizard_step1 extends wizard_step
     private function get_valid_install_dirs()
     {
         $app = get_app();
-        $start = realpath($app->get_rootdir()); // real.. might be a problem?
-        $parent = realpath(dirname($start)); // ditto
+        $start = realpath($app->get_rootdir());
+        $parent = realpath(dirname($start));
 
         $_is_valid_dir = function($dir) {
             // this routine attempts to exclude most cmsms core directories
@@ -90,7 +90,7 @@ class wizard_step1 extends wizard_step
                 break;
 
             case 'modules':
-                if( is_dir("$dir/CMSMailer") || is_dir("$dir/AdminSearch") ) return FALSE;
+                if( is_dir("$dir/AdminSearch") || is_dir("$dir/ModuleManager") ) return FALSE;
                 break;
 
             case 'data':
@@ -161,10 +161,10 @@ class wizard_step1 extends wizard_step
             $dirlist = $this->get_valid_install_dirs();
             if( !$dirlist ) throw new Exception('No possible installation directories found.  This could be a permissions issue');
             $smarty->assign('dirlist',$dirlist);
-
+            $best = dirname($app->get_destdir());
             $custom_destdir = $app->has_custom_destdir();
             $smarty->assign('custom_destdir',$custom_destdir)
-             ->assign('destdir',$app->get_destdir());
+             ->assign('destdir',$best);
         }
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0))
           ->assign('languages',translator()->get_language_list(translator()->get_allowed_languages()))
