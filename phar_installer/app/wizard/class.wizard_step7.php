@@ -62,7 +62,7 @@ class wizard_step7 extends wizard_step
         }
     }
 
-    private function do_files($langlist = null)
+    private function do_files($langlist = [])
     {
         $languages = array('en_US');
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
@@ -186,10 +186,10 @@ class wizard_step7 extends wizard_step
                     $languages = $this->detect_languages();
                     $this->do_manifests();
                     $this->do_files($languages);
-                    break; 
+                    break;
                 }
                 else {
-                    throw new Exception(lang('error_internal',703)); 
+                    throw new Exception(lang('error_internal',703));
                 }
                 // no break here
             case 'freshen':

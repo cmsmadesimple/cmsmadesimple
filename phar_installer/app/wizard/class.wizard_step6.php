@@ -22,12 +22,13 @@ class wizard_step6 extends wizard_step
         if( !$tz ) @date_default_timezone_set('UTC');
 
         $this->_siteinfo = array( 'sitename'=>'','languages'=>[] );
-        $tmp = $this->get_wizard()->get_data('config');
+        $wiz = $this->get_wizard();
+        $tmp = $wiz->get_data('config');
         if( $tmp ) $this->_siteinfo = array_merge($this->_siteinfo,$tmp);
         $lang = translator()->get_selected_language();
         if( $lang != 'en_US' ) $this->_siteinfo['languages'] = [ $lang ];
 
-        $tmp = $this->get_wizard()->get_data('siteinfo');
+        $tmp = $wiz->get_data('siteinfo');
         if( is_array($tmp) && count($tmp) ) $this->_siteinfo = $tmp;
         return parent::run();
     }
@@ -54,11 +55,12 @@ class wizard_step6 extends wizard_step
             $this->_siteinfo['languages'] = $tmp;
         }
 
-        $this->get_wizard()->set_data('siteinfo',$this->_siteinfo);
+        $wiz = $this->get_wizard();
+        $wiz->set_data('siteinfo',$this->_siteinfo);
         try {
             $this->validate($this->_siteinfo);
-            $url = $this->get_wizard()->next_url();
-            if( $config['nofiles'] ) $url = $this->get_wizard()->step_url(8);
+            $url = $wiz->next_url();
+            if( $config['nofiles'] ) $url = $wiz->step_url(8);
             utils::redirect($url);
         }
         catch( Exception $e ) {
@@ -70,13 +72,14 @@ class wizard_step6 extends wizard_step
     protected function display()
     {
         parent::display();
-        $action = $this->get_wizard()->get_data('action');
+        $wiz = $this->get_wizard();
+        $action = $wiz->get_data('action');
         $languages = get_app()->get_language_list();
         unset($languages['en_US']);
 
         $smarty = smarty();
         $smarty->assign('action',$action)
-          ->assign('verbose',$this->get_wizard()->get_data('verbose',0))
+          ->assign('verbose',$wiz->get_data('verbose',0))
           ->assign('siteinfo',$this->_siteinfo)
           ->assign('yesno',array('0'=>lang('no'),'1'=>lang('yes')))
           ->assign('language_list',$languages)

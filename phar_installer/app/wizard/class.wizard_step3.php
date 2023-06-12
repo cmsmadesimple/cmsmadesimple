@@ -70,9 +70,8 @@ class wizard_step3 extends wizard_step
         $tests[] = $obj;
         unset($fh);
 
-        // its an upgrade
         if( $version_info ) {
-            // config file must be writable.
+            // its an upgrade, config file must be writable.
             $obj = new _tests_\boolean_test('config_writable',is_writable($version_info['config_file']));
             $obj->required = true;
             $obj->fail_key = 'fail_config_writable';
@@ -331,16 +330,50 @@ class wizard_step3 extends wizard_step
         $obj->fail_key = 'fail_file_get_contents';
         $tests[] = $obj;
 
-        // test ini set
-        {
-            $val = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0':'99';
-            ini_set('log_errors_max_len',$val);
-            $obj = new _tests_\boolean_test('ini_set',ini_get('log_errors_max_len') == $val);
+        // ini set
+        $v = ini_get('log_errors_max_len');
+        if( $v ) {
+            $v2 = (string)max(512,(int)$v - 10);
+        }
+        else if( $v !== false ) {
+            $v2 = '512';
+        }
+        else {
+            $v2 = false;
+        }
+        if( $v2 !== false ) {
+            ini_set('log_errors_max_len',$v2);
+            $r = (ini_get('log_errors_max_len') == $v2);
+            ini_set('log_errors_max_len',$v);
+            $obj = new _tests_\boolean_test('ini_set', $r);
             $obj->fail_key = 'fail_ini_set';
             $tests[] = $obj;
         }
+        else {
+            $v = ini_get('max_execution_time');
+            if( $v ) {
+                $v2 = (string)max(93,(int)$v + 2);
+            }
+            else if( $v !== false ) {
+                $v2 = '93';
+            }
+            else {
+                $v2 = false;
+            }
+            if( $v2 !== false ) {
+                ini_set('max_execution_time',$v2);
+                $r = (ini_get('max_execution_time') == $v2);
+                ini_set('max_execution_time',$v);
+                $obj = new _tests_\boolean_test('ini_set', $r);
+                $obj->fail_key = 'fail_ini_set';
+                $tests[] = $obj;
+            }
+            else {
+                $obj = new _tests_\informational_test('ini_set', 'Undetermined');
+                $tests[] = $obj;
+            }
+        }
 
-        //
         // now run the tests
         // if all tests pass
         //   display warm fuzzy message

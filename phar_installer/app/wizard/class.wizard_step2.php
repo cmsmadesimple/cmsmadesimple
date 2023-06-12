@@ -42,7 +42,7 @@ class wizard_step2 extends wizard_step
         if( version_compare($info['version'],$app->get_dest_version()) > 0 ) $info['error_status'] = 'too_new';
 
         $fn = $dir.'/config.php';
-        include_once($fn);
+        require_once $fn;
         $info['config'] = $config;
         if( isset($config['admin_dir']) ) {
             if( $config['admin_dir'] != 'admin' ) throw new Exception(lang('error_admindirrenamed'));

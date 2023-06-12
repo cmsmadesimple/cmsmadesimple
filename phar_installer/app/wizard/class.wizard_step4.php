@@ -28,8 +28,9 @@ class wizard_step4 extends wizard_step
                                'samplecontent'=>TRUE,
                                'query_var'=>'','timezone'=>$tz);
 
-        // get saved date
-        $tmp = $this->get_wizard()->get_data('config');
+        // get saved data
+        $wiz = $this->get_wizard();
+        $tmp = $wiz->get_data('config');
         if( $tmp ) $this->_config = array_merge($this->_config,$tmp);
 
         $databases = array('mysqli'=>'MySQL (4.1+)');
@@ -39,13 +40,13 @@ class wizard_step4 extends wizard_step
         }
         if( !count($this->_dbms_options) ) throw new Exception(lang('error_nodatabases'));
 
-        $action = $this->get_wizard()->get_data('action');
+        $action = $wiz->get_data('action');
         if( $action == 'freshen' || $action == 'upgrade' ) {
             // read config data from config.php for freshen action.
             $app = get_app();
             $destdir = $app->get_destdir();
             $config_file = $destdir.'/config.php';
-            include_once($config_file);
+            require_once $config_file;
             $this->_config['dbtype'] = $config['dbms'];
             $this->_config['dbhost'] = $config['db_hostname'];
             $this->_config['dbuser'] = $config['db_username'];
@@ -154,14 +155,15 @@ class wizard_step4 extends wizard_step
             $app = get_app();
             $config = $app->get_config();
             $this->validate($this->_config);
-            $url = $this->get_wizard()->next_url();
-            $action = $this->get_wizard()->get_data('action');
-            if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(6);
+            $wiz = $this->get_wizard();
+            $url = $wiz->next_url();
+            $action = $wiz->get_data('action');
+            if( $action == 'freshen' ) $url = $wiz->step_url(6);
             if( $action == 'upgrade' ) {
                 if( $config['nofiles'] ) {
-                    $url = $this->get_wizard()->step_url(8);
+                    $url = $wiz->step_url(8);
                 } else {
-                    $url = $this->get_wizard()->step_url(7);
+                    $url = $wiz->step_url(7);
                 }
             }
             utils::redirect($url);
@@ -175,14 +177,15 @@ class wizard_step4 extends wizard_step
     protected function display()
     {
         parent::display();
+        $wiz = $this->get_wizard();
         $tmp = timezone_identifiers_list();
         if( !is_array($tmp) ) throw new Exception(lang('error_tzlist'));
         $tmp2 = array_combine(array_values($tmp),array_values($tmp));
         $smarty = smarty();
         $smarty->assign('timezones',array_merge(array(''=>lang('none')),$tmp2))
           ->assign('dbtypes',$this->_dbms_options)
-          ->assign('action',$this->get_wizard()->get_data('action'))
-          ->assign('verbose',$this->get_wizard()->get_data('verbose',0))
+          ->assign('action',$wiz->get_data('action'))
+          ->assign('verbose',$wiz->get_data('verbose',0))
           ->assign('config',$this->_config)
           ->assign('yesno',array('0'=>lang('no'),'1'=>lang('yes')))
           ->display('wizard_step4.tpl');

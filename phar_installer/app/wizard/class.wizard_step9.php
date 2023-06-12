@@ -195,19 +195,22 @@ class wizard_step9 extends wizard_step
     private function connect_to_cmsms($destdir)
     {
         if( is_file("$destdir/lib/include.php") ) {
+            $app = get_app();
             // this loads the standard CMSMS stuff, except smarty cuz it's already done.
             // we do this here because both upgrade and install stuff needs it.
             // NOTE in this connection, we don't disable database loading
             global $CMS_INSTALL_PAGE, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
             $CMS_INSTALL_PAGE = 1;
             $DONT_LOAD_SMARTY = 1;
-            $CMS_PHAR_INSTALLER = 1; //TODO unused anywhere TODO if extended installer ?
-            $CMS_VERSION = get_app()->get_dest_version();
+            $CMS_VERSION = $app->get_dest_version();
+            if( $app->in_phar() ) {
+                $CMS_PHAR_INSTALLER = 1; //TODO unused anywhere
+            }
             // setup and initialize the cmsms API's
             // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
             require_once "$destdir/lib/include.php";
+            // $config does [did?] not define this when installer is running.
             if( !defined('CMS_DB_PREFIX') ) {
-                // $config does not define this when installer is running.
                 $config = cms_config::get_instance();
                 define('CMS_DB_PREFIX',$config['db_prefix']);
             }
