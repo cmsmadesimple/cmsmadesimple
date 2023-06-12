@@ -28,7 +28,7 @@ $_debug = false;
 //$_compress = true;
 $_compress = false;
 $_interactive = false; //$_cli && (DIRECTORY_SEPARATOR !== '/');  //always false on windows
-$_tmpdir = sys_get_temp_dir().DIRECTORY_SEPARATOR.$_scriptname.'.'.getmypid();
+$_tmpdir = sys_get_temp_dir().DIRECTORY_SEPARATOR.basename(__FILE__,'php').getmypid();
 $_tmpfile = $_tmpdir.DIRECTORY_SEPARATOR.'tmp.out';
 $_configname = str_replace('.php', '.ini', $_scriptname);
 $_configfile = get_config_file();
