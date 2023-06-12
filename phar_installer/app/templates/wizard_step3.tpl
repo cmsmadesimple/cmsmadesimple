@@ -45,6 +45,7 @@
   <div class="message green">{'step3_passed'|tr}</div>
 {/if}
 
+{if $tests_failed }
 <table class="table bordered-table installer-test-legend small-font">
     <caption>
         {'legend'|tr}
@@ -70,7 +71,7 @@
         </tr>
     </tbody>
 </table>
-
+{/if}
 <div class="message yellow">{'warn_tests'|tr}</div>
 
 <div id="bottom_nav">
