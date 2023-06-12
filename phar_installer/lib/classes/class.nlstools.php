@@ -13,13 +13,13 @@ class nlstools
 
   protected function __construct() {}
 
-  public static function &get_instance()
+  public static function get_instance()
   {
-    if( !self::$_instance ) self::$_instance = new nlstools();
+    if( !is_object(self::$_instance) ) self::$_instance = new self();
     return self::$_instance;
   }
 
-  public static function set_nlshandler(nlstools &$obj)
+  public static function set_nlshandler(nlstools $obj)
   {
     self::$_instance = $obj;
   }
@@ -60,16 +60,14 @@ class nlstools
     return array_keys($this->_nls);
   }
 
-  public function &find($str)
+  public function find($str)
   {
     $this->load_nls();
-    foreach( $this->_nls as $name => &$nls ){
+    foreach( $this->_nls as $name => $nls ){
       if( $str == $name ) return $nls;
       if( $nls->matches($str) ) return $nls;
     }
-    unset($nls);
-    $obj = null;
-    return $obj;
+    return null;
   }
 } // end of class
 

@@ -32,9 +32,9 @@ class wizard
 
   }
 
-  final public static function &get_instance($classdir = '', $namespace = '')
+  final public static function get_instance($classdir = '', $namespace = '')
   {
-    if( !self::$_instance ) self::$_instance = new self($classdir,$namespace);
+    if( !is_object(self::$_instance) ) self::$_instance = new self($classdir,$namespace);
     return self::$_instance;
   }
 
@@ -105,19 +105,20 @@ class wizard
     return count($this->_steps);
   }
 
-  final public function &get_step()
+  final public function get_step()
   {
     $this->_init();
     if( is_object($this->_stepobj) ) return $this->_stepobj;
 
     $rec = $this->_steps[$this->cur_step()];
     if( isset($rec['class']) && class_exists($rec['class']) ) {
-      $obj = new $rec['class'];
+      $obj = new $rec['class']();
       if( is_object($obj) ) {
         $this->_stepobj = $obj;
         return $obj;
       }
     }
+    $this->_stepobj = null;
     return null;
   }
 

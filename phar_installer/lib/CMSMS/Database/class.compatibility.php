@@ -126,21 +126,21 @@ namespace {
      * @return \CMSMS\Database\DataDictionary
      * @deprecated
      */
-    function &NewDataDictionary(\CMSMS\Database\Connection $conn)
+    function NewDataDictionary(\CMSMS\Database\Connection $conn)
     {
         // called by module installation routines.
         return $conn->NewDataDictionary();
     }
 
     /**
-     * A function co create a new adodb database connection.
+     * A function to create a new database connection object
      *
      * @param string $dbms
      * @param string $flags
      * @return \CMSMS\Database\Connection
      * @deprecated
      */
-    function &ADONewConnection( $dbms, $flags )
+    function ADONewConnection( $dbms, $flags )
     {
         // now that our connection object is stateless... this is just a wrapper
         // for our global db instance.... but should not be called.

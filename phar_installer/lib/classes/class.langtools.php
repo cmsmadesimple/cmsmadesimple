@@ -18,14 +18,14 @@ class langtools
 
   protected function __construct() {}
 
-  public static function &get_instance()
+  public static function get_instance()
   {
-    if( !is_object(self::$_instance) ) self::$_instance = new langtools();
+    if( !is_object(self::$_instance) ) self::$_instance = new self();
     return self::$_instance;
   }
 
 
-  public static function set_translator(langtools &$obj)
+  public static function set_translator(langtools $obj)
   {
     self::$_instance = $obj;
   }

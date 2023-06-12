@@ -33,7 +33,7 @@ abstract class app
         }
     }
 
-    public static function &get_instance()
+    public static function get_instance()
     {
         if( !is_object(self::$_instance) ) throw new Exception('There is no registered app instance');
         return self::$_instance;

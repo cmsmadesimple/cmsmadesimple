@@ -168,7 +168,7 @@ namespace CMSMS\Database {
          * Data Dictionary objects are used for manipulating tables, i.e: creating, altering and editing them.
          * @return \CMSMS\Database\DataDictionary
          */
-        abstract public function &NewDataDictionary();
+        abstract public function NewDataDictionary();
 
         /**
          * Return the database type.
@@ -265,7 +265,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql The SQL query
          */
-        abstract public function &do_sql($sql);
+        abstract public function do_sql($sql);
 
         /**
          * Create a prepared statement object.
@@ -273,7 +273,7 @@ namespace CMSMS\Database {
          * @param string $sql The SQL query
          * @return Statement
          */
-        abstract public function &Prepare($sql);
+        abstract public function Prepare($sql);
 
         /**
          * Execute an SQL Select and limit the output.
@@ -281,10 +281,10 @@ namespace CMSMS\Database {
          * @param string $sql
          * @param int $nrows  The number of rows to return
          * @param int $offset The starting offset of rows to return
-         * @param array Any additional paramters required by placeholders in the $sql statement.
+         * @param array Any additional parameters required by placeholders in the $sql statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
+        public function SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
             $limit = null;
             $nrows = (int) $nrows;
@@ -338,14 +338,14 @@ namespace CMSMS\Database {
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &Execute($sql, $inputarr = null)
+        public function Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
             return $rs;
         }
 
         /**
-         * Execute an SQL Commmand and return all of the results as an array.
+         * Execute an SQL command and return the results as an array.
          *
          * @param string $sql The SQL statement to execute.
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
@@ -694,13 +694,13 @@ namespace CMSMS\Database {
 
         /**
          * Create a new database connection object.
-         * This is the preferred wa to open a new database connection.
+         * This is the preferred way to open a new database connection.
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
      * @todo  Move this into a factory class
          */
-        public static function &Initialize(ConnectionSpec $spec)
+        public static function Initialize(ConnectionSpec $spec)
         {
             if( !$spec->valid() ) throw new ConnectionSpecException('Invalid or incorrect configuration information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';

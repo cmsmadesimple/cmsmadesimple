@@ -16,9 +16,9 @@ class request implements ArrayAccess
   {
   }
 
-  public static function &get()
+  public static function get()
   {
-    if( !self::$_instance ) self::$_instance = new request();
+    if( !self::$_instance ) self::$_instance = new self();
     return self::$_instance;
   }
 
@@ -57,7 +57,7 @@ class request implements ArrayAccess
   public function __call($fn,$args)
   {
     $key = strtoupper($fn);
-    if( isset($_SERVER[$key]) )	return $this->raw_server($key);
+    if( isset($_SERVER[$key]) ) return $this->raw_server($key);
     throw new Exception('Call to unknown method '.$fn.' in request object');
   }
 
@@ -79,12 +79,12 @@ class request implements ArrayAccess
 
   public function is_post()
   {
-    return ($this->method() == self::METHOD_POST)?TRUE:FALSE;
+    return ($this->method() === self::METHOD_POST);
   }
 
   public function is_get()
   {
-    return ($this->method() == self::METHOD_GET)?TRUE:FALSE;
+    return ($this->method() === self::METHOD_GET);
   }
 
   public function accept()
@@ -124,8 +124,7 @@ class request implements ArrayAccess
 
   public function https()
   {
-    if( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
-    return FALSE;
+    return (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off');
   }
 
 } // end of class

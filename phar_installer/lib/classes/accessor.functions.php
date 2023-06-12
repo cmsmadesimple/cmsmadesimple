@@ -19,7 +19,7 @@ function translator()
   return langtools::get_instance();
 }
 
-function &get_app()
+function get_app()
 {
   return app::get_instance();
 }

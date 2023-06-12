@@ -34,9 +34,9 @@ class cms_smarty extends Smarty
     }
   }
 
-  public static function &get_instance()
+  public static function get_instance()
   {
-    if( !is_object(self::$_instance) ) self::$_instance = new cms_smarty;
+    if( !is_object(self::$_instance) ) self::$_instance = new self();
     return self::$_instance;
   }
 
