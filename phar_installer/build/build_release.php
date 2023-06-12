@@ -16,6 +16,7 @@ $srcdir = $rootdir;
 $tmpdir = $rootdir.'/tmp';
 $datadir = $rootdir.'/data';
 $outdir = $rootdir.'/out';
+$systmpdir = sys_get_temp_dir().'/'.basename(__FILE__,'php').getmypid();
 //TODO update these lists, per the following variables
 //do not skip class.cms_config.php or Smarty files like smarty_internal_method*config.php
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
@@ -30,7 +31,6 @@ $src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/
 // so that they are not ignored by PharData when processing
 $all_excludes = [
 '~\.git.*~',
-'~\.md$~i',
 '~\.svn~',
 '~svn\-~',
 '~index\.html?$~',
@@ -45,6 +45,7 @@ $all_excludes = [
 '~DEVELOP~',
 '~HIDE~',
 ];
+//TODO some of this type might be redundant '~\.md$~i',
 
 // members of $src_excludes which need double-check before exclusion to confirm they're 'ours'
 $src_checks = ['scripts', 'tmp', 'tests'];
@@ -584,17 +585,40 @@ try {
             $arch->close();
             @unlink($infile);
 
-            // zip up the install dir itself. (uses shell)
-            $tmpfile = '/tmp/zip_excludes.dat'; // hackish, but relatively safe.
+            // zip up the install dir itself (uses shell zip command)
+            @mkdir($systmpdir,0777,TRUE);
+            $tmpfile = $systmpdir.'/zip_excludes.dat'; // hackish, but relatively safe.
             $str = implode("\n",$exclude_from_zip);
             file_put_contents($tmpfile,$str);
-            chdir($rootdir);
+            // relocate sources, for folder-management
+            $zipdir = $systmpdir.'/packer';
+            mkdir($zipdir,0777,TRUE);
+            chdir($zipdir);
+            copy($rootdir.'/README.TXT', './README.TXT');
+            mkdir($zipdir.'/installer',0777,TRUE);
+            copy($rootdir.'/index.php', './installer/index.php');
+            $l = strlen($rootdir);
+            foreach( ['app','lib','data'] as $top ) {
+                $from = $rootdir.'/'.$top;
+                $rdi = new RecursiveDirectoryIterator($from,
+                  FilesystemIterator::KEY_AS_FILENAME |
+                  FilesystemIterator::CURRENT_AS_PATHNAME |
+                  FilesystemIterator::UNIX_PATHS |
+                  FilesystemIterator::SKIP_DOTS);
+                $rii = new RecursiveIteratorIterator($rdi);
+                foreach( $rii as $name => $fp ) {
+                    $tp = $zipdir.'/installer'.substr($fp, $l);
+                    $dir = dirname($tp);
+                    @mkdir($dir,0777,TRUE);
+                    copy($fp,$tp);
+                }
+            }
             $outfile = "$outdir/$basename.expanded.zip";
             echo "INFO: zipping install directory into $outfile\n";
-            $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT index.php app lib data";
+            $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT installer";
             $cmd = escapeshellcmd($cmd);
             system($cmd);
-            unlink($tmpfile);
+            rrmdir($systmpdir);
         } // zip
         rrmdir($datadir);
     } // !archive only
