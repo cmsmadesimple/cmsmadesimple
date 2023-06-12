@@ -617,7 +617,13 @@ try {
             }
             $outfile = "$outdir/$basename.expanded.zip";
             echo "INFO: zipping install directory into $outfile\n";
-            $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT installer";
+            if( strncasecmp(PHP_OS,'WIN', 3) != 0 ) {
+                $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT installer";
+            }
+            else {
+                //Windows10 build 17063+ tar.exe -a -c [other options] -f outfile.zip input-file-or-directory
+                $cmd = "tar.exe -a -c -f $outfile {$zipdir}/packer"; //TODO
+            }
             $cmd = escapeshellcmd($cmd);
             system($cmd);
             rrmdir($systmpdir);
