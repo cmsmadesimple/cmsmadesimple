@@ -2,10 +2,6 @@
 
 namespace __appbase;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use function __appbase\endswith;
-
 class nlstools
 {
   private static $_instance;
@@ -13,13 +9,13 @@ class nlstools
 
   protected function __construct() {}
 
-  public static function get_instance()
+  public static function &get_instance()
   {
-    if( !is_object(self::$_instance) ) self::$_instance = new self();
+    if( !self::$_instance ) self::$_instance = new nlstools();
     return self::$_instance;
   }
 
-  public static function set_nlshandler(nlstools $obj)
+  public static function set_nlshandler(nlstools &$obj)
   {
     self::$_instance = $obj;
   }
@@ -33,8 +29,8 @@ class nlstools
   {
     if( is_array($this->_nls) ) return;
 
-    $rdi = new RecursiveDirectoryIterator($this->get_nls_dir());
-    $rii = new RecursiveIteratorIterator($rdi);
+    $rdi = new \RecursiveDirectoryIterator($this->get_nls_dir());
+    $rii = new \RecursiveIteratorIterator($rdi);
 
     $this->_nls = array();
     foreach( $rii as $file => $info ) {
@@ -60,14 +56,15 @@ class nlstools
     return array_keys($this->_nls);
   }
 
-  public function find($str)
+  public function &find($str)
   {
     $this->load_nls();
-    foreach( $this->_nls as $name => $nls ){
+    foreach( $this->_nls as $name => &$nls ){
       if( $str == $name ) return $nls;
       if( $nls->matches($str) ) return $nls;
     }
-    return null;
+    $obj = null;
+    return $obj;
   }
 } // end of class
 

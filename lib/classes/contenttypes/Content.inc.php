@@ -637,26 +637,32 @@ class Content extends ContentBase
 		case 'image':
 			$field = $this->_display_image_block($blockInfo,$value,$adding);
 			break;
-
+			
 		case 'module':
-			$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
-			if( is_array($tmp) ) {
-				if( count($tmp) == 2 ) {
-                    if( !$label || $label == $blockName ) $label = $tmp[0];
-					$field = $tmp[1];
+				$tmp = $this->_display_module_block($blockName, $blockInfo, $value, $adding);
+				if( is_array($tmp) )
+				{
+					if(2 === count($tmp))
+					{
+						//if( !$label || $label == $blockName )
+						$label = $tmp[0];
+						$field = $tmp[1];
+					}
+					else
+					{
+						$field = $tmp[0];
+					}
 				}
-				else {
-					$field = $tmp[0];
+				else
+				{
+					if( empty($label) ) $label = $blockName.':';
+					$field = $tmp;
 				}
-			}
-			else {
-				$field = $tmp;
-			}
 			break;
 		}
-		if( empty($field) ) return FALSE;
-		if( empty($label) ) $label = $blockName.':';
-		return array($label,$field);
+		if( empty($field) ) { return FALSE; }
+		
+		return [$label, $field];
 	}
 
 } // end of class

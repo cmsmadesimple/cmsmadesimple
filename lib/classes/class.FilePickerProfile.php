@@ -57,6 +57,7 @@ class FilePickerProfile
      */
     protected function setValue( $key, $val )
     {
+      $val = (string) $val;
         switch( $key ) {
         case 'top':
             $val = trim($val);
@@ -137,7 +138,7 @@ class FilePickerProfile
         case 'type':
         case 'match_prefix':
         case 'exclude_prefix':
-            return trim($this->_data[$key]);
+            return \trim((string)$this->_data[$key]);
 
         case 'can_mkdir':
         case 'can_upload':

@@ -1,8 +1,0 @@
-[config]
-archive_only = 0
-clean = 1
-checksums = 1
-;pack = "zip"
-rename = 1
-sourceuri = "file://local"
-verbose = 0

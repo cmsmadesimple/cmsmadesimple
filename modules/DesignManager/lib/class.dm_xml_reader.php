@@ -21,7 +21,7 @@
 
 class dm_xml_reader extends XMLReader
 {
-  private $_setup = FALSE;
+  private $_setup;
   private $_old_err_handler;
   private $_old_internal_errors;
 
@@ -40,7 +40,7 @@ class dm_xml_reader extends XMLReader
     if( !$this->_setup ) {
       $this->_old_internal_errors = libxml_use_internal_errors(FALSE);
       $this->_old_err_handler = set_error_handler(array($this,'__errhandler'));
-      $this->_setup = TRUE;
+      $this->_setup = 1;
     }
   }
 
@@ -50,8 +50,7 @@ class dm_xml_reader extends XMLReader
       set_error_handler($this->_old_err_handler);
   }
 
-  //[\ReturnTypeWillChange]
-  public function read()//: bool
+  public function read()
   {
     $this->__setup();
     return parent::read();

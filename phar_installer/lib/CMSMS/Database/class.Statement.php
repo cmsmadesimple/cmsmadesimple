@@ -79,7 +79,6 @@ abstract class Statement
     /**
      * @ignore
      */
-    #[\ReturnTypeWillChange]
     public function __get($key)
     {
         switch( $key ) {

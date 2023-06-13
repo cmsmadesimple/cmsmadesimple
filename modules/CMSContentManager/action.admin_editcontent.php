@@ -58,7 +58,7 @@ try {
     }
 
     if( $content_id < 1 ) {
-        // adding or copying.
+      // adding or copying.
         if( !$this->CheckPermission('Add Pages') ) {
             // no permission to add pages.
             $this->SetError($this->Lang('error_editpage_permission'));
@@ -78,7 +78,7 @@ try {
     //
     // load or create the initial content object
     //
-    if( $content_id === -1 && isset($_SESSION['__cms_copy_obj__']) ) {
+  if( $content_id === -1 && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $tmp = $_SESSION['__cms_copy_obj__'];
         $type_name = get_parameter_value($tmp,'type');
@@ -90,7 +90,7 @@ try {
         $content_type = $content_obj->Type();
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     }
-    else if( $content_id === 0 ) {
+  else if( $content_id === 0 ) {
         // creating a new content object
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
         $content_obj = $contentops->CreateNewContent($content_type);
@@ -216,12 +216,12 @@ try {
     }
 }
 catch( CmsEditContentException $e ) {
-/*
+    /*
     if( isset($params['submit']) ) {
         $this->SetError($e->getMessage());
         $this->RedirectToAdminTab();
     };
-*/
+    */
     $error = $e->GetMessage();
     if( isset($params['ajax']) ) {
         $tmp = array('response'=>'Error','details'=>$error);
@@ -230,12 +230,12 @@ catch( CmsEditContentException $e ) {
     }
 }
 catch( CmsContentException $e ) {
-    $error = $e->getMessage();
-    if( isset($params['ajax']) ) {
-        $tmp = array('response'=>'Error','details'=>$error);
-        echo json_encode($tmp);
-        exit;
-    }
+  $error = $e->getMessage();
+  if( isset($params['ajax']) ) {
+    $tmp = array('response'=>'Error','details'=>$error);
+    echo json_encode($tmp);
+    exit;
+  }
 }
 
 //
@@ -264,13 +264,12 @@ if( $content_id > 0 && CmsContentManagerUtils::locking_enabled() ) {
     }
 }
 
-$tab_names = null;
-$tab_contents_array = array();
-$tab_message_array = array();
+$tab_names          = NULL;
+$tab_contents_array = [];
+$tab_message_array  = [];
 try {
-    $tab_names = $content_obj->GetTabNames();
-    $tab_contents_array = array();
-    $tab_message_array = array();
+  $tab_names          = $content_obj->GetTabNames();
+
 
     // the content object may not have a main tab, but we require one
     if( !in_array($content_obj::TAB_MAIN,$tab_names) ) {
@@ -283,6 +282,7 @@ try {
         if( $tmp ) $tab_message_array[$currenttab] = $tmp;
 
         $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() < 1 );
+        
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
             if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {
@@ -338,7 +338,6 @@ $smarty->assign('tab_message_array',$tab_message_array);
 $factory = new ContentAssistantFactory($content_obj);
 /* $assistant = $factory->getEditContentAssistant(); */
 /* if( is_object($assistant) ) $smarty->assign('extra_content',$assistant->getExtraCode()); */
-
 echo $this->ProcessTemplate('admin_editcontent.tpl');
 
 #

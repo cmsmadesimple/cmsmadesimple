@@ -230,7 +230,7 @@ abstract class Alert
      * Decode a serialized object read from the database.
      *
      * @param string $serialized A serialized array, containing an optional module name that must be loaded and the serialized alert object.
-     * @return Alert | null
+     * @return Alert
      */
     protected static function decode_object($serialized)
     {
@@ -244,7 +244,7 @@ abstract class Alert
         } else {
             $obj = unserialize($tmp['data']);
         }
-        if( !is_object($obj) || !$obj instanceof self ) return;
+	if( !is_object($obj) || !$obj instanceof self ) return;
         return $obj;
     }
 
@@ -300,7 +300,7 @@ abstract class Alert
 
             $out[] = $tmp;
         }
-        return $out;
+        if( count($out) ) return $out;
     }
 
     /**
@@ -324,7 +324,7 @@ abstract class Alert
                 $out[] = $alert;
             }
         }
-        if( !$out ) return [];
+        if( !count($out) ) return;
 
         // now sort these fuggers by priority
         $map = [ Alert::PRIORITY_HIGH => 0, Alert::PRIORITY_NORMAL => 1, Alert::PRIORITY_LOW => 2 ];
@@ -335,7 +335,7 @@ abstract class Alert
                 if( $pa > $pb ) return 1;
                 return strcasecmp($a->module,$b->module);
             });
-        return $out;
+        if( count($out) ) return $out;
     }
 
     /**

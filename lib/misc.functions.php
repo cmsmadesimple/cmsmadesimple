@@ -25,6 +25,8 @@
  * @license GPL
  */
 
+
+
 /**
  * Redirects to relative URL on the current site.
  *
@@ -40,8 +42,8 @@ function redirect($to)
 {
     $app = cmsms();
     if( $app->is_cli() ) {
-        // cannot redirect cli based scripts
-        die("ERROR: no redirect on cli based scripts ---\n");
+	// cannot redirect cli based scripts
+	die("ERROR: no redirect on cli based scripts ---\n");
     }
     $_SERVER['PHP_SELF'] = null;
 
@@ -50,7 +52,7 @@ function redirect($to)
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);
-    if( $components ) {
+    if(count($components) > 0) {
         $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
         $to .= isset($components['host']) ? $components['host'] : $host;
         $to .= isset($components['port']) ? ':' . $components['port'] : '';
@@ -64,7 +66,7 @@ function redirect($to)
                 $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
             }
             else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) { //Lighttpd
-                if( endswith($_SERVER['REQUEST_URI'], '/') ) {
+                if (endswith($_SERVER['REQUEST_URI'], '/')) {
                     $to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
                 }
                 else {
@@ -110,14 +112,15 @@ function redirect($to)
                 echo $error;
             }
             echo '</div> <!-- end DebugFooter -->';
-            exit;
+            exit();
         }
         else {
             header("Location: $to");
-            exit;
+            exit();
         }
     }
 }
+
 
 
 /**
@@ -128,20 +131,21 @@ function redirect($to)
  */
 function redirect_to_alias($alias)
 {
-    $manager = CmsApp::get_instance()->GetHierarchyManager();
-    $node = $manager->sureGetNodeByAlias($alias);
-    if( !$node ) {
-        // put mention into the admin log
-        audit('','Core','Attempt to redirect to invalid alias: '.$alias);
-        return;
-    }
-    $content = $node->GetContent();
-    if (!is_object($content)) {
-        audit('','Core','Attempt to redirect to invalid alias: '.$alias);
-        return;
-    }
-    if ($content->GetURL() != '') redirect($content->GetURL());
+  $manager = CmsApp::get_instance()->GetHierarchyManager();
+  $node = $manager->sureGetNodeByAlias($alias);
+  if( !$node ) {
+	// put mention into the admin log
+    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    return;
+  }
+  $content = $node->GetContent();
+  if (!is_object($content)) {
+    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    return;
+  }
+  if ($content->GetURL() != '') redirect($content->GetURL());
 }
+
 
 
 /**
@@ -158,6 +162,7 @@ function microtime_diff($a, $b)
     list($b_dec, $b_sec) = explode(" ", $b);
     return $b_sec - $a_sec + $b_dec - $a_dec;
 }
+
 
 
 /**
@@ -178,7 +183,6 @@ function cms_join_path()
     $args = func_get_args();
     return implode(DIRECTORY_SEPARATOR,$args);
 }
-
 
 /**
  * Return the relative portion of a path
@@ -217,26 +221,26 @@ function cms_relative_path($in,$relative_to = null)
  */
 function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
-    if ($val == "") return "";
+  if ($val == "") return "";
 
-    $val = str_replace( "&#032;", " ", $val );
-    $val = str_replace( "&"            , "&amp;"         , $val );
-    $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
-    $val = str_replace( "-->"          , "--&#62;"       , $val );
-    $val = str_ireplace( "<script"     , "&#60;script"   , $val );
-    $val = str_replace( ">"            , "&gt;"          , $val );
-    $val = str_replace( "<"            , "&lt;"          , $val );
-    $val = str_replace( "\""           , "&quot;"        , $val );
-    $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-    $val = str_replace( "!"            , "&#33;"         , $val );
-    $val = str_replace( "'"            , "&#39;"         , $val );
+  $val = str_replace( "&#032;", " ", $val );
+  $val = str_replace( "&"            , "&amp;"         , $val );
+  $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
+  $val = str_replace( "-->"          , "--&#62;"       , $val );
+  $val = str_ireplace( "<script"     , "&#60;script"   , $val );
+  $val = str_replace( ">"            , "&gt;"          , $val );
+  $val = str_replace( "<"            , "&lt;"          , $val );
+  $val = str_replace( "\""           , "&quot;"        , $val );
+  $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
+  $val = str_replace( "!"            , "&#33;"         , $val );
+  $val = str_replace( "'"            , "&#39;"         , $val );
 
-    if ($convert_single_quotes) {
-        $val = str_replace("\\'", "&apos;", $val);
-        $val = str_replace("'", "&apos;", $val);
-    }
+  if ($convert_single_quotes) {
+    $val = str_replace("\\'", "&apos;", $val);
+    $val = str_replace("'", "&apos;", $val);
+  }
 
-    return $val;
+  return $val;
 }
 
 
@@ -280,6 +284,7 @@ function debug_bt_to_log()
 }
 
 
+
 /**
  * A function to generate a backtrace in a readable format.
  *
@@ -303,10 +308,11 @@ function debug_bt()
         echo "
         <dt><b>$function</b>($args) </dt>
         <dd>$file on line $line</dd>
-        ";
+		";
     }
     echo "</dl></pre>\n";
 }
+
 
 
 /**
@@ -314,9 +320,9 @@ function debug_bt()
 *
 * @param mixed $var The data to display
 * @param string $title (optional) title for the output.  If null memory information is output.
-* @param bool $echo_to_screen (optional) Flag indicating whether the output should be echoed to the screen or returned.
-* @param bool $use_html (optional) flag indicating whether html or text should be used in the output.
-* @param bool $showtitle (optional) flag indicating whether the title field should be displayed in the output.
+* @param bool $echo_to_screen (optional) Flag indicating wether the output should be echoed to the screen or returned.
+* @param bool $use_html (optional) flag indicating wether html or text should be used in the output.
+* @param bool $showtitle (optional) flag indicating wether the title field should be displayed in the output.
 * @return string
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
@@ -381,6 +387,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 }
 
 
+
 /**
  * Display $var nicely only if $config["debug"] is set.
  *
@@ -392,6 +399,7 @@ function debug_output($var, $title="")
     $config = \cms_config::get_instance();
     if( $config["debug"] == true) debug_display($var, $title, true);
 }
+
 
 
 /**
@@ -419,6 +427,7 @@ function debug_to_log($var, $title='',$filename = '')
 }
 
 
+
 /**
  * Display $var nicely to the CmsApp::get_instance()->errors array if $config['debug'] is set.
  *
@@ -434,7 +443,7 @@ function debug_buffer($var, $title="")
 
 /**
 * Return $value if it's set and same basic type as $default_value,
-* Otherwise return $default_value. Note. Also will trim($value) if $value is not numeric.
+* Otherwise return $default_value. Note. Also will trim($value)	if $value is not numeric.
 *
 * @ignore
 * @param string $value
@@ -475,6 +484,7 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
     if($session_key != '') $_SESSION['default_values'][$session_key] = $return_value;
     return $return_value;
 }
+
 
 
 /**
@@ -534,6 +544,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 }
 
 
+
 /**
  * A method to remove a permission from the database.
  *
@@ -552,6 +563,7 @@ function cms_mapi_remove_permission($permission_name)
     catch( Exception $e ) {
     }
 }
+
 
 
 /**
@@ -579,6 +591,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
         return false;
     }
 }
+
 
 
 /**
@@ -625,9 +638,9 @@ function is_directory_writable( $path )
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
-    if( !is_dir($dir) ) return [];
+    if( !is_dir($dir) ) return false;
     $dh = opendir($dir);
-    if( !$dh ) return [];
+    if( !$dh ) return false;
 
     if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
     $results = array();
@@ -641,11 +654,12 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
         }
 
         $ext = strtolower(substr($file,strrpos($file,'.')+1));
-        if( $extensions && is_array($extensions) && !in_array($ext,$extensions) ) continue;
+        if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
 
         $results[] = $file;
     }
     closedir($dh);
+    if( !count($results) ) return false;
     return $results;
 }
 
@@ -723,6 +737,7 @@ function recursive_delete( $dirname )
 }
 
 
+
 /**
  * A function to recursively chmod all files and folders in a directory.
  *
@@ -760,6 +775,7 @@ function chmod_r( $path, $mode )
 }
 
 
+
 /**
  * A convenience function to test wether one string starts with another.
  *
@@ -773,6 +789,7 @@ function startswith( $str, $sub )
 {
     return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
+
 
 
 /**
@@ -790,6 +807,7 @@ function endswith( $str, $sub )
 }
 
 
+
 /**
  * Convert a human readable string into something that is suitable for use in URLS.
  *
@@ -800,8 +818,8 @@ function endswith( $str, $sub )
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
-  $alias = (string)$alias;
-  if( $tolower ) $alias = mb_strtolower($alias);
+  $alias = $alias ?? '';
+  if ($tolower == true) $alias = mb_strtolower($alias);
 
   // remove invalid chars
   $expr = '/[^\p{L}_\-\.\ \d]/u';
@@ -836,7 +854,7 @@ function cleanValue($val) {
     if ($remove) {
       $string = strip_tags($string);
     } else {
-      $patterns = array("/&(?!amp;)/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
+      $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
       $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
       $string = preg_replace($patterns, $replacements, $string);
     }
@@ -859,6 +877,7 @@ function cleanValue($val) {
 }
 
 
+
 /**
  * A function to test if permissions, and php configuration is setup correctly
  * to allow an administrator to upload files to CMSMS.
@@ -868,13 +887,11 @@ function cleanValue($val) {
  */
 function can_admin_upload()
 {
-  /*
-  first, check to see if safe mode is enabled
-  if it is, then check to see the owner of the index.php, moduleinterface.php
-  and the uploads and modules directory.  if they all match, then we
-  can upload files.
-  if safe mode is off, then we just have to check the permissions.
-  */
+  # first, check to see if safe mode is enabled
+  # if it is, then check to see the owner of the index.php, moduleinterface.php
+  # and the uploads and modules directory.  if they all match, then we
+  # can upload files.
+  # if safe mode is off, then we just have to check the permissions.
   $config = CmsApp::get_instance()->GetConfig();
   $file_index = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'index.php';
   $file_moduleinterface = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.
@@ -900,8 +917,8 @@ function can_admin_upload()
   if( $safe_mode ) {
     // we're in safe mode.
     if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
-        ($stat_moduleinterface[4] != $stat_uploads[4]) ||
-        ($my_uid != $stat_moduleinterface[4]) ) {
+	($stat_moduleinterface[4] != $stat_uploads[4]) ||
+	($my_uid != $stat_moduleinterface[4]) ) {
       // owners don't match
       return FALSE;
     }
@@ -944,10 +961,10 @@ function stack_trace()
   foreach( $stack as $elem ) {
     if( $elem['function'] == 'stack_trace' ) continue;
     if( isset($elem['file'])  ) {
-      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br />';
+      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
     }
     else {
-      echo ' - '.$elem['function'].'<br />';
+      echo ' - '.$elem['function'].'<br/>';
     }
   }
 }
@@ -963,17 +980,11 @@ function stack_trace()
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
-  $config = CmsApp::get_instance()->GetConfig();
-  // reject browser-executable files
-  $helper = new \CMSMS\FileTypeHelper($config);
-  if( $helper->is_executable($destination) ) {
-    //TODO report|log error or throw new Exception(lang(''))
-    return FALSE;
-  }
+   $config = CmsApp::get_instance()->GetConfig();
 
-  if( !@move_uploaded_file( $tmpfile, $destination ) ) return FALSE;
-  @chmod($destination,octdec($config['default_upload_permission']));
-  return TRUE;
+   if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
+   @chmod($destination,octdec($config['default_upload_permission']));
+   return true;
 }
 
 
@@ -1017,13 +1028,13 @@ function cms_ipmatches($ip,$checklist)
       $maskl = 0;
 
       for ($i = 0; $i< 31; $i++) {
-        if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
+	if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
       }
 
       if (($maskl & $rangel) == ($maskl & $ipl)) {
-        return 1;
+	return 1;
       } else {
-        return 0;
+	return 0;
       }
     } else {
       // range based
@@ -1034,12 +1045,12 @@ function cms_ipmatches($ip,$checklist)
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
-        if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-          if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
-        }
-        else {
-          if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
-        }
+	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+	}
+	else {
+	  if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
+	}
       }
     }
     return $result;
@@ -1060,17 +1071,18 @@ function cms_ipmatches($ip,$checklist)
  * @param string  $email
  * @param bool $checkDNS
 */
-function is_email( $email, $checkDNS=FALSE )
+function is_email( $email, $checkDNS=false )
 {
    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
    if ($checkDNS && function_exists('checkdnsrr')) {
        list($user,$domain) = explode('@',$email,2);
        if( !$domain ) return FALSE;
-       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE; // Domain doesn't actually exist
+       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
    }
 
    return TRUE;
 }
+
 
 
 /**
@@ -1091,6 +1103,7 @@ function get_secure_param()
 }
 
 
+
 /**
  * A simple function to convert a string to a bool.
  * accepts, 'y','yes','true',1 as TRUE (case insensitive) all other values represent FALSE.
@@ -1106,6 +1119,7 @@ function cms_to_bool($str)
   if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' || $str === 'on' ) return TRUE;
   return FALSE;
 }
+
 
 
 /**
@@ -1132,7 +1146,7 @@ function cms_to_bool($str)
  * @param string  $custom_root A custom root URL for all scripts (when using local mode).  If this is spefied the $ssl param will be ignored.
  * @param bool $include_css Optionally output stylesheet tags for the included javascript libraries.
  */
-function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$custom_root='',$include_css = TRUE)
+function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
 {
   $config = cms_config::get_instance();
   $scripts = array();
@@ -1141,13 +1155,13 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
 
   // Scripts to include
-  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
-                             'local'=>$basePath.'/lib/jquery/js/jquery-1.11.3.min.js',
-                             'aliases'=>array('jquery.min.js','jquery',));
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.1.min.js',
+			     'aliases'=>array('jquery.min.js','jquery',));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
-                                'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
-                                'aliases'=>array('jquery-ui.min.js','ui'),
-                                'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
+				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
+				'aliases'=>array('jquery-ui.min.js','ui'),
+				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
@@ -1206,7 +1220,7 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   // Output
   $output = '';
   $fmt_js = '<script type="text/javascript" src="%s"></script>';
-  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s" />';
+  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s"/>';
   foreach($scripts as $script) {
       $url_js = $script['local'];
       if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
@@ -1220,7 +1234,6 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
   return $output;
 }
 
-
 /**
  * @ignore
  * @since 2.0.2
@@ -1228,7 +1241,7 @@ function cms_get_jquery($exclude = '',$ssl = FALSE,$cdn = FALSE,$append = '',$cu
 function setup_session($cachable = FALSE)
 {
     global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE;
-    static $_setup_already = FALSE;
+    static $_setup_already = false;
     if( $_setup_already ) return;
 
     $_f = $_l = null;
@@ -1266,11 +1279,10 @@ function setup_session($cachable = FALSE)
         }
     }
     if(!@session_id()) session_start();
-
+    
     if($cachable) header_remove('Last-Modified');
-    $_setup_already = TRUE;
+    $_setup_already = true;
 }
-
 
 /**
  * Test if a string is a base64 encoded string
@@ -1281,5 +1293,5 @@ function setup_session($cachable = FALSE)
  */
 function is_base64($s)
 {
-    return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+      return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
 }

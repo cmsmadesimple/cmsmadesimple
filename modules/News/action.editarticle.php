@@ -1,34 +1,29 @@
 <?php
-if (!isset($gCms)) exit;
+if (!isset($gCms))  exit ;
 
-if (!$this->CheckPermission('Modify News')) return;
-
+if (!$this->CheckPermission('Modify News'))  return;
 if (isset($params['cancel'])) $this->Redirect($id, 'defaultadmin', $returnid);
 
 /*--------------------
  * Variables
  ---------------------*/
-$now = time();
-$status       = 'draft';
-if ($this->CheckPermission('Approve News')) $status = 'published';
+if ($this->CheckPermission('Approve News'))  $status = 'published';
 
+$status       = 'draft';
+$postdate     = time();
+$startdate    = time();
+$enddate      = strtotime('+6 months', time());
 $articleid    = isset($params['articleid']) ? $params['articleid'] : '';
-$author_id    = isset($params['author_id']) ? $params['author_id'] : '-1';
 $content      = isset($params['content']) ? $params['content'] : '';
-$ndays        = (int)$this->GetPreference('expiry_interval', 180);
-if ($ndays == 0) $ndays = 180;
-//TODO preserve existing $endate value if > $now
-$enddate      = strtotime(sprintf("+%d days", $ndays), $now);
-$extra        = isset($params['extra']) ? trim(strip_tags($params['extra'])) : '';
-$news_url     = isset($params['news_url']) ? $params['news_url'] : '';
-$postdate     = $now;
-$searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
-$startdate    = $now;
-$status       = isset($params['status']) ? $params['status'] : $status;
 $summary      = isset($params['summary']) ? $params['summary'] : '';
-$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
+$news_url     = isset($params['news_url']) ? $params['news_url'] : '';
 $usedcategory = isset($params['category']) ? $params['category'] : '';
+$author_id    = isset($params['author_id']) ? $params['author_id'] : '-1';
 $useexp       = isset($params['useexp']) ? 1: 0;
+$extra        = isset($params['extra']) ? trim(strip_tags($params['extra'])) : '';
+$searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
+$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
+$status       = isset($params['status']) ? $params['status'] : $status;
 
 if (isset($params['postdate_Month'])) {
     $postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
@@ -59,22 +54,22 @@ if (isset($params['submit']) || isset($params['apply'])) {
 
     $startdatestr = NULL;
     $enddatestr = NULL;
-    if ($useexp) {
+    if ($useexp != 0) {
         $startdate = trim($db->DbTimeStamp($startdate), "'");
         $enddate = trim($db->DbTimeStamp($enddate), "'");
     }
 
-    if ($error === FALSE && $news_url) {
+    if (empty($error) && $news_url != '') {
         // check for starting or ending slashes
-        if (startswith($news_url, '/') || endswith($news_url, '/')) {
+        if (startswith($news_url, '/') || endswith($news_url, '/'))
             $error = $this->Lang('error_invalidurl');
-        }
         if ($error === FALSE) {
             // check for invalid chars.
             $translated = munge_string_to_url($news_url, false, true);
             if (strtolower($translated) != strtolower($news_url))
                 $error = $this->Lang('error_invalidurl');
         }
+
         if ($error === FALSE) {
             // make sure this url isn't taken.
             cms_route_manager::load_routes();
@@ -82,7 +77,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
             if ($route) {
                 $dflts = $route->get_defaults();
                 if ($route['key1'] != $this->GetName() || !isset($dflts['articleid']) || $dflts['articleid'] != $articleid) {
-                    // any other matching route is bad.
+                    // we're adding an article, not editing... any matching route is bad.
                     $error = $this->Lang('error_invalidurl');
                 }
             }
@@ -94,7 +89,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
         // database work
         //
         $query = 'UPDATE ' . CMS_DB_PREFIX . 'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ?, searchable = ? WHERE news_id = ?';
-        if ($useexp) {
+        if ($useexp == 1) {
             $db->Execute($query, array(
                 $title,
                 $content,
@@ -133,10 +128,10 @@ if (isset($params['submit']) || isset($params['apply'])) {
         //
 
         // get the field types
-        $query = "SELECT id,name,type FROM " . CMS_DB_PREFIX . "module_news_fielddefs WHERE type='file'";
-        $types = $db->GetArray($query);
+        $qu = "SELECT id,name,type FROM " . CMS_DB_PREFIX . "module_news_fielddefs WHERE type='file'";
+        $types = $db->GetArray($qu);
 
-        $error = FALSE;
+        $error = false;
         if (is_array($types)) {
             foreach ($types as $onetype) {
                 $elem = $id . 'customfield_' . $onetype['id'];
@@ -163,8 +158,8 @@ if (isset($params['submit']) || isset($params['apply'])) {
                     $articleid,
                     $fldid
                 ));
-                $dbr = TRUE;
-                if ($tmp === FALSE) {
+                $dbr = true;
+                if ($tmp === false) {
                     if (!empty($value)) {
                         $query = "INSERT INTO " . CMS_DB_PREFIX . "module_news_fieldvals (news_id,fielddef_id,value,create_date,modified_date) VALUES (?,?,?,$now,$now)";
                         $dbr = $db->Execute($query, array(
@@ -182,7 +177,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
                         ));
                     } else {
                         $query = "UPDATE " . CMS_DB_PREFIX . "module_news_fieldvals
-SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
+                      SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
                         $dbr = $db->Execute($query, array(
                             $value,
                             $articleid,
@@ -208,7 +203,7 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
         }
     }
 
-    if (!$error && $status == 'published' && $news_url) {
+    if (!$error && $status == 'published' && $news_url != '') {
         news_admin_ops::delete_static_route($articleid);
         news_admin_ops::register_static_route($news_url, $articleid);
     }
@@ -251,36 +246,32 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
         ));
         // put mention into the admin log
         audit($articleid, 'News: ' . $title, 'Article edited');
-    }// no error
+    }// if no error.
 
     if (isset($params['apply']) && isset($params['ajax'])) {
-        if (empty($error)) {
-            $out = array('response' => 'Success', 'details' => $this->Lang('articleupdated'));
+        $response = '<EditArticle>';
+        if ($error != '') {
+            $response .= '<Response>Error</Response>';
+            $response .= '<Details><![CDATA[' . $error . ']]></Details>';
         } else {
-            $out = array('response' => 'Error', 'details' => $error);
+            $response .= '<Response>Success</Response>';
+            $response .= '<Details><![CDATA[' . $this->Lang('articleupdated') . ']]></Details>';
         }
-        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        if (defined('JSON_INVALID_UTF8_IGNORE')) {
-            $flags |= JSON_INVALID_UTF8_IGNORE;
-        }
-
-        $handlers = ob_list_handlers();
-        for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
-
-        echo json_encode($out, $flags);
-        exit;
+        $response .= '</EditArticle>';
+        echo $response;
+        return;
     }
 
     if (!isset($params['apply']) && !$error) {
         // redirect out of here.
-        $this->SetMessage($this->Lang('articlesubmitted'));
+		$this->SetMessage($this->Lang('articlesubmitted'));
         $this->Redirect($id, 'defaultadmin', $returnid);
         return;
     }
 
-    if ($error) {
+    if ($error)
         echo $this->ShowErrors($error);
-    }
+
 // end submit or apply
 } elseif (isset($params['preview'])) {
     // save data for preview.
@@ -290,40 +281,41 @@ SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
     unset($params['cancel']);
     unset($params['ajax']);
 
-    if (empty($error)) {
-        $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
-        file_put_contents($tmpfname, serialize($params));
+    $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
+    file_put_contents($tmpfname, serialize($params));
 
-        $detail_returnid = $this->GetPreference('detail_returnid', -1);
-        if ($detail_returnid <= 0)
-            $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
-        if (isset($params['previewpage']) && (int)$params['previewpage'] > 0)
-            $detail_returnid = (int)$params['previewpage'];
+    $detail_returnid = $this->GetPreference('detail_returnid', -1);
+    if ($detail_returnid <= 0)
+        $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
+    if (isset($params['previewpage']) && (int)$params['previewpage'] > 0)
+        $detail_returnid = (int)$params['previewpage'];
 
-        $_SESSION['news_preview'] = array(
-            'fname' => basename($tmpfname),
-            'checksum' => md5_file($tmpfname)
-        );
-        $tparms = array('preview' => md5(serialize($_SESSION['news_preview'])));
-        if (isset($params['detailtemplate']))
-            $tparms['detailtemplate'] = trim($params['detailtemplate']);
-        $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
-        $url = str_replace('&amp;', '&', $url);
-        $out = array('response' => 'Success', 'details' => $url);
-        $flags = 0;
+    $_SESSION['news_preview'] = array(
+        'fname' => basename($tmpfname),
+        'checksum' => md5_file($tmpfname)
+    );
+    $tparms = array('preview' => md5(serialize($_SESSION['news_preview'])));
+    if (isset($params['detailtemplate']))
+        $tparms['detailtemplate'] = trim($params['detailtemplate']);
+    $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
+
+    $response = '<?xml version="1.0"?>';
+    $response .= '<EditArticle>';
+    if (isset($error) && $error != '') {
+        $response .= '<Response>Error</Response>';
+        $response .= '<Details><![CDATA[' . $error . ']]></Details>';
     } else {
-        $out = array('response' => 'Error', 'details' => $error);
-        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        if (defined('JSON_INVALID_UTF8_IGNORE')) { //PHP 7.2+
-            $flags |= JSON_INVALID_UTF8_IGNORE;
-        }
+        $response .= '<Response>Success</Response>';
+        $response .= '<Details><![CDATA[' . $url . ']]></Details>';
     }
+    $response .= '</EditArticle>';
 
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
-
-    echo json_encode($out, $flags);
-    exit;
+    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+    }
+    header('Content-Type: text/xml');
+    echo $response;
+    exit ;
 } else {
     //
     // Load data from database
@@ -514,23 +506,23 @@ if ($this->CheckPermission('Approve News')) {
     $smarty->assign('statuses', array_flip($statusdropdown));
 }
 
-if ($custom_flds) {
+if (count($custom_flds) > 0)
     $smarty->assign('custom_fields', $custom_flds);
-}
+
 $contentops = cmsms()->GetContentOperations();
-$smarty->assign('preview_page_selector', $contentops->CreateHierarchyDropdown('', $this->GetPreference('detail_returnid', -1), $id.'previewpage'));
+$smarty->assign('preview_returnid', $contentops->CreateHierarchyDropdown('', $this->GetPreference('detail_returnid', -1), 'preview_returnid'));
 
 // get the list of detail templates.
 try {
     $type = CmsLayoutTemplateType::load($this->GetName() . '::detail');
     $templates = $type->get_template_list();
     $list = array();
-    if ($templates && is_array($templates)) {
+    if (is_array($templates) && count($templates)) {
         foreach ($templates as $template) {
             $list[$template->get_id()] = $template->get_name();
         }
     }
-    if ($list) {
+    if (count($list)) {
         $smarty->assign('prompt_detail_template', $this->Lang('detail_template'));
         $smarty->assign('prompt_detail_page', $this->Lang('detail_page'));
         $smarty->assign('detail_templates', $list);

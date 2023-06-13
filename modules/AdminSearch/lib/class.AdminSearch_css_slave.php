@@ -23,9 +23,9 @@ final class AdminSearch_css_slave extends AdminSearch_slave
     private function check_css_matches(\CmsLayoutStylesheet $css)
     {
         $strposFunctionName = $this->search_casesensitive() ? 'strpos' : 'stripos';
-        if( $strposFunctionName($css->get_name(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $strposFunctionName($css->get_content(),$this->get_text()) !== FALSE ) return TRUE;
-        if( $this->search_descriptions() && $strposFunctionName($css->get_description(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName((string)$css->get_name(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $strposFunctionName((string)$css->get_content(),$this->get_text()) !== FALSE ) return TRUE;
+        if( $this->search_descriptions() && $strposFunctionName((string)$css->get_description(),$this->get_text()) !== FALSE ) return TRUE;
         return FALSE;
     }
 

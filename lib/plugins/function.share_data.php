@@ -55,8 +55,8 @@ function smarty_cms_function_share_data($params, &$template)
     }
 
     foreach( $vars as $one ) {
-        $var = $template->getVariable($one,null,false,false);
-        if( !is_a($var,'Smarty_Undefined_Variable') ) $scope->$fn($one,$var->value);
+        $var = $template->getTemplateVars($one);
+        if( !is_a($var,'Smarty_Undefined_Variable') ) $scope->$fn($one,$var);
     }
 }
 

@@ -37,7 +37,9 @@ if( !isset($gCms) ) exit;
 // no permissions checks here.
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+
+$opts = NULL;
 
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
@@ -86,7 +88,7 @@ try {
 
     $smarty->assign('indent',!$filter && cms_userprefs::get('indent',1));
     $locks = $builder->get_locks();
-    $have_locks = ($locks && is_array($locks))?1:0;
+    $have_locks = (is_array($locks) && count($locks))?1:0;
     $smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
     $smarty->assign('have_locks',$have_locks);
     $smarty->assign('pagelimit',$pagelimit);
@@ -111,6 +113,7 @@ try {
         $smarty->assign('error',$this->Lang('err_nomatchingcontent'));
     }
 
+
     if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
         bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
     }
@@ -127,10 +130,14 @@ try {
         bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
         bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
     }
-    $opts = bulkcontentoperations::get_operation_list();
-    if( $opts ) $smarty->assign('bulk_options',$opts);
+  
+  $opts = bulkcontentoperations::get_operation_list();
+    
+  if( $opts ) $smarty->assign('bulk_options',$opts);
+  
+  $out = $this->ProcessTemplate('ajax_get_content.tpl'); // check: ok without $opts?
 
-    $out = $this->ProcessTemplate('ajax_get_content.tpl'); // check: ok without $opts?
+    $out = $this->ProcessTemplate('ajax_get_content.tpl');
     echo $out;
 }
 catch( \Exception $e ) {

@@ -87,7 +87,6 @@ $lang['error_movefile'] = 'Could not create file: %s';
 $lang['error_noarticlesselected'] = 'No Articles Were Selected';
 $lang['error_nooptions'] = 'No options specified for field definition';
 $lang['error_templatenamexists'] = 'A template by that name already exists';
-$lang['error_unknown'] = 'An unknown error occurred';
 $lang['error_upload'] = 'Problem occurred uploading a file';
 
 $lang['eventdesc-NewsArticleAdded'] = 'Sent when an article is added.';

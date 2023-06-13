@@ -222,7 +222,7 @@ class cms_content_tree extends cms_tree
 	 */
 	public function &getParentNode()
 	{
-		return $this->get_parent();
+		return $this->getParent();
 	}
 
 

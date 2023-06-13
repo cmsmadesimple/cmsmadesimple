@@ -53,14 +53,16 @@ namespace CMSMS\Database {
          * @ignore
          */
         private function __construct() {}
-
-        /**
-         * Initialize the database connection according to config settings.
-         *
-         * @internal
-         * @param cms_config $config The config object
-         * @return \CMSMS\Database\Connection
-         */
+  
+      /**
+       * Initialize the database connection according to config settings.
+       *
+       * @param cms_config $config The config object
+       *
+       * @return \CMSMS\Database\Connection
+       * @throws \CMSMS\Database\ConnectionSpecException
+       * @internal
+       */
         public static function init(\cms_config $config)
         {
             $spec = new ConnectionSpec;

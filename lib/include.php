@@ -33,21 +33,21 @@
 /**
  * Special variables that may be set before this file is included which will influence its behavior.
  *
- * DONT_LOAD_DB = Indicates that the database should not be initialized and any database related functions should not be called
- * DONT_LOAD_SMARTY = Indicates that smarty should not be initialized, and no smarty related variables assigned.
- * CMS_INSTALL_PAGE - Indicates that the file was included from the CMSMS Installation/Upgrade process
+ * DONT_LOAD_DB       - Indicates that the database should not be initialized and any database related functions should not be called
+ * DONT_LOAD_SMARTY   - Indicates that smarty should not be initialized, and no smarty related variables assigned.
+ * CMS_INSTALL_PAGE   - Indicates that the file was included from the CMSMS Installation/Upgrade process
  * CMS_PHAR_INSTALLER - Indicates that the file was included from the CMSMS PHAR based installer (note: CMS_INSTALL_PAGE will also be set).
- * CMS_ADMIN_PAGE - Indicates that the file was included from an admin side request.
- * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
+ * CMS_ADMIN_PAGE     - Indicates that the file was included from an admin side request.
+ * CMS_LOGIN_PAGE     - Indicates that the file was included from the admin login form.
  */
 
 $dirname = __DIR__;
 
-define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
-define('CMS_SECURE_PARAM_NAME','__c');  // this is used for CSRF protection
-define('CMS_USER_KEY','_userkey_'); // this is used for CSRF protection
-define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
-global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
+define('CMS_DEFAULT_VERSIONCHECK_URL', 'https://www.cmsmadesimple.org/latest_version.php');
+define('CMS_SECURE_PARAM_NAME', '__c');  // this is used for CSRF protection
+define('CMS_USER_KEY', '_userkey_'); // this is used for CSRF protection
+define('CONFIG_FILE_LOCATION', dirname(__DIR__) . '/config.php');
+global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY;
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
 	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
@@ -67,9 +67,11 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
  * temporary as we will revisit the security measures used
  * (JoMorg)
  *
- * @param string $string
+ * Note: the closure is recursive to allow for parameters with arrays
  *
- * @return string
+ * @param $param
+ *
+ * @return array|string
  */
 $sanitize_fn = static function (&$param) use (&$sanitize_fn)
 {
@@ -82,7 +84,7 @@ $sanitize_fn = static function (&$param) use (&$sanitize_fn)
     $param = preg_replace('/\x00|<[^>]*>?/', '', $param);
     $param = str_replace(["'", '"'], ['&#39;', '&#34;'], $param);
   }
-  
+
   return $param;
 };
 
@@ -90,19 +92,19 @@ array_walk($_SERVER,  $sanitize_fn);
 array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
-require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'version.php'); // tells us where the config file is and other things.
-require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.HookManager.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'content.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'translation.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'compat.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'misc.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'version.php'); // tells us where the config file is and other things.
+require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsException.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.HookManager.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.cms_config.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsApp.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'autoloader.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'module.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'page.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'content.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'translation.functions.php');
+require_once($dirname . DIRECTORY_SEPARATOR . 'html_entity_decode_php4.php');
 
 debug_buffer('done loading basic files');
 
@@ -110,7 +112,7 @@ debug_buffer('done loading basic files');
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 
-if ($config["debug"] == true) {
+if (true == $config["debug"]) {
     @ini_set('display_errors',1);
     @error_reporting(E_ALL);
 }
@@ -184,7 +186,7 @@ UserTagOperations::setup();
 ContentOperations::setup_cache();
 
 // Set the timezone
-if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
+if('' != $config['timezone']) @date_default_timezone_set(trim($config['timezone']));
 
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));

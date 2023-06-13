@@ -133,19 +133,19 @@ function check_checksum_data(&$report)
     $tmp2 = array();
     if( $filespassed == 0 )  $tmp2[] = lang('no_files_scanned');
     if( $errorlines ) $tmp2[] = lang('lines_in_error',$errorlines);
-    if( $filenotfound ) $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
+    if( count($filenotfound) ) $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
     if( $notreadable ) $tmp2[] = sprintf("%d %s",$notreadable,lang('files_not_readable'));
     if( $md5failed ) $tmp2[] = sprintf("%d %s",$md5failed,lang('files_checksum_failed'));
-    if( !empty($tmp) ) $tmp .= "<br>";
+    if( !empty($tmp) ) $tmp .= "<br/>";
 
-    $tmp = implode( "<br>", $tmp2 );
-    if( $filenotfound ) {
-      $tmp .= "<br>".lang('files_not_found').':';
-      $tmp .= "<br>".implode("<br>",$filenotfound)."<br>";
+    $tmp = implode( "<br/>", $tmp2 );
+    if( count($filenotfound) ) {
+      $tmp .= "<br/>".lang('files_not_found').':';
+      $tmp .= "<br/>".implode("<br/>",$filenotfound)."<br/>";
     }
-    if( $filesfailed ) {
-      $tmp .= "<br>".count($filesfailed).' '.lang('files_failed').':';
-      $tmp .= "<br>".implode("<br>",$filesfailed)."<br>";
+    if( count($filesfailed) ) {
+      $tmp .= "<br/>".count($filesfailed).' '.lang('files_failed').':';
+      $tmp .= "<br/>".implode("<br/>",$filesfailed)."<br/>";
     }
 
     $report = $tmp;
@@ -178,7 +178,7 @@ function generate_checksum_file(&$report)
   }
 
   $handlers = ob_list_handlers();
-  for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
+  for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
   header('Pragma: public');
   header('Expires: 0');
   header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -189,7 +189,7 @@ function generate_checksum_file(&$report)
   header('Content-Transfer-Encoding: binary');
   header('Content-Length: ' . strlen($output));
   echo $output;
-  exit;
+  exit();
 }
 
 // Get ready
@@ -224,5 +224,6 @@ $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 echo $smarty->fetch('checksum.tpl');
 include_once("footer.php");
+
 
 ?>

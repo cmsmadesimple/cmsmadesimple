@@ -41,10 +41,6 @@ $lang['help'] = <<<EOT
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. This module may not be used otherwise than in accordance with that license, or a later version of it if such is granted by the module's distributor.</p>
 EOT;
 
-// I 
-
-$lang['lbl_include_inactive_items'] = 'Include inactive items';
-
 // L
 $lang['lbl_content_search'] = 'Search Content Pages';
 $lang['lbl_css_search'] = 'Search Stylesheets';

@@ -28,7 +28,7 @@ $_debug = false;
 //$_compress = true;
 $_compress = false;
 $_interactive = false; //$_cli && (DIRECTORY_SEPARATOR !== '/');  //always false on windows
-$_tmpdir = sys_get_temp_dir().DIRECTORY_SEPARATOR.basename(__FILE__,'php').getmypid();
+$_tmpdir = sys_get_temp_dir().DIRECTORY_SEPARATOR.$_scriptname.'.'.getmypid();
 $_tmpfile = $_tmpdir.DIRECTORY_SEPARATOR.'tmp.out';
 $_configname = str_replace('.php', '.ini', $_scriptname);
 $_configfile = get_config_file();
@@ -39,33 +39,31 @@ $_outfile = OUTBASE;
 $_notdeleted = [];
 // modules to be kept for uninstallation, before any related files go away
 $uninstallmodules = [];
-// note careful not to exclude class.cms_config.php or Smarty files like smarty_internal_method*config.php
+
 $src_excludes = [
-'~\.git.*~',
-'~\.md$~i',
-'~\.svn~',
-'~svn\-.*~',
-'~index\.html?$~',
-'~[\\/]config\.php$~',
-'~siteuuid\.dat$~',
-'~master\.dat$~',
-'~master\.ini$~',
-'~\.htccess$~',
-'~web\.config$~i',
-'~phar_installer~',
-'~installer~',
-'~scripts~',
-'~tests~',
-'~UNUSED~',
-'~HIDE~',
-'~DEVELOP~',
-'~uploads~',
+'/\.git.*/',
+'/\.md$/i',
+'/\.svn/',
+'/svn\-.*/',
+'/index\.html?$/',
+'/config\.php$/',
+'/siteuuid\.dat$/',
+'/\.htccess$/',
+'/web\.config$/i',
+'/phar_installer/',
+'/installer/',
+'/scripts/',
+'/tests/',
+'/UNUSED/',
+'/HIDE/',
+'/DEVELOP/',
+'/uploads/',
 '/~$/',
-'~\.bak$~',
-'~#.*~',
-'~\.#.*~',
+'/\.bak$/',
+'/#.*/',
+'/\.#.*/',
 ];
-//TODO root-dir etc '~\.htaccess$~',
+//TODO root-dir  '/\.htaccess$/',
 
 // TODO completely ignore some places c.f. build_release script:
 $folder_excludes = [
@@ -110,8 +108,8 @@ if ($_cli) {
     'to',
     ]);
     // parse config-file argument
-    $val = (isset($opts['c'])) ? $opts['c'] : ((isset($opts['config'])) ? $opts['config'] : '');
-    if ($val) {
+    $val = $opts['c'] ?? $opts['config'] ?? null;
+    if ($val !== null) {
         $_configfile = $val;
     }
 }
@@ -441,9 +439,6 @@ if ($mode == 'd' || $mode == 'f') {
     $out = $obj->get_deleted_files();
     foreach ($out as $fn) {
         $file = $_fromdir.DIRECTORY_SEPARATOR.$fn;
-        if (is_dir($file)) {
-            continue;
-        }
         if ($mode == 'd') {
             $str = "DELETED :: $fn";
         } else {
@@ -475,9 +470,6 @@ if ($mode == 'n' || $mode == 'f') {
     $out = $obj->get_new_files();
     foreach ($out as $fn) {
         $file = $_todir.DIRECTORY_SEPARATOR.$fn;
-        if (is_dir($file)) {
-            continue;
-        }
         if ($mode == 'n') {
             $str = "ADDED :: $fn";
         } else {
@@ -532,13 +524,10 @@ if (defined('STDOUT') && $_outfile == STDOUT) {
     $file = '';
     if ($_to_ver) {
         $dir = __DIR__;
-        $base = basename($dir);
-        //the topmost reachable dirname is not '.' if there is any slash in the path
-        while ($dir != '.' && $dir != '/' && $base != 'phar_installer') {
+        while ($dir != '.' && basename($dir) != 'phar_installer') {
             $dir = dirname($dir);
-            $base = basename($dir);
         }
-        if ($dir !== '.' && $dir !== '/') {
+        if ($dir != '.') {
 //2.99+     $file = joinpath($dir, 'lib', 'upgrade', $_to_ver);
             $file = joinpath($dir, 'app', 'upgrade', $_to_ver);
             if (is_dir($file)) {
@@ -546,11 +535,11 @@ if (defined('STDOUT') && $_outfile == STDOUT) {
                     touch($file.DIRECTORY_SEPARATOR.'changelog.txt');
                 }
                 $file .= DIRECTORY_SEPARATOR.$_outfile;
-            } elseif (mkdir($file, 0777, true)) { // generic perms, pending actuals for installation
+            } elseif (mkdir($file, 0777, true)) { // generic perms, pending actuals for istallation
                 touch($file.DIRECTORY_SEPARATOR.'changelog.txt');
                 $file .= DIRECTORY_SEPARATOR.$_outfile;
             } else {
-                fatal('Cannot create upgrade-version folder ' . $file);
+                fatal('Cannot create upgrade-version folder');
             }
         } else {
             fatal('Cannot find upgrade-version data');
@@ -662,7 +651,7 @@ options
 EOT;
 }
 
-function output($str)
+function output(string $str)
 {
     global $_tmpfile;
     static $_mode = 'a';
@@ -675,44 +664,44 @@ function output($str)
     fclose($fh);
 }
 
-function info($str)
+function info(string $str)
 {
     if (defined('STDOUT')) {
         fwrite(STDOUT, "INFO: $str\n");
     } else {
-        echo("<br>INFO: $str");
+        echo("<br/>INFO: $str");
     }
 }
 
-function debug($str)
+function debug(string $str)
 {
     global $_debug;
     if ($_debug) {
         if (defined('STDOUT')) {
             fwrite(STDOUT, "DEBUG: $str\n");
         } else {
-            echo("<br>DEBUG: $str");
+            echo("<br/>DEBUG: $str");
         }
     }
 }
 
-function fatal($str)
+function fatal(string $str)
 {
     if (defined('STDERR')) {
         fwrite(STDERR, "FATAL: $str\n");
     } else {
-        echo("<br>FATAL: $str");
+        echo("<br/>FATAL: $str");
     }
     cleanup();
     exit(1);
 }
 
-function startswith($haystack, $needle)
+function startswith(string $haystack, string $needle) : bool
 {
     return (strncmp($haystack, $needle, strlen($needle)) == 0);
 }
 
-function endswith($haystack, $needle)
+function endswith(string $haystack, string $needle) : bool
 {
     $o = strlen($needle);
     if ($o > 0 && $o <= strlen($haystack)) {
@@ -730,7 +719,7 @@ function joinpath(...$segs)
     return str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
 }
 
-function rrmdir($dir)
+function rrmdir(string $dir)
 {
     if (is_dir($dir)) {
         $objects = scandir($dir);
@@ -763,7 +752,7 @@ function cleanup($signum = null)
     rrmdir($_tmpdir);
 }
 
-function ask_string($prompt, $dflt = null, $allow_empty = false)
+function ask_string(string $prompt, $dflt = null, bool $allow_empty = false)
 {
     while (1) {
         if ($dflt) {
@@ -787,7 +776,7 @@ function ask_string($prompt, $dflt = null, $allow_empty = false)
     }
 }
 
-function ask_options($prompt, array $options, $dflt)
+function ask_options(string $prompt, array $options, $dflt)
 {
     while (1) {
         if ($dflt) {
@@ -808,7 +797,7 @@ function ask_options($prompt, array $options, $dflt)
     }
 }
 
-function write_config_file(array $config_data, $filename)
+function write_config_file(array $config_data, string $filename)
 {
     @copy($filename, $filename.'.bak');
     $fh = fopen($filename, 'w');
@@ -834,7 +823,7 @@ function write_config_file(array $config_data, $filename)
     chmod($filename, 0666); // generic perms pending installation
 }
 
-function get_config_file()
+function get_config_file() : string
 {
     global $_configname;
     // detect user's home directory
@@ -855,7 +844,7 @@ function get_config_file()
     return '';
 }
 
-function rcopy($srcdir, $tmpdir)
+function rcopy(string $srcdir, string $tmpdir)
 {
     global $src_excludes;
 
@@ -895,25 +884,18 @@ function rcopy($srcdir, $tmpdir)
     }
 }
 
-function get_version($basedir)
+function get_version(string $basedir) : array
 {
     global  $CMS_VERSION, $CMS_VERSION_NAME, $CMS_SCHEMA_VERSION;
 
     $file = joinpath($basedir, 'lib', 'version.php');
     if (is_file($file)) {
-        $A = (isset($CMS_VERSION)) ? $CMS_VERSION : '';
-        $B = (isset($CMS_VERSION_NAME)) ? $CMS_VERSION_NAME : '';
-        $C = (isset($CMS_SCHEMA_VERSION)) ? $CMS_SCHEMA_VERSION : '';
-        if ($A) {
-            //prevent warning from re-definition of 3 consts in included 'to' version-file
-            $lvl = error_reporting();
-            error_reporting(0);
-        }
+        $A = $CMS_VERSION ?? '';
+        $B = $CMS_VERSION_NAME ?? '';
+        $C = $CMS_SCHEMA_VERSION ?? '';
         include $file;
         $ret = [$CMS_VERSION, $CMS_VERSION_NAME];
         if ($A) {
-            error_reporting($lvl);
-            // reinstate the 'from' release values
             $CMS_VERSION = $A;
             $CMS_VERSION_NAME = $B;
             $CMS_SCHEMA_VERSION = $C;
@@ -923,7 +905,7 @@ function get_version($basedir)
     return ['', ''];
 }
 
-function get_sources($sourceuri, $tmpdir)
+function get_sources(string $sourceuri, string $tmpdir) : bool
 {
     if (strncmp($sourceuri, 'file://', 7) == 0) {
         $dir = substr($sourceuri, 7);
@@ -979,7 +961,7 @@ function get_sources($sourceuri, $tmpdir)
     return false;
 }
 
-function get_svn_branch()
+function get_svn_branch() : string
 {
     $cmd = "svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
     $out = exec($cmd);
@@ -993,15 +975,13 @@ class compare_dirs
 {
     private $_a;
     private $_b;
-    private $_list_a;
-    private $_list_b;
     private $_do_md5;
     private $_has_run = null;
     private $_base_dir;
     private $_ignored = [];
     private $_donotdelete = [];
 
-    public function __construct($dir_a, $dir_b, $do_md5 = false)
+    public function __construct(string $dir_a, string $dir_b, bool $do_md5 = false)
     {
         if (!is_dir($dir_a)) {
             throw new Exception('Invalid directory '.$dir_a);
@@ -1068,7 +1048,7 @@ class compare_dirs
         $this->_list_b = $this->_read_dir($this->_b);
     }
 
-    public function get_new_files()
+    public function get_new_files() : array
     {
         $this->run();
 
@@ -1078,7 +1058,7 @@ class compare_dirs
         return array_diff($tmp_b, $tmp_a);
     }
 
-    public function get_deleted_files()
+    public function get_deleted_files() : array
     {
         $this->run();
 
@@ -1090,7 +1070,6 @@ class compare_dirs
             foreach ($out as $file) {
                 $skipped = false;
                 foreach ($this->_donotdelete as $nd) {
-                    //TODO skip / filter out dirs here ?
                     if (startswith($file, $nd)) {
                         // skip this file at this stage
                         $skipped = true;
@@ -1108,7 +1087,7 @@ class compare_dirs
         return $out;
     }
 
-    public function get_changed_files()
+    public function get_changed_files() : array
     {
         $this->run();
 
@@ -1126,7 +1105,7 @@ class compare_dirs
         return $out;
     }
 
-    private function _set_base($dir)
+    private function _set_base(string $dir)
     {
         $this->_base_dir = $dir;
     }
@@ -1136,7 +1115,7 @@ class compare_dirs
         return $this->_base_dir;
     }
 
-    private function _is_ignored($filename)
+    private function _is_ignored(string $filename) : bool
     {
         foreach ($this->_ignored as $pattern) {
             if ($pattern == $filename || fnmatch($pattern, $filename, FNM_CASEFOLD)) {

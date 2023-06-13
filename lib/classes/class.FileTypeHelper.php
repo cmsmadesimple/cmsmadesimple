@@ -57,11 +57,6 @@ class FileTypeHelper
      * @ignore
      */
     private $_document_extensions = ['doc','docx','odt','ods','odp','odg','odf','txt','pdf','text','xls','xlsx','ppt','pptx'];
-    /**
-     * @ignore
-     * browser-executable text-file extensions (also text)
-     */
-    private $_exe_extensions = ['php','php4','php5','phps','phtml'];
 
     /**
      * Constructor
@@ -88,7 +83,7 @@ class FileTypeHelper
      */
     protected function update_config_extensions( $member, $str = '' )
     {
-        $str = trim($str);
+        $str = trim($str ?? '');
         if( !$str ) return;
 
         $out = $this->$member;
@@ -134,14 +129,13 @@ class FileTypeHelper
      */
     public function get_mime_type( $filename )
     {
-        if( !$this->_mime_ok ) return '';
+        if( !$this->_mime_ok ) return;
         $fh = finfo_open(FILEINFO_MIME_TYPE);
         if( $fh ) {
             $mime_type = finfo_file($fh,$filename);
             finfo_close($fh);
             return $mime_type;
         }
-        return '';
     }
 
     /**
@@ -272,21 +266,6 @@ class FileTypeHelper
         // extensions only
         $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
         return in_array($ext, $this->_document_extensions );
-    }
-
-    /**
-     * Using the file extension, test whether the file name specified is
-     *  a known browser-executable file.
-     * @since 2.2.17
-     *
-     * @param string $filename At least the basename of a file
-     * @return bool
-     */
-    public function is_executable( $filename )
-    {
-        // extensions only
-        $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-        return in_array($ext, $this->_exe_extensions);
     }
 
     /**

@@ -36,7 +36,7 @@
  * @property    CmsApp $cms A reference to the application object (deprecated)
  * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
- * @property    ADOConnection $db  A reference to the global database configuration object (deprecated)
+ * @property    \CMSMS\Database\Connection $db  A reference to the global database configuration object (deprecated)
  */
 abstract class CMSModule
 {
@@ -246,10 +246,10 @@ abstract class CMSModule
      * @internal
      * @return mixed module call output.
      */
-    final static public function function_plugin($params,&$template)
+    final static public function function_plugin($params, $template)
     {
         $class = get_called_class();
-        if( $class != 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
+        if($class !== 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
         return cms_module_plugin($params,$template);
     }
 
@@ -407,7 +407,7 @@ abstract class CMSModule
      */
     final public function GetModulePath()
     {
-        if (is_subclass_of($this, 'CMSModule')) {
+        if ($this instanceof self) {
             return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
         }
         return __DIR__;
@@ -571,7 +571,7 @@ abstract class CMSModule
                     // Key not found in the map
                     // see if one matches via regular expressions
                     foreach( $map as $mk => $mv ) {
-                        if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
+                        if(FALSE === strpos($mk, CLEAN_REGEXP)) continue;
 
                         // mk is a regular expression
                         $ss = substr($mk,strlen(CLEAN_REGEXP));
@@ -609,11 +609,11 @@ abstract class CMSModule
                         break;
                     case 'CLEAN_FILE':
                         $value = realpath($value);
-                        if( $realpath === FALSE ) {
+                        if( $value === FALSE ) {
                             $value = CLEANED_FILENAME;
                         }
                         else {
-                            if( strpos($realpath, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
+                            if( strpos($value, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
                         }
                         $mappedcount++;
                         $mapped = true;
@@ -837,21 +837,23 @@ abstract class CMSModule
      * Returns the cms->config object as a reference
      *
      * @final
+     * @return \cms_config
      * @deprecated
-     * @return array The config hash.
      */
     final public function &GetConfig()
     {
         return \cms_config::get_instance();
     }
-
-    /**
-     * Returns the cms->db object as a reference
-     *
-     * @final
-     * @deprecated
-     * @return ADOConnection Adodb Database object.
-     */
+  
+  /**
+   * Returns the cms->db object as a reference
+   *
+   * @final
+   *
+   * @throws \Exception
+   * @deprecated
+   * @return \CMSMS\Database\Connection ADOConnection Adodb Database object
+   */
     final public function &GetDb()
     {
         return CmsApp::get_instance()->GetDb();
@@ -876,7 +878,7 @@ abstract class CMSModule
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param array  $params    Associative array containing content block parameters
-     * @param bool   $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+     * @param bool   $adding   A flag indicating whether the content editor is in create mode (adding) vs. edit mod.
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
      */
@@ -1009,19 +1011,21 @@ abstract class CMSModule
     {
         return FALSE;
     }
-
-    /**
-     * Function that will get called as module is uninstalled. This function should
-     * remove any database tables that it uses and perform any other cleanup duties.
-     * It should return a string message if there is a failure. Returning nothing
-     * (FALSE) will allow the uninstall procedure to proceed.
-     *
-     * The default behaviour of this function is to include a file called method.uninstall.php
-     * in your module directory to do uninstall operations.
-     *
-     * @abstract
-     * @return string|false A result of FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
-     */
+  
+  /**
+   * Function that will get called as module is uninstalled. This function should
+   * remove any database tables that it uses and perform any other cleanup duties.
+   * It should return a string message if there is a failure. Returning nothing
+   * (FALSE) will allow the uninstall procedure to proceed.
+   *
+   * The default behaviour of this function is to include a file called method.uninstall.php
+   * in your module directory to do uninstall operations.
+   *
+   * @abstract
+   * @return string|false A result of FALSE indicates that the module uninstalled correctly, any other value indicates
+   *                      an error message.
+   * @throws \Exception
+   */
     public function Uninstall()
     {
         $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
@@ -1209,7 +1213,7 @@ abstract class CMSModule
      * Returns true or false, depending on whether the user has the
      * right permissions to see the module in their Admin menus.
      *
-     * Typically permission checks are done in the overriden version of
+     * Typically, permission checks are done in the overridden version of
      * this method.
      *
      * Defaults to true.
@@ -1366,7 +1370,7 @@ abstract class CMSModule
      * @abstract
      * @param string $name The Name of the action to perform
      * @param string $id The ID of the module
-     * @param string $params The parameters targeted for this module
+     * @param array $params The parameters targeted for this module
      * @param int $returnid The current page id that is being displayed.
      * @return string output XHTML.
      */

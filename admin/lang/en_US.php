@@ -87,6 +87,7 @@ $lang['autoclearcache'] = "Automatically clear the cache every <em>N</em> days";
 $lang['autoclearcache2'] = "Remove cache files that are older than the specified number of days";
 $lang['autoinstallupgrade'] = "Automatically install or upgrade";
 $lang['automatedtask_success'] = "Automated task performed";
+$lang['settings_smtpautotls'] = "Auto TLS Encryption";
 
 ## B
 $lang['back'] = "Back to Menu";
@@ -1069,7 +1070,6 @@ $lang['info_this_templateuser'] = "This account is set as the template user.  Ne
 $lang['info_user_active'] = "Toggle this checkbox off to preserve the user information, but prevent the user from logging in to the Admin console";
 $lang['info_user_active2'] = "Toggle this flag to preserve the user information, but prevent the user from logging in to the Admin console";
 $lang['info_user_switch'] = "Test as this user";
-$lang['info_wait'] = "Wait a few minutes before proceeding.";
 $lang['info_validation'] = "This function will compare the checksums found in the uploaded file with the files on the current installation.  It can assist in finding problems with uploads, or exactly what files were modified if your system has been hacked.";
 $lang['insecure'] = "Insecure (HTTP)";
 //$lang['install'] = "Install";
@@ -1140,9 +1140,9 @@ $lang['logout'] = "Logout";
 $lang['lostpw'] = "Forgot your password?";
 $lang['lostpwemail'] = '
 <h3>Hello</h3>
-<p>This email was sent to you because a request has been made to recover the \'%s\' website admin-console password for user account \'%s\'. If you would like to reset the password for that account, click on the link below or paste it into the URL field of your favorite browser:</p>
+<p>You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the recovery link below or paste it into the URL field on your favorite browser:</p>
 <p><a href="%s">%s</a></p>
-<p>Or if this is incorrect, ignore this email and nothing will change.</p>';
+<p>If you feel this is incorrect or made in error, simply ignore the email and nothing will change.</p>';
 $lang['lostpwemailsubject'] = "[%s] Password Recovery";
 
 ## M

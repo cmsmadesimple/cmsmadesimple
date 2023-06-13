@@ -8,13 +8,13 @@
 {block name='contents'}
 
 <script type="text/javascript">
-$(function() {
-  $('#upgrade_info .link').css('cursor','pointer').on('click',function() {
-    var e = '#'+$(this).data('content');
-    $(e).dialog({
-      minWidth: 500,
-      modal: 'true'
-    });
+$(document).ready(function(){
+  $('#upgrade_info .link').css('cursor','pointer').click(function(){
+     var e = '#'+$(this).data('content');
+     $(e).dialog({
+       minWidth: 500,
+       modal: 'true'
+     })
   });
 });
 </script>
@@ -24,13 +24,13 @@ $(function() {
   {$label='install'|tr}
 
   {if $nofiles}
-    <div class="message blue">{'step2_nofiles'|tr}</div>
+    <div class="message yellow">{'step2_nofiles'|tr}</div>
   {/if}
 
   {if !isset($cmsms_info)}
-    <div class="message blue">{'step2_nocmsms'|tr}</div>
+    <div class="message yellow">{'step2_nocmsms'|tr}</div>
     {if !$install_empty_dir}
-    <div class="message yellow">{'step2_install_dirnotempty2'|tr}
+    <div class="message red">{'step2_install_dirnotempty2'|tr}
       {if !empty($existing_files)}
       <ul>
         {foreach $existing_files as $one}

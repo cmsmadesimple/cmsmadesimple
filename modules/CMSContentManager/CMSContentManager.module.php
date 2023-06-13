@@ -37,7 +37,7 @@
 final class CMSContentManager extends CMSModule
 {
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '1.1.9'; }
+    function GetVersion() { return '1.1.10'; }
     function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help'); }
     function GetAuthor() { return 'calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -71,9 +71,9 @@ final class CMSContentManager extends CMSModule
     public function GetAdminMenuItems()
     {
         $out = array();
-
-        if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
-            // user is entitled to see the main page in the navigation.
+  
+      if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
+        // user is entitled to see the main page in the navigation.
             $obj = CmsAdminMenuItem::from_module($this);
             $out[] = $obj;
         }

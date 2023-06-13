@@ -36,37 +36,37 @@ $(document).ready(function(){
     });
   }
 
-{if $content_obj->HasPreview()}
+    {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){
     if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
-      // serialize the form data
-      var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
-      data.push({
-        'name': '{$actionid}preview',
-        'value': 1
-      });
-      data.push({
-          'name': '{$actionid}ajax',
-          'value': 1
-      });
-      $.post('{$preview_ajax_url}&showtemplate=false', data, function (resultdata, text) {
-        if( resultdata != null && resultdata.response == 'Error' ) {
-          $('#previewframe').attr('src','').hide();
-          $('#preview_errors').html('<ul></ul>');
-          for( var i = 0; i < resultdata.details.length; i++ ) {
-            $('#preview_errors').append('<li>'+resultdata.details[i]+'</li>');
-          }
-          $('#previewerror').show();
-        }
-        else {
-          var x = new Date().getTime();
-          var url = '{$preview_url}&junk='+x;
-          $('#previewerror').hide();
-            $('#previewframe').attr('src', url).show();
-          }
-      },'json');
+    // serialize the form data
+    var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({
+      'name': '{$actionid}preview',
+      'value': 1
     });
-{/if}
+    data.push({
+      'name': '{$actionid}ajax',
+      'value': 1
+    });
+    $.post('{$preview_ajax_url}&showtemplate=false', data, function (resultdata, text) {
+      if( resultdata != null && resultdata.response == 'Error' ) {
+        $('#previewframe').attr('src','').hide();
+        $('#preview_errors').html('<ul></ul>');
+        for( var i = 0; i < resultdata.details.length; i++ ) {
+          $('#preview_errors').append('<li>'+resultdata.details[i]+'</li>');
+        }
+        $('#previewerror').show();
+      }
+      else {
+        var x = new Date().getTime();
+        var url = '{$preview_url}&junk='+x;
+        $('#previewerror').hide();
+        $('#previewframe').attr('src', url).show();
+      }
+    },'json');
+  });
+    {/if}
 
   // submit the form if disable wysiwyg, template id, and/or content-type fields are changed.
   $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
@@ -154,7 +154,7 @@ $(document).ready(function(){
     }
   });
 
-  {if isset($designchanged_ajax_url)}
+    {if isset($designchanged_ajax_url)}
   $('#design_id').change(function(e,edata){
     var v = $(this).val();
     var lastValue = $(this).data('lastValue');
@@ -196,7 +196,7 @@ $(document).ready(function(){
   $('#design_id').data('lastValue',$('#design_id').val());
   $('#template_id').data('lastValue',$('#template_id').val());
   $('#Edit_Content').dirtyForm('option','dirty',false);
-  {/if}
+    {/if}
 });
 // ]]>
 </script>
@@ -214,12 +214,12 @@ $(document).ready(function(){
   <p class="pageinput">
   <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}" class="pagebutton" title="{$mod->Lang('title_editpage_submit')}"/>
   <input type="submit" name="{$actionid}cancel" formnovalidate value="{$mod->Lang('cancel')}" class="pagebutton" title="{$mod->Lang('title_editpage_cancel')}"/>
-  {if $content_id > 0}
-  <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}" class="pagebutton" title="{$mod->Lang('title_editpage_apply')}"/>
-  {/if}
-  {if ($content_id > 0) && $content_obj->IsViewable() && $content_obj->Active()}
-  <a id="viewpage" rel="external" href="{$content_obj->GetURL()}" title="{$mod->Lang('title_editpage_view')}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
-  {/if}
+      {if $content_id != ''}
+        <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}" class="pagebutton" title="{$mod->Lang('title_editpage_apply')}"/>
+      {/if}
+      {if ($content_id != '') && $content_obj->IsViewable() && $content_obj->Active()}
+        <a id="viewpage" rel="external" href="{$content_obj->GetURL()}" title="{$mod->Lang('title_editpage_view')}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
+      {/if}
 </p>
 {/function}
 
@@ -227,31 +227,31 @@ $(document).ready(function(){
 <div id="Edit_Content">
 {form_start content_id=$content_id}
   <input type="hidden" id="active_tab" name="{$actionid}active_tab"/>
-  {submit_buttons}
+    {submit_buttons}
 
-  {* tab headers *}
-  {foreach $tab_names as $key => $tabname}
-    {tab_header name=$key label=$tabname active=$active_tab}
-  {/foreach}
-  {if $content_obj->HasPreview()}
-    {tab_header name='_preview_' label=$mod->Lang('prompt_preview')}
-  {/if}
+    {* tab headers *}
+    {foreach $tab_names as $key => $tabname}
+        {tab_header name=$key label=$tabname active=$active_tab}
+    {/foreach}
+    {if $content_obj->HasPreview()}
+        {tab_header name='_preview_' label=$mod->Lang('prompt_preview')}
+    {/if}
 
-  {* tab content *}
-  {foreach $tab_names as $key => $tabname}
-    {tab_start name=$key}
-      {if isset($tab_message_array[$key])}{$tab_message_array[$key]}{/if}
-      {if isset($tab_contents_array[$key])}
-        {foreach $tab_contents_array.$key as $fld}
-        <div class="pageoverflow">
+    {* tab content *}
+    {foreach $tab_names as $key => $tabname}
+        {tab_start name=$key}
+        {if isset($tab_message_array[$key])}{$tab_message_array[$key]}{/if}
+        {if isset($tab_contents_array[$key])}
+            {foreach $tab_contents_array.$key as $fld}
+              <div class="pageoverflow">
           <p class="pagetext">{$fld[0]|default:''}</p>
-          <p class="pageinput">{$fld[1]|default:''}{if isset($fld) && count($fld) == 3}<br/>{$fld[2]|default:''}{/if}</p>
+          <p class="pageinput">{$fld[1]|default:''}{if isset($fld) && is_array(fld) && count($fld) == 3}<br/>{$fld[2]|default:''}{/if}</p>
         </div>
-        {/foreach}
-      {/if}
-  {/foreach}
-  {if $content_obj->HasPreview()}
-    {tab_start name='_preview_'}
+            {/foreach}
+        {/if}
+    {/foreach}
+    {if $content_obj->HasPreview()}
+        {tab_start name='_preview_'}
       <div class="pagewarning">{$mod->Lang('info_preview_notice')}</div>
       <iframe name="_previewframe_" class="preview" id="previewframe"></iframe>
       <div id="previewerror" class="red" style="display: none; color: #000;">
@@ -260,7 +260,7 @@ $(document).ready(function(){
           <ul id="preview_errors"></ul>
         </fieldset>
       </div>
-  {/if}
-  {tab_end}
-{form_end}
+    {/if}
+    {tab_end}
+    {form_end}
 </div>{* #Edit_Content *}

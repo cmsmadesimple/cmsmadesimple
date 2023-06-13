@@ -31,10 +31,10 @@ Developers Past and Present
 - Christian Page <christian [AT] localdesert [DOT] com>
 - Darren Landrum <consul [AT] studioconsul [DOT] net>
 
-
+ 
 Translators
 -----------
-The following people have contributed translations to the CMS Made Simple core since March of 2009.
+The following people have contributed translations to the CMS Made Simple core since March of 2009.  
 If we have missed anybody please contact us and we will add your name for future releases.
 
 - Jacek Brzeski -- jacek [AT] numer9 [DOT] pl
@@ -100,7 +100,7 @@ If we have missed anybody please contact us and we will add your name for future
 - Alex -- html5sf [AT] gmail [DOT] com
 
 Past Translators:
-Translators are automatically removed from the list if not active two years before release of version.
+Translators are automatic removed from list if not active two years before release of version.  
 
 
 Contributors

@@ -64,7 +64,7 @@ namespace CMSMS\Database {
         public static function init(\cms_config $config)
         {
             $spec = new ConnectionSpec;
-            $spec->type = (isset($config['dbms'])) ? $config['dbms'] : ((isset($config['type'])) ? $config['type'] : 'mysqli');
+            $spec->type = $config['dbms'];
             $spec->host = $config['db_hostname'];
             $spec->username = $config['db_username'];
             $spec->password = $config['db_password'];
@@ -126,21 +126,21 @@ namespace {
      * @return \CMSMS\Database\DataDictionary
      * @deprecated
      */
-    function NewDataDictionary(\CMSMS\Database\Connection $conn)
+    function &NewDataDictionary(\CMSMS\Database\Connection $conn)
     {
         // called by module installation routines.
         return $conn->NewDataDictionary();
     }
 
     /**
-     * A function to create a new database connection object
+     * A function co create a new adodb database connection.
      *
      * @param string $dbms
      * @param string $flags
      * @return \CMSMS\Database\Connection
      * @deprecated
      */
-    function ADONewConnection( $dbms, $flags )
+    function &ADONewConnection( $dbms, $flags )
     {
         // now that our connection object is stateless... this is just a wrapper
         // for our global db instance.... but should not be called.
@@ -148,7 +148,7 @@ namespace {
     }
 
     /**
-     * A function formerly used to load the adodb library.
+     * A function forumerly used to load the adodb library.
      * This method currently has no functionality.
      *
      * @deprecated

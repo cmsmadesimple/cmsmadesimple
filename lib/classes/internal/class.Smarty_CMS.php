@@ -40,19 +40,22 @@ class Smarty_CMS extends CMSSmartyBase
 
     /**
      * Constructor
+     *
+     * @param array The hash of CMSMS config settings
      */
     public function __construct()
     {
-        global $CMS_INSTALL_PAGE;
         parent::__construct();
+        $this->direct_access_security = TRUE;
 
-//Smarty 2,3      $this->direct_access_security = TRUE;
+        global $CMS_INSTALL_PAGE;
+
         // Set template_c and cache dirs
         $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
         $this->setCacheDir(TMP_CACHE_LOCATION);
         $this->assignGlobal('app_name','CMSMS');
 
-        if (CMS_DEBUG) $this->error_reporting = E_ALL;
+        if (CMS_DEBUG == true) $this->error_reporting = E_ALL;
 
         // set our own template class with some funky stuff in it
         // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
@@ -67,19 +70,19 @@ class Smarty_CMS extends CMSSmartyBase
 
         // register default plugin handler
         $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
-
+        
         // Load User Defined Tags
         $_gCms = CmsApp::get_instance();
         if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
             $utops = UserTagOperations::get_instance();
             $usertags = $utops->ListUserTags();
 
-            if( !empty( $usertags ) ) {
-                foreach( $usertags as $id => $name ) {
-                    $function = $utops->CreateTagFunction($name);
-                    $this->registerPlugin('function',$name,$function,false);
-                }
-            }
+	    if( !empty( $usertags ) ) {
+            	foreach( $usertags as $id => $name ) {
+                	$function = $utops->CreateTagFunction($name);
+                	$this->registerPlugin('function',$name,$function,false);
+            	}
+	    }	
         }
 
         $config = cms_config::get_instance();
@@ -93,7 +96,7 @@ class Smarty_CMS extends CMSSmartyBase
             $this->addTemplateDir($config['assets_path'].'/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
-//see below            if(isset($CMS_INSTALL_PAGE)) return;
+            if(isset($CMS_INSTALL_PAGE)) return;
 
             if (is_sitedown()) {
                 $this->setCaching(false);
@@ -118,33 +121,28 @@ class Smarty_CMS extends CMSSmartyBase
             // compile check can only be enabled, if using smarty cache... just for safety.
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
 
-            // Enable custom security, permissive or not
-            $this->enableSecurity('CMSSmartySecurityPolicy');
+            // Enable security object
+            if( !$config['permissive_smarty'] ) $this->enableSecurity('CMSSmartySecurityPolicy');
         }
-        else if( $_gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+        else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
+            $config = cms_config::get_instance();
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');
-// TODO next release enable custom security (might be a breaker)
-//            $this->enableSecurity('CMSSmartySecurityPolicy');
-        }
-        else if( $_gCms->test_state(CmsApp::STATE_INSTALL) ) {
-            $this->addTemplateDir($config['assets_path'].'/templates');
-            // no change to default security during installer run
         }
     }
 
     /**
      * get_instance method
      *
-     * @return reference to object $this
+     * @return object $this
      */
     public static function &get_instance()
     {
         if( !self::$_instance ) {
-            self::$_instance = new self();
+            self::$_instance = new \Smarty_CMS;
         }
         return self::$_instance;
     }
@@ -231,7 +229,7 @@ class Smarty_CMS extends CMSSmartyBase
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
-
+        
         // plugins with the smarty_cms_function
         $cachable = TRUE;
         $dirs = [];
@@ -354,6 +352,8 @@ class Smarty_CMS extends CMSSmartyBase
     {
         $name = $template; if( startswith($name,'string:') ) $name = 'string:';
         debug_buffer('','Fetch '.$name.' start');
+      //$this->unregister_modifier('date_format');
+      //$this->registerPlugin('modifier', 'date_format', [$this, '_modifier_date_format']);
 
         // we called the root smarty fetch method instead of some template object's fetch method directly.
         // which is the case for things like Module::ProcessTemplate and Module::ProcessTemplateFromDatabase etc..()

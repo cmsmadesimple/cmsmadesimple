@@ -163,7 +163,7 @@ $lang['need_upgrade'] = 'This module is awaiting upgrade';
 $lang['newerversion'] = 'Newer version installed';
 $lang['newer_available'] = 'New version available';
 $lang['notavailable'] = 'This module cannot be loaded. Possibly due to dependencies';
-$lang['notcompatibile'] = 'This module is not compatible with this version of CMSMS';
+$lang['notcompatible'] = 'This module is not compatible with this version of CMSMS';
 $lang['notice'] = 'Notice';
 $lang['notinstalled'] = 'Not installed';
 

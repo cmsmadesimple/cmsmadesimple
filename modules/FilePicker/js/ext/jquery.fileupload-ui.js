@@ -149,7 +149,6 @@
                     // the progress to 100%, showing the full animated bar:
                     data.context
                         .find('.progress').addClass(
-                            //TODO replace deprecated $.support
                             !$.support.transition && 'progress-animated'
                         )
                         .attr('aria-valuenow', 100)
@@ -681,7 +680,6 @@
         _create: function () {
             this._super();
             this._resetFinishedDeferreds();
-            //TODO replace deprecated $.support
             if (!$.support.fileInput) {
                 this._disableFileInputButton();
             }

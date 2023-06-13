@@ -16,10 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_page_error($params,$template)
+function smarty_function_page_error($params,&$template)
 {
 	$smarty = $template->smarty;
-
+  
 	if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 	if( !isset($params['msg']) ) return;
 

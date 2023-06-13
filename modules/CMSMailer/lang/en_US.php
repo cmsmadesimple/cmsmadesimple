@@ -1,15 +1,16 @@
 <?php
 $lang['friendlyname'] = 'CMSMailer';
 
+// H
 $lang['help'] = '<h3>What Does This Do?</h3>
-<p>This module is mainly for managing changes of backend mail-send libraries, independently from CMSMS core updates.</p>
-<p>This module continues to provide long-deprecated methods which wrap cms_mailer class methods, some of them with a slightly different name. As such, CMSMailer can be, but these days should not be, used by other modules.</p>
+<p><strong>NOTE:</strong> This module is deprecated and will be removed in later versions of CMSMS.</p>
+<p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  That\'s it, nothing more.</p>
 <h3>How Do I Use It</h3>
-<p>Below is an example, and a brief API reference. Please read the PHPMailer documentation for more information.</p>
+<p>This module provides a simple wrapper around all of the methods and variables of phpmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the PHPMailer documentation included for more information.</p>
 <h3>An Example</h3>
 <pre>
   $cmsmailer = $this->GetModuleInstance(\'CMSMailer\');
-  $cmsmailer->AddAddress(\'you@overthere.com\',\'yourname\');
+  $cmsmailer->AddAddress(\'calguy1000@hotmail.com\',\'calguy\');
   $cmsmailer->SetBody(\'&lt;h4&gt;This is a test message&lt;/h4&gt;\');
   $cmsmailer->IsHTML(true);
   $cmsmailer->SetSubject(\'Test message\');
@@ -247,19 +248,22 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 </li>
 </ul>
 <h3>Support</h3>
-<p>There are a couple of resources available to help you with this module:</p>
+<p>This module does not include commercial support. However, there are a number of resources available to help you with it:</p>
 <ul>
-<li>For the latest version of this module, FAQs, or to file a Bug Report, please visit the CMSMS Forge.</li>
-<li>Additional discussion of this module may be found in the <a href=\'https://forum.cmsmadesimple.org\'>CMS Made Simple Forums</a>.</li>
+<li>For the latest version of this module, FAQs, or to file a Bug Report or buy commercial support, please visit the CMSMS Forge.</li>
+<li>Additional discussion of this module may also be found in the <a href=\'https://forum.cmsmadesimple.org\'>CMS Made Simple Forums</a>.</li>
+<li>The author, calguy1000, can often be found in the <a href=\'irc://irc.freenode.net/#cms\'>CMS IRC Channel</a>.</li>
+<li>Lastly, you may have some success emailing the author directly.</li>  
 </ul>
 <p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2005-2023 CMS Made Simple Foundation <a href=\'mailto:foundation@smamadesimple.org\'>&lt;CMSMS Foundation&gt;</a>. All rights reserved.</p>
-<p>This module has been released under the <a href=\'http://www.gnu.org/licenses/licenses.html#GPL\'>GNU General Public License</a>. This module may not be distributed or used otherwise than in accordance with that license.</p>
+<p>Copyright &copy; 2005, Robert Campbell <a href=\'mailto:calguy1000@hotmail.com\'>&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
+<p>This module has been released under the <a href=\'http://www.gnu.org/licenses/licenses.html#GPL\'>GNU Public License</a>. You must agree to this license before using the module.</p>
 ';
 
-$lang['moddescription'] = 'This is an email-libraries version-manager and a deprecated simple wrapper around cms_mailer class methods.';
+$lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.  This module is deprecated as of CMSMS 2.0';
+
 $lang['postinstall'] = 'CMSMailer module has been successfully installed';
 $lang['postuninstall'] = 'CMSMailer module uninstalled... sorry to see you leave';

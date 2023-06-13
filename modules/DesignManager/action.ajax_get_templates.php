@@ -1,7 +1,7 @@
 <?php
 
 $handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 try {
     $tmp = get_parameter_value($_REQUEST,'filter');
@@ -11,7 +11,7 @@ try {
 
     $tpl_query = new CmsLayoutTemplateQuery($filter);
     $templates = $tpl_query->GetMatches();
-    if( $templates ) {
+    if( count($templates) ) {
         $smarty->assign('templates',$templates);
         $tpl_nav = array();
         $tpl_nav['pagelimit'] = $tpl_query->limit;
@@ -22,7 +22,7 @@ try {
     }
 
     $designs = CmsLayoutCollection::get_all();
-    if( $designs ) {
+    if( count($designs) ) {
         $smarty->assign('list_designs',$designs);
         $tmp = array();
         for( $i = 0; $i < count($designs); $i++ ) {
@@ -34,7 +34,7 @@ try {
 
     $types = CmsLayoutTemplateType::get_all();
     $originators = array();
-    if( $types ) {
+    if( count($types) ) {
         $tmp = array();
         $tmp2 = array();
         $tmp3 = array();
@@ -64,6 +64,7 @@ try {
 }
 catch( Exception $e ) {
     echo '<div class="red">'.$e->GetMessage().'</div>';
+    // nothing here
 }
 exit;
 

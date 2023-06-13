@@ -24,11 +24,19 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
-
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 /**
- * A class for sending email. It wraps PHPMailer usage for CMSMS.
+ * This file contains the class that wraps PHPMailer usage for CMSMS.
+ *
+ * @package CMS
+ * @license GPL
+ */
+
+/**
+ * A class for sending email.
+ *
  * Prior to CMSMS 2.0 this class was implemented as a core module.
  *
  * @package CMS
@@ -46,19 +54,18 @@ class cms_mailer
   /**
    * Constructor
    *
-   * @param bool $exceptions Optionally enable phpmailer exceptions.
-   * @since 2.2.17 Default false
+   * @param bool $exceptions Optionally disable exceptions, and rely on error strings.
    */
-  public function __construct($exceptions = false)
+  public function __construct($exceptions = true)
   {
-    if (@spl_autoload_register([__CLASS__, 'MailerAutoload'], false)) {
-      $this->_mailer = new PHPMailer($exceptions);
-      $this->reset();
-    } else {
-      $this->_mailer = null;
-      //TODO handle error more-publicly e.g. throw
-      audit('', 'cms_mailer', 'PHPMailer-autoload registration failed');
-    }
+    $dir = dirname(__DIR__).'/phpmailer/';
+    
+    require_once($dir.'Exception.php');
+    require_once($dir.'PHPMailer.php');
+    require_once($dir.'SMTP.php');
+
+    $this->_mailer = new PHPMailer($exceptions);
+    $this->reset();
   }
 
   /**
@@ -68,58 +75,70 @@ class cms_mailer
    * @param string $method Call method to call from PHP Mailer
    * @param array $args Arguments passed to PHP Mailer method
    */
-  #[\ReturnTypeWillChange]
-  public function __call($method,$args)
+  public function __call($method, $args)
   {
-    if( method_exists($this->_mailer, $method) )
-        return call_user_func_array(array($this->_mailer,$method), $args);
+    if(method_exists($this->_mailer, $method))
+    {
+      return call_user_func_array([$this->_mailer, $method], $args);
+    }
   }
-
+  
   /**
-   * Autoloader for PHPMailer 6+
-   * @since 2.2.17
-   * @param string $classname
+   * @param $name
+   * @param $value
    */
-  public function MailerAutoload($classname)
+  public function __set($name, $value)
   {
-    if ($classname[0] === 'P' && strpos($classname, 'PHPMailer') === 0) {
-      $class = basename(strtr($classname, '\\', DIRECTORY_SEPARATOR));
-      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'src', $class.'.php');
-      if (is_readable($filename)) {
-        require_once $filename;
-      }
-      return;
+    if(property_exists($this->_mailer, $name))
+    {
+      $this->_mailer->$name = $value;
     }
-    if ($classname[0] === 'L' && strpos($classname, 'League\OAuth2\Client') === 0) {
-      //League\OAuth2\Client\A\class
-      $sp = str_replace('League\OAuth2\Client\\', '', $classname);
-      $bp = strtr($sp, '\\', DIRECTORY_SEPARATOR);
-      $filename = cms_join_path(dirname(__DIR__), 'phpmailer', 'oauth2', $bp.'.php');
-      if (is_readable($filename)) {
-        require_once $filename;
-      }
+  }
+  
+  /**
+   * @param $name
+   */
+  public function __get($name)
+  {
+    if(property_exists($this->_mailer, $name))
+    {
+      return $this->_mailer->$name;
     }
+    
+    return null;
+  }
+  
+  /**
+   * @param $name
+   *
+   * @return bool
+   */
+  public function __isset($name)
+  {
+    return property_exists($this->_mailer, $name);
   }
 
   /**
    * Reset the mailer to standard settings
+   * We use the set global preferences here
    */
   public function reset()
   {
-    $prefs = unserialize(cms_siteprefs::get('mailprefs'));
-    $this->_mailer->Mailer = get_parameter_value($prefs,'mailer','mail');
-    $this->_mailer->Sendmail = get_parameter_value($prefs,'sendmail','/usr/sbin/sendmail');
-    $this->_mailer->Timeout = get_parameter_value($prefs,'timeout',60);
-    $this->_mailer->Port = get_parameter_value($prefs,'port',25);
-    $this->_mailer->FromName = get_parameter_value($prefs,'fromuser');
-    $this->_mailer->From = get_parameter_value($prefs,'from');
-    $this->_mailer->Host = get_parameter_value($prefs,'host');
-    $this->_mailer->SMTPAuth = get_parameter_value($prefs,'smtpauth',0);
-    $this->_mailer->Username = get_parameter_value($prefs,'username');
-    $this->_mailer->Password = get_parameter_value($prefs,'password');
-    $this->_mailer->SMTPSecure = get_parameter_value($prefs,'secure');
-    $this->_mailer->CharSet = get_parameter_value($prefs,'charset','utf-8');
-    $this->_mailer->ErrorInfo = '';
+    $prefs                      = unserialize(cms_siteprefs::get('mailprefs'));
+    $this->_mailer->Mailer      = get_parameter_value($prefs, 'mailer', 'mail');
+    $this->_mailer->Sendmail    = get_parameter_value($prefs, 'sendmail', '/usr/sbin/sendmail');
+    $this->_mailer->Timeout     = get_parameter_value($prefs, 'timeout', 60);
+    $this->_mailer->Port        = get_parameter_value($prefs, 'port', 25);
+    $this->_mailer->FromName    = get_parameter_value($prefs, 'fromuser');
+    $this->_mailer->From        = get_parameter_value($prefs, 'from');
+    $this->_mailer->Host        = get_parameter_value($prefs, 'host');
+    $this->_mailer->SMTPAuth    = get_parameter_value($prefs, 'smtpauth', 0);
+    $this->_mailer->SMTPAutoTLS = get_parameter_value($prefs, 'smtpautotls', 1);
+    $this->_mailer->Username    = get_parameter_value($prefs, 'username');
+    $this->_mailer->Password    = get_parameter_value($prefs, 'password');
+    $this->_mailer->SMTPSecure  = get_parameter_value($prefs, 'secure');
+    $this->_mailer->CharSet     = get_parameter_value($prefs, 'charset', 'utf-8');
+    $this->_mailer->ErrorInfo   = '';
     $this->_mailer->ClearAllRecipients();
     $this->_mailer->ClearAttachments();
     $this->_mailer->ClearCustomHeaders();
@@ -190,7 +209,7 @@ class cms_mailer
   /**
    * Retrieve the reading confirmation email address
    *
-   * @return string The email address (if any) that will receive the reading confirmation.
+   * @return string The email address (if any) that will recieve the reading confirmation.
    */
   function GetConfirmReadingTo()
   {
@@ -837,11 +856,7 @@ class cms_mailer
    */
   function Send()
   {
-    try {
-      return $this->_mailer->Send();
-    } catch (\Exception $e) {
-      return false;
-    }
+    return $this->_mailer->Send();
   }
 
   /**

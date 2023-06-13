@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2023 CMS Made Simple Foundation Inc
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,7 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id:$
+#$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
+if( !isset($gCms) ) exit;
 
 final class MenuManager extends CMSModule
 {
@@ -24,7 +25,7 @@ final class MenuManager extends CMSModule
   function GetFriendlyName() { return $this->Lang('menumanager'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }
-  function GetVersion() { return '1.50.4'; }
+  function GetVersion() { return '1.50.3'; }
   function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'layout'; }
@@ -32,8 +33,8 @@ final class MenuManager extends CMSModule
   function LazyLoadAdmin() { return TRUE; }
   function GetHelp($lang='en_US') { return $this->Lang('help'); }
   function GetAuthor() { return 'Ted Kulp'; }
-  function GetAuthorEmail() { return ''; }
-  function GetChangeLog() { return file_get_contents(__DIR__.'/changelog.inc'); }
+  function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
 
   function InstallPostMessage()
   {
@@ -93,7 +94,7 @@ final class MenuManager extends CMSModule
       $excludeprefix = trim($params['excludeprefix']);
     }
 
-    if( isset($params['show_all']) ) {
+    if (isset($params['show_all'])) {
       $show_all = $params['show_all'];
     }
     else {
@@ -101,86 +102,86 @@ final class MenuManager extends CMSModule
     }
 
     $nadded = 0;
-    if( isset($parentnode) ) {
+    if (isset($parentnode)) {
       $children = $parentnode->getChildren($deep);
-      if( $children ) {
-        $nchildren = count($children);
-        $nc = -1;
-        foreach( $children as &$onechild ) {
-          $nc++;
-          $content = $onechild->GetContent($deep);
-          if( !is_object($content) ) {
-            // uhm, couldn't get the content object... this is strange
-            // should I trigger an error?
-            $nchildren--;
-            continue;
-          }
+      if (isset($children) && count($children)) {
+	reset($children);
+	$nchildren = count($children);
+	$nc = -1;
+	while (list($key) = each($children)) {
+	  $nc++;
+	  $onechild =& $children[$key];
+	  $content = $onechild->GetContent($deep);
+	  if( !is_object($content) ) {
+	    // uhm, couldn't get the content object... this is strange
+	    // should I trigger an error?
+	    $nchildren--;
+	    continue;
+	  }
 
-          // see if we need to explicitly include this content
-          $includeit = 1;
-          if( $includeprefix != '' ) {
-            $includeit = 0;
-            $alias = $content->Alias();
-            $prefixes = explode(',',$includeprefix);
-            foreach( $prefixes as $oneprefix ) {
-              if( strpos($alias,$oneprefix) !== false ) {
-                $includeit = 1;
-                break;
-              }
-            }
-          }
+	  // see if we need to explicitly include this content
+	  $includeit = 1;
+	  if( $includeprefix != '' ) {
+	    $includeit = 0;
+	    $prefixes = explode(',',$includeprefix);
+	    foreach( $prefixes as $oneprefix ) {
+	      if( strstr($content->Alias(),$oneprefix) !== FALSE ) {
+		$includeit = 1;
+		break;
+	      }
+	    }
+	  }
 
-          // see if we need to explicitly exclude this content
-          $excludeit = 0;
-          if( $excludeprefix != '' ) {
-            $alias = $content->Alias();
-            $prefixes = explode(',',$excludeprefix);
-            foreach( $prefixes as $oneprefix ) {
-              if( strpos($alias,$oneprefix) !== false ) {
-                $excludeit = 1;
-                break;
-              }
-            }
-          }
+	  // see if we need to explicitly exclude this content
+	  $excludeit = 0;
+	  if( $excludeprefix != '' ) {
+	    $prefixes = explode(',',$excludeprefix);
+	    foreach( $prefixes as $oneprefix ) {
+	      if( strstr($content->Alias(),$oneprefix) !== FALSE ) {
+		$excludeit = 1;
+		break;
+	      }
+	    }
+	  }
 
-          if( $content != NULL && $content->Active() &&
-              ($includeit && !$excludeit) &&
-              ($content->ShowInMenu() || ($show_all == 1  && !$content->IsSystemPage())) ) {
-            $newnode = $this->FillNode($content, $onechild, $nodelist, $count, $prevdepth, $origdepth, $deep, $params);
-            if( $nc == 0 ) {
-              $newnode->first = 1;
-            }
-            if( $nc >= $nchildren - 1 ) {
-              $newnode->last = 1;
-            }
-            $nadded++;
+	  if ($content != NULL && $content->Active() &&
+	      ($includeit && !$excludeit) &&
+	      ($content->ShowInMenu() || ($show_all == 1  && !$content->IsSystemPage()))) {
+	    $newnode = $this->FillNode($content, $onechild, $nodelist,
+				       $count, $prevdepth, $origdepth, $deep, $params);
+	    if( $nc == 0 ) {
+	      $newnode->first = 1;
+	    }
+	    if( $nc >= $nchildren - 1 ) {
+	      $newnode->last = 1;
+	    }
+	    $nadded++;
 
-            //Ok, this one is nasty...
-            //First part checks to see if number_of_levels is set and whether the current depth is deeper than the set number_of_levels depth (opposite logic, actually)
-            //Second part checks to see if showparents is set...  if so, then it checks to see if this hierarchy position is one of them
-            //If either of these things occurs, then try to show the children of this node
-            $n = (int)($newnode->depth);
-            $limit_levels = isset($params['number_of_levels']);
-            $have_depth = $limit_levels && ($n < (int)$params['number_of_levels']);
-            $collapsing = count($showparents) > 0;
-            $in_collapse_path = $collapsing && in_array($content->Hierarchy().'.',$showparents);
-            if( ($limit_levels && $have_depth && !$collapsing) ||
-                ($in_collapse_path && ($have_depth || !$limit_levels)) || (!$limit_levels && !$collapsing) ) {
-              $tmp = $this->GetChildNodes($onechild, $nodelist, $gCms, $prevdepth, $count, $params, $origdepth, $showparents, $deep); //recurse
-              if( $tmp ) {
-                $nadded += $tmp;
-                $newnode->haschildren = true;
-              }
-            }
-          }
-        }
-        unset($onechild);
+	    //Ok, this one is nasty...
+	    //First part checks to see if number_of_levels is set and whether the current depth is deeper than the set number_of_levels depth (opposite logic, actually)
+	    //Second part checks to see if showparents is set...  if so, then it checks to see if this hierarchy position is one of them
+	    //If either of these things occurs, then try to show the children of this node
+	    $n = (int)($newnode->depth);
+	    $limit_levels = isset($params['number_of_levels']);
+	    $have_depth = $limit_levels && ($n < (int)$params['number_of_levels']);
+	    $collapsing = count($showparents) > 0;
+	    $in_collapse_path = $collapsing && in_array($content->Hierarchy().'.',$showparents);
+	    if( ($limit_levels && $have_depth && !$collapsing) ||
+		($in_collapse_path && ($have_depth || !$limit_levels)) || (!$limit_levels && !$collapsing) ) {
+	      $tmp = $this->GetChildNodes($onechild, $nodelist, $gCms, $prevdepth, $count, $params, $origdepth, $showparents, $deep);
+	      if( $tmp ) {
+		$nadded += $tmp;
+		$newnode->haschildren = true;
+	      }
+	    }
+	  }
+	}
       }
     }
     return $nadded;
   }
 
-  protected function &FillNode(&$content, &$node, &$nodelist, &$count, &$prevdepth, $origdepth, $deep = false, $params = array())
+  protected function & FillNode(&$content, &$node, &$nodelist, &$count, &$prevdepth, $origdepth, $deep = false, $params = array())
   {
     $onenode = new stdClass();
     $onenode->id = $content->Id();
@@ -199,20 +200,19 @@ final class MenuManager extends CMSModule
     }
     $onenode->depth = count(explode('.', $content->Hierarchy())) - ($origdepth - 1);
     $onenode->prevdepth = $prevdepth - ($origdepth - 1);
-    if( $onenode->prevdepth == 0 ) {
+    if ($onenode->prevdepth == 0)
       $onenode->prevdepth = 1;
-    }
     $onenode->children_exist = false;
-    if( is_object($node) && $node->has_children() ) {
+    if (is_object($node) && $node->has_children()) {
       $children = $node->get_children();
       if( $children ) {
-        for( $i = 0; $i < count($children); $i++ ) {
-          $tmpc = $children[$i]->getContent(false,true,true);
-          if( is_object($tmpc) && $tmpc->Active() && $tmpc->ShowInMenu() ) {
-            $onenode->children_exist = true;
-            break;
-          }
-        }
+	for( $i = 0; $i < count($children); $i++ ) {
+	  $tmpc = $children[$i]->getContent(false,true,true);
+	  if( is_object($tmpc) && $tmpc->Active() && $tmpc->ShowInMenu() ) {
+	    $onenode->children_exist = true;
+	    break;
+	  }
+	}
       }
     }
     $prevdepth = $onenode->depth + ($origdepth - 1);
@@ -224,38 +224,38 @@ final class MenuManager extends CMSModule
     $onenode->parent = false;
     $count++;
 
+    $gCms = \CmsApp::get_instance();
     if( $deep ) {
-      $config = \cms_config::get_instance();
+        $config = \cms_config::get_instance();
       $onenode->extra1 = $content->GetPropertyValue('extra1');
       $onenode->extra2 = $content->GetPropertyValue('extra2');
       $onenode->extra3 = $content->GetPropertyValue('extra3');
       $tmp = $content->GetPropertyValue('image');
-      if( $tmp && $tmp != -1 ) {
-        $url = get_site_preference('content_imagefield_path').'/'.$tmp;
-        if( !startswith($url,'/') ) { $url = '/'.$url; }
-        $url = $config['image_uploads_url'].$url;
-        $onenode->image = $url;
+      if( !empty($tmp) && $tmp != -1 ) {
+	$url = get_site_preference('content_imagefield_path').'/'.$tmp;
+	if( !startswith($url,'/') ) $url = '/'.$url;
+	$url = $config['image_uploads_url'].$url;
+	$onenode->image = $url;
       }
       $tmp = $content->GetPropertyValue('thumbnail');
-      if( $tmp && $tmp != -1 ) {
-        $url = get_site_preference('content_thumbnailfield_path').'/'.$tmp;
-        if( !startswith($url,'/') ) { $url = '/'.$url; }
-        $url = $config['image_uploads_url'].$url;
-        $onenode->thumbnail = $url;
+      if( !empty($tmp) && $tmp != -1 ) {
+	$url = get_site_preference('content_thumbnailfield_path').'/'.$tmp;
+	if( !startswith($url,'/') ) $url = '/'.$url;
+	$url = $config['image_uploads_url'].$url;
+	$onenode->thumbnail = $url;
       }
-      if( $content->HasProperty('target') ) {
-        $onenode->target = $content->GetPropertyValue('target');
-      }
+      if ($content->HasProperty('target'))
+	$onenode->target = $content->GetPropertyValue('target');
     }
 
-    if( $onenode->id == \CmsApp::get_instance()->get_content_id() ) {
+    if( $onenode->id == $gCms->get_content_id() ) {
       $onenode->current = true;
     }
     else {
       $onenode->current = false;
       //So, it's not current.  Lets check to see if it's a direct parent of the current page.
       if( ContentOperations::get_instance()->CheckParentage($onenode->id) ) {
-        $onenode->parent = true;
+	$onenode->parent = true;
       }
     }
 
@@ -275,15 +275,15 @@ final class MenuManager extends CMSModule
     //      substr($str, nthPos($str, "/\\:", 4)) => \photos\Party\Phoebe.jpg
     $pos = -1;
     $size = strlen($str);
-    if( $reverse=($n<0) ) { $n=-$n; $str = strrev($str); }
+    if ($reverse=($n<0)) { $n=-$n; $str = strrev($str); }
     while ($n--) {
       $bestNewPos = $size;
-      for( $i=strlen($needles)-1;$i>=0;$i-- ) {
-        $newPos = strpos($str, $needles[$i], $pos+1);
-        if( $newPos===false ) { $needles = substr($needles,0,$i) . substr($needles,$i+1); }
-        else { $bestNewPos = min($bestNewPos,$newPos); }
+      for ($i=strlen($needles)-1;$i>=0;$i--) {
+	$newPos = strpos($str, $needles[$i], $pos+1);
+	if ($newPos===false) $needles = substr($needles,0,$i) . substr($needles,$i+1);
+	else $bestNewPos = min($bestNewPos,$newPos);
       }
-      if( ($pos=$bestNewPos)==$size ) { return -1; }
+      if (($pos=$bestNewPos)==$size) return -1;
     }
     return $reverse ? $size-1-$pos : $pos;
   }
@@ -298,8 +298,7 @@ final class MenuManager extends CMSModule
   final public static function page_type_lang_callback($str)
   {
     $mod = cms_utils::get_module('MenuManager');
-    if( is_object($mod) ) { return $mod->Lang('type_'.$str); }
-    return '';
+    if( is_object($mod) ) return $mod->Lang('type_'.$str);
   }
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
@@ -308,24 +307,20 @@ final class MenuManager extends CMSModule
       throw new CmsLogicException('Cannot reset contents for this template type');
     }
 
+    $fn = null;
     switch( $type->get_name() ) {
     case 'navigation':
       $fn = 'simple_navigation.tpl';
       break;
-    default:
-      $fn = '';
-      break;
     }
 
-    if( $fn ) {
-      $fn = cms_join_path(__DIR__,'templates',$fn);
-      if( file_exists($fn) ) {
-        return @file_get_contents($fn);
-      }
+    $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
+    if( file_exists($fn) ) {
+      return @file_get_contents($fn);
     }
-    return '';
   }
 
-} // end of class
+} // End of class
+
 
 ?>

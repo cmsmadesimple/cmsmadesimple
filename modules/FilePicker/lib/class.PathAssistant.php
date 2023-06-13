@@ -54,8 +54,8 @@ class PathAssistant
 
     public function is_relative_to( $path_a, $path_b )
     {
-        $path_a = realpath( $path_a );
-        $path_b = realpath( $path_b );
+        $path_a = \realpath( (string)$path_a );
+        $path_b = \realpath( (string)$path_b );
         if( !$path_a || ! $path_b ) return FALSE;
 
         return startswith( $path_a, $path_b);

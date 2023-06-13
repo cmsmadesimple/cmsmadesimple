@@ -38,7 +38,7 @@
      */
     SX.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-    $(function () {
+    $(document).ready(function () {
 
         // add class to body if mobile device detected (just for convenience)
         if (SX.isMobile) {

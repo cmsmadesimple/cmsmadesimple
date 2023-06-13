@@ -2,11 +2,6 @@
 
 namespace cms_autoinstaller;
 
-use Exception;
-use PharFileInfo;
-use function __appbase\get_app;
-use function __appbase\lang;
-
 abstract class filehandler
 {
   private $_destdir;
@@ -15,19 +10,19 @@ abstract class filehandler
 
   protected function get_config()
   {
-    return get_app()->get_config();
+    return \__appbase\get_app()->get_config();
   }
 
   public function set_destdir($destdir)
   {
-    if( !is_dir($destdir) ) throw new Exception(lang('error_dirnotvalid',$destdir));
-    if( !is_writable($destdir) ) throw new Exception(lang('error_dirnotvalid',$destdir));
+    if( !is_dir($destdir) ) throw new \Exception(\__appbase\lang('error_dirnotvalid',$destdir));
+    if( !is_writable($destdir) ) throw new \Exception(\__appbase\lang('error_dirnotvalid',$destdir));
     $this->_destdir = $destdir;
   }
 
   public function get_destdir()
   {
-    if( !$this->_destdir ) throw new Exception(lang('error_nodestdir'));
+    if( !$this->_destdir ) throw new \Exception(\__appbase\lang('error_nodestdir'));
     return $this->_destdir;
   }
 
@@ -44,7 +39,7 @@ abstract class filehandler
 
   public function set_output_fn($fn)
   {
-    if( !is_callable($fn) ) throw new Exception(lang('error_internal',1102));
+    if( !is_callable($fn) ) throw new \Exception(\__appbase\lang('error_internal',1102));
     $this->_output_fn = $fn;
   }
 
@@ -56,7 +51,7 @@ abstract class filehandler
   protected function is_excluded($filespec)
   {
     $filespec = trim($filespec);
-    if( !$filespec ) throw new Exception(lang('error_internal',1101));
+    if( !$filespec ) throw new \Exception(\__appbase\lang('error_internal',1101));
     $config = $this->get_config();
     if( !isset($config['install_excludes']) ) return FALSE;
 
@@ -64,13 +59,12 @@ abstract class filehandler
     foreach( $excludes as $excl ) {
       if( preg_match($excl,$filespec) ) return TRUE;
     }
-    return FALSE;
   }
 
   protected function dir_exists($filespec)
   {
     $filespec = trim($filespec);
-    if( !$filespec ) throw new Exception(lang('error_invalidparam','filespec'));
+    if( !$filespec ) throw new \Exception(\__appbase\lang('error_invalidparam','filespec'));
 
     $dn = dirname($filespec);
     $tmp = $this->get_destdir()."/$dn";
@@ -80,7 +74,7 @@ abstract class filehandler
   protected function create_directory($filespec)
   {
     $filespec = trim($filespec);
-    if( !$filespec ) throw new Exception(lang('error_invalidparam','filespec'));
+    if( !$filespec ) throw new \Exception(\__appbase\lang('error_invalidparam','filespec'));
 
     $dn = dirname($filespec);
     $tmp = $this->get_destdir()."/$dn";
@@ -98,7 +92,7 @@ abstract class filehandler
   protected function is_langfile($filespec)
   {
     $filespec = trim($filespec);
-    if( !$filespec ) throw new Exception(lang('error_invalidparam','filespec'));
+    if( !$filespec ) throw new \Exception(\__appbase\lang('error_invalidparam','filespec'));
 
     if( $this->is_imagefile($filespec) ) return FALSE;
     $bn = basename($filespec);
@@ -108,7 +102,7 @@ abstract class filehandler
     $fnmatch = $fnmatch || preg_match('/^[a-zA-Z]{2}_[a-zA-Z]{2}\.nls\.php$/',$bn);
     if( $fnmatch ) return substr($bn,0,strpos($bn,'.'));
 
-    $nls = get_app()->get_nls();
+    $nls = \__appbase\get_app()->get_nls();
     if( !is_array($nls) ) return FALSE; // problem
 
     $bn = substr($bn,0,strpos($bn,'.'));
@@ -134,7 +128,7 @@ abstract class filehandler
     return in_array($res,$langs);
   }
 
-  abstract public function handle_file($filespec,$srcspec,PharFileInfo $fi);
+  abstract public function handle_file($filespec,$srcspec,\PharFileInfo $fi);
 }
 
 ?>

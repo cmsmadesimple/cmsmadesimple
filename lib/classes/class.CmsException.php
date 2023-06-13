@@ -131,7 +131,7 @@ class CmsException extends CmsExtraDataException
     public function __construct(/* var args */) {
         $args = func_get_args();
         parent::__construct($args);
-        if( is_int($this->message) ) $this->messsage = 'CMSEX_'.$msg;
+        if( is_int($this->message) ) $this->message = 'CMSEX_'.$msg;
         if( startswith($this->message,'CMSEX_') && !CmsLangOperations::key_exists($this->message) ) {
             $this->message = 'MISSING TRANSLATION FOR '.$this->message;
         }

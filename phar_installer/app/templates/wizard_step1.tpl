@@ -3,7 +3,7 @@
 
 {block name='logic'}
     {capture assign='browser_title'}CMS Made Simple&trade; {$version|default:''} ({$version_name|default:''}) {'apptitle'|tr}{/capture}
-    {capture assign='title'}{'title_welcome'|tr} {'to'|tr} CMS Made Simple&trade; {$version|default:''} <em>({$version_name|default:''})</em><br />{'apptitle'|tr}{/capture}
+    {capture assign='title'}{'title_welcome'|tr} {'to'|tr} CMS Made Simple&trade; {$version|default:''} <em>({$version_name|default:''})</em><br/>{'apptitle'|tr}{/capture}
     {$current_step = '1'}
 {/block}
 
@@ -12,8 +12,8 @@
 function redirect_langchange() {
   var e = document.getElementById('lang_selector');
   var v = e.options[e.selectedIndex].value;
-  var url = window.location.origin + window.location.pathname + '?curlang=' + v;
-  window.location.href = url;
+  var url = window.location.origin + window.location.pathname + '?curlang='+v;
+  window.location = url;
   return false;
 }
 </script>
@@ -33,19 +33,19 @@ function redirect_langchange() {
           {html_options options=$dirlist selected=$destdir|default:''}
         </select>
       </div>
-      <hr>
+      <hr />
     {/if}
 
     <h3>{'step1_language'|tr}</h3>
     <p class="info">{'select_language'|tr}</p>
     <div class="row">
         <label>{'available_languages'|tr}:</label>
-        <select id="lang_selector" class="form-field" name="lang" onchange="redirect_langchange();">
+        <select id="lang_selector" class="form-field" name="lang" onchange="redirect_langchange()">
             {html_options options=$languages selected=$curlang}
         </select>
     </div>
 
-    <hr>
+    <hr />
 
     <h3>{'step1_advanced'|tr}</h3>
     <p class="info">{'info_advanced'|tr}</p>
@@ -58,7 +58,7 @@ function redirect_langchange() {
     </div>
 
     <div id="bottom_nav">
-      <input type="submit" class="action-button positive" name="next" value="{'next'|tr} &rarr;" />
+      <input type="submit" class="action-button positive" name="next" value="{'next'|tr} &rarr;"/>
     </div>
 {wizard_form_end}
 </div>

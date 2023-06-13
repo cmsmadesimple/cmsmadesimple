@@ -13,7 +13,7 @@ class Profile extends \CMSMS\FilePickerProfile
         case 'name':
           case 'prefix':
           case 'file_extensions':
-            $this->_data[$key] = trim($val);
+            $this->_data[$key] = trim((string)$val);
             break;
         case 'create_date':
         case 'modified_date':
@@ -44,19 +44,17 @@ class Profile extends \CMSMS\FilePickerProfile
     public function __get($key)
     {
         switch( $key ) {
-        case 'id':
+          case 'modified_date':
+          case 'create_date':
+          case 'id':
             return (int) $this->_data[$key];
 
         case 'name':
         case 'file_extensions':
         case 'prefix':
-            return trim($this->_data[$key]);
-
-        case 'create_date':
-        case 'modified_date':
-            return (int) $this->_data[$key];
-
-        case 'relative_top':
+            return \trim((string)$this->_data[$key]);
+            
+          case 'relative_top':
         case 'reltop':
             // parent top is checked for relative or absolute
             // return relative to uploads path
@@ -141,23 +139,24 @@ class Profile extends \CMSMS\FilePickerProfile
    *
    * @return bool
    */
-    public function is_filename_acceptable( $file_name )
-    {
-        $mod = cms_utils::get_module('FilePicker');
-        if( !$mod->is_acceptable_filename($this, $file_name) ) return FALSE;
-        if( !$this->file_extensions ) return FALSE; // OR TRUE if we don't have anything to care about? 
-
-        // file must have an extension
-        $ext = strtolower(substr(strrchr($file_name, '.'), 1));
-        if( !$ext ) return FALSE; // file has no extension.
-        $list = explode(',',$this->_profile->file_extensions);
-
-        foreach( $list as $one ) {
-            $one = strtolower(trim($one));
-            if( !$one ) continue;
-            if( startswith( $one, '.') ) $one = substr($one,1);
-            if( $ext == $one ) return TRUE;
-        }
-        return FALSE;
+  public function is_filename_acceptable( $file_name )
+  {
+    $mod = cms_utils::get_module('FilePicker');
+    if( !$mod->is_acceptable_filename($this, $file_name) ) return FALSE;
+    if( !$this->file_extensions ) return FALSE; // OR TRUE if we don't have anything to care about?
+    
+    // file must have an extension
+    $ext = strtolower(substr(strrchr($file_name, '.'), 1));
+    if( !$ext ) return FALSE; // file has no extension.
+    $list = explode(',',$this->_profile->file_extensions);
+    
+    foreach( $list as $one ) {
+      $one = strtolower(trim($one));
+      if( !$one ) continue;
+      if( startswith( $one, '.') ) $one = substr($one,1);
+      if( $ext == $one ) return TRUE;
     }
+    return FALSE;
+  }
 } // end of class
+

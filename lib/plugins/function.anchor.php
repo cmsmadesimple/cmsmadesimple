@@ -18,48 +18,34 @@
 
 function smarty_function_anchor($params, $smarty)
 {
-	$to = (isset($params['anchor'])) ? trim($params['anchor']) : '';
-	if( $to === '' ) return '<!-- anchor tag: no anchor provided -->';
+    $content = cms_utils::get_current_content();
+    if( !is_object($content) ) return;
 
-    //current content useless for runtime-populated pages e.g. News details
-    if( !empty($_SERVER['QUERY_STRING']) ) {
-        //$_SERVER['QUERY_STRING'] like 'page=news/99/107/somename'
-        $config = cmsms()->GetConfig();
-        $tmp = $config['query_var'].'=';
-        $path = str_replace($tmp,'',$_SERVER['QUERY_STRING']);
-        $url = $config['root_url'].'/'.trim($path,' /');
+    $class="";
+    $title="";
+    $tabindex="";
+    $accesskey="";
+    if (isset($params['class'])) $class = ' class="'.$params['class'].'"';
+    if (isset($params['title'])) $title = ' title="'.$params['title'].'"';
+    if (isset($params['tabindex'])) $tabindex = ' tabindex="'.$params['tabindex'].'"';
+    if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
+
+    $url = $content->GetURL().'#'.trim($params['anchor']);
+    $url = str_replace('&amp;','***',$url);
+    $url = str_replace('&', '&amp;', $url);
+    $url = str_replace('***','&amp;',$url);
+    if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true')) {
+        $tmp =  $url;
     }
     else {
-        $content = cms_utils::get_current_content();
-        if( !is_object($content) ) return '';
-        $url = $content->GetURL();
-    }
-
-    $class = "";
-    $title = "";
-    $tabindex = "";
-    $accesskey = "";
-    if( isset($params['class']) && $params['class'] !== '' ) $class = ' class="'.$params['class'].'"';
-    if( isset($params['title']) && $params['title'] !== '' ) $title = ' title="'.$params['title'].'"';
-    if( isset($params['tabindex']) && $params['tabindex'] !== '' ) $tabindex = ' tabindex="'.(int)$params['tabindex'].'"';
-    if( isset($params['accesskey']) && $params['accesskey'] !== '' ) $accesskey = ' accesskey="'.$params['accesskey'].'"';
-
-    $url = preg_replace('/&(?!amp;)/','&amp;',$url.'#'.rawurlencode($to));
-    if( !empty($params['onlyhref']) && cms_to_bool($params['onlyhref']) ) {
-        $tmp = $url;
-    }
-    else {
-        $text = trim(get_parameter_value($params,'text'));
-        if( $text === '' ) {
-            $text = htmlentities($to).'<!-- anchor tag: no text provided -->';
-        }
+	$text = get_parameter_value( $params, 'text','<!-- anchor tag: no text provided -->anchor');
         $tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$text.'</a>';
     }
 
-    if( isset($params['assign']) ) {
+    if( isset($params['assign']) ){
         $smarty->assign(trim($params['assign']),$tmp);
-        return '';
+        return;
     }
-    return $tmp;
+    echo $tmp;
 }
 ?>

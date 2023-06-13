@@ -2,12 +2,12 @@
 if (!isset($gCms)) exit;
 debug_buffer('', 'Start of BreadCrumbs Display');
 
+$template = 'breadcrumbs.tpl';
+if( isset($params['template']) ) $template = trim($params['template']);
 $content_obj = $gCms->get_content_object();
 if( !$content_obj ) return; //  no current page?
 
 $cache_id = '|nav'.md5(serialize($params));
-$template = 'breadcrumbs.tpl';
-if( isset($params['template']) ) $template = trim($params['template']);
 $tpl = $smarty->createTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty->get_template_parent());
 if( !$tpl->isCached() ) {
     //

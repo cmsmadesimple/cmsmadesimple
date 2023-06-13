@@ -18,7 +18,7 @@ function cssHover() {
 			if (this.className != "") {
 				this.className = this.className + menuadd;
 			}
-			else {
+			else {	
 				this.className = menuh;
 			}
 		}

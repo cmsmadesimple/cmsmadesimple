@@ -1,0 +1,15 @@
+#
+# Explicitly disable caching of any and all media types from admin requests
+# This will cause performance issues for websites that do not change often
+# but will prevent browser caching from preventing items from being updated.
+#
+# Since CMSMS 2.2.16
+#
+<IfModule mod_expires.c>
+	ExpiresActive Off
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+    Header set Pragma "no-cache"
+</IfModule>

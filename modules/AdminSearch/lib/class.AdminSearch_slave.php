@@ -20,7 +20,6 @@ abstract class AdminSearch_slave
             case 'search_descriptions':
             case 'search_casesensitive':
             case 'show_snippets':
-            case 'include_inactive_items':
                 // valid keys
                 break;
 
@@ -47,12 +46,6 @@ abstract class AdminSearch_slave
     protected function show_snippets()
     {
         if( isset($this->_params['show_snippets']) ) return cms_to_bool($this->_params['show_snippets']);
-        return FALSE;
-    }
-
-    protected function include_inactive_items()
-    {
-        if( isset($this->_params['include_inactive_items']) ) return cms_to_bool($this->_params['include_inactive_items']);
         return FALSE;
     }
 

@@ -17,10 +17,10 @@
 //www.phpclasses.org/browse/package/4239.html
 
 $dirname=dirname(__FILE__);
-if (extension_loaded('zip')) require ($dirname.'/EasyZip.class.php');
+require ($dirname.'/EasyZip.class.php');
 require ($dirname.'/EasyTar.class.php');
-if (extension_loaded('zlib')) require ($dirname.'/EasyGzip.class.php');
-if (extension_loaded('bz2')) require ($dirname.'/EasyBzip2.class.php');
+require ($dirname.'/EasyGzip.class.php');
+require ($dirname.'/EasyBzip2.class.php');
 //echo "hi";die();
 
 /**

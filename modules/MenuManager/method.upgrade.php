@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-
+$uid = null;
 if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
     $uid = 1; // hardcode to first user
 } else {

@@ -103,12 +103,12 @@ final class ContentListQuery extends CmsDbQueryBase
         $this->_offset = 0;
     }
 
-    public function set_limit($limit)
+    public function set_limit(int $limit)
     {
         $this->_limit = max(1,$limit);
     }
 
-    public function set_offset($offset)
+    public function set_offset(int $offset)
     {
         $this->_offset = max(0,$offset);
     }

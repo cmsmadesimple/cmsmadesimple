@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
     public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
     public function GetHeaderHTML() { return $this->_output_header_javascript(); }
     public function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    public function GetVersion() { return '1.6.12'; }
+    public function GetVersion() { return '1.6.13'; }
     public function GetHelp() { return $this->Lang('help'); }
     public function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
     public function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -105,7 +105,7 @@ final class FileManager extends CMSModule {
         $config = cmsms()->GetConfig();
         $realpath=$this->Slash($config["root_path"],$path);
         $statinfo=stat($this->Slash($realpath,$file));
-        return filemanager_utils::format_permissions($statinfo["mode"]);
+        return filemanager_util::format_permissions($statinfo["mode"]);
     }
 
     public function GetModeWin($path,$file) {

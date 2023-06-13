@@ -27,9 +27,9 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
-use FilePicker\TemporaryProfileStorage;
-use CMSMS\FilePickerProfile as Profile;
-use CMSMS\FileType;
+use \FilePicker\TemporaryProfileStorage;
+use \CMSMS\FilePickerProfile as Profile;
+use \CMSMS\FileType;
 
 require_once(__DIR__.'/lib/class.ProfileDAO.php');
 
@@ -72,7 +72,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
      */
 
     function GetFriendlyName() { return $this->Lang('friendlyname');  }
-    function GetVersion() { return '1.0.5'; }
+    function GetVersion() { return '1.0.6'; }
     function GetHelp() { return $this->Lang('help'); }
     function IsPluginModule() { return FALSE; }
     function HasAdmin() { return TRUE; }
@@ -176,14 +176,15 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
             $tpl_ob->assign('title',$this->Lang('select_a_file'));
             break;
         }
-        return $tpl_ob->fetch();
+  
+      return $tpl_ob->fetch();
     }
 
     // INTERNAL UTILITY FUNCTION
     public function is_image( $filespec )
     {
         $filespec = trim($filespec);
-        if( !$filespec ) return FALSE;
+        if( !$filespec ) return;
 
         return $this->_typehelper->is_image( $filespec );
     }
@@ -193,7 +194,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
     public function is_acceptable_filename( \CMSMS\FilePickerProfile $profile, $filename )
     {
         $filename = trim($filename);
-        $filename = basename($filename);  // in case it's a path
+        $filename = basename($filename);  // incase it's a path
         if( !$filename ) return FALSE;
         if( endswith( $filename, '.' ) ) return FALSE;
         
@@ -203,32 +204,38 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 
         switch( $profile->type ) {
         case \CMSMS\FileType::TYPE_IMAGE:
-            return ( $this->_typehelper->is_image( $filename ) );
+            if( $this->_typehelper->is_image( $filename ) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_AUDIO:
-            return ( $this->_typehelper->is_audio( $filename ) );
+            if( $this->_typehelper->is_audio( $filename ) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_VIDEO:
-            return ( $this->_typehelper->is_video( $filename ) );
+            if( $this->_typehelper->is_video( $filename ) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_MEDIA:
-            return ( $this->_typehelper->is_media( $filename) );
+            if( $this->_typehelper->is_media( $filename) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_XML:
-            return ( $this->_typehelper->is_xml( $filename) );
+            if( $this->_typehelper->is_xml( $filename) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_DOCUMENT:
-            return ( $this->_typehelper->is_document( $filename) );
+            if( $this->_typehelper->is_document( $filename) ) return TRUE;
+            return FALSE;
 
         case \CMSMS\FileType::TYPE_ARCHIVE:
-            return ( $this->_typehelper->is_archive( $filename ) );
+            if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
+            return FALSE;
 
         default:
-            if( $this->_typehelper->is_executable( $filename ) ) {
-                $config = \cms_config::get_instance();
-                if( !$config['developer_mode'] ) {
-                    return FALSE;
-                }
+            $config = \cms_config::get_instance();
+            if( !$config['developer_mode'] ) {
+                $ext = strtolower($this->_typehelper->get_extension( $filename ) );
+                if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
             }
             break;
         }

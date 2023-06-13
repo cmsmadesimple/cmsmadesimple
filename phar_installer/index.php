@@ -3,7 +3,7 @@
 # CMS Made Simple - Power for the professional, Simplicity for the end user.
 # (c) 2004 - 2011 by Ted Kulp
 # (c) 2011 - 2018 by the CMS Made Simple Development Team
-# (c) 2018 - 2023 by the CMS Made Simple Foundation
+# (c) 2018 - 2020 by the CMS Made Simple Foundation
 # This project's homepage is: https://www.cmsmadesimple.org
 #---------------------------------------------------------------------------
 # This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,7 @@ try {
 
     // some basic system wide pre-requisites
     if(php_sapi_name() == "cli") throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
-    if( version_compare(phpversion(),'7.0.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 7.0.0');
+    if( version_compare(phpversion(),'5.4.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 5.4.0');
     _detect_bad_ioncube();
     
     // clear opcache before disabling it
@@ -49,7 +49,7 @@ try {
     @ini_set('apc.enabled',0); // disable apc opcode caching (for later versions of APC)
     @ini_set('xcache.cacher',0); // disable xcache opcode caching 
 
-    require_once __DIR__.'/app/class.cms_install.php';
+    require_once('app/class.cms_install.php');
     $app = new cms_install;
     $app->run();
 }
@@ -57,7 +57,7 @@ catch( \Exception $e ) {
     // this handles fatal, serious errors.
     // cannot use stylesheets, scripts, or images here, as the problem may be a phar based problem
     $out = <<<EOT
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">

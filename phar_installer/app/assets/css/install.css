@@ -149,7 +149,7 @@ abbr[title], dfn[title] {
 
 .visuallyhidden {
 	border: 0;
-	clip: rect(0,0,0,0);
+	clip: rect(0 0 0 0);
 	height: 1px;
 	margin: -1px;
 	overflow: hidden;
@@ -615,8 +615,8 @@ h1, h2, h3, h4, h5, h6 {
 .cmsms-ui .bigtext {
     max-height: 20em;
     max-width: 60em;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow-y: none;
+    overflow-x: none;
 }
 
 /* --- Buttons --- */

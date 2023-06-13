@@ -2,6 +2,7 @@
 if( !isset($gCms) ) exit;
 if( !isset($params['items']) ) return;
 
+$template = null;
 if( isset($params['template']) ) {
     $template = trim($params['template']);
 }

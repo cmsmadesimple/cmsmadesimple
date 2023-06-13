@@ -31,7 +31,8 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
             if( isset($minfo[$module_name]['dependants']) ) $this['dependants'] = $minfo[$module_name]['dependants'];
         }
     }
-
+    
+    #[\ReturnTypeWillChange]
     public function OffsetGet($key)
     {
         if( !in_array($key,self::$_ekeys) ) return parent::OffsetGet($key);
@@ -41,7 +42,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
             $deps = $this['depends'];
             if( is_array($deps) && count($deps) ) {
                 foreach( $deps as $onedepname => $onedepversion ) {
-                    $depinfo = new CmsExtendedModuleInfo($onedepkey);
+                    $depinfo = new CmsExtendedModuleInfo($onedepname);
                     if( !$depinfo['installed'] || version_compare($depinfo['version'],$onedepversion) < 0 ) $out[$onedepname] = $onedepversion;
                 }
             }
@@ -49,7 +50,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
         }
     }
 
-    public function OffsetSet($key,$value)
+    public function OffsetSet($key,$value) : void
     {
         if( !in_array($key,self::$_ekeys) ) parent::OffsetSet($key,$value);
         if( $key == 'can_deactivate' ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
@@ -58,7 +59,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
         $this->_edata[$key] = $value;
     }
 
-    public function OffsetExists($key)
+    public function OffsetExists($key) : bool
     {
         if( !in_array($key,self::$_ekeys) ) return parent::OffsetExists($key);
         return isset($this->_edata[$key]);

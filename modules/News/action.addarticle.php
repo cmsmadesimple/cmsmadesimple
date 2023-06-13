@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms))
-    exit;
+    exit ;
 
 if (!$this->CheckPermission('Modify News'))
     return;
@@ -12,25 +12,27 @@ if (isset($params['cancel']))
  * Variables
  ---------------------*/
 
-$ndays        = (int)$this->GetPreference('expiry_interval', 180);
-if ($ndays == 0) $ndays = 180;
-$now          = time();
 $status       = 'draft';
-if ($this->CheckPermission('Approve News')) $status = 'published';
+if ($this->CheckPermission('Approve News'))  $status = 'published';
 $userid       = get_userid();
-
+$postdate     = time();
+$startdate    = time();
 $content      = isset($params['content']) ? $params['content'] : '';
-$enddate      = strtotime(sprintf("+%d days", $ndays), $now);
-$extra        = isset($params['extra']) ? trim(strip_tags($params['extra'])) : '';
-$news_url     = isset($params['news_url']) ? $params['news_url'] : '';
-$postdate     = $now;
-$searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
-$startdate    = $now;
-$status       = isset($params['status']) ? $params['status'] : $status;
 $summary      = isset($params['summary']) ? $params['summary'] : '';
-$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
+$status       = isset($params['status']) ? $params['status'] : $status;
 $usedcategory = isset($params['category']) ? $params['category'] : $this->GetPreference('default_category', '');
-$useexp       = isset($params['useexp']) ? (int)$params['useexp'] : 0;
+$useexp       = isset($params['useexp']) ? 1: 0;
+$searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
+$news_url     = isset($params['news_url']) ? $params['news_url'] : '';
+$extra        = isset($params['extra']) ? trim(strip_tags($params['extra'])) : '';
+$title        = isset($params['title']) ? trim(strip_tags($params['title'])) : '';
+$ndays        = (int)$this->GetPreference('expiry_interval', 180);
+
+if ($ndays == 0)
+    $ndays = 180;
+
+$enddate      = strtotime(sprintf("+%d days", $ndays), time());
+
 
 if (isset($params['postdate_Month'])) {
     $postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
@@ -44,22 +46,23 @@ if (isset($params['enddate_Month'])) {
     $enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'], $params['enddate_Month'], $params['enddate_Day'], $params['enddate_Year']);
 }
 
+
 /*--------------------
  * Logic
  ---------------------*/
 
 if (isset($params['submit'])) {
     $error = FALSE;
-    if (!$title) {
+    if (empty($title)) {
         $error = $this->ShowErrors($this->Lang('notitlegiven'));
-    } else if (!$content) {
+    } else if (empty($content)) {
         $error = $this->ShowErrors($this->Lang('nocontentgiven'));
-    } else if ($useexp) {
+    } else if ($useexp == 1) {
         if ($startdate >= $enddate)
             $error = $this->ShowErrors($this->Lang('error_invaliddates'));
     }
 
-    if ($error === FALSE && $news_url) {
+    if (empty($error) && $news_url != '') {
         // check for starting or ending slashes
         if (startswith($news_url, '/') || endswith($news_url, '/'))
             $error = $this->ShowErrors($this->Lang('error_invalidurl'));
@@ -85,12 +88,12 @@ if (isset($params['submit'])) {
     //
     // database work
     //
-    if ($error) {
+    if ($error !== FALSE) {
         echo $error;
     } else {
         $articleid = $db->GenID(CMS_DB_PREFIX . "module_news_seq");
         $query = 'INSERT INTO ' . CMS_DB_PREFIX . 'module_news (news_id, news_category_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date,author_id,news_extra,news_url,searchable) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-        if ($useexp) {
+        if ($useexp == 1) {
             $dbr = $db->Execute($query, array(
                 $articleid,
                 $usedcategory,
@@ -137,21 +140,21 @@ if (isset($params['submit'])) {
         //Handle submitting the 'custom' fields
         //
         // get the field types
-        $query = "SELECT id,name,type FROM " . CMS_DB_PREFIX . "module_news_fielddefs WHERE type='file'";
-        $types = $db->GetArray($query);
+        $qu = "SELECT id,name,type FROM " . CMS_DB_PREFIX . "module_news_fielddefs WHERE type='file'";
+        $types = $db->GetArray($qu);
 
         foreach ($types as $onetype) {
             $elem = $id . 'customfield_' . $onetype['id'];
             if (isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
                 if ($_FILES[$elem]['error'] != 0 || $_FILES[$elem]['tmp_name'] == '') {
                     echo $this->ShowErrors($this->Lang('error_upload'));
-                    $error = TRUE;
+                    $error = true;
                 } else {
                     $error = '';
                     $value = news_admin_ops::handle_upload($articleid, $elem, $error);
                     if ($value === FALSE) {
                         echo $this->ShowErrors($error);
-                        $error = TRUE;
+                        $error = true;
                     } else {
                         $params['customfield'][$onetype['id']] = $value;
                     }
@@ -176,9 +179,9 @@ if (isset($params['submit'])) {
                 if (!$dbr)
                     die('FATAL SQL ERROR: ' . $db->ErrorMsg() . '<br/>QUERY: ' . $db->sql);
             }
-        }
+        }// if
 
-        if (!$error && $status == 'published' && $news_url) {
+        if (!$error && $status == 'published' && $news_url != '') {
             // todo: if not expired
             // register the route.
             news_admin_ops::delete_static_route($articleid);
@@ -204,23 +207,23 @@ if (isset($params['submit'])) {
 
         if (!$error) {
             \CMSMS\HookManager::do_hook('News::NewsArticleAdded',
-                array('news_id' => $articleid,
-                      'category_id' => $usedcategory,
-                      'title' => $title,
-                      'content' => $content,
-                      'summary' => $summary,
-                      'status' => $status,
-                      'start_time' => $startdate,
-                      'end_time' => $enddate,
-                      'postdate' => $postdate,
-                      'useexp' => $useexp,
-                      'extra' => $extra ));
+                                        array('news_id' => $articleid,
+                                              'category_id' => $usedcategory,
+                                              'title' => $title,
+                                              'content' => $content,
+                                              'summary' => $summary,
+                                              'status' => $status,
+                                              'start_time' => $startdate,
+                                              'end_time' => $enddate,
+                                              'postdate' => $postdate,
+                                              'useexp' => $useexp,
+                                              'extra' => $extra ));
             // put mention into the admin log
             audit($articleid, 'News: ' . $title, 'Article added');
-            $this->SetMessage($this->Lang('articleadded'));
+			$this->SetMessage($this->Lang('articleadded'));
             $this->Redirect($id, 'defaultadmin', $returnid);
-        } // !$error
-    } // outer !$error
+        } // if !$error
+    } // outer if !$error
 // end submit
 } elseif (isset($params['preview'])) {
     // save data for preview.
@@ -230,43 +233,43 @@ if (isset($params['submit'])) {
     unset($params['cancel']);
     unset($params['ajax']);
 
-    if (empty($error)) {
-        $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
-        file_put_contents($tmpfname, serialize($params));
+    $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
+    file_put_contents($tmpfname, serialize($params));
 
-        $detail_returnid = $this->GetPreference('detail_returnid', -1);
-        if ($detail_returnid <= 0) {
-            // now get the default content id.
-            $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
-        }
-        if (isset($params['previewpage']) && (int)$params['previewpage'] > 0)
-            $detail_returnid = (int)$params['previewpage'];
-
-        $_SESSION['news_preview'] = array(
-            'fname' => basename($tmpfname),
-            'checksum' => md5_file($tmpfname)
-        );
-        $tparms = array('preview' => md5(serialize($_SESSION['news_preview'])));
-        if (isset($params['detailtemplate'])) {
-            $tparms['detailtemplate'] = trim($params['detailtemplate']);
-        }
-        $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
-        $url = str_replace('&amp;', '&', $url);
-        $out = array('response'=>'Success', 'details' => $url);
-        $flags = 0;
-    } else {
-        $out = array('response'=>'Error', 'details' => $error);
-        $flags = JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        if (defined('JSON_INVALID_UTF8_IGNORE')) {
-            $flags |= JSON_INVALID_UTF8_IGNORE;
-        }
+    $detail_returnid = $this->GetPreference('detail_returnid', -1);
+    if ($detail_returnid <= 0) {
+        // now get the default content id.
+        $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
     }
+    if (isset($params['previewpage']) && (int)$params['previewpage'] > 0)
+        $detail_returnid = (int)$params['previewpage'];
+
+    $_SESSION['news_preview'] = array(
+        'fname' => basename($tmpfname),
+        'checksum' => md5_file($tmpfname)
+    );
+    $tparms = array('preview' => md5(serialize($_SESSION['news_preview'])));
+    if (isset($params['detailtemplate']))
+        $tparms['detailtemplate'] = trim($params['detailtemplate']);
+    $url = $this->create_url('_preview_', 'detail', $detail_returnid, $tparms, TRUE);
+
+    $response = '<?xml version="1.0"?>';
+    $response .= '<EditArticle>';
+    if (isset($error) && $error != '') {
+        $response .= '<Response>Error</Response>';
+        $response .= '<Details><![CDATA[' . $error . ']]></Details>';
+    } else {
+        $response .= '<Response>Success</Response>';
+        $response .= '<Details><![CDATA[' . $url . ']]></Details>';
+    }
+    $response .= '</EditArticle>';
 
     $handlers = ob_list_handlers();
-    for ($cnt = 0; $cnt < count($handlers); $cnt++) { ob_end_clean(); }
-
-    echo json_encode($out, $flags);
-    exit;
+    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean();
+    }
+    header('Content-Type: text/xml');
+    echo $response;
+    exit ;
 }
 
 //
@@ -413,7 +416,7 @@ $parms = array(
 );
 $smarty->assign('inputsummary', CmsFormutils::create_textarea($parms));
 
-if ($custom_flds)
+if (count($custom_flds) > 0)
     $smarty->assign('custom_fields', $custom_flds);
 
 if ($this->CheckPermission('Approve News')) {
@@ -422,19 +425,19 @@ if ($this->CheckPermission('Approve News')) {
 }
 
 $contentops = cmsms()->GetContentOperations();
-$smarty->assign('preview_page_selector', $contentops->CreateHierarchyDropdown('', $this->GetPreference('detail_returnid', -1), $id.'previewpage'));
+$smarty->assign('preview_returnid', $contentops->CreateHierarchyDropdown('', $this->GetPreference('detail_returnid', -1), 'preview_returnid'));
 
 // get the list of detail templates.
 try {
     $type = CmsLayoutTemplateType::load($this->GetName() . '::detail');
     $templates = $type->get_template_list();
     $list = array();
-    if ($templates && is_array($templates)) {
+    if (is_array($templates) && count($templates)) {
         foreach ($templates as $template) {
             $list[$template->get_id()] = $template->get_name();
         }
     }
-    if ($list) {
+    if (count($list)) {
         $smarty->assign('prompt_detail_template', $this->Lang('detail_template'));
         $smarty->assign('prompt_detail_page', $this->Lang('detail_page'));
         $smarty->assign('detail_templates', $list);

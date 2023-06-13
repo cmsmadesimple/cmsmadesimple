@@ -1,29 +1,12 @@
 <?php
 
 namespace cms_autoinstaller;
+use \__appbase\utils;
 
-use __appbase\app;
-use __appbase\request;
-use __appbase\session;
-use __appbase\utils;
-use __appbase\wizard;
-use Exception;
-use Phar;
-use PharData;
-use RecursiveIteratorIterator;
-use RuntimeException;
-use function __appbase\endswith;
-use function __appbase\lang;
-use function __appbase\nls;
-use function __appbase\smarty;
-use function __appbase\startswith;
-use function __appbase\translator;
-use function file_put_contents;
+include_once(__DIR__.'/lib/compat.functions.php');
+include_once(\dirname(__FILE__, 2) . '/lib/classes/base/class.app.php');
 
-require_once \dirname(__DIR__) . '/lib/classes/base/compat.functions.php';
-require_once \dirname(__DIR__) . '/lib/classes/base/class.app.php';
-
-class cms_install extends app
+class cms_install extends \__appbase\app
 {
     private static $_instance;
     private $_archive;
@@ -51,12 +34,12 @@ class cms_install extends app
         // then we attempt to putenv the TMPDIR environment variable
         // so that tmpfile() will work as it uses the system temporary directory which can read from environment variables
         $sys_tmpdir = null;
-        if( function_exists('sys_get_temp_dir') ) $sys_tmpdir = rtrim(sys_get_temp_dir(),'\\/');
+        if( \function_exists('sys_get_temp_dir') ) $sys_tmpdir = \rtrim(\sys_get_temp_dir(), '\\/');
         $config = $this->get_config();
-        if( (!$sys_tmpdir || !is_dir($sys_tmpdir) || !is_writable($sys_tmpdir)) && $sys_tmpdir != $config['tmpdir'] ) {
-            @putenv('TMPDIR='.$config['tmpdir']);
-            $try1 = getenv('TMPDIR');
-            if( $try1 != $config['tmpdir'] ) throw new RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
+        if((!$sys_tmpdir || !\is_dir($sys_tmpdir) || !\is_writable($sys_tmpdir)) && $sys_tmpdir != $config['tmpdir'] ) {
+            @\putenv('TMPDIR=' . $config['tmpdir']);
+            $try1 = \getenv('TMPDIR');
+            if( $try1 != $config['tmpdir'] ) throw new \RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
         }
     }
 
@@ -65,11 +48,11 @@ class cms_install extends app
         parent::__construct(__FILE__);
 
         // initialize the session.
-        $sess = session::get();
+        $sess = \__appbase\session::get();
         $junk = $sess[__CLASS__]; // this is junk, but triggers session to start.
 
         // get the request
-        $request = request::get();
+        $request = \__appbase\request::get();
         if( isset($request['clear']) ) {
             $sess->reset();
         }
@@ -77,30 +60,31 @@ class cms_install extends app
         $config = $this->get_config();
 
         // setup autoload
-        spl_autoload_register(__CLASS__.'::autoload');
+        \spl_autoload_register(__NAMESPACE__ . '\cms_install::autoload');
 
         $this->fixup_tmpdir_environment();
 
         // setup smarty
-        $smarty = smarty();
-        $smarty->assign('APPNAME','cms_installer')
-          ->assign('config',$config)
-          ->assign('installer_version',$config['installer_version']);
+        $smarty = \__appbase\smarty();
+        $smarty->assign('APPNAME','cms_installer');
+        $smarty->assign('config',$config);
+        $smarty->assign('installer_version',$config['installer_version']);
 
         $fn = $this->get_appdir().'/build.ini';
         $build = null;
-        if( file_exists($fn) ) $build = parse_ini_file($fn);
+        if( \file_exists($fn) ) $build = \parse_ini_file($fn);
         if( isset($build['build_time']) ) $smarty->assign('build_time',$build['build_time']);
 
         // handle debug mode
         if( $config['debug'] ) {
-            @ini_set('display_errors',1);
-            @error_reporting(E_ALL);
+            @\ini_set('display_errors', 1);
+            @\error_reporting(\E_ALL);
+            @\ini_set('error_log', \Phar::running(FALSE) . '/error.log');
         }
 
         if( $this->in_phar() && !$config['nobase'] ) {
             $base_href = $_SERVER['SCRIPT_NAME'];
-            if( endswith($base_href,'.php') ) {
+            if( \__appbase\endswith($base_href,'.php') ) {
                 $base_href = $base_href . '/';
                 $smarty->assign('BASE_HREF',$base_href);
             }
@@ -109,23 +93,23 @@ class cms_install extends app
         // find our archive, copy it... and rename it securely.
         // we do this because phar data cannot read from a .tar.gz file that is already embedded within a phar
         // (some environments)
-        $tmpdir = $this->get_tmpdir().'/m'.md5(__FILE__.session_id());
+        $tmpdir = $this->get_tmpdir().'/m' . \md5(__FILE__ . \session_id());
         $src_archive = (isset($config['archive']))?$config['archive']:'data/data.tar.gz';
-        $src_archive = \dirname(__DIR__).DIRECTORY_SEPARATOR.$src_archive;
-        if( !file_exists($src_archive) ) throw new Exception('Could not find installation archive at '.$src_archive);
-        $dest_archive = $tmpdir.DIRECTORY_SEPARATOR."f".md5($src_archive.session_id()).'.tgz';
-        $src_md5 = md5_file($src_archive);
+        $src_archive = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . $src_archive;
+        if( !\file_exists($src_archive) ) throw new \Exception('Could not find installation archive at ' . $src_archive);
+        $dest_archive = $tmpdir . \DIRECTORY_SEPARATOR . "f" . \md5($src_archive . \session_id()) . '.tgz';
+        $src_md5 = \md5_file($src_archive);
 
         for( $i = 0; $i < 2; $i++ ) {
-            if( !file_exists($dest_archive) ) {
-                @mkdir($tmpdir,0777,TRUE);
-                @copy($src_archive,$dest_archive);
+            if( !\file_exists($dest_archive) ) {
+                @\mkdir($tmpdir,0777,TRUE);
+                @\copy($src_archive, $dest_archive);
             }
-            $dest_md5 = md5_file($dest_archive);
-            if( is_readable($dest_archive) && $src_md5 == $dest_md5 ) break;
-            @unlink($dest_archive);
+            $dest_md5 = \md5_file($dest_archive);
+            if(\is_readable($dest_archive) && $src_md5 == $dest_md5 ) break;
+            @\unlink($dest_archive);
         }
-        if( $i == 2 ) throw new Exception('Checksum of temporary archive does not match... copying/permissions problem');
+        if(2 == $i) throw new \Exception('Checksum of temporary archive does not match... copying/permissions problem');
         $this->_archive = $dest_archive;;
 
         // get version details (version we are installing)
@@ -137,10 +121,10 @@ class cms_install extends app
             $this->_dest_schema = $ver['schema_version'];
         }
         else {
-            $verfile = \dirname($src_archive).'/version.php';
-            if( !is_file($verfile) ) throw new Exception('Could not find version file');
+            $verfile = dirname($src_archive).'/version.php';
+            if( !is_file($verfile) ) throw new \Exception('Could not find version file');
             include_once($verfile);
-            $ver = array('version' => $CMS_VERSION, 'version_name' => $CMS_VERSION_NAME, 'schema_version' => $CMS_SCHEMA_VERSION);
+            $ver = ['version' => $CMS_VERSION, 'version_name' => $CMS_VERSION_NAME, 'schema_version' => $CMS_SCHEMA_VERSION];
             $sess[__CLASS__.'version'] = $ver;
             $this->_dest_version = $CMS_VERSION;
             $this->_dest_name = $CMS_VERSION_NAME;
@@ -150,12 +134,12 @@ class cms_install extends app
 
     static public function autoload($classname)
     {
-        if( startswith($classname, 'cms_autoinstaller\\') ) $classname = substr($classname,strlen('cms_autoinstaller\\'));
+        if( \__appbase\startswith($classname, 'cms_autoinstaller\\') ) $classname = \substr($classname, \strlen('cms_autoinstaller\\'));
 
-        $dirs = array(__DIR__,__DIR__.'/base',__DIR__.'/lib',__DIR__.'/wizard');
+        $dirs = [__DIR__, __DIR__ . '/base', __DIR__ . '/lib', __DIR__ . '/wizard'];
         foreach( $dirs as $dir ) {
             $fn = $dir."/class.$classname.php";
-            if( file_exists($fn) ) {
+            if( \file_exists($fn) ) {
                 include_once($fn);
                 return;
             }
@@ -165,10 +149,10 @@ class cms_install extends app
     protected function set_config_defaults()
     {
         $tmp = [ 'timezone' => null, 'tmpdir' => null, 'dest' => null, 'debug' => false, 'nofiles' => false, 'nobase' => false, 'lang' => null, 'verbose' => false ];
-        $config = array_merge(parent::get_config(), $tmp);
-        $this->_orig_tz = $config['timezone'] = @date_default_timezone_get();
+        $config = \array_merge(parent::get_config(), $tmp);
+        $this->_orig_tz = $config['timezone'] = @\date_default_timezone_get();
         if( !$this->_orig_tz ) $this->_orig_tz = $config['timezone'] = 'UTC';
-        $config['dest'] = realpath(getcwd());
+        $config['dest'] = \realpath(\getcwd());
         return $config;
     }
 
@@ -178,29 +162,29 @@ class cms_install extends app
         $config = $this->set_config_defaults();
 
         // override default config with config file
-        $config_file = realpath(getcwd()).'/custom_config.ini';
-        if( is_file($config_file) && is_readable($config_file) ) {
-            $tmp = parse_ini_file($config_file);
-            if( is_array($tmp) && count($tmp) ) {
-                $config = array_merge($config,$tmp);
+        $config_file = \realpath(\getcwd()) . '/custom_config.ini';
+        if(\is_file($config_file) && \is_readable($config_file) ) {
+            $tmp = \parse_ini_file($config_file);
+            if(\is_array($tmp) && count($tmp) ) {
+                $config = \array_merge($config, $tmp);
                 if( isset($tmp['dest']) ) $this->_custom_destdir = $tmp['dest'];
             }
         }
 
         // override current config with url params
-        $request = request::get();
+        $request = \__appbase\request::get();
         $list = [ 'TMPDIR', 'tmpdir', 'timezone', 'tz', 'dest', 'destdir', 'debug', 'nofiles', 'no_files', 'nobase' ];
         foreach( $list as $key ) {
-            if( !isset($request[$key]) ) continue;
+	    if( !isset($request[$key]) ) continue;
             $val = $request[$key];
             switch( $key ) {
             case 'TMPDIR':
             case 'tmpdir':
-                $config['tmpdir'] = trim($val);
+                $config['tmpdir'] = \trim($val);
                 break;
             case 'timezone':
             case 'tz':
-                $config['timezone'] = trim($val);
+                $config['timezone'] = \trim($val);
                 break;
             case 'dest':
             case 'destdir':
@@ -225,20 +209,17 @@ class cms_install extends app
     {
         foreach( $config as $key => $val ) {
             switch( $key ) {
-            case 'timezone':
-                // do nothing
-                break;
             case 'tmpdir':
                 if( !$val ) {
                     // no tmpdir set... gotta find or create one.
                     $val = parent::get_tmpdir();
                 }
-                if( !is_dir($val) || !is_writable($val) ) {
+                if(!\is_dir($val) || !\is_writable($val) ) {
                     // could not find a valid system temporary directory, or none specified. gotta make one
-                    $dir = realpath(getcwd()).'/__m'.md5(session_id());
-                    if( !@is_dir($dir) && !@mkdir($dir) ) throw new RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
+                    $dir = \realpath(\getcwd()) . '/__m' . \md5(\session_id());
+                    if(!@\is_dir($dir) && !@mkdir($dir) ) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
                     $txt = 'This is temporary directory created for installing CMSMS in punitively restrictive environments.  You may delete this directory and its files once installation is complete.';
-                    if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
+                    if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
                     $config[$key] = $dir;
                     $this->_custom_tmpdir = $dir;
                     $val = $dir;
@@ -246,15 +227,16 @@ class cms_install extends app
                 $config[$key] = $val;
                 break;
             case 'dest':
-                if( !is_dir($val) || !is_writable($val) ) {
-                    throw new RuntimeException('Invalid config value for '.$key.' - not a directory, or not writable');
+                if(!\is_dir($val) || !\is_writable($val) ) {
+                    throw new \RuntimeException('Invalid config value for '.$key.' - not a directory, or not writable');
                 }
                 break;
-            case 'debug':
-            case 'nofiles':
-            case 'nobase':
+              case 'nobase':
+              case 'nofiles':
+              case 'debug':
+              case 'timezone':
                 // do nothing
-                break;
+              break;
             }
         }
         return $config;
@@ -262,7 +244,7 @@ class cms_install extends app
 
     public function get_config()
     {
-        $sess = session::get();
+        $sess = \__appbase\session::get();
         if( isset($sess['config']) ) {
             // already set once... so you must close and re-open the browser to reset it.
             return $sess['config'];
@@ -277,12 +259,13 @@ class cms_install extends app
 
     private function set_config_val($key,$val)
     {
-        $config = $this->get_config();
-        $config[trim($key)] = $val;
+        $config            = $this->get_config();
+      $config[\trim($key)] = $val;
 
-        $sess = session::get();
+        $sess = \__appbase\session::get();
         $sess['config'] = $config;
     }
+
 
     public function get_orig_error_level() { return $this->_orig_error_level; }
 
@@ -298,9 +281,9 @@ class cms_install extends app
     }
 
     public function has_custom_destdir() {
-        $p1 = realpath(getcwd());
-        $p2 = realpath((string)$this->_custom_destdir);
-        return ($p1 != $p2);
+        $p1 = \realpath((string)\getcwd());
+        $p2 = \realpath((string)$this->_custom_destdir);
+        return ($p1 !== $p2);
     }
 
     public function get_archive() { return $this->_archive; }
@@ -313,12 +296,13 @@ class cms_install extends app
 
     public function get_phar()
     {
-        return Phar::running();
+        return \Phar::running();
     }
 
-    public function in_phar()
-    {
-        return Phar::running() != FALSE;
+    public function in_phar() {
+        $x = $this->get_phar();
+        if( !$x ) return FALSE;
+        return TRUE;
     }
 
     public function get_nls()
@@ -327,16 +311,16 @@ class cms_install extends app
 
         $archive = $this->get_archive();
         $archive = str_replace('\\','/',$archive); // stupid windoze
-        if( !file_exists($archive) ) throw new Exception(lang('error_noarchive'));
+        if( !file_exists($archive) ) throw new \Exception(\__appbase\lang('error_noarchive'));
 
-        $phardata = new PharData($archive);
+        $phardata = new \PharData($archive);
         $nls = array();
         $found = false;
         $pharprefix = "phar://".$archive;
-        foreach( new RecursiveIteratorIterator($phardata) as $file => $it ) {
+        foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
             if( ($p = strpos($file,'/lib/nls')) === FALSE ) continue;
             $tmp = substr($file,$p);
-            if( !endswith($tmp,'.php') ) continue;
+            if( !\__appbase\endswith($tmp,'.php') ) continue;
             $found = true;
             if( preg_match('/\.nls\.php$/',$tmp) ) {
                $tmpdir = $this->get_tmpdir();
@@ -346,7 +330,7 @@ class cms_install extends app
                unlink($fn);
             }
         }
-        if( !$found ) throw new Exception(lang('error_nlsnotfound'));
+        if( !$found ) throw new \Exception(\__appbase\lang('error_nlsnotfound'));
         $this->_nls = $nls;
         return $nls;
     }
@@ -359,60 +343,59 @@ class cms_install extends app
 
     public function get_root_url()
     {
-        // if we are putting files somewhere unrelated to the dest dir,
-        // we cannot determine the root url of the site via $_SERVER members.
-        $a = getcwd();
-        $b = $this->get_destdir();
-        if( $b != $a ) {
-            //TODO failure here
-            if( startswith($b,$_SERVER['DOCUMENT_ROOT']) ) {
-                $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
-            }
-        }
-        else {
-            $b = \dirname($_SERVER['PHP_SELF']);
-             if( $this->in_phar() ) {
-                 $tmp = basename($_SERVER['SCRIPT_NAME']);
-                 if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
-             }
-        }
-        $b = str_replace('\\','/',$b); // cuz windows blows.
-
-        if( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) { $prefix = 'https:'; }
-        else { $prefix = 'http:'; }
+        $prefix = null;
+        //if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) $prefix = 'https';
         $prefix .= '//'.$_SERVER['HTTP_HOST'];
-        if( !endswith($prefix,'/') && !startswith($b,'/') ) $prefix .= '/';
+
+        // if we are putting files somewhere else, we cannot determine the root url of the site
+        // via the $_SERVER variables.
+        $b = $this->get_destdir();
+        if( $b != getcwd() ) {
+            if( \__appbase\startswith($b,$_SERVER['DOCUMENT_ROOT']) ) $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
+            $b = str_replace('\\','/',$b); // cuz windows blows
+            if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
+            return $prefix.$b;
+        }
+
+        $b = dirname($_SERVER['PHP_SELF']);
+        if( $this->in_phar() ) {
+            $tmp = basename($_SERVER['SCRIPT_NAME']);
+            if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
+        }
+
+        $b = str_replace('\\','/',$b); // cuz windows blows.
+        if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
         return $prefix.$b;
     }
 
     public function run()
     {
         // set the languages we're going to support.
-        $list = nls()->get_list();
-        foreach( $list as &$one ) { $one = substr($one,0,-4); } unset($one);
-        translator()->set_allowed_languages($list);
+        $list = \__appbase\nls()->get_list();
+        foreach( $list as &$one ) $one = substr($one,0,-4);
+        \__appbase\translator()->set_allowed_languages($list);
 
         // the default language.
-        translator()->set_default_language('en_US');
+        \__appbase\translator()->set_default_language('en_US');
 
         // get the language preferred by the user (either in the request, in a cookie, or in the session)
-        $lang = translator()->get_selected_language();
+        $lang = \__appbase\translator()->get_selected_language();
 
-        if( !$lang ) $lang = translator()->get_default_language(); // get a preferred language
+        if( !$lang ) $lang = \__appbase\translator()->get_default_language(); // get a preferred language
 
         // set our selected language...
-        translator()->set_selected_language($lang);
+        \__appbase\translator()->set_selected_language($lang);
 
         // for every request we're gonna make sure it's not cached.
         //session_cache_limiter('private');
 
         // and make sure we are in UTF-8
-        //TODO headers already sent header('Content-Type:text/html; charset=UTF-8');
+        header('Content-Type:text/html; charset=UTF-8');
 
         // and do our stuff.
         try {
             $tmp = 'm'.substr(md5(realpath(getcwd()).session_id()),0,8);
-            $wizard = wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
+            $wizard = \__appbase\wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
             // this sets a custom step variable for each instance
             // which is just one more security measure.
             // nobody can guess an installer URL and jump to a specific step to
@@ -421,8 +404,8 @@ class cms_install extends app
             $wizard->set_step_var($tmp);
             $res = $wizard->process();
         }
-        catch( Exception $e ) {
-            $smarty = smarty();
+        catch( \Exception $e ) {
+            $smarty = \__appbase\smarty();
             $smarty->assign('error',$e->GetMessage());
             $smarty->display('error.tpl');
         }

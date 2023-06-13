@@ -1,15 +1,9 @@
 <?php
 
 namespace cms_autoinstaller;
+use \__appbase\tests as _tests_;
 
-use __appbase\tests as _tests_;
-use __appbase\utils;
-use cms_autoinstaller\wizard_step;
-use function __appbase\get_app;
-use function __appbase\lang;
-use function __appbase\smarty;
-
-class wizard_step3 extends wizard_step
+class wizard_step3 extends \cms_autoinstaller\wizard_step
 {
     protected function process()
     {
@@ -18,10 +12,9 @@ class wizard_step3 extends wizard_step
 
     protected function perform_tests($verbose,&$infomsg,&$tests)
     {
-        $app = get_app();
-        $wiz = $this->get_wizard();
-        $version_info = $wiz->get_data('version_info'); // only present for upgrades
-        $action = $wiz->get_data('action');
+        $app = \__appbase\get_app();
+        $version_info = $this->get_wizard()->get_data('version_info');
+        $action = $this->get_wizard()->get_data('action');
         $informational = array();
         $tests = array();
 
@@ -32,11 +25,11 @@ class wizard_step3 extends wizard_step
 
         // required test for php version
         $obj = new _tests_\version_range_test('php_version',phpversion());
-        $obj->minimum = '7.0.0';
-        $obj->recommended = '7.4.0';
-        $obj->fail_msg = lang('pass_php_version',$obj->minimum,$obj->recommended,phpversion());
-        $obj->warn_msg = lang('msg_yourvalue',phpversion());
-        $obj->pass_msg = lang('msg_yourvalue',phpversion());
+        $obj->minimum = '5.4.11';
+        $obj->recommended = '5.5.2';
+        $obj->fail_msg = \__appbase\lang('pass_php_version',$obj->minimum,$obj->recommended,phpversion());
+        $obj->warn_msg = \__appbase\lang('msg_yourvalue',phpversion());
+        $obj->pass_msg = \__appbase\lang('msg_yourvalue',phpversion());
         $obj->required = true;
         $tests[] = $obj;
 
@@ -52,10 +45,10 @@ class wizard_step3 extends wizard_step
                     if( !is_writable($one) ) $failed[] = $relative;
                 }
                 else if( in_array($basename,$dirs) ) {
-                    $b = utils::is_directory_writable($one,TRUE);
+                    $b = \__appbase\utils::is_directory_writable($one,TRUE);
                     if( !$b ) {
-                        $tmp = utils::get_writable_error();
-                        $failed = array_merge($failed,utils::get_writable_error());
+                        $tmp = \__appbase\utils::get_writable_error();
+                        $failed = array_merge($failed,\__appbase\utils::get_writable_error());
                     }
                 }
             }
@@ -66,12 +59,13 @@ class wizard_step3 extends wizard_step
         $b = ($fh === FALSE)?FALSE:TRUE;
         $obj = new _tests_\boolean_test('tmpfile',$b);
         $obj->required = true;
-        if( !$b ) $obj->fail_msg = lang('fail_tmpfile');
+        if( !$b ) $obj->fail_msg = \__appbase\lang('fail_tmpfile');
         $tests[] = $obj;
         unset($fh);
 
+        // its an upgrade
         if( $version_info ) {
-            // its an upgrade, config file must be writable.
+            // config file must be writable.
             $obj = new _tests_\boolean_test('config_writable',is_writable($version_info['config_file']));
             $obj->required = true;
             $obj->fail_key = 'fail_config_writable';
@@ -93,7 +87,7 @@ class wizard_step3 extends wizard_step
                 if( !$dir ) return FALSE;  // fail on invalid dir
                 if( !is_dir($dir) ) return TRUE; // pass on dir not existing yet
                 $files = glob($dir.'/*' );
-                if( !is_array($files) || count($files) == 0 ) return TRUE; // no files yet.
+                if( !count($files) ) return TRUE; // no files yet.
                 if( count($files) > 1 ) return FALSE; // morre than one file
                 // trivial check for index.html
                 $bn = strtolower(basename($files[0]));
@@ -115,7 +109,7 @@ class wizard_step3 extends wizard_step
         $obj = new _tests_\version_range_test('gd_version',$this->_GDVersion());
         $obj->minimum = 2;
         $obj->required = 1;
-        $obj->fail_msg = lang('msg_yourvalue',$this->_GDVersion());
+        $obj->fail_msg = \__appbase\lang('msg_yourvalue',$this->_GDVersion());
         $tests[] = $obj;
 
         // required test ... tempnam function
@@ -135,7 +129,7 @@ class wizard_step3 extends wizard_step
         $obj->required = false;
         $obj->fail_key = 'fail_func_ziparchive';
         $tests[] = $obj;
-
+    
         // only perform the check below PHP 7.0 (we'll be removing this check on 2.99+)
         if(version_compare(PHP_VERSION, '7.0.0') < 0)
         {
@@ -201,7 +195,7 @@ class wizard_step3 extends wizard_step
                 // note: if we got here, sessions are probably working just fine.
                 $t2 = new _tests_\boolean_test('open_basedir_session_save_path',0);
                 $t2->warn_key = 'warn_open_basedir_session_savepath';
-                $t2->msg = lang('info_open_basedir_session_save_path');
+                $t2->msg = \__appbase\lang('info_open_basedir_session_save_path');
                 $tests[] = $t2;
             }
             else {
@@ -240,13 +234,13 @@ class wizard_step3 extends wizard_step
             $obj->minimum = '16M';
             $obj->recommended = '32M';
             $obj->pass_msg = ini_get('memory_limit');
-            $obj->fail_msg = lang('fail_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
-            $obj->warn_msg = lang('warn_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
+            $obj->fail_msg = \__appbase\lang('fail_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
+            $obj->warn_msg = \__appbase\lang('warn_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
             $obj->required = 1;
             $tests[] = $obj;
         } else {
             $obj = new _tests_\boolean_test('memory_limit',true);
-            $obj->pass_msg = lang('pass_memory_limit_nolimit');
+            $obj->pass_msg = \__appbase\lang('pass_memory_limit_nolimit');
             $obj->required = 1;
             $tests[] = $obj;
         }
@@ -268,7 +262,7 @@ class wizard_step3 extends wizard_step
         $obj->minimum = '1M';
         $obj->recommended = '10M';
         $obj->required = 1;
-        $obj->warn_msg = lang('warn_upload_max_filesize',ini_get('upload_max_filesize'),$obj->recommended);
+        $obj->warn_msg = \__appbase\lang('warn_upload_max_filesize',ini_get('upload_max_filesize'),$obj->recommended);
         $tests[] = $obj;
 
         // xml extension
@@ -284,8 +278,8 @@ class wizard_step3 extends wizard_step
             $obj->minimum = 30;
             $obj->recommended = 60;
             $obj->required = 1;
-            $obj->warn_msg = lang('warn_max_execution_time',ini_get('max_execution_time'),$obj->minimum,$obj->recommended);;
-            $obj->fail_msg = lang('fail_max_execution_time',ini_get('max_execution_time'),$obj->minimum,$obj->recommended);;
+            $obj->warn_msg = \__appbase\lang('warn_max_execution_time',ini_get('max_execution_time'),$obj->minimum,$obj->recommended);;
+            $obj->fail_msg = \__appbase\lang('fail_max_execution_time',ini_get('max_execution_time'),$obj->minimum,$obj->recommended);;
             $tests[] = $obj;
         }
 
@@ -293,7 +287,7 @@ class wizard_step3 extends wizard_step
         $obj = new _tests_\range_test('post_max_size',ini_get('post_max_size'));
         $obj->minimum = '2M';
         $obj->recommended = '10M';
-        $obj->warn_msg = lang('warn_post_max_size',ini_get('post_max_size'),$obj->minimum,$obj->recommended);
+        $obj->warn_msg = \__appbase\lang('warn_post_max_size',ini_get('post_max_size'),$obj->minimum,$obj->recommended);
         $obj->fail_key = 'fail_post_max_size';
         $tests[] = $obj;
 
@@ -310,7 +304,7 @@ class wizard_step3 extends wizard_step
 
         // recommended test .... disable functions
         $obj = new _tests_\boolean_test('disable_functions',ini_get('disable_functions') == '');
-        $obj->warn_msg = lang('warn_disable_functions',str_replace(',',', ',ini_get('disable_functions')));
+        $obj->warn_msg = \__appbase\lang('warn_disable_functions',str_replace(',',', ',ini_get('disable_functions')));
         $tests[] = $obj;
 
         // recommended test... remote_url
@@ -330,50 +324,16 @@ class wizard_step3 extends wizard_step
         $obj->fail_key = 'fail_file_get_contents';
         $tests[] = $obj;
 
-        // ini set
-        $v = ini_get('log_errors_max_len');
-        if( $v ) {
-            $v2 = (string)max(512,(int)$v - 10);
-        }
-        else if( $v !== false ) {
-            $v2 = '512';
-        }
-        else {
-            $v2 = false;
-        }
-        if( $v2 !== false ) {
-            ini_set('log_errors_max_len',$v2);
-            $r = (ini_get('log_errors_max_len') == $v2);
-            ini_set('log_errors_max_len',$v);
-            $obj = new _tests_\boolean_test('ini_set', $r);
+        // test ini set
+        {
+            $val = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0':'99';
+            ini_set('log_errors_max_len',$val);
+            $obj = new _tests_\boolean_test('ini_set',ini_get('log_errors_max_len') == $val);
             $obj->fail_key = 'fail_ini_set';
             $tests[] = $obj;
         }
-        else {
-            $v = ini_get('max_execution_time');
-            if( $v ) {
-                $v2 = (string)max(93,(int)$v + 2);
-            }
-            else if( $v !== false ) {
-                $v2 = '93';
-            }
-            else {
-                $v2 = false;
-            }
-            if( $v2 !== false ) {
-                ini_set('max_execution_time',$v2);
-                $r = (ini_get('max_execution_time') == $v2);
-                ini_set('max_execution_time',$v);
-                $obj = new _tests_\boolean_test('ini_set', $r);
-                $obj->fail_key = 'fail_ini_set';
-                $tests[] = $obj;
-            }
-            else {
-                $obj = new _tests_\informational_test('ini_set', 'Undetermined');
-                $tests[] = $obj;
-            }
-        }
 
+        //
         // now run the tests
         // if all tests pass
         //   display warm fuzzy message
@@ -412,11 +372,12 @@ class wizard_step3 extends wizard_step
         $tests = '';
         list($tests_failed,$can_continue) = $this->perform_tests($verbose,$informational,$tests);
 
-        $smarty = smarty();
-        $smarty->assign('tests_failed',$tests_failed)
-          ->assign('can_continue',$can_continue)
-          ->assign('verbose',$verbose)
-          ->assign('retry_url',$_SERVER['REQUEST_URI']);
+        $app = \__appbase\get_app();
+        $smarty = \__appbase\smarty();
+        $smarty->assign('tests_failed',$tests_failed);
+        $smarty->assign('can_continue',$can_continue);
+        $smarty->assign('verbose',$verbose);
+        $smarty->assign('retry_url',$_SERVER['REQUEST_URI']);
         if( $verbose ) $smarty->assign('information',$informational);
         if( count($tests) )	$smarty->assign('tests',$tests);
         $url = $this->get_wizard()->next_url();

@@ -4,16 +4,12 @@ namespace __appbase\tests;
 
 class range_test extends test_base
 {
-  private $minimum;
-  private $maximum;
-
   public function __construct($name,$value)
   {
       parent::__construct($name,$value);
   }
 
 
-  #[\ReturnTypeWillChange]
   public function __set($key,$value)
   {
       switch( $key )
@@ -35,21 +31,21 @@ class range_test extends test_base
       {
           $min = $this->returnBytes($this->minimum);
           $val = $this->returnBytes($this->value);
-          if( $val < $min ) return parent::TEST_FAIL;
+          if( $val < $min ) return self::TEST_FAIL;
       }
       if( $this->recommended )
       {
           $rec = $this->returnBytes($this->recommended);
           $val = $this->returnBytes($this->value);
-          if( $val < $rec ) return parent::TEST_WARN;
+          if( $val < $rec ) return self::TEST_WARN;
       }
       if( $this->maximum )
       {
           $max = $this->returnBytes($this->maximum);
           $val = $this->returnBytes($this->value);
-          if( $val > $max ) return parent::TEST_FAIL;
+          if( $val > $max ) return self::TEST_FAIL;
       }
-      return parent::TEST_PASS;
+      return self::TEST_PASS;
   }
 }
 

@@ -25,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-    {foreach $tests as $test}
+    {foreach from=$tests item='test'}
         {cycle values='odd,even' assign='rowclass'}
         <tr class="{$rowclass}{if $test->status == 'test_fail'} error{/if}{if $test->status == 'test_warn'} warning{/if}">
             <td class="{$test->status}">{if $test->status == 'test_fail'}<i title="{'test_failed'|tr}" class="icon-cancel-circle red"></i>{elseif $test->status == 'test_warn'}<i title="{'test_warning'|tr}" class="icon-warning yellow"></i>{else}<i title="{'test_passed'|tr|strip_tags}" class="icon-checkmark-circle green"></i>{/if}</td>
@@ -45,7 +45,6 @@
   <div class="message green">{'step3_passed'|tr}</div>
 {/if}
 
-{if $tests_failed}
 <table class="table bordered-table installer-test-legend small-font">
     <caption>
         {'legend'|tr}
@@ -71,12 +70,16 @@
         </tr>
     </tbody>
 </table>
-{/if}
-<div class="message {if $tests_failed}yellow{else}blue{/if}">{'warn_tests'|tr}</div>
+
+<div class="message yellow">{'warn_tests'|tr}</div>
 
 <div id="bottom_nav">
 {if $tests_failed}
-  <a onclick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
+  {*
+  <button onClick="window.location.reload();">Refresh Page</button>
+  <a href="{$retry_url}" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
+  *}
+  <a onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
 {/if}
 {if $can_continue} <a href="{$next_url}" class="action-button positive" title="{'next'|tr}">{'next'|tr} &rarr;</a>{/if}
 </div>

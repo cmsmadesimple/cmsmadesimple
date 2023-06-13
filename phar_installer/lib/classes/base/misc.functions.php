@@ -4,16 +4,12 @@ namespace __appbase;
 
 function startswith($haystack,$needle)
 {
-  return (strncmp($haystack,$needle,strlen($needle)) == 0);
+  return (substr($haystack,0,strlen($needle)) == $needle);
 }
 
 function endswith($haystack,$needle)
 {
-  $o = strlen($needle);
-  if( $o > 0 ) {
-    return substr_compare($haystack, $needle, -$o, $o) == 0;
-  }
-  return false;
+  return (substr($haystack,-1*strlen($needle)) == $needle);
 }
 
 ?>

@@ -62,7 +62,7 @@ final class cms_utils
 	/**
 	 * @ignore
 	 */
-	final private function __construct() {}
+	private function __construct() {}
 
 
 	/**
@@ -104,7 +104,6 @@ final class cms_utils
 	 *
 	 * @see version_compare()
 	 * @see ModuleOperations::get_module_instance
-	 * @final
 	 * @since 1.9
 	 * @param string $name The module name
 	 * @param string $version An optional version string
@@ -120,27 +119,27 @@ final class cms_utils
 	 * A convenience function to return an indication if a module is availalbe.
 	 *
 	 * @see get_module()
-	 * @final
 	 * @author calguy1000
 	 * @since 1.11
 	 * @param string $name The module name
 	 * @return bool
 	 */
-	final public static function module_available($name)
+	 public static function module_available($name)
 	{
 		return ModuleOperations::get_instance()->IsModuleActive($name);
 	}
-
-
-	/**
-	 * A convenience function to return the current database instance.
-	 *
-	 * @link http://phplens.com/lens/adodb/docs-adodb.htm
-	 * @final
-	 * @since 1.9
-	 * @return ADOConnection a handle to the ADODB database object
-	 */
-	final public static function & get_db()
+  
+  
+  /**
+   * A convenience function to return the current database instance.
+   *
+   * @link  http://phplens.com/lens/adodb/docs-adodb.htm
+   * @since 1.9
+   * //return ADOConnection a handle to the ADODB database object
+   * @return \CMSMS\Database\Connection
+   * @throws \Exception
+   */
+	public static function & get_db()
 	{
 		return \CmsApp::get_instance()->GetDb();
 	}
@@ -149,11 +148,10 @@ final class cms_utils
 	/**
 	 * A convenience function to return a handle to the global CMSMS config.
 	 *
-	 * @final
 	 * @since 1.9
 	 * @return cms_config The global configuration object.
 	 */
-	final public static function & get_config()
+	 public static function & get_config()
 	{
 		return \cms_config::get_instance();
 	}
@@ -164,10 +162,9 @@ final class cms_utils
 	 *
 	 * @see CmsApp::GetSmarty()
 	 * @since 1.9
-	 * @final
 	 * @return Smarty_CMS Handle to the Smarty object
 	 */
-	final public static function & get_smarty()
+	 public static function & get_smarty()
 	{
 		return \Smarty_CMS::get_instance();
 	}
@@ -179,10 +176,10 @@ final class cms_utils
 	 * This function will always return NULL if called from an admin action
 	 *
 	 * @since 1.9
-	 * @final
+
 	 * @return Content The current content object, or null
 	 */
-	final public static function get_current_content()
+	 public static function get_current_content()
 	{
 		return CmsApp::get_instance()->get_content_object();
 	}
@@ -194,10 +191,9 @@ final class cms_utils
 	 * This function will always return NULL if called from an admin action
 	 *
 	 * @since 1.9
-	 * @final
 	 * @return string
 	 */
-	final public static function get_current_alias()
+	 public static function get_current_alias()
 	{
 		$obj = CmsApp::get_instance()->get_content_object();
 		if( $obj ) return $obj->Alias();
@@ -210,10 +206,9 @@ final class cms_utils
 	 * This function will always return NULL if called from an admin action
 	 *
 	 * @since 1.9
-	 * @final
 	 * @return int
 	 */
-	final public static function get_current_pageid()
+	 public static function get_current_pageid()
 	{
 		return CmsApp::get_instance()->get_content_id();
 	}

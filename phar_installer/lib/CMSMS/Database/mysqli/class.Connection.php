@@ -8,7 +8,6 @@ class Connection extends \CMSMS\Database\Connection
     private $_in_transaction = 0;
     private $_in_smart_transaction = 0;
     private $_transaction_status = TRUE;
-    private $_transaction_failed = FALSE;
 
     public function DbType() { return 'mysqli'; }
 
@@ -36,7 +35,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function NewDataDictionary()
+    public function &NewDataDictionary()
     {
         $obj = new DataDictionary($this);
         return $obj;
@@ -50,7 +49,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function get_inner_mysql()
+    public function &get_inner_mysql()
     {
         return $this->_mysql;
     }
@@ -114,7 +113,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function do_sql($sql)
+    public function &do_sql($sql)
     {
         // execute all queries, but only need the resultset from the last one.
         $resultset = null;
@@ -133,7 +132,7 @@ class Connection extends \CMSMS\Database\Connection
         return $resultset;
     }
 
-    public function Prepare($sql)
+    public function &Prepare($sql)
     {
         $stmt = new Statement($this,$sql);
         return $stmt;

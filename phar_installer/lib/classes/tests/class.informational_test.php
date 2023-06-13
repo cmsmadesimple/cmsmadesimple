@@ -8,9 +8,9 @@ class informational_test extends test_base
   {
     parent::__construct($name,$value,$key);
     if( $message )
-    {
-      $this->msg_key = $message;
-    }
+      {
+	$this->msg_key = $message;
+      }
   }
 
   /**

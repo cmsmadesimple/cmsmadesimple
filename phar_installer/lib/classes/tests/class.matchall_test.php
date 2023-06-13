@@ -2,17 +2,9 @@
 
 namespace __appbase\tests;
 
-use function __appbase\lang;
-
 class matchall_test extends test_base
 {
     private $_children;
-    private $minimum;
-    private $maximum;
-    private $recommended;
-    private $success_key;
-    private $pass_key;
-    private $fail_key;
 
     public function __construct($name)
     {
@@ -26,7 +18,6 @@ class matchall_test extends test_base
     }
 
 
-    #[\ReturnTypeWillChange]
     public function __set($key,$value)
     {
         switch( $key ){
@@ -46,14 +37,14 @@ class matchall_test extends test_base
 
     public function execute()
     {
-        $out = parent::TEST_PASS;
+        $out = self::TEST_PASS;
         if( count($this->_children) ) {
             for( $i = 0; $i < count($this->_children); $i++ ) {
                 $res = $this->_children[$i]->run();
-                if( $res == parent::TEST_FAIL ) {
+                if( $res == self::TEST_FAIL ) {
                     // test failed.... if this test is not required, we can continue
                     if( $this->required ) return $res;
-                    $out = parent::TEST_WARN;
+                    $out = self::TEST_WARN;
                 }
             }
         }
@@ -63,22 +54,22 @@ class matchall_test extends test_base
     public function msg()
     {
         switch( $this->status ) {
-        case parent::TEST_FAIL:
+        case self::TEST_FAIL:
             for( $i = 0; $i < count($this->_children); $i++ ) {
                 $obj = $this->_children[$i];
-                if( $obj->status == parent::TEST_FAIL ) {
+                if( $obj->status == self::TEST_FAIL ) {
                     if( $obj->fail_msg ) return $obj->fail_msg;
-                    if( $obj->fail_key ) return lang($obj->fail_key);
+                    if( $obj->fail_key ) return \__appbase\lang($obj->fail_key);
                 }
             }
             break;
 
-        case parent::TEST_WARN:
+        case self::TEST_WARN:
             for( $i = 0; $i < count($this->_children); $i++ ) {
                 $obj = $this->_children[$i];
-                if( $obj->status == parent::TEST_FAIL ) {
+                if( $obj->status == self::TEST_FAIL ) {
                     if( $obj->warn_msg ) return $obj->warn_msg;
-                    if( $obj->warn_key ) return lang($obj->warn_key);
+                    if( $obj->warn_key ) return \__appbase\lang($obj->warn_key);
                 }
             }
         }

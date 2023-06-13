@@ -107,7 +107,6 @@ class news_article
     }
 
 
-    #[\ReturnTypeWillChange]
     public function __get($key)
     {
         switch( $key ) {
@@ -180,7 +179,6 @@ class news_article
     }
 
 
-    #[\ReturnTypeWillChange]
     public function __isset($key)
     {
         switch( $key )
@@ -226,7 +224,6 @@ class news_article
     }
 
 
-    #[\ReturnTypeWillChange]
     public function __set($key,$value)
     {
         switch( $key ) {

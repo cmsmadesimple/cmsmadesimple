@@ -411,6 +411,16 @@ $(document).ready(function(){
 					</div>
 
 					<div class="pageoverflow">
+						<p class="pagetext"><label for="smtpautotls">{lang('settings_smtpautotls')}:</label></p>
+						<p class="pageinput">
+							<select id="secure" name="mailprefs_smtpautotls">
+								{cms_yesno selected=$mailprefs.smtpautotls}
+								{*html_options options=$secure_opts selected=$mailprefs.secure*}
+							</select>&nbsp;{cms_help key2='settings_mailprefs_smtp_smtpautotls' title=lang('settings_smtpautotls')}
+						</p>
+					</div>
+
+					<div class="pageoverflow">
 						<p class="pagetext"><label for="username">{lang('settings_authusername')}:</label></p>
 						<p class="pageinput">
 							<input type="text" id="username" name="mailprefs_username" value="{$mailprefs.username}" size="50" maxlength="255"/>

@@ -117,12 +117,11 @@ final class news_admin_ops
             $current_parent_id = $row['news_category_id'];
             $count = 0;
 
-            $query = "SELECT news_category_id, item_order, news_category_name, parent_id FROM ".CMS_DB_PREFIX."module_news_categories WHERE news_category_id = ?";
             while ($current_parent_id > -1) {
+                $query = "SELECT news_category_id, item_order, news_category_name, parent_id FROM ".CMS_DB_PREFIX."module_news_categories WHERE news_category_id = ?";
                 $row2 = $db->GetRow($query, array($current_parent_id));
                 if ($row2) {
-                    //TODO prevent item_order null values ?
-                    $current_hierarchy_position = str_pad((string)$row2['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
+                    $current_hierarchy_position = str_pad($row2['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
                     $current_long_name = $row2['news_category_name'] . ' | ' . $current_long_name;
                     $current_parent_id = $row2['parent_id'];
                     $count++;

@@ -2,32 +2,23 @@
 
 namespace cms_autoinstaller;
 
-use __appbase\utils;
-use cms_autoinstaller\wizard_step;
-use Exception;
-use function __appbase\get_app;
-use function __appbase\lang;
-use function __appbase\smarty;
-use function __appbase\startswith;
-use function __appbase\translator;
-
-class wizard_step1 extends wizard_step
+class wizard_step1 extends \cms_autoinstaller\wizard_step
 {
     public function __construct()
     {
         parent::__construct();
-        if( !class_exists('PharData') ) throw new Exception('It appears that the Phar extension has not been enabled in this version of PHP. Please correct this.');
+        if( !class_exists('PharData') ) throw new \Exception('It appears that the phar extensions have not been enabled in this version of php.  Please correct this.');
     }
 
     protected function process()
     {
         if( isset($_POST['lang']) ) {
-            $lang = trim(utils::clean_string($_POST['lang']));
-            if( $lang ) translator()->set_selected_language($lang);
+            $lang = trim(\__appbase\utils::clean_string($_POST['lang']));
+            if( $lang ) \__appbase\translator()->set_selected_language($lang);
         }
 
         if( isset($_POST['destdir']) ) {
-            $app = get_app();
+            $app = \__appbase\get_app();
             $app->set_destdir($_POST['destdir']);
         }
 
@@ -37,14 +28,14 @@ class wizard_step1 extends wizard_step
 
         if( isset($_POST['next']) ) {
             // redirect to the next step.
-            utils::redirect($this->get_wizard()->next_url());
+            \__appbase\utils::redirect($this->get_wizard()->next_url());
         }
         return TRUE;
     }
 
     private function get_valid_install_dirs()
     {
-        $app = get_app();
+        $app = \__appbase\get_app();
         $start = realpath($app->get_rootdir());
         $parent = realpath(dirname($start));
 
@@ -90,7 +81,7 @@ class wizard_step1 extends wizard_step
                 break;
 
             case 'modules':
-                if( is_dir("$dir/AdminSearch") || is_dir("$dir/ModuleManager") ) return FALSE;
+                if( is_dir("$dir/CMSMailer") || is_dir("$dir/AdminSearch") ) return FALSE;
                 break;
 
             case 'data':
@@ -117,13 +108,13 @@ class wizard_step1 extends wizard_step
         };
 
         $_find_dirs = function($start,$depth = 0) use( &$_find_dirs, &$_get_annotation, $_is_valid_dir ) {
-            if( !is_readable( $start ) ) return [];
+            if( !is_readable( $start ) ) return;
             $dh = opendir($start);
             if( !$dh ) return;
             $out = array();
             while( ($file = readdir($dh)) !== FALSE ) {
                 if( $file == '.' || $file == '..' ) continue;
-                if( startswith($file,'.') || startswith($file,'_') ) continue;
+                if( \__appbase\startswith($file,'.') || \__appbase\startswith($file,'_') ) continue;
                 $dn = $start.DIRECTORY_SEPARATOR.$file;  // cuz windows blows, and windoze guys are whiners :)
                 if( !@is_readable($dn) ) continue;
                 if( !@is_dir($dn) ) continue;
@@ -138,7 +129,7 @@ class wizard_step1 extends wizard_step
                     if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
                 }
             }
-            return $out;
+            if( count($out) ) return $out;
         };
 
         $out = array();
@@ -154,23 +145,23 @@ class wizard_step1 extends wizard_step
         parent::display();
 
         // get the list of directories we can install to.
-        $smarty = smarty();
-        $app = get_app();
+        $smarty = \__appbase\smarty();
+        $app = \__appbase\get_app();
         if( !$app->in_phar() ) {
             // get the list of directories we can install to
             $dirlist = $this->get_valid_install_dirs();
-            if( !$dirlist ) throw new Exception('No possible installation directories found.  This could be a permissions issue');
+            if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
             $smarty->assign('dirlist',$dirlist);
-            $best = dirname($app->get_destdir());
+
             $custom_destdir = $app->has_custom_destdir();
-            $smarty->assign('custom_destdir',$custom_destdir)
-             ->assign('destdir',$best);
+            $smarty->assign('custom_destdir',$custom_destdir);
+            $smarty->assign('destdir',$app->get_destdir());
         }
-        $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0))
-          ->assign('languages',translator()->get_language_list(translator()->get_allowed_languages()))
-          ->assign('curlang',translator()->get_current_language())
-          ->assign('yesno',array(0=>lang('no'),1=>lang('yes')))
-          ->display('wizard_step1.tpl');
+        $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
+        $smarty->assign('languages',\__appbase\translator()->get_language_list(\__appbase\translator()->get_allowed_languages()));
+        $smarty->assign('curlang',\__appbase\translator()->get_current_language());
+        $smarty->assign('yesno',array(0=>\__appbase\lang('no'),1=>\__appbase\lang('yes')));
+        $smarty->display('wizard_step1.tpl');
 
         $this->finish();
     }

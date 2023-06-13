@@ -4,10 +4,8 @@ namespace __appbase;
 
 abstract class wizard_step
 {
-  public function __construct()
-  {
-    //TODO only if debugging
-    echo "DEBUG: create wizard step<br />";
+  public function __construct() {
+    echo "DEBUG: create wizard step<br/>";
   }
 
   /**
@@ -23,7 +21,7 @@ abstract class wizard_step
   public function get_name() { return get_class($this); }
   public function get_description() { return null; }
 
-  public function get_wizard()
+  public function &get_wizard()
   {
     return wizard::get_instance();
   }

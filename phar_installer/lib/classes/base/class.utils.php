@@ -2,10 +2,6 @@
 
 namespace __appbase;
 
-use Exception;
-use function __appbase\endswith;
-use function __appbase\startswith;
-
 class utils
 {
     private static $_writable_error = array();
@@ -66,7 +62,7 @@ class utils
         $in = strtolower((string) $in);
         if( in_array($in,array('1','y','yes','true','t','on')) ) return TRUE;
         if( in_array($in,array('0','n','no','false','f','off')) ) return FALSE;
-        if( $strict ) return FALSE;
+        if( $strict ) return null;
         return ($in?TRUE:FALSE);
     }
 
@@ -80,7 +76,7 @@ class utils
         $val = str_replace("'", "'", $val);
         return strip_tags($val);
     }
-
+  
   /**
    * cleans passwords for config.php mainly db pass.
    * we don't want quotes on the string
@@ -94,7 +90,7 @@ class utils
       if( !$val ) return $val;
       $val = trim( (string) $val );
       $val = str_replace(["'", '"'], "", $val);
-
+  
       return $val;
     }
 
@@ -125,7 +121,7 @@ class utils
             }
         }
 
-        throw new Exception('Could not find a writable location for temporary files');
+        throw new \Exception('Could not find a writable location for temporary files');
     }
 
     public static function is_email($str)
