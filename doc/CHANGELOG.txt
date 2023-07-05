@@ -1,3 +1,8 @@
+Version 2.2.18 - Apex
+-------------------------------
+Core - General
+ - Fallback function CMSMS\strftime. PHP Intl extension still recommended. The fallback solves issues on hosts that don't install it by default and don't allow users to install it.
+
 Version 2.2.17 - Iqaluit
 -------------------------------
 Core - General
