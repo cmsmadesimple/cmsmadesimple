@@ -44,7 +44,7 @@ function get_userid($redirect = true)
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
         $config = \cms_config::get_instance();
-        redirect($config['admin_url']."/login.php");
+        redirect($config['admin_url'] . '/login.php');
     }
     return $uid;
 }
@@ -67,7 +67,7 @@ function get_username($check = true)
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
         $config = \cms_config::get_instance();
-        redirect($config['admin_url']."/login.php");
+        redirect($config['admin_url'] . '/login.php');
     }
     return $uname;
 }
@@ -104,7 +104,7 @@ function check_login($no_redirect = false)
                 $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
             }
             $config = \cms_config::get_instance();
-            redirect($config['admin_url']."/login.php");
+            redirect($config['admin_url'] . '/login.php');
         }
     }
     return TRUE;
@@ -202,8 +202,9 @@ function audit($itemid, $itemname, $action)
 
     if( $userid > 0 && !$app->is_cli() ) $ip_addr = cms_utils::get_real_ip();
 
-    $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
-    $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
+    $query = 'INSERT INTO ' . CMS_DB_PREFIX .
+             'adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)';
+    $db->Execute($query, [time(), $userid, $username, $itemid, $itemname, $action, $ip_addr]);
 }
 
 
@@ -234,7 +235,7 @@ function get_site_preference($prefname, $defaultvalue = '')
  */
 function remove_site_preference($prefname,$uselike=false)
 {
-  return cms_siteprefs::remove($prefname,$uselike);
+  cms_siteprefs::remove($prefname,$uselike);
 }
 
 
@@ -250,7 +251,7 @@ function remove_site_preference($prefname,$uselike=false)
  */
 function set_site_preference($prefname, $value)
 {
-  return cms_siteprefs::set($prefname,$value);
+  cms_siteprefs::set($prefname,$value);
 }
 
 
@@ -279,7 +280,7 @@ function set_site_preference($prefname, $value)
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
-  $parms = array();
+  $parms = [];
   $parms['enablewysiwyg'] = $enablewysiwyg;
   $parms['text'] = $text;
   $parms['name'] = $name;
@@ -366,7 +367,6 @@ function pagination($page, $totalrows, $limit)
 function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
 			      $fileprefix='',$excludefiles=1,$sortresults = 0)
 {
-  $files = array();
   $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
   if( $files === false ) return false;
   $out = "<select name=\"{$name}\" id=\"{$name}\" {$extratext}>\n";
@@ -427,7 +427,7 @@ function get_pageid_or_alias_from_url()
         // either we're using pretty urls
         // or this is the default page.
         if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php')) {
-            $matches = array();
+            $matches = [];
             if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches)) {
                 // pretty urls... grab all the stuff after the index.php
                 $page = $matches[1];
@@ -440,7 +440,7 @@ function get_pageid_or_alias_from_url()
     // by here, if page is empty, use the default page id
     if ($page == '') $page = $contentops->GetDefaultContent(); // assume default content
 
-    // by here, if we're not assuming pretty urls of any sort
+    // by here, if we're not assuming pretty urls of any sort,
     // and we have a value... we're done.
     if( $config['url_rewriting'] == 'none' ) return $page;
 
@@ -472,7 +472,7 @@ function get_pageid_or_alias_from_url()
             // it's a module route
             //Now setup some assumptions
             if (!isset($matches['id'])) $matches['id'] = 'cntnt01';
-            if (!isset($matches['action'])) $matches['action'] = 'defaulturl';
+            if (!isset($matches['action'])) $matches['action'] = 'default';
             if (!isset($matches['inline'])) $matches['inline'] = 0;
             if (!isset($matches['returnid']))	$matches['returnid'] = ''; #Look for default page
             if (!isset($matches['module'])) $matches['module'] = $route->get_dest();
