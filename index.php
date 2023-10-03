@@ -42,10 +42,10 @@ if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
 
 if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) {
     echo '<html><title>Error</title></head><body>';
-    echo '<p>The following directories must be writable by the web server:<br />';
-    echo 'tmp/cache<br />';
-    echo 'tmp/templates_c<br /></p>';
-    echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivalent for your platform before continuing.</p>';
+    echo '<p>The following directories must be writable by the web server:<br>';
+    echo 'tmp/cache<br>';
+    echo 'tmp/templates_c<br></p>';
+    echo '<p>Please correct by executing:<br><em>chmod 777 tmp/cache<br>chmod 777 tmp/templates_c</em><br>or the equivalent for your platform before continuing.</p>';
     echo '</body></html>';
     exit;
 }
