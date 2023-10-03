@@ -302,7 +302,7 @@ abstract class jquery_upload_handler
         if( !$total_file_size ) {
             $content_range_header = isset($_SERVER['HTTP_CONTENT_RANGE']) ? trim($_SERVER['HTTP_CONTENT_RANGE']) : null;
             $content_range = $content_range_header ? preg_split('/[^0-9]+/', $content_range_header) : null;
-            $total_file_size = $content_range[3];
+            $total_file_size = $content_range[3] ? (int) $content_range[3] : null;
         }
 
         $upload = isset($_FILES[$this->options['param_name']]) ?
