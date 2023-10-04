@@ -48,6 +48,7 @@ try {
     $content_type = $pagedefaults['contenttype'];
     $error = null;
     $active_tab = null;
+    $isDefault= false;
 
     if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
@@ -127,14 +128,17 @@ try {
     else {
         // editing an existing content object
         $content_obj = $contentops->LoadContentFromId($content_id);
+        
+        $isDefault = $content_obj->DefaultContent();
+        
         $content_type = $content_obj->Type();
-        if( isset($params['content_type']) ) {
+        if( isset($params['content_type']) && !$isDefault ) {
             $content_type = trim($params['content_type']);
         }
     }
 
     // validate the content type.
-    if( is_array($existingtypes) && count($existingtypes) > 0 && !in_array($content_type,array_keys($existingtypes)) ) {
+    if(  is_array($existingtypes) && count($existingtypes) > 0 && !in_array($content_type,array_keys($existingtypes)) ) {
         $this->SetError($this->Lang('error_editpage_contenttype'));
         $this->RedirectToAdminTab();
     }
@@ -150,7 +154,7 @@ catch( Exception $e ) {
 // or a POST
 //
 try {
-    if( $content_id != -1 && $content_type != $content_obj->Type() ) {
+    if( !$isDefault && $content_id != -1 && $content_type != $content_obj->Type() ) {
         // content type changed. create a new content object, but preserve the id.
         $tmpobj = $contentops->CreateNewContent($content_type);
         $tmpobj->SetId($content_obj->Id());
@@ -285,7 +289,7 @@ try {
         
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
-            if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {
+            if( !$isDefault && ($this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id) )  {
                 // if you're only an additional editor on this page... you don't get to change this.
                 $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
                 $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
