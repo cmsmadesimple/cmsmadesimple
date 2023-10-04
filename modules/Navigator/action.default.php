@@ -47,6 +47,12 @@ $childrenof = null;
 $deep = TRUE;
 $collapse = FALSE;
 
+/**
+ * Start by clearing the excludes as they won't apply to the following action calls.
+ * Each action call will require explicitly setting the excludes.
+ */
+Nav_utils::clear_excludes();
+
 $template = null;
 if( isset($params['template']) ) {
     $template = trim($params['template']);
