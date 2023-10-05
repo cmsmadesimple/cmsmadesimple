@@ -361,8 +361,7 @@ function cms_html_entity_decode($text_to_convert) {
     "&gt;" => ">",
     "&lt;" => "<"
   );
-
-  $return_text = html_entity_decode($text_to_convert, (ENT_QUOTES | ENT_HTML5), 'UTF-8');
+  $return_text = html_entity_decode((string)$text_to_convert, (ENT_QUOTES | ENT_HTML5), 'UTF-8');
 
   # just to be on the safe side if html_entity_decode still missed something
   # and also converts &nbsp; to chr(32) which seems correct (Jo Morg)
