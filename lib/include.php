@@ -47,6 +47,7 @@ define('CMS_DEFAULT_VERSIONCHECK_URL', 'https://www.cmsmadesimple.org/latest_ver
 define('CMS_SECURE_PARAM_NAME', '__c');  // this is used for CSRF protection
 define('CMS_USER_KEY', '_userkey_'); // this is used for CSRF protection
 define('CONFIG_FILE_LOCATION', dirname(__DIR__) . '/config.php');
+
 global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY;
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
@@ -129,6 +130,28 @@ if( isset($CMS_ADMIN_PAGE) ) {
         // Language shizzle
         if( !$charset ) $charset = get_encoding();
         header("Content-Type: $content_type; charset=$charset");
+        $config = CmsApp::get_instance()->GetConfig();
+        
+        # for the moment we will only use the self header for CSP as an option, either self or none;
+        if($config['admin_csp_header'] === 'self')
+        {
+          if(!isset($_SESSION['__CORE_NONCE__']))
+          {
+            $_SESSION['__CORE_NONCE__'] = base64_encode(random_bytes(16));
+          }
+          
+          $policies = [
+           "default-src 'self'",
+            "script-src 'unsafe-inline' 'self'",
+            "style-src 'unsafe-inline' 'self'",
+          ];
+          
+          $csp = implode('; ', $policies);
+          
+          header("Content-Security-Policy: $csp;");
+        }
+        
+
     }
 }
 
@@ -234,4 +257,6 @@ if( !isset($DONT_LOAD_SMARTY) ) {
     debug_buffer('Done Initialing Smarty');
     if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = E_ALL;
     $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
+    
+    # TODO: we'll set here a smarty filter to handle CPS tags maybe? messy but it's a start
 }

@@ -64,12 +64,12 @@ final class cms_config implements ArrayAccess
   /**
    * ignore
    */
-  private $_data = array();
+  private $_data = [];
 
   /**
    * ignore
    */
-  private $_cache = array();
+  private $_cache = [];
 
 
   /**
@@ -206,8 +206,9 @@ final class cms_config implements ArrayAccess
     $this->_types['assets_path']               = self::TYPE_STRING;
     $this->_types['permissive_smarty']         = self::TYPE_BOOL;
     $this->_types['startup_mact_processing']   = self::TYPE_BOOL;
+    $this->_types['admin_csp_header']          = self::TYPE_STRING;
   
-    $config = array();
+    $config = [];
     if( defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION) ) {
       include(CONFIG_FILE_LOCATION);
       foreach( $config as $key => &$value ) {
@@ -251,7 +252,6 @@ final class cms_config implements ArrayAccess
     global $CMS_INSTALL_PAGE;
     if( !isset($CMS_INSTALL_PAGE) ) {
       trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
-      return;
     }
 
     $this->_data = array_merge($this->_data,$newconfig);
@@ -515,6 +515,7 @@ final class cms_config implements ArrayAccess
         return $this->_cache[$key];
   
       case 'url_rewriting':
+      case 'admin_csp_header':
         return 'none';
   
       case 'default_encoding':

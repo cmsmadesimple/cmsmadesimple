@@ -684,7 +684,7 @@ class CmsContentTypePlaceholder
 	public $friendlyname;
 
 	/**
-	 * @var Wether the type has been loaded
+	 * @var bool Whether the type has been loaded
 	 */
 	public $loaded;
 }
