@@ -1,3 +1,19 @@
+Version 2.2.19 - Not Released
+-------------------------------
+
+Core - General
+ - BR #12647 - Wrong default action value in get_pageid_or_alias_from_url
+ - FR #12638 - ability to add CSP headers on the backend: currently weak restrictions: self with script-src and script-src-elem set to unsafe-inline (optionally set on config admin_csp_header);
+Content Manager nv
+ - BR #12635 - Apply button is shown for non-existing page;
+ - BR #12474 Taking the default page down by accident through the content type;
+
+FilePicker nv
+ - BR #12621 - FilePicker upload bug
+
+Navigator nv
+ - BR #12528 Navigator call doesn't clear excluded prefixes in some situations
+
 Version 2.2.18 - Apex
 -------------------------------
 Core - General

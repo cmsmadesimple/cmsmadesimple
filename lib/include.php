@@ -135,10 +135,11 @@ if( isset($CMS_ADMIN_PAGE) ) {
         # for the moment we will only use the self header for CSP as an option, either self or none;
         if($config['admin_csp_header'] === 'self')
         {
-          if(!isset($_SESSION['__CORE_NONCE__']))
-          {
-            $_SESSION['__CORE_NONCE__'] = base64_encode(random_bytes(16));
-          }
+// will have to be tested later, along with the to do bellow (JMorg)
+//          if(!isset($_SESSION['__CORE_NONCE__']))
+//          {
+//            $_SESSION['__CORE_NONCE__'] = base64_encode(random_bytes(16));
+//          }
           
           $policies = [
            "default-src 'self'",
