@@ -131,7 +131,7 @@ class CmsLayoutTemplate
 	 *
 	 * @param string $str Smarty template text
 	 */
-	public function set_content($str)
+	public function set_content($str = '')
 	{
 		$str = trim($str);
 		if( !$str ) $str = '{* Empty Smarty Template *}';
