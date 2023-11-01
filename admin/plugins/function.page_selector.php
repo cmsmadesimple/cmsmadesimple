@@ -21,7 +21,7 @@ function smarty_function_page_selector($params,&$template)
     $value = (isset($params['value']) ) ? (int) $params['value'] : 0;
     $name = (isset($params['name']) ) ? trim($params['name']) : 'parent_id';
     $allowcurrent = (isset($params['allowcurrent']) ) ? cms_to_bool($params['allowcurrent']) : 0;
-    $allow_all = (isset($params['allowall']) ) ? cms_to_bool($params['allowall']) : 0;
+    $allow_all = (isset($params['allow_all']) ) ? cms_to_bool($params['allow_all']) : 0;
     $for_child = (isset($params['for_child']) ) ? cms_to_bool($params['for_child']) : 0;
 
     $out = \ContentOperations::get_instance()->CreateHierarchyDropdown('',$value,$name,$allowcurrent,0,0,$allow_all,$for_child);
