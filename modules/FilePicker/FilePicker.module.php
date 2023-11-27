@@ -72,7 +72,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
      */
 
     function GetFriendlyName() { return $this->Lang('friendlyname');  }
-    function GetVersion() { return '1.0.6'; }
+    function GetVersion() { return '1.0.7'; }
     function GetHelp() { return $this->Lang('help'); }
     function IsPluginModule() { return FALSE; }
     function HasAdmin() { return TRUE; }

@@ -51,7 +51,7 @@ final class Navigator extends CMSModule
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
     function IsPluginModule() { return true; }
     function HasAdmin() { return false; }
-    function GetVersion() { return '1.0.9'; }
+    function GetVersion() { return '1.0.10'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAdminDescription() { return $this->Lang('description'); }
     function GetAdminSection() { return 'layout'; }
