@@ -20,9 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
-
-$CMS_VERSION = '2.2.18';
-$CMS_VERSION_NAME = 'Apex';
+$CMS_VERSION = '2.2.19';
+$CMS_VERSION_NAME = 'Selkirk';
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
