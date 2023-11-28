@@ -472,7 +472,7 @@ function get_pageid_or_alias_from_url()
             // it's a module route
             //Now setup some assumptions
             if (!isset($matches['id'])) $matches['id'] = 'cntnt01';
-            if (!isset($matches['action'])) $matches['action'] = 'default';
+            if (!isset($matches['action'])) $matches['action'] = 'defaulturl';
             if (!isset($matches['inline'])) $matches['inline'] = 0;
             if (!isset($matches['returnid']))	$matches['returnid'] = ''; #Look for default page
             if (!isset($matches['module'])) $matches['module'] = $route->get_dest();
