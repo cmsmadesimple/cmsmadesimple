@@ -1,5 +1,6 @@
 <fieldset>
   <legend>{$mod->lang('prompt_profiles')}</legend>
+{if !empty($profiles)}
   <table class="pagetable">
     <thead>
       <tr>
@@ -8,13 +9,16 @@
       </tr>
     </thead>
     <tbody>
-      {foreach $profiles as $profile}
-        {cms_action_url action='admin_editprofile' profile=$profile.name profile=$profile.name assign='edit_url'}
+    {foreach $profiles as $profile}
+     {cms_action_url action='admin_editprofile' profile=$profile.name profile=$profile.name assign='edit_url'}
       <tr>
         <td><a href="{$edit_url}" title="{$mod->Lang('title_edit_profile')}">{$profile.label}</a></td>
         <td><a href="{$edit_url}">{admin_icon icon='edit.gif' alt=$mod->Lang('title_edit_profile')}</a></td>
       </tr>
-      {/foreach}
+    {/foreach}
     </tbody>
   </table>
+{else}
+  <p class="information">{$mod->Lang('none')}</p>
+{/if}
 </fieldset>

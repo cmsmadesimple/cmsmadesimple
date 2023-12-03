@@ -1,7 +1,6 @@
 <?php
-#CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (ted@cmsmadesimple.org)
-#Visit our homepage at: http://www.cmsmadesimple.org
+#CMS Made Simple module: MicroTiny
+#(c) 2004 CMS Made Simple Foundation Inc <foundation@cmsmadesimple.org>
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -22,16 +21,15 @@ class MicroTiny extends CMSModule
   const PROFILE_FRONTEND = '__frontend__';
   const PROFILE_ADMIN = '__admin__';
 
-  public function __construct() { parent::__construct(); }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
-  public function GetVersion(){ return '2.2.5'; }
+  public function GetVersion() { return '2.2.6'; }
   public function HasAdmin() { return TRUE; }
   public function IsPluginModule() { return TRUE; }
   public function LazyLoadFrontend() { return TRUE; }
   public function LazyLoadAdmin() { return TRUE; }
   public function MinimumCMSVersion() { return '2.2.2'; }
-  public function GetDependencies() { return array('FileManager'=>'1.6.4'); }
+  public function GetDependencies() { return array('FilePicker'=>'1.0.7'); }
   public function GetHelp() { return $this->Lang('help'); }
   public function GetAuthor() { return 'Morten Poulsen'; }
   public function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -39,7 +37,7 @@ class MicroTiny extends CMSModule
   public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
   public function GetAdminDescription() { return $this->Lang('admindescription'); }
 
-  public function WYSIWYGGenerateHeader($selector = null,$cssname = null) {
+  public function WYSIWYGGenerateHeader($selector = '',$cssname = '') {
     return microtiny_utils::WYSIWYGGenerateHeader($selector, $cssname);
   }
 
@@ -50,6 +48,7 @@ class MicroTiny extends CMSModule
 
 } // end of module class
 
+// function unused across the core, deprecated since 2.2.6
 function mt_jsbool($val)
 {
   $val = cms_to_bool($val);

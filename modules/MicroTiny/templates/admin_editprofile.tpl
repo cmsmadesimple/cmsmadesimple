@@ -1,16 +1,16 @@
 <h3>{$mod->Lang('edit_profile')}: <em>{$data.label}</em></h3>
 
 {form_start}
-	<input type="hidden" name="{$actionid}profile" value="{$profile}"/>
-	<input type="hidden" name="{$actionid}origname" value="{$data.name}"/>
+	<input type="hidden" name="{$actionid}profile" value="{$profile}">
+	<input type="hidden" name="{$actionid}origname" value="{$data.name}">
 
 	{if $data.system}<div class="information">{$tmp='profiledesc_'|cat:$data.name}{$mod->Lang($tmp)}</div>{/if}
 
 	<div class="pageoverflow">
 		<p class="pagetext"></p>
 		<p class="pageinput">
-			<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-			<input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+			<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}">
+			<input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}">
 		</p>
 	</div>
 
@@ -20,7 +20,7 @@
 				<label for="profile_name">*{$mod->Lang('profile_name')}:</label>&nbsp;{cms_help key2='mthelp_profilename' title=$mod->Lang('profile_name')}
 			</p>
 			<p class="pageinput">
-				<input type="text" size="40" id="profile_name" name="{$actionid}profile_name" value="{$data.name}" />
+				<input type="text" size="40" id="profile_name" name="{$actionid}profile_name" value="{$data.name}">
 			</p>
 		</div>
 
@@ -29,7 +29,7 @@
 				<label for="profile_label">*{$mod->Lang('profile_label')}:</label>&nbsp;{cms_help key2='mthelp_profilelabel' title=$mod->Lang('profile_label')}
 			</p>
 			<p class="pageinput">
-				<input type="text" size="80" id="profile_label" name="{$actionid}profile_label" value="{$data.label}" />
+				<input type="text" size="80" id="profile_label" name="{$actionid}profile_label" value="{$data.label}">
 			</p>
 		</div>
 	{/if}
@@ -102,8 +102,8 @@
 	<div class="pageoverflow">
 		<p class="pagetext"></p>
 		<p class="pageinput">
-			<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-			<input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+			<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}">
+			<input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}">
 		</p>
 	</div>
 {form_end}
