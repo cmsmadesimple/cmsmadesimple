@@ -62,7 +62,9 @@ if( !$this->CheckPermission('Modify Files') ) {
 $useprefix = cms_to_bool(get_parameter_value($_GET,'useprefix'));
 if( $useprefix ) {
     $prefix = $profile->reltop;
-    $profile = $profile->overrideWith( [ 'prefix'=>$prefix.'/' ] );
+    if (!empty($prefix)) {
+        $profile = $profile->overrideWith( [ 'prefix'=>$prefix.'/' ] );
+    }
 }
 
 $filemanager = cms_utils::get_module('FileManager');
