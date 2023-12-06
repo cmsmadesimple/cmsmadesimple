@@ -8,12 +8,13 @@ $lang['browse'] = 'Browse';
 // C
 $lang['cancel'] = 'Cancel';
 $lang['class'] = 'Class';
-$lang['cmsms_linker'] = 'Link to CMSMS Page';
+$lang['cmsms_linker'] = 'Site-page link'; // menu label
+$lang['cmsms_linker2'] = 'Link to Page on this Website'; // dialog heading
 $lang['css_styles_help'] = 'CSS-stylenames specified here are added to a dropdown box in the editor. Leaving the input field empty will keep the dropdown box hidden (default behavior).';
-$lang['css_styles_help2'] = 'The styles can either be just the class name, or a classname with a new name to show.<br />
-Must be separated by either commas or newlines.<br />
-Example: mystyle1, My style name=mystyle2<br />
-Result: a dropdown containing 2 entries, \'mystyle1\' and \'My style name\' resulting in the insertion of mystyle1, and mystyle2 respectively.<br />
+$lang['css_styles_help2'] = 'The styles can either be just the class name, or a classname with a new name to show.<br>
+Must be separated by either commas or newlines.<br>
+Example: mystyle1, My style name=mystyle2<br>
+Result: a dropdown containing 2 entries, \'mystyle1\' and \'My style name\' resulting in the insertion of mystyle1, and mystyle2 respectively.<br>
 Note: No checking for the actual existence of the stylenames is done. They are used blindly.';
 $lang['css_styles_text'] = 'CSS Styles';
 
@@ -32,7 +33,6 @@ $lang['error_nopage'] = 'No page alias selected';
 $lang['example'] = 'MicroTiny example';
 
 // F
-$lang['filepickertitle'] = 'CMSMS File picker';
 $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
 $lang['fileview'] = 'File View';
 $lang['filename'] = 'File Name';
@@ -128,10 +128,10 @@ h2 {
   <dl>
    <dt>Q: Where is the support for <em style="color: red;">&quot;some functionality&quot;</em> in the editor, and how do I activate it?</dt>
       <dd>A: You don't.  The version of TinyMCE distributed with MicroTiny is a trimmed down, custom package.  We have added our own custom plugins, but don't support the addition of custom plugins or the ability to customize the configuration in any way other than the edit profile form.  If you require additional functionality in a WYSIWYG editor you may have some success in a third party module.</dd>
-    <br/>
+    <br>
     <dt>Q: Which HTML/HTML5 tags are supported by this module, and how do I change that?</dt>
       <dd>A: The list of supported elements in the default TinyMCE editor can be found on the TinyMCE website <em>(though we don't have a correct link at the moment)</em>.  There is no mechanism in the MicroTiny module to extend that.</dd>
-    <br/>
+    <br>
     <dt>Q: I cannot get the MicroTiny editor to work in the Admin interface, what can I do</dt>
       <dd>A: There are a few steps you can follow to diagnose this issue:
         <ol>
@@ -144,7 +144,7 @@ h2 {
       </dd>
     <dt>Q: How do I insert a &lt;br/&gt; instead of create new paragraphs?</dt>
       <dd>A: Press [shift]+Enter instead of just the Enter key.</dd>
-    <br/>
+    <br>
     <dt>Q: Why is <em style="color: red;">&quot;some functionality&quot;</em> available in the menubar, and not the toolbar?</dt>
       <dd>A: For this most part this is done intentionally to allow web developers the ability to further restrict the functionality of certain editor profiles.  The menubar can be toggled off in different profiles thus denying the user the functionality only available in the menubar.</dd>
   </dl>
@@ -161,15 +161,15 @@ EOT;
 
 // I
 $lang['image'] = 'Image';
-$lang['info_linker_autocomplete'] = 'This is an auto complete field. Begin by typing a few characters of the desired page alias, menu text, or title. Any matching items will be displayed in a list.';
+$lang['info_linker_autocomplete'] = 'This is an auto complete field. Begin by typing a few characters of the desired page alias, menu text or title.  Matching page(s) will be displayed in a list.';
+$lang['info_linker_autocomplete2'] = 'Auto-completion operates here';//NEW input-element placeholder
 
 // L
 $lang['loading_info'] = 'Loading...';
 
 // M
-$lang['mailto_image'] = 'Create a mail image';
-$lang['mailto_text'] = 'Create a mail link';
-$lang['mailto_title'] = 'Create a mail link';
+$lang['mailto_text'] = 'Email link'; // menu label
+$lang['mailto_text2'] = 'Email Link'; //dialog heading, upper-cased version of 'mailto_text'
 $lang['msg_cancelled'] = 'Operation canceled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
 $lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the website appearance.';
@@ -189,10 +189,6 @@ $lang['none'] = 'None';
 $lang['ok'] = 'Ok';
 
 // P
-$lang['prompt_linker'] = 'Enter Page title';
-$lang['prompt_linktext'] = 'Link Text';
-$lang['prompt_profiles'] = 'Profiles';
-$lang['prompt_selectedalias'] = 'Selected Page alias';
 $lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editor';
 $lang['profiledesc___frontend__'] = 'This profile is used for all frontend requests where this WYSIWYG editor is allowed';
 $lang['profile_admin'] = 'Admin Editors';
@@ -203,16 +199,19 @@ $lang['profile_allowtables'] = 'Allow tables';
 $lang['profile_dfltstylesheet'] = 'Stylesheet for editor';
 $lang['profile_frontend'] = 'Frontend Editors';
 $lang['profile_label'] = 'Label';
-$lang['profile_name'] = 'Profile name';
 $lang['profile_menubar'] = 'Show menubar';
+$lang['profile_name'] = 'Profile name';
 $lang['profile_showstatusbar'] = 'Show statusbar';
-$lang['prompt_name'] = 'Name';
-$lang['prompt_target'] = 'Target';
+$lang['prompt_anchortext'] = 'Anchor text';
 $lang['prompt_class'] = 'Class attribute';
 $lang['prompt_email'] = 'Email address';
-$lang['prompt_insertmailto'] = 'Insert/edit a mail link';
-$lang['prompt_anchortext'] = 'Anchor text';
+$lang['prompt_linker'] = 'Page title';
+$lang['prompt_linktext'] = 'Link text';
+$lang['prompt_name'] = 'Name';
+$lang['prompt_profiles'] = 'Profiles';
 $lang['prompt_rel'] = 'Rel attribute';
+$lang['prompt_selectedalias'] = 'Page alias';
+$lang['prompt_target'] = 'Target';
 $lang['prompt_texttodisplay'] = 'Text to display';
 
 // S
@@ -221,20 +220,12 @@ $lang['settings'] = 'Settings';
 $lang['settingssaved'] = 'Settings saved';
 $lang['size'] = 'Size';
 $lang['submit'] = 'Submit';
-$lang['switchgrid'] = 'Switch to grid view';
-$lang['switchlist'] = 'Switch to list view';
-$lang['switchimage'] = 'Show image files';
-$lang['switchvideo'] = 'Show video files';
-$lang['switchaudio'] = 'Show audio files';
-$lang['switcharchive'] = 'Show archive files';
-$lang['switchfiles'] = 'Show files';
-$lang['switchreset'] = 'Show all';
 
 // T
 $lang['tooltip_selectedalias'] = 'This field is read only';
-$lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
-$lang['title_cmsms_filebrowser'] = 'Select a file';
+$lang['title_cmsms_linker'] = 'Insert/edit link to site page';
 $lang['title_edit_profile'] = 'Edit profile';
+$lang['title_mailto'] = 'Insert/edit email link';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp directory! Please fix this...';
 $lang['tab_general_title'] = 'General';
 $lang['tab_advanced_title'] = 'Advanced';

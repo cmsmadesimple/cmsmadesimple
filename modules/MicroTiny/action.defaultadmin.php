@@ -1,7 +1,6 @@
 <?php
-#CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (ted@cmsmadesimple.org)
-#Visit our homepage at: http://www.cmsmadesimple.org
+#Module MicroTiny action
+#(c) 2004 CMS Made Simple Foundation Inc <foundation@cmsmadesimple.org>
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -27,11 +26,11 @@ echo $this->EndTabHeaders();
 echo $this->StartTabContent();
 
 echo $this->StartTab("example");
-include(dirname(__FILE__).'/function.admin_example.php');
+include(__DIR__.'/function.admin_example.php');
 echo $this->EndTab();
 
 echo $this->StartTab("settings");
-include(dirname(__FILE__).'/function.admin_settings.php');
+include(__DIR__.'/function.admin_settings.php');
 echo $this->EndTab();
 
 echo $this->EndTabContent();
