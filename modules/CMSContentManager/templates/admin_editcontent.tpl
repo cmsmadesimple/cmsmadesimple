@@ -245,7 +245,7 @@ $(document).ready(function(){
             {foreach $tab_contents_array.$key as $fld}
               <div class="pageoverflow">
           <p class="pagetext">{$fld[0]|default:''}</p>
-          <p class="pageinput">{$fld[1]|default:''}{if isset($fld) && is_array(fld) && count($fld) == 3}<br/>{$fld[2]|default:''}{/if}</p>
+          <p class="pageinput">{$fld[1]|default:''}{if isset($fld) && is_array($fld) && count($fld) == 3}<br/>{$fld[2]|default:''}{/if}</p>
         </div>
             {/foreach}
         {/if}
