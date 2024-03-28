@@ -672,6 +672,11 @@ class CmsContentTypePlaceholder
 	 * @var string The type name
 	 */
 	public $type;
+	
+	/**
+	 * @var string The type name
+	 */
+	public $class;
 
 	/**
 	 * @var string The filename containing the type class
