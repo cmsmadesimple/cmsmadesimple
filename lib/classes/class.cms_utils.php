@@ -109,7 +109,7 @@ final class cms_utils
 	 * @param string $version An optional version string
 	 * @return CmsModule The matching module object or null
 	 */
-	public static function &get_module($name,$version = '')
+	public static function get_module($name,$version = '')
 	{
 		return ModuleOperations::get_instance()->get_module_instance($name,$version);
 	}
@@ -239,7 +239,7 @@ final class cms_utils
 	 * @author calguy1000
 	 * @return CMSModule
 	 */
-	public static function &get_syntax_highlighter_module()
+	public static function get_syntax_highlighter_module()
 	{
 		return ModuleOperations::get_instance()->GetSyntaxHighlighter();
 	}
@@ -252,7 +252,7 @@ final class cms_utils
 	 * @author calguy1000
 	 * @return CMSModule
 	 */
-	public static function &get_search_module()
+	public static function get_search_module()
 	{
 		return ModuleOperations::get_instance()->GetSearchModule();
 	}
@@ -264,7 +264,7 @@ final class cms_utils
 	 * @author calguy1000
 	 * @return CMSModule
 	 */
-	public static function &get_filepicker_module()
+	public static function get_filepicker_module()
 	{
 		return ModuleOperations::get_instance()->GetFilePickerModule();
 	}
