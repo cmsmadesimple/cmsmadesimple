@@ -126,6 +126,7 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 if( isset($CMS_ADMIN_PAGE) ) {
     setup_session();
 
+
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
         // Language shizzle
         if( !$charset ) $charset = get_encoding();
@@ -135,7 +136,7 @@ if( isset($CMS_ADMIN_PAGE) ) {
         # for the moment we will only use the self header for CSP as an option, either self or none;
         if($config['admin_csp_header'] === 'self')
         {
-// will have to be tested later, along with the to do bellow (JMorg)
+// will have to be tested later, along with the to do below (JMorg)
 //          if(!isset($_SESSION['__CORE_NONCE__']))
 //          {
 //            $_SESSION['__CORE_NONCE__'] = base64_encode(random_bytes(16));
@@ -203,6 +204,7 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
                                                }
                                                return $out;
                                            });
+
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 Events::setup();
@@ -232,6 +234,7 @@ if (!isset($_SERVER['REQUEST_URI'])) {
     $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
     if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
+
 
 if (! isset($CMS_INSTALL_PAGE)) {
     // Set a umask
