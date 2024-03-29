@@ -24,13 +24,13 @@ class ResultSet extends \CMSMS\Database\ResultSet
 
     public function __destruct()
     {
-        if( $this->_resultId ) mysqli_free_result( $this->_resultId );
+      if( is_a($this->_resultId, 'mysqli_result') ) mysqli_free_result( $this->_resultId );
     }
 
     public function Close()
     {
-        if( $this->_resultId ) mysqli_free_result( $this->_resultId );
-        $this->_fields = $this->_resultId = null;
+      if( is_a($this->_resultId, 'mysqli_result') ) mysqli_free_result( $this->_resultId );
+      $this->_fields = $this->_resultId = null;
     }
 
     public function Fields( $key = null )

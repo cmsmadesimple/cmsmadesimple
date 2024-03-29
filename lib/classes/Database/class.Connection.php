@@ -263,7 +263,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql The SQL query
          */
-        abstract public function &do_sql($sql);
+        abstract public function do_sql($sql);
 
         /**
          * Create a prepared statement object.
@@ -271,7 +271,7 @@ namespace CMSMS\Database {
          * @param string $sql The SQL query
          * @return Statement
          */
-        abstract public function &Prepare($sql);
+        abstract public function Prepare($sql);
 
         /**
          * Execute an SQL Select and limit the output.
@@ -282,7 +282,7 @@ namespace CMSMS\Database {
          * @param array Any additional paramters required by placeholders in the $sql statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
+        public function SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
             $limit = null;
             $nrows = (int) $nrows;
@@ -324,7 +324,6 @@ namespace CMSMS\Database {
                 }
             }
             $sql .= $limit;
-
             $rs = $this->do_sql( $sql );
             return $rs;
         }
@@ -336,7 +335,7 @@ namespace CMSMS\Database {
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function &Execute($sql, $inputarr = null)
+        public function Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
             return $rs;
@@ -689,16 +688,18 @@ namespace CMSMS\Database {
         }
 
         //// initialization
-
-        /**
-         * Create a new database connection object.
-         * This is the preferred wa to open a new database connection.
-         *
-         * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
-         * @return \CMSMS\Database\Connection
-     * @todo  Move this into a factory class
-         */
-        public static function &Initialize(ConnectionSpec $spec)
+      
+      /**
+       * Create a new database connection object.
+       * This is the preferred wa to open a new database connection.
+       *
+       * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
+       *
+       * @return \CMSMS\Database\Connection
+       * @throws \CMSMS\Database\ConnectionSpecException
+       * @todo  Move this into a factory class
+       */
+        public static function Initialize(ConnectionSpec $spec)
         {
             if( !$spec->valid() ) throw new ConnectionSpecException('Invalid or incorrect configuration information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';
@@ -708,9 +709,8 @@ namespace CMSMS\Database {
             if( !($obj instanceof Connection ) ) throw new \LogicException("$connection_class is not derived from the primary database class.");
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
-
             if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
-            return $obj;
+          return $obj;
         }
 
     } // end of class

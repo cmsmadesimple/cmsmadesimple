@@ -122,8 +122,8 @@ abstract class Resultset
      * This is known as array behavior.
      *
      * @deprecated
-     * @param boolean force_array Force array behavior, even if there are only two columns in the resulting SQL.
-     * @param boolean first2cols The opposite of force_array.  Only output the data from the first 2 columns as an associative array.
+     * @param boolean $force_array Force array behavior, even if there are only two columns in the resulting SQL.
+     * @param boolean $first2cols The opposite of force_array.  Only output the data from the first 2 columns as an associative array.
      * @return array
      */
     public function GetAssoc($force_array = false, $first2cols = false)

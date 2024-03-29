@@ -50,7 +50,7 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
-    public function &get_inner_mysql()
+    public function get_inner_mysql()
     {
         return $this->_mysql;
     }
@@ -113,8 +113,11 @@ class Connection extends \CMSMS\Database\Connection
             } while( $this->_mysql->more_results() && $this->_mysql->next_result() );
         }
     }
-
-    public function &do_sql($sql)
+  
+  /**
+   * @throws \CMSMS\Database\DatabaseConnectionException
+   */
+  public function do_sql($sql)
     {
         // execute all queries, but only need the resultset from the last one.
         $resultset = null;
