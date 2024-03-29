@@ -170,7 +170,7 @@ abstract class Job
     public function delete()
     {
         // get the asyncmanager module
-        $module = ModuleOperations::get_instance()->get_module_instance(self::MODULE_NAME);
+        $module = \ModuleOperations::get_instance()->get_module_instance(self::MODULE_NAME);
         if( !$module ) throw new \LogicException('Cannot delete a job... the CmsJobMgr module is not available');
         $module->delete_job($this);
         $this->_id = null;
