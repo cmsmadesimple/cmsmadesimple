@@ -55,8 +55,31 @@ class CMSSmartyBase extends \Smarty
     public function __construct()
     {
         parent::__construct();
+        
+        # here we register modifiers that are on root scope
+        # i.e. not namespaced and not in a class
+        # the modifier name is the function name
+        $modifiers =  [
+            'lang',
+            'file_exists',
+            'cms_htmlentities',
+            'htmlentities',
+            'get_userid',
+            'str_replace',
+            'basename',
+            'html_entity_decode',
+            'md5',
+            'lang_by_realm', # from core functions lib
+          ];
+        
+        foreach ($modifiers as $modifier)
+        {
+            $this->register_modifier($modifier, $modifier);
+        }
+        
+        $this->registerClass('cms_utils', 'cms_utils');
     }
-
+    
     /**
      * wrapper for assign_by_ref
      *
@@ -189,13 +212,15 @@ class CMSSmartyBase extends \Smarty
     {
         $this->unregisterPlugin('compiler', $function);
     }
-
-    /**
-     * Registers modifier to be used in templates
-     *
-     * @param string $modifier      name of template modifier
-     * @param string $modifier_impl name of PHP function to register
-     */
+  
+  /**
+   * Registers modifier to be used in templates
+   *
+   * @param string $modifier      name of template modifier
+   * @param string $modifier_impl name of PHP function to register
+   *
+   * @throws \SmartyException
+   */
     public function register_modifier($modifier, $modifier_impl)
     {
         $this->registerPlugin('modifier', $modifier, $modifier_impl);

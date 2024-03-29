@@ -37,7 +37,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     {
         parent::__construct($smarty);
         $this->secure_dir = null;
-        $this->php_modifiers = ['lang'];
+        //$this->php_modifiers = ['lang']; // deprecated?
         $this->streams = null;
         $this->allow_constants = false;
         $gCms = CmsApp::get_instance();
