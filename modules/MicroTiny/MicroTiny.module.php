@@ -22,7 +22,12 @@ class MicroTiny extends CMSModule
   const PROFILE_FRONTEND = '__frontend__';
   const PROFILE_ADMIN = '__admin__';
 
-  public function __construct() { parent::__construct(); }
+  public function __construct()
+  {
+    parent::__construct();
+    
+    \CmsApp::get_instance()->GetSmarty()->register_modifier('mt_jsbool', [$this, 'mt_jsbool']);
+  }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
   public function GetVersion(){ return '2.2.5'; }

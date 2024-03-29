@@ -34,6 +34,7 @@
 
 namespace News;
 
+#[AllowDynamicProperties] 
 class DraftMessageAlert extends \CMSMS\AdminAlerts\TranslatableAlert
 {
     public function __construct($count)

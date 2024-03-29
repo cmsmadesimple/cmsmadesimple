@@ -21,6 +21,7 @@
 
 abstract class dm_reader_base
 {
+  private $_filename;
   private $_suggested_name;
   private $_suggested_description;
 

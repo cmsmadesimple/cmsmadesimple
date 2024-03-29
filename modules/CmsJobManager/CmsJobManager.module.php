@@ -315,4 +315,4 @@ final class CmsJobManager extends \CMSModule
         }
     }
 
-} // class CGSmartNav
+} // class
