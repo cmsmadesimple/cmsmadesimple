@@ -92,7 +92,7 @@ function check_checksum_data(&$report)
           $errorlines++;
           continue;
       }
-      list($md5sum,$file) = explode('--::--',$line,2);
+      [$md5sum,$file] = explode('--::--',$line,2);
 
       if( !$md5sum || !$file ) {
           $errorlines++;
@@ -193,13 +193,21 @@ function generate_checksum_file(&$report)
 }
 
 // Get ready
-$gCms = \CmsApp::get_instance();
+$gCms = \CmsApp::get_instance(); # to be removed
 $theme = \cms_utils::get_theme_object();
-$smarty = $gCms->GetSmarty();
-$smarty->register_function('lang','checksum_lang');
+$smarty = \cms_utils::get_smarty();
+try
+{
+  $smarty->register_function('lang','checksum_lang');
+}
+catch (Exception $e)
+{
+  audit(0, 'CMSMS', 'Admin Checksum: ' . $e->getMessage());
+}
+
 $smarty->caching = false;
 $smarty->force_compile = true;
-$db = &$gCms->GetDb();
+$db = \cms_utils::get_db();
 
 // Handle output
 $res = true;

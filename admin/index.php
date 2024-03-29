@@ -20,17 +20,19 @@
 
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 
-$CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='main';
-$CMS_ADMIN_TITLE='adminhome';
-$CMS_ADMIN_TITLE='mainmenu';
-$CMS_EXCLUDE_FROM_RECENT=1;
+
+$CMS_ADMIN_PAGE          = 1;
+$CMS_TOP_MENU            = 'main';
+$CMS_ADMIN_TITLE         = 'adminhome';
+$CMS_ADMIN_TITLE         = 'mainmenu';
+$CMS_EXCLUDE_FROM_RECENT = 1;
 
 require_once("../lib/include.php");
 
 // if this page was accessed directly, and the secure param name is not in the URL
 // but it is in the session, assume it is correct.
 if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) ) $_GET[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+
 
 check_login();
 
