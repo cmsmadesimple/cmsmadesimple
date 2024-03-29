@@ -605,7 +605,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
             if (strcasecmp($name, 'isset') === 0 || strcasecmp($name, 'empty') === 0
                 || strcasecmp($name, 'array') === 0 || is_callable($name)
             ) {
-                $func_name = strtolower($name);
+                $func_name = smarty_strtolower_ascii($name);
 
                 if ($func_name === 'isset') {
                     if (count($parameter) === 0) {
@@ -640,7 +640,17 @@ abstract class Smarty_Internal_TemplateCompilerBase
                         return $func_name . '(' . $parameter[ 0 ] . ')';
                     }
                 } else {
-                    return $name . '(' . implode(',', $parameter) . ')';
+					$first_param = array_shift($parameter);
+					$modifier = array_merge(array($name), $parameter);
+					// Now, compile the function call as a modifier
+					return $this->compileTag(
+						'private_modifier',
+						array(),
+						array(
+							'modifierlist' => array($modifier),
+							'value'        => $first_param
+						)
+					);
                 }
             } else {
                 $this->trigger_template_error("unknown function '{$name}'");
@@ -765,7 +775,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         if (!isset(self::$_tag_objects[ $tag ])) {
             // lazy load internal compiler plugin
             $_tag = explode('_', $tag);
-            $_tag = array_map('ucfirst', $_tag);
+            $_tag = array_map('smarty_ucfirst_ascii', $_tag);
             $class_name = 'Smarty_Internal_Compile_' . implode('_', $_tag);
             if (class_exists($class_name)
                 && (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this))
@@ -1131,8 +1141,12 @@ abstract class Smarty_Internal_TemplateCompilerBase
             echo ob_get_clean();
             flush();
         }
-        $e = new SmartyCompilerException($error_text);
-        $e->setLine($line);
+        $e = new SmartyCompilerException(
+            $error_text,
+            0,
+            $this->template->source->filepath,
+            $line
+        );
         $e->source = trim(preg_replace('![\t\r\n]+!', ' ', $match[ $line - 1 ]));
         $e->desc = $args;
         $e->template = $this->template->source->filepath;
