@@ -304,7 +304,7 @@ final class CmsApp {
 	 * @final
 	 * @return \CMSMS\Database\Connection a handle to the ADODB database object
 	 */
-	final public function &GetDb()
+	final public function GetDb()
 	{
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection
@@ -314,7 +314,7 @@ final class CmsApp {
 
 		if( !isset($DONT_LOAD_DB) ) {
             $config = \cms_config::get_instance();
-            $this->db = \CMSMS\Database\compatibility::init($config);
+			$this->db = \CMSMS\Database\compatibility::init($config);
 		}
 
 		return $this->db;
