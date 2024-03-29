@@ -89,15 +89,17 @@ class CMSSmartyBase extends \Smarty
     {
         $this->clearAssign($tpl_var);
     }
-
-    /**
-     * Registers custom function to be used in templates
-     *
-     * @param string $function      the name of the template function
-     * @param string $function_impl the name of the PHP function to register
-     * @param bool   $cacheable
-     * @param mixed  $cache_attrs
-     */
+  
+  /**
+   * Registers custom function to be used in templates
+   *
+   * @param string $function      the name of the template function
+   * @param string $function_impl the name of the PHP function to register
+   * @param bool   $cacheable
+   * @param mixed  $cache_attrs
+   *
+   * @throws \SmartyException
+   */
     public function register_function($function, $function_impl, $cacheable = true, $cache_attrs = null)
     {
         $this->registerPlugin('function', $function, $function_impl, $cacheable, $cache_attrs);
@@ -229,13 +231,15 @@ class CMSSmartyBase extends \Smarty
     {
         $this->unregisterResource($type);
     }
-
-    /**
-     * Registers a prefilter function to apply
-     * to a template before compiling
-     *
-     * @param callable $function
-     */
+  
+  /**
+   * Registers a prefilter function to apply
+   * to a template before compiling
+   *
+   * @param callable $function
+   *
+   * @throws \SmartyException
+   */
     public function register_prefilter($function)
     {
         $this->registerFilter('pre', $function);
@@ -250,13 +254,15 @@ class CMSSmartyBase extends \Smarty
     {
         $this->unregisterFilter('pre', $function);
     }
-
-    /**
-     * Registers a postfilter function to apply
-     * to a compiled template after compilation
-     *
-     * @param callable $function
-     */
+  
+  /**
+   * Registers a postfilter function to apply
+   * to a compiled template after compilation
+   *
+   * @param callable $function
+   *
+   * @throws \SmartyException
+   */
     public function register_postfilter($function)
     {
         $this->registerFilter('post', $function);
@@ -271,13 +277,15 @@ class CMSSmartyBase extends \Smarty
     {
         $this->unregisterFilter('post', $function);
     }
-
-    /**
-     * Registers an output filter function to apply
-     * to a template output
-     *
-     * @param callable $function
-     */
+  
+  /**
+   * Registers an output filter function to apply
+   * to a template output
+   *
+   * @param callable $function
+   *
+   * @throws \SmartyException
+   */
     public function register_outputfilter($function)
     {
         $this->registerFilter('output', $function);
@@ -292,13 +300,15 @@ class CMSSmartyBase extends \Smarty
     {
         $this->unregisterFilter('output', $function);
     }
-
-    /**
-     * load a filter of specified type and name
-     *
-     * @param string $type filter type
-     * @param string $name filter name
-     */
+  
+  /**
+   * load a filter of specified type and name
+   *
+   * @param string $type filter type
+   * @param string $name filter name
+   *
+   * @throws \SmartyException
+   */
     public function load_filter($type, $name)
     {
         $this->loadFilter($type, $name);
@@ -330,16 +340,17 @@ class CMSSmartyBase extends \Smarty
     {
         return $this->clearCache(null, null, null, $exp_time);
     }
-
-    /**
-     * test to see if valid cache exists for this template
-     *
-     * @param  string $tpl_file name of template file
-     * @param  string $cache_id
-     * @param  string $compile_id
-     *
-     * @return boolean
-     */
+  
+  /**
+   * test to see if valid cache exists for this template
+   *
+   * @param string $tpl_file name of template file
+   * @param string $cache_id
+   * @param string $compile_id
+   *
+   * @return boolean
+   * @throws \SmartyException
+   */
     public function is_cached($tpl_file, $cache_id = null, $compile_id = null)
     {
         return $this->isCached($tpl_file, $cache_id, $compile_id);
@@ -368,14 +379,15 @@ class CMSSmartyBase extends \Smarty
     {
         return $this->clearCompiledTemplate($tpl_file, $compile_id, $exp_time);
     }
-
-    /**
-     * Checks whether requested template exists.
-     *
-     * @param  string $tpl_file
-     *
-     * @return boolean
-     */
+  
+  /**
+   * Checks whether requested template exists.
+   *
+   * @param string $tpl_file
+   *
+   * @return boolean
+   * @throws \SmartyException
+   */
     public function template_exists($tpl_file)
     {
         return $this->templateExists($tpl_file);
