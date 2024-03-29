@@ -105,6 +105,8 @@ final class CmsApp {
 	 * @ignore
 	 */
 	private $errors = array();
+	
+	private $bookmarkoperations;
 
 	/**
 	 * @ignore
@@ -674,9 +676,14 @@ class CmsContentTypePlaceholder
 	public $type;
 	
 	/**
-	 * @var string The type name
+	 * @var string The type class name
 	 */
 	public $class;
+	
+	/**
+	 * @var string The friendly name key
+	 */
+	public $friendlyname_key;
 
 	/**
 	 * @var string The filename containing the type class

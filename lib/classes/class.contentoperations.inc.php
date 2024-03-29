@@ -147,6 +147,7 @@ class ContentOperations
 		$contenttype = 'content';
 		if( isset($data['content_type']) ) $contenttype = $data['content_type'];
 
+		## TODO: variable is overwritten by next line??? revisit this (JM)
 		$contentobj = $this->CreateNewContent($contenttype);
 		$contentobj = unserialize($data['serialized_content']);
 		return $contentobj;
@@ -169,6 +170,7 @@ class ContentOperations
 		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 
 		$ctph = $this->_get_content_type($type);
+		
 		if( is_object($ctph) ) {
 			if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) ) include_once( $ctph->filename );
 		}
@@ -191,7 +193,6 @@ class ContentOperations
 	{
 		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 		$result = NULL;
-
 		$ctph = $this->LoadContentType($type);
 		if( is_object($ctph) && class_exists($ctph->class) ) $result = new $ctph->class;
 		return $result;
@@ -215,9 +216,11 @@ class ContentOperations
 		$db = CmsApp::get_instance()->GetDb();
 		$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
 		$row = $db->GetRow($query, array($id));
+		
 		if ($row) {
 			$classtype = strtolower($row['type']);
 			$contentobj = $this->CreateNewContent($classtype);
+			
 			if ($contentobj) {
 				$contentobj->LoadFromData($row, $loadprops);
 				cms_content_cache::add_content($id,$row['content_alias'],$contentobj);
@@ -280,11 +283,11 @@ class ContentOperations
 				$obj = new CmsContentTypePlaceHolder();
 				$class = basename($one,'.inc.php');
 				$type  = strtolower($class);
-
 				$obj->class = $class;
 				$obj->type = strtolower($class);
 				$obj->filename = $one;
 				$obj->loaded = false;
+				
 				if( $obj->type == 'link' ) {
 					// cough... big hack... cough.
 					$obj->friendlyname_key = 'contenttype_redirlink';
@@ -295,7 +298,7 @@ class ContentOperations
 				$result[$type] = $obj;
 			}
 		}
-
+		
 		return $result;
 	}
 
@@ -305,10 +308,12 @@ class ContentOperations
 	 */
 	private function _get_content_types()
 	{
+		
+
 		if( !is_array($this->_content_types) ) {
 			// get the standard ones.
 			$this->_content_types = $this->_get_std_content_types();
-
+			
 			// get the list of modules that have content types.
 			// and load them.  content types from modules are
 			// registered in the constructor.

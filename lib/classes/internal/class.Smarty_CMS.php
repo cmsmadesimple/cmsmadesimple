@@ -34,9 +34,10 @@ class Smarty_CMS extends CMSSmartyBase
     public $params; // <- triggers error without | do search why this is needed
     protected $_global_cache_id;
     private static $_instance;
+    protected  $direct_access_security;
 
     // this is deprecated
-    private $_tpl_stack = []; // this is for simulating parent and child scopes while directly using \Smarty_CMS::fetch()
+  private        $_tpl_stack = []; // this is for simulating parent and child scopes while directly using \Smarty_CMS::fetch()
 
     /**
      * Constructor
