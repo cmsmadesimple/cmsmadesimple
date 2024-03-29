@@ -56,7 +56,7 @@ class Statement extends \CMSMS\Database\Statement
         if( !$this->_stmt ) $this->prepare($this->sql);
 
         // get the type string
-        $this->types = '';
+        $this->_types = '';
         $keys = null;
         $args = func_get_args();
         if( count($args) == 1 && is_array($args) && is_array($args[0]) ) {
