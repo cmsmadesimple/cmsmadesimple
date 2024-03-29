@@ -854,7 +854,7 @@ abstract class CMSModule
    * @deprecated
    * @return \CMSMS\Database\Connection ADOConnection Adodb Database object
    */
-    final public function &GetDb()
+    final public function GetDb()
     {
         return CmsApp::get_instance()->GetDb();
     }
@@ -923,7 +923,7 @@ abstract class CMSModule
      * @since 2.0
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
-     * @param arrray $blockparams Content block parameters.
+     * @param array $blockparams Content block parameters.
      * @param contentBase $content_obj The content object that is currently being edited.
      * @return string An error message if the value is invalid, empty otherwise.
      */

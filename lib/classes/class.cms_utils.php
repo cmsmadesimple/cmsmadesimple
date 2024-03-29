@@ -139,7 +139,7 @@ final class cms_utils
    * @return \CMSMS\Database\Connection
    * @throws \Exception
    */
-	public static function & get_db()
+	public static function get_db()
 	{
 		return \CmsApp::get_instance()->GetDb();
 	}
@@ -151,7 +151,7 @@ final class cms_utils
 	 * @since 1.9
 	 * @return cms_config The global configuration object.
 	 */
-	 public static function & get_config()
+	 public static function get_config()
 	{
 		return \cms_config::get_instance();
 	}
@@ -164,7 +164,7 @@ final class cms_utils
 	 * @since 1.9
 	 * @return Smarty_CMS Handle to the Smarty object
 	 */
-	 public static function & get_smarty()
+	 public static function get_smarty()
 	{
 		return \Smarty_CMS::get_instance();
 	}
@@ -225,7 +225,7 @@ final class cms_utils
 	 * @param string $module_name The module name.
 	 * @return CMSModule
 	 */
-	public static function &get_wysiwyg_module($module_name = '')
+	public static function get_wysiwyg_module($module_name = '')
 	{
 		return ModuleOperations::get_instance()->GetWYSIWYGModule($module_name);
 	}

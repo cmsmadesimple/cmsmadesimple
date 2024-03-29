@@ -1197,7 +1197,7 @@ final class ModuleOperations
      * @since 1.10
      * @deprecated
      */
-    public function &GetWYSIWYGModule($module_name = '')
+    public function GetWYSIWYGModule($module_name = '')
     {
         $obj = null;
         if( !$module_name ) {
@@ -1227,7 +1227,7 @@ final class ModuleOperations
      * @return CMSModule
      * @since 1.10
      */
-    public function &GetSearchModule()
+    public function GetSearchModule()
     {
         $obj = null;
         $module_name = cms_siteprefs::get('searchmodule','Search');
@@ -1244,7 +1244,7 @@ final class ModuleOperations
      * @return \CMSMS\FilePickerInterface
      * @since 2.2
      */
-    public function &GetFilePickerModule()
+    public function GetFilePickerModule()
     {
         $obj = null;
         $module_name = cms_siteprefs::get('filepickermodule','FilePicker');
@@ -1262,7 +1262,7 @@ final class ModuleOperations
      * @param string $module_name
      * @return CMSModule
      */
-    public function &GetSyntaxModule($module_name = '')
+    public function GetSyntaxModule($module_name = '')
     {
         return $this->GetSyntaxHighlighter($module_name);
     }
