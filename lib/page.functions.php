@@ -193,6 +193,7 @@ function audit($itemid, $itemname, $action)
     if( !isset($action) ) $action = '-- unset --';
     $app = cmsms();
     $db = $app->GetDb();
+    $itemname = substr($itemname, 0, 50);
 
     $userid = get_userid(FALSE);
     $username = get_username(FALSE);
