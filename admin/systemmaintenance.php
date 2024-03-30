@@ -24,7 +24,17 @@ $CMS_ADMIN_PAGE = 1;
 //
 
 require_once("../lib/include.php");
-$urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+
+# we prevent a warning from showing up if the user is not logged in
+if(isset($_SESSION[CMS_USER_KEY]))
+{
+  $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+}
+else
+{
+  $urlext = '';
+}
+
 check_login();
 
 
@@ -37,8 +47,8 @@ if (!$access) {
 
 include_once("header.php");
 
-define('CMS_BASE', dirname(dirname(__FILE__)));
-require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
+define('CMS_BASE', dirname(__FILE__, 2));
+require_once cms_join_path(CMS_BASE, 'lib', 'functions', 'test.functions.php');
 
 
 $gCms = cmsms();

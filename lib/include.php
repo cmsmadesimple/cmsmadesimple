@@ -47,6 +47,7 @@ define('CMS_DEFAULT_VERSIONCHECK_URL', 'https://www.cmsmadesimple.org/latest_ver
 define('CMS_SECURE_PARAM_NAME', '__c');  // this is used for CSRF protection
 define('CMS_USER_KEY', '_userkey_'); // this is used for CSRF protection
 define('CONFIG_FILE_LOCATION', dirname(__DIR__) . '/config.php');
+define('FUNCTIONS_FILE_LOCATION', $dirname . DIRECTORY_SEPARATOR . 'functions');
 
 global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY;
 
@@ -58,10 +59,6 @@ if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize
     die ('FATAL ERROR: config.php file not found or invalid');
 }
 
-// sanitize $_SERVER and $_GET
-// FILTER_SANITIZE_STRING bound to be removed on PHP 9
-//$_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
-//$_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
 /**
  * a replacement for filter_var_array FILTER_SANITIZE_STRING
@@ -93,18 +90,18 @@ array_walk($_SERVER,  $sanitize_fn);
 array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
-require_once($dirname . DIRECTORY_SEPARATOR . 'compat.functions.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'misc.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'compat.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'misc.functions.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'version.php'); // tells us where the config file is and other things.
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsException.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.HookManager.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.cms_config.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'class.CmsApp.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'autoloader.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'module.functions.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'page.functions.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'content.functions.php');
-require_once($dirname . DIRECTORY_SEPARATOR . 'translation.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'module.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'page.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'content.functions.php');
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'translation.functions.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'html_entity_decode_php4.php');
 
 debug_buffer('done loading basic files');
