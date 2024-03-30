@@ -6,7 +6,7 @@ final class ReduceAdminlogTask implements CmsRegularTask
 
     public function get_name()
     {
-        return get_class();
+        return __CLASS__;
     }
 
     public function get_description()
