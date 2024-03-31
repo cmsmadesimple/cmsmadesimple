@@ -146,7 +146,7 @@ class microtiny_profile implements ArrayAccess
    * @throws \CmsInvalidDataException
    * @todo: make sure this method is used or needed at all JoMorg
    */
-  private static function &_load_from_data($data)
+  private static function _load_from_data($data)
   {
     if( !is_array($data) || !count($data) ) throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
 
@@ -163,13 +163,13 @@ class microtiny_profile implements ArrayAccess
     self::$_module = $module;
   }
 
-  private static function &_get_module() : \CmsModule
+  private static function _get_module() : \CmsModule
   {
     if( is_object(self::$_module) ) return self::$_module;
     return cms_utils::get_module('MicroTiny');
   }
 
-  public static function &load($name)
+  public static function load($name)
   {
     if( $name == '' ) return;
     $data = self::_get_module()->GetPreference('profile_'.$name);
@@ -179,7 +179,10 @@ class microtiny_profile implements ArrayAccess
     $obj->_data = unserialize($data);
     return $obj;
   }
-
+  
+  /**
+   * @throws \CmsInvalidDataException
+   */
   public static function list_all()
   {
     $prefix = 'profile_';

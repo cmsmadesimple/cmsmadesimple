@@ -130,7 +130,9 @@ class microtiny_utils
       $ajax_url = function($url) {
           return str_replace('&amp;','&',$url).'&showtemplate=false';
       };
-
+      
+      # moved the register function here so that it can be used in this template only
+      \CmsApp::get_instance()->GetSmarty()->register_function('mt_jsbool','mt_jsbool');
       $mod = cms_utils::get_module('MicroTiny');
       $_gCms = CmsApp::get_instance();
       $config = $_gCms->GetConfig();
