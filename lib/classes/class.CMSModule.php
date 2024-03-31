@@ -545,7 +545,7 @@ abstract class CMSModule
 
     /**
      * Method to sanitize all entries in a hash
-     * This method is called by the module api to clean incomming parameters in the frontend.
+     * This method is called by the module api to clean incoming parameters in the frontend.
      * It uses the map created with the SetParameterType() method in the module api.
      *
      * @internal
@@ -700,7 +700,7 @@ abstract class CMSModule
      * @see CreateParameter
      * @final
      * @deprecated
-     * @param bool $flag Indicaties wether unknown params should be restricted.
+     * @param bool $flag Indicates whether unknown params should be restricted.
      */
     final public function RestrictUnknownParams($flag = true)
     {
@@ -840,7 +840,7 @@ abstract class CMSModule
      * @return \cms_config
      * @deprecated
      */
-    final public function &GetConfig()
+    final public function GetConfig()
     {
         return \cms_config::get_instance();
     }
@@ -2397,7 +2397,7 @@ abstract class CMSModule
      * @param string $module The required module name.
      * @return CMSModule The module object, or FALSE
      */
-    static public function &GetModuleInstance($module)
+    static public function GetModuleInstance($module)
     {
         return cms_utils::get_module($module);
     }

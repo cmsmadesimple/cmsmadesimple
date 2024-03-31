@@ -101,11 +101,12 @@ function __code_to_utf8($num) {
  * Reverse function for htmlentities.
  * Convert entities in UTF-8.
  *
+ * @deprecated Use html_entity_decode instead
  * @param $text_to_convert Text to convert.
  * @return string converted
  */
-//function html_entity_decode_php4($text_to_convert) {
-function cms_html_entity_decode($text_to_convert) {
+function html_entity_decode_php4($text_to_convert) {
+//function cms_html_entity_decode($text_to_convert) {
   $htmlentities_table = array (
     "&Aacute;" => "".chr(195).chr(129)."",
     "&aacute;" => "".chr(195).chr(161)."",
@@ -376,6 +377,12 @@ function cms_html_entity_decode($text_to_convert) {
       }, $return_text );
 
   return $return_text;
+}
+
+function cms_html_entity_decode($text_to_convert)
+{
+  //return \html_entity_decode_php4($text_to_convert);
+  return \html_entity_decode($text_to_convert);
 }
 
 // EOF
