@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Classes and utilities for operationg on and with modules
+ * Classes and utilities for operations on and with modules
  *
  * @package CMS
  * @license GPL
@@ -39,15 +39,40 @@ define( "MODULE_DTD_VERSION", "1.3" );
  */
 final class ModuleOperations
 {
-	/**
-	 * System Modules - a list (hardcoded) of all system modules
-	 *
-	 * @access private
-	 * @internal
-	 */
-	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager', 'MenuManager', 'ModuleManager', 'Search','News', 'MicroTiny', 'Navigator', 'CmsJobManager', 'FilePicker' );
-
-	/**
+    /**
+     * System Modules - a list (hardcoded) of all system modules
+     *
+     * @access private
+     * @internal
+     */
+    protected $cmssystemmodules = [
+      'AdminSearch',
+      'CMSContentManager',
+      'DesignManager',
+      'FileManager',
+      'MenuManager',
+      'ModuleManager',
+      'Search',
+      'News',
+      'MicroTiny',
+      'Navigator',
+      'CmsJobManager',
+      'FilePicker',
+      'UserGuide'
+    ];
+    
+    /**
+     * System Modules - a list (hardcoded) of optional system modules
+     *
+     * @access private
+     * @internal
+     */
+    protected $cmsoptsystemmodules = [
+      'News',
+      'UserGuide'
+    ];
+    
+    /**
 	 * @ignore
 	 */
 	static private $_instance = null;
@@ -75,9 +100,9 @@ final class ModuleOperations
 	/**
 	 * @ignore
 	 */
-	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git', '^\.tmp$');
-
-	/**
+    private $xml_exclude_files = ['^\.svn', '^CVS$', '^\#.*\#$', '~$', '\.bak$', '^\.git', '^\.tmp$'];
+    
+    /**
 	 * @ignore
 	 */
 	private $xmldtd = '
@@ -115,7 +140,7 @@ final class ModuleOperations
      *
      * @return ModuleOperations
      */
-    public static function &get_instance()
+    public static function get_instance()
     {
         if( !isset(self::$_instance) ) {
             $c = __CLASS__;
@@ -182,7 +207,7 @@ final class ModuleOperations
      * @internal
      * @ignore
      */
-    private function _generate_moduleinfo( CMSModule &$modinstance )
+    private function _generate_moduleinfo( CMSModule $modinstance )
     {
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
         if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
@@ -216,18 +241,20 @@ final class ModuleOperations
         }
         fclose($fh);
     }
-
+    
     /**
      * Creates an xml data package from the module directory.
      *
      * @param CMSModule $modinstance The instance of the module object
-     * @param string $message Reference to a string which will be filled with the message
-     *                        created by the run of the method
-     * @param int $filecount Reference to an interger which will be filled with the
-     *                           total # of files in the package
+     * @param string    $message     Reference to a string which will be filled with the message
+     *                               created by the run of the method
+     * @param int       $filecount   Reference to an interger which will be filled with the
+     *                               total # of files in the package
+     *
      * @return string an XML string comprising the module and its files
+     * @throws \CmsFileSystemException
      */
-    function CreateXMLPackage( CMSModule &$modinstance, &$message, &$filecount )
+    function CreateXMLPackage( CMSModule $modinstance, &$message, &$filecount )
     {
         // get a file list
         global $CMSMS_GENERATING_XML;
@@ -460,7 +487,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function _install_module(CmsModule& $module_obj)
+    private function _install_module(CmsModule $module_obj)
     {
         debug_buffer('install_module '.$module_obj->GetName());
 
@@ -511,8 +538,7 @@ final class ModuleOperations
      * Install a module into the database
      *
      * @param string $module The name of the module to install
-     * @param bool $loadifnecessary If true, loads the module before trying to install it
-     * @return array Returns a tuple of whether the install was successful and a message if applicable
+     * @return array Returns a tuple of whether the install process was successful and a message if applicable
      */
     public function InstallModule($module)
     {
@@ -659,13 +685,22 @@ final class ModuleOperations
         if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
             (isset($CMS_INSTALL_PAGE) || $this->IsQueuedForInstall($module_name)) ) {
             // not installed, can we auto-install it?
-            if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
+            
+            # Check if the module is in the system modules but not in the optional system modules
+            # additionally check if the module is queued for install
+            $can_auto_install =  (in_array($module_name, $this->cmssystemmodules)
+                                 && !in_array($module_name, $this->cmsoptsystemmodules) )
+                                 || $this->IsQueuedForInstall($module_name);
+            
+            if($can_auto_install)
+            {
                 $res = $this->_install_module($obj);
                 if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
                 $_SESSION['moduleoperations_result'][$module_name] = $res;
                 $this->_unqueue_install($module_name);
             }
-            else {
+            else
+            {
                 // nope, can't auto install...
                 unset($obj,$this->_modules[$module_name]);
                 return FALSE;
@@ -681,7 +716,12 @@ final class ModuleOperations
                 $dbversion = $info[$module_name]['version'];
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
                     // looks like upgrade is needed
-                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) && !$gCms->is_frontend_request() ) {
+                    $can_upgrade =  (in_array($module_name, $this->cmssystemmodules) && !in_array($module_name, $this->cmsoptsystemmodules) )
+                                    || $this->IsQueuedForInstall($module_name)
+                                       && !$gCms->is_frontend_request();
+                    
+                    if($can_upgrade)
+                    {
                         // we're allowed to upgrade
                         $res = $this->_upgrade_module($obj);
                         $this->_unqueue_install($module_name);
@@ -727,7 +767,7 @@ final class ModuleOperations
 
 
     /**
-     * A function to return a list of all modules that appear to exist properly in the modules directory.
+     * A function to return a list of all modules that appear to exist properly in the modules' directory.
      *
      * @return array of module names for all modules that exist in the module directory.
      */
@@ -880,14 +920,16 @@ final class ModuleOperations
         if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
         return $this->_upgrade_module($module_obj,$to_version);
     }
-
-
+    
+    
     /**
      * Uninstall a module
      *
-     * @internal
      * @param string $module The name of the module to upgrade
+     *
      * @return array Returns a tuple of whether the install was successful and a message if applicable
+     * @throws \CmsInvalidDataException
+     * @internal
      */
     public function UninstallModule( $module)
     {
@@ -1118,7 +1160,7 @@ final class ModuleOperations
      * @param bool $force an optional flag to indicate wether the module should be force loaded if necesary.
      * @return CMSModule
      */
-    public function &get_module_instance($module_name,$version = '',$force = FALSE)
+    public function get_module_instance($module_name,$version = '',$force = FALSE)
     {
         if( empty($module_name) && isset($this->variables['module'])) $module_name = $this->variables['module'];
 
@@ -1132,7 +1174,7 @@ final class ModuleOperations
             }
         }
         if( !is_object($obj) ) {
-            // gotta load it.
+            // we need to load it.
             $res = $this->_load_module($module_name,$force);
             if( $res ) $obj =& $this->_modules[$module_name];
         }
@@ -1156,6 +1198,17 @@ final class ModuleOperations
     {
         return in_array($module_name,$this->cmssystemmodules);
     }
+    
+    /**
+     * Test if the specified module name is an optional system module
+     *
+     * @param string $module_name The module name
+     * @return bool
+     */
+    public function IsOptionalSystemModule($module_name)
+    {
+        return in_array($module_name,$this->cmsoptsystemmodules);
+    }
 
 
     /**
@@ -1168,7 +1221,7 @@ final class ModuleOperations
      * @return CMSModule
      * @since 1.10
      */
-    public function &GetSyntaxHighlighter($module_name = '')
+    public function GetSyntaxHighlighter($module_name = '')
     {
         $obj = null;
         if( !$module_name ) {
@@ -1310,14 +1363,14 @@ final class ModuleOperations
         if( !isset($_SESSION['moduleoperations']) ) $_SESSION['moduleoperations'] = array();
         if( !isset($_SESSION['moduleoperations'][$module_name]) ) $_SESSION['moduleoperations'][$module_name] = 1;
     }
-
-
+    
+    
     /**
      * Get list of modules queued for install.
      *
-     * @internal
+     * @return mixed|void
      * @since 1.10
-     * @param string $module_name
+     * @internal
      */
     public function GetQueueResults()
     {
