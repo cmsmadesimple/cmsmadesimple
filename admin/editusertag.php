@@ -86,26 +86,39 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
         $error[] = lang('invalidcode');
         $error[] = lang('invalidcode_brace_missing');
     }
-
-    if( count($error) == 0 ) {
-        srand();
-        ob_start();
-        if (eval('function testfunction'.rand().'() {'.$code."\n}") === FALSE) {
-            $error[] = lang('invalidcode');
-            $buffer = ob_get_clean();
-            //add error
-            $error[] = preg_replace('/<br \/>/', '', $buffer );
-            $validinfo = false;
-        }
-        else {
-            ob_get_clean();
-        }
+  
+  if(count($error) == 0)
+  {
+    mt_srand();
+    $token = @ini_set('display_errors', true);
+    ob_start();
+    
+    try
+    {
+      eval($code);
+      ob_get_clean();
     }
-
-    if( count($error) == 0 ) {
-        $res = $tagops->SetUserTag($record['userplugin_name'],$record['code'],$record['description'],$userplugin_id);
-        if( !$res ) $error = lang('errorupdatingusertag');
+    catch(ParseError $e)
+    {
+      $error[] = lang('invalidcode');
+      //add error
+      $error[]   = '<span style="color:red">' . $e->getMessage() .'</span>';
+      ob_get_clean();
     }
+    finally
+    {
+      @ini_set('display_errors', $token);
+    }
+  }
+  
+  if(count($error) == 0)
+  {
+    $res = $tagops->SetUserTag($record['userplugin_name'], $record['code'], $record['description'], $userplugin_id);
+    if(!$res)
+    {
+      $error = lang('errorupdatingusertag');
+    }
+  }
 
     $details = lang('usertagupdated');
 

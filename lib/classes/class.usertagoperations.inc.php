@@ -297,14 +297,37 @@ final class UserTagOperations
 	function CreateTagFunction($name)
 	{
 		$row = $this->_get_from_cache($name);
-		if( !$row ) return;
-		$functionname = 'cms_user_tag_'.$name;
-		if( !function_exists($functionname) ) {
-			if( startswith($row['code'],'<?php') ) $row['code'] = substr($row['code'],5);
-			if( endswith($row['code'],'?>') ) $row['code'] = substr($row['code'],0,-2);
-			$code = 'function '.$functionname.'($params,$smarty) {'.$row['code']."\n}";
-			@eval($code);
+		
+		if(!$row) { return ''; }
+		
+		$functionname = 'cms_user_tag_' . $name;
+		
+		if(!function_exists($functionname))
+		{
+			if(startswith($row['code'], '<?php'))
+			{
+				$row['code'] = substr($row['code'], 5);
+			}
+			
+			if(endswith($row['code'], '?>'))
+			{
+				$row['code'] = substr($row['code'], 0, -2);
+			}
+			
+			$code = 'function ' . $functionname . '($params,$smarty) {' . $row['code'] . "\n}";
+			
+			try
+			{
+				eval($code);
+			}
+			catch(ParseError $e)
+			{
+				$functionname = '';
+				# echo '<red>Parse error: ' . $e->getMessage() . '</red>';
+			}
+		
 		}
+		
 		return $functionname;
 	}
 
