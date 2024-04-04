@@ -1,0 +1,160 @@
+/* UserGuide_admin.css */
+
+.sortable-list tr {cursor:move;}
+.sortable-list .ui-sortable-helper {border:1px solid #CCC;}
+#loader {padding-left:50px;}
+.collapse:not(.show) {display:none;}
+
+#page_content {float:left; width:99%; margin-bottom:20px;}
+
+/* some custom CSS for displaying the User Guide pages */
+.guide * {box-sizing:border-box;}
+.guide {position:relative; padding-top:10px;}
+.guide, .guide p {font-size:14px;}
+.guide h1 {margin:0 0 1rem; font-size:1.8rem; color:#147fdb;}
+.guide h2 {margin:0 0 .5rem; font-size:1.4rem; color:#147fdb;}
+.guide h3 {margin:0 0 .25rem; font-size:1.15rem; color:#147fdb;}
+.guide h4 {margin:0; font-size:1rem; color:#147fdb;}
+.guide p {margin-bottom:1rem;}
+#oe_mainarea .guide ul, #oe_mainarea .guide ol {margin-left:0; overflow:hidden;}
+.guide li {margin:0 0 .3rem 2rem;}
+.guide .font-extra-large {font-size:1.25em;}
+.guide .font-larger {font-size:1.125em;}
+.guide .font-smaller {font-size:.875em;}
+.guide .image-left {float:left; margin:0 10px 10px 0;}
+.guide .image-center, .guide .image-center img {display:block; margin:0 auto 10px;}
+.guide .image-right {float:right; margin:0 0 10px 10px;}
+.guide .image-max-50 {max-width:50%;}
+.guide .image-inline {display:inline;}
+.guide blockquote {padding:1rem 2rem; background-color: rgba(0,0,0,.1);}
+.guide .edit-link-container {position:absolute; top:-10px; right:0;}
+.guide .edit-link, .guide .admin-only {float:right; margin-left:1rem;}
+/* .guide .admin-only {position:absolute; top:-10px; right:40px;} */
+.guide iframe {border:0;}
+.guide .ratio {position:relative; width:100%; margin-bottom:1rem;}
+.guide .ratio::before {display:block; padding-top:var(--bs-aspect-ratio); content:'';}
+.guide .ratio > * {position:absolute; top:0; left:0; width:100%; height:100%;}
+.guide .ratio-1x1 {--bs-aspect-ratio:100%;}
+.guide .ratio-4x3 {--bs-aspect-ratio:75%;}
+.guide .ratio-16x9 {--bs-aspect-ratio:56.25%;}
+.guide .ratio-21x9 {--bs-aspect-ratio:42.8571428571%;}
+
+/* custom CSS for admin pages */
+.user-guide-edit-page .embed-code.small {min-width:500px; width:500px; min-height:21px; max-height:21px;}
+
+
+/* bs input-group css */
+.input-group, .input-group * {box-sizing:border-box;}
+.input-group {position:relative; display:-ms-flexbox; display:flex; align-items:stretch; -ms-flex-align:stretch; -ms-flex-wrap:wrap; flex-wrap:wrap; width:100%;}
+.input-group > .form-control, .input-group > .form-control-plaintext, .input-group > .custom-select, .input-group > .custom-file {position:relative; -ms-flex:0 0 auto; flex:0 0 auto; width:auto; margin-bottom:0;}
+.input-group > .form-control + .form-control, .input-group > .form-control + .custom-select, .input-group > .form-control + .custom-file, .input-group > .form-control-plaintext + .form-control, .input-group > .form-control-plaintext + .custom-select, .input-group > .form-control-plaintext + .custom-file, .input-group > .custom-select + .form-control, .input-group > .custom-select + .custom-select, .input-group > .custom-select + .custom-file, .input-group > .custom-file + .form-control, .input-group > .custom-file + .custom-select, .input-group > .custom-file + .custom-file {margin-left:-1px;}
+.input-group > .form-control:focus, .input-group > .custom-select:focus, .input-group > .custom-file .custom-file-input:focus ~ .custom-file-label {z-index:3;}
+.input-group > .custom-file .custom-file-input:focus {z-index:4;}
+.input-group > .form-control:not(:last-child), .input-group > .custom-select:not(:last-child) {border-top-right-radius:0; border-bottom-right-radius:0;
+}
+.input-group > .form-control:not(:first-child), .input-group > .custom-select:not(:first-child) {border-top-left-radius:0; border-bottom-left-radius:0;}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {margin-left:-1px; border-top-left-radius:0; border-bottom-left-radius:0;}
+.input-group > :not(:last-child) {border-top-right-radius:0; border-bottom-right-radius:0;}
+.input-group-text {font-weight:400; line-height:1.5; display:-ms-flexbox; display:flex; align-items:center; -ms-flex-align:center; margin-bottom:0; padding:4px .75rem; text-align:center; white-space:nowrap; color:#495057; border:1px solid #ced4da; border-radius:.25rem; background-color:#e9ecef; }
+.input-group input[type='text'] {margin:0 5px 0 0;}
+.input-group-text input[type='radio'], .input-group-text input[type='checkbox'] {margin-top:0;}
+
+
+
+
+
+
+/* BS4 default Print styles */
+@media print {
+  *,
+  *::before,
+  *::after {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+  a:not(.btn) {
+    text-decoration: underline;
+  }
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+  pre {
+    white-space: pre-wrap !important;
+  }
+  pre,
+  blockquote {
+    border: 1px solid #adb5bd;
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  @page {
+    size: a3;
+  }
+  body {
+    min-width: 992px !important;
+  }
+  .container {
+    min-width: 992px !important;
+  }
+  .navbar {
+    display: none;
+  }
+  .badge {
+    border: 1px solid #000;
+  }
+  .table {
+    border-collapse: collapse !important;
+  }
+  .table td,
+  .table th {
+    background-color: #fff !important;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #dee2e6 !important;
+  }
+  .table-dark {
+    color: inherit;
+  }
+  .table-dark th,
+  .table-dark td,
+  .table-dark thead th,
+  .table-dark tbody + tbody {
+    border-color: #dee2e6;
+  }
+  .table .thead-dark th {
+    color: inherit;
+    border-color: #dee2e6;
+  }
+}
+
+
+@media print {
+   /* custom print styles for Users Guide */
+   @page {margin:2cm;}
+   .header, .pageheader, #oe_sidebar, #oe_footer, #page_tabs, #options_c, .shadow {
+      display:none;}
+   #oe_mainarea  {margin:0;}
+   #page_content {border:0;}
+   #oe_mainarea .content-inner {padding:0;}
+   #page_content [id^="ugpage"] {
+      display:block !important;
+      page-break-after:always; break-after:always;
+   }
+}
