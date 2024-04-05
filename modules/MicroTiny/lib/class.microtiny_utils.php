@@ -36,7 +36,7 @@ class microtiny_utils
    */
   public static function WYSIWYGGenerateHeader($selector=null, $css_name='')
   {
-    self::_init();
+    #self::_init();
       static $first_time = true;
 
       // Check if we are in object instance
@@ -85,11 +85,11 @@ class microtiny_utils
       // if this is an action for MicroTiny disable caching.
       $smarty = CmsApp::get_instance()->GetSmarty();
       $module = $smarty->get_template_vars('actionmodule');
-      if( $module == $mod->GetName() ) $mtime = time() + 60; // do not cache when we're using this from within the MT modul.
+      if( $module == $mod->GetName() ) $mtime = time() + 60; // do not cache when we're using this from within the MT module.
 
       // also disable caching if told to by the config.php
       if( isset($config['mt_disable_cache']) && cms_to_bool($config['mt_disable_cache']) ) $mtime = time() + 60;
-
+    
       $output = '';
       if( $first_time ) {
           // only once per request.
@@ -111,6 +111,9 @@ class microtiny_utils
       return $output;
   }
   
+  /**
+   * @throws \SmartyException
+   */
   private static function _init()
   {
     if( self::$_initialized ) { return; }
@@ -138,7 +141,9 @@ class microtiny_utils
    */
   private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en")
   {
-      self::_init(); # may be redundant here, to be reviewed
+    # we try to register the function here so that it can be used in this template only
+      self::_init();
+      # but it fails miserably (JM) see comment at the end of this function
       $ajax_url = function($url) {
           return str_replace('&amp;','&',$url).'&showtemplate=false';
       };
@@ -181,11 +186,35 @@ class microtiny_utils
           if( $css_name ) $tpl_ob->assign('mt_cssname',$css_name);
       }
       catch( Exception $e ) {
-          // oops, we gots a problem.
+          // oops, we got a problem.
           die($e->Getmessage());
       }
-
-      return $tpl_ob->fetch();
+    
+      # we hack the hell out of Smarty poor decision of deprecating some security policy features
+      # For some odd reason we are not being able to register mt_jsbool as a function, so we just suppress the error
+      # to be revisited (JM)
+      $old_error_handler = set_error_handler([__CLASS__, '_error_handler']);
+      $ret = $tpl_ob->fetch();
+      set_error_handler($old_error_handler);
+      
+      return $ret;
+  }
+  
+  /**
+   * Hackish way to get rid of USER deprecated warnings
+   * thrown by Smarty on a (IMO) particular bad decision
+   *
+   * @internal
+   * @param $errno
+   * @param $errstr
+   * @param $errfile
+   * @param $errline
+   *
+   * @return bool
+   */
+  public static function _error_handler($errno, $errstr, $errfile, $errline)
+  {
+    return $errno === E_USER_DEPRECATED;
   }
 
   /**
