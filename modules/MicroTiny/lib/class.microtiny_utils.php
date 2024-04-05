@@ -19,6 +19,8 @@
 
 class microtiny_utils
 {
+  
+  protected static $_initialized = FALSE;
 
   /**
    * Constructor
@@ -34,6 +36,7 @@ class microtiny_utils
    */
   public static function WYSIWYGGenerateHeader($selector=null, $css_name='')
   {
+    self::_init();
       static $first_time = true;
 
       // Check if we are in object instance
@@ -107,6 +110,14 @@ class microtiny_utils
 
       return $output;
   }
+  
+  private static function _init()
+  {
+    if( self::$_initialized ) { return; }
+    self::$_initialized = TRUE;
+    # moved the register function here so that it can be used in this template only
+    \CmsApp::get_instance()->GetSmarty()->register_function('mt_jsbool','mt_jsbool');
+  }
 
   private static function _save_static_config($fn, $frontend=false, $selector = NULL, $css_name = '', $languageid='')
   {
@@ -127,12 +138,11 @@ class microtiny_utils
    */
   private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en")
   {
+      self::_init();
       $ajax_url = function($url) {
           return str_replace('&amp;','&',$url).'&showtemplate=false';
       };
       
-      # moved the register function here so that it can be used in this template only
-      \CmsApp::get_instance()->GetSmarty()->register_function('mt_jsbool','mt_jsbool');
       $mod = cms_utils::get_module('MicroTiny');
       $_gCms = CmsApp::get_instance();
       $config = $_gCms->GetConfig();
