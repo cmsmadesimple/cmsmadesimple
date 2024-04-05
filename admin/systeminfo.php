@@ -27,21 +27,19 @@ check_login();
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Site Preferences");
-if (!$access) {
-	die('Permission Denied');
-return;
-}
+if (!$access) { die('Permission Denied'); }
 
 include_once("header.php");
 
-define('CMS_BASE', dirname(dirname(__FILE__)));
-require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
+define('CMS_BASE', dirname(__FILE__, 2));
+require_once cms_join_path(CMS_BASE, 'lib', 'functions', 'test.functions.php');
 
 
-function installerHelpLanguage( $lang, $default_null=null )
+function installerHelpLanguage($lang, $default_null = NULL)
 {
-        if( (!is_null($default_null)) && ($default_null == $lang) ) return '';
-        return substr($lang, 0, 2);
+  if((!is_null($default_null)) && ($default_null == $lang)) { return ''; }
+  
+  return substr($lang, 0, 2);
 }
 
 function systeminfo_lang($params, $smarty)
@@ -56,21 +54,21 @@ function systeminfo_lang($params, $smarty)
 
 		$str = $tmp[0];
 		$tmp2 = array();
-		for( $i = 1; $i < count($tmp); $i++ )
+		for($i = 1, $iMax = count($tmp); $i < $iMax; $i++ )
 			$tmp2[] = $params[$i];
 		return lang($str,$tmp2);
 	}
 }
 
-$gCms = cmsms();
+$gCms   = cmsms();
 $smarty = $gCms->GetSmarty();
-$smarty->register_function('si_lang','systeminfo_lang');
-$smarty->caching = false;
-$smarty->force_compile = true;
-$db = $gCms->GetDb();
+$smarty->register_function('si_lang', 'systeminfo_lang');
+$smarty->caching       = FALSE;
+$smarty->force_compile = TRUE;
+$db                    = $gCms->GetDb();
 
 
-
+/** @var CmsAdminThemeBase $themeObject */
 //smartyfier
 $smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
@@ -121,14 +119,14 @@ $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
 /* Performance Information */
-$tmp = array(0=>array(), 1=>array());
+$tmp = [0 => [], 1 => []];
 
 $res = get_site_preference('allow_browser_cache',0);
 $tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'), FALSE);
 $res = get_site_preference('browser_cache_expiry',60);
 $tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
 
-if( version_compare(phpversion(),'5.5') >= 0 ) {
+if(version_compare(PHP_VERSION, '5.5') >= 0 ) {
     $opcache = ini_get('opcache.enable');
     $tmp[0]['php_opcache'] = testBoolean(0, lang('php_opcache'), $opcache, '', false, false, 'opcache_enabled');
 } else {
@@ -146,18 +144,18 @@ $smarty->assign('performance_info', $tmp);
 
 /* PHP Information */
 
-$tmp = array(0=>array(), 1=>array());
+$tmp = [0 => [], 1 => []];
 
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
 
-list($minimum, $recommended) = getTestValues('php_version');
+[$minimum, $recommended] = getTestValues('php_version');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
 
 $tmp[0]['md5_function'] = testBoolean(0, 'md5_function', function_exists('md5'), '', false, false, 'Function_md5_disabled');
 $tmp[0]['json_function'] = testBoolean(0, 'json_function', function_exists('json_decode'), '', false, false, 'json_disabled');
 
-list($minimum, $recommended) = getTestValues('gd_version');
+[$minimum, $recommended] = getTestValues('gd_version');
 $tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum, '', 'min_GD_version');
 
 $tmp[0]['tempnam_function'] = testBoolean(0, 'tempnam_function', function_exists('tempnam'), '', false, false, 'Function_tempnam_disabled');
@@ -176,10 +174,10 @@ $tmp[0]['test_db_timedifference'] = ($_tmp->value) ? testDummy('test_db_timediff
 
 $tmp[0]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
-list($minimum, $recommended) = getTestValues('memory_limit');
+[$minimum, $recommended] = getTestValues('memory_limit');
 $tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, -1, 'memory_limit_range');
 
-list($minimum, $recommended) = getTestValues('max_execution_time');
+[$minimum, $recommended] = getTestValues('max_execution_time');
 $tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0, 'max_execution_time_range');
 
 $tmp[0]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
@@ -202,10 +200,10 @@ $tmp[0]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test
 
 $tmp[0]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false, 'Function_file_uploads_disabled');
 
-list($minimum, $recommended) = getTestValues('post_max_size');
+[$minimum, $recommended] = getTestValues('post_max_size');
 $tmp[0]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true, null, 'min_post_max_size');
 
-list($minimum, $recommended) = getTestValues('upload_max_filesize');
+[$minimum, $recommended] = getTestValues('upload_max_filesize');
 $tmp[0]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true, null, 'min_upload_max_filesize');
 
 $session_save_path = testSessionSavePath('');
@@ -271,19 +269,20 @@ $smarty->assign('php_information', $tmp);
 
 /* Server Information */
 
-$tmp = array(0=>array(), 1=>array());
+$tmp = [0 => [], 1 => []];
 
 $tmp[0]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[0]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
-
+/** @var CMSMSC $config */
 switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
  case 'mysqli':
  case 'mysql':
    $v = $db->GetOne('SELECT version()');
+   
    $tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
    $_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-   list($minimum, $recommended) = getTestValues('mysql_version');
+   [$minimum, $recommended] = getTestValues('mysql_version');
    $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 
    $grants = $db->GetArray('SHOW GRANTS FOR CURRENT_USER');
