@@ -323,7 +323,6 @@ final class UserTagOperations
 			catch(ParseError $e)
 			{
 				$functionname = '';
-				# echo '<red>Parse error: ' . $e->getMessage() . '</red>';
 			}
 		
 		}
