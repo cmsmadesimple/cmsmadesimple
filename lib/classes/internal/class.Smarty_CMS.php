@@ -140,7 +140,7 @@ class Smarty_CMS extends CMSSmartyBase
      *
      * @return object $this
      */
-    public static function &get_instance()
+    public static function get_instance()
     {
         if( !self::$_instance ) {
             self::$_instance = new \Smarty_CMS;
@@ -335,20 +335,22 @@ class Smarty_CMS extends CMSSmartyBase
         }
         return $parent;
     }
-
-    /**
-     * fetch method
-     * NOTE: Overwrites parent
-     *
-     * @deprecated
-     * @param mixed $template
-     * @param int $cache_id
-     * @param mixed $parent
-     * @param bool $display
-     * @param bool $merge_tpl_vars
-     * @param bool $no_output_filter
-     * @return mixed
-     */
+  
+  /**
+   * fetch method
+   * NOTE: Overwrites parent
+   *
+   * @param mixed $template
+   * @param int   $cache_id
+   * @param mixed $parent
+   * @param bool  $display
+   * @param bool  $merge_tpl_vars
+   * @param bool  $no_output_filter
+   *
+   * @return mixed
+   * @throws \SmartyException
+   * @deprecated
+   */
     public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
     {
         $name = $template; if( startswith($name,'string:') ) $name = 'string:';
@@ -437,14 +439,16 @@ class Smarty_CMS extends CMSSmartyBase
         }
         return parent::isCached($template,$cache_id,$compile_id,$parent);
     }
-
-    /**
-     * Error console
-     *
-     * @param object Exception $e
-     * @return html
-     * @author Stikki
-     */
+  
+  /**
+   * Error console
+   *
+   * @param object Exception $e
+   *
+   * @return html
+   * @throws \SmartyException
+   * @author Stikki
+   */
     public function errorConsole(Exception $e)
     {
         $this->force_compile = true;
@@ -468,19 +472,21 @@ class Smarty_CMS extends CMSSmartyBase
 
         return $output;
     }
-
-
-    /**
-     * Takes unknown classes and loads plugin files for them
-     * class name format: Smarty_PluginType_PluginName
-     * plugin filename format: plugintype.pluginname.php
-     *
-     * Note: this method overrides the one in the smarty base class and provides more testing.
-     *
-     * @param string $plugin_name    class plugin name to load
-     * @param bool   $check          check if already loaded
-     * @return string |boolean filepath of loaded file or false
-     */
+  
+  
+  /**
+   * Takes unknown classes and loads plugin files for them
+   * class name format: Smarty_PluginType_PluginName
+   * plugin filename format: plugintype.pluginname.php
+   *
+   * Note: this method overrides the one in the smarty base class and provides more testing.
+   *
+   * @param string $plugin_name class plugin name to load
+   * @param bool   $check       check if already loaded
+   *
+   * @return string |boolean filepath of loaded file or false
+   * @throws \SmartyException
+   */
     public function loadPlugin($plugin_name, $check = true)
     {
         // if function or class exists, exit silently (already loaded)

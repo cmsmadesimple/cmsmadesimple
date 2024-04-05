@@ -74,7 +74,7 @@ class ContentOperations
 	 *
 	 * @return ContentOperations
 	 */
-	public static function &get_instance()
+	public static function get_instance()
 	{
 		if( !is_object( self::$_instance ) ) self::$_instance = new ContentOperations();
 		return self::$_instance;
@@ -119,7 +119,7 @@ class ContentOperations
 	 * Return a content object for the currently requested page.
 	 *
 	 * @since 1.9
-	 * @return getContentObject()
+	 * @return ContentBase
 	 */
 	public function getContentObject()
 	{
@@ -140,7 +140,7 @@ class ContentOperations
 	 * @param  array $data
 	 * @return ContentBase A content object derived from ContentBase
 	 */
-	public function &LoadContentFromSerializedData(&$data)
+	public function LoadContentFromSerializedData(&$data)
 	{
 		if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
 
@@ -189,7 +189,7 @@ class ContentOperations
 	 * @param mixed $type The type.  Either a string, or an instance of CmsContentTypePlaceHolder
 	 * @return ContentBase (A valid object derived from ContentBase)
 	 */
-	public function &CreateNewContent($type)
+	public function CreateNewContent($type)
 	{
 		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 		$result = NULL;
@@ -206,7 +206,7 @@ class ContentOperations
      * @param bool $loadprops Also load the properties of that content object. Defaults to false.
      * @return mixed The loaded content object. If nothing is found, returns FALSE.
      */
-	function &LoadContentFromId($id,$loadprops=false)
+	function LoadContentFromId($id, $loadprops=false)
 	{
 		$result = FALSE;
         $id = (int) $id;
@@ -214,7 +214,7 @@ class ContentOperations
 		if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
 
 		$db = CmsApp::get_instance()->GetDb();
-		$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
+		$query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'content WHERE content_id = ?';
 		$row = $db->GetRow($query, array($id));
 		
 		if ($row) {

@@ -26,7 +26,7 @@
  * Extends the Smarty class for content.
  *
  * @package CMS
- * @author Tapio Löytty
+ * @author Tapio LÃ¶ytty
  * @since 1.11.3
  */
 class Smarty_Parser extends Smarty_CMS
@@ -35,15 +35,17 @@ class Smarty_Parser extends Smarty_CMS
 	public $params; // <- triggers error without | do search why this is needed
 	private static $_instance;
 	private static $_allowed_static_plugins = array('global_content');
-
-	/**
-	* Constructor
-	*
-	* @param array The hash of CMSMS config settings
-	*/
+  
+  /**
+   * Constructor
+   *
+   * @param array The hash of CMSMS config settings
+   *
+   * @throws \SmartyException
+   */
 	public function __construct()
 	{
-        stack_trace(); die();
+    #stack_trace(); die();
 		parent::__construct();
 
 		$this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
@@ -65,9 +67,9 @@ class Smarty_Parser extends Smarty_CMS
 	/**
 	* get_instance method
 	*
-	* @return object $this
+	* @return
 	*/
-	public static function &get_instance()
+	public static function get_instance()
 	{
 		if( !is_object(self::$_instance) )
 			self::$_instance = new self;
@@ -209,7 +211,7 @@ class Smarty_Parser extends Smarty_CMS
  * class for undefined CMSMS parser variable objects
  *
  * @package CMS
- * @author Tapio Löytty
+ * @author Tapio Lï¿½ytty
  * @since 1.11.3
  */
 class CMSMS_Dummy_Smarty_Variable {
@@ -261,7 +263,7 @@ class CMSMS_Dummy_Smarty_Variable {
  * class for undefined CMSMS parser variable object values
  *
  * @package CMS
- * @author Tapio Löytty
+ * @author Tapio Lï¿½ytty
  * @since 1.11.3
  */
 class CMSMS_Dummy_Variable_Value extends ArrayObject {

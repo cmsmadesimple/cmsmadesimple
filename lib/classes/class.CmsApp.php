@@ -551,15 +551,18 @@ final class CmsApp {
 			if( isset($CMS_STYLESHEET) ) $this->_states[] = self::STATE_STYLESHEET;
 		}
 	}
-
-    /**
+	
+	/**
 	 * Test if the current application state matches the requested value.
 	 * This method will throw an exception if invalid data is passed in.
 	 *
-	 * @since 1.11.2
-	 * @author Robert Campbell
-	 * @param string $state A valid state name (see the state list above).  It is recommended that the class constants be used.
+	 * @param string $state A valid state name (see the state list above).  It is recommended that the class constants be
+	 *                      used.
+	 *
 	 * @return bool
+	 * @throws \CmsInvalidDataException
+	 * @author      Robert Campbell
+	 * @since       1.11.2
 	 */
 	public function test_state($state)
 	{
@@ -569,29 +572,31 @@ final class CmsApp {
 		return FALSE;
 	}
 
-    /**
+	/**
 	 * Get a list of all current states.
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
-	 * @return stringp[] Array of state strings, or null.
+	 * @return string[] Array of state strings, or null.
 	 */
     public function get_states()
     {
 		$this->set_states();
 		if( isset($this->_states) ) return $this->_states;
 	}
-
-    /**
+	
+	/**
 	 * Add a state to the list of states.
 	 *
 	 * This method will throw an exception if an invalid state is passed in.
 	 *
+	 * @param string $state The state.  We recommend you use the class constants for this.
+	 *
+	 * @throws \CmsInvalidDataException
+	 * @since  1.11.2
+	 * @author Robert Campbell
 	 * @ignore
 	 * @internal
-	 * @since 1.11.2
-	 * @author Robert Campbell
-	 * @param string The state.  We recommend you use the class constants for this.
 	 */
     public function add_state($state)
     {
@@ -599,17 +604,19 @@ final class CmsApp {
 		$this->set_states();
 		$this->_states[] = $state;
     }
-
-    /**
+	
+	/**
 	 * Remove a state to the list of states.
 	 *
 	 * This method will throw an exception if an invalid state is passed in.
 	 *
+	 * @param string $state The state.  We recommend you use the class constants for this.
+	 *
+	 * @throws \CmsInvalidDataException
+	 * @since  1.11.2
+	 * @author Robert Campbell
 	 * @ignore
 	 * @internal
-	 * @since 1.11.2
-	 * @author Robert Campbell
-	 * @param string The state.  We recommend you use the class constants for this.
 	 */
     public function remove_state($state)
     {

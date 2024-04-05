@@ -951,7 +951,7 @@ function ini_get_boolean($str)
 
 
 /**
- * Another convenience function to output a human readable function stack trace.
+ * Another convenience function to output a human-readable function stack trace.
  *
  * This method uses echo.
  */
