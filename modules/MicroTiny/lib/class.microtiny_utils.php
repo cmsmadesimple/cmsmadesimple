@@ -138,7 +138,7 @@ class microtiny_utils
    */
   private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en")
   {
-      self::_init();
+      self::_init(); # may be redundant here, to be reviewed
       $ajax_url = function($url) {
           return str_replace('&amp;','&',$url).'&showtemplate=false';
       };
