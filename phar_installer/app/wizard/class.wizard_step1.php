@@ -129,7 +129,8 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
                     if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
                 }
             }
-            if( count($out) ) return $out;
+            return $out;
+            //if( count($out) ) return $out;
         };
 
         $out = array();
