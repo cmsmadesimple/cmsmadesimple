@@ -29,25 +29,25 @@ namespace cms_autoinstaller;
 try {
     function _detect_bad_ioncube()
     {
-        if( extension_loaded('ionCube Loader') ) {
-            if( function_exists('ioncube_loader_version') ) {
-                $ver = ioncube_loader_version();
-                if( version_compare($ver,'4.1') < 0 ) throw new \Exception('An old version of ioncube loader was detected.  Older versions are known to have problems with PHAR files. Sorry, but we cannot continue.');
+        if( \extension_loaded('ionCube Loader') ) {
+            if( \function_exists('ioncube_loader_version') ) {
+                $ver = \ioncube_loader_version();
+                if(\version_compare($ver, '4.1') < 0 ) throw new \RuntimeException('An old version of ioncube loader was detected.  Older versions are known to have problems with PHAR files. Sorry, but we cannot continue.');
             }
         }
     }
 
     // some basic system wide pre-requisites
-    if(php_sapi_name() == "cli") throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
-    if( version_compare(phpversion(),'5.4.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 5.4.0');
+    if(\php_sapi_name() == "cli") throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
+    if( \version_compare(\phpversion(),'5.4.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 5.4.0');
     _detect_bad_ioncube();
     
     // clear opcache before disabling it
-    if( function_exists( 'opcache_get_status' ) && opcache_get_status() ) opcache_reset();
+    if(\function_exists('opcache_get_status' ) && \opcache_get_status() ) \opcache_reset();
     // disable some stuff.
-    @ini_set('opcache.enable',0); // disable zend opcode caching.
-    @ini_set('apc.enabled',0); // disable apc opcode caching (for later versions of APC)
-    @ini_set('xcache.cacher',0); // disable xcache opcode caching 
+    @\ini_set('opcache.enable', 0);     // disable zend opcode caching.
+    @\ini_set('apc.enabled', 0);        // disable apc opcode caching (for later versions of APC)
+    @\ini_set('xcache.cacher', 0);      // disable xcache opcode caching
 
     require_once('app/class.cms_install.php');
     $app = new cms_install;
@@ -71,7 +71,7 @@ catch( \Exception $e ) {
   </body>
 </html>
 EOT;
-    echo str_replace('[message]',$e->GetMessage(),$out);
+    echo \str_replace('[message]',$e->GetMessage(),$out);
 }
 
 ?>
