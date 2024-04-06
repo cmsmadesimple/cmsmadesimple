@@ -36,7 +36,6 @@ class microtiny_utils
    */
   public static function WYSIWYGGenerateHeader($selector=null, $css_name='')
   {
-    #self::_init();
       static $first_time = true;
 
       // Check if we are in object instance
@@ -110,17 +109,6 @@ class microtiny_utils
 
       return $output;
   }
-  
-  /**
-   * @throws \SmartyException
-   */
-  private static function _init()
-  {
-    if( self::$_initialized ) { return; }
-    self::$_initialized = TRUE;
-    # moved the register function here so that it can be used in this template only
-    \CmsApp::get_instance()->GetSmarty()->register_function('mt_jsbool','mt_jsbool');
-  }
 
   private static function _save_static_config($fn, $frontend=false, $selector = NULL, $css_name = '', $languageid='')
   {
@@ -129,21 +117,20 @@ class microtiny_utils
     $res = file_put_contents($fn,$configcontent);
     if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
   }
-
+  
   /**
    * Generate a tinymce initialization file.
    *
-   * @since 1.0
    * @param boolean Frontend true/false
    * @param string Templateid
    * @param string A2 Languageid
+   *
    * @return string
+   * @throws \SmartyException
+   * @since 1.0
    */
   private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en")
   {
-    # we try to register the function here so that it can be used in this template only
-      self::_init();
-      # but it fails miserably (JM) see comment at the end of this function
       $ajax_url = function($url) {
           return str_replace('&amp;','&',$url).'&showtemplate=false';
       };
@@ -189,15 +176,8 @@ class microtiny_utils
           // oops, we got a problem.
           die($e->Getmessage());
       }
-    
-      # we hack the hell out of Smarty poor decision of deprecating some security policy features
-      # For some odd reason we are not being able to register mt_jsbool as a function, so we just suppress the error
-      # to be revisited (JM)
-      $old_error_handler = set_error_handler([__CLASS__, '_error_handler']);
-      $ret = $tpl_ob->fetch();
-      set_error_handler($old_error_handler);
       
-      return $ret;
+      return $tpl_ob->fetch();
   }
   
   /**
@@ -280,6 +260,13 @@ class microtiny_utils
     $result=str_replace("\\","/",$url);
     return $result;
   }
+  
+  public static function mt_jsbool($val)
+{
+  $val = cms_to_bool($val);
+  if( $val ) return 'true';
+  return 'false';
+}
 
 } // end of class
 
