@@ -28,18 +28,23 @@
  * Type:     modifier<br>
  * Name:     escape<br>
  * Purpose:  Escape the string according to escapement type
- * @link http://smarty.php.net/manual/en/language.modifier.escape.php
+ *
+ * @link     http://smarty.php.net/manual/en/language.modifier.escape.php
  *          escape (Smarty online manual)
  * @author   Monte Ohrt <monte at ohrt dot com>
- * @param string
- * @param html|htmlall|url|quotes|hex|hexentity|javascript
+ *
+ * @param string $string html|htmlall|url|quotes|hex|hexentity|javascript
+ * @param string $esc_type
+ * @param string $char_set
+ *
  * @return string
  *
  * calguy1000: change default char-set to utf-8
  */
  
-function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'utf-8')
+function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'utf-8') : string
 {
+  $string = (string) $string;
 	$esc_type = strtolower($esc_type);
     switch ($esc_type) {
         case 'html':
@@ -61,21 +66,21 @@ function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'ut
         case 'hex':
             // escape every character into hex
             $return = '';
-            for ($x=0; $x < strlen($string); $x++) {
+            for ($x=0, $xMax = strlen($string); $x < $xMax; $x++) {
                 $return .= '%' . bin2hex($string[$x]);
             }
             return $return;
             
         case 'hexentity':
             $return = '';
-            for ($x=0; $x < strlen($string); $x++) {
+            for ($x=0, $xMax = strlen($string); $x < $xMax; $x++) {
                 $return .= '&#x' . bin2hex($string[$x]) . ';';
             }
             return $return;
 
         case 'decentity':
             $return = '';
-            for ($x=0; $x < strlen($string); $x++) {
+            for ($x=0, $xMax = strlen($string); $x < $xMax; $x++) {
                 $return .= '&#' . ord($string[$x]) . ';';
             }
             return $return;

@@ -555,6 +555,7 @@ namespace CMSMS\Database {
          */
         public function UnixTimeStamp($str)
         {
+          $str = $str ?? '';
             return strtotime($str);
         }
 
