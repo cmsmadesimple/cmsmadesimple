@@ -4,7 +4,12 @@ namespace __appbase\tests;
 
 class informational_test extends test_base
 {
-  public function __construct($name,$value,$message = '',$key = '')
+  /**
+   * @var mixed|string
+   */
+  protected $msg_key;
+  
+  public function __construct($name, $value, $message = '', $key = '')
   {
     parent::__construct($name,$value,$key);
     if( $message )

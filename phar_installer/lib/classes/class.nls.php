@@ -4,6 +4,7 @@ namespace __appbase;
 
 abstract class nls
 {
+  protected $_name;
   protected $_isocode;
   protected $_locale;
   protected $_fullname;
@@ -20,10 +21,10 @@ abstract class nls
     if( $str == $this->isocode() ) return TRUE;
     if( $str == $this->fullname() ) return TRUE;
     $aliases = $this->aliases();
-    if( !is_array($aliases) ) $aliases = explode(',',$aliases);
-    if( is_array($aliases) && count($aliases) )
+    if( !\is_array($aliases) ) $aliases = \explode(',', $aliases);
+    if(\is_array($aliases) && \count($aliases) )
       {
-	for( $i = 0; $i < count($aliases); $i++ )
+	for($i = 0, $iMax = \count($aliases); $i < $iMax; $i++ )
 	  {
 	    if( $aliases[$i] == $str ) return TRUE;
 	  }
@@ -33,10 +34,10 @@ abstract class nls
 
   public function name()
   {
-    $name = get_class();
+    $name = __CLASS__;
     if( endswith($name,'_nls') )
       {
-	$name = substr($name,0,strlen($name)-4);
+	$name = \substr($name, 0, -4);
       }
     return $name;
   }
@@ -45,7 +46,7 @@ abstract class nls
   {
     if( !$this->_isocode )
       {
-	return substr($this->name,0,2);
+	return \substr($this->name, 0, 2);
       }
     return $this->_isocode;
   }
@@ -83,9 +84,9 @@ abstract class nls
   {
     if( $this->_aliases )
       {
-	if( is_array($this->_aliases) )
+	if( \is_array($this->_aliases) )
 	  return $this->_aliases;
-	return explode(',',$this->_aliases);
+	return \explode(',', $this->_aliases);
       }
   }
 
