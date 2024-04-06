@@ -983,15 +983,17 @@ abstract class ContentBase
 	{
 		return FALSE;
 	}
-
+	
 	/**
 	 * Set the page alias for this content page.
 	 * If an empty alias is supplied, and depending upon the doAutoAliasIfEnabled flag, and config entries
 	 * a suitable alias may be calculated from other data in the page object
 	 * This method relies on the menutext and the name of the content page already being set.
 	 *
-	 * @param string $alias The alias
-	 * @param bool $doAutoAliasIfEnabled Whether an alias should be calculated or not.
+	 * @param string $alias                The alias
+	 * @param bool   $doAutoAliasIfEnabled Whether an alias should be calculated or not.
+	 *
+	 * @throws \CmsContentException
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
@@ -1339,7 +1341,7 @@ abstract class ContentBase
 		$out['titleattribute'] = $this->mTitleAttribute;
 		$out['accesskey'] = $this->mAccessKey;
 		$out['tabindex'] = $this->mTabIndex;
-		$out['default_content'] = ($this->mActive)?1:0;
+		$out['default_content'] = ($this->mDefaultContent)?1:0;
 		$out['active'] = ($this->mActive)?1:0;
 		$out['show_in_menu'] = ($this->mShowInMenu)?1:0;
 		$out['cachable'] = ($this->mCachable)?1:0;
@@ -1728,15 +1730,17 @@ abstract class ContentBase
 		$this->mItemOrder = -1;
 		$this->mOldItemOrder = -1;
 	}
-
+	
 	/**
 	 * Function for the subclass to parse out data for it's parameters.
 	 * This method is typically called from an editor form to allow modifying the content object from
 	 * form input fields (usually $_POST)
 	 *
-	 * @param array $params The input array (usually from $_POST)
+	 * @param array $params  The input array (usually from $_POST)
 	 * @param bool  $editing Indicates wether this is an edit or add operation.
+	 *
 	 * @abstract
+	 * @throws \CmsContentException
 	 */
 	public function FillParams($params,$editing = false)
 	{
