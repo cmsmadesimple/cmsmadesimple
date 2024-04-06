@@ -44,6 +44,7 @@ function test_remote_file($url,$timeout = 3,$searchString = '')
   return TRUE;
 }
 
+#[\AllowDynamicProperties]
 abstract class test_base
 {
   const TEST_UNTESTED = 'test_untested';

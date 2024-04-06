@@ -347,7 +347,7 @@ class http_request
         $this->useCookie    = TRUE;
         $this->saveCookie   = TRUE;
         $this->maxRedirect  = 3;
-        $this->cookiePath   = $app->get_tmpdir().'/c'.md5(get_class().session_id()).'.dat'; // by default, use a cookie file that is unique only to this session.
+        $this->cookiePath   = $app->get_tmpdir().'/c' . \md5(__CLASS__ . \session_id()) . '.dat'; // by default, use a cookie file that is unique only to this session.
         $this->userAgent    = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.9';
     }
 
@@ -639,7 +639,7 @@ class http_request
 	  $tmp = explode(':',$key);
 	  $key = trim($tmp[0]);
 	}
-      for( $i = 0; $i < count($this->headerArray); $i++ )
+      for($i = 0, $iMax = count($this->headerArray); $i < $iMax; $i++ )
 	{
 	  $tmp = explode(':',$this->headerArray[$i],1);
 	  $key2 = trim($tmp[0]);
@@ -664,7 +664,7 @@ class http_request
 	{
 	  $tmp = explode(':',$str,1);
 	  $key = trim($tmp[0]);
-	  for( $i = 0; $i < count($this->headerArray); $i++ )
+	  for($i = 0, $iMax = count($this->headerArray); $i < $iMax; $i++ )
 	    {
 	      $tmp = explode(':',$this->headerArray[$i],1);
 	      $key2 = trim($tmp[0]);
@@ -846,7 +846,7 @@ class http_request
 
 	    if ($this->proxy)
 	    {
-	        curl_setop($ch,CURL_PROXY,$this->proxy);
+	        curl_setop($ch,CURLOPT_PROXY,$this->proxy);
 	    }
 
             // Custom cookie configuration
@@ -893,7 +893,7 @@ class http_request
 	    if( !empty($content) )
 	      {
 		$tmp = explode("\r\n\r\n", $content,2);
-		for( $i = 0; $i < count($tmp); $i++ )
+		for($i = 0, $iMax = count($tmp); $i < $iMax; $i++ )
 		  {
 		    if( empty($tmp[$i]) ) unset($tmp[$i]);
 		  }
@@ -1161,7 +1161,7 @@ class http_request
         }
 
         // Loop through the cookies
-        for ($cookie = 0; $cookie < count($cookieHeaders); $cookie++)
+        for ($cookie = 0, $cookieMax = count($cookieHeaders); $cookie < $cookieMax; $cookie++)
         {
             $cookieName  = trim($this->_tokenize($cookieHeaders[$cookie], "="));
             $cookieValue = $this->_tokenize(";");
@@ -1341,7 +1341,7 @@ class http_request
             $string = $this->nextToken;
         }
 
-        for($character = 0; $character < strlen($separator); $character++)
+        for($character = 0, $characterMax = strlen($separator); $character < $characterMax; $character++)
         {
             if(gettype($position = strpos($string, $separator[$character])) == "integer")
             {

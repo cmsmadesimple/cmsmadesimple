@@ -4,6 +4,7 @@ namespace CMSMS\Database\mysqli;
 
 class DataDictionary extends \CMSMS\Database\DataDictionary
 {
+  private $alterTableAddIndex;
     public function __construct(Connection $conn)
     {
         parent::__construct($conn);

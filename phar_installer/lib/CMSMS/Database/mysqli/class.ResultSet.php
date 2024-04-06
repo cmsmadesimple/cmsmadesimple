@@ -10,6 +10,7 @@ class ResultSet extends \CMSMS\Database\ResultSet
     private $_nrows;
     private $_pos;
     private $_sql;
+    private $resultId;
 
     public function __construct(\mysqli $conn, $resultId, $sql = null)
     {

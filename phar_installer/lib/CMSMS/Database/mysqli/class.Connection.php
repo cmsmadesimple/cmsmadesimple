@@ -8,6 +8,7 @@ class Connection extends \CMSMS\Database\Connection
     private $_in_transaction = 0;
     private $_in_smart_transaction = 0;
     private $_transaction_status = TRUE;
+    private $_transaction_failed = FALSE;
 
     public function DbType() { return 'mysqli'; }
 
