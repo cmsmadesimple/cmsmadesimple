@@ -7,18 +7,19 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
 {
     private function get_cmsms_info($dir)
     {
+        $info = [];
         if( !$dir ) return;
-        if( !\is_dir($dir . '/modules') ) return;
-        if(!\is_file($dir . '/version.php') && !is_file("$dir/lib/version.php") ) return;
-        if(!\is_file($dir . '/include.php') && !is_file("$dir/lib/include.php") ) return;
-        if( !\is_file($dir . '/config.php') ) return;
-        if( !\is_file($dir . '/moduleinterface.php') ) return;
+        if( !\is_dir($dir . '/modules') ) return $info;
+        if(!\is_file($dir . '/version.php') && !\is_file("$dir/lib/version.php") ) return $info;
+        if(!\is_file($dir . '/include.php') && !\is_file("$dir/lib/include.php") ) return $info;
+        if( !\is_file($dir . '/config.php') ) return $info;
+        if( !\is_file($dir . '/moduleinterface.php') ) return $info;
         
         # these vars are set by the version.php (deprecated) or /lib/version.php
         /** @var $CMS_VERSION string */
         /** @var $CMS_VERSION_NAME string */
         /** @var $CMS_SCHEMA_VERSION string */
-        $info = [];
+
         if( \is_file("$dir/version.php") ) {
             include($dir.'/version.php');
             $info['mtime'] = \filemtime($dir . '/version.php');
@@ -64,7 +65,11 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
         }
         \__appbase\utils::redirect($this->get_wizard()->next_url());
     }
-
+    
+    /**
+     * @throws \SmartyException
+     * @throws \Exception
+     */
     protected function display()
     {
         // search for installs of CMSMS.
@@ -111,7 +116,7 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
                 if(\count($files) > 3 ) return FALSE;
                 // trivial check for index.html
                 foreach( $files as $file ) {
-                    $bn = \strtolower(basename($file));
+                    $bn = \strtolower(\basename($file));
                     if( \fnmatch('index.htm*', $bn) ) continue;   // this is okay
                     if( \fnmatch('readme*.txt', $bn) ) continue;  // this is okay
                     if( $phar_url ) {
@@ -125,8 +130,8 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
             };
             $list_files = function($dir,$n = 5) {
                 $n = \max(1, \min(100, $n));
-                if( !$dir ) return;
-                if( !\is_dir($dir) ) return;
+                if( !$dir ) return [];
+                if( !\is_dir($dir) ) return [];
                 $files = \glob($dir . '/*');
                 $files = \array_slice($files, 0, $n);
                 foreach( $files as &$file ) {

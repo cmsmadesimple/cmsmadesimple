@@ -5,16 +5,20 @@ namespace cms_autoinstaller;
 abstract class wizard_step extends \__appbase\wizard_step
 {
   static $_registered;
-
+  
+  /**
+   * @throws \SmartyException
+   */
   public function __construct()
   {
+    parent::__construct();
     $dd = \__appbase\get_app()->get_destdir();
-    if( !$dd ) throw new \Exception('Session Failure');
+    if( !$dd ) throw new \RuntimeException('Session Failure');
 
     if( !self::$_registered ) {
       \__appbase\smarty()->addPluginsDir(\__appbase\app::get_rootdir().'/lib/plugins');
-      \__appbase\smarty()->registerPlugin('function','wizard_form_start', array($this,'fn_wizard_form_start'));
-      \__appbase\smarty()->registerPlugin('function','wizard_form_end', array($this,'fn_wizard_form_end'));
+      \__appbase\smarty()->registerPlugin('function', 'wizard_form_start', [$this, 'fn_wizard_form_start']);
+      \__appbase\smarty()->registerPlugin('function', 'wizard_form_end', [$this, 'fn_wizard_form_end']);
       self::$_registered = 1;
     }
 
@@ -34,7 +38,10 @@ abstract class wizard_step extends \__appbase\wizard_step
   {
       echo '</form>';
   }
-
+  
+  /**
+   * @throws \Exception
+   */
   protected function get_primary_title()
   {
       $app = \__appbase\get_app();
@@ -53,47 +60,49 @@ abstract class wizard_step extends \__appbase\wizard_step
       }
       return $str;
   }
-
+  
+  /**
+   * @throws \Exception
+   */
   protected function display()
   {
-      $app = \__appbase\get_app();
       \__appbase\smarty()->assign('wizard_steps',$this->get_wizard()->get_nav());
       \__appbase\smarty()->assign('title',$this->get_primary_title());
   }
 
   public function error($msg)
   {
-      $msg = addslashes($msg);
+      $msg = \addslashes($msg);
       echo '<script type="text/javascript">add_error(\''.$msg.'\');</script>'."\n";
-      flush();
+      \flush();
   }
 
   public static function verbose($msg)
   {
-      $msg = addslashes($msg);
+      $msg = \addslashes($msg);
       $verbose = \__appbase\wizard::get_instance()->get_data('verbose');
       if( $verbose )  echo '<script type="text/javascript">add_verbose(\''.$msg.'\');</script>'."\n";
-      flush();
+      \flush();
   }
 
   public function message($msg)
   {
-      $msg = addslashes($msg);
+      $msg = \addslashes($msg);
       echo '<script type="text/javascript">add_message(\''.$msg.'\');</script>'."\n";
-      flush();
+      \flush();
   }
 
   public function set_block_html($id,$html)
   {
-      $html = addslashes($html);
+      $html = \addslashes($html);
       echo '<script type="text/javascript">set_block_html(\''.$id.'\',\''.$html.'\');</script>'."\n";
-      flush();
+      \flush();
   }
 
   protected function finish()
   {
       echo '<script type="text/javascript">finish();</script>'."\n";
-      flush();
+      \flush();
   }
 
 }

@@ -156,7 +156,10 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
             }
         }
     }
-
+  
+  /**
+   * @throws \SmartyException
+   */
     protected function display()
     {
         // here, we do either the upgrade, or the install stuff.

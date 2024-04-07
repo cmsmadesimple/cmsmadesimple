@@ -28,7 +28,7 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
     private function validate($siteinfo)
     {
         $action = $this->get_wizard()->get_data('action');
-        if( $action !== 'freshen' ) {
+        if('freshen' !== $action) {
             if( !isset($siteinfo['sitename']) || !$siteinfo['sitename'] ) throw new \Exception(\__appbase\lang('error_nositename'));
         }
     }
@@ -59,7 +59,10 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
             $smarty->assign('error',$e->GetMessage());
         }
     }
-
+    
+    /**
+     * @throws \SmartyException
+     */
     protected function display()
     {
         parent::display();

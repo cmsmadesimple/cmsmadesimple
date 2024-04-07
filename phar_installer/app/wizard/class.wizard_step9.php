@@ -30,7 +30,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             if( $modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name) ) {
                 $this->verbose(\__appbase\lang('msg_upgrade_module',$name));
                 $module = $modops->get_module_instance($name,'',TRUE);
-                if( !is_object($module) ) {
+                if( !\is_object($module) ) {
                     $this->error("FATAL ERROR: could not load module {$name} for upgrade");
                 }
             }
@@ -185,7 +185,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $CMS_VERSION = $this->get_wizard()->get_data('destversion');
         $app = \__appbase\get_app();
         $destdir = $app->get_destdir();
-        if( is_file("$destdir/lib/include.php") ) {
+        if( \is_file("$destdir/lib/include.php") ) {
             include_once($destdir.'/lib/include.php');
         }
         else {
@@ -196,9 +196,12 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $config = \cms_config::get_instance();
 
         // we do this here, because the config.php class may not set the define when in an installer.
-        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$config['db_prefix']);
+        if( !\defined('CMS_DB_PREFIX')) \define('CMS_DB_PREFIX', $config['db_prefix']);
     }
-
+    
+    /**
+     * @throws \SmartyException
+     */
     protected function display()
     {
         $app = \__appbase\get_app();
@@ -209,29 +212,29 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $smarty->assign('back_url',$this->get_wizard()->prev_url());
         $smarty->display('wizard_step9.tpl');
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',903));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 903));
 
 
         // here, we do either the upgrade, or the install stuff.
         try {
             $action = $this->get_wizard()->get_data('action');
             $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
+            if('upgrade' == $action && \is_array($tmp) && \count($tmp) ) {
                 $this->do_upgrade($tmp);
             }
-            else if( $action == 'freshen' ) {
+            else if('freshen' == $action) {
                 $this->do_freshen();
             }
-            else if( $action == 'install' ) {
+            else if('install' == $action) {
                 $this->do_install();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',910));
+                throw new \RuntimeException(\__appbase\lang('error_internal', 910));
             }
 
             // clear the session.
             $sess = \__appbase\session::get();
-            $sess->clear();
+            $sess::clear();
 
             $this->finish();
         }

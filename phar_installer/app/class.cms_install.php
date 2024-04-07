@@ -102,14 +102,17 @@ class cms_install extends \__appbase\app
 
         for( $i = 0; $i < 2; $i++ ) {
             if( !\file_exists($dest_archive) ) {
-                @\mkdir($tmpdir,0777,TRUE);
+              if(!\mkdir($tmpdir, 0777, TRUE) && !\is_dir($tmpdir))
+              {
+                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $tmpdir));
+              }
                 @\copy($src_archive, $dest_archive);
             }
             $dest_md5 = \md5_file($dest_archive);
-            if(\is_readable($dest_archive) && $src_md5 == $dest_md5 ) break;
+            if( $src_md5 == $dest_md5 && \is_readable($dest_archive) ) { break; }
             @\unlink($dest_archive);
         }
-        if(2 == $i) throw new \Exception('Checksum of temporary archive does not match... copying/permissions problem');
+        if(2 == $i) throw new \RuntimeException('Checksum of temporary archive does not match... copying/permissions problem');
         $this->_archive = $dest_archive;;
 
         // get version details (version we are installing)
@@ -121,8 +124,15 @@ class cms_install extends \__appbase\app
             $this->_dest_schema = $ver['schema_version'];
         }
         else {
-            $verfile = dirname($src_archive).'/version.php';
-            if( !is_file($verfile) ) throw new \Exception('Could not find version file');
+            $verfile = \dirname($src_archive) . '/version.php';
+            if( !\is_file($verfile) ) throw new \RuntimeException('Could not find version file');
+          
+          /**
+           * from version.php
+           * @var array $CMS_VERSION
+           * @var string $CMS_VERSION_NAME ,
+           * @var string $CMS_SCHEMA_VERSION
+           */
             include_once($verfile);
             $ver = ['version' => $CMS_VERSION, 'version_name' => $CMS_VERSION_NAME, 'schema_version' => $CMS_SCHEMA_VERSION];
             $sess[__CLASS__.'version'] = $ver;
@@ -165,7 +175,7 @@ class cms_install extends \__appbase\app
         $config_file = \realpath(\getcwd()) . '/custom_config.ini';
         if(\is_file($config_file) && \is_readable($config_file) ) {
             $tmp = \parse_ini_file($config_file);
-            if(\is_array($tmp) && count($tmp) ) {
+            if(\is_array($tmp) && \count($tmp) ) {
                 $config = \array_merge($config, $tmp);
                 if( isset($tmp['dest']) ) $this->_custom_destdir = $tmp['dest'];
             }
@@ -188,7 +198,7 @@ class cms_install extends \__appbase\app
                 break;
             case 'dest':
             case 'destdir':
-                $this->_custom_destdir = $config['dest'] = trim($val);
+              $this->_custom_destdir = $config['dest'] = \trim($val);
                 break;
             case 'debug':
                 $config['debug'] = utils::to_bool($val);
@@ -217,7 +227,7 @@ class cms_install extends \__appbase\app
                 if(!\is_dir($val) || !\is_writable($val) ) {
                     // could not find a valid system temporary directory, or none specified. gotta make one
                     $dir = \realpath(\getcwd()) . '/__m' . \md5(\session_id());
-                    if(!@\is_dir($dir) && !@mkdir($dir) ) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
+                    if(!@\is_dir($dir) && !\mkdir($dir) && !\is_dir($dir)) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
                     $txt = 'This is temporary directory created for installing CMSMS in punitively restrictive environments.  You may delete this directory and its files once installation is complete.';
                     if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
                     $config[$key] = $dir;
@@ -307,27 +317,27 @@ class cms_install extends \__appbase\app
 
     public function get_nls()
     {
-        if( is_array($this->_nls) ) return $this->_nls;
+        if( \is_array($this->_nls) ) return $this->_nls;
 
         $archive = $this->get_archive();
-        $archive = str_replace('\\','/',$archive); // stupid windoze
-        if( !file_exists($archive) ) throw new \Exception(\__appbase\lang('error_noarchive'));
+        $archive = \str_replace('\\', '/', $archive); // stupid windoze
+        if( !\file_exists($archive) ) throw new \Exception(\__appbase\lang('error_noarchive'));
 
         $phardata = new \PharData($archive);
-        $nls = array();
+        $nls = [];
         $found = false;
         $pharprefix = "phar://".$archive;
         foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
-            if( ($p = strpos($file,'/lib/nls')) === FALSE ) continue;
-            $tmp = substr($file,$p);
+            if(FALSE === ($p = \strpos($file, '/lib/nls'))) continue;
+            $tmp = \substr($file, $p);
             if( !\__appbase\endswith($tmp,'.php') ) continue;
             $found = true;
-            if( preg_match('/\.nls\.php$/',$tmp) ) {
+            if( \preg_match('/\.nls\.php$/', $tmp) ) {
                $tmpdir = $this->get_tmpdir();
-               $fn = "$tmpdir/tmp_".basename($file);
-               @copy($file,$fn);
+               $fn = "$tmpdir/tmp_" . \basename($file);
+               @\copy($file, $fn);
                include($fn);
-               unlink($fn);
+               \unlink($fn);
             }
         }
         if( !$found ) throw new \Exception(\__appbase\lang('error_nlsnotfound'));
@@ -350,29 +360,33 @@ class cms_install extends \__appbase\app
         // if we are putting files somewhere else, we cannot determine the root url of the site
         // via the $_SERVER variables.
         $b = $this->get_destdir();
-        if( $b != getcwd() ) {
-            if( \__appbase\startswith($b,$_SERVER['DOCUMENT_ROOT']) ) $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
-            $b = str_replace('\\','/',$b); // cuz windows blows
+        if($b != \getcwd() ) {
+            if( \__appbase\startswith($b,$_SERVER['DOCUMENT_ROOT']) ) $b = \substr($b, \strlen($_SERVER['DOCUMENT_ROOT']));
+            $b = \str_replace('\\', '/', $b); // for windows
             if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
             return $prefix.$b;
         }
 
-        $b = dirname($_SERVER['PHP_SELF']);
+        $b = \dirname($_SERVER['PHP_SELF']);
         if( $this->in_phar() ) {
-            $tmp = basename($_SERVER['SCRIPT_NAME']);
-            if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
+            $tmp = \basename($_SERVER['SCRIPT_NAME']);
+            if(FALSE !== ($p = \strpos($b, $tmp))) $b = \substr($b, 0, $p);
         }
 
-        $b = str_replace('\\','/',$b); // cuz windows blows.
+        $b = \str_replace('\\', '/', $b); // cuz windows blows.
         if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
         return $prefix.$b;
     }
-
-    public function run()
+  
+  /**
+   * @throws \SmartyException
+   * @throws \__appbase\langtools_Exception
+   */
+  public function run()
     {
         // set the languages we're going to support.
         $list = \__appbase\nls()->get_list();
-        foreach( $list as &$one ) $one = substr($one,0,-4);
+        foreach( $list as &$one ) $one = \substr($one, 0, -4);
         \__appbase\translator()->set_allowed_languages($list);
 
         // the default language.
@@ -390,11 +404,11 @@ class cms_install extends \__appbase\app
         //session_cache_limiter('private');
 
         // and make sure we are in UTF-8
-        header('Content-Type:text/html; charset=UTF-8');
+        \header('Content-Type:text/html; charset=UTF-8');
 
         // and do our stuff.
         try {
-            $tmp = 'm'.substr(md5(realpath(getcwd()).session_id()),0,8);
+            $tmp = 'm' . \substr(\md5(\realpath(\getcwd()) . \session_id()), 0, 8);
             $wizard = \__appbase\wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
             // this sets a custom step variable for each instance
             // which is just one more security measure.

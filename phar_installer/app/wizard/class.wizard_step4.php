@@ -14,12 +14,18 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
         $tz = \date_default_timezone_get();
         if( !$tz ) @\date_default_timezone_set('UTC');
-        $this->_config = [
-          'dbtype'        =>'', 'dbhost' =>'localhost', 'dbname' =>'', 'dbuser' =>'',
-          'dbpass'        =>'', 'dbprefix' =>'cms_', 'dbport' =>'',
-          'samplecontent' =>TRUE,
-          'query_var'     =>'', 'timezone' =>$tz
-        ];
+      $this->_config = [
+        'dbtype'        => '',
+        'dbhost'        => 'localhost',
+        'dbname'        => '',
+        'dbuser'        => '',
+        'dbpass'        => '',
+        'dbprefix'      => 'cms_',
+        'dbport'        => '',
+        'samplecontent' => TRUE,
+        'query_var'     => '',
+        'timezone'      => $tz
+      ];
 
         // get saved date
         $tmp = $this->get_wizard()->get_data('config');
@@ -71,7 +77,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         }
 
         $all_timezones = \timezone_identifiers_list();
-        if( !\in_array($config['timezone'], $all_timezones) ) throw new \Exception(\__appbase\lang('error_invalidtimezone'));
+        if( !\in_array($config['timezone'], $all_timezones) ) throw new \RuntimeException(\__appbase\lang('error_invalidtimezone'));
 
         if( $config['dbpass'] ) {
             if(FALSE !== \strpos($config['dbpass'], "'") || FALSE !== \strpos($config['dbpass'], '\\')) {
@@ -118,7 +124,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
             try {
                 $db->GetOne('SELECT module_name FROM '.$config['dbprefix'].'modules');
-                if( $res > 0 ) throw new \Exception(\__appbase\lang('error_cmstablesexist'));
+                if( $res > 0 ) throw new \RuntimeException(\__appbase\lang('error_cmstablesexist'));
             }
             catch( \CMSMS\Database\DatabaseException $e ) {
                 // if this fails it's not a problem.
@@ -192,11 +198,11 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
     {
         parent::display();
         $smarty = \__appbase\smarty();
-
         $tmp = \timezone_identifiers_list();
-        if( !\is_array($tmp) ) throw new \Exception(\__appbase\lang('error_tzlist'));
+        
+        if( !\is_array($tmp) ) throw new \RuntimeException(\__appbase\lang('error_tzlist'));
         $tmp2 = \array_combine(\array_values($tmp), \array_values($tmp));
-        $smarty->assign('timezones', \array_merge(array('' =>\__appbase\lang('none')), $tmp2));
+        $smarty->assign('timezones', \array_merge(['' =>\__appbase\lang('none')], $tmp2));
         $smarty->assign('dbtypes',$this->_dbms_options);
         $smarty->assign('action',$this->get_wizard()->get_data('action'));
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));

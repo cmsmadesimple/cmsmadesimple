@@ -47,8 +47,8 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
     private function get_valid_install_dirs()
     {
         $app = \__appbase\get_app();
-        $start = \realpath($app->get_rootdir());
-        $parent = \realpath(dirname($start));
+        $start = \realpath($app::get_rootdir());
+        $parent = \realpath(\dirname($start));
 
         $_is_valid_dir = function($dir) {
             // this routine attempts to exclude most cmsms core directories
@@ -102,10 +102,9 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
             return TRUE;
         };
         
-        /** @var string $CMS_VERSION from version.php (deprecated) or from lib/version.php */
-        
-        $_get_annotation = function($dir) {
-            if(!\is_dir($dir) || !\is_readable($dir) ) return;
+        $_get_annotation = static function($dir) {
+            /** @var string $CMS_VERSION from version.php (deprecated) or from lib/version.php */
+            if(!\is_dir($dir) || !\is_readable($dir) ) return '';
             $bn = \basename($dir);
             if( $bn != 'lib' && \is_file("$dir/version.php" ) ) {
                 @include("$dir/version.php"); // defines in this file can throw notices
@@ -122,10 +121,11 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         };
 
         $_find_dirs = static function($start, $depth = 0) use( &$_find_dirs, &$_get_annotation, $_is_valid_dir ) {
-            if( !\is_readable($start ) ) return;
-            $dh = \opendir($start);
-            if( !$dh ) return;
             $out = [];
+            if( !\is_readable($start ) ) return $out;
+            $dh = \opendir($start);
+            if( !$dh ) return $out;
+            
             while( ($file = readdir($dh)) !== FALSE ) {
                 if( $file == '.' || $file == '..' ) continue;
                 if( \__appbase\startswith($file,'.') || \__appbase\startswith($file,'_') ) continue;
@@ -165,7 +165,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         if( !$app->in_phar() ) {
             // get the list of directories we can install to
             $dirlist = $this->get_valid_install_dirs();
-            if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
+            if( !$dirlist ) throw new \RuntimeException('No possible installation directories found.  This could be a permissions issue');
             $smarty->assign('dirlist',$dirlist);
 
             $custom_destdir = $app->has_custom_destdir();
@@ -175,7 +175,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('languages',\__appbase\translator()->get_language_list(\__appbase\translator()->get_allowed_languages()));
         $smarty->assign('curlang',\__appbase\translator()->get_current_language());
-        $smarty->assign('yesno',array(0=>\__appbase\lang('no'),1=>\__appbase\lang('yes')));
+        $smarty->assign('yesno', [0 =>\__appbase\lang('no'), 1 =>\__appbase\lang('yes')]);
         $smarty->display('wizard_step1.tpl');
 
         $this->finish();

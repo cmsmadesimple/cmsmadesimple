@@ -267,7 +267,9 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         }
         $newconfig->save();
     }
-
+    /**
+     * @throws \SmartyException
+     */
     protected function display()
     {
         parent::display();

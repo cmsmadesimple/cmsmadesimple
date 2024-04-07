@@ -9,13 +9,16 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
     {
         # nothing here
     }
-
-    protected function perform_tests($verbose,&$infomsg,&$tests)
+    
+    /**
+     * @throws \Exception
+     */
+    protected function perform_tests($verbose, &$infomsg, &$tests)
     {
         $app = \__appbase\get_app();
         $version_info = $this->get_wizard()->get_data('version_info');
         $action = $this->get_wizard()->get_data('action');
-        $informational = array();
+        $informational = [];
         $tests = [];
 
         // informational messages...
@@ -56,9 +59,9 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
 
         // required test... tmpfile
         $fh = \tmpfile();
-        $b = ($fh === FALSE)?FALSE:TRUE;
+        $b = !((FALSE === $fh));
         $obj = new _tests_\boolean_test('tmpfile',$b);
-        $obj->required = true;
+        $obj->required = TRUE;
         if( !$b ) $obj->fail_msg = \__appbase\lang('fail_tmpfile');
         $tests[] = $obj;
         unset($fh);
@@ -67,7 +70,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         if( $version_info ) {
             // config file must be writable.
             $obj = new _tests_\boolean_test('config_writable', \is_writable($version_info['config_file']));
-            $obj->required = true;
+            $obj->required = TRUE;
             $obj->fail_key = 'fail_config_writable';
             $tests[] = $obj;
 
@@ -131,6 +134,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
     
         // only perform the check below PHP 7.0 (we'll be removing this check on 2.99+)
+        // note: we are way past the PHP 7.0.0 release so we just go ahead with this
 //        if(\version_compare(PHP_VERSION, '7.0.0') < 0)
 //        {
 //          // required test ... magic_quotes_runtime
@@ -273,7 +277,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
 
         // recommended test ... max_execution_time
         $v = (int) \ini_get('max_execution_time');
-        if( $v !== 0 ) {
+        if(0 !== $v) {
             $obj = new _tests_\range_test('max_execution_time',$v);
             $obj->minimum = 30;
             $obj->recommended = 60;
@@ -292,10 +296,11 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // recommended test (register globals)
-        $obj = new _tests_\boolean_test('register_globals',!\ini_get('register_globals'));
-        $obj->required = 1;
-        $obj->fail_key = 'fail_register_globals';
-        $tests[] = $obj;
+        // we are way past php 5.3...
+//        $obj = new _tests_\boolean_test('register_globals',!\ini_get('register_globals'));
+//        $obj->required = 1;
+//        $obj->fail_key = 'fail_register_globals';
+//        $tests[] = $obj;
 
         // recommended test ... output buffering
         $obj = new _tests_\boolean_test('output_buffering', \ini_get('output_buffering'));
@@ -325,6 +330,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // test ini set
+        # not sure if this works with php 8.0 or above??? revisit (JM)
         {
             $val = (\ini_get('log_errors_max_len')) ? \ini_get('log_errors_max_len') . '0':'99';
             \ini_set('log_errors_max_len', $val);
@@ -362,16 +368,20 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             }
         }
         if( !$verbose ) $tests = $results;
+        
         return [$tests_failed, $can_continue];
     }
-
+    
+    /**
+     * @throws \SmartyException
+     */
     protected function display()
     {
         parent::display();
         $verbose = $this->get_wizard()->get_data('verbose',0);
         $informational = '';
         $tests = '';
-        list($tests_failed,$can_continue) = $this->perform_tests($verbose,$informational,$tests);
+        [$tests_failed,$can_continue] = $this->perform_tests($verbose,$informational,$tests);
 
         $app = \__appbase\get_app();
         $smarty = \__appbase\smarty();
