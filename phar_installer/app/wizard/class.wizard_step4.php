@@ -13,7 +13,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         parent::__construct();
 
         $tz = \date_default_timezone_get();
-        if( !$tz ) @\date_default_timezone_set('UTC');
+        if(!$tz) @\date_default_timezone_set('UTC');
       $this->_config = [
         'dbtype'        => '',
         'dbhost'        => 'localhost',
@@ -29,7 +29,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
         // get saved date
         $tmp = $this->get_wizard()->get_data('config');
-        if( $tmp ) $this->_config = \array_merge($this->_config, $tmp);
+        if($tmp) $this->_config = \array_merge($this->_config, $tmp);
 
         $databases = ['mysqli' =>'MySQLi (4.1+)'];
         $this->_dbms_options = [];

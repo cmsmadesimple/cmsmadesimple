@@ -58,7 +58,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
    */
   private function do_files($langlist = null)
     {
-        $languages = array('en_US');
+        $languages = ['en_US'];
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if(\is_array($siteinfo) && \is_array($siteinfo['languages']) && \count($siteinfo['languages']) ) $languages = \array_merge($languages, $siteinfo['languages']);
         if(\is_array($langlist) && \count($langlist) ) $languages = \array_merge($languages, $langlist);
@@ -87,14 +87,14 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         // get the list of all available versions that this upgrader knows about
         $app = \__appbase\get_app();
         $app_config = $app->get_config();
-        $upgrade_dir =  $app->get_appdir().'/upgrade';
+        $upgrade_dir =  $app::get_appdir().'/upgrade';
         if( !\is_dir($upgrade_dir) ) throw new \RuntimeException(\__appbase\lang('error_internal', 710));
         $destdir = $app->get_destdir();
         if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 711));
 
         $version_info = $this->get_wizard()->get_data('version_info');
         $versions = utils::get_upgrade_versions();
-        if(\is_array($versions) && count($versions) ) {
+        if(\is_array($versions) && \count($versions) ) {
             $this->message(\__appbase\lang('cleaning_files'));
             foreach( $versions as $one_version ) {
                 if(\version_compare($one_version, $version_info['version']) < 1 ) continue;
@@ -118,7 +118,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     foreach( $deleted as $rec ) {
                         $fn = "{$destdir}{$rec['filename']}";
                         if( !\file_exists($fn) ) {
-                            $this->verbose("file $fn does not exist... but we planned to delete it anyway");
+                            self::verbose("file $fn does not exist... but we planned to delete it anyway");
                             $nmissing++;
                         }
                         else if( !\is_writable($fn) ) {
@@ -133,18 +133,18 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
 				    $this->error('problem removing directory: '.$fn);
 				    $nfailed++;
  				} else {
-                                    $this->verbose('removed directory: '.$fn);
+                                    self::verbose('removed directory: ' . $fn);
                                     $ndeleted++;
 				}
                             }
                             else {
-                                $res = @unlink($fn);
+                                $res = @\unlink($fn);
                                 if( !$res ) {
                                     $this->error("problem deleting: $fn");
                                     $nfailed++;
                                 }
                                 else {
-                                    $this->verbose('removed file: '.$fn);
+                                    self::verbose('removed file: ' . $fn);
                                     $ndeleted++;
                                 }
                             }

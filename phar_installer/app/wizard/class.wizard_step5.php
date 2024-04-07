@@ -19,16 +19,16 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
     {
         if( !isset($acct['username']) || '' == $acct['username']) throw new \Exception(\__appbase\lang('error_adminacct_username'));
         if( !isset($acct['password']) || '' == $acct['password'] || \strlen($acct['password']) < 6 ) {
-            throw new \Exception(\__appbase\lang('error_adminacct_password'));
+            throw new \RuntimeException(\__appbase\lang('error_adminacct_password'));
         }
         if( !isset($acct['repeatpw']) || $acct['repeatpw'] != $acct['password'] ) {
-            throw new \Exception(\__appbase\lang('error_adminacct_repeatpw'));
+            throw new \RuntimeException(\__appbase\lang('error_adminacct_repeatpw'));
         }
         if( isset($acct['emailaddr']) && $acct['emailaddr'] != '' && !\__appbase\utils::is_email($acct['emailaddr']) ) {
-            throw new \Exception(\__appbase\lang('error_adminacct_emailaddr'));
+            throw new \RuntimeException(\__appbase\lang('error_adminacct_emailaddr'));
         }
         if( (!isset($acct['emailaddr']) || $acct['emailaddr'] == '') && $acct['emailaccountinfo'] ) {
-            throw new \Exception(\__appbase\lang('error_adminacct_emailaddrrequired'));
+            throw new \RuntimeException(\__appbase\lang('error_adminacct_emailaddrrequired'));
         }
     }
 
@@ -65,7 +65,7 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
 
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('account',$this->_adminacct);
-        $smarty->assign('yesno',array('0'=>\__appbase\lang('no'),'1'=>\__appbase\lang('yes')));
+        $smarty->assign('yesno', ['0' =>\__appbase\lang('no'), '1' =>\__appbase\lang('yes')]);
         $smarty->display('wizard_step5.tpl');
         $this->finish();
     }

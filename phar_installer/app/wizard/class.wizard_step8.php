@@ -17,7 +17,10 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
     {
         // nothing here
     }
-
+    
+    /**
+     * @throws \CMSMS\Database\ConnectionSpecException
+     */
     private function db_connect($destconfig)
     {
         $spec = new \CMSMS\Database\ConnectionSpec;
@@ -68,7 +71,10 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         }
 
     }
-
+    
+    /**
+     * @throws \CMSMS\Database\ConnectionSpecException
+     */
     private function do_install()
     {
         $dir = \__appbase\get_app()->get_appdir().'/install';
@@ -85,6 +91,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if( !$siteinfo ) throw new \RuntimeException(\__appbase\lang('error_internal', 704));
 
+        // connect to the CMSMS API
         $this->connect_to_cmsms($destdir);
 
         // connect to the database
@@ -108,17 +115,17 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $CMS_INSTALL_CREATE_TABLES=1;
             include_once($fn);
 
-            $this->verbose(\__appbase\lang('install_setsequence'));
+            self::verbose(\__appbase\lang('install_setsequence'));
             include_once($dir.'/createseq.php');
 
             if( $adminaccount['saltpw'] ) {
-                $this->verbose(\__appbase\lang('install_passwordsalt'));
+                self::verbose(\__appbase\lang('install_passwordsalt'));
                 $salt = \substr(\str_shuffle(\md5($destdir) . \time()), 0, 16);
                 \cms_siteprefs::set('sitemask',$salt);
             }
 
             // create tmp directories
-            $this->verbose(\__appbase\lang('install_createtmpdirs'));
+            self::verbose(\__appbase\lang('install_createtmpdirs'));
             if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
             {
                 throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
@@ -138,7 +145,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             if( $destconfig['samplecontent'] ) $fn = $dir.'/extra.php';
             include_once($fn);
 
-            $this->verbose(\__appbase\lang('install_setsitename'));
+            self::verbose(\__appbase\lang('install_setsitename'));
             \cms_siteprefs::set('sitename',$siteinfo['sitename']);
 
             $this->write_config();
@@ -155,7 +162,12 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $this->error($e->GetMessage());
         }
     }
-
+    
+    /**
+     * @param $version_info
+     *
+     * @throws \CMSMS\Database\ConnectionSpecException
+     */
     private function do_upgrade($version_info)
     {
         global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
@@ -167,14 +179,14 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         // get the list of all available versions that this upgrader knows about
         $app = \__appbase\get_app();
-        $dir =  $app->get_appdir().'/upgrade';
-        if( !\is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal', 710));
+        $dir =  $app::get_appdir().'/upgrade';
+        if( !\is_dir($dir) ) throw new \RuntimeException(\__appbase\lang('error_internal', 710));
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 711));
 
         $dh = \opendir($dir);
         $versions = [];
-        if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',712));
+        if( !$dh ) throw new \RuntimeException(\__appbase\lang('error_internal', 712));
         while( ($file = \readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;
             if(\is_dir($dir . '/' . $file) && (\is_file("$dir/$file/MANIFEST.DAT") || \is_file("$dir/$file/MANIFEST.DAT.gz")) ) $versions[] = $file;
@@ -221,6 +233,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         }
     }
 
+    
     private function do_freshen()
     {
         try {

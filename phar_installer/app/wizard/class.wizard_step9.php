@@ -23,14 +23,21 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $this->message(\__appbase\lang('msg_upgrademodules'));
         $modops = \ModuleOperations::get_instance();
         $allmodules = $modops->FindAllModules();
-        foreach( $allmodules as $name ) {
+        
+        foreach($allmodules as $name)
+        {
             // we force all system modules to be loaded, if it's a system module
             // and needs upgrade, then it should automagically upgrade.
             // additionally, upgrade any specific modules specified by the upgrade routine.
-            if( $modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name) ) {
-                $this->verbose(\__appbase\lang('msg_upgrade_module',$name));
-                $module = $modops->get_module_instance($name,'',TRUE);
-                if( !\is_object($module) ) {
+            // even if the module is optional we still need to load it... if not queued for install
+            // it should be handled by the force load routine.
+            
+            if($modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name))
+            {
+                self::verbose(\__appbase\lang('msg_upgrade_module', $name));
+                $module = $modops->get_module_instance($name, '', TRUE);
+                if(!\is_object($module))
+                {
                     $this->error("FATAL ERROR: could not load module {$name} for upgrade");
                 }
             }
@@ -58,31 +65,55 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $this->set_block_html('bottom_nav',\__appbase\lang('finished_upgrade_msg', $url, $admin_url));
         }
     }
-
+    
+    /**
+     * @throws \Exception
+     */
     public function do_install()
     {
         // create tmp directories
         $app = \__appbase\get_app();
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',901));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
-        @mkdir($destdir.'/tmp/cache',0777,TRUE);
-        @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
+        
+        if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
+        {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
+        
+        if(!\mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !\is_dir($concurrentDirectory))
+        {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',902));
+        if( !$siteinfo ) throw new \RuntimeException(\__appbase\lang('error_internal', 902));
 
         // install modules
         $this->message(\__appbase\lang('install_modules'));
         $this->connect_to_cmsms();
         $modops = \cmsms()->GetModuleOperations();
         $allmodules = $modops->FindAllModules();
-        foreach( $allmodules as $name ) {
+        
+        foreach($allmodules as $name)
+        {
             // we force all system modules to be loaded, if it's a system module
             // and needs upgrade, then it should automagically upgrade.
-            if( $modops->IsSystemModule($name) ) {
-                $this->verbose(\__appbase\lang('install_module',$name));
-                $module = $modops->get_module_instance($name,'',TRUE);
+            if($modops->IsSystemModule($name) && !$modops->IsOptionalSystemModule($name))
+            {
+                self::verbose(\__appbase\lang('install_module', $name));
+                $module = $modops->get_module_instance($name, '', TRUE);
+            }
+            else if ($modops->IsOptionalSystemModule($name) )
+            {
+                ## TODO add a language string here. self::verbose(\__appbase\lang('install_optional_module', $name));
+                $module = $modops->get_module_instance($name, '', TRUE);
+            }
+            
+            if(!\is_object($module))
+            {
+                $this->error("FATAL ERROR: could not load module {$name} for install");
             }
         }
 
@@ -94,7 +125,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( !endswith($root_url,'/') ) $root_url .= '/';
         $admin_url = $root_url.'admin';
 
-        if( is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo'] && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
+        if(\is_array($adminacct) && isset($adminacct['emailaccountinfo']) && $adminacct['emailaccountinfo'] && isset($adminacct['emailaddr']) && $adminacct['emailaddr'] ) {
             try {
                 $this->message(\__appbase\lang('send_admin_email'));
                 $mailer = new \cms_mailer();
@@ -111,7 +142,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                                             $adminacct['username'],$adminacct['password'],
                                             $destdir);
                 }
-                $body = html_entity_decode($body, ENT_QUOTES);
+                $body = \html_entity_decode($body, \ENT_QUOTES);
                 $mailer->SetBody($body);
                 $mailer->Send();
             }
@@ -146,13 +177,21 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // create tmp directories
         $app = \__appbase\get_app();
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',901));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
-        @mkdir($destdir.'/tmp/cache',0777,TRUE);
-        @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
+        
+        if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
+        {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
+        
+        if(!mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !is_dir($concurrentDirectory))
+        {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
 
         // write protect config.php
-        @chmod("$destdir/config.php",0444);
+        @\chmod("$destdir/config.php", 0444);
 
         // clear the cache
         $this->connect_to_cmsms();
