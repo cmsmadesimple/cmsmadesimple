@@ -38,8 +38,8 @@ try {
     }
 
     // some basic system wide pre-requisites
-    if(\php_sapi_name() == "cli") throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
-    if( \version_compare(\phpversion(),'5.4.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 5.4.0');
+    if("cli" == \php_sapi_name()) throw new \RuntimeException("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
+    if( \version_compare(\phpversion(),'5.4.0') < 0 ) throw new \RuntimeException('We are sorry, but this installer requires at least PHP 5.4.0');
     _detect_bad_ioncube();
     
     // clear opcache before disabling it
@@ -71,7 +71,9 @@ catch( \Exception $e ) {
   </body>
 </html>
 EOT;
-    echo \str_replace('[message]',$e->GetMessage(),$out);
+    $message = \str_replace("\n", '<br>', $e->getMessage());
+    $message .= "\n\n" . \str_replace("\n", '<br>', $e->getTraceAsString());
+    echo \str_replace('[message]', $message, $out);
 }
 
 ?>

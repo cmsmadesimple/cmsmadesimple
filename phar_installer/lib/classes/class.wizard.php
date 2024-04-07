@@ -148,20 +148,20 @@ class wizard
 
       // get the url to the specified step index
       $idx = (int)$idx;
-      if( $idx < 1 || $idx > $this->num_steps() ) return;
+      if( $idx < 1 || $idx > $this->num_steps() ) return '';
 
       $request = request::get();
       $url = $request->raw_server('REQUEST_URI');
-      $urlmain = explode('?',$url);
+      $urlmain = \explode('?', $url);
 
-      parse_str($url,$parts);
+      \parse_str($url, $parts);
       $parts[$this->_stepvar] = $idx;
 
       $tmp = array();
       foreach( $parts as $k => $v ) {
           $tmp[] = $k.'='.$v;
       }
-      $url = $urlmain[0].'?'.implode('&',$tmp);
+      $url = $urlmain[0].'?' . \implode('&', $tmp);
       return $url;
   }
 
@@ -170,17 +170,17 @@ class wizard
       $this->_init();
       $request = request::get();
       $url = $request->raw_server('REQUEST_URI');
-      $urlmain = explode('?',$url);
+      $urlmain = \explode('?', $url);
 
-      $parts = parse_str($url,$parts);
+      \parse_str($url, $parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
-      if( $parts[$this->_stepvar] > $this->num_steps() ) return;
+      if( $parts[$this->_stepvar] > $this->num_steps() ) return '';
 
       $tmp = array();
       foreach( $parts as $k => $v ) {
           $tmp[] = $k.'='.$v;
       }
-      $url = $urlmain[0].'?'.implode('&',$tmp);
+      $url = $urlmain[0].'?' . \implode('&', $tmp);
       return $url;
   }
 
@@ -189,19 +189,19 @@ class wizard
       $this->_init();
       $request = request::get();
       $url = $request->raw_server('REQUEST_URI');
-      $urlmain = explode('?',$url);
+      $urlmain = \explode('?', $url);
 
-      parse_str($url,$parts);
+      \parse_str($url, $parts);
       $parts[$this->_stepvar] = $this->cur_step() - 1;
-      if( $parts[$this->_stepvar] <= 0 ) return;
+      if( $parts[$this->_stepvar] <= 0 ) return '';
 
-      $tmp = array();
-      if( count($parts) ) {
+      $tmp = [];
+      if( \count($parts) ) {
           foreach( $parts as $k => $v ) {
               $tmp[] = $k.'='.$v;
           }
       }
-      $url = $urlmain[0].'?'.implode('&',$tmp);
+      $url = $urlmain[0].'?' . \implode('&', $tmp);
       return $url;
   }
 

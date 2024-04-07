@@ -5,7 +5,7 @@ namespace __appbase;
 abstract class wizard_step
 {
   public function __construct() {
-    echo 'DEBUG: create wizard step<br/>';
+    //echo 'DEBUG: create wizard step<br/>';
   }
 
   /**
