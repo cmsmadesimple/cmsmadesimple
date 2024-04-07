@@ -61,7 +61,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
     private function validate($config)
     {
-      # TODO consider defining our own exceptions here
+      # TODO consider defining our own exceptions for this
         $action = $this->get_wizard()->get_data('action');
         if( !isset($config['dbtype']) || !$config['dbtype'] ) throw new \RuntimeException(\__appbase\lang('error_nodbtype'));
         if( !isset($config['dbhost']) || !$config['dbhost'] ) throw new \RuntimeException(\__appbase\lang('error_nodbhost'));
@@ -167,6 +167,11 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $this->_config['samplecontent'] = (int)$_POST['samplecontent'];
       }
       
+      if(isset($_POST['optional_modules']))
+      {
+        $this->_config['optional_modules'] = (array)$_POST['optional_modules'];
+      }
+      
         $this->get_wizard()->set_data('config',$this->_config);
 
         try {
@@ -200,14 +205,27 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $smarty = \__appbase\smarty();
         $tmp = \timezone_identifiers_list();
         
+        # we default the optional modules to News and UserGuide
+        if(!isset($this->_config['optional_modules'])) $this->_config['optional_modules'] = ['News', 'UserGuide'];
+        
         if( !\is_array($tmp) ) throw new \RuntimeException(\__appbase\lang('error_tzlist'));
         $tmp2 = \array_combine(\array_values($tmp), \array_values($tmp));
-        $smarty->assign('timezones', \array_merge(['' =>\__appbase\lang('none')], $tmp2));
-        $smarty->assign('dbtypes',$this->_dbms_options);
-        $smarty->assign('action',$this->get_wizard()->get_data('action'));
-        $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
-        $smarty->assign('config',$this->_config);
-        $smarty->assign('yesno', ['0' =>\__appbase\lang('no'), '1' =>\__appbase\lang('yes')]);
+        
+        $smarty_assign = [
+          'timezones' => \array_merge(['' =>\__appbase\lang('none')], $tmp2),
+          'dbtypes'   => $this->_dbms_options,
+          'action'    => $this->get_wizard()->get_data('action'),
+          'verbose'   => $this->get_wizard()->get_data('verbose',0),
+          'config'    => $this->_config,
+          'yesno'     => ['0' =>\__appbase\lang('no'), '1' =>\__appbase\lang('yes')],
+          # labels are preceded by a ' '
+          'optional_modules' => [
+            'News' => ' News',
+            'UserGuide' => ' User Guide'
+          ]
+        ];
+        
+        $smarty->assign($smarty_assign);
         $smarty->display('wizard_step4.tpl');
         $this->finish();
     }

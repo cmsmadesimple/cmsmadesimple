@@ -75,10 +75,6 @@
 
 <div id="bottom_nav">
 {if $tests_failed}
-  {*
-  <button onClick="window.location.reload();">Refresh Page</button>
-  <a href="{$retry_url}" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
-  *}
   <a onClick="window.location.reload();" class="action-button orange" title="{'retry'|tr}">{'retry'|tr} <i class="icon-loop"></i></a>
 {/if}
 {if $can_continue} <a href="{$next_url}" class="action-button positive" title="{'next'|tr}">{'next'|tr} &rarr;</a>{/if}

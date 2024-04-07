@@ -96,6 +96,11 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $modops = \cmsms()->GetModuleOperations();
         $allmodules = $modops->FindAllModules();
         
+        if(! \method_exists($modops, 'IsOptionalSystemModule') )
+        {
+            throw new \RuntimeException(\__appbase\lang('error_internal', 903));
+        }
+        
         foreach($allmodules as $name)
         {
             // we force all system modules to be loaded, if it's a system module
@@ -105,7 +110,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 self::verbose(\__appbase\lang('install_module', $name));
                 $module = $modops->get_module_instance($name, '', TRUE);
             }
-            else if ($modops->IsOptionalSystemModule($name) )
+            else if ($modops->IsOptionalSystemModule($name) && \in_array($name, $this->get_wizard()->get_data('optional_modules')))
             {
                 ## TODO add a language string here. self::verbose(\__appbase\lang('install_optional_module', $name));
                 $module = $modops->get_module_instance($name, '', TRUE);

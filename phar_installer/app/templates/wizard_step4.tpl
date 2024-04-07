@@ -117,6 +117,13 @@
     {/if}
 
     {if $verbose and $action == 'install'}
+
+    <h3>{'Install Optional Modules'}{*'prompt_optional_modules'|tr*}</h3>
+        <p>{'Optional Modules info here'}{*'info_optional_modules'|tr*}</p>
+    <fieldset>
+        {html_checkboxes name='optional_modules' options = $optional_modules
+        selected = $config.optional_modules  separator='<br>'}
+    </fieldset>
     <h3>{'prompt_installcontent'|tr}</h3>
     <p>{'info_installcontent'|tr}</p>
 

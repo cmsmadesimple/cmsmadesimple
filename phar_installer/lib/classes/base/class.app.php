@@ -72,7 +72,7 @@ abstract class app
     return \dirname($request['SCRIPT_FILENAME']);
   }
   
-  public static function get_config()
+  public function get_config()
   {
     return self::$_instance->_config;
   }
