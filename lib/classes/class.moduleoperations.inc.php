@@ -623,7 +623,7 @@ final class ModuleOperations
 
         global $CMS_INSTALL_PAGE;
 
-        // okay, lessee if we can load the dependants
+        // okay, let's see if we can load the dependants
         if( $dependents ) {
             $deps = $this->get_module_dependencies($module_name);
             if( is_array($deps) && count($deps) ) {
@@ -695,7 +695,7 @@ final class ModuleOperations
             if($can_auto_install)
             {
                 $res = $this->_install_module($obj);
-                if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
+                if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = [];
                 $_SESSION['moduleoperations_result'][$module_name] = $res;
                 $this->_unqueue_install($module_name);
             }
@@ -1181,7 +1181,7 @@ final class ModuleOperations
 
         if( is_object($obj) && !empty($version) ) {
             $res = version_compare($obj->GetVersion(),$version);
-            if( $res < 0 OR $res === FALSE ) $obj = null;
+            if( $res < 0 || FALSE === $res) $obj = null;
         }
 
         return $obj;
