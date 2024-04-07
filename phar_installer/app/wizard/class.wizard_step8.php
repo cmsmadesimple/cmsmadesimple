@@ -3,7 +3,14 @@
 namespace cms_autoinstaller;
 use \__appbase;
 
-
+/**
+ * At this point we assume the files have been copied to the destination
+ * so that we can connect to the database and use a number of functions and classes
+ * available in the CMSMS API
+ *
+ * Class wizard_step8
+ * @package cms_autoinstaller
+ */
 class wizard_step8 extends \cms_autoinstaller\wizard_step
 {
     protected function process()
@@ -11,32 +18,33 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // nothing here
     }
 
-    private function &db_connect($destconfig)
+    private function db_connect($destconfig)
     {
         $spec = new \CMSMS\Database\ConnectionSpec;
         if( isset($destconfig['dbms']) ) {
-            $spec->type = $destconfig['dbms'];
-            $spec->host = $destconfig['db_hostname'];
+            $spec->type     = $destconfig['dbms'];
+            $spec->host     = $destconfig['db_hostname'];
             $spec->username = $destconfig['db_username'];
             $spec->password = $destconfig['db_password'];
-            $spec->dbname = $destconfig['db_name'];
-            $spec->prefix = $destconfig['db_prefix'];
+            $spec->dbname   = $destconfig['db_name'];
+            $spec->prefix   = $destconfig['db_prefix'];
         }
         else {
-            $spec->type = $destconfig['dbtype'];
-            $spec->host = $destconfig['dbhost'];
+            $spec->type     = $destconfig['dbtype'];
+            $spec->host     = $destconfig['dbhost'];
             $spec->username = $destconfig['dbuser'];
             $spec->password = $destconfig['dbpass'];
-            $spec->dbname = $destconfig['dbname'];
-            $spec->port = isset($destconfig['dbport']) ? $destconfig['dbport'] : null;
-            $spec->prefix = $destconfig['dbprefix'];
+            $spec->dbname   = $destconfig['dbname'];
+            $spec->port     = isset($destconfig['dbport']) ? $destconfig['dbport'] : NULL;
+            $spec->prefix   = $destconfig['dbprefix'];
         }
-        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$spec->prefix);
+        if( !\defined('CMS_DB_PREFIX')) \define('CMS_DB_PREFIX', $spec->prefix);
         $db = \CMSMS\Database\Connection::initialize($spec);
-        $obj =& $this;
+        $obj = $this;
         $db->SetErrorHandler(function() { /* do nohing */ });
         $db->Execute("SET NAMES 'utf8'");
         \CMSMS\Database\compatibility::noop();
+        /** CmsApp instance will be available here after the files been copied */
         \CmsApp::get_instance()->_setDb($db);
         return $db;
     }
@@ -52,7 +60,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         // setup and initialize the cmsms API's
         // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
-        if( is_file("$destdir/lib/include.php") ) {
+        if( \is_file("$destdir/lib/include.php") ) {
             include_once("$destdir/lib/include.php");
         }
         else {
@@ -66,16 +74,16 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $dir = \__appbase\get_app()->get_appdir().'/install';
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 700));
 
         $adminaccount = $this->get_wizard()->get_data('adminaccount');
-        if( !$adminaccount ) throw new \Exception(\__appbase\lang('error_internal',701));
+        if( !$adminaccount ) throw new \RuntimeException(\__appbase\lang('error_internal', 701));
 
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \RuntimeException(\__appbase\lang('error_internal', 703));
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',704));
+        if( !$siteinfo ) throw new \RuntimeException(\__appbase\lang('error_internal', 704));
 
         $this->connect_to_cmsms($destdir);
 
@@ -86,14 +94,14 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         try {
             // create some variables that the sub functions need.
-            if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT','DT');
+            if( !\defined('CMS_ADODB_DT') ) \define('CMS_ADODB_DT', 'DT');
             $admin_user = null;
             $db_prefix = CMS_DB_PREFIX;
 
             // install the schema
             $this->message(\__appbase\lang('install_schema'));
             $fn = $dir.'/schema.php';
-            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',705));
+            if( !\file_exists($fn) ) throw new \RuntimeException(\__appbase\lang('error_internal', 705));
 
             global $CMS_INSTALL_DROP_TABLES, $CMS_INSTALL_CREATE_TABLES;
             $CMS_INSTALL_DROP_TABLES=1;
@@ -105,14 +113,23 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
             if( $adminaccount['saltpw'] ) {
                 $this->verbose(\__appbase\lang('install_passwordsalt'));
-                $salt = substr(str_shuffle(md5($destdir).time()),0,16);
+                $salt = \substr(\str_shuffle(\md5($destdir) . \time()), 0, 16);
                 \cms_siteprefs::set('sitemask',$salt);
             }
 
             // create tmp directories
             $this->verbose(\__appbase\lang('install_createtmpdirs'));
-            @mkdir($destdir.'/tmp/cache',0777,TRUE);
-            @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
+            if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
+            {
+                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
+            
+            if(
+              !\mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !\is_dir($concurrentDirectory)
+            )
+            {
+                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
 
             include_once($dir.'/base.php');
 
@@ -151,28 +168,28 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // get the list of all available versions that this upgrader knows about
         $app = \__appbase\get_app();
         $dir =  $app->get_appdir().'/upgrade';
-        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal',710));
+        if( !\is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal', 710));
         $destdir = $app->get_destdir();
         if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
 
-        $dh = opendir($dir);
-        $versions = array();
+        $dh = \opendir($dir);
+        $versions = [];
         if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',712));
-        while( ($file = readdir($dh)) !== false ) {
+        while( ($file = \readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;
-            if( is_dir($dir.'/'.$file) && (is_file("$dir/$file/MANIFEST.DAT") || is_file("$dir/$file/MANIFEST.DAT.gz")) ) $versions[] = $file;
+            if(\is_dir($dir . '/' . $file) && (\is_file("$dir/$file/MANIFEST.DAT") || \is_file("$dir/$file/MANIFEST.DAT.gz")) ) $versions[] = $file;
         }
-        closedir($dh);
-        if( count($versions) ) usort($versions,'version_compare');
+        \closedir($dh);
+        if( \count($versions) ) \usort($versions, 'version_compare');
 
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \RuntimeException(\__appbase\lang('error_internal', 703));
 
         // setup and initialize the cmsms API's
-        if( is_file("$destdir/lib/include.php") ) {
+        if( \is_file("$destdir/lib/include.php") ) {
             include_once("$destdir/lib/include.php");
         }
-        else if( is_file( "$destdir/include.php")) {
+        else if( \is_file("$destdir/include.php")) {
             include_once( "$destdir/lib/include.php" );
         }
         else {
@@ -190,7 +207,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $current_version = $version_info['version'];
             foreach( $versions as $ver ) {
                 $fn = "$dir/$ver/upgrade.php";
-                if( version_compare($current_version,$ver) < 0 && is_file($fn) ) {
+                if(\version_compare($current_version, $ver) < 0 && \is_file($fn) ) {
                     include_once($fn);
                 }
             }
@@ -217,33 +234,33 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
     private function write_config()
     {
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \RuntimeException(\__appbase\lang('error_internal', 703));
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 700));
 
         // create new config file.
         // this step has to go here.... as config file has to exist in step9
         // so that CMSMS can connect to the database.
-        $fn = $destdir."/config.php";
-        if( is_file($fn) ) {
+        $fn = $destdir . '/config.php';
+        if( \is_file($fn) ) {
             $this->verbose(\__appbase\lang('install_backupconfig'));
             $destfn = $destdir.'/bak.config.php';
-            if( !copy($fn,$destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
+            if( !\copy($fn, $destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
         }
 
         $this->connect_to_cmsms($destdir);
 
         $this->message(\__appbase\lang('install_createconfig'));
-        $newconfig = \cms_config::get_instance();
-        $newconfig['dbms'] = trim($destconfig['dbtype']);
-        $newconfig['db_hostname'] = trim($destconfig['dbhost']);
-        $newconfig['db_username'] = trim($destconfig['dbuser']);
-        $newconfig['db_password'] = trim($destconfig['dbpass']);
-        $newconfig['db_name'] = trim($destconfig['dbname']);
-        $newconfig['db_prefix'] = trim($destconfig['dbprefix']);
-        $newconfig['timezone'] = trim($destconfig['timezone']);
-        if( $destconfig['query_var'] ) $newconfig['query_var'] = trim($destconfig['query_var']);
+        $newconfig                = \cms_config::get_instance();
+        $newconfig['dbms']        = \trim($destconfig['dbtype']);
+        $newconfig['db_hostname'] = \trim($destconfig['dbhost']);
+        $newconfig['db_username'] = \trim($destconfig['dbuser']);
+        $newconfig['db_password'] = \trim($destconfig['dbpass']);
+        $newconfig['db_name']     = \trim($destconfig['dbname']);
+        $newconfig['db_prefix']   = \trim($destconfig['dbprefix']);
+        $newconfig['timezone']    = \trim($destconfig['timezone']);
+        if( $destconfig['query_var'] ) $newconfig['query_var'] = \trim($destconfig['query_var']);
         if( isset($destconfig['dbport']) ) {
             $num = (int)$destconfig['dbport'];
             if( $num > 0 ) $newconfig['db_port'] = $num;
@@ -261,17 +278,17 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         try {
             $action = $this->get_wizard()->get_data('action');
             $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
+            if( $action == 'upgrade' && \is_array($tmp) && \count($tmp) ) {
                 $this->do_upgrade($tmp);
             }
-            else if( $action == 'freshen' ) {
+            else if('freshen' == $action) {
                 $this->do_freshen();
             }
-            else if( $action == 'install' ) {
+            else if('install' == $action) {
                 $this->do_install();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',705));
+                throw new \RuntimeException(\__appbase\lang('error_internal', 705));
             }
         }
         catch( \Exception $e ) {

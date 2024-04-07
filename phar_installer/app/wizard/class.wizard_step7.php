@@ -13,7 +13,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
     private function _createIndexHTML($filename)
     {
         $str = '<!-- DUMMY HTML FILE -->';
-        file_put_contents($filename,$str);
+        \file_put_contents($filename, $str);
     }
 
     private function detect_languages()
@@ -23,12 +23,12 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
 
         $nlsdir = "$destdir/lib/nls";
         $pattern = "$nlsdir/*nls.php";
-        $files = glob($pattern);
-        if( !is_array($files) || count($files) == 0 ) throw new \Exception(\__appbase\lang('error_internal',750));
+        $files = \glob($pattern);
+        if(!\is_array($files) || 0 == count($files)) throw new \RuntimeException(\__appbase\lang('error_internal', 750));
 
         foreach( $files as &$one ) {
-            $fn = basename($one);
-            $one = substr($fn,0,strlen($fn)-strlen('.nls.php'));
+            $fn = \basename($one);
+            $one = \substr($fn, 0, \strlen($fn) - \strlen('.nls.php'));
         }
         return $files;
     }
@@ -41,40 +41,43 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',751));
         $archive = \__appbase\get_app()->get_archive();
         $phardata = new \PharData($archive);
-        $archive = basename($archive);
+        $archive = \basename($archive);
         foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
-            if( ($p = strpos($file,$archive)) === FALSE ) continue;
-            $fn = substr($file,$p+strlen($archive));
-            $dn = $destdir.dirname($fn);
+            if(FALSE === ($p = \strpos($file, $archive))) continue;
+            $fn = \substr($file, $p + \strlen($archive));
+            $dn = $destdir . \dirname($fn);
             if( $dn == $destdir || $dn == $destdir.'/' ) continue;
             if( $dn == "$destdir/admin" ) continue;
             $idxfile = $dn.'/index.html';
-            if( is_dir($dn) && !is_file($idxfile) )  $this->_createIndexHTML($idxfile);
+            if(\is_dir($dn) && !\is_file($idxfile) )  $this->_createIndexHTML($idxfile);
         }
     }
-
-    private function do_files($langlist = null)
+  
+  /**
+   * @throws \Exception
+   */
+  private function do_files($langlist = null)
     {
         $languages = array('en_US');
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if(is_array($siteinfo) && is_array($siteinfo['languages']) && count($siteinfo['languages']) ) $languages = array_merge($languages,$siteinfo['languages']);
-        if( is_array($langlist) && count($langlist) ) $languages = array_merge($languages,$langlist);
-        $languages = array_unique($languages);
+        if(\is_array($siteinfo) && \is_array($siteinfo['languages']) && \count($siteinfo['languages']) ) $languages = \array_merge($languages, $siteinfo['languages']);
+        if(\is_array($langlist) && \count($langlist) ) $languages = \array_merge($languages, $langlist);
+        $languages = \array_unique($languages);
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',601));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 601));
         $archive = \__appbase\get_app()->get_archive();
 
         $this->message(\__appbase\lang('install_extractfiles'));
         $phardata = new \PharData($archive);
-        $archive = basename($archive);
+        $archive = \basename($archive);
         $filehandler = new \cms_autoinstaller\install_filehandler();
         $filehandler->set_languages($languages);
         $filehandler->set_destdir($destdir);
         $filehandler->set_output_fn('\cms_autoinstaller\wizard_step6::verbose');
         foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
-            if( ($p = strpos($file,$archive)) === FALSE ) continue;
-            $fn = substr($file,$p+strlen($archive));
+            if(FALSE === ($p = \strpos($file, $archive))) continue;
+            $fn = \substr($file, $p + \strlen($archive));
             $filehandler->handle_file($fn,$file,$it);
         }
     }
@@ -85,46 +88,47 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         $app = \__appbase\get_app();
         $app_config = $app->get_config();
         $upgrade_dir =  $app->get_appdir().'/upgrade';
-        if( !is_dir($upgrade_dir) ) throw new \Exception(\__appbase\lang('error_internal',710));
+        if( !\is_dir($upgrade_dir) ) throw new \RuntimeException(\__appbase\lang('error_internal', 710));
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 711));
 
         $version_info = $this->get_wizard()->get_data('version_info');
         $versions = utils::get_upgrade_versions();
-        if( is_array($versions) && count($versions) ) {
+        if(\is_array($versions) && count($versions) ) {
             $this->message(\__appbase\lang('cleaning_files'));
             foreach( $versions as $one_version ) {
-                if( version_compare($one_version, $version_info['version']) < 1 ) continue;
+                if(\version_compare($one_version, $version_info['version']) < 1 ) continue;
 
                 // open the manifest
                 // check the to version info
                 $manifest = new manifest_reader("$upgrade_dir/$one_version");
                 if( $one_version != $manifest->to_version() ) {
-                    throw new \Exception(\__appbase\lang('error_internal',712));
+                    throw new \RuntimeException(\__appbase\lang('error_internal', 712));
                 }
 
-                // delete all 'deleted' files
-                // if they are supposed to be in the installation, the copy from the archive
-                // will restore them.
-                $deleted = $manifest->get_deleted();
+                // delete all files marked for deletion
+                // if they are supposed to be in the installation,
+                // the copy from the archive will restore them.
+                $deleted  = $manifest->get_deleted();
                 $ndeleted = 0;
-                $nfailed = 0;
+                $nfailed  = 0;
                 $nmissing = 0;
-                if( is_array($deleted) && count($deleted) ) {
+                
+                if(\is_array($deleted) && \count($deleted) ) {
                     foreach( $deleted as $rec ) {
                         $fn = "{$destdir}{$rec['filename']}";
-                        if( !file_exists($fn) ) {
+                        if( !\file_exists($fn) ) {
                             $this->verbose("file $fn does not exist... but we planned to delete it anyway");
                             $nmissing++;
                         }
-                        else if( !is_writable($fn) ) {
-                            $this->error("$file $fn is not writable, could not delete it");
+                        else if( !\is_writable($fn) ) {
+                            $this->error("file $fn is not writable, could not delete it");
                             $nfailed++;
                         }
                         else {
-                            if( is_dir($fn) ) {
-				if( is_file($fn.'/index.html') ) @unlink($fn.'/index.html');
-                                $res = @rmdir($fn);
+                            if( \is_dir($fn) ) {
+				if( \is_file($fn . '/index.html') ) @\unlink($fn . '/index.html');
+                                $res = @\rmdir($fn);
 				if( !$res ) {
 				    $this->error('problem removing directory: '.$fn);
 				    $nfailed++;
@@ -148,7 +152,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     }
                 }
 
-                $this->message($ndeleted.' files/folders deleted for version '.$one_version.": ".$nmissing.' missing, '.$nfailed.' failed');
+                $this->message($ndeleted.' files/folders deleted for version '.$one_version . ': ' . $nmissing . ' missing, ' . $nfailed . ' failed');
             }
         }
     }
@@ -159,30 +163,30 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         parent::display();
         $action = $this->get_wizard()->get_data('action');
         \__appbase\smarty()->assign('next_url',$this->get_wizard()->next_url());
-        if( $action == 'freshen' ) {
+        if('freshen' == $action) {
             \__appbase\smarty()->assign('next_url',$this->get_wizard()->step_url(9));
         }
         echo \__appbase\smarty()->display('wizard_step7.tpl');
-        flush();
+        \flush();
 
         // create index.html files in directories.
         try {
             $action = $this->get_wizard()->get_data('action');
             $tmp = $this->get_wizard()->get_data('version_info');
-            if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
+            if( $action == 'upgrade' && \is_array($tmp) && \count($tmp) ) {
                 $languages = $this->detect_languages();
                 $this->do_manifests();
                 $this->do_files($languages);
             }
-            else if( $action == 'freshen' ) {
+            else if('freshen' == $action) {
                 $inst_languages = $this->detect_languages();
                 $this->do_files($inst_languages);
             }
-            else if( $action == 'install' ) {
+            else if('install' == $action) {
                 $this->do_files();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',705));
+                throw new \RuntimeException(\__appbase\lang('error_internal', 705));
             }
 
             $this->do_index_html();

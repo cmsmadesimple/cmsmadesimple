@@ -11,17 +11,17 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
 
-        $tz = date_default_timezone_get();
-        if( !$tz ) @date_default_timezone_set('UTC');
+        $tz = \date_default_timezone_get();
+        if( !$tz ) @\date_default_timezone_set('UTC');
 
-        $this->_siteinfo = array( 'sitename'=>'','languages'=>[] );
+        $this->_siteinfo = ['sitename' =>'', 'languages' =>[]];
         $tmp = $this->get_wizard()->get_data('config');
-        if( $tmp ) $this->_siteinfo = array_merge($this->_siteinfo,$tmp);
+        if( $tmp ) $this->_siteinfo = \array_merge($this->_siteinfo, $tmp);
         $lang = \__appbase\translator()->get_selected_language();
-        if( $lang != 'en_US' ) $this->_siteinfo['languages'] = [ $lang ];
+        if('en_US' != $lang) $this->_siteinfo['languages'] = [$lang ];
 
         $tmp = $this->get_wizard()->get_data('siteinfo');
-        if( is_array($tmp) && count($tmp) ) $this->_siteinfo = $tmp;
+        if(\is_array($tmp) && \count($tmp) ) $this->_siteinfo = $tmp;
         return parent::run();
     }
 
@@ -38,9 +38,9 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
         $app = \__appbase\get_app();
         $config = $app->get_config();
 
-        if( isset($_POST['sitename']) ) $this->_siteinfo['sitename'] = trim(\__appbase\utils::clean_string($_POST['sitename']));
+        if( isset($_POST['sitename']) ) $this->_siteinfo['sitename'] = \trim(\__appbase\utils::clean_string($_POST['sitename']));
         if( isset($_POST['languages']) ) {
-            $tmp = array();
+            $tmp = [];
             foreach ( $_POST['languages'] as $lang ) {
                 $tmp[] = \__appbase\utils::clean_string($lang);
             }
@@ -69,7 +69,7 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
         $smarty->assign('action',$action);
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('siteinfo',$this->_siteinfo);
-        $smarty->assign('yesno',array('0'=>\__appbase\lang('no'),'1'=>\__appbase\lang('yes')));
+        $smarty->assign('yesno', ['0' =>\__appbase\lang('no'), '1' =>\__appbase\lang('yes')]);
         $languages = \__appbase\get_app()->get_language_list();
         unset($languages['en_US']);
         $smarty->assign('language_list',$languages);

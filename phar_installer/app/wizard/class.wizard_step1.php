@@ -4,16 +4,27 @@ namespace cms_autoinstaller;
 
 class wizard_step1 extends \cms_autoinstaller\wizard_step
 {
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         parent::__construct();
-        if( !class_exists('PharData') ) throw new \Exception('It appears that the phar extensions have not been enabled in this version of php.  Please correct this.');
+        if( !\class_exists('PharData') )
+        {
+            throw new \RuntimeException(
+              'It appears that the phar extensions have not been enabled in this version of php.  Please correct this.'
+            );
+        }
     }
-
+    
+    /**
+     * @throws \__appbase\langtools_Exception
+     */
     protected function process()
     {
         if( isset($_POST['lang']) ) {
-            $lang = trim(\__appbase\utils::clean_string($_POST['lang']));
+            $lang = \trim(\__appbase\utils::clean_string($_POST['lang']));
             if( $lang ) \__appbase\translator()->set_selected_language($lang);
         }
 
@@ -36,32 +47,32 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
     private function get_valid_install_dirs()
     {
         $app = \__appbase\get_app();
-        $start = realpath($app->get_rootdir());
-        $parent = realpath(dirname($start));
+        $start = \realpath($app->get_rootdir());
+        $parent = \realpath(dirname($start));
 
         $_is_valid_dir = function($dir) {
             // this routine attempts to exclude most cmsms core directories
             // from appearing in the dropdown for directory choosers
-            $bn = basename($dir);
+            $bn = \basename($dir);
             switch( $bn ) {
             case 'lang':
-                if( file_exists("$dir/en_US.php") ) return FALSE;
+                if( \file_exists("$dir/en_US.php") ) return FALSE;
                 break;
 
             case 'ext':
-                if( file_exists("$dir/fr_FR.php") ) return FALSE;
+                if( \file_exists("$dir/fr_FR.php") ) return FALSE;
                 break;
 
             case 'plugins':
-                if( file_exists("$dir/function.cms_selflink.php") ) return FALSE;
+                if( \file_exists("$dir/function.cms_selflink.php") ) return FALSE;
                 break;
 
             case 'install':
-                if( is_dir("$dir/schemas") ) return FALSE;
+                if( \is_dir("$dir/schemas") ) return FALSE;
                 break;
 
             case 'tmp':
-                if( is_dir("$dir/cache") ) return FALSE;
+                if( \is_dir("$dir/cache") ) return FALSE;
                 break;
 
             case 'phar_installer':
@@ -73,51 +84,54 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
                 return FALSE;
 
             case 'lib':
-                if( is_dir("$dir/smarty") ) return FALSE;
+                if( \is_dir("$dir/smarty") ) return FALSE;
                 break;
 
             case 'app':
-                if( file_exists("$dir/class.cms_install.php") ) return FALSE;
+                if( \file_exists("$dir/class.cms_install.php") ) return FALSE;
                 break;
 
             case 'modules':
-                if( is_dir("$dir/CMSMailer") || is_dir("$dir/AdminSearch") ) return FALSE;
+                if(\is_dir("$dir/CMSMailer") || \is_dir("$dir/AdminSearch") ) return FALSE;
                 break;
 
             case 'data':
-                if( file_exists("$dir/data.tar.gz") ) return FALSE;
+                if( \file_exists("$dir/data.tar.gz") ) return FALSE;
                 break;
             }
             return TRUE;
         };
-
+        
+        /** @var string $CMS_VERSION from version.php (deprecated) or from lib/version.php */
+        
         $_get_annotation = function($dir) {
-            if( !is_dir($dir) || !is_readable($dir) ) return;
-            $bn = basename($dir);
-            if( $bn != 'lib' && is_file("$dir/version.php" ) ) {
+            if(!\is_dir($dir) || !\is_readable($dir) ) return;
+            $bn = \basename($dir);
+            if( $bn != 'lib' && \is_file("$dir/version.php" ) ) {
                 @include("$dir/version.php"); // defines in this file can throw notices
-                if( isset($CMS_VERSION) ) return "CMSMS $CMS_VERSION";
-            } else if( is_file("$dir/lib/version.php") ) {
+  
+                if( isset($CMS_VERSION) ) return "CMSMS $CMS_VERSION"; # this should be deprecated in the future
+            } else if( \is_file("$dir/lib/version.php") ) {
                 @include("$dir/lib/version.php"); // defines in this file can throw notices
                 if( isset($CMS_VERSION) ) return "CMSMS $CMS_VERSION";
             }
 
-            if( is_dir("$dir/app") && is_file("$dir/app/class.cms_install.php") ) {
+            if(\is_dir("$dir/app") && \is_file("$dir/app/class.cms_install.php") ) {
                 return "CMSMS installation assistant";
             }
         };
 
-        $_find_dirs = function($start,$depth = 0) use( &$_find_dirs, &$_get_annotation, $_is_valid_dir ) {
-            if( !is_readable( $start ) ) return;
-            $dh = opendir($start);
+        $_find_dirs = static function($start, $depth = 0) use( &$_find_dirs, &$_get_annotation, $_is_valid_dir ) {
+            if( !\is_readable($start ) ) return;
+            $dh = \opendir($start);
             if( !$dh ) return;
-            $out = array();
+            $out = [];
             while( ($file = readdir($dh)) !== FALSE ) {
                 if( $file == '.' || $file == '..' ) continue;
                 if( \__appbase\startswith($file,'.') || \__appbase\startswith($file,'_') ) continue;
                 $dn = $start.DIRECTORY_SEPARATOR.$file;  // cuz windows blows, and windoze guys are whiners :)
-                if( !@is_readable($dn) ) continue;
-                if( !@is_dir($dn) ) continue;
+                if( !@\is_readable($dn) ) continue;
+                if( !@\is_dir($dn) ) continue;
                 if( !$_is_valid_dir( $dn ) ) continue;
                 $str = $dn;
                 $ann = $_get_annotation( $dn );
@@ -126,18 +140,18 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
                 $out[$dn] = $str;
                 if( $depth < 3 ) {
                     $tmp = $_find_dirs($dn,$depth + 1); // recursion
-                    if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
+                    if(\is_array($tmp) && \count($tmp) ) $out = \array_merge($out, $tmp); # revise this to be more efficient (merging arrays in a loop is slow and causes high CPU usage.)
                 }
             }
             return $out;
             //if( count($out) ) return $out;
         };
 
-        $out = array();
+        $out = [];
         if( $_is_valid_dir($parent) ) $out[$parent] = $parent;
         $tmp = $_find_dirs($parent);
-        if( count($tmp) ) $out = array_merge($out,$tmp);
-        asort($out);
+        if( \count($tmp) ) $out = \array_merge($out, $tmp);
+        \asort($out);
         return $out;
     }
 

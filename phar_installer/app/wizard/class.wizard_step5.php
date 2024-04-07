@@ -10,15 +10,15 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
     public function __construct()
     {
         parent::__construct();
-        $this->_adminacct = array('username'=>'admin','emailaddr'=>'','password'=>'','repeatpw'=>'','saltpw'=>1,'emailaccountinfo'=>1);
+        $this->_adminacct = ['username' =>'admin', 'emailaddr' =>'', 'password' =>'', 'repeatpw' =>'', 'saltpw' =>1, 'emailaccountinfo' =>1];
         $tmp = $this->get_wizard()->get_data('adminaccount');
-        if( is_array($tmp) && count($tmp) ) $this->_adminacct = $tmp;
+        if(\is_array($tmp) && \count($tmp) ) $this->_adminacct = $tmp;
     }
 
     private function validate($acct)
     {
-        if( !isset($acct['username']) || $acct['username'] == '' ) throw new \Exception(\__appbase\lang('error_adminacct_username'));
-        if( !isset($acct['password']) || $acct['password'] == '' || strlen($acct['password']) < 6 ) {
+        if( !isset($acct['username']) || '' == $acct['username']) throw new \Exception(\__appbase\lang('error_adminacct_username'));
+        if( !isset($acct['password']) || '' == $acct['password'] || \strlen($acct['password']) < 6 ) {
             throw new \Exception(\__appbase\lang('error_adminacct_password'));
         }
         if( !isset($acct['repeatpw']) || $acct['repeatpw'] != $acct['password'] ) {
@@ -34,10 +34,11 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
 
     protected function process()
     {
-        $this->_adminacct['username'] = trim(\__appbase\utils::clean_string($_POST['username']));
-        $this->_adminacct['emailaddr'] = trim(\__appbase\utils::clean_string($_POST['emailaddr']));
-        $this->_adminacct['password'] = trim(\__appbase\utils::clean_string($_POST['password']));
-        $this->_adminacct['repeatpw'] = trim(\__appbase\utils::clean_string($_POST['repeatpw']));
+      $this->_adminacct['username']  = \trim(\__appbase\utils::clean_string($_POST['username']));
+      $this->_adminacct['emailaddr'] = \trim(\__appbase\utils::clean_string($_POST['emailaddr']));
+      $this->_adminacct['password']  = \trim(\__appbase\utils::clean_string($_POST['password']));
+      $this->_adminacct['repeatpw']  = \trim(\__appbase\utils::clean_string($_POST['repeatpw']));
+        
         if( isset($_POST['saltpw']) ) $this->_adminacct['saltpw'] = (int)$_POST['saltpw'];
         $this->_adminacct['emailaccountinfo'] = 1;
         if( isset($_POST['emailaccountinfo']) ) $this->_adminacct['emailaccountinfo'] = (int)$_POST['emailaccountinfo'];
@@ -53,8 +54,11 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
             $smarty->assign('error',$e->GetMessage());
         }
     }
-
-    protected function display()
+  
+  /**
+   * @throws \SmartyException
+   */
+  protected function display()
     {
         parent::display();
         $smarty = \__appbase\smarty();

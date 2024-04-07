@@ -15,7 +15,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',900));
+        if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 900));
 
         $this->connect_to_cmsms();
 
