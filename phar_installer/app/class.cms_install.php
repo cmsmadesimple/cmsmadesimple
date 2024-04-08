@@ -42,8 +42,11 @@ class cms_install extends \__appbase\app
             if( $try1 != $config['tmpdir'] ) throw new \RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
         }
     }
-
-    public function __construct()
+  
+  /**
+   * @throws \Exception
+   */
+  public function __construct()
     {
         parent::__construct(__FILE__);
 
@@ -70,7 +73,7 @@ class cms_install extends \__appbase\app
         $smarty->assign('config',$config);
         $smarty->assign('installer_version',$config['installer_version']);
 
-        $fn = $this->get_appdir().'/build.ini';
+        $fn = self::get_appdir() . '/build.ini';
         $build = null;
         if( \file_exists($fn) ) $build = \parse_ini_file($fn);
         if( isset($build['build_time']) ) $smarty->assign('build_time',$build['build_time']);
@@ -94,7 +97,7 @@ class cms_install extends \__appbase\app
         // we do this because phar data cannot read from a .tar.gz file that is already embedded within a phar
         // (some environments)
         $tmpdir = $this->get_tmpdir().'/m' . \md5(__FILE__ . \session_id());
-        $src_archive = (isset($config['archive']))?$config['archive']:'data/data.tar.gz';
+        $src_archive = $config['archive'] ?? 'data/data.tar.gz';
         $src_archive = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . $src_archive;
         if( !\file_exists($src_archive) ) throw new \Exception('Could not find installation archive at ' . $src_archive);
         $dest_archive = $tmpdir . \DIRECTORY_SEPARATOR . "f" . \md5($src_archive . \session_id()) . '.tgz';
@@ -102,7 +105,7 @@ class cms_install extends \__appbase\app
 
         for( $i = 0; $i < 2; $i++ ) {
             if( !\file_exists($dest_archive) ) {
-              if(!\mkdir($tmpdir, 0777, TRUE) && !\is_dir($tmpdir))
+              if(!@\mkdir($tmpdir, 0777, TRUE) && !\is_dir($tmpdir))
               {
                 throw new \RuntimeException(\sprintf('Directory "%s" was not created', $tmpdir));
               }
@@ -320,7 +323,7 @@ class cms_install extends \__appbase\app
         if( \is_array($this->_nls) ) return $this->_nls;
 
         $archive = $this->get_archive();
-        $archive = \str_replace('\\', '/', $archive); // stupid windoze
+        $archive = \str_replace('\\', '/', $archive); // for windows
         if( !\file_exists($archive) ) throw new \Exception(\__appbase\lang('error_noarchive'));
 
         $phardata = new \PharData($archive);
@@ -340,7 +343,7 @@ class cms_install extends \__appbase\app
                \unlink($fn);
             }
         }
-        if( !$found ) throw new \Exception(\__appbase\lang('error_nlsnotfound'));
+        if( !$found ) throw new \RuntimeException(\__appbase\lang('error_nlsnotfound'));
         $this->_nls = $nls;
         return $nls;
     }
