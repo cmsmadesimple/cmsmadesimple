@@ -20,11 +20,11 @@ class cms_install extends \__appbase\app
     private $_orig_error_level;
     private $_custom_tmpdir;
 
-    public function get_tmpdir()
+    public static function get_tmpdir()
     {
         // because phar uses tmpfile() we need to set the TMPDIR environment variable
         // with whatever directory we find.
-        $config = $this->get_config();
+        $config = self::get_instance()->get_config();
         return $config['tmpdir'];
     }
 
@@ -424,7 +424,7 @@ class cms_install extends \__appbase\app
         catch( \Exception $e ) {
             $smarty = \__appbase\smarty();
             $smarty->assign('error',$e->GetMessage());
-            $smarty->display('error.tpl');
+            $smarty->display('phar:error.tpl');
         }
     }
 
