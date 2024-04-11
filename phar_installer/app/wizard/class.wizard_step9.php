@@ -48,7 +48,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $this->message(\__appbase\lang('msg_clearedcache'));
 
         // write protect config.php
-        @chmod("$destdir/config.php",0444);
+        @\chmod("$destdir/config.php", 0444);
 
         // todo: write history
 
@@ -123,7 +123,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         }
 
         // write protect config.php
-        @chmod("$destdir/config.php",0444);
+        @\chmod("$destdir/config.php", 0444);
 
         $adminacct = $this->get_wizard()->get_data('adminaccount');
         $root_url = $app->get_root_url();
