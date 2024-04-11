@@ -115,8 +115,7 @@ $lang['embed_type_prompt_code'] = 'Full Embed Code';
 ###    ###   #########   #########  ###
 ###    ###   #########   #########  ###
 
-$lang['help'] = <<<'EOD'
-
+$lang['help'] = "
 <h3>What does this do?</h3>
 <p>'UserGuide' provides an online CMS User Guide. It is easy to access for Editors and easy to update and customise for Admins. The completed User Guide can easily be printed directly from the browser.</p><br>
 <p>User Guide pages can now easily include responsive video content, from Vimeo, YouTube, a local video file, or full embed code for external content.</p><br>
@@ -176,24 +175,17 @@ $lang['help'] = <<<'EOD'
 <p>As per the GPL licence, this software is provided as is. Please read the text of the license for the full disclaimer.
 The module author is not obligated to provide support for this code. However you might get support through the following:</p>
 <ul>
-   <li>For support, first <strong>search</strong> the <a href="//forum.cmsmadesimple.org" target="_blank">CMS Made Simple Forum</a>, for issues with the module similar to those you are finding.</li>
+   <li>For support, first <strong>search</strong> the <a href=\"//forum.cmsmadesimple.org\" target=\"_blank\">CMS Made Simple Forum</a>, for issues with the module similar to those you are finding.</li>
    <li>Then, if necessary, open a <strong>new forum topic</strong> to request help, with a thorough description of your issue, and steps to reproduce it.</li>
-   <li>If you find a bug you can <a href="http://dev.cmsmadesimple.org/bug/list/1429"  target="_blank">submit a Bug Report</a>.</li>
-   <li>For any good ideas you can <a href="http://dev.cmsmadesimple.org/feature_request/list/1429"  target="_blank">submit a Feature Request</a>.</li>
-   <li>If you found the Module useful - shout out to me on Twitter <a href="//twitter.com/KiwiChrisBT">@KiwiChrisBT</a></li>
+   <li>If you find a bug you can <a href=\"http://dev.cmsmadesimple.org/bug/list/1429\"  target=\"_blank\">submit a Bug Report</a>.</li>
+   <li>For any good ideas you can <a href=\"http://dev.cmsmadesimple.org/feature_request/list/1429\"  target\"_blank\">submit a Feature Request</a>.</li>
+   <li>If you found the Module useful - shout out to me on Twitter <a href=\"//twitter.com/KiwiChrisBT\">@KiwiChrisBT</a></li>
 </ul><br>
 
 <h3>Copyright &amp; Licence</h3>
 <p>Copyright © 2016, Chris Taylor <chris at binnovative dot co dot uk>. All Rights Are Reserved.</p><br>
 <p>This module has been released under the GNU Public License v3. However, as a special exception to the GPL, this software is distributed as an addon module to CMS Made Simple. You may only use this software when there is a clear and obvious indication in the admin section that the site was built with CMS Made Simple!</p><br>
-<p>Inspired by: UsersGuide module by jissey.</p><br>
-EOD;
-
-
-
-
-
-
+<p>Inspired by: UsersGuide module by jissey.</p><br>";
 
 
 #########  ###    ###  ##########  ###    ###  #########  ########  ###       #########  #########
@@ -205,7 +197,7 @@ EOD;
 #########  ###    ###  ###    ###  ###    ###  #########  ########  ######### #########  #########
 #########  ###    ###  ###    ###  ###    ###  #########  ########  ######### #########  #########
 
-$lang['changelog'] = <<<'EOD'
+$lang['changelog'] = '
 
 <h3>Version 1.0 - 04Apr24</h3>
 <ul>
@@ -217,8 +209,4 @@ $lang['changelog'] = <<<'EOD'
    <li>By default all Editors have view access with options to set permissions for all user groups.</li>
 </ul>
 <br>
-
-
-EOD;
-
-
+';
