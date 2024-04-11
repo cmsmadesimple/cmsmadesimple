@@ -46,7 +46,7 @@ abstract class app
   /**
    * @throws \Exception
    */
-  public function get_tmpdir()
+  public static function get_tmpdir()
   {
     // not modifiable, ye
     return \__appbase\utils::get_sys_tmpdir();

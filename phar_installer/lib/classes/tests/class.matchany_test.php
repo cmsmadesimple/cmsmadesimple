@@ -11,10 +11,10 @@ class matchany_test extends test_base
     parent::__construct($name,'');
   }
 
-  public function add_child(test_base $obj)
+  public function add_child(test_base $obj) : void
   {
-    if( !is_array($this->_children) )
-      $this->_children = array();
+    if( !\is_array($this->_children) )
+      $this->_children = [];
 
     $this->_children[] = $obj;
   }
@@ -36,21 +36,22 @@ class matchany_test extends test_base
 	parent::__set($key,$value);
       }
   }
-
-
+  
+  
   public function execute()
   {
-    if( count($this->_children) )
+    if(\count($this->_children))
+    {
+      foreach($this->_children as $iValue)
       {
-	for( $i = 0; $i < count($this->_children); $i++ )
-	  {
-	    $res = $this->_children[$i]->execute();
-	    if( $res == self::TEST_PASS )
-	      {
-		return self::TEST_PASS;
-	      }
-	  }
+        $res = $iValue->execute();
+        if($res == self::TEST_PASS)
+        {
+          return self::TEST_PASS;
+        }
       }
+    }
+    
     return self::TEST_FAIL;
   }
 }

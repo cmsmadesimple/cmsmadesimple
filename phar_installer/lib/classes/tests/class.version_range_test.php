@@ -33,13 +33,13 @@ class version_range_test extends test_base
     // do the test
     // set the result.
     if( $this->minimum ) {
-      if( version_compare($this->value,$this->minimum) < 0 ) return self::TEST_FAIL;
+      if(\version_compare($this->value, $this->minimum) < 0 ) return self::TEST_FAIL;
     }
     if( $this->maximum ) {
-      if( version_compare($this->value,$this->maximum) > 0 ) return self::TEST_FAIL;
+      if(\version_compare($this->value, $this->maximum) > 0 ) return self::TEST_FAIL;
     }
     if( $this->recommended ) {
-      if( version_compare($this->value,$this->recommended) < 0 ) return self::TEST_WARN;
+      if(\version_compare($this->value, $this->recommended) < 0 ) return self::TEST_WARN;
     }
     return self::TEST_PASS;
   }

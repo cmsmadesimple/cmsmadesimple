@@ -13,31 +13,31 @@ final class session implements \ArrayAccess
   private static function start()
   {
       if( !self::$_key ) {
-          $session_key = substr(md5(__DIR__),0,10);
-          @session_name('CMSIC'.$session_key);
-          @session_cache_limiter('private');
+          $session_key = \substr(\md5(__DIR__), 0, 10);
+          @\session_name('CMSIC' . $session_key);
+          @\session_cache_limiter('private');
           $res = null;
-          if( !@session_id() ) $res = @session_start();
+          if( !@\session_id() ) $res = @\session_start();
           if( !$res ) throw new \RuntimeException('Problem starting the session (system configuration problem?)');
-          self::$_session_id = session_id();
-          self::$_key = 'k'.md5(self::$_session_id);
+          self::$_session_id = \session_id();
+          self::$_key = 'k' . \md5(self::$_session_id);
       }
   }
 
   private function _collapse()
   {
     self::start();
-    if( $this->_data ) $_SESSION[self::$_key] = serialize($this->_data);
+    if( $this->_data ) $_SESSION[self::$_key] = \serialize($this->_data);
     $this->_data = null;
   }
 
   private function _expand()
   {
     self::start();
-    if( !is_array($this->_data) ) {
-      $this->_data = array();
+    if( !\is_array($this->_data) ) {
+      $this->_data = [];
       if( isset($_SESSION[self::$_key]) ) {
-          $this->_data = unserialize($_SESSION[self::$_key]);
+          $this->_data = \unserialize($_SESSION[self::$_key]);
       }
     }
   }

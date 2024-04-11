@@ -2,6 +2,8 @@
 
 namespace __appbase;
 
+use cms_autoinstaller\smarty_phar_resource;
+
 require_once(\dirname(__FILE__, 2) . '/Smarty/Smarty.class.php');
 
 class cms_smarty extends \Smarty
@@ -15,11 +17,11 @@ class cms_smarty extends \Smarty
   public function __construct()
   {
     parent::__construct();
-
-    $app = get_app();
-    $rootdir = $app->get_rootdir();
-    $tmpdir = $app->get_tmpdir().'/m' . \md5(__FILE__);
-    $appdir = $app->get_appdir();
+    
+    $app     = get_app(); # may not be needed
+    $rootdir = app::get_rootdir();
+    $tmpdir  = app::get_tmpdir() . '/m' . \md5(__FILE__);
+    $appdir  = app::get_appdir();
     $basedir = \dirname(__FILE__, 3);
     
     $this->setTemplateDir($appdir.'/templates');
@@ -27,16 +29,23 @@ class cms_smarty extends \Smarty
     $this->setCompileDir($tmpdir.'/templates_c');
     $this->setCacheDir($tmpdir.'/cache');
 
-    $this->registerPlugin('modifier','tr',array($this,'modifier_tr'));
+    $this->registerPlugin('modifier', 'tr', [$this, 'modifier_tr']);
+    
+    # for debugging purposes
+    # $this->registerResource('phar', new smarty_phar_resource());
     $dirs = [$this->compile_dir, $this->cache_dir];
     
-    for($i = 0, $iMax = count($dirs); $i < $iMax; $i++ ) {
+    foreach($dirs as $iValue)
+    {
       
-      if(!@\mkdir($concurrentDirectory = $dirs[$i], 0777, TRUE) && !\is_dir($concurrentDirectory))
+      if(!@\mkdir($concurrentDirectory = $iValue, 0777, TRUE) && !\is_dir($concurrentDirectory))
       {
         throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
       }
-      if( !\is_dir($dirs[$i]) ) throw new \RuntimeException('Required directory ' . $dirs[$i] . ' does not exist');
+      if( !\is_dir($iValue) )
+      {
+        throw new \RuntimeException('Required directory ' . $iValue . ' does not exist');
+      }
     }
   }
 

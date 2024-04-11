@@ -13,7 +13,7 @@ class request implements \ArrayAccess
   {
   }
 
-  public static function &get()
+  public static function get()
   {
     if( !self::$_instance ) self::$_instance = new request();
     return self::$_instance;
@@ -42,7 +42,7 @@ class request implements \ArrayAccess
   #[\ReturnTypeWillChange]
   public function offsetUnset($key)
   {
-    throw new \Exception('Attempt to unset a request variable');
+    throw new \RuntimeException('Attempt to unset a request variable');
   }
 
   public function raw_server($key)
@@ -53,9 +53,9 @@ class request implements \ArrayAccess
 
   public function __call($fn,$args)
   {
-    $key = strtoupper($fn);
+    $key = \strtoupper($fn);
     if( isset($_SERVER[$key]) )	return $this->raw_server($key);
-    throw new \Exception('Call to unknown method '.$fn.' in request object');
+    throw new \RuntimeException('Call to unknown method ' . $fn . ' in request object');
   }
 
   public function self()
@@ -71,7 +71,7 @@ class request implements \ArrayAccess
     elseif( $this->raw_server('REQUEST_METHOD') == 'GET' ) {
       return self::METHOD_GET;
     }
-    throw new \Exception('Unhandled request method '.$_SERVER['REQUEST_METHOD']);
+    throw new \RuntimeException('Unhandled request method ' . $_SERVER['REQUEST_METHOD']);
   }
 
   public function is_post()
@@ -121,7 +121,7 @@ class request implements \ArrayAccess
 
   public function https()
   {
-    if( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'on' ) return TRUE;
+    if( isset($_SERVER['HTTPS']) && 'on' != \strtolower($_SERVER['HTTPS'])) return TRUE;
     return FALSE;
   }
 

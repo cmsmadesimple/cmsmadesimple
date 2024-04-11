@@ -2,10 +2,10 @@
 
 namespace __appbase\tests;
 
-function test_extension_loaded($name)
+function test_extension_loaded($name) : bool
 {
-  $a = extension_loaded(strtoupper($name));
-  $b = extension_loaded(strtoupper($name));
+  $a = \extension_loaded(\strtoupper($name));
+  $b = \extension_loaded(\strtoupper($name));
   return $a || $b;
 }
 
@@ -13,34 +13,34 @@ function test_extension_loaded($name)
 function test_apache_module($name)
 {
   if( !$name ) return FALSE;
-  if( !function_exists('apache_get_modules') ) return FALSE;
-  $modules = apache_get_modules();
-  if( in_array($name,$modules) ) return TRUE;
+  if( !\function_exists('apache_get_modules') ) return FALSE;
+  $modules = \apache_get_modules();
+  if( \in_array($name, $modules) ) return TRUE;
   return FALSE;
 }
 
 
 function test_is_false($val)
 {
-  return (\__appbase\utils::to_bool($val) == FALSE);
+  return (FALSE == \__appbase\utils::to_bool($val));
 }
 
 
 function test_is_true($val)
 {
-  return (\__appbase\utils::to_bool($val) == TRUE);
+  return (TRUE == \__appbase\utils::to_bool($val));
 }
 
 
-function test_remote_file($url,$timeout = 3,$searchString = '')
+function test_remote_file($url,$timeout = 3,$searchString = '') : bool
 {
-  $timeout = max(1,min(360,$timeout));
+  $timeout = \max(1, \min(360, $timeout));
   $req = new \__appbase\http_request;
   $req->setTarget($url);
   $req->setTimeout($timeout);
   $req->execute();
-  if( $req->getStatus() != 200 ) return FALSE;
-  if( $searchString && strpos($req->getResult(),$searchString) === FALSE ) return FALSE;
+  if(200 != $req->getStatus()) return FALSE;
+  if( $searchString && FALSE === \strpos($req->getResult(), $searchString)) return FALSE;
   return TRUE;
 }
 
@@ -48,17 +48,19 @@ function test_remote_file($url,$timeout = 3,$searchString = '')
 abstract class test_base
 {
   const TEST_UNTESTED = 'test_untested';
-  const TEST_PASS = 'test_pass';
-  const TEST_FAIL = 'test_fail';
-  const TEST_WARN = 'test_warn';
+  const TEST_PASS     = 'test_pass';
+  const TEST_FAIL     = 'test_fail';
+  const TEST_WARN     = 'test_warn';
 
-  private static $_keys = array('name','name_key','status','value','required','minimum','maximum','recommended','pass_key','pass_msg','fail_msg',
-				'fail_key','warn_key','warn_msg','msg_key','msg');
-  private $_data = array();
+  private static $_keys = [
+    'name', 'name_key', 'status', 'value', 'required', 'minimum', 'maximum', 'recommended', 'pass_key', 'pass_msg', 'fail_msg',
+    'fail_key', 'warn_key', 'warn_msg', 'msg_key', 'msg'
+  ];
+  private $_data = [];
 
   public function __construct($name,$value,$key = '')
   {
-    if( !$name ) throw new Exception(\__appbase\lang('error_test_name'));
+    if( !$name ) throw new \RuntimeException(\__appbase\lang('error_test_name'));
     $this->name = $name;
     $this->name_key = $name;
     $this->value = $value;
@@ -69,21 +71,23 @@ abstract class test_base
 
   public function __get($key)
   {
-    if( !in_array($key,self::$_keys) ) throw new \Exception(\__appbase\lang('error_invalidkey',$key,__CLASS__));
+    if( !\in_array($key, self::$_keys) ) throw new \RuntimeException(\__appbase\lang('error_invalidkey', $key, __CLASS__));
     if( isset($this->_data[$key]) ) return $this->_data[$key];
   }
 
   public function __isset($key)
   {
-    if( !in_array($key,self::$_keys) ) throw new \Exception(\__appbase\lang('error_invalidkey',$key,__CLASS__));
+    if( !\in_array($key, self::$_keys) ) throw new \RuntimeException(\__appbase\lang('error_invalidkey', $key, __CLASS__));
     return isset($this->_data[$key]);
   }
 
   public function __set($key,$value)
   {
-    if( !in_array($key,self::$_keys) ) throw new \Exception(\__appbase\lang('error_invalidkey',$key,__CLASS__));
-    if( is_null($value) || $value === '' ) {
+    if( !\in_array($key, self::$_keys) ) throw new \RuntimeException(\__appbase\lang('error_invalidkey', $key, __CLASS__));
+    if(NULL === $value || '' === $value)
+    {
       unset($this->_data[$key]);
+      
       return;
     }
 
@@ -92,7 +96,7 @@ abstract class test_base
 
   public function __unset($key)
   {
-    if( !in_array($key,self::$_keys) ) throw new \Exception(\__appbase\lang('error_invalidkey',$key,__CLASS__));
+    if( !\in_array($key, self::$_keys) ) throw new \RuntimeException(\__appbase\lang('error_invalidkey', $key, __CLASS__));
     unset($this->_data[$key]);
   }
 
@@ -110,7 +114,7 @@ abstract class test_base
 
     case self::TEST_UNTESTED:
     default:
-      throw new \Exception(\__appbase\lang('error_test_invalidresult').' '.$res);
+      throw new \RuntimeException(\__appbase\lang('error_test_invalidresult') . ' ' . $res);
     }
 
     return $this->status;
@@ -144,10 +148,10 @@ abstract class test_base
 
   protected function returnBytes($val)
   {
-      if(is_string($val) && $val != '') {
-          $val = trim($val);
-          $last = strtolower(substr($val,-1));
-          $val = (float) substr($val,0,-1);
+      if(\is_string($val) && '' != $val) {
+          $val = \trim($val);
+          $last = \strtolower(\substr($val, -1));
+          $val = (float) \substr($val, 0, -1);
           switch($last) {
           case 'g':
               $val *= 1024.0;
