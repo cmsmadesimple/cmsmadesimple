@@ -1,11 +1,13 @@
 <?php
 global $admin_user;
+/** @var $havenews string - dummy variable to prevent warnings in PHP related to the smarty templates samples inside EOT*/
+$havenews ='';
 
 //
 // Themes
 //
 
-// minimal theme has the minimal template, and no styesheets.
+// minimal theme has the minimal template, and no stylesheets.
 verbose_msg(ilang('install_default_collections'));
 
 $minimal_theme = new CmsLayoutCollection();
