@@ -150,7 +150,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
             $this->write_config();
 
-            // update all hierarchy positioss
+            // update all hierarchy positions
             $this->message(\__appbase\lang('install_updatehierarchy'));
             $contentops = cmsms()->GetContentOperations();
             $contentops->SetAllHierarchyPositions();
@@ -186,6 +186,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         $dh = \opendir($dir);
         $versions = [];
+        
         if( !$dh ) throw new \RuntimeException(\__appbase\lang('error_internal', 712));
         while( ($file = \readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;

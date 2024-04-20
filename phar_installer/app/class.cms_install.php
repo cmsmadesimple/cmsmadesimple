@@ -424,7 +424,7 @@ class cms_install extends \__appbase\app
         catch( \Exception $e ) {
             $smarty = \__appbase\smarty();
             $smarty->assign('error',$e->GetMessage());
-            $smarty->display('phar:error.tpl');
+            $smarty->display('error.tpl');
         }
     }
 

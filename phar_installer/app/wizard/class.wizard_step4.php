@@ -171,6 +171,17 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
       {
         $this->_config['optional_modules'] = (array)$_POST['optional_modules'];
       }
+      else
+      {
+        if( $this->get_wizard()->get_data('verbose',0) )
+        {
+          $this->_config['optional_modules'] = [];
+        }
+        else
+        {
+          $this->_config['optional_modules'] = ['News', 'UserGuide'];
+        }
+      }
       
         $this->get_wizard()->set_data('config',$this->_config);
 
@@ -205,7 +216,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $smarty = \__appbase\smarty();
         $tmp = \timezone_identifiers_list();
         
-        # we default the optional modules to News and UserGuide
+        # we default the optional modules to both News and UserGuide
         if(!isset($this->_config['optional_modules'])) $this->_config['optional_modules'] = ['News', 'UserGuide'];
         
         if( !\is_array($tmp) ) throw new \RuntimeException(\__appbase\lang('error_tzlist'));
