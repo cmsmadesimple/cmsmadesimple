@@ -157,10 +157,12 @@ class wizard
       \parse_str($url, $parts);
       $parts[$this->_stepvar] = $idx;
 
-      $tmp = array();
-      foreach( $parts as $k => $v ) {
-          $tmp[] = $k.'='.$v;
-      }
+      $tmp = [];
+    foreach($parts as $k => $v)
+    {
+      if(startswith($k, $urlmain[0])) { continue; }
+      $tmp[] = $k . '=' . $v;
+    }
       $url = $urlmain[0].'?' . \implode('&', $tmp);
       return $url;
   }
@@ -172,7 +174,7 @@ class wizard
       $url = $request->raw_server('REQUEST_URI');
       
       $urlmain = \explode('?', $url);
-
+      
       \parse_str($url, $parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
       if( $parts[$this->_stepvar] > $this->num_steps() ) return '';
@@ -180,7 +182,7 @@ class wizard
       $tmp = [];
     foreach($parts as $k => $v)
     {
-      if($k == $urlmain[0]) { continue; }
+      if(startswith($k, $urlmain[0])) { continue; }
       $tmp[] = $k . '=' . $v;
     }
       $url = $urlmain[0].'?' . \implode('&', $tmp);
@@ -200,13 +202,16 @@ class wizard
       if( $parts[$this->_stepvar] <= 0 ) return '';
 
       $tmp = [];
-      if( \count($parts) ) {
-          foreach( $parts as $k => $v ) {
-              $tmp[] = $k.'='.$v;
-          }
+    if(\count($parts))
+    {
+      foreach($parts as $k => $v)
+      {
+        if(startswith($k, $urlmain[0])) { continue; }
+        $tmp[] = $k . '=' . $v;
       }
-      $url = $urlmain[0].'?' . \implode('&', $tmp);
-      return $url;
+    }
+    $url = $urlmain[0].'?' . \implode('&', $tmp);
+    return $url;
   }
 
 } // end of class
