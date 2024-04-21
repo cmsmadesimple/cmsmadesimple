@@ -170,17 +170,21 @@ class wizard
       $this->_init();
       $request = request::get();
       $url = $request->raw_server('REQUEST_URI');
+      
       $urlmain = \explode('?', $url);
 
       \parse_str($url, $parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
       if( $parts[$this->_stepvar] > $this->num_steps() ) return '';
 
-      $tmp = array();
-      foreach( $parts as $k => $v ) {
-          $tmp[] = $k.'='.$v;
-      }
+      $tmp = [];
+    foreach($parts as $k => $v)
+    {
+      if($k == $urlmain[0]) { continue; }
+      $tmp[] = $k . '=' . $v;
+    }
       $url = $urlmain[0].'?' . \implode('&', $tmp);
+    
       return $url;
   }
 
