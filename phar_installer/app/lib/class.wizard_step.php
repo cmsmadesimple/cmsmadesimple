@@ -92,7 +92,7 @@ abstract class wizard_step extends \__appbase\wizard_step
       \flush();
   }
 
-  public function set_block_html($id,$html)
+  public function set_block_html($id, $html)
   {
       $html = \addslashes($html);
       echo '<script type="text/javascript">set_block_html(\''.$id.'\',\''.$html.'\');</script>'."\n";

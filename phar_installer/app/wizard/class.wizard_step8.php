@@ -123,22 +123,30 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
                 $salt = \substr(\str_shuffle(\md5($destdir) . \time()), 0, 16);
                 \cms_siteprefs::set('sitemask',$salt);
             }
+            
+            $tmp_dir_errors = [];
 
             // create tmp directories
             self::verbose(\__appbase\lang('install_createtmpdirs'));
-            if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
+            if(!@\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
             {
-                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+                $tmp_dir_errors[] = \sprintf('Directory "%s" was not created', $concurrentDirectory);
+                //throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
             
-            if(
-              !\mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !\is_dir($concurrentDirectory)
+            if(!@\mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !\is_dir($concurrentDirectory)
             )
             {
-                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+                $tmp_dir_errors[] = \sprintf('Directory "%s" was not created', $concurrentDirectory);
+                //throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
 
             include_once($dir.'/base.php');
+            
+            if( \count($tmp_dir_errors) > 0 )
+            {
+                $this->message(\implode("\n", $tmp_dir_errors));
+            }
 
             $this->message(\__appbase\lang('install_defaultcontent'));
             $fn = $dir.'/initial.php';

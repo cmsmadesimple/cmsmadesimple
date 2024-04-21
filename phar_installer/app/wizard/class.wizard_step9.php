@@ -73,6 +73,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
     {
         // create tmp directories
         $app = \__appbase\get_app();
+        $config = $app->get_config();
+        
         $destdir = \__appbase\get_app()->get_destdir();
         if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
@@ -112,9 +114,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 self::verbose(\__appbase\lang('install_module', $name));
                 $module = $modops->get_module_instance($name, '', TRUE);
             }
-            else if ($modops->IsOptionalSystemModule($name)
-                     && NULL !== $this->get_wizard()->get_data('optional_modules')
-                     && \in_array($name, $this->get_wizard()->get_data('optional_modules')))
+            else if ($modops->IsOptionalSystemModule($name) && \in_array($name, $config['optional_modules']))
             {
                 # now we handle optional modules.
                 ## TODO add a language string here. self::verbose(\__appbase\lang('install_optional_module', $name));
@@ -127,7 +127,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 $this->error("FATAL ERROR: could not load module {$name} for install");
             }
         }
-
+        
         // write protect config.php
         @\chmod("$destdir/config.php", 0444);
 
