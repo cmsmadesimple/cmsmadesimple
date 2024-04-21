@@ -58,6 +58,9 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
    */
   private function do_files($langlist = null)
     {
+      # TODO - we need to have an alternative routine only for uploads,
+      #        to be able to check for deleted theme folders and not create them again
+      #         (JM)
         $languages = ['en_US'];
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if(\is_array($siteinfo) && \is_array($siteinfo['languages']) && \count($siteinfo['languages']) ) $languages = \array_merge($languages, $siteinfo['languages']);
