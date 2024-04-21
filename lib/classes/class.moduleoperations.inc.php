@@ -689,7 +689,7 @@ final class ModuleOperations
             # Check if the module is in the system modules but not in the optional system modules
             # additionally check if the module is queued for install
             $can_auto_install =  (in_array($module_name, $this->cmssystemmodules)
-                                 && !in_array($module_name, $this->cmsoptsystemmodules) )
+                                 || in_array($module_name, $this->cmsoptsystemmodules) ) # we also auto install optional system modules @since 2.2.20
                                  || $this->IsQueuedForInstall($module_name);
             
             if($can_auto_install)
