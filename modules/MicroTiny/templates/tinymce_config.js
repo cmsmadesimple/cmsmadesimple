@@ -1,5 +1,5 @@
 // define cmsms_tiny object
-var cmsms_tiny = {};
+var cmsms_tiny = { };
 // this is the actual tinymce initialization
 tinymce.init({
     selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
@@ -7,9 +7,9 @@ tinymce.init({
     cmsms_tiny: cmsms_tiny = {
         schema: 'html5',
         base_url: '{root_url}/',
-        resize: {if (bool)$mt_profile.allowresize}'true'{else}'false'{/if},
-        statusbar: {if (bool)$mt_profile.showstatusbar}'true'{else}'false'{/if},
-        menubar: {if (bool)$mt_profile.menubar}'true'{else}'false'{/if},
+        resize: {if (bool)$mt_profile.allowresize}true{else}false{/if},
+        statusbar: {if (bool)$mt_profile.showstatusbar}true{else}false{/if},
+        menubar: {if (bool)$mt_profile.menubar}true{else}false{/if},
         filepicker_title: '{$MT->Lang('filepickertitle')|escape:javascript}',
         filepicker_url: '{$filepicker_url}&field=',
         filebrowser_title: '{$MT->Lang('title_cmsms_filebrowser')|escape:javascript}',
