@@ -33,6 +33,7 @@
  * @since 0.6.1
  * @license GPL
  */
+#[\AllowDynamicProperties]
 class User
 {
 
