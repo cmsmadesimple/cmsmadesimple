@@ -15,6 +15,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $destdir = $app->get_destdir();
+        $config = $app->get_config();
+        
         if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 900));
 
         $this->connect_to_cmsms();
@@ -24,6 +26,12 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $modops = \ModuleOperations::get_instance();
         $allmodules = $modops->FindAllModules();
         
+        # we check if we have the correct version  of modops just in case
+        if(! \method_exists($modops, 'IsOptionalSystemModule') )
+        {
+            throw new \RuntimeException(\__appbase\lang('error_internal', 903));
+        }
+        
         foreach($allmodules as $name)
         {
             // we force all system modules to be loaded, if it's a system module
@@ -32,7 +40,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             // even if the module is optional we still need to load it... if not queued for install
             // it should be handled by the force load routine.
             
-            if($modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name))
+            if(($modops->IsSystemModule($name) && !$modops->IsOptionalSystemModule($name)) || $modops->IsQueuedForInstall($name))
             {
                 self::verbose(\__appbase\lang('msg_upgrade_module', $name));
                 $module = $modops->get_module_instance($name, '', TRUE);
@@ -40,6 +48,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 {
                     $this->error("FATAL ERROR: could not load module {$name} for upgrade");
                 }
+            }
+            else if ($modops->IsOptionalSystemModule($name) && \in_array($name, $config['optional_modules']))
+            {
+                # now we handle optional modules.
+                ## TODO add a language string here. self::verbose(\__appbase\lang('install_optional_module', $name));
+                self::verbose(\__appbase\lang('install_module', $name));
+                $module = $modops->get_module_instance($name, '', TRUE);
             }
         }
 
