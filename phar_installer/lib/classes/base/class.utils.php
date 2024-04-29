@@ -7,14 +7,15 @@ class utils
     private static $_writable_error = [];
 
     private function __construct() {}
-
+    
     public static function redirect($to)
     {
         $_SERVER['PHP_SELF'] = null;
         $schema = '443' == $_SERVER['SERVER_PORT'] ? 'https' : 'http';
         $host = \strlen($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $_SERVER['SERVER_NAME'];
-
+        
         $components = \parse_url($to);
+
         if (\count($components) > 0) {
             $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
             $to .= $components['host'] ?? $host;
@@ -24,14 +25,14 @@ class utils
                     $to .= $components['path'];
                 }
                 //Path is relative, append current directory first.
-                else if (isset($_SERVER['PHP_SELF']) && NULL !== $_SERVER['PHP_SELF']) { //Apache
+                else if (isset($_SERVER['PHP_SELF'])) { //Apache
                     $to .= (\strlen(\dirname($_SERVER['PHP_SELF'])) > 1 ? \dirname($_SERVER['PHP_SELF']) . '/' : '/') . $components['path'];
                 }
-                else if (isset($_SERVER['REQUEST_URI']) && NULL !== $_SERVER['REQUEST_URI']) { //Lighttpd
+                else if (isset($_SERVER['REQUEST_URI'])) { //Lighttpd
                     if (endswith($_SERVER['REQUEST_URI'], '/'))
                         $to .= (\strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
                     else
-                        $to .= (\strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ? \dirname($_SERVER['REQUEST_URI']) . '/' : '/') . $components['path'];
+                        $to .= (\strlen(\dirname($_SERVER['REQUEST_URI'])) > 1 ? \dirname($_SERVER['REQUEST_URI']) . '/' : '/') . $components['path'];
                 }
             }
             else {
@@ -47,6 +48,7 @@ class utils
         \session_write_close();
 
         if(\headers_sent() ) {
+
             // use javascript instead
             echo '<script type="text/javascript"><!-- location.replace("'.$to.'"); // --></script><noscript><meta http-equiv="Refresh" content="0;URL='.$to.'"></noscript>';
             exit;

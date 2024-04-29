@@ -144,73 +144,70 @@ class wizard
 
   final public function step_url($idx)
   {
-      $this->_init();
-
-      // get the url to the specified step index
-      $idx = (int)$idx;
-      if( $idx < 1 || $idx > $this->num_steps() ) return '';
-
-      $request = request::get();
-      $url = $request->raw_server('REQUEST_URI');
-      $urlmain = \explode('?', $url);
-
-      \parse_str($url, $parts);
-      $parts[$this->_stepvar] = $idx;
-
-      $tmp = [];
-    foreach($parts as $k => $v)
-    {
-      if(startswith($k, $urlmain[0])) { continue; }
-      $tmp[] = $k . '=' . $v;
-    }
-      $url = $urlmain[0].'?' . \implode('&', $tmp);
-      return $url;
+    $this->_init();
+    
+    // get the url to the specified step index
+    $idx = (int)$idx;
+    if( $idx < 1 || $idx > $this->num_steps() ) return '';
+    
+    $request = request::get();
+    $url = $request->raw_server('REQUEST_URI');
+    $urlmain = \explode('?', $url);
+    
+    \parse_str($url, $parts);
+    \array_shift($parts);
+    $parts[$this->_stepvar] = $idx;
+    
+    $tmp = [];
+    foreach($parts as $k => $v) { $tmp[] = $k . '=' . $v; }
+    $url = $urlmain[0].'?' . \implode('&', $tmp);
+    return $url;
   }
-
+  
   final public function next_url()
   {
-      $this->_init();
-      $request = request::get();
-      $url = $request->raw_server('REQUEST_URI');
-      
-      $urlmain = \explode('?', $url);
-      
-      \parse_str($url, $parts);
-      $parts[$this->_stepvar] = $this->cur_step() + 1;
-      if( $parts[$this->_stepvar] > $this->num_steps() ) return '';
-
-      $tmp = [];
-    foreach($parts as $k => $v)
-    {
-      if(startswith($k, $urlmain[0])) { continue; }
-      $tmp[] = $k . '=' . $v;
-    }
-      $url = $urlmain[0].'?' . \implode('&', $tmp);
+    $this->_init();
+    $request = request::get();
+    $url     = $request->raw_server('REQUEST_URI');
     
-      return $url;
+    $urlmain = \explode('?', $url);
+    
+    \parse_str($url, $parts);
+    $parts[$this->_stepvar] = $this->cur_step() + 1;
+    
+    if($parts[$this->_stepvar] > $this->num_steps()) { return ''; }
+    
+    \array_shift($parts);
+    
+    $tmp = [];
+    foreach($parts as $k => $v) { $tmp[] = $k . '=' . $v; }
+    
+    $url = $urlmain[0] . '?' . \implode('&', $tmp);
+    
+    return $url;
   }
 
   final public function prev_url()
   {
-      $this->_init();
-      $request = request::get();
-      $url = $request->raw_server('REQUEST_URI');
-      $urlmain = \explode('?', $url);
+    $this->_init();
+    $request = request::get();
+    $url = $request->raw_server('REQUEST_URI');
+    $urlmain = \explode('?', $url);
 
-      \parse_str($url, $parts);
-      $parts[$this->_stepvar] = $this->cur_step() - 1;
-      if( $parts[$this->_stepvar] <= 0 ) return '';
+    \parse_str($url, $parts);
+    $parts[$this->_stepvar] = $this->cur_step() - 1;
+    if( $parts[$this->_stepvar] <= 0 ) { return ''; }
 
-      $tmp = [];
+    $tmp = [];
     if(\count($parts))
     {
-      foreach($parts as $k => $v)
-      {
-        if(startswith($k, $urlmain[0])) { continue; }
-        $tmp[] = $k . '=' . $v;
-      }
+      \array_shift($parts);
+      
+      foreach($parts as $k => $v) { $tmp[] = $k . '=' . $v; }
     }
+    
     $url = $urlmain[0].'?' . \implode('&', $tmp);
+    
     return $url;
   }
 
