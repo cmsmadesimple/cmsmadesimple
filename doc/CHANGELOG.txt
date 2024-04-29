@@ -1,8 +1,31 @@
+Version 2.2.20 - Saguenay
+-------------------------------
+Core - General
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Smarty upgraded to version 4.5.1 (latest of the stable 4.5.x branch);
+ - Made some changes to keep backward compatibility with previous versions of Smarty;
+ - Fixed BR #12683: we now truncate the item_name at 50 characters;
+ - moved php files with functions to a specific folder tidying up for further changes;
+ - deprecated cms_html_entity_decode: scheduled to be removed; PHP native html_entity_decode now supports UTF-8 properly;
+ - Fixed BRs #12677 and #12703: UDTs errors are now handled more gracefully - the error being triggered is shown on the popup;
+ - News module is no longer mandatory;
+ - New module added to core (UserGuide);
+ - Installer now supports optional modules (News and UserGuide);
+ 
+FilePicker NOT SET
+ - BR #12671 - fix FilePicker prefix error;
+ 
+Content Manager NOT SET
+ - fixed a typo in admin_editcontent.tpl;
+ 
+MicroTiny NOT SET
+ - removed mt_jsbool as it is not needed any longer and was breaking Smarty compatibility; 
+
 Version 2.2.19 - Selkirk
 -------------------------------
 
 Core - General
- - BR #12647 - Wrong default action value in get_pageid_or_alias_from_url
+ - BR #12647 - Wrong default action value in get_pageid_or_alias_from_url;
  - FR #12638 - ability to add CSP headers on the backend: currently weak restrictions: self with script-src and script-src-elem set to unsafe-inline (optionally set on config admin_csp_header);
  - BR #12661 - fix page_selector allow_all parameter and set default to false;
  
