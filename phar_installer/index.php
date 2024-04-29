@@ -61,7 +61,7 @@ catch( \Exception $e ) {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>CMS Made Simple Installer : Fatal Error</title>
+    <title>CMS Made Simple Installer: Fatal Error</title>
   </head>
   <body>
     <div style="border-radius: 3px; max-width: 85%; margin: 10% auto; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; background-color: #f2dede; border: 1px solid #ebccd1; color: #a94442; padding: 15px;">
@@ -71,8 +71,12 @@ catch( \Exception $e ) {
   </body>
 </html>
 EOT;
-    $message = \str_replace("\n", '<br>', $e->getMessage());
-    $message .= "\n\n" . \str_replace("\n", '<br>', $e->getTraceAsString());
+    # build the message but remove the __DIR__ stuff
+    $message = '<strong>' . \str_replace("\n", '<br>', $e->getMessage()) . '</strong><br>';
+    $message .= '<p><small>' . "\n\n" . \str_replace("\n", '<br>', $e->getTraceAsString()) . '</small></p>';
+    $message = \str_replace(__DIR__, '', $message);
+    $message = \preg_replace('/(require_once\(.*\))/m', '<em>--redacted--</em>', $message);
+    
     echo \str_replace('[message]', $message, $out);
 }
 
