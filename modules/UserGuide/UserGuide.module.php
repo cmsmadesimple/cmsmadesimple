@@ -40,7 +40,7 @@ class UserGuide extends CMSModule {
     const EMBED_PREFIX_YOUTUBE = '//www.youtube.com/embed/';
     const DEFAULT_CONTENT_XML = '/lib/userguide_default_content.xml';
 
-    public function GetVersion() { return '1.0'; }
+    public function GetVersion() { return '1.0.0'; }
     public function GetFriendlyName() { return $this->GetPreference('customModuleName', 'User Guide'); }
     public function GetAdminDescription() { return $this->Lang('admindescription'); }
     public function IsPluginModule() { return FALSE; }

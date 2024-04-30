@@ -14,30 +14,36 @@ Core - General
  - Installer now supports optional modules (News and UserGuide);
  - MenuManager is no longer installed back on upgrades;
  
-FilePicker NOT SET
- - BR #12671 - fix FilePicker prefix error;
- 
-Content Manager NOT SET
+Content Manager 1.1.13
  - Fixed a typo in admin_editcontent.tpl;
  
-MicroTiny NOT SET
+CmsJobManager 1.0.0
+ - Considered a stable release, version is now 1.0.0;
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+DesignManager 1.1.11
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+FilePicker 1.0.8
+ - BR #12671 - fix FilePicker prefix error;
+  
+MicroTiny 1.6.5
  - Compatibility fixes for PHP 8.2 and 8.3;
  - Removed mt_jsbool as it is not needed any longer and was breaking Smarty compatibility; 
  
-CmsJobManager NOT SET
+Navigator 1.0.11
  - Compatibility fixes for PHP 8.2 and 8.3;
+
+News 2.51.13
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - News is now an optional module, no longer installed by default;
  
-DesignManager NOT SET
- - Compatibility fixes for PHP 8.2 and 8.3;
-
-Navigator NOT SET
- - Compatibility fixes for PHP 8.2 and 8.3;
-
-News NOT SET
- - Compatibility fixes for PHP 8.2 and 8.3;
+UserGuide 1.0.0
+ - Initial release;
  
 Phar Installer Not SET
  - Compatibility fixes for PHP 8.2 and 8.3;
+ - Supports core optional modules selection on advanced mode (currently News and UserGuide);
  - Modified Smarty 4.2.1 enough to work with PHP 8.3;
  - Regular Phar doesn't support Windows at this point while Expanded Phar does; 
 
