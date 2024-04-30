@@ -1,25 +1,46 @@
 Version 2.2.20 - Saguenay
 -------------------------------
+
 Core - General
  - Compatibility fixes for PHP 8.2 and 8.3;
  - Smarty upgraded to version 4.5.1 (latest of the stable 4.5.x branch);
  - Made some changes to keep backward compatibility with previous versions of Smarty;
  - Fixed BR #12683: we now truncate the item_name at 50 characters;
- - moved php files with functions to a specific folder tidying up for further changes;
- - deprecated cms_html_entity_decode: scheduled to be removed; PHP native html_entity_decode now supports UTF-8 properly;
+ - Moved php files with functions to a specific folder tidying up for further changes;
+ - Deprecated cms_html_entity_decode: scheduled to be removed; PHP native html_entity_decode now supports UTF-8 properly;
  - Fixed BRs #12677 and #12703: UDTs errors are now handled more gracefully - the error being triggered is shown on the popup;
  - News module is no longer mandatory;
  - New module added to core (UserGuide);
  - Installer now supports optional modules (News and UserGuide);
+ - MenuManager is no longer installed back on upgrades;
  
 FilePicker NOT SET
  - BR #12671 - fix FilePicker prefix error;
  
 Content Manager NOT SET
- - fixed a typo in admin_editcontent.tpl;
+ - Fixed a typo in admin_editcontent.tpl;
  
 MicroTiny NOT SET
- - removed mt_jsbool as it is not needed any longer and was breaking Smarty compatibility; 
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Removed mt_jsbool as it is not needed any longer and was breaking Smarty compatibility; 
+ 
+CmsJobManager NOT SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+DesignManager NOT SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+
+Navigator NOT SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+
+News NOT SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+Phar Installer Not SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Modified Smarty 4.2.1 enough to work with PHP 8.3;
+ - Regular Phar doesn't support Windows at this point while Expanded Phar does; 
+
 
 Version 2.2.19 - Selkirk
 -------------------------------
