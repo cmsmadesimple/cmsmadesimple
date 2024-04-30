@@ -3,7 +3,7 @@ Version 2.2.20 - Saguenay
 
 Core - General
  - Compatibility fixes for PHP 8.2 and 8.3;
- - Smarty upgraded to version 4.5.1 (latest of the stable 4.5.x branch);
+ - Smarty upgraded to version 4.5.2 (latest of the stable 4.5.x branch);
  - Made some changes to keep backward compatibility with previous versions of Smarty;
  - Fixed BR #12683: we now truncate the item_name at 50 characters;
  - Moved php files with functions to a specific folder tidying up for further changes;
