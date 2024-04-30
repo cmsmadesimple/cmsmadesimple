@@ -72,12 +72,6 @@ class Smarty_Internal_Config_File_Compiler
      * @var bool
      */
     public $write_compiled_code = true;
-  
-  /* @var Smarty_Internal_ConfigFileParser $this->parser */
-    public $parser;
-    
-  /* @var Smarty_Internal_ConfigFileLexer $this->lex */
-    public $lex;
 
     /**
      * Initialize compiler
