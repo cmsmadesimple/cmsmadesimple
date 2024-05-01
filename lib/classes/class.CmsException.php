@@ -69,7 +69,7 @@ abstract class CmsExtraDataException extends Exception
       $code = 0;
       $args = func_get_args();
       if( is_array($args) && count($args) == 1 ) $args = $args[0];
-      for( $i = 0; $i < count($args); $i++ ) {
+      for($i = 0, $iMax = count($args); $i < $iMax; $i++ ) {
           switch( $i ) {
           case 0:
               $msg = $args[$i];
@@ -93,7 +93,9 @@ abstract class CmsExtraDataException extends Exception
               break;
           }
       }
-      parent::__construct($msg,$code,$prev);
+      
+      if(NULL === $msg)  { $msg = 'Unknown error'; }
+      parent::__construct($msg, $code, $prev);
   }
 
   /**
