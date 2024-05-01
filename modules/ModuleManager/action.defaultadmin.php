@@ -77,6 +77,9 @@ if( $connection_ok ) {
     try {
         $newversions = modulerep_client::get_newmoduleversions();
     }
+    catch(ModuleNoDataException $e) {
+      // nothing here TODO handle this a bit better (JM)
+    }
     catch( Exception $e ) {
         echo $this->ShowErrors($e->GetMessage());
     }
