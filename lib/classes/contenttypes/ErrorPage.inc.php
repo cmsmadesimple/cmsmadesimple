@@ -31,7 +31,8 @@
  * @version $Revision$
  * @license GPL
  */
-#[AllowDynamicProperties] class ErrorPage extends Content
+#[\AllowDynamicProperties]
+class ErrorPage extends Content
 {
     var $doAliasCheck;
     var $error_types;
