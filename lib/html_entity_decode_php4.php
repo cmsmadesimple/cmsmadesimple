@@ -381,6 +381,7 @@ function html_entity_decode_php4($text_to_convert) {
 
 function cms_html_entity_decode($text_to_convert)
 {
+  $text_to_convert = $text_to_convert ?? '';
   //return \html_entity_decode_php4($text_to_convert);
   return \html_entity_decode($text_to_convert);
 }
