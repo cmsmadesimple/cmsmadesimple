@@ -15,7 +15,7 @@
 		{/if}
 		{if isset($navitem.children)}
 		{if $depth == '0'}<ul>{/if}
-			{include file=$smarty.template nav=$navitem.children depth=$depth+1}
+			{include file='navigation.tpl' nav=$navitem.children depth=$depth+1}
 		{if $depth == '0'}</ul>{/if}
 		{/if}
 	</li>
