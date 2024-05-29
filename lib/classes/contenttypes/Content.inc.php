@@ -113,7 +113,7 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddProperty('design_id',0,self::TAB_OPTIONS);
+	  	$this->AddProperty('design_id',0,self::TAB_OPTIONS);
       $this->AddProperty('template',0,self::TAB_OPTIONS);
       $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
