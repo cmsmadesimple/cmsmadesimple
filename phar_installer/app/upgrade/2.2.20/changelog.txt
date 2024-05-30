@@ -1,13 +1,4 @@
-Version 2.2.21 - Sherbrooke
--------------------------------
-
-Core - General
- - Fixes BR 12714 inherited content Fields from a base templates are missing in child templates (backend edit);
- - Fixes BR 12713 Pages extended of a page base can't be edited, if they don't contain a {content} tag;
- - Fixes a typo in class ErrorPage: missing line break after #[\AllowDynamicProperties] directive;
-
-
- Version 2.2.20 - Saguenay
+Version 2.2.20 - Saguenay
 -------------------------------
 
 Core - General
