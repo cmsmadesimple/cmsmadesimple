@@ -1,0 +1,1181 @@
+Version 2.2.21 - Sherbrooke
+-------------------------------
+
+Core - General
+ - Fixes BR 12714 inherited content Fields from a base templates are missing in child templates (backend edit);
+ - Fixes BR 12713 Pages extended of a page base can't be edited, if they don't contain a {content} tag;
+ - Fixes a typo in class ErrorPage: missing line break after #[\AllowDynamicProperties] directive;
+
+
+ Version 2.2.20 - Saguenay
+-------------------------------
+
+Core - General
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Smarty upgraded to version 4.5.2 (latest of the stable 4.5.x branch);
+ - Made some changes to keep backward compatibility with previous versions of Smarty;
+ - Fixed BR #12683: we now truncate the item_name at 50 characters;
+ - Moved php files with functions to a specific folder tidying up for further changes;
+ - Deprecated cms_html_entity_decode: scheduled to be removed; PHP native html_entity_decode now supports UTF-8 properly;
+ - Fixed BRs #12677 and #12703: UDTs errors are now handled more gracefully - the error being triggered is shown on the popup;
+ - News module is no longer mandatory;
+ - New module added to core (UserGuide);
+ - Installer now supports optional modules (News and UserGuide);
+ - MenuManager is no longer installed back on upgrades;
+ 
+Content Manager 1.1.13
+ - Fixed a typo in admin_editcontent.tpl;
+ 
+CmsJobManager 1.0.0
+ - Considered a stable release, version is now 1.0.0;
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+DesignManager 1.1.11
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ 
+FilePicker 1.0.8
+ - BR #12671 - fix FilePicker prefix error;
+  
+MicroTiny 1.6.5
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Removed mt_jsbool as it is not needed any longer and was breaking Smarty compatibility; 
+ 
+Navigator 1.0.11
+ - Compatibility fixes for PHP 8.2 and 8.3;
+
+News 2.51.13
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - News is now an optional module, no longer installed by default;
+ 
+UserGuide 1.0.0
+ - Initial release;
+ 
+Phar Installer Not SET
+ - Compatibility fixes for PHP 8.2 and 8.3;
+ - Supports core optional modules selection on advanced mode (currently News and UserGuide);
+ - Modified Smarty 4.2.1 enough to work with PHP 8.3;
+ - Regular Phar doesn't support Windows at this point while Expanded Phar does; 
+
+
+Version 2.2.19 - Selkirk
+-------------------------------
+
+Core - General
+ - BR #12647 - Wrong default action value in get_pageid_or_alias_from_url;
+ - FR #12638 - ability to add CSP headers on the backend: currently weak restrictions: self with script-src and script-src-elem set to unsafe-inline (optionally set on config admin_csp_header);
+ - BR #12661 - fix page_selector allow_all parameter and set default to false;
+ 
+Content Manager 1.1.12
+ - BR #12635 - Apply button is shown for non-existing page;
+ - BR #12474 Taking the default page down by accident through the content type;
+
+File Manager 1.6.16
+ - BR #12659 - FileManager upload Warning bug fix;
+
+FilePicker 1.0.7
+ - BR #12621 - FilePicker upload bug;
+ - BR #12659 - FilePicker upload Warning bug fix;
+
+Navigator 1.0.10
+ - BR #12528 Navigator call doesn't clear excluded prefixes in some situations
+
+Version 2.2.18 - Apex
+-------------------------------
+Core - General
+ - Fallback function CMSMS\strftime. PHP Intl extension still recommended. The fallback solves issues on hosts that don't install it by default and don't allow users to install it.
+
+Version 2.2.17 - Iqaluit
+-------------------------------
+Core - General
+ - BR #12529 - Cacheable Pages have Bad Header Last-Modified;
+ - BR #12543 - Lib file corrections;
+ - BR #12618 - HasChildren() is broken;
+ - BR #12587 - can't uninstall modules;
+ - Compatibility fixes for PHP 7, 8.0 and 8.1;
+ - Smarty upgraded to version 4.2.1;
+    Note: Smarty 2 syntax is still supported, but deprecated
+ - Add function CMSMS\strftime to replace deprecated PHP function. PHP Intl extension recommended to support this.
+ - Enabled use of PHP functions trim,ltrim,rtrim in smarty templates
+ - PHPMailer upgraded to version 6.6.0.
+ - fixes BR #12529 Cacheable Pages have Bad Header Last-Modified;
+ - added module's support for arrays in parameters;
+ - Fixes to cms_mailer class mainly in terms of proxy design pattern getters and setters and autotls settings;
+ - Smarty security policies changes: due to some modifications in the way updated Smarty now behaves, all static classes need to be registered for its use to be allowed in templates.
+
+Content Manager 1.1.10
+ - Differentiate new page from cloned page.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+Design Manager 1.1.10
+ - BR #12545 - Module: DesignManager typo info on top file.
+ - fixes typo BR #12545
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+FilePicker 1.0.6
+ - BR #12539 - Module FilePicker 1.0.5 files corrections.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+Module Manager 2.1.9
+ - BR #12541 - Module ModuleManager 2.1.8 : corrections + compatible php 7.1.0 to 8.1.4.
+
+News 2.51.12
+ - BR #12543 - Lib file corrections.
+ - Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+FileManager 1.6.13
+- Compatibility fixes for PHP 7, 8.0 and 8.1.
+
+
+Version 2.2.16 - Truro
+-------------------------------
+Core - General
+  - BR #12370 - Admin Log-Download : now downloading the log honors all filters but doesn't process paging.
+  - BR #12437 - Installer won't allow "<" symbol in database password.
+  - BR #12457 - Event Manager empty list when mysql mode only_full_group_by.
+  - BR #12484 - Cannot exit after Run UDT.
+  - BR #12495 - MySQL 8.0.2+ breaks groups without table prefix.
+  - BR #12499 - adminlog.tpl Wrongly formed date.
+  - BR #12500 - NameQuote function does not work properly.
+  - BR #12504 - Function call notification.
+  - Fixed an issue with specific characters in a content block tab name breaking the editor.
+  - Adjust regex's incompatible with PCRE2.
+  - Avoid deprecated strftime() - deploy new replacement function locale_ftime() and new modifier-plugin localedate_format.
+  - A number of fixes for PHP 8 compatibility.
+
+Admin Search v1.0.6
+  - BR #12443 - Admin Search fails on some searches with default mysql mode only_full_group_by (mysql 5.7.5+).
+  - Removed license and copyright notices from module help text.
+  - Escaping the search input field values.
+  - More content object attributes are searched.
+  - User Defined Tags can be searched.
+  - Only places a user has permission to search are shown in the filter list (cached!).
+
+Content Manager v1.1.9
+  - Fix menu text/title setting.
+
+FileManager v1.6.12
+  - BR #12435 - Replacing an image file in filepicker doesn't update thumbnail.
+
+FilePicker v1.0.5
+  - FR #12483 - Additional FilePicker Help for usage as Content Block.
+
+Navigator v1.0.9
+  - BR #12456 - Navigator breadcrumbs with default page hidden from menu causes PHP notice.
+
+Search v1.53
+  - Added 'Manage Search' permission.
+  - BR #12391 - Core search issue page/entry titles that start with numbers.
+  
+Phar Installer v1.3.15
+  - Fixed BR #12437 - Installer won't allow "<" symbol in database password.
+  - Added Russian lang file to installer.
+  - use locale_ftime() instead of deprecated strftime().
+  - escape name of groups table, to prevent reserved-word conflict when table-prefix is empty.
+  - alterations to the links in final step: we now privilege links to CMSMS channels of contact and support.
+
+
+Version 2.2.15 - Bonaventure
+-------------------------------
+Core - General
+  - BR #12287 - Admin shortcuts popup refers to IRC.
+  - BR #12292 - showbase parameter of metadata tag doesn't accept boolean value.
+  - BR #12303 - No date displayed in the admin + category id not incremented.
+  - BR #12305 - Removing actual Destination Page breaks Destination Page dropdown in Internal Page Link pages.
+  - BR #12311 - log_performance_info - undefined variable: queries.
+  - BR #12313 - 5 Stored XSS vulnerabilities in Settings - Content Manager.
+  - BR #12317 - XSS on Settings News Module.
+  - BR #12325 - Several XSS vulnerabilities.
+  - BR #12335 - User pref admin homepage not properly displayed under certain conditions.
+  - BR #12337 - GetContentBlockFieldInput $adding always false.
+  - BR #12338 - Allow http/2 responses.
+  - BR #12357 - Filepicker dropzone size issue.
+  - FR #12345 - More user friendly admin session handling (partly implemented).
+  - FR #12349 - Swap tabs on System Maintenance page.
+  - Browsing to the main admin page in a new browser tab during a running session won't redirect to login form anymore.
+  - (Error) messages in OneEleven won't dismiss on click.
+  - Fix to Admin redirection after login on Windows platform.
+  - Fix to the module API redirection to support arrays in parameters.
+
+FileManager v1.6.12
+  - Dropzone improvement like core FilePicker.
+
+FilePicker v1.0.5
+  - BR #11673 - FilePicker will not show svg images, when in the Content Manager.
+  - BR #12312 - Stored XSS vulnerability in File Picker.
+
+News v2.51.11
+  - Minor code fix to encoding title content.
+  - BR #12322 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+  - BR #12325 - Several XSS vulnerabilities.
+
+Design Manager v1.1.9
+  - Minor fixes for PHP warnings\notices.
+
+Module Manager v2.1.8
+  - BR #12291 - Reflected Cross site scripting.
+  - BR #12324 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+  - Increased the Download Chunk Size field size to 4.
+
+MicroTiny v2.2.5
+  - BR #12351 - Escaping translation strings in tinymce_config.js.
+
+Search v1.52
+  - FR #11886 - Include module and modulerecord fields for content pages.
+
+Phar Installer v1.3.13
+  - Fixes to the reload button: now prevents browser's caching.
+  - BR #11591 - fixed: Phar installer doesn't work with OPCache enabled.
+
+
+Version 2.2.14 - T'Sou-ke
+-------------------------------
+Core - General
+  - BR #12280 - Add Shortcut from Shortcuts modal broken.
+  - Fixes to the class.CmsAdminThemeBase.php regarding main sections title and breadcrumbs generation.
+  - Explicitly add function_exists and getimagesize functions to the allowed functions in PHP secure mode.
+  - Improved Error Console template.
+  - Site Prefs, remove submit confirmation.
+  - System Maintenance, remove confirmation update page hierarchy positions and routes.
+  - cms_http_request PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+  - Backend users, fixed the bulk actions.
+  - BR #12172 - CronJobTrait undefined constants.
+  - BR #12227 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+  - BR #12272 - Internal page link - selecting destination page problem.
+
+AdminSearch v1.0.5
+  - Remove click thru warning.
+
+CMSContentManager v1.1.9
+  - Fix notices in edit content template.
+  - Fix notice in default admin view.
+
+DesignManager v1.1.8
+  - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+
+FileManager v1.6.11
+  - Don’t disable advanced mode on upgrade.
+  - Fix adding double // in site root link.
+  - BR #12215 - FileManager 1.6.10 crashes when trying to rename a file.
+  - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+
+News v2.51.9
+  - Minor code fix.
+  - Alert on unapproved articles disabled by default. Enable at Settings >> Options tab.
+  - BR #12207 - Can't display image in news when using upload field.
+  - BR #12228 - Stored Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
+
+Phar Installer v1.3.9
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+  - PHP 7.4 fix "Function get_magic_quotes_runtime() is deprecated".
+
+Search v1.51.8
+  - PHP 7.4 fix "Array and string offset access syntax with curly braces is deprecated".
+
+
+Version 2.2.13 - Moosomin
+-------------------------------
+Core - General
+   - Explicitly add a function or two to the allowed functions in PHP secure mode.
+
+DesignManager v1.1.7
+   - Fix a warning in PHP 7.3+.
+
+FileManager v1.6.10
+   - Fix minor XSS vulnerabilities in FileManager.
+
+News v2.51.8
+   - Fix a security issue in the default action with the idlist param.
+   (This version was also separately released in the forge).
+
+
+Version 2.2.12 - Osoyoos
+-------------------------------
+NOTICE: Due to the nature of the security issue fixed in FileManager after upgrading you should change your database password.
+
+Core - General
+  - Fix warning in cms_html_entity_decode.
+
+FileManager v1.6.9.1
+  - Security fixes for view action.
+
+
+Version 2.2.11 - Vulcan
+-------------------------------
+Core - General
+  - Fix minor bug in copying content objects.
+  - Minor fix to array indexes when filling params in ContentBase.
+  - Fix to the {cms_filepicker} plugin.
+  - Minor fix to the 'my account' form.
+  - Fix error in cmsms_filepicker.js encountered in LISE.
+  - PHP 7.3 fix to DataDictionary::RenameColumnSQL.
+
+CMSContentManager v1.1.8
+  - Fix an issue with copying non-core content objects.
+  - Minor fixes for php 7.3.
+
+ModuleManager v2.1.7
+  - Minor exception handling improvements.
+  - Minor improvement to dependency detection with modules that do not exist in ModuleRepository.
+  - Minor fixes for php 7.3.
+
+News v2.51.6
+  - Minor improvements for CMSMS v2.3 compatibility.
+
+Phar Installer v1.3.8
+  - Minor change to use include() instead of include_once()... not sure why.
+
+FilePicker v1.0.4.1
+  - Fix type error.
+
+Search v1.51.7
+  - Minor fixes for php 7.3.
+
+
+Version 2.2.10 - Spuzzum
+-------------------------------
+Core - General
+  - Fix minor potential authenticated object insertion vulnerability in changegroupperm.
+  - Fix minor potential uncleaned input vulnerability in siteprefs.
+  - Minor improvement to get_real_ip().
+  - Fix to clearing cache in cms_filecache_driver.
+
+News v2.51.5
+  - Fix unauthenticated SQL injection vulnerability with the default action.
+
+ModuleManager v2.1.6
+  - Fix authenticated object insertion vulnerability in the installmodule action.
+  - Improve ordering of the dependencies before installing or upgrading modules.
+  - Adds more auditing, particularly in the cached request stuff.
+
+FilePicker v1.0.4
+  - Fix authenticated object insertion vulnerability.
+
+
+Version 2.2.9.1
+-------------------------------
+Core - General
+  - fix to the CmsLayoutStylesheetQuery class.
+  - fix an edge case in the Database\Connection::DbTimeStamp() method.
+
+MicroTiny v2.2.4
+  - Minor fix in error displays.
+
+Phar Installer v1.3.7
+  - Fix to edge case in step 3 where memory_limit is set to -1.
+
+
+Version 2.2.9 - Blow Me Down
+-------------------------------
+Core - General
+  - PHP 7.2+ fixes.
+  - Now do not call Module::InitializeAdmin() or Module::InitializeFrontend() if the module loading is being forced
+    (as is the case sometimes within ModuleManager);
+  - Minor changes and fixes to prevent warnings/notices in CLI based scripts.
+  - Improvements to the {browser_lang} plugin.
+  - Fixes a bug in the CmsLayoutTemplateQuery class.
+  - Fixes a bug with the name= parameter in the {cms_stylesheet} plugin.
+  - Fixes a minor issue in system information (smarty compilecheck).
+  - Fixes a minor issue with the tabIndex and accesskey fields in edit content.
+  - Fixes issue in the CmsLayoutStylesheet class related to associating designs with new stylesheets.
+  - Now check for an english language file first in module_custom/xxxxx/lang before a file for the current language.
+  - Prevent false-positive hit for "multiple_webshells_0018" rule webserver virusscanner (https://github.com/Yara-Rules/rules/blob/master/Webshells/WShell_THOR_Webshells.yar#L4764).
+  - Fixes a bug in ContentOperations::LoadAllContent() if the content list had a custom content type from a module that was unvavailable.
+  - Fixes a bug in the Database\Connection::DbTimeStamp().
+
+Search v1.51.6
+  - Minor fixes to help.
+
+MicroTiny v2.2.3
+  - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
+  - Fixes in the cms_linker plugin for when trying to change a link to a CMSMS page where the alias has changed.
+
+FileManager v1.6.8
+  - Fixes an upload issue.
+
+ModuleManager v2.1.5
+  - PHP 7.2+ fixes.
+
+CMSContentManager v1.1.7
+  - Fixes an issue with changing content type after copying a content page.
+
+DesignManager v1.1.5
+  - Fixes ownership issue on templates with importing a design.
+
+Phar Installer v1.3.7
+  - Minof fix to detect when PHP's memory limit is set to -1.
+
+
+Version 2.2.8 - Flin Flon
+----------------------------------
+Core - General
+  - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
+  - Minor fix to pagination in Admin log.
+  - Change Finnish locale priorities so that UTF-8 is first.
+  - Minor fix to calling hooks with a single associative array parameter.
+  - Adds new HookManager::do_hook_first_result() method.
+  - cangegroupperms now calls HookManager::do_hook_first_result.
+  - Minor enhancement to moduleoperations::_load_module() to check if the class exists.
+  - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
+  - Deprecate CMSModule::SetParameterType and CMSModule::CreateParameter methods.
+  - Deprecate ModuleOperations::GetModuleParameters() method.
+  - CMSModule::RestrictUnknownParameters() now does nothing.
+  - No longer warn if a module is sent a parameter that is not registered.
+  Note: modules should now be cleaning parameters directly (see filter_var) from $_POST and $_REQUEST ($_GET is automatically cleaned).
+  Note: In the future,  $params in module actions will only consist of parameters passed on the module tag.
+  - PHP 7.2+ fixes.
+  - Fix the inactive param in the page_attr plugin.
+
+FilePicker v1.0.3
+  - Minor fix to delete action.
+
+Search v1.51.5
+  - Now enforce utf-8 on preg_split.
+  - Minor parameter check.
+  - Removed deprecated each() function.
+
+CMSJobManager v0.1.3
+  - Notices fixed.
+  - PHP 7.2+ fixes.
+
+FileManager v1.6.7
+  - Remove un-necessary files that may cause a security vulnerability.
+  - prevent creating directories with leading or trailing whitespace in the name.
+
+Module Manager v2.1.4
+  - PHP 7.2+ fixes.
+
+Navigator v1.0.9
+  - Template fix simple_navigation.tpl. Output correct class for parent without active children.
+
+News v2.51.4
+  - Notices fixed.
+
+
+Version 2.2.7 - Skookumchuck
+----------------------------------
+Core - General
+  - Change internal CSRF variable name.
+  - Fix object insertion bug via deserialize in LoginOperations.
+  - Fix issue where login cookie contents could be forged by determining the hashing salt.
+  - Refactor the mechanism for generating and verifying admin account password reset codes.
+
+FileManager v1.6.6
+  - No longer allow uploading files with names that end in .
+
+FilePicker v1.0.2
+  - No longer allow uploading files with names that end in .
+
+Search v1.51.4
+  - Minor fix to microtime calls.
+
+
+Version 2.2.6 - Come by Chance
+----------------------------------
+Core - General
+  - Fixes to AdminAlerts::load_by_name().
+  - SetMessage() and SetError() in the module API now use session variables.
+  - Remove support for module_error and module_action request parameters in admin module actions.
+  - Add call to check_login() in admin actions that were missing them.
+
+Search v1.51.3
+  - Fix notice in PHP 7.1: A non well formed numeric value encountered...
+
+
+Version 2.2.5 - Wawa
+----------------------------------
+Core - General
+  - Fix minor security issue in the way login information was cached in cookies and the session.
+  - Simplify rules around alias editing/generation in fillparams.
+    If the alias field exists then we can adjust its value or recalculate an alias.
+    Use basic properties, and ownership and permissions to determine if that field exists on the edit form.
+  - Minor fixes to the CmsJobManager.
+
+
+Version 2.2.4 - Little Paradise
+----------------------------------
+Core - General
+  - Improvements to the Hook class.
+  - Minor fix to usertagoperations.
+  - Changes to the hierarchy selector to disallow circular references.
+  - Fix problems with additional editors causing page aliases to be regenerated.
+  - Minor fixes to Admin log browser.
+  - Minor fixes to Admin login.
+  - Add missing call Core::LoginPre hook.
+  - Modify myaccount.php to call Core::EditUserPre hook BEFORE the password is set.
+  - Fix documentation to CallUserTag.
+  - Fix to default handling for content_image block.
+  - Improve the help for the {page_attr} plugin.
+  - Fix a potential warning in the {anchor} tag.
+  - Fix boolean comparison in LoginOperations.
+
+Installation Assistant v1.3.4
+  - Fixes endless recursion issue with setting a tmpdir.
+  - Fix issue with requiring a database prefix on upgrade.
+
+FilePicker v1.0.2
+  - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory.
+  - Add a prefix on all returned strings.
+  - Slight modification to the profile class.
+  - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does.
+  - Adds an exception handler around the change working directory stuff.
+
+FileManager v1.6.5
+  - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.
+  - Now enable creation of thumbnails on install.
+
+MicroTiny v2.2.2
+  - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
+  - Re-adds the table plugin (went missing when we upgraded tinymce).
+
+ModuleManager v2.1.3
+  - Adds audit line displaying status if cannot connect to ModuleRepository.
+
+DesignManager v1.1.4
+  - Fixes problems with the cancel button not marking the form as 'clean' (not dirty).
+
+
+Version 2.2.3.1 - Happy Adventure
+----------------------------------
+Core - General
+  - Fix an issue when parsing multiple content blocks.
+
+
+Version 2.2.3 - Happy Adventure
+----------------------------------
+Core - General
+  - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
+  - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins.
+  - Now use our own derivative of Smarty Internal Template so that we can send hooks, etc.
+  - Improved error message if there was an error parsing the template (or a duplicate content block).
+  - Fixes content blocks, image blocks, module blocks containing whitespace in the name.
+  - Minor fix to {cms_filepicker} plugin.
+  - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
+  - Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
+  - Increase the maxlength attribute for password input boxes in myaccount.
+  - Adds a StartsWith JavaScript shiv for IE11.
+  - Revert the protocol-less URI for root_url (more changes coming for 2.3).
+  - Get rid of the smart_url config option.
+  - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greater than 100.
+  - More fixes to mact preprocessing if {content} was in the top of the template.
+  - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
+  - adds new cms_entities_array function in misc to convert an array recursively to values.
+  - Fixes transposed arguments in UserOperations::AddMemberGroup().
+  - Better detection of duplicate content blocks.
+  - Revert template_stack change to Smarty_CMS from 2.2.2.
+  - Improvements to HookManager.
+
+CmsJobManager v0.1.1
+  - Optimization of audit logging.
+  - Change connection timeout to 1 second.
+  - Change processing to be a little more friendly to some environments wrt. content-size header.
+  - Prevent processing from the CLI when root_url is calculated.
+
+MicroTiny v2.2.1
+  - Minor fix for filepicker plugin.
+
+News v2.51.3
+  - For security, no longer urldecode the detailtemplate parameter in detail view.
+    This may have some implications for people that are specifying the detailtemplate parameter (with a template with special characters) from within a WYSIWYG (which is not recommended behavior).
+  - Convert title and dropdown options and text fields to entities before display.
+
+ModuleManager v2.1.2
+  - Now sort modules in the installed tab a bit better.
+  - Now handle module 'not available' a bit better.
+
+FileManager v1.6.4
+  - Add a different icon for navigating up one level.
+  - No longer allow uploading any php (or derivative) file.
+  - No longer allow renaming any file to have a .php extension (or a derivative).
+  - Fixes an issue when improper/invalid values for root path and uploads path are manually specified in the config.php
+
+FilePicker v1.0.1
+  - No longer allow overriding the filepicker type on the URL.
+  - No longer allow uploading any .php files.
+
+CMSContentmanager v1.1.6
+  - Now double check that the 'default parent' for new pages actually exists.
+
+Navigator v1.0.8
+  - Minor english documentation correction.
+
+Installation Assistant v1.3.3
+  - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
+  - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception).
+
+
+Version 2.2.2 - Hearts Content
+----------------------------------
+Core - General
+ - Additional security improvement in CMSModule::GetTemplateResource().
+ - Now Smarty_CMS is no longer derived from SmartyBC (uses our own wrapper class) which prevents all occurrences of {php} tags from running.
+ - Adds an admin directory .htaccess file to explicitly disable browser caching of any resources.
+ - Fixes a relative path vulnerability in module_file_tpl resource.
+ - Fixes a path building issue in CmsModuleInfo.
+ - Fixes to parsing and generating moduleinfo.ini files.
+ - Disallow any resource specifications with a * or a /.
+     * This also means that no file resource specifications with path information will be permitted.
+ - Move mact preprocessing to AFTER the template_top has been processed. So order of processing (for module actions on the frontend is)
+     a:  template top
+     b:  mact preprocessing (if enabled, which is the default)
+     c:  template body
+     d:  template head
+ - Fix sureGetNodeByAlias to check if the input is numeric. If it is, assume that it is a page id, not an alias.
+ - Fix alias generation in the ContentBase class to check if the input page title is numeric... If it is, prepend a character to it to ensure that integer casting will return 0.
+ - Fix listtags to show tags using smarty_nocache_ function name prefix.
+ - Improvements to the {form_start} plugin.
+ - Fix silly, old issue in recursive_delete function.
+ - Clean up more parameters from the content tag before passing to module action.
+ - Fix local file inclusion vulnerability in listtags.
+ - Now call get_userid() in debug_to_log instead of check_login()
+
+AdminSearch v1.0.3
+ - Now search the metadata field of content pages.
+ - Fixes for single quotes in search results.
+
+DesignManager v1.1.3
+ - Set title attribute tags for edit/create template, stylesheet, design.
+ - Remove debug statements.
+
+MicroTiny v2.2
+ - Upgrade tinymce to v4.6.x.
+ - Adds new tabfocus and hr plugins.
+
+News v2.51.2
+ - Fixes so that all cancel buttons work properly on new News articles.
+
+Navigator v1.0.7
+ - Adds a silly __get() method to the NavigatorNode class squash some notifications in the error logs.
+
+ModuleManager v2.1.1
+ - Now handlle remote module installs upgrades, and activates via a 2 request process to allow new module versions to be read into memory.
+
+Installation Assistant v1.3.2
+ - Correction to assets warning
+
+Search v1.51.2
+ - Now do an html entity decode on all content added to AddWords.
+
+
+Version 2.2.1 - Hearts Desire
+----------------------------------
+Core - General
+ - Improve the Smarty plugin loading to handle non-cachable plugins in the /assets/plugins and /plugins directories.
+ - Fixes to transaction functions in database abstraction library.
+ - Fix CMSModule::GetTemplateResource to no longer accept eval or string resources.
+ - Fix CMSSmartySecurityPolicy so that debug_to_log is no longer an allowed function.
+
+   Many thanks to Daniel Le Gall from SCRT SA, Switzerland for reporting the vulnerabilities.
+
+Installation Assistant v1.3.1
+ - On upgrade to 2.2.1 move all files from /plugins to /assets/plugins (they should only be third party plugins at this point).
+ - On upgrade chmod the config.php to 444.
+
+MicroTiny v2.1.1
+ - Fix temporary JS call URL.
+
+News v2.51.1
+ - Fix frontend pagination.
+
+
+Version 2.2 - Canada
+----------------------------------
+Core - General
+  - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
+    NOTE:  On systems using archaic filesystems such as FAT and FAT32 CMSMS may no longer operate.
+  - cms_filecache_driver now caches for 2 hours by default and has an improved cooperative locking test
+  - Implement new database abstraction library that is compatible with (functionality wise) but improves upon adodb-lite.
+  - Implement protocol-less URL's in the config.
+  - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
+  - Minor fix to the {form_start} plugin.
+  - Minor change to the {admin_icon} plugin (default image class).
+  - Cache more items that are queried from the database, to reduce mysql load.
+  - Minor change to tree operations functionality to reduce memory usage.
+  - Fixed problem with order of content blocks when using {content_module} stuff.
+  - Adds get_usage_string and the concept of a type assistant to template types.
+  - Minor change to auto-alias determination routine.
+  - Detect module_custom enhancements in the CmsModuleInfo stuff.
+  - Refactor Admin authentication.
+  - More fixes to the cms_url class.
+  - Optimize the include.php file.
+  - Adds built-in asynchronous task processing system.
+  - Adds the ability to reduce redundant mentions in the Admin log (runs asynchronously).
+  - Refactor the Admin log page to allow for better filtering and pagination.
+  - Admin log now uses cms_date_format and cleans output.
+  - Notification functions in the CmsAdminThemeBase function are now just stubs and do nothing. Will be removed at a later date.
+  - Removed the GetNotificationOutput() method from the module API.
+  - Adds classes for creating Alerts. This is much more advanced than the old Notifications system.
+  - Minor accessibility tweaks to the OneEleven theme.
+  - Fix numerous minor problems with the OneEleven theme.
+  - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
+  - Refactor the OneEleven Admin theme to display an alert icon in the shortcut bar, instead of in the navigation area.
+  - Fixed sidenav in the one OneEleven theme now works properly. If sidenav is larger than viewport then don't use fixed... easy.
+  - In OneEleven Now revert to small sidebar navigation (still floating) if screen is too narrow.
+  - Removed notification settings from MyAccount and Global Settings.
+  - Removed pseudocron granularity preferences.
+  - cms_alert() and the new cms_confirm() JavaScript functions now return promises.
+  - Revises much code to use cms_alert and cms_confirm() instead of the standard, but browser specific functions.
+  - Fixes to the cache clearing methodology.
+  - No longer check for duplicate content blocks in templates... NEEDS TESTING
+  - New core events: ContentPreRender, LostPassword, LostPasswordReset, StylesheetPostRender.
+  - Fix problem with the default parameter to the {content} tag.
+  - Fix problem with the use_smartycache thing in system information.
+  - Fix notice in useroperations.
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+  - Fixes minor notice in user operations.
+  - Fixes for namespaced modules.
+  - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
+  - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
+  - More fixes to cms_url class.
+  - Numerous minor optimizations.
+  - Add to content types the ability to set basic attributes for properties from within the page type definition.
+  - Fixes problems with pagelink and link content types not being properly editable by additional editors.
+  - Adds more type and content cleaning into the content types FillParams method(s).
+  - Pass an explicit cacheid in to createtemplate in index.php.
+  - Fix an error message in the autorefresh JavaScript class.
+  - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
+  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
+  - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax highlighter and WYSIWYG modules. i.e: {content data-foo="bar"}.
+  - Refactoring of the Admin login code to be cleaner, more efficient, more secure.
+  - No longer allow any modules to auto-upgrade on frontend requests.
+  - Fix problem with cms_filecache_driver::clear().
+  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks.
+  - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook).
+  - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the Admin theme class.
+  - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php.
+  - now use hooks so that loaded modules can now add text to the head area of any Admin page output.
+  - Change the help for the basic attributes.
+  - Adds new 'switch user' functionality for members of the Admin group.
+  - Re-factor the content page selector ... now supports two modes (one for a simple list, and the previous dynamic one that is faster for large sites)
+    the simple list mode is used for users with limited edit capabilities on pages.
+  - Adds a new Smarty plugin {page_selector} to the Admin lib.
+  - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
+  - Content pages now have the ability to control whether or not the page wants any more children.
+  - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type.
+  - Permissions are now grouped logically by module/originator in ChangeGroupPermissions.
+  - Now use HTTPS for the latest version check.
+  - Adds the public_cache_url config entry,  and make sure that the css_url uses that by default.
+  - Adds many core hooks.
+  - Enhance the {page_image} plugin to optionally output a full HTML img tag if there is a value for the respective property.
+  - Improve the {content_image} plugin to output nothing if there is no value for the property, and to output any non-internal arguments as attributes to the HTML img tag.
+  - Upgrade to an un-modified version of smarty v3.1.31.
+  - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  Upgrading should preserve any custom plugins in the /plugins directory.
+  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker).
+  - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL.
+  - Minor improvements to the asynchronous behaviour of the locking functionality.
+  - #11295 - Cannot change the name of a UDT, always creates new UDT.
+  - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
+  - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
+  - #11133 - is_email() fails on domain check.
+  - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
+  - #11287 - Password reset form's password fields have different lengths.
+  - Fix issue with module actions if 'content_en' block name was given on the default content block.
+  - Better security when saving content pages.  Most primary fields are cast to their appropriate data type (int, bool, etc).  MenuText, and TitleAttribute can no longer contain html tags like <strong>foo</strong>.
+  - Fixes issue with entities in redirecting links
+  - The href/page argument to {cms_selflink} is now decoded before resolving to a page id.
+
+Navigator v1.0.5
+  - Minor optimizations.
+  - Now use pageid in calculations of cacheid.
+  - Now output template help to Navigator.
+
+Installation Assistant v1.3
+  - Only create dummy index.html files in subdirectories we created.
+  - Clear cache after step 9.
+  - Upgrade routine now asks for, and tests database credentials.
+  - Upgrade routine now rewrites the config.php file (but keeps a backup).
+  - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
+  - On installation, now insure that tmp/cache and tmp/templates_c directories are empty.
+  - Now displays if files are going to be skipped.
+  - Adds clear option for development purposes.
+  - No longer ask to save database password.
+  - On install now create the assets directory structure.
+  - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, admin/custom, etc. within it.
+  - When using the expanded installer allow changing the destination directory on step 1.
+  - Check for existing files in the installation directory for new installations.
+  - Added more notes to aide in diagnosing white screens
+  - Modify package .zip files so that extracted files will usually have 644 permission (depends on the unzip routine used).
+
+CmsJobManager
+  - New core module to handle queued asynchronous tasks.
+
+Content Manager
+  - Minor tweak to bulk delete pages.
+  - Minor fix to the active tab when changing a template or design.
+  - Now listen to the 'default parent page' user preference.
+  - Fix minor XSS problem in the Admin if some loser puts JavaScript into the title field or alias field or menu text field.
+  - Now allow filtering pages by owner, editor, template, or design.  Only for Administrators with Modify any page, or Manage all content permissions.
+  - Fix problems with auto-refresh being too fast for some operations.
+  - Now auto scroll to the first matched page in a find.
+  - Additional editors of a page cannot change the content type. Only owners, or users with the Manage all Content permissions.
+  - Fix a problem with the call to GetTabElements.
+
+DesignManager
+  - Move the designs tab of the main interface into third position.
+  - Implement sorting in edit design.
+  - Remove option menus (for now) from templates, stylesheets, and designs tab.
+  - Modify the template list functionality in edit-design to allow using keyboard control. Space or + to select an item on the left, and right arrow to move.
+  - Modify the edit-design functionality to allow clicking on an attached template or stylesheet to edit it.
+  - Generic templates now display a usage string.
+  - When creating a new template, associate the new template with the default design.
+  - Add reset buttons to the filter forms.
+  - No longer check for default content block in a template.
+  - Adds the ability to export a template to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing.
+  - Add bulk actions to allow importing and exporting multiple templates.
+  - In the template list, if a file exists for a template... display it in the filename column.
+  - Adds the ability to export a stylesheet to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/css directory corresponding to a stylesheet name, do not allow in-browser editing.
+  - Add bulk actions to allow importing and exporting multiple stylesheets.
+  - In the stylesheet list, if a file exists for a stylesheet display it in the filename column.
+
+News v2.51
+  - Minor fix to add category.
+  - Removes GetNotificationOutput method.
+  - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
+  - Add an option to never create alerts about draft News articles.
+  - Minor optimizations.
+  - Adds postdate as parameters in events.
+  - now output template help to Navigator.
+  - Adds new 'linked file' type field that allows selecting a file using the filepicker.
+  - Changes the default summary and detail templates to support the linked_file field type, and uses {thumbnail_url} and {file_url}.
+
+FileManager v1.6.3
+  - Move settings to it's own menu item under Site Admin.
+  - Fix minor problem with moving a directory.
+  - Minor fix to move file functionality.
+  - Adds OnFileDeleted event.
+  - Adds 'view raw file' icon in each viewable row.
+  - Minor formatting changes in file list.
+  - Now display clickable path entries for easier navigation.
+
+Search
+  - Convert to store all data using the InnoDB engine.
+  - Use transactions for the addwords and deletewords stuff for performance.
+  - Fix problem with query and record expiry.
+
+AdminSearch v1.0.3
+  - Fixes problem with use of 'Use Admin Search' permission.
+  - Now searches for matching strings within templates and stylesheets that are stored as files.
+  - Now listens to the HasSearchableContent metod when searching content pages.
+
+ModuleManager
+  - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
+  - Minor string changes.
+  - Improvements to error handling in the new versions tab.
+  - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
+  - Now don't allow disabling / uninstalling myself.
+  - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
+  - Now use HTTPS for requests to ModuleRepository.
+  - Trigger a hook before exporting a module to XML.
+
+MicroTiny v2.1
+  - New version of the tinymce wysiwyg editor.
+  - Adds a mailto plugin.
+  - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin.
+  - Enable the title attribute on the image plugin.
+  - Now uses PUBLIC_CACHE_LOCATION for cache files instead of hardcoding tmp/cache
+
+
+Version 2.1.6 - Spanish Wells
+----------------------------------
+Core - General
+  - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
+  - endswith is now an accepted function in Smarty templates (fixes typo in security policy).
+  - Fixes for CmsNlsOperations when using a language detector.
+  - Fixes warnings in useroperations.
+  - Fixes problem with cms_selflink dir='up' since 2013.
+  - Modifies the OneEleven theme to set the meta referrer attribute for security purposes.
+  - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie).
+  - Increase Admin users list limit.
+  - Reduce time limit for daily version check to 3 seconds.
+  - cleanValues in Admin log and List Content.
+  - Minor fix to the relative_time plugin.
+  - Admin menu item URLs can now be built from the remaining members of the object, if not specified.
+  - {content_image} and {content_module} now preserve order properly and support the priority attribute.
+
+  - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
+
+Content Manager v1.1.4
+  - Fix bulk set-non-cachable functionality.
+  - Fix a bug wrt content blocks and the adding flag.
+
+Installation Assistant v1.0.4
+  - Adds recommended check for ZipArchive.
+  - Improves method of determining a temp directory.
+
+ModuleManager v2.0.5
+  - Improves functionality if ModuleRepository is not available.
+
+News v2.50.6
+  - Minor fix to editing news articles from the Admin interface.
+
+
+Version 2.1.5 - High Rock
+----------------------------------
+Core - General
+  - Fix fatal error if an extcss stylesheet was placed in the Admin theme.
+  - Another minor fix to clearing cached files.
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+  - Fixes minor notice in user operations.
+  - Fixes for namespaced modules.
+  - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
+  - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
+  - More fixes to cms_url class.
+  - Improve the way page aliases are munged when they are supplied.
+  - Improve the error generated when a page alias cannot be generated.
+  - Minor fixes to the form_start plugin.
+  - Minor fixes to generation of moduleinfo.ini.
+  - Fix an error message in the autorefresh JavaScript class.
+  - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
+  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
+
+  - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
+  - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
+
+Content Manager
+  - Improve error handling in Edit Content.
+  - Fix a problem with the call to GetTabElements.
+
+Design Manager
+  - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
+
+Module Manager
+  - Improve the way modules with dependencies are installed and upgraded. (Got rid of the queue stuff).
+
+AdminSearch
+  - Use 'Manage Stylesheets' permission, not 'Modify Stylesheets' when searching stylesheets.
+
+Phar Installer
+  - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
+
+
+
+Version 2.1.4 - Freetown
+----------------------------------
+Core - General
+  - Fix to the clear_cached_file() method which should fix problems with module installation.
+  - Minor tweak to distributed sample htaccess.txt file.
+
+Phar Installer
+  - Fixes issues with respect to hanging on step 7 when suhosin PHP addon was installed.
+  - Minor PHP7 Fixes.
+
+Module Manager
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+
+
+Version 2.1.3 - Black Point
+----------------------------------
+Core - General
+  - Security fix to prevent HTTP_HOST attacks. Many thanks to I-TRACING (www.i-tracing.com) for reporting it!!
+  - Remove stub .htaccess files from subdirectories.
+  - Update the included sample htaccess.txt file for security.
+  - Fix for endless loop when calculating a page alias in utf-8 environments.
+  - Fix for endless loop when calculating a page alias and a page name/title ended with -
+  - Fixes a notice on the login page.
+  - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid.
+  - Fix error condition if there were no default default design, or default page template.
+  - Fix problem with system verification.
+
+  - #10825 - Admin-account settings don't remember startpage if you set one
+  - #10874 - When creating a page and the title has specific characters, CMSMS stops responding
+  - #10910 - content and content_module order incorrect Admin page
+  - #10911 - 'Use Admin Search' permission not being used in 2.1.2
+  - #10921 - Content Field to Display in Name Column not used
+
+AdminSearch v1.0.1
+  - Minor fix to permissions checks.
+
+Navigator v1.0.3
+  - Improved exception handling on install
+
+News v2.50.5
+  - Fix error condition if no results were returned.
+
+Installation Assistant v1.0.3.1
+  - Tweaks to README files.
+  - Improved error handling in some circumstances.
+  - Fix some PHP7 issues.
+
+FileManager
+  - #10871 - Filemanager moving folder
+
+
+Version 2.1.2 - Andros Town
+----------------------------------
+Core - General
+- Minor fix to missing language string stuff
+- Fixes to home page preferences
+- API documentation fixes (minor)
+- Fixes for ajax_content (the Ajax routine behind the parent selector in edit content) to handle ordering inconsistencies
+- Remove die statement in is_email
+- Minor fix to the relative_time modifier
+- Upgrade CMSMailer to 6.2.14
+- Now do a check for E_ALL in the system info
+
+News v2.50.4
+- Now all field definitions can be deleted
+- Minor fix to default action if no results were returned...
+
+ModuleManager v2.0.2
+- Revamp module dependency calculations when installing a module
+- Minor fix for some notices in install and upgrade modules
+- Minor typo fixes
+- Minor fixes for PHP7
+
+MenuManager  v1.50.2
+- make sure that uninstall cleans up properly
+
+MicroTiny v2.0.3
+- minor template fix
+- fixes for stylesheet overrides
+
+
+Version 2.1.1 - Nicholls Town
+----------------------------------
+Core - General
+- Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag
+- Fix minor problem with checksum verification
+- Fix to the cms_cache_handler class
+- Minor fix to SetAllPageHierarchies()
+- Correct location where session was started in frontend displays
+- Fix the default option for {content_image}
+- Modify the locker to use a beacon if supported, when unlocking
+- Fix missing permissions when a 1.12 site was upgraded (installation assistant)
+
+CMSContentmanager v1.1
+- Minor template changes in edit content wrt. locking
+- Adds ability to clear content locks (Admins can clear all locks, regular users can only clear their locks)
+- Enhancements to the action to bulk set designs to show only page templates by default, but to optionally show more
+
+DesignManager v1.1.1
+- Minor template changes in edit content wrt. locking
+- Adds ability to clear template and CSS locks (Admins can clear all locks, regular users can only clear their locks)
+
+
+Version 2.1 - Bahamas
+----------------------------------
+Core - General
+- Minor performance tweaks to sample htaccess.txt
+- Minor fix to the ProcessTemplateFromDatabase module API method.
+- Improvements and re-factor the way headers are sent wrt caching
+- Add a new method to the ModuleOperations class to allow a module to be within a namespace.
+- Enhances the Group class.
+- Enhancements and fixes to the cms_url class.
+- Modified the $mod->smarty reference to be smarter... it is now deprecated.
+- Fixes issue with https requests (#10697)
+- Modifies The CmsLayoutTemplate class and CmsLayoutTemplateQuery to allow filtering on listable or non listable
+  or setting a template as listable (default) or non listable
+- Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
+- Fixes to the cloning of templates in CmsLayoutTemplate
+- Fixes problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
+- Adds the unloadCancel handler to the lockManager jQuery plugin.
+- Moves version.php and include.php inside the lib directory so that they are easier to protect from unwanted direct access.
+- Fixes to page alias tests when manually entering a page alias.
+- Missing language strings are no longer output to Admin log, but to the debug log.
+- Requests for modules that are not installed/enabled, or for invalid actions will now result in 404 errors.
+- Fixed problem where restricted content editors could implicitly change the page alias.
+- Improvements to the system information page, particularly the bbcode output.
+- cms_init_editor, form_start, and cms_action_url plugins are no longer cachable.
+- Adds the 'adminonly' option to the {content}, {content_image}, and {content_module} tags to allow only members of the 'Admin' group to manipulate the values of that block.
+- Add a trivial check to the sitedown message to make sure that it is not empty.
+- Minor fixes for PHP 7
+
+MicroTiny v2.0.2
+- Now add page hierarchy to autocomplete text when using the linker.
+- Now use $smarty->CreateTemplate for clarity when compling the config template
+- Now explicitly assign urls so that they do not get caced by smarty.
+- Slightly tweak the default HTML content in the example tab.
+- Updated tinymce to the latest 4.2.7 version, included the 'paste' plugin, and turned on 'paste_as_text'.
+- Added the ability to enable the table plugin, now distribute the table plugin
+
+CMSContentManager v1.0.2
+- Fix problem with pagedefault metadata.
+- Fixes for handling no listable templates for a design
+- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+- Minor fix to copycontent
+
+DesignManager v1.1
+- Adds ability to toggle the listability of a template.
+- Fixes problems with lost changes if there is a syntax error in the template.
+- More work with locking.  With only one exception all locking and unlocking is initiated via JavaScript.
+
+News v2.50.3
+- Fixes minor issue with pagination in News Admin console.
+- Fix errors in the default form template.
+- Fixed URL to long issues on redirection after adding/editing article.
+
+Search v1.50.2
+- Minor PHP7 fixes.
+
+ModuleManager 2.0.1
+- Minor fix to which modules could be uninstalled and deactivated.
+
+
+Version 2.0.1.1 - Adelaide
+----------------------------------
+Fix to the $this->smarty magic method in the module class to resolve to the action template or the global Smarty.
+
+
+Version 2.0.1 - Adelaide
+----------------------------------
+Core - General
+- Improved optimization in ContentOperations::SetAllHierarchyPositions.
+- Fixed return type of ContentOperations::GetPageIdFromAlias().
+- Help for the {cms_html_options} plugin.
+- Change the default page template to use {Navigator}.
+- Explicitly force $smarty->fetch() to create a new template, and therefore a new scope. Keep track of scopes in a stack.
+- Change prototype to CMSModule::DoActionBase to pass in the current template object.
+- SITENAME is now assigned as a Smarty global.
+  (fixes some variable scope issues)
+- Fix problem with changing content types.
+- Fix problem with CmsLayoutTemplateQuery wrt the editable option, that generated an SQL error.
+  (resolves problems where people have additional editor access to templates, but no other design manager permissions).
+- Fix minor JavaScript errors in plugin (error checking).
+- Fix problems where If assign was passed to a {content} tag, do not pass it to the module on a mact request.
+- Implements the completely forgotten 403 exception stuff and the IsPermitted content method.
+- Improve the cmsms_dirtyform jQuery plugin to support the unload handler and an onUnload callback.
+- Fixed the jQuery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous Ajax.
+- Adds a globally available cms_busy() JavaScript function for the Admin.
+- Fix problem with html entitites in email addresses in user settings.
+- Fix problem with {content cssname=string} and quotes.
+- Changed cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
+- Minor fix to {form_start} when not used in a module.
+- Improved error handling for cms_stylesheet.  Now will generate a message in the Admin log, and an html comment on error.
+
+CMSContentManager v1.0.1
+- Fixes for changing content types.
+- Adds a title for some contextual help if a template is not available for a content item.
+- Clear any locks if an exception occurred while submitting a content item.
+- Improvements to error handling with apply and preview.
+- Content list now refreshes every 30 seconds to display up-to-date lock information.
+
+DesignManager v1.0.1
+- Clear the type_default flag when copying a template.
+- Clear any locks if an exception occurred while submitting a template.
+- Clear any locks if an exception occurred while submitting a stylesheet.
+- Template and stylesheet lists now refresh every 30 seconds to display up-to-date lock information.
+- Fixes for design exporting templates with protocol-less URLs in them.
+
+MenuManager v1.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
+
+Navigator v1.0.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
+- Minor change to the help ($node->children_exist)
+
+Search v1.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
+
+News v2.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
+- Fix problem with custom fields not being assigned in fesubmit.
+- Fix minor problem with html entities in the detail template parameter.
+
+FileManager v1.5.1
+- Fix minor problem with Smarty scope in the drop zone.
+
+
+Version 2.0 - Australia
+----------------------------------
++++ Initial Release +++
