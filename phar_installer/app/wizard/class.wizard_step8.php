@@ -224,7 +224,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         try {
             // ready to do the upgrading now (in a loop)
-            // only perform upgrades for the versions known by the installer that are greater than what is instaled.
+            // only perform upgrades for the versions known by the installer that are greater than what is installed.
             $current_version = $version_info['version'];
             foreach( $versions as $ver ) {
                 $fn = "$dir/$ver/upgrade.php";

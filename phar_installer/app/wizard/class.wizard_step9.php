@@ -54,6 +54,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 # now we handle optional modules.
                 ## TODO add a language string here. self::verbose(\__appbase\lang('install_optional_module', $name));
                 self::verbose(\__appbase\lang('install_module', $name));
+                $modops->QueueForInstall($name);
                 $module = $modops->get_module_instance($name, '', TRUE);
             }
         }
@@ -254,10 +255,11 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             include_once($destdir.'/lib/include.php');
         }
         else {
-            // do not need to test /include.php as if it still exists, it is bad... and 
+            // do not need to test /include.php as if it still exists, it is bad...
             // and it should have been deleted by now.
             throw new \RuntimeException("Could not find $destdir/lib/include.php");
         }
+        
         $config = \cms_config::get_instance();
 
         // we do this here, because the config.php class may not set the define when in an installer.

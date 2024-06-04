@@ -91,7 +91,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                 if( !\is_dir($dir) ) return TRUE; // pass on dir not existing yet
                 $files = \glob($dir . '/*' );
                 if( !\count($files) ) return TRUE;    // no files yet.
-                if(\count($files) > 1 ) return FALSE; // morre than one file
+                if(\count($files) > 1 ) return FALSE; // more than one file
                 // trivial check for index.html
                 $bn = \strtolower(\basename($files[0]));
                 if( \fnmatch('index.htm*', $bn) ) return TRUE;
