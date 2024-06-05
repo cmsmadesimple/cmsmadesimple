@@ -207,14 +207,16 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( !$destdir ) throw new \RuntimeException(\__appbase\lang('error_internal', 901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
         
-        if(!\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
+        if(!@\mkdir($concurrentDirectory = $destdir . '/tmp/cache', 0777, TRUE) && !\is_dir($concurrentDirectory))
         {
-            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+          #throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+          $this->message(\__appbase\lang('info_directory_not_created', $concurrentDirectory));
         }
         
-        if(!mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !is_dir($concurrentDirectory))
+        if(!@\mkdir($concurrentDirectory = $destdir . '/tmp/templates_c', 0777, TRUE) && !is_dir($concurrentDirectory))
         {
-            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+          #throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+          $this->message(\__appbase\lang('info_directory_not_created', $concurrentDirectory));
         }
 
         // write protect config.php

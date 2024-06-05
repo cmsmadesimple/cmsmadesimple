@@ -176,6 +176,7 @@ $lang['info_pwd_writable'] = 'This application needs write permission to the cur
 $lang['info_queryvar'] = 'The query variable is used internally by CMSMS to identify the page requested. In most circumstances you should not need to adjust this.';
 $lang['info_sitename'] = 'The website name is used in default templates as part of the title. Please enter a human readable name for the website';
 $lang['info_timezone'] = 'The timezone information is needed for time calculations and time/date displays. Please select the server timezone';
+$lang['info_directory_not_created'] = 'Directory "%s" was not created';
 $lang['ini_set'] = 'Testing if we can change INI settings';
 $lang['install'] = 'Install';
 $lang['install_attachstylesheets'] = 'Attach stylesheets to themes';
