@@ -84,9 +84,12 @@
             <div class="footer-info">
                 <a href="https://forum.cmsmadesimple.org" target="_blank">{'title_forum'|tr}</a> &bull; <a href="https://docs.cmsmadesimple.org" target="_blank">{'title_docs'|tr}</a> &bull; <a href="http://apidoc.cmsmadesimple.org" target="_blank">{'title_api_docs'|tr}</a>
             </div>
-            <small>
+            <div>
+                <small>
                 &copy; Copyright {$smarty.now|localedate_format:'Y'} <a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a>. All rights reserved{if isset($installer_version)} - {'installer_ver'|tr}:&nbsp;{$installer_version}{/if}{if isset($build_time)} - {'build_date'|tr}:&nbsp;{$build_time|localedate_format:'j %h Y H:i:s'}{/if}
-            </small>
+                </small>
+            </div>
+            <div><small>{if isset($build_number)}{'build_reference'|tr}: {$build_number}{/if}</small> </div>
         </footer>
     {block name='javascript'}
     <script>

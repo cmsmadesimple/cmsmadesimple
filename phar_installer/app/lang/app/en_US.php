@@ -10,6 +10,7 @@ $lang['available_languages'] = 'Available languages';
 
 # B
 $lang['build_date'] = 'Build Date';
+$lang['build_reference'] = 'Build';
 
 # C
 $lang['changelog_uc'] = 'CHANGELOG';

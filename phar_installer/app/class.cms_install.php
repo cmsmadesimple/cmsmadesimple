@@ -77,6 +77,7 @@ class cms_install extends \__appbase\app
         $build = null;
         if( \file_exists($fn) ) $build = \parse_ini_file($fn);
         if( isset($build['build_time']) ) $smarty->assign('build_time',$build['build_time']);
+        if( isset($build['build_number']) ) $smarty->assign('build_number',$build['build_number']);
 
         // handle debug mode
         if( $config['debug'] ) {

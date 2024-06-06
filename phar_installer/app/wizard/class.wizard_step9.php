@@ -145,7 +145,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         }
         
         // write protect config.php
-        @\chmod("$destdir/config.php", 0444);
+        #@\chmod("$destdir/config.php", 0444);
+        @\chmod("$destdir/config.php", \octdec('0444') );
 
         $adminacct = $this->get_wizard()->get_data('adminaccount');
         $root_url = $app->get_root_url();
@@ -220,7 +221,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         }
 
         // write protect config.php
-        @\chmod("$destdir/config.php", 0444);
+        #@\chmod("$destdir/config.php", 0444);
+        @\chmod("$destdir/config.php", \octdec('0444') );
 
         // clear the cache
         $this->connect_to_cmsms();
