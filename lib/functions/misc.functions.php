@@ -1252,8 +1252,11 @@ function setup_session($cachable = FALSE)
     }
     if( $cachable ) $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
     if( !$cachable ) {
-        // admin pages can't be cached... period, at all.. never.
-        @session_cache_limiter('nocache');
+      // Admin pages can't be cached... period, at all.. never.
+      @session_cache_limiter('nocache');
+      header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+      header("Pragma: no-cache"); // HTTP 1.0.
+      header("Expires: 0"); // Proxies.
     }
     else {
         // frontend request
