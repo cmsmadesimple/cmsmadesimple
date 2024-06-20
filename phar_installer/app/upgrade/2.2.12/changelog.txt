@@ -1,9 +1,0 @@
-Version 2.2.12 - Osoyoos
--------------------------------
-NOTICE: Due to the nature of the security issue fixed in FileManager after upgrading you should change your database password.
-
-Core - General
-  - Fix warning in cms_html_entity_decode
-
-FileManager v1.6.9.1
-  - Security fixes for view action.

@@ -1,3 +1,0 @@
-<?php
-die('not implemented');
-?>
