@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="{$lang|truncate:'2':''}" dir="{$lang_dir}">
   <head>
+	  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     {$thetitle=$pagetitle}
     {if $thetitle && $subtitle}{$thetitle="{$thetitle} - {$subtitle}"}{/if}
     {if $thetitle}{$thetitle="{$thetitle} - "}{/if}
