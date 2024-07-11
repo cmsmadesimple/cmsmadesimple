@@ -135,7 +135,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
 </ul>
 <p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
 <h3>Example:</h3>
-<pre><code>{cms_action_url module=News action=defaultadmin}</code><pre>
+<pre><code>{cms_action_url module=News action=defaultadmin}</code></pre>
 EOT;
 
 $lang['help_function_cms_admin_user'] = <<<EOT

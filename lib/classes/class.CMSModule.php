@@ -2212,12 +2212,12 @@ abstract class CMSModule
      * @param string $action The action that this form should do when the link is clicked
      * @param string $returnid The id to eventually return to when the module is finished it's task
      * @param string $contents The text that will have to be clicked to follow the link
-     * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
+     * @param string $params An array of params that should be included in the URL of the link.	 These should be in a $key=>$value format.
      * @param string $warn_message Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
      * @param bool $onlyhref A flag to determine if only the href section should be returned
      * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
      * @param string $addttext Any additional text that should be added into the tag when rendered
-     * @param bool $targetcontentonly A flag to determine if the link should target the default content are of the destination page.
+     * @param bool $targetcontentonly A flag to determine if the link should target the default content area of the destination page.
      * @param string $prettyurl An optional pretty url segment (related to the root of the website) for a pretty url.
      * @return string
      */
@@ -2235,12 +2235,12 @@ abstract class CMSModule
      * This method is called by the CreateLink methods when creating a link to a module action.
      *
      * @since 1.10
-     * @param string  $id The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
+     * @param string  $id The module action id (cntnt01 indicates that the default content block of the destination page should be used).
      * @param string  $action The module action name
      * @param int $returnid The destination page.
-     * @param hash    $params Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
-     * @param bool $inline Wether the target of the output link is the same tag on the same page.
-     * @param bool $targetcontentonly Wether the target of the output link targets the content area of the destination page.
+     * @param hash    $params Array of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
+     * @param bool $inline Whether the target of the output link is the same tag on the same page.
+     * @param bool $targetcontentonly Whether the target of the output link targets the content area of the destination page.
      * @param string  $prettyurl An optional url segment related to the root of the page for pretty url purposes.
      * @return string.
      */
@@ -2317,7 +2317,7 @@ abstract class CMSModule
      * @since 1.11
      * @author Robert Campbell
      * @param string $tab The tab name.  If empty, the current tab is used.
-     * @param mixed|null  $params An assoiciative array of params, or null
+     * @param mixed|null  $params An associative array of params, or null
      * @param string $action The action name (if not specified, defaultadmin is assumed)
      * @see CMSModule::SetCurrentTab
      */
