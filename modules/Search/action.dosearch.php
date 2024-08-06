@@ -201,7 +201,7 @@ if (isset($params['searchinput']) && $params['searchinput'] != '') {
                 }
                 else if (method_exists($moduleobj, 'SearchResult')) {
                     $searchresult = $moduleobj->SearchResult( $thepageid, $result->fields['content_id'], $result->fields['extra_attr']);
-                    if (count($searchresult) == 3) {
+                    if (is_countable($searchresult) && count($searchresult) == 3) {
                         $col->AddItem($searchresult[0], $searchresult[2], $searchresult[1],
                                       $result->fields['total_weight'], $modulename, $result->fields['content_id']);
                     }
