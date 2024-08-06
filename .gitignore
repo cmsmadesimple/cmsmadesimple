@@ -12,3 +12,6 @@ assets/resources/
 phar_installer/out/
 #non-en translations
 #ext/
+.htaccess
+php.ini
+.user.ini
