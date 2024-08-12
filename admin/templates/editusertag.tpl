@@ -52,21 +52,31 @@ $(document).ready(function(){
     data.push({ 'name': 'apply', 'value': 1 });
 
     $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
-      var x = $.parseJSON(resultdata);
-      var r = x.response;
-      var d = x.details;
-      var txt = '';
-      if( r == 'Success' ) {
-        txt = '<div class="pagemcontainer"><span class="close-warning"></span><p class="pagemessage">' + d + '<\/p><\/div>';
-        $('[name=cancel]').fadeOut();
-        $('[name=cancel]').attr('value','{lang('close')}');
-        $('[name=cancel]').button('option','label','{lang('close')}');
-        $('[name=cancel]').fadeIn();
-      }
-      else {
-        txt = '<div class="pageerrorcontainer"><ul class="pageerror">' + d + '<\/ul><\/div>';
-      }
-      $('#edit_userplugin_result').html( txt );
+        var x = $.parseJSON(resultdata);
+        var r = x.response;
+        var d = x.details;
+        var txt = '';
+        if( r == 'Success' ) {
+            txt = '<div class="message pagemcontainer"><span class="close-warning"></span><p class="pagemessage">' + d + '<\/p><\/div>';
+            $('[name=cancel]').fadeOut();
+            $('[name=cancel]').attr('value','{lang('close')}');
+            $('[name=cancel]').button('option','label','{lang('close')}');
+            $('[name=cancel]').fadeIn();
+        }
+        else {
+            txt = '<div class="message pageerrorcontainer"><ul class="pageerror">' + d + '<\/ul><\/div>';
+        }
+        $('#edit_userplugin_result').html( txt );
+
+        $('.message.pageerrorcontainer, .message.pagemcontainer').each(function() {
+            // borrowed from standard.js - all should be in a common file - in new admin theme
+            var message = $(this);
+            $(message).hide().slideDown(1000, function() {
+                window.setTimeout(function() {
+                    message.slideUp();
+                }, 10000);
+            });
+        });
     });
     return false;
   });
