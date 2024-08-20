@@ -43,7 +43,7 @@ class ContentAssistantFactory
 		$this->_content_obj = $content_obj;
 	}
 
-	public function &getEditContentAssistant()
+	public function getEditContentAssistant()
 	{
 		$classname = get_class($this->_content_obj);
 		$n = 0;
