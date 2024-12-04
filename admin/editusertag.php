@@ -104,7 +104,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     {
       $error[] = lang('invalidcode');
       //add error
-      $error[]   = '<span style="color:red">' . $e->getMessage() .'</span>';
+      $error[]   = '<span style="color:red"> ' . $e->getMessage() .'</span>';
       ob_get_clean();
     }
     finally
@@ -122,7 +122,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     }
   }
 
-    $details = lang('usertagupdated');
+    $details = lang('usertagupdated') . "<br />";
 
     if( !$error ) {
         if( isset($_POST['run']) ) {
