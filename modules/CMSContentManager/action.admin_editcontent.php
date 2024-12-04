@@ -79,7 +79,7 @@ try {
     //
     // load or create the initial content object
     //
-  if( $content_id === -1 && isset($_SESSION['__cms_copy_obj__']) ) {
+  if( $content_id < 1 && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $tmp = $_SESSION['__cms_copy_obj__'];
         $type_name = get_parameter_value($tmp,'type');
@@ -91,7 +91,7 @@ try {
         $content_type = $content_obj->Type();
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     }
-  else if( $content_id === 0 ) {
+  else if( $content_id < 1 ) {
         // creating a new content object
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
         $content_obj = $contentops->CreateNewContent($content_type);
@@ -154,7 +154,7 @@ catch( Exception $e ) {
 // or a POST
 //
 try {
-    if( !$isDefault && $content_id != -1 && $content_type != $content_obj->Type() ) {
+    if( !$isDefault && $content_id > 0 && $content_type != $content_obj->Type() ) {
         // content type changed. create a new content object, but preserve the id.
         $tmpobj = $contentops->CreateNewContent($content_type);
         $tmpobj->SetId($content_obj->Id());

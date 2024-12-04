@@ -127,7 +127,7 @@ if( isset($params['movedown']) ) {
 
 if( isset($params['delete']) ) {
     $res = $builder->delete_content($params['delete']);
-    if( $res ) $error = $res; // @todo Rolf: ???
+    if( $res ) $error = $res; // @todo JoMorg: ???
 }
 
 if( isset($params['multisubmit']) && isset($params['multiaction']) &&

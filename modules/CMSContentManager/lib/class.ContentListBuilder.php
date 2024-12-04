@@ -491,7 +491,11 @@ final class ContentListBuilder
       $content->Delete();
       audit($page_id,'Core','Deleted content page');
 
-      if( $childcount == 1 && $parent_id > -1 ) $this->collapse_section($parent_id);
+      if( $childcount == 1 && $parent_id > 0 )
+      {
+        $this->collapse_section($parent_id);
+      }
+      
       $this->collapse_section($page_id);
 
       $contentops->SetAllHierarchyPositions();
