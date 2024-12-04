@@ -95,7 +95,9 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     
     try
     {
-      eval($code);
+      # let's try to eval the code but not execute it
+      $tmp = 'return;' . $code;
+      eval($tmp);
       ob_get_clean();
     }
     catch(ParseError $e)
