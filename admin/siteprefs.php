@@ -356,7 +356,7 @@ if (isset($_POST['editsiteprefs'])) {
                 if( !startswith($key,$prefix) ) continue;
                 $key = substr($key,strlen($prefix));
 
-                $mailprefs[$key] = trim(filter_var($val,FILTER_SANITIZE_STRING));
+                $mailprefs[$key] = trim($sanitize_fn($val));
             }
             
             // validate
