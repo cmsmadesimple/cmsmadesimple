@@ -96,7 +96,7 @@ try {
                 $content = $child->getContent(FALSE);
                 if( !is_object($content) ) continue;
                 if( !$allow_all && !$content->Active() ) continue;
-                if( !$allow_all && !$content->HasUsableLink() ) continue;
+                if( !$allow_all && !$content->HasUsableLink() && !$content->HasChildren()) continue;
                 if( !$allowcurrent && $current == $content->Id() ) continue;
                 $rec = $content->ToData();
                 $rec['can_edit'] = $can_edit_any || $contentops->CheckPageAuthorship($ruid,$content->Id());
