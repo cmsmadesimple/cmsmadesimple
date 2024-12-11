@@ -1,3 +1,22 @@
+Version 2.2.22 - ???
+-------------------------------
+Core - General
+ - Fixed BR12711 - replace FILTER_SANITIZE_STRING in admin/siteprefs.php
+ - Fixed BR12701 - Internal Page Link fixed to now include section headers that have children
+ - Fixed BR12704 - User tag correctly updated message now automatically hides after 10 seconds
+ - Fixed BR12658 - removed redundant string & other language file tweaks
+ - Fixed BR12749 - Saving an UDT error fixed - saving the UDT parses the code but no longer executes
+ - in case the php headers fail to be correctly interpreted fallback on pure HTML
+ - make sure login form doesn't cache at all to aviod redirect loop on some server configurations
+ - re-enforce the no caching of backend pages for some server configurations and browsers
+
+Content Manager 1.1.14
+ - Default page deletion bug on copy fixed
+
+Search Module 1.53
+ - Fixed BR12727 - Search Module bug fix to remove error if no result found
+
+
 Version 2.2.21 - Sherbrooke
 -------------------------------
 
