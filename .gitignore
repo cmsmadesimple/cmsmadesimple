@@ -2,16 +2,117 @@
 *.bak
 \#*\#
 tmp/
-#.htaccess
+#
 config.php
 index.html
 moduleinfo.ini
 MANIFEST*
+#CORE only cares for English language files
+admin/lang/*
+!admin/lang/en_US.pphp
+
+#CORE has one theme for the moment OneEleven
+admin/themes/*
+!admin/themes/OneEleven/
+!admin/themes/OneEleven/**
+
+#Assets are not in the repo
+assets/
+
+#Modules maintained in CORE are tracked in the repo
+modules/*
+
+!modules/AdminSearch
+!modules/AdminSearch/**
+
+!modules/CMSContentManager/
+!modules/CMSContentManager/**
+
+!modules/CmsJobManager/
+!modules/CmsJobManager/**
+
+!modules/CMSMailer/
+!modules/CMSMailer/**
+
+!modules/DesignManager/
+!modules/DesignManager/**
+
+!modules/FileManager/
+!modules/FileManager/**
+
+!modules/FilePicker/
+!modules/FilePicker/**
+
+!modules/MenuManager/
+!modules/MenuManager/**
+
+!modules/MicroTiny/
+!modules/MicroTiny/**
+
+!modules/ModuleManager/
+!modules/ModuleManager/**
+
+!modules/Navigator/
+!modules/Navigator/**
+
+!modules/News/
+!modules/News/**
+
+!modules/Search/
+!modules/Search/**
+
+!modules/UserGuide/
+!modules/UserGuide/**
+
+
+#uploads are limited to the minimum
 uploads/
-assets/resources/
-phar_installer/out/
+
+!uploads/images/index.html
+!uploads/images/logo1.gif
+!uploads/images/thumb_logo1.gif
+
+!uploads/NCleanBlue/
+!uploads/NCleanBlue/**
+
+!uploads/ngrey/
+!uploads/ngrey/**
+
+!uploads/simplex/
+!uploads/simplex/**
+
+!uploads/index.html
+
+
+
+#INstaller is not here but just in case
+phar_installer/
 #non-en translations
 #ext/
 .htaccess
 php.ini
 .user.ini
+#Environment specific files
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+
+# eclipse
+.project
+.settings
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Jetbrains
+/.idea
+
+# Vscode
+.vscode/
+
