@@ -98,6 +98,7 @@ If we have missed anybody please contact us and we will add your name for future
 - Aire Libre (Mathieu M [DOT] ) -- contact [AT] airelibre [DOT] fr
 - Farhad Pezeshki -- farhadrm [AT] hotmail [DOT] com
 - Alex -- html5sf [AT] gmail [DOT] com
+- Kim Birkeland Skorgenes -- kimskorgenes [AT] hotmail [DOT] com
 
 Past Translators:
 Translators are automatic removed from list if not active two years before release of version.  
