@@ -22,49 +22,49 @@
 abstract class Smarty_Internal_TemplateCompilerBase
 {
     /**
-     * compile tag objects cache
+     * Compile tag objects cache.
      *
      * @var array
      */
     public static $_tag_objects = array();
 
     /**
-     * counter for prefix variable number
+     * Counter for prefix variable number.
      *
      * @var int
      */
     public static $prefixVariableNumber = 0;
 
     /**
-     * Smarty object
+     * Smarty object instance.
      *
      * @var Smarty
      */
     public $smarty = null;
 
     /**
-     * Parser object
+     * Parser object instance.
      *
      * @var Smarty_Internal_Templateparser
      */
     public $parser = null;
 
     /**
-     * hash for nocache sections
+     * Cache for nocache sections hash.
      *
      * @var mixed
      */
     public $nocache_hash = null;
 
     /**
-     * suppress generation of nocache code
+     * Suppress generation of nocache code.
      *
      * @var bool
      */
     public $suppressNocacheProcessing = false;
 
     /**
-     * caching enabled (copied from template object)
+     * Caching enabled status (copied from template object).
      *
      * @var int
      */
@@ -363,15 +363,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
     public function __construct(Smarty $smarty)
     {
         $this->smarty = $smarty;
-        $this->nocache_hash = str_replace(
-            array(
-                '.',
-                ','
-            ),
-            '_',
-            uniqid(mt_rand(), true)
-        );
-    }
+        $this->nocache_hash = str_replace(['.', ','], '_', uniqid(mt_rand(), true));
+     }
 
     /**
      * Method to compile a Smarty template
@@ -380,9 +373,12 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param bool                                      $nocache  true is shall be compiled in nocache mode
      * @param null|Smarty_Internal_TemplateCompilerBase $parent_compiler
      *
-     * @return bool true if compiling succeeded, false if it failed
-     * @throws \Exception
-     */
+     * @param Smarty_Internal_Template $template Template object to compile.
+     * @param bool $nocache Flag for nocache compilation.
+     * @param Smarty_Internal_TemplateCompilerBase|null $parent_compiler Parent compiler instance.
+     * @return bool|string True if compiling succeeded, false otherwise.
+     * @throws Exception
+    */
     public function compileTemplate(
         Smarty_Internal_Template $template,
         $nocache = null,
@@ -539,6 +535,9 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param array  $args      array with tag attributes
      * @param array  $parameter array with compilation parameter
      *
+     * @param string $name Function name.
+     * @param array $parameter Parameters for the function.
+     * @return string Compiled PHP function call.
      * @throws SmartyCompilerException
      * @throws SmartyException
      * @return string compiled code
@@ -577,87 +576,69 @@ abstract class Smarty_Internal_TemplateCompilerBase
         return '$_smarty_tpl->tpl_vars[' . $variable . ']->value';
     }
 
-    /**
-     * compile config variable
-     *
-     * @param string $variable
-     *
-     * @return string
-     */
-    public function compileConfigVariable($variable)
-    {
-        // return '$_smarty_tpl->config_vars[' . $variable . ']';
-        return '$_smarty_tpl->smarty->ext->configLoad->_getConfigVariable($_smarty_tpl, ' . $variable . ')';
-    }
+/**
+ * Compile PHP function call
+ *
+ * @param string $name
+ * @param array  $parameter
+ *
+ * @return string
+ * @throws \SmartyCompilerException
+ */
+public function compilePHPFunctionCall($name, $parameter)
+{
+    if (!$this->smarty->security_policy || $this->smarty->security_policy->isTrustedPhpFunction($name, $this)) {
+        if (strcasecmp($name, 'isset') === 0 || strcasecmp($name, 'empty') === 0
+            || strcasecmp($name, 'array') === 0 || is_callable($name)
+        ) {
+            $func_name = smarty_strtolower_ascii($name);
 
-    /**
-     * compile PHP function call
-     *
-     * @param string $name
-     * @param array  $parameter
-     *
-     * @return string
-     * @throws \SmartyCompilerException
-     */
-    public function compilePHPFunctionCall($name, $parameter)
-    {
-        if (!$this->smarty->security_policy || $this->smarty->security_policy->isTrustedPhpFunction($name, $this)) {
-            if (strcasecmp($name, 'isset') === 0 || strcasecmp($name, 'empty') === 0
-                || strcasecmp($name, 'array') === 0 || is_callable($name)
-            ) {
-                $func_name = smarty_strtolower_ascii($name);
+            if ($func_name === 'isset') {
+                if (!isset($parameter) || empty($parameter)) { 
+                    $this->trigger_template_error('Illegal number of parameter in "isset()"');
+                }
 
-                if ($func_name === 'isset') {
-                    if (count($parameter) === 0) {
-                        $this->trigger_template_error('Illegal number of parameter in "isset()"');
-                    }
+                $pa = array();
+                foreach ($parameter as $p) {
+                    $pa[] = $this->syntaxMatchesVariable($p) ? 'isset(' . $p . ')' : '(' . $p . ' !== null )';
+                }
+                return '(' . implode(' && ', $pa) . ')';
+            } elseif (in_array($func_name, ['empty', 'reset', 'current', 'end', 'prev', 'next'])) {
+                if (!isset($parameter[0])) {
+                    $this->trigger_template_error("Illegal number of parameters in '{$func_name}'");
+                }
 
-                    $pa = array();
-                    foreach ($parameter as $p) {
-                        $pa[] = $this->syntaxMatchesVariable($p) ? 'isset(' . $p . ')' : '(' . $p . ' !== null )';
-                    }
-                    return '(' . implode(' && ', $pa) . ')';
-
-                } elseif (in_array(
-                    $func_name,
-                    array(
-                        'empty',
-                        'reset',
-                        'current',
-                        'end',
-                        'prev',
-                        'next'
-                    )
-                )
-                ) {
-                    if (count($parameter) !== 1) {
-                        $this->trigger_template_error("Illegal number of parameter in '{$func_name()}'");
-                    }
-                    if ($func_name === 'empty') {
-                        return $func_name . '(' .
-                               str_replace("')->value", "',null,true,false)->value", $parameter[ 0 ]) . ')';
-                    } else {
-                        return $func_name . '(' . $parameter[ 0 ] . ')';
-                    }
+                if ($func_name === 'empty') {
+                    return $func_name . '(' . str_replace("')->value", "',null,true,false)->value", $parameter[0]) . ')';
                 } else {
-
-					if (
-						!$this->smarty->loadPlugin('smarty_modifiercompiler_' . $name)
-						&& !isset($this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER][$name])
-						&& !in_array($name, ['time', 'join', 'is_array', 'in_array'])
-					) {
-						trigger_error('Using unregistered function "' . $name . '" in a template is deprecated and will be ' .
-							'removed in a future release. Use Smarty::registerPlugin to explicitly register ' .
-							'a custom modifier.', E_USER_DEPRECATED);
-					}
-
-					return $name . '(' . implode(',', $parameter) . ')';
+                    return $func_name . '(' . $parameter[0] . ')';
                 }
             } else {
-                $this->trigger_template_error("unknown function '{$name}'");
+                // Register 'count' function explicitly if missing
+                if ($name === 'count' && !isset($this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER]['count'])) {
+                    $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER, 'count', 'count');
+                }
+
+                if (
+                    !$this->smarty->loadPlugin('smarty_modifiercompiler_' . $name)
+                    && !isset($this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER][$name])
+                    && !in_array($name, ['time', 'join', 'is_array', 'in_array', 'count'])
+                ) {
+                    trigger_error(
+                        'Using unregistered function "' . $name . '" in a template is deprecated and will be ' .
+                        'removed in a future release. Use Smarty::registerPlugin to explicitly register ' .
+                        'a custom modifier.',
+                        E_USER_DEPRECATED
+                    );
+                }
+
+                return $name . '(' . implode(',', $parameter) . ')';
             }
+        } else {
+            $this->trigger_template_error("Unknown function '{$name}'");
         }
     }
+}
 
     /**
      * Determines whether the passed string represents a valid (PHP) variable.
