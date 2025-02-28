@@ -90,12 +90,16 @@ final class imageEditor
 			return false;
 		}
 		$mime = image_type_to_mime_type($info[2]);
-		if($mime != image_type_to_mime_type(IMAGETYPE_JPEG)
-			&& $mime != image_type_to_mime_type(IMAGETYPE_GIF)
-			&& $mime != image_type_to_mime_type(IMAGETYPE_PNG)){
+		switch ($mime) {
+			case 'image/jpeg':
+			case 'image/gif':
+			case 'image/png':
+			case 'image/webp':
+			case 'image/avif':
+			return $mime;
+		default:
 			return false;
 		}
-		return $mime;
 	}
 
 	/**
@@ -127,17 +131,21 @@ final class imageEditor
 			return "INVALID IMAGE TYPE";
 		}
 
-		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {
-			return imagecreatefromjpeg($path);
-		}
-		else if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
-			return imagecreatefromgif($path);
-		}
-		else if ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
-			return imagecreatefrompng($path);
-		}
-
-		return NULL;
+		switch ($mimeType) {
+			case 'image/jpeg':
+				return imagecreatefromjpeg($path);
+			case 'image/gif':
+				return imagecreatefromgif($path);
+			case 'image/png':
+				return imagecreatefrompng($path);
+			case 'image/webp':
+				return imagecreatefromwebp($path);
+			case 'image/avif':
+				if (PHP_VERSION_ID >= 80000 && function_exists('imagecreatefromavif')) {
+					return imagecreatefromavif($path);
+				} else return NULL;
+			default:
+				return NULL;
 	}
 
 	/**
@@ -149,13 +157,22 @@ final class imageEditor
      * @return bool
 	 **/
 	public static function save($image, $path, $mimeType){
-		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {
-			return imagejpeg($image, $path);
-		} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
-			return imagegif($image, $path);
-		} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
-			imagesavealpha($image, true);
-			return imagepng($image, $path);
+		switch ($mimeType) {
+			case 'image/jpeg':
+				return imagejpeg($image, $path);
+			case 'image/gif':
+				return imagegif($image, $path);
+			case 'image/png':
+				imagesavealpha($image, true); //TODO also for webp and avif
+				return imagepng($image, $path);
+			case 'image/webp':
+				return imagewebp($image, $path);
+			case 'image/avif':
+				if (PHP_VERSION_ID >= 80000 && function_exists('imageavif')) {
+					return imageavif($image, $path);
+				} else return false;
+			default:
+				return false;
 		}
 	}
 }
