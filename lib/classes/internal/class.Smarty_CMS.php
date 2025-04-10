@@ -384,7 +384,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
         // gotta fix that.
-        debug_buffer('','Fetch '.$name.' end');
+        
         return $tmp;
     }
 
