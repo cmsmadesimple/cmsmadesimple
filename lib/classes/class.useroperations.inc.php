@@ -410,8 +410,8 @@ class UserOperations
 	 */
 	public function IsSuperuser($uid)
 	{
-		if( $uid == 1 ) return TRUE;
-		$groups = $this->GetMemberGroups();
+		if(1 == $uid) return TRUE;
+		$groups = $this->GetMemberGroups($uid);
 		if( is_array($groups) && count($groups) ) {
 			if( in_array($uid,$groups) ) return TRUE;
 		}
