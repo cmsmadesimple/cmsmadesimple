@@ -1372,24 +1372,27 @@ abstract class ContentBase
 	 */
 	public function Save()
 	{
-        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
-
-		if( !is_array($this->_props) ) {
+        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => $this ] );
+		
+		if(!is_array($this->_props))
+		{
 			debug_buffer('save is loading properties');
 			$this->_load_properties();
 		}
-
-		if (-1 < $this->mId) {
+		
+		if(0 < $this->mId)
+		{
 			$this->Update();
 		}
-		else {
+		else
+		{
 			$this->Insert();
 		}
 
-        $contentops = ContentOperations::get_instance();
-        $contentops->SetContentModified();
-        $contentops->SetAllHierarchyPositions();
-        \CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
+		$contentops = ContentOperations::get_instance();
+		$contentops->SetContentModified();
+		$contentops->SetAllHierarchyPositions();
+		\CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => $this ] );
 	}
 
 	/**
@@ -1413,23 +1416,29 @@ abstract class ContentBase
 		$result = false;
 
 		// Figure out the item_order (if necessary)
-		if ($this->mItemOrder < 1) {
-			$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".CMS_DB_PREFIX."content WHERE parent_id = ?";
-			$row = $db->GetRow($query,array($this->mParentId));
-
-			if ($row) {
-				if ($row['new_order'] < 1) {
+		if($this->mItemOrder < 1)
+		{
+			$query = 'SELECT ' . $db->IfNull('max(item_order)', '0') . ' as new_order FROM ' . CMS_DB_PREFIX .
+							 'content WHERE parent_id = ?';
+			$row   = $db->GetRow($query, [$this->mParentId]);
+			
+			if($row)
+			{
+				if($row['new_order'] < 1)
+				{
 					$this->mItemOrder = 1;
 				}
-				else {
+				else
+				{
 					$this->mItemOrder = $row['new_order'] + 1;
 				}
 			}
 		}
-
+		
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".CMS_DB_PREFIX."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = 'UPDATE ' . CMS_DB_PREFIX .
+						 'content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?';
 		$dbresult = $db->Execute($query, array(
                                      $this->mName,
                                      $this->mOwner,
@@ -1454,25 +1463,15 @@ abstract class ContentBase
                                      (int) $this->mId
                                      ));
 
-        /*
-		if ($this->mOldParentId != $this->mParentId) {
-			// Fix the item_order if necessary
-			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
-
-			$this->mOldParentId = $this->mParentId;
-			$this->mOldItemOrder = $this->mItemOrder;
-		}
-        */
-
 		if (isset($this->mAdditionalEditors)) {
-			$query = "DELETE FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";
-			$db->Execute($query, array($this->Id()));
+			$query = 'DELETE FROM ' . CMS_DB_PREFIX . 'additional_users WHERE content_id = ?';
+			$db->Execute($query, [$this->Id()]);
 
 			foreach ($this->mAdditionalEditors as $oneeditor) {
-				$new_addt_id = $db->GenID(CMS_DB_PREFIX."additional_users_seq");
-				$query = "INSERT INTO ".CMS_DB_PREFIX."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+				$new_addt_id = $db->GenID(CMS_DB_PREFIX . 'additional_users_seq');
+				$query = 'INSERT INTO ' . CMS_DB_PREFIX .
+								 'additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)';
+				$db->Execute($query, [$new_addt_id, $oneeditor, $this->Id()]);
 			}
 		}
 
@@ -1482,7 +1481,7 @@ abstract class ContentBase
 		}
 
 		cms_route_manager::del_static('','__CONTENT__',$this->mId);
-		if( $this->mURL != '' ) {
+		if('' != $this->mURL) {
 			$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
 			cms_route_manager::add_static($route);
 		}
@@ -1499,66 +1498,71 @@ abstract class ContentBase
 	 */
 	protected function Insert()
 	{
-        # :TODO: This function should return something
-        # :TODO: Take care bout hierarchy here, it has no value !
-        # :TODO: Figure out proper item_order
+		# :TODO: This function should return something
+		# :TODO: Take care about hierarchy here, it has no value !
+		# :TODO: Figure out proper item_order
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$result = false;
 
-        $query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content WHERE default_content = 1';
-        $dflt_pageid = (int) $db->GetOne($query);
-        if( $dflt_pageid < 1 ) $this->SetDefaultContent(TRUE);
-
+		$query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content WHERE default_content = 1';
+		$dflt_pageid = (int) $db->GetOne($query);
+		if( $dflt_pageid < 1 ) $this->SetDefaultContent(TRUE);
+		
 		// Figure out the item_order
-		if ($this->mItemOrder < 1) {
-			$query = "SELECT max(item_order) as new_order FROM ".CMS_DB_PREFIX."content WHERE parent_id = ?";
-			$row = $db->Getrow($query, array($this->mParentId));
-
-			if ($row) {
-				if ($row['new_order'] < 1) {
+		if($this->mItemOrder < 1)
+		{
+			$query = 'SELECT max(item_order) as new_order FROM ' . CMS_DB_PREFIX . 'content WHERE parent_id = ?';
+			$row   = $db->Getrow($query, [$this->mParentId]);
+			
+			if($row)
+			{
+				if($row['new_order'] < 1)
+				{
 					$this->mItemOrder = 1;
 				}
-				else {
+				else
+				{
 					$this->mItemOrder = $row['new_order'] + 1;
 				}
 			}
 		}
 
-		$newid = $db->GenID(CMS_DB_PREFIX."content_seq");
+		$newid = $db->GenID(CMS_DB_PREFIX . 'content_seq');
 		$this->mId = $newid;
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = 'INSERT INTO ' . CMS_DB_PREFIX .
+						 'content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
-		$dbresult = $db->Execute($query, array(
-                                     $newid,
-                                     $this->mName,
-                                     $this->mAlias,
-                                     $this->Type(),
-                                     $this->mOwner,
-                                     $this->mParentId,
-                                     $this->mTemplateId,
-                                     $this->mItemOrder,
-                                     $this->mHierarchy,
-                                     $this->mIdHierarchy,
-                                     ($this->mActive == true         ? 1 : 0),
-                                     ($this->mDefaultContent == true ? 1 : 0),
-                                     ($this->mShowInMenu == true     ? 1 : 0),
-                                     ($this->mCachable == true       ? 1 : 0),
-                                     $this->mSecure,
-                                     $this->mURL,
-                                     $this->mMenuText,
-                                     $this->mMetadata,
-                                     $this->mTitleAttribute,
-                                     $this->mAccessKey,
-                                     $this->mTabIndex,
-                                     $this->mLastModifiedBy,
-                                     $this->mModifiedDate,
-                                     $this->mCreationDate
-                                     ));
+		$dbresult = $db->Execute($query, [
+			$newid,
+			$this->mName,
+			$this->mAlias,
+			$this->Type(),
+			$this->mOwner,
+			$this->mParentId,
+			$this->mTemplateId,
+			$this->mItemOrder,
+			$this->mHierarchy,
+			$this->mIdHierarchy,
+			(true === (bool)$this->mActive ? 1 : 0),
+			(true === (bool)$this->mDefaultContent ? 1 : 0),
+			(true === (bool)$this->mShowInMenu ? 1 : 0),
+			(true === (bool)$this->mCachable ? 1 : 0),
+			$this->mSecure,
+			$this->mURL,
+			$this->mMenuText,
+			$this->mMetadata,
+			$this->mTitleAttribute,
+			$this->mAccessKey,
+			$this->mTabIndex,
+			$this->mLastModifiedBy,
+			$this->mModifiedDate,
+			$this->mCreationDate
+		]);
 
 		if (! $dbresult) {
 			die($db->sql.'<br/>'.$db->ErrorMsg());
@@ -1571,9 +1575,10 @@ abstract class ContentBase
 		}
 		if (isset($this->mAdditionalEditors)) {
 			foreach ($this->mAdditionalEditors as $oneeditor) {
-				$new_addt_id = $db->GenID(CMS_DB_PREFIX."additional_users_seq");
-				$query = "INSERT INTO ".CMS_DB_PREFIX."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+				$new_addt_id = $db->GenID(CMS_DB_PREFIX . 'additional_users_seq');
+				$query = 'INSERT INTO ' . CMS_DB_PREFIX .
+								 'additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)';
+				$db->Execute($query, [$new_addt_id, $oneeditor, $this->Id()]);
 			}
 		}
 
@@ -1596,35 +1601,35 @@ abstract class ContentBase
 	 */
 	public function ValidateData()
 	{
-		$errors = array();
+		$errors = [];
 
 		if ($this->mParentId < -1) {
 			$errors[] = lang('invalidparent');
 			$result = false;
 		}
 
-		if ($this->mName == '') {
-			if ($this->mMenuText != '') {
+		if ('' == $this->mName) {
+			if ('' != $this->mMenuText) {
 				$this->mName = $this->mMenuText;
 			}
 			else {
-				$errors[]= lang('nofieldgiven',array(lang('title')));
+				$errors[]= lang('nofieldgiven', [lang('title')]);
 				$result = false;
 			}
 		}
 
-		if ($this->mMenuText == '') {
-			if ($this->mName != '') {
+		if ('' == $this->mMenuText) {
+			if ('' != $this->mName) {
 				$this->mMenuText = $this->mName;
 			}
 			else {
-				$errors[]=lang('nofieldgiven',array(lang('menutext')));
+				$errors[]=lang('nofieldgiven', [lang('menutext')]);
 				$result = false;
 			}
 		}
 
 		if (!$this->HandlesAlias()) {
-			if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
+			if ($this->mAlias != $this->mOldAlias || ('' == $this->mAlias && $this->RequiresAlias()) ) {
 				$contentops = ContentOperations::get_instance();
 				$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 				if ($error !== FALSE) {
@@ -1647,7 +1652,7 @@ abstract class ContentBase
 					$gCms = CmsApp::get_instance();
 					$tree = $gCms->GetHierarchyManager();
 					$node = $tree->find_by_tag('id',$this->ParentId());
-					$stack = array($this->mAlias);
+					$stack = [$this->mAlias];
 					$parent_url = '';
 					$count = 0;
 					while( $node ) {
@@ -1699,33 +1704,34 @@ abstract class ContentBase
 	function Delete()
 	{
 		$gCms = CmsApp::get_instance();
-        \CMSMS\HookManager::do_hook('Core::ContentDeletePre', [ 'content' => &$this ] );
-		$db = $gCms->GetDb();
-		$result = false;
+		\CMSMS\HookManager::do_hook('Core::ContentDeletePre', ['content' => $this]);
+		$db     = $gCms->GetDb();
+		$result = FALSE;
 
 		if ($this->mId > 0) {
-			$query = "DELETE FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
-			$dbresult = $db->Execute($query, array($this->mId));
+			$query = 'DELETE FROM ' . CMS_DB_PREFIX . 'content WHERE content_id = ?';
+			$db->Execute($query, [$this->mId]);
 
 			// Fix the item_order if necessary
-			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+			$query = 'UPDATE ' . CMS_DB_PREFIX .
+							 'content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?';
+			$result = $db->Execute($query, [$this->ParentId(), $this->ItemOrder()]);
 
 			// DELETE properties
 			$query = 'DELETE FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
-			$result = $db->Execute($query,array($this->mId));
+			$result = $db->Execute($query, [$this->mId]);
 			$this->_props = null;
 
 			// Delete additional editors.
 			$query = 'DELETE FROM '.CMS_DB_PREFIX.'additional_users WHERE content_id = ?';
-			$result = $db->Execute($query,array($this->mId));
+			$result = $db->Execute($query, [$this->mId]);
 			$this->mAdditionalEditors = null;
 
 			// Delete route
-			if( $this->mURL != '' ) cms_route_manager::del_static($this->mURL);
+			if('' != $this->mURL) cms_route_manager::del_static($this->mURL);
 		}
 
-        \CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
+		\CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => $this ] );
 		$this->mId = -1;
 		$this->mItemOrder = -1;
 		$this->mOldItemOrder = -1;
