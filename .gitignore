@@ -5,7 +5,7 @@ tmp/
 #
 config.php
 index.html
-moduleinfo.ini
+
 MANIFEST*
 #CORE only cares for English language files
 admin/lang/*
@@ -64,6 +64,7 @@ modules/*
 !modules/UserGuide/
 !modules/UserGuide/**
 
+moduleinfo.ini
 
 #uploads are limited to the minimum
 uploads/
