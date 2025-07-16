@@ -129,7 +129,7 @@ class ContentOperations
 
 	/**
 	 * Given an array of content_type and seralized_content, reconstructs a
-	 * content object.  It will handle loading the content type if it hasn't
+	 * content object.  It will handled loading the content type if it hasn't
 	 * already been loaded.
 	 *
 	 * Expects an associative array with 2 elements:
@@ -330,7 +330,7 @@ class ContentOperations
 
 
 	/**
-	 * Function to return a content type given its name
+	 * Function to return a content type given it's name
 	 *
 	 * @since 1.9
 	 * @access private

@@ -155,7 +155,7 @@ final class UserTagOperations
 		$config = \cms_config::get_instance();
 		$phpfiles = glob(CMS_ROOT_PATH.'/plugins/function.*.php');
 		if( is_array($phpfiles) && count($phpfiles) ) {
-			for($i = 0, $iMax = count($phpfiles); $i < $iMax; $i++ ) {
+			for( $i = 0; $i < count($phpfiles); $i++ ) {
 				$fn = basename($phpfiles[$i]);
 				$parts = explode('.',$fn);
 				if( count($parts) < 3 ) continue;
@@ -239,7 +239,7 @@ final class UserTagOperations
 		$db = $gCms->GetDb();
 
 		$query = 'DELETE FROM '.CMS_DB_PREFIX.'userplugins WHERE userplugin_name = ?';
-		$result = $db->Execute($query, array($name));
+		$result = &$db->Execute($query, array($name));
 
 		$this->_cache = array();
 		if ($result) {

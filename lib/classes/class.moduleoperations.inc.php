@@ -1157,7 +1157,7 @@ final class ModuleOperations
      *
      * @param string $module_name The module name
      * @param string $version an optional version string.
-     * @param bool $force an optional flag to indicate whether the module should be force loaded if necessary.
+     * @param bool $force an optional flag to indicate wether the module should be force loaded if necesary.
      * @return CMSModule
      */
     public function get_module_instance($module_name,$version = '',$force = FALSE)
