@@ -120,8 +120,24 @@ abstract class jquery_upload_handler
                 $src_img = @imagecreatefrompng($file_path);
                 $write_image = 'imagepng';
                 break;
+            case 'webp':
+                @imagesavealpha($new_img, true);
+                $src_img = @imagecreatefromwebp($file_path);;
+                $write_image = 'imagewebp';
+                break;
+            case 'avif':
+                if (PHP_VERSION_ID >= 80000 && function_exists('imageavif')) {
+                    @imagesavealpha($new_img, true);
+                    $src_img = @imagecreatefromavif($file_path);
+                    $write_image = 'imageavif';
+                } else {
+                    $src_img = false;
+                    $write_image = '';
+                }
+                break;
             default:
-                $src_img = $image_method = null;
+                $src_img = false;
+                $write_image = '';
         }
         $success = $src_img && @imagecopyresampled(
             $new_img,

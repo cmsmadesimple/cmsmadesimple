@@ -61,7 +61,11 @@ switch( $imageinfo['mime'] ) {
  case 'image/gif':
  case 'image/jpeg':
  case 'image/png':
+ case 'image/webp': 
    break;
+ case 'image/avif':
+   if (PHP_VERSION_ID >= 80000 && function_exists('imageavif')) break;
+   // no break here   
  default:
    $params['fmerror'] = 'fileimagetype';
    $this->Redirect($id,"defaultadmin",$returnid,$params);
@@ -153,7 +157,16 @@ if( isset($params['save']) ) {
   case 'image/png':
     $res = imagepng($rotated,$src,9);
     break;
-  case 'image/jpeg':
+  case 'image/webp':
+    $res = imagewebp($rotated,$dest,80);
+    break;    
+  case 'image/avif':
+    if (PHP_VERSION_ID >= 80000 && function_exists('imageavif')) {
+        $res = imageavif($rotated,$dest,80,6);
+        break;
+    }
+  //no break here
+//case 'image/jpeg':
   default:
     $res = imagejpeg($rotated,$src,100);
     break;
