@@ -1,4 +1,4 @@
-Version 2.2.22 - ???
+Version 2.2.22 beta - ???
 -------------------------------
 Core - General
  - Fixed BR12711 - replace FILTER_SANITIZE_STRING in admin/siteprefs.php
@@ -16,6 +16,9 @@ Content Manager 1.1.14
 
 Search Module 1.53
  - Fixed BR12727 - Search Module bug fix to remove error if no result found
+
+ FilePicker 1.0.9-b.1
+ - Fixed BR #12666 - Logs display problem in Admin Log
 
 
 Version 2.2.21 - Sherbrooke
