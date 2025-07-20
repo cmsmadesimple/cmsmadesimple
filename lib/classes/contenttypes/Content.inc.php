@@ -184,7 +184,7 @@ class Content extends ContentBase
                     // nothing
                     break;
                 default:
-                    if( count($blocks) && isset($blocks[$oneparam]) ) {
+									if( is_array($blocks) && count($blocks) && isset($blocks[$oneparam]) ) {
                         // it's a content block.
                         $val = $val;
                     } else {
