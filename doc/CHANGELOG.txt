@@ -7,8 +7,9 @@ Core - General
  - Fixed BR12658 - removed redundant string & other language file tweaks
  - Fixed BR12749 - Saving an UDT error fixed - saving the UDT parses the code but no longer executes
  - in case the php headers fail to be correctly interpreted fallback on pure HTML
- - make sure login form doesn't cache at all to aviod redirect loop on some server configurations
+ - make sure login form doesn't cache at all to avoid redirect loop on some server configurations
  - re-enforce the no caching of backend pages for some server configurations and browsers
+ - upgraded to Smarty 4.5.5;
 
 Content Manager 1.1.14
  - Default page deletion bug on copy fixed
