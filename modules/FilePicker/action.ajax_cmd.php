@@ -49,13 +49,19 @@ try {
             if( count(scandir($destpath)) > 2 ) throw new \RuntimeException($this->Lang('error_ajax_dirnotempty'));
             @rmdir($destpath);
         } else {
+          $test_thumbnail = false;
             if( $this->is_image( $destpath ) ) {
                 $thumbnail = $fullpath.'/thumb_'.$val;
-                if( is_file($thumbnail) ) {
+                $test_thumbnail = is_file($thumbnail);
+                if( $test_thumbnail ) {
                     @unlink($thumbnail);
                 }
             }
             @unlink($destpath);
+            
+          $str = basename($destpath).' deleted from '.filemanager_utils::get_full_cwd();
+          if( $test_thumbnail ) { $str .= ' along with thumbnail'; }
+          audit('',$this->GetName(),$str);
         }
         break;
 

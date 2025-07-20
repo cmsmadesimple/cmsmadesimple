@@ -44,9 +44,15 @@ class UploadHandler extends jquery_upload_handler
         if( is_array($parms) && isset($parms['file']) ) $file = $parms['file']; // file name could have changed.
 
         if( !is_file($complete_path) ) return;
-        if( !$this->_mod->is_image( $complete_path ) ) return;
+        
+        if( !$this->_mod->is_image( $complete_path ) )
+        {
+          $str = basename($complete_path).' uploaded to '.\filemanager_utils::get_full_cwd();
+          audit('',$this->_mod->GetName(),$str);
+          return;
+        }
 
-        $mod = \cms_utils::get_module('FileManager');
+        #$mod = \cms_utils::get_module('FileManager'); /** @var $mod \FileManager apparently not used (JM) */
         $thumb = \filemanager_utils::create_thumbnail($complete_path, NULL, TRUE);
 
         $str = basename($complete_path).' uploaded to '.\filemanager_utils::get_full_cwd();
