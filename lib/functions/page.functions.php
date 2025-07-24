@@ -182,11 +182,13 @@ function author_pages($userid)
  * Put an event into the audit (admin) log.  This should be
  * done on most admin events for consistency.
  *
- * @since 0.3
- * @param integer $itemid The item id (perhaps a content id, or a record id from a module)
+ * @param integer $itemid   The item id (perhaps a content id, or a record id from a module)
  * @param string  $itemname The item name (perhaps Content, or the module name)
- * @param string  $action The action that needs to be audited
+ * @param string  $action   The action that needs to be audited
+ *
  * @return void
+ * @throws \Exception
+ * @since 0.3
  */
 function audit($itemid, $itemname, $action)
 {
