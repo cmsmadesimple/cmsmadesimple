@@ -1,5 +1,6 @@
 Version 2.2.22 beta - ???
 -------------------------------
+
 Core - General
  - Fixed BR12711 - replace FILTER_SANITIZE_STRING in admin/siteprefs.php
  - Fixed BR12701 - Internal Page Link fixed to now include section headers that have children
@@ -10,6 +11,7 @@ Core - General
  - make sure login form doesn't cache at all to avoid redirect loop on some server configurations
  - re-enforce the no caching of backend pages for some server configurations and browsers
  - upgraded to Smarty 4.5.5;
+ - fixed the UserOperations::IsSuperuser method when $uid is not 1 (default for an installation) but not necessarily kept the same during the lifecycle of the site;
 
 Content Manager 1.1.14
  - Default page deletion bug on copy fixed
