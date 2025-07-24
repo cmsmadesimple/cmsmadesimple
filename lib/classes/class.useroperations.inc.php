@@ -76,14 +76,16 @@ class UserOperations
 		if( !is_object(self::$_instance) ) self::$_instance = new UserOperations();
 		return self::$_instance;
 	}
-
-
+	
+	
 	/**
 	 * Gets a list of all users
 	 *
-	 * @param int $limit The maximum number of users to return
+	 * @param int $limit  The maximum number of users to return
 	 * @param int $offset The offset
+	 *
 	 * @returns array An array of User objects
+	 * @throws \Exception
 	 * @since 0.6.1
 	 */
 	function LoadUsers($limit = 10000,$offset = 0)
@@ -117,13 +119,15 @@ class UserOperations
 
 		return $this->_users;
 	}
-
-
+	
+	
 	/**
 	 * Gets a list of all users in a given group
 	 *
 	 * @param mixed $groupid Group for the loaded users
+	 *
 	 * @return array An array of User objects
+	 * @throws \Exception
 	 */
 	function LoadUsersInGroup($groupid)
 	{
@@ -149,16 +153,18 @@ class UserOperations
 
 		return $result;
 	}
-
+	
 	/**
 	 * Loads a user by username.
 	 * Does not use a cache, so use sparingly.
 	 *
-	 * @param mixed $username Username to load
-	 * @param mixed $password Password to check against
-	 * @param mixed $activeonly Only load the user if they are active
+	 * @param mixed $username        Username to load
+	 * @param mixed $password        Password to check against
+	 * @param mixed $activeonly      Only load the user if they are active
 	 * @param mixed $adminaccessonly Only load the user if they have admin access
+	 *
 	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
+	 * @throws \Exception
 	 * @since 0.6.1
 	 */
 	function LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
@@ -198,12 +204,14 @@ class UserOperations
 
 		return $result;
 	}
-
+	
 	/**
 	 * Loads a user by user id.
 	 *
 	 * @param mixed $id User id to load
+	 *
 	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
+	 * @throws \Exception
 	 * @since 0.6.1
 	 */
 	function LoadUserByID($id)
@@ -235,12 +243,14 @@ class UserOperations
 		$this->_saved_users[$id] = $result;
 		return $result;
 	}
-
+	
 	/**
 	 * Saves a new user to the database.
 	 *
 	 * @param mixed $user User object to save
+	 *
 	 * @return mixed The new user id.  If it fails, it returns -1.
+	 * @throws \Exception
 	 * @since 0.6.1
 	 */
 	function InsertUser($user)
@@ -263,13 +273,15 @@ class UserOperations
 
 		return $result;
 	}
-
+	
 	/**
 	 * Updates an existing user in the database.
 	 *
-	 * @since 0.6.1
 	 * @param mixed $user User object to save
+	 *
 	 * @return mixed If successful, true.  If it fails, false.
+	 * @throws \Exception
+	 * @since 0.6.1
 	 */
 	function UpdateUser($user)
 	{
@@ -290,13 +302,15 @@ class UserOperations
 
 		return $result;
 	}
-
+	
 	/**
 	 * Deletes an existing user from the database.
 	 *
-	 * @since 0.6.1
 	 * @param mixed $id Id of the user to delete
+	 *
 	 * @returns mixed If successful, true.  If it fails, false.
+	 * @throws \Exception
+	 * @since 0.6.1
 	 */
 	function DeleteUserByID($id)
 	{
@@ -322,13 +336,15 @@ class UserOperations
 		if ($dbresult !== false) $result = true;
 		return $result;
 	}
-
+	
 	/**
 	 * Show the number of pages the given user's id owns.
 	 *
-	 * @since 0.6.1
 	 * @param mixed $id Id of the user to count
+	 *
 	 * @return mixed Number of pages they own.  0 if any problems.
+	 * @throws \Exception
+	 * @since 0.6.1
 	 */
 	function CountPageOwnershipByID($id)
 	{
@@ -386,14 +402,16 @@ class UserOperations
         }
         return $result;
 	}
-
-
+	
+	
 	/**
 	 * Tests $uid is a member of the group identified by $gid
 	 *
 	 * @param int $uid User ID to test
 	 * @param int $gid Group ID to test
+	 *
 	 * @return true if test passes, false otherwise
+	 * @throws \Exception
 	 */
 	function UserInGroup($uid,$gid)
 	{
@@ -401,12 +419,14 @@ class UserOperations
 		if( in_array($gid,$groups) ) return TRUE;
 		return FALSE;
 	}
-
+	
 	/**
 	 * Test if the specified user is a member of the admin group, or is the first user account
 	 *
 	 * @param int $uid
+	 *
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function IsSuperuser($uid)
 	{
@@ -417,12 +437,14 @@ class UserOperations
 		}
 		return FALSE;
 	}
-
+	
 	/**
 	 * Get the ids of all groups to which the user belongs.
 	 *
 	 * @param int $uid
+	 *
 	 * @return array
+	 * @throws \Exception
 	 */
 	function GetMemberGroups($uid)
 	{
@@ -435,12 +457,14 @@ class UserOperations
 		}
 		return self::$_user_groups[$uid];
 	}
-
+	
 	/**
 	 * Add the user to the specified group
 	 *
 	 * @param int $uid
 	 * @param int $gid
+	 *
+	 * @throws \Exception
 	 */
 	function AddMemberGroup($uid,$gid)
 	{
@@ -456,15 +480,17 @@ class UserOperations
 		$dbr = $db->Execute($query,array($gid,$uid));
 		if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
 	}
-
+	
 	/**
 	 * Test if the user has the specified permission
 	 *
 	 * Given the users member groups, test if any of those groups have the specified permission.
 	 *
-	 * @param int $userid
+	 * @param int    $userid
 	 * @param string $permname
+	 *
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function CheckPermission($userid,$permname)
 	{
