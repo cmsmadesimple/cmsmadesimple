@@ -90,6 +90,7 @@ array_walk($_SERVER,  $sanitize_fn);
 array_walk($_GET,  $sanitize_fn);
 
 // include some stuff
+require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'fs.functions.php');
 require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'compat.functions.php');
 require_once(FUNCTIONS_FILE_LOCATION . DIRECTORY_SEPARATOR . 'misc.functions.php');
 require_once($dirname . DIRECTORY_SEPARATOR . 'version.php'); // tells us where the config file is and other things.

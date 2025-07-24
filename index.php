@@ -35,18 +35,11 @@ clearstatcache();
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 require_once(__DIR__.'/lib/include.php');
 
+# test for the existence of the tmp dirs and create them if necessary; terminate if they don't exist
+if (false === ensure_tmp_dirs_exist()) { exit; }
+
 if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
     echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
-    exit;
-}
-
-if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) {
-    echo '<html><title>Error</title></head><body>';
-    echo '<p>The following directories must be writable by the web server:<br>';
-    echo 'tmp/cache<br>';
-    echo 'tmp/templates_c<br></p>';
-    echo '<p>Please correct by executing:<br><em>chmod 777 tmp/cache<br>chmod 777 tmp/templates_c</em><br>or the equivalent for your platform before continuing.</p>';
-    echo '</body></html>';
     exit;
 }
 

@@ -19,8 +19,6 @@
 #$Id$
 
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-
-
 $CMS_ADMIN_PAGE          = 1;
 $CMS_TOP_MENU            = 'main';
 //$CMS_ADMIN_TITLE         = 'adminhome';
@@ -33,9 +31,10 @@ require_once("../lib/include.php");
 // but it is in the session, assume it is correct.
 if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) ) $_GET[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
 
+# test for the existence of the tmp dirs and create them if necessary; terminate if they don't exist
+if (false === ensure_tmp_dirs_exist()) { exit; }
 
 check_login();
-
 include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
 // todo: we should just be getting the html, and giving it to the theme. mmaybe
