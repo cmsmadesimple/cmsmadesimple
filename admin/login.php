@@ -90,8 +90,6 @@ function find_recovery_user($hash)
     return null;
 }
 
-
-
 //Redirect to the normal login screen if we hit cancel on the forgot pw one
 //Otherwise, see if we have a forgotpw hit
 if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel'])) {
