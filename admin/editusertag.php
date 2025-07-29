@@ -142,6 +142,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     if( !$error ) {
         // save the UDT.
         if( isset($_POST['submit']) ) {
+            $urlext .= '&message=usertagupdated';
             redirect('listusertags.php'.$urlext);
         }
         else {
