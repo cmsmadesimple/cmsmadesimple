@@ -50,7 +50,6 @@ final class ModuleOperations
       'CMSContentManager',
       'DesignManager',
       'FileManager',
-      'MenuManager',
       'ModuleManager',
       'Search',
       'News',
