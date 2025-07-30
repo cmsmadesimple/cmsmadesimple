@@ -222,20 +222,20 @@ final class ModuleOperations
         };
 
         $fh = fopen($dir."/moduleinfo.ini",'w');
-        fputs($fh,"[module]\n");
-        fputs($fh,$to_string('name',$modinstance->GetName()));
-        fputs($fh,$to_string('version',$modinstance->GetVersion()));
-        //fputs($fh,$to_string('description',$modinstance->GetAdminDescription())); // language sensitive.
-        fputs($fh,$to_string('author',$modinstance->GetAuthor()));
-        fputs($fh,$to_string('authoremail',$modinstance->GetAuthorEmail()));
-        fputs($fh,$to_string('mincmsversion',$modinstance->MinimumCMSVersion()));
-        fputs($fh,$to_string('lazyloadadmin',($modinstance->LazyLoadAdmin())?'1':'0'));
-        fputs($fh,$to_string('lazyloadfrontend',($modinstance->LazyLoadFrontend())?'1':'0'));
+        fwrite($fh, "[module]\n");
+        fwrite($fh,$to_string('name',$modinstance->GetName()));
+        fwrite($fh,$to_string('version',$modinstance->GetVersion()));
+        //fwrite($fh,$to_string('description',$modinstance->GetAdminDescription())); // language sensitive.
+        fwrite($fh,$to_string('author',$modinstance->GetAuthor()));
+        fwrite($fh,$to_string('authoremail',$modinstance->GetAuthorEmail()));
+        fwrite($fh,$to_string('mincmsversion',$modinstance->MinimumCMSVersion()));
+        fwrite($fh,$to_string('lazyloadadmin',($modinstance->LazyLoadAdmin())?'1':'0'));
+        fwrite($fh,$to_string('lazyloadfrontend',($modinstance->LazyLoadFrontend())?'1':'0'));
         $depends = $modinstance->GetDependencies();
         if( is_array($depends) && count($depends) ) {
-            fputs($fh,"[depends]\n");
+            fwrite($fh,"[depends]\n");
             foreach( $depends as $key => $val ) {
-                fputs($fh,$to_string($key,$val));
+                fwrite($fh,$to_string($key,$val));
             }
         }
         fclose($fh);
@@ -311,17 +311,21 @@ final class ModuleOperations
         unset($CMSMS_GENERATING_XML);
         return $xmltxt;
     }
-
-
+    
+    
     /**
      * Unpackage a module from an xml string
      * does not touch the database
      *
-     * @internal
-     * @param string $xmlurl The xml data for the package
-     * @param bool $overwrite Should we overwrite files if they exist?
-     * @param bool $brief If set to true, less checking is done and no errors are returned
+     * @param     $xmluri
+     * @param int $overwrite Should we overwrite files if they exist?
+     * @param int $brief     If set to true, less checking is done and no errors are returned
+     *
      * @return array A hash of details about the installed module
+     * @throws \CmsFileSystemException
+     * @throws \CmsInvalidDataException
+     * @throws \CmsLogicException
+     * @internal
      */
     function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
     {
@@ -531,13 +535,15 @@ final class ModuleOperations
         // install returned something.
         return array(FALSE,$result);
     }
-
-
+    
+    
     /**
      * Install a module into the database
      *
      * @param string $module The name of the module to install
+     *
      * @return array Returns a tuple of whether the install process was successful and a message if applicable
+     * @throws \Exception
      */
     public function InstallModule($module)
     {
@@ -807,7 +813,7 @@ final class ModuleOperations
      *
      * @access public
      * @internal
-     * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
+     * @param boolean $noadmin  indicates that modules marked as admin_only in the database should not be loaded, default is false
      */
     public function LoadModules($noadmin = false)
     {
@@ -1016,14 +1022,16 @@ final class ModuleOperations
 
         return (bool)$info[$module_name]['active'];
     }
-
-
+    
+    
     /**
      * Activate a module
      *
      * @param string $module_name
-     * @param bool $activate flag indicating wether to activate or deactivate the module
+     * @param bool   $activate flag indicating whether to activate or deactivate the module
+     *
      * @return bool
+     * @throws \Exception
      */
     public function ActivateModule($module_name,$activate = true)
     {
@@ -1156,7 +1164,7 @@ final class ModuleOperations
      *
      * @param string $module_name The module name
      * @param string $version an optional version string.
-     * @param bool $force an optional flag to indicate wether the module should be force loaded if necesary.
+     * @param bool $force an optional flag to indicate whether the module should be force loaded if necesary.
      * @return CMSModule
      */
     public function get_module_instance($module_name,$version = '',$force = FALSE)
