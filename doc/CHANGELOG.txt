@@ -12,6 +12,7 @@ Core - General
  - re-enforce the no caching of backend pages for some server configurations and browsers
  - upgraded to Smarty 4.5.5;
  - fixed the UserOperations::IsSuperuser method when $uid is not 1 (default for an installation) but not necessarily kept the same during the lifecycle of the site;
+ - Removed MenuManager from the package;
 
 Content Manager 1.1.14
  - Default page deletion bug on copy fixed
@@ -21,6 +22,10 @@ Search Module 1.53
 
  FilePicker 1.0.9-b.1
  - Fixed BR #12666 - Logs display problem in Admin Log
+ 
+ Phar Installer Not SET
+ - Upgraded Smarty to version 4.5.5;
+ - Regular Phar still doesn't support Windows at this point while Expanded Phar does because of a Smarty issue while being served from the phar installer; 
 
 
 Version 2.2.21 - Sherbrooke
