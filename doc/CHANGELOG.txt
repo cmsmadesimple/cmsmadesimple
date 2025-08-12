@@ -1,4 +1,4 @@
-Version 2.2.22 beta - NO NAME SET
+Version 2.2.22 - Saskatoon
 -------------------------------
 
 Core - General
@@ -17,15 +17,16 @@ Core - General
 Content Manager 1.1.14
  - Default page deletion bug on copy fixed
 
-Search Module 1.53
+Search Module 1.54
  - Fixed BR12727 - Search Module bug fix to remove error if no result found
 
- FilePicker 1.0.9-b.1
+ FilePicker 1.0.9
  - Fixed BR #12666 - Logs display problem in Admin Log
  
- Phar Installer Not SET
+ Phar Installer 1.4.3
  - Upgraded Smarty to version 4.5.5;
- - Regular Phar still doesn't support Windows at this point while Expanded Phar does because of a Smarty issue while being served from the phar installer; 
+ - Regular Phar still doesn't support Windows at this point while Expanded Phar does because of a Smarty issue while being served from the phar installer;
+ - Updated the installer README file;
 
 
 Version 2.2.21 - Sherbrooke
