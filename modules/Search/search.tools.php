@@ -220,6 +220,8 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
             // here check for a string to see
             // if module content is indexable at all
             $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
+            // Convert HTML line breaks to spaces - bug fix
+            $text = preg_replace('/<br\s*\/?>/i', ' ', $text); 
             $text = trim(strip_tags($text));
             if( $text && !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
         }
