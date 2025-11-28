@@ -67,4 +67,9 @@
     <li>Added 'Manage Search' permission</li>
   </ul>
 </li>
+<li>1.55.beta.1 - November 2025 (kiwichris)
+  <ul>
+    <li>bug fix so search recognises words split by line breaks</li>
+  </ul>
+</li>
 </ul>
