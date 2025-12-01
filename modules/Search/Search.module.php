@@ -48,7 +48,7 @@ class Search extends CMSModule
     public function IsPluginModule() { return true; }
     public function HasAdmin() { return true; }
     public function HandlesEvents () { return true; }
-    public function GetVersion() { return '1.55.beta.1'; }
+    public function GetVersion() { return '1.55.beta.2'; }
     public function MinimumCMSVersion() { return '1.12'; }
     public function GetAdminDescription() { return $this->Lang('description'); }
     public function VisibleToAdminUser() { return $this->CheckPermission('Manage Search'); }

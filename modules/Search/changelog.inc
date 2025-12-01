@@ -67,9 +67,10 @@
     <li>Added 'Manage Search' permission</li>
   </ul>
 </li>
-<li>1.55.beta.1 - November 2025 (kiwichris)
+<li>1.55.beta.2 - November 2025 (kiwichris)
   <ul>
     <li>bug fix so search recognises words split by line breaks</li>
+    <li>improvement - words split by a forward slash '/' are also included in the index as single phrase e.g. 9/11, 2/apples</li>
   </ul>
 </li>
 </ul>

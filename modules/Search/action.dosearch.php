@@ -224,7 +224,7 @@ if (isset($params['searchinput']) && $params['searchinput'] != '') {
         $title = cms_htmlentities($result->title);
         $txt = cms_htmlentities($result->urltxt);
         foreach( $words as $word ) {
-            $word = preg_quote($word);
+            $word = preg_quote($word, '/');
             $title = preg_replace('/\b('.$word.')\b/i', '<span class="searchhilite">$1</span>', $title);
             $txt = preg_replace('/\b('.$word.')\b/i', '<span class="searchhilite">$1</span>', $txt);
         }

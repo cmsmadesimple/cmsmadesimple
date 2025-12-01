@@ -41,6 +41,15 @@ function search_StemPhrase(&$module,$phrase)
 
     // split into words
     $words = preg_split('/[\s,!.;:\?()+\-\/\\\\]+/u', $phrase);
+    // find slashed words & add to $words (e.g. path/to/something, 9/11, 2/apples)
+    preg_match_all('/[^\/\s]+(?:\/[^\/\s]+)+/u', $phrase, $matches);
+    $slashed_words = $matches[0];
+    if( is_array($slashed_words) && count($slashed_words) ) {
+        foreach( $slashed_words as $one ) {
+            $words[] = $one;
+        }
+    }
+
     if( !is_array($words) ) return [];
 
     // ignore 1-digit numbers and non-numbers < 3 bytes
