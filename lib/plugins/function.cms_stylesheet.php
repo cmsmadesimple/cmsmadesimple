@@ -36,8 +36,10 @@ function smarty_function_cms_stylesheet($params, $smarty)
 	$combine_stylesheets = true;
 	$fnsuffix = '';
 	$trimbackground = FALSE;
+	$minify = TRUE;
 	$root_url = $config['css_url'];
 	$auto_https = 1;
+	$userid = get_userid(false);
 
 	#---------------------------------------------
 	# Trivial Exclusion
@@ -50,7 +52,12 @@ function smarty_function_cms_stylesheet($params, $smarty)
 	#---------------------------------------------
 
     try {
-        if (isset($params['name']) && $params['name'] != '' ) {
+        if (isset($params['names']) && $params['names'] != '' ) {
+            // Handle multiple names separated by commas
+            $names = array_map('trim', explode(',', $params['names']));
+            $name = $names; // Store as array for later processing
+        }
+        else if (isset($params['name']) && $params['name'] != '' ) {
             $name = trim($params['name']);
         }
         else if (isset($params['designid']) && $params['designid']!='') {
@@ -75,30 +82,73 @@ function smarty_function_cms_stylesheet($params, $smarty)
             $trimbackground = cms_to_bool($params['stripbackground']);
             $fnsuffix = '_e_';
         }
+        if( isset($params['nominify']) ) $minify = !cms_to_bool($params['nominify']);
+        
+        if($userid) {
+            $minify = FALSE;
+            $params['cache'] = '0';
+            $params['preload'] = '0';
+        }
 
         #---------------------------------------------
         # Build query
         #---------------------------------------------
 
         $query = null;
-        if( $name != '' ) {
+        if( is_array($name) ) {
+            // Handle multiple stylesheet names
+            $res = array();
+            foreach( $name as $single_name ) {
+                $single_query = new CmsLayoutStylesheetQuery( [ 'fullname'=>$single_name ] );
+                $matches = $single_query->GetMatches();
+                if( $matches ) $res = array_merge($res, $matches);
+            }
+            if( empty($res) ) throw new \RuntimeException('No stylesheets matched the criteria specified');
+            $nrows = count($res);
+        } else if( $name != '' ) {
             // stylesheet by name
             $query = new CmsLayoutStylesheetQuery( [ 'fullname'=>$name ] );
         } else if( $design_id > 0 ) {
             // stylesheet by design id
             $query = new \CmsLayoutStylesheetQuery( [ 'design'=>$design_id ] );
         }
-        if( !$query ) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
+        if( !$query && !is_array($name) ) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
 
         #---------------------------------------------
         # Execute
         #---------------------------------------------
 
-        $nrows = $query->TotalMatches();
-        if( !$nrows ) throw new \RuntimeException('No stylesheets matched the criteria specified');
-        $res = $query->GetMatches();
+        if( !is_array($name) ) {
+            $nrows = $query->TotalMatches();
+            if( !$nrows ) throw new \RuntimeException('No stylesheets matched the criteria specified');
+            $res = $query->GetMatches();
+        }
+        // $res is already populated for multiple names case
 
         // we have some output, and the stylesheet objects have already been loaded.
+
+        // Handle inline parameter
+        if( isset($params['inline']) && cms_to_bool($params['inline']) ) {
+            $css_content = '';
+            foreach( $res as $one ) {
+                $smarty->left_delimiter = '[[';
+                $smarty->right_delimiter = ']]';
+                $tmp = $smarty->force_compile;
+                $smarty->force_compile = 1;
+                $css_content .= $smarty->fetch('cms_stylesheet:'.$one->get_name());
+                $smarty->force_compile = $tmp;
+                $smarty->left_delimiter = '{';
+                $smarty->right_delimiter = '}';
+            }
+            if($minify) {
+                $css_content = preg_replace('/\/\*[^*]*\*+([^\/*][^*]*\*+)*\//', '', $css_content);
+                $css_content = preg_replace('/\s+/', ' ', $css_content);
+                $css_content = preg_replace('/;\s*}/', '}', $css_content);
+                $css_content = str_replace([' {', '{ ', ' }', '} ', ': ', ' :', '; ', ' ;'], ['{', '{', '}', '}', ':', ':', ';', ';'], $css_content);
+                $css_content = trim($css_content);
+            }
+            $stylesheet = '<style>' . $css_content . '</style>';
+        } else {
 
         // Combine stylesheets
         if($combine_stylesheets) {
@@ -129,16 +179,19 @@ function smarty_function_cms_stylesheet($params, $smarty)
                 // media parameter is deprecated.
 
                 // combine all matches into one stylesheet
-                $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps).$fnsuffix).'.css';
+                $hash_params = $params;
+
+                if(isset($params['cache']) && !cms_to_bool($params['cache'])) $hash_params['_nocache_time'] = time();
+                $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($hash_params).serialize($all_timestamps).$fnsuffix).'.css';
                 $fn = cms_join_path($cache_dir,$filename);
 
-                if( !file_exists($fn) ) {
+                if( !file_exists($fn) || (isset($params['cache']) && !cms_to_bool($params['cache'])) ) {
                     $list = array();
                     foreach ($res as $one) {
                         if( in_array($params['media'],$one->get_media_types()) ) $list[] = $one->get_name();
                     }
 
-                    cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
+                    cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty, $minify);
                 }
 
                 cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
@@ -148,21 +201,23 @@ function smarty_function_cms_stylesheet($params, $smarty)
                 foreach($all_media as $hash=>$onemedia) {
 
                     // combine all matches into one stylesheet.
-                    $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
+                    $hash_params = $params;
+                    if(isset($params['cache']) && !cms_to_bool($params['cache'])) $hash_params['_nocache_time'] = time();
+                    $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($hash_params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
                     $fn = cms_join_path($cache_dir,$filename);
 
                     // Get media_type and media_query
                     $media_query = $onemedia[0]->get_media_query();
                     $media_type = implode(',',$onemedia[0]->get_media_types());
 
-                    if( !is_file($fn) ) {
+                    if( !is_file($fn) || (isset($params['cache']) && !cms_to_bool($params['cache'])) ) {
                         $list = array();
 
                         foreach( $onemedia as $one ) {
                             $list[] = $one->get_name();
                         }
 
-                        cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
+                        cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty, $minify);
                     }
 
                     cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
@@ -182,14 +237,18 @@ function smarty_function_cms_stylesheet($params, $smarty)
                     $media_type  = implode(',',$one->get_media_types());
                 }
 
-                $filename = 'stylesheet_'.md5('single'.$one->get_id().$use_https.$one->get_modified().$fnsuffix).'.css';
+                $hash_base = 'single'.$one->get_id().$use_https.$one->get_modified().$fnsuffix;
+                if(isset($params['cache']) && !cms_to_bool($params['cache'])) $hash_base .= time();
+                $filename = 'stylesheet_'.md5($hash_base).'.css';
                 $fn = cms_join_path($cache_dir,$filename);
 
-                if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
+                if (!file_exists($fn) || (isset($params['cache']) && !cms_to_bool($params['cache'])) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty, $minify);
 
                 cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
             }
         }
+
+        } // end inline else
 
         #---------------------------------------------
         # Cleanup & output
@@ -226,7 +285,7 @@ function smarty_function_cms_stylesheet($params, $smarty)
 	Misc functions
 **********************************************************/
 
-function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
+function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty, $minify = true)
 {
 	$_contents = '';
     if( is_string($list) && !is_array($list) ) $list = array($list);
@@ -268,6 +327,15 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 
     \CMSMS\HookManager::do_hook('Core::StylesheetPostRender', [ 'content' => &$_contents ] );
 
+	// Minify CSS
+	if($minify) {
+		$_contents = preg_replace('/\/\*[^*]*\*+([^\/*][^*]*\*+)*\//', '', $_contents); // Remove comments
+		$_contents = preg_replace('/\s+/', ' ', $_contents); // Collapse whitespace
+		$_contents = preg_replace('/;\s*}/', '}', $_contents); // Remove semicolon before closing brace
+		$_contents = str_replace([' {', '{ ', ' }', '} ', ': ', ' :', '; ', ' ;'], ['{', '{', '}', '}', ':', ':', ';', ';'], $_contents);
+		$_contents = trim($_contents);
+	}
+
 	// Write file
 	$fh = fopen($filename,'w');
 	fwrite($fh, $_contents);
@@ -281,15 +349,25 @@ function cms_stylesheet_toString($filename, $media_query = '', $media_type = '',
 	if( isset($params['nolinks']) )	{
 		$stylesheet .= $root_url.$filename.',';
 	} else {
-
-		if (!empty($media_query)) {
-			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_query.'" />'."\n";
-		} elseif (!empty($media_type)) {
-
-			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_type.'" />'."\n";
+		if( isset($params['preload']) && cms_to_bool($params['preload']) ) {
+			if (!empty($media_query)) {
+				$stylesheet .= '<link rel="preload" href="'.$root_url.$filename.'" as="style" media="'.$media_query.'" onload="this.onload=null;this.rel=\'stylesheet\'" />'."\n";
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_query.'" />'."\n";
+			} elseif (!empty($media_type)) {
+				$stylesheet .= '<link rel="preload" href="'.$root_url.$filename.'" as="style" media="'.$media_type.'" onload="this.onload=null;this.rel=\'stylesheet\'" />'."\n";
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_type.'" />'."\n";
+			} else {
+				$stylesheet .= '<link rel="preload" href="'.$root_url.$filename.'" as="style" onload="this.onload=null;this.rel=\'stylesheet\'" />'."\n";
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" />'."\n";
+			}
 		} else {
-
-			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" />'."\n";
+			if (!empty($media_query)) {
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_query.'" />'."\n";
+			} elseif (!empty($media_type)) {
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_type.'" />'."\n";
+			} else {
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" />'."\n";
+			}
 		}
 	}
 
@@ -303,9 +381,40 @@ function smarty_cms_about_function_cms_stylesheet()
 {
 	?>
 	<p>Author: jeff&lt;jeff@ajprogramming.com&gt;</p>
+	<p>Enhanced by: Magal Hezi (v3.0)</p>
+
+	<h3>Version 3.0 New Features:</h3>
+	<ul>
+		<li><strong>names parameter:</strong> Load multiple stylesheets: <code>{cms_stylesheet names="style1,style2,style3"}</code></li>
+		<li><strong>CSS Minification:</strong> Enabled by default (use <code>nominify=1</code> to disable)</li>
+		<li><strong>cache parameter:</strong> Use <code>cache=0</code> to force cache regeneration for development</li>
+		<li><strong>preload parameter:</strong> Use <code>preload=1</code> for performance optimization with preload links</li>
+		<li><strong>inline parameter:</strong> Use <code>inline=1</code> to output CSS as &lt;style&gt; tags instead of &lt;link&gt; tags</li>
+		<li><strong>Admin Detection:</strong> Automatically disables minification, caching, and preload for logged-in users</li>
+	</ul>
+
+	<h3>Examples:</h3>
+	<ul>
+		<li>Multiple stylesheets: <code>{cms_stylesheet names="header,footer,main"}</code></li>
+		<li>Development mode: <code>{cms_stylesheet names="style" cache=0 nominify=1}</code></li>
+		<li>Performance mode: <code>{cms_stylesheet names="critical" preload=1}</code></li>
+		<li>Inline CSS: <code>{cms_stylesheet names="critical" inline=1}</code></li>
+		<li>Combined options: <code>{cms_stylesheet names="app,theme" preload=1 assign="my_css"}</code></li>
+	</ul>
+
+	<h3>Parameters:</h3>
+	<ul>
+		<li><code>names</code> - Comma-separated list of stylesheet names</li>
+		<li><code>cache</code> - Set to 0 to disable caching (default: 1)</li>
+		<li><code>nominify</code> - Set to 1 to disable minification (default: 0)</li>
+		<li><code>preload</code> - Set to 1 to enable preload links (default: 0)</li>
+		<li><code>inline</code> - Set to 1 to output as &lt;style&gt; tags (default: 0)</li>
+		<li><code>assign</code> - Assign output to Smarty variable instead of displaying</li>
+	</ul>
 
 	<p>Change History:</p>
 	<ul>
+		<li>v3.0 (2025-12-16): Added multiple stylesheet support, minification, preload, inline, and admin detection</li>
 		<li>Rework from {stylesheet}</li>
 		<li>(Stikki and Calguy1000) Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
 	</ul>
