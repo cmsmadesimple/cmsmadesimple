@@ -105,7 +105,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
         if( !is_array($tmp) || !count($tmp) ) return;
         $words = array();
         foreach( $tmp as $key => $val ) {
-            $words[] = array('word'=>$key,'count'=>$val);
+            $words[] = array('word'=>(string)$key,'count'=>$val);
         }
         $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
         $parms = array($module);
