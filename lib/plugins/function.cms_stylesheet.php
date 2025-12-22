@@ -36,7 +36,7 @@ function smarty_function_cms_stylesheet($params, $smarty)
 	$combine_stylesheets = true;
 	$fnsuffix = '';
 	$trimbackground = FALSE;
-	$minify = TRUE;
+	$minify = FALSE;
 	$root_url = $config['css_url'];
 	$auto_https = 1;
 	$userid = get_userid(false);
@@ -53,12 +53,10 @@ function smarty_function_cms_stylesheet($params, $smarty)
 
     try {
         if (isset($params['names']) && $params['names'] != '' ) {
-            // Handle multiple names separated by commas
-            $names = array_map('trim', explode(',', $params['names']));
-            $name = $names; // Store as array for later processing
+            $name = array_map('trim', explode(',', $params['names']));
         }
         else if (isset($params['name']) && $params['name'] != '' ) {
-            $name = trim($params['name']);
+            $name = array_map('trim', explode(',', $params['name']));
         }
         else if (isset($params['designid']) && $params['designid']!='') {
             $design_id = (int)$params['designid'];
@@ -82,7 +80,7 @@ function smarty_function_cms_stylesheet($params, $smarty)
             $trimbackground = cms_to_bool($params['stripbackground']);
             $fnsuffix = '_e_';
         }
-        if( isset($params['nominify']) ) $minify = !cms_to_bool($params['nominify']);
+        if( isset($params['minify']) ) $minify = cms_to_bool($params['minify']);
         
         if($userid) {
             $minify = FALSE;
@@ -95,8 +93,8 @@ function smarty_function_cms_stylesheet($params, $smarty)
         #---------------------------------------------
 
         $query = null;
-        if( is_array($name) ) {
-            // Handle multiple stylesheet names
+        if( is_array($name) && !empty($name) ) {
+            // Handle stylesheet names (always array now)
             $res = array();
             foreach( $name as $single_name ) {
                 $single_query = new CmsLayoutStylesheetQuery( [ 'fullname'=>$single_name ] );
@@ -105,9 +103,6 @@ function smarty_function_cms_stylesheet($params, $smarty)
             }
             if( empty($res) ) throw new \RuntimeException('No stylesheets matched the criteria specified');
             $nrows = count($res);
-        } else if( $name != '' ) {
-            // stylesheet by name
-            $query = new CmsLayoutStylesheetQuery( [ 'fullname'=>$name ] );
         } else if( $design_id > 0 ) {
             // stylesheet by design id
             $query = new \CmsLayoutStylesheetQuery( [ 'design'=>$design_id ] );

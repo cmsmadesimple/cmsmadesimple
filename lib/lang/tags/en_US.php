@@ -320,7 +320,7 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <li><em>(optional)</em> <strong>names</strong> - Comma-separated list of stylesheet names: <code>names="style1,style2,style3"</code></li>
   <li><em>(optional)</em> name - Instead of getting all stylesheets for the given page, it will only get one specifically named one, whether it's attached to the current template or not.</li>
   <li><em>(optional)</em> <strong>cache</strong> - (boolean, default true) Set to 0 to disable caching and force regeneration: <code>cache=0</code></li>
-  <li><em>(optional)</em> <strong>nominify</strong> - (boolean, default false) Set to 1 to disable CSS minification: <code>nominify=1</code></li>
+  <li><em>(optional)</em> <strong>minify</strong> - (boolean, default false) Set to 1 to enable CSS minification: <code>minify=1</code></li>
   <li><em>(optional)</em> <strong>preload</strong> - (boolean, default false) Set to 1 to enable preload links for performance: <code>preload=1</code></li>
   <li><em>(optional)</em> <strong>inline</strong> - (boolean, default false) Set to 1 to output CSS as &lt;style&gt; tags instead of &lt;link&gt; tags: <code>inline=1</code></li>
   <li><em>(optional)</em> nocombine - (boolean, default false) If enabled, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
@@ -333,7 +333,7 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <h3>Version 3.0 Examples:</h3>
   <ul>
   <li>Multiple stylesheets: <code>{cms_stylesheet names="header,footer,main"}</code></li>
-  <li>Development mode: <code>{cms_stylesheet names="style" cache=0 nominify=1}</code></li>
+  <li>Development mode: <code>{cms_stylesheet names="style" cache=0}</code></li>
   <li>Performance mode: <code>{cms_stylesheet names="critical" preload=1}</code></li>
   <li>Inline CSS: <code>{cms_stylesheet names="critical" inline=1}</code></li>
   <li>Combined options: <code>{cms_stylesheet names="app,theme" preload=1 assign="my_css"}</code></li>
@@ -341,7 +341,7 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <h3>Admin Detection:</h3>
   <p>When a user is logged in, the system automatically disables minification, caching, and preload for easier development and debugging.</p>
   <h3>CSS Minification (v3.0):</h3>
-  <p>CSS is automatically minified by default, removing comments, whitespace, and optimizing syntax for smaller file sizes and faster loading. Use <code>nominify=1</code> to disable for development.</p>
+  <p>CSS minification is opt-in and disabled by default. Use <code>minify=1</code> to enable minification for smaller file sizes and faster loading.</p>
   <h3>Smarty Processing</h3>
   <p>When generating css files this system passes the stylesheets retrieved from the database through smarty.  The smarty delimiters have been changed from the CMSMS standard { and } to [[ and ]] respectively to ease transition in stylesheets.  This allows creating smarty variables i.e.: [[assign var='red' value='#900']] at the top of the stylesheet, and then using these variables later in the stylesheet, i.e:</p>
 <pre>
