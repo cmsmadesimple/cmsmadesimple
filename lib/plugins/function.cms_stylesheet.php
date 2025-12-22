@@ -52,13 +52,13 @@ function smarty_function_cms_stylesheet($params, $smarty)
 	#---------------------------------------------
 
     try {
-        if (isset($params['names']) && $params['names'] != '' ) {
+        if (!empty($params['names'])) {
             $name = array_map('trim', explode(',', $params['names']));
         }
-        else if (isset($params['name']) && $params['name'] != '' ) {
+        else if (!empty($params['name'])) {
             $name = array_map('trim', explode(',', $params['name']));
         }
-        else if (isset($params['designid']) && $params['designid']!='') {
+        else if (!empty($params['designid'])) {
             $design_id = (int)$params['designid'];
         } else {
             $content_obj = $gCms->get_content_object();
@@ -80,7 +80,7 @@ function smarty_function_cms_stylesheet($params, $smarty)
             $trimbackground = cms_to_bool($params['stripbackground']);
             $fnsuffix = '_e_';
         }
-        if( isset($params['minify']) ) $minify = cms_to_bool($params['minify']);
+        if( !empty($params['minify']) ) $minify = cms_to_bool($params['minify']);
         
         if($userid) {
             $minify = FALSE;
@@ -123,7 +123,7 @@ function smarty_function_cms_stylesheet($params, $smarty)
         // we have some output, and the stylesheet objects have already been loaded.
 
         // Handle inline parameter
-        if( isset($params['inline']) && cms_to_bool($params['inline']) ) {
+        if( !empty($params['inline']) && cms_to_bool($params['inline']) ) {
             $css_content = '';
             foreach( $res as $one ) {
                 $smarty->left_delimiter = '[[';
