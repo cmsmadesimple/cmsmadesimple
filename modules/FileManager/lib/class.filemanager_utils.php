@@ -175,7 +175,7 @@ final class filemanager_utils
         $ext = substr(strrchr($file, '.'), 1);
         if( !$ext ) return FALSE;
 
-        $tmp = array('gif','jpg','jpeg','png');
+        $tmp = array('gif','jpg','jpeg','png','webp','avif');
         if( in_array(strtolower($ext),$tmp) ) return TRUE;
         return FALSE;
     }
@@ -343,6 +343,8 @@ final class filemanager_utils
                     'tif' => 'image/tiff',
                     'svg' => 'image/svg+xml',
                     'svgz' => 'image/svg+xml',
+                    'webp' => 'image/webp',
+                    'avif' => 'image/avif',
 
                     // archives
                     'zip' => 'application/zip',
@@ -498,12 +500,20 @@ final class filemanager_utils
             $res = imagepng($i_dest,$dest,9);
             break;
         case 'image/jpeg':
-            $res = imagejpeg($i_dest,$dest,100);
+            $res = imagejpeg($i_dest,$dest,80); //set quality to 80 instead of 100
             break;
+        case 'image/webp':
+            $res = imagewebp($i_dest,$dest,80);
+            break;
+        case 'image/avif':
+            if (PHP_VERSION_ID >= 80000 && function_exists('imageavif')) {
+                $res = imageavif($i_dest,$dest,80,6);
+            } else $res = FALSE;
+            break;            
+        default:
+            $res = FALSE;
         }
-
-        if( !$res ) return FALSE;
-        return TRUE;
+        return ($res != FALSE);
     }
 
     public static function format_filesize($_size) {
