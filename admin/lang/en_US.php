@@ -470,6 +470,7 @@ $lang['event_desc_globalcontentprecompile'] = "Sent before a global content bloc
 $lang['event_desc_loginfailed'] = "Sent after a user failed to login into the Admin panel";
 $lang['event_desc_loginattempted'] = "Sent when login request is started";;
 $lang['event_desc_loginverified'] = "Sent after a user is verified, before login";
+$lang['event_desc_loginstart'] = "Sent when login request is started";
 $lang['event_desc_loginpre'] = "Sent when a user submits the login form in the Admin panel";
 $lang['event_desc_loginpost'] = "Sent after a user logs into the Admin panel";
 $lang['event_desc_logoutpost'] = "Sent after a user logs out of the Admin panel";
