@@ -74,31 +74,87 @@ final class LoginOperations
 
     public function save_authentication(\User $user,\User $effective_user = null)
     {
-        // saves session/cookie data
-        if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
+        return $this->finalize_authentication($user, $effective_user);
+    }
 
-        $private_data = array();
+    public function initialize_authentication(\User $user, \User $effective_user = null): void
+    {
+        if (!$user || !$user->id) {
+            throw new \LogicException('Invalid user for authentication initialization');
+        }
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_regenerate_id(true);
+        }
+
+        unset($_SESSION['cms_userid'], $_SESSION['cms_loggedin'], $_SESSION[$this->_loginkey]);
+
+        $_SESSION['cms_pending_auth_userid'] = (int) $user->id;
+        $_SESSION['cms_pending_auth_time']   = time();
+        $_SESSION['cms_pending_effective_userid'] =
+            ($effective_user && $effective_user->id > 0)
+                ? (int) $effective_user->id
+                : null;
+    }
+
+    public function finalize_authentication(\User $user, \User $effective_user = null): string
+    {
+        if (!$user || !$user->id) {
+            throw new \LogicException('Invalid user for authentication finalization');
+        }
+
+        if (!isset($_SESSION['cms_pending_auth_time']) ||
+            $_SESSION['cms_pending_auth_time'] < (time() - 300)) {
+            throw new \LogicException('Pending authentication expired');
+        }
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_regenerate_id(true);
+        }
+
+        $_SESSION['cms_userid'] = (int) $user->id;
+        $_SESSION['cms_loggedin'] = 1;
+
+        unset($_SESSION['cms_pending_auth_userid']);
+        unset($_SESSION['cms_pending_auth_time']);
+
+        $private_data = [];
         $private_data['uid'] = $user->id;
         $private_data['username'] = $user->username;
         $private_data['eff_uid'] = null;
         $private_data['eff_username'] = null;
-        $private_data['hash'] = password_hash( $user->id.$user->password.__FILE__, PASSWORD_BCRYPT );
-        if( $effective_user && $effective_user->id > 0 && $effective_user->id != $user->id ) {
+        $private_data['hash'] = password_hash(
+            $user->id.$user->password.__FILE__,
+            PASSWORD_BCRYPT
+        );
+
+        if ($effective_user && $effective_user->id > 0 && $effective_user->id != $user->id) {
             $private_data['eff_uid'] = $effective_user->id;
             $private_data['eff_username'] = $effective_user->username;
         }
-        $enc = base64_encode( json_encode( $private_data ) );
-        $hash = sha1( $this->_get_salt() . $enc );
-        $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
-        \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
-        // this is for CSRF stuff, doesn't technically belong here.
-        $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
+        $enc  = base64_encode(json_encode($private_data));
+        $hash = sha1($this->_get_salt() . $enc);
+
+        $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
+        \cms_cookies::set($this->_loginkey, $_SESSION[$this->_loginkey]);
+
+        $key = substr(
+            str_shuffle(sha1(__DIR__.$user->id.time().session_id())),
+            -19
+        );
+
         $_SESSION[CMS_USER_KEY] = $key;
-        \cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+        \cms_cookies::set(CMS_SECURE_PARAM_NAME, $key);
+
         unset($this->_data);
+
+        \CMSMS\HookManager::do_hook('Core::LoginPost', ['user' => $user]);
+
         return $key;
     }
+
+
 
     protected function _get_data()
     {
