@@ -75,6 +75,8 @@ $lang['import_UsersGuide'] = 'Import Content & Settings';
 $lang['text_UsersGuide'] = 'from UsersGuide Module';
 $lang['text_UserGuide2'] = 'from UserGuide2 Module';
 $lang['none'] = 'none';
+$lang['error_invalid_file_path'] = 'Invalid file path';
+$lang['error_creating_directory'] = 'Error creating directory';
 
 
 # Edit User Guide Page
@@ -198,6 +200,15 @@ The module author is not obligated to provide support for this code. However you
 #########  ###    ###  ###    ###  ###    ###  #########  ########  ######### #########  #########
 
 $lang['changelog'] = '
+
+<h3>Version 1.1 - 19Feb26</h3>
+<ul>
+   <li>Kept page order stable during export and import.</li>
+   <li>Added a one-time upgrade step to fix existing page order.</li>
+   <li>Added stricter image checks for import and export.</li>
+   <li>Improved import filenames: keeps spaces, brackets and %, and avoids overwriting existing files.</li>
+</ul>
+<br>
 
 <h3>Version 1.0 - 04Apr24</h3>
 <ul>

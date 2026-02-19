@@ -9,13 +9,13 @@
 
 if ( !defined('CMS_VERSION') ) exit;
 
-// //$current_version = $oldversion;
-// $db = $this->GetDb();
-// $dict = NewDataDictionary($db);
+$db = $this->GetDb();
 
-// switch ($oldversion) {
-//     case '1.0':
-//         // do something
-//         break;
-
-// }
+if ( version_compare($oldversion, '1.1', '<') ) {
+	$sql = 'SET @rownumber = 0';
+	$db->Execute($sql);
+	$sql = 'UPDATE '.CMS_DB_PREFIX.'module_userguide
+		SET position = (@rownumber:=@rownumber+1)
+		ORDER BY position, id';
+	$db->Execute($sql);
+}
