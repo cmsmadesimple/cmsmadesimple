@@ -31,6 +31,15 @@ final class utils
         switch( $job->frequency ) {
         case $job::RECUR_NONE:
             return $out;
+        case $job::RECUR_3M:
+            $out = $now + 3 * 60;
+            break;
+        case $job::RECUR_5M:
+            $out = $now + 5 * 60;
+            break;
+        case $job::RECUR_10M:
+            $out = $now + 10 * 60;
+            break;
         case $job::RECUR_15M:
             $out = $now + 15 * 60;
             break;
@@ -45,6 +54,12 @@ final class utils
             break;
         case $job::RECUR_3H:
             $out = $now + 3 * 3600;
+            break;
+        case $job::RECUR_6H:
+            $out = $now + 6 * 3600;
+            break;
+        case $job::RECUR_12H:
+            $out = $now + 12 * 3600;
             break;
         case $job::RECUR_DAILY:
             $out = $now + 3600 * 24;

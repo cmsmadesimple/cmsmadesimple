@@ -87,11 +87,15 @@ trait CronJobTrait
         case 'frequency':
             switch( $val ) {
             case self::RECUR_NONE:
+            case self::RECUR_3M:
+            case self::RECUR_5M:
+            case self::RECUR_10M:
             case self::RECUR_15M:
             case self::RECUR_30M:
             case self::RECUR_HOURLY:
             case self::RECUR_2H:
             case self::RECUR_3H:
+            case self::RECUR_6H:
             case self::RECUR_12H:
             case self::RECUR_DAILY:
             case self::RECUR_WEEKLY:
@@ -121,5 +125,15 @@ trait CronJobTrait
         default:
             return parent::__set($key,$val);
         }
+    }
+
+    /**
+     * Get all available frequency constants
+     * @return array
+     */
+    public static function get_frequencies()
+    {
+        $reflection = new \ReflectionClass('\\CMSMS\\Async\\CronJobInterface');
+        return array_values($reflection->getConstants());
     }
 }
