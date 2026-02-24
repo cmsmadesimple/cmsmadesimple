@@ -1,11 +1,10 @@
 Developers Past and Present
 ---------------------------
 - Fernando Morgado - <fjmorgado [AT] gmail [DOT] com>
-- Rolf - <rolf [AT] cmscanbesimple [DOT] org>
+- Rolf 💙
 - Mathieu Muths (AirLibre)
 - Chris Taylor (chrisbt)
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
-
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Tapio Löytty - stikki [AT] cmsmadesimple [AT] org
 - Goran Ilic - g [DOT] ilic [AT] i-arts [DOT] eu
@@ -79,7 +78,7 @@ If we have missed anybody please contact us and we will add your name for future
 - Christoffer L -- christoffer.la [AT] hotmail [DOT] com
 - Christophe Lherieau -- skimpax [AT] gmail [DOT] com
 - Joost de Bruijn -- joostdebruijn [AT] planet [DOT] nl
-- Rolf -- rolf [AT] cmsmadesimple [DOT] org
+- Rolf 💙
 - Jos -- josvd [AT] live [DOT] nl
 - Anton Evseichev -- jn0izzze [AT] gmail [DOT] com
 - Oskar Rough -- oskar [AT] lyf [DOT] dk
@@ -98,7 +97,7 @@ If we have missed anybody please contact us and we will add your name for future
 - Aire Libre (Mathieu M [DOT] ) -- contact [AT] airelibre [DOT] fr
 - Farhad Pezeshki -- farhadrm [AT] hotmail [DOT] com
 - Alex -- html5sf [AT] gmail [DOT] com
-- Kim Birkeland Skorgenes -- kimskorgenes [AT] hotmail [DOT] com
+- Kim Birkeland Skorgenes 
 
 Past Translators:
 Translators are automatic removed from list if not active two years before release of version.  
