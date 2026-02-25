@@ -18,5 +18,8 @@ if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], '
 }
 $smarty->assign('action_url',$this->create_url('m1_','upload',$returnid));
 $smarty->assign('ie_upload_message',$this->Lang('ie_upload_message'));
+$uid = get_userid(false);
+$smarty->assign('is_superuser', $uid && \UserOperations::get_instance()->IsSuperuser($uid));
+$smarty->assign('blocked_extensions', \CMSMS\FilePickerProfile::BLOCKED_EXTENSIONS_DEFAULT);
 
 echo $this->ProcessTemplate('uploadview.tpl');

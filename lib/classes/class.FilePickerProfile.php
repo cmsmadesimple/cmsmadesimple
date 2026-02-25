@@ -44,10 +44,37 @@ class FilePickerProfile
     const FLAG_BYGROUP = 2;
 
     /**
+     * Default blocked file extensions for non-superuser uploads.
+     * Comma-separated, lowercase, no dots.
+     */
+    const BLOCKED_EXTENSIONS_DEFAULT = 'exe,bat,cmd,com,msi,scr,pif,php';
+
+    /**
+     * MIME types that indicate executable content.
+     * Used for server-side validation of uploaded file bytes via finfo.
+     */
+    const BLOCKED_MIME_TYPES = [
+        'application/x-dosexec',
+        'application/x-executable',
+        'application/x-msdos-program',
+        'application/x-msdownload',
+        'application/x-msi',
+        'application/x-ms-installer',
+        'application/x-bat',
+        'application/x-com',
+        'application/x-pif',
+        'application/x-screensaver',
+        'application/x-php',
+        'application/x-httpd-php',
+        'text/x-php',
+    ];
+
+    /**
      * @ignore
      */
     private $_data = [ 'top'=>null, 'type'=>FileType::TYPE_ANY, 'can_upload'=>self::FLAG_YES, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_YES,
-                       'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>TRUE, 'can_mkdir'=>TRUE ];
+                       'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>TRUE, 'can_mkdir'=>TRUE,
+                       'blocked_extensions'=>null ];
 
     /**
      * Set a value into this profile
@@ -66,6 +93,7 @@ class FilePickerProfile
 
         case 'match_prefix':
         case 'exclude_prefix':
+        case 'blocked_extensions':
             $this->_data[$key] = trim($val);
             break;
 
@@ -139,6 +167,10 @@ class FilePickerProfile
         case 'match_prefix':
         case 'exclude_prefix':
             return \trim((string)$this->_data[$key]);
+
+        case 'blocked_extensions':
+            $val = isset($this->_data[$key]) ? \trim((string)$this->_data[$key]) : '';
+            return $val !== '' ? $val : self::BLOCKED_EXTENSIONS_DEFAULT;
 
         case 'can_mkdir':
         case 'can_upload':

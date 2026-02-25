@@ -3,6 +3,9 @@
 // A
 $lang['add_profile'] = 'Add a new Profile';
 
+// B
+$lang['blocked_extensions'] = 'Blocked extensions';
+
 // C
 $lang['can_delete'] = 'Allow file deletion';
 $lang['can_mkdir'] = 'Allow directory creation';
@@ -26,6 +29,7 @@ $lang['error_ajax_writepermission'] = 'Sorry, you do not have permission to writ
 $lang['error_failed_ajax'] = 'A problem occurred with an ajax request';
 $lang['error_problem_upload'] = 'Sorry, a problem occurred uploading';
 $lang['error_upload_acceptFileTypes'] = 'Files of this type are not acceptable in this scope.';
+$lang['error_upload_blockedMimeType'] = 'File rejected: executable content detected';
 $lang['error_upload_maxFileSize'] = 'The file is too large';
 $lang['error_upload_minFileSize'] = 'The file is too small';
 $lang['error_upload_maxNumberOfFiles'] = 'You are uploading too many files at once';
@@ -53,6 +57,8 @@ $lang['HelpPopupTitle_ProfileCan_Upload'] = 'Allow uploading';
 $lang['HelpPopup_ProfileCan_Upload'] = 'Optionally allow users to upload files during the selection process';
 $lang['HelpPopupTitle_ProfileDir'] = 'Top Directory';
 $lang['HelpPopup_ProfileDir'] = 'Optionally enter the relative path of a directory (relative to the uploads path) to restrict operations to.';
+$lang['HelpPopupTitle_ProfileBlockedExtensions'] = 'Blocked File Extensions';
+$lang['HelpPopup_ProfileBlockedExtensions'] = 'Comma-separated list of file extensions (without dots) that non-superuser admins cannot upload. Leave empty to use the system default. Superusers (admin group members) always have unrestricted access.';
 $lang['HelpPopupTitle_ProfileShowthumbs'] = 'Show Thumbnails';
 $lang['HelpPopup_ProfileShowthumbs'] = 'If enabled, thumbnails will be visible for image files for which thumbnails are generated.';
 

@@ -48,4 +48,10 @@
   &nbsp;{cms_help key2='HelpPopup_ProfileCan_Mkdir' title=$mod->Lang('HelpPopupTitle_ProfileCan_Mkdir')}
   </p>
 </div>
+<div class="c_full cf">
+  <label for="profile_blocked_ext" class="grid_2">{$mod->Lang('blocked_extensions')}:</label>
+  <p class="grid_9"><input type="text" size="80" id="profile_blocked_ext" name="{$actionid}blocked_extensions" value="{$profile->blocked_extensions|cms_escape}"/>
+  &nbsp;{cms_help key2='HelpPopup_ProfileBlockedExtensions' title=$mod->Lang('HelpPopupTitle_ProfileBlockedExtensions')}
+  </p>
+</div>
 {form_end}

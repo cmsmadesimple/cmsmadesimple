@@ -38,9 +38,18 @@ $(function() {
   });
 
   // create our file upload area.
+  {/literal}
+  var _is_superuser = {if $is_superuser}true{else}false{/if};
+  var _blocked_ext = _is_superuser ? null : new RegExp('\\.({$blocked_extensions|replace:',':'|'})$', 'i');
+  {literal}
   $('#fileupload').fileupload({
     add: function(e, data) {
-      _files.push(data.files[0].name);
+      var file = data.files[0];
+      if (_blocked_ext && _blocked_ext.test(file.name)) {
+        alert('{/literal}{$mod->Lang("error_filetype_blocked")}{literal}'.replace('%s', file.name));
+        return;
+      }
+      _files.push(file.name);
       _jqXHR.push(data.submit());
     },
 

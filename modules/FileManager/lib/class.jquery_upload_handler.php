@@ -126,6 +126,28 @@ abstract class jquery_upload_handler
 
     protected function is_file_acceptable( $filename ) { return TRUE; }
 
+    /**
+     * Validate the MIME type of an uploaded file using finfo.
+     * Detects executables regardless of file extension.
+     *
+     * @param string $file_path Absolute path to the uploaded file
+     * @return string|null Error string if MIME is blocked, null if acceptable
+     */
+    protected function validate_uploaded_file_mime( $file_path )
+    {
+        if( !function_exists('finfo_open') ) return null;
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if( !$finfo ) return null;
+
+        $mime = finfo_file($finfo, $file_path);
+        finfo_close($finfo);
+        if( !$mime ) return null;
+
+        if( in_array($mime, \CMSMS\FilePickerProfile::BLOCKED_MIME_TYPES) ) return 'blockedMimeType';
+        return null;
+    }
+
     private function has_error($uploaded_file, $file, $error) {
         if ($error) {
             return $error;
@@ -235,14 +257,21 @@ abstract class jquery_upload_handler
             }
             $file_size = filesize($file_path);
             if ($file_size === $file->size) {
-            		if ($this->options['orient_image']) {
-            		    $this->orient_image($file_path);
-            		}
-                    $file->url = $this->options['upload_url'].rawurlencode($file->name);
-                    foreach($this->options['image_versions'] as $version => $options) {
-                        if ($this->create_scaled_image($file->name, $options)) {
-                            $file->{$version.'_url'} = $options['upload_url']
-                                                           .rawurlencode($file->name);
+                    // validate MIME type on completed uploads
+                    $mime_error = $this->validate_uploaded_file_mime($file_path);
+                    if( $mime_error ) {
+                        unlink($file_path);
+                        $file->error = $mime_error;
+                    } else {
+                        if ($this->options['orient_image']) {
+                            $this->orient_image($file_path);
+                        }
+                        $file->url = $this->options['upload_url'].rawurlencode($file->name);
+                        foreach($this->options['image_versions'] as $version => $options) {
+                            if ($this->create_scaled_image($file->name, $options)) {
+                                $file->{$version.'_url'} = $options['upload_url']
+                                                               .rawurlencode($file->name);
+                            }
                         }
                     }
             } else if ($this->options['discard_aborted_uploads']) {

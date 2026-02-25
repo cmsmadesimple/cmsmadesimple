@@ -22,12 +22,29 @@ class FileManagerUploadHandler extends jquery_upload_handler
 
   protected function is_file_acceptable( $file )
   {
-      $config = \cms_config::get_instance();
-      if( !$config['developer_mode'] ) {
-          $ext = strtolower(substr(strrchr($file, '.'), 1));
-          if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
-      }
+      // superusers (admin group members and uid 1) have unrestricted uploads
+      $uid = get_userid(false);
+      if( $uid && \UserOperations::get_instance()->IsSuperuser($uid) ) return TRUE;
+
+      $ext = strtolower(substr(strrchr($file, '.'), 1));
+
+      // block dangerous executable extensions for non-superusers
+      $blocked = array_map('trim', explode(',', \CMSMS\FilePickerProfile::BLOCKED_EXTENSIONS_DEFAULT));
+      if( in_array($ext, $blocked) ) return FALSE;
+
+      // block PHP files for non-superusers (regardless of developer_mode)
+      if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
+
       return TRUE;
+  }
+
+  protected function validate_uploaded_file_mime( $file_path )
+  {
+      // superusers bypass MIME validation
+      $uid = get_userid(false);
+      if( $uid && \UserOperations::get_instance()->IsSuperuser($uid) ) return null;
+
+      return parent::validate_uploaded_file_mime( $file_path );
   }
 
   protected function after_uploaded_file($fileobject)

@@ -13,6 +13,9 @@ $smarty->assign('max_chunksize',min($upload_max_filesize,$post_max_size-1024));
 $smarty->assign('action_url',$this->create_url('m1_','upload',$returnid));
 $smarty->assign('prompt_dropfiles',$this->Lang('prompt_dropfiles'));
 $smarty->assign('chdir_url',$this->create_url('m1_','changedir',$returnid));
+$uid = get_userid(false);
+$smarty->assign('is_superuser', $uid && \UserOperations::get_instance()->IsSuperuser($uid));
+$smarty->assign('blocked_extensions', \CMSMS\FilePickerProfile::BLOCKED_EXTENSIONS_DEFAULT);
 $advancedmode = $this->GetPreference('advancedmode',0);
 if( strlen($advancedmode) > 1 ) $advancedmode = 0;
 

@@ -34,10 +34,23 @@ $(document).on('drop dragover', function(e) {
     e.preventDefault();
 });
 
+    {/literal}
+    var _is_superuser = {if $is_superuser}true{else}false{/if};
+    var _blocked_ext = _is_superuser ? null : new RegExp('\\.({$blocked_extensions|replace:',':'|'})$', 'i');
+    {literal}
     $(thediv+'_i').fileupload({
         dataType: 'json',
         dropZone: $(thediv),
         maxChunkSize: {/literal}{$max_chunksize},{literal}
+
+        add: function(e, data) {
+            var file = data.files[0];
+            if (_blocked_ext && _blocked_ext.test(file.name)) {
+                alert('{/literal}{$FileManager->Lang("error_filetype_blocked")}{literal}'.replace('%s', file.name));
+                return;
+            }
+            data.submit();
+        },
 
         progressall: function(e,data) {
             var total = (data.loaded / data.total * 100).toFixed(0);

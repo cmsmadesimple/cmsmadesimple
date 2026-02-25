@@ -63,6 +63,8 @@ $lang['dirtreedeletesuccess'] = 'The directory including content was successfull
 // E
 $lang['enableadvanced'] = 'Enable advanced mode?';
 $lang['error_dirnotempty'] = 'Directory %s is not empty';
+$lang['error_filetype_blocked'] = 'File type not allowed: %s';
+$lang['error_mime_blocked'] = 'File rejected: executable content detected';
 $lang['error_notwritable'] = 'No write permission to %s';
 $lang['error_thumbnotwritable'] = '%s has a thumbnail that does not have write permission';
 

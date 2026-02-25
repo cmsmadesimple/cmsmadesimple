@@ -24,6 +24,15 @@ class UploadHandler extends jquery_upload_handler
         return $this->_mod->is_acceptable_filename( $this->_profile, $complete_path );
     }
 
+    protected function validate_uploaded_file_mime( $file_path )
+    {
+        // superusers bypass MIME validation
+        $uid = get_userid(false);
+        if( $uid && \UserOperations::get_instance()->IsSuperuser($uid) ) return null;
+
+        return parent::validate_uploaded_file_mime( $file_path );
+    }
+
     public function process_error( $fileobject, $error )
     {
         $fileobject = parent::process_error( $fileobject, $error );

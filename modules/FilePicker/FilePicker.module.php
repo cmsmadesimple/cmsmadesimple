@@ -232,11 +232,18 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
             return FALSE;
 
         default:
-            $config = \cms_config::get_instance();
-            if( !$config['developer_mode'] ) {
-                $ext = strtolower($this->_typehelper->get_extension( $filename ) );
-                if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
-            }
+            // superusers (admin group members and uid 1) have unrestricted access
+            $uid = get_userid(false);
+            if( $uid && \UserOperations::get_instance()->IsSuperuser($uid) ) break;
+
+            $ext = strtolower($this->_typehelper->get_extension( $filename ) );
+
+            // block extensions defined in the profile (falls back to system default)
+            $blocked = array_map('trim', explode(',', $profile->blocked_extensions));
+            if( in_array($ext, $blocked) ) return FALSE;
+
+            // block PHP files for non-superusers (regardless of developer_mode)
+            if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
             break;
         }
 
