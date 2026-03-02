@@ -18,6 +18,11 @@ if( $result[0] == FALSE ) {
   $this->RedirectToAdminTab();
 }
 
+$modinstance = $ops->get_module_instance($mod,'',TRUE);
+if( is_object($modinstance) ) {
+  modmgr_utils::track_module_event($mod, 'upgrade', $modinstance->GetVersion());
+}
+
 $this->SetMessage($this->Lang('msg_module_upgraded',$mod));
 $this->RedirectToAdminTab();
 
