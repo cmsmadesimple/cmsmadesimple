@@ -25,10 +25,12 @@ try {
     if( isset($params['submit']) ) {
         try {
             if( !isset($params['confirm']) || $params['confirm'] != 1 ) throw new \RuntimeException($this->Lang('error_notconfirmed'));
+            $module_version = $modinstance->GetVersion();
             $postmsg = $modinstance->UninstallPostMessage();
             if( $postmsg == '' ) $postmsg = $this->Lang('msg_module_uninstalled',$mod);
             $result = $ops->UninstallModule($mod);
             if( $result[0] == FALSE ) throw new \RuntimeException($result[1]);
+            modmgr_utils::track_module_event($mod, 'uninstall', $module_version);
             $this->SetMessage($postmsg);
             $this->RedirectToAdminTab();
         }
