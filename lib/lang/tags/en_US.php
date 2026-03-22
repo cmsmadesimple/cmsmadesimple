@@ -278,8 +278,8 @@ $lang['help_function_browser_lang'] = <<<EOT
   <p>This plugin detects and outputs the language that the users browser accepts, and cross references it with a list of allowed languages to determine a language value for the session.</p>
 <h3>How do I use it?</h3>
 <p>Insert the tag early into your page template <em>(it can go above the &lt;head&gt; section if you want)</em> and provide it the name of the default language, and the accepted languages (only two character language names are accepted), then do something with the result.  i.e:</p>
-	     <pre><code>{browser_lang accepted=&quot;de,fr,en,es&quot; default=en assign=tmp}{session_put var=lang val=\$tmp}</code></pre>
-<p><em>({session_put} is a plugin provided by the CGSimpleSmarty module)</em></p>
+        <pre><code>{browser_lang accepted=&quot;de,fr,en,es&quot; default=en assign=tmp}{sess_put var=lang val=\$tmp}</code></pre>
+<p><em>({sess_put} is a plugin provided by the SmartyExt module)</em></p>
 <h3>What Parameters does it Take?</h3>
 <ul>
 <li><strong>accepted <em>(required)</em></strong><br/> - A comma separated list of two character language names that are accepted.</li>
