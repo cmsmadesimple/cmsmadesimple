@@ -305,7 +305,7 @@ final class ContentListBuilder
    *
    * @param ContentListFilter $filter an optional filter.  Use null to invalidate any filter.
    */
-  public function set_filter(ContentListFilter $filter = null)
+  public function set_filter(?ContentListFilter $filter = null)
   {
       $this->_filter = $filter;
   }

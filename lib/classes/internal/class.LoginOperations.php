@@ -72,7 +72,7 @@ final class LoginOperations
         return TRUE;
     }
 
-    public function save_authentication(\User $user,\User $effective_user = null)
+    public function save_authentication(\User $user,?\User $effective_user = null)
     {
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
@@ -196,7 +196,7 @@ final class LoginOperations
         return $this->get_loggedin_username();
     }
 
-    public function set_effective_user(\User $e_user = null)
+    public function set_effective_user( ?\User $e_user = null )
     {
         $li_user = $this->get_loggedin_user();
         if( $e_user && $e_user->id == $li_user->id ) return;

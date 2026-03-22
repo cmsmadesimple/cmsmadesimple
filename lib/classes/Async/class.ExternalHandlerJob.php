@@ -40,7 +40,7 @@
  * @package CMS
  */
 
-namespace \CMSMS\Async;
+namespace CMSMS\Async;
 
 /**
  * A type of job that calls an external function for processing.  i.e: a UDT or a static function.

@@ -133,7 +133,6 @@ class FileTypeHelper
         $fh = finfo_open(FILEINFO_MIME_TYPE);
         if( $fh ) {
             $mime_type = finfo_file($fh,$filename);
-            finfo_close($fh);
             return $mime_type;
         }
     }
@@ -245,14 +244,14 @@ class FileTypeHelper
         if( $this->_use_mimetype && $this->is_readable( $filename ) ) {
             $type = $this->get_mime_type( $filename );
             switch( $type ) {
-            case 'text/xml';
+            case 'text/xml':
             case 'application/xml':
             case 'application/rss+xml':
                 return TRUE;
             }
         }
         $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-        return in_array($ext, $this->_video_extensions );
+        return in_array($ext, $this->_xml_extensions );
     }
 
     /**

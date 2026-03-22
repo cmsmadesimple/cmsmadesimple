@@ -34,7 +34,7 @@
  */
 abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
 {
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(Smarty_Template_Source $source, ?Smarty_Internal_Template $_template = null)
     {
         $source->filepath = $source->type . ':' . $source->name;
         $source->uid = sha1($source->type . ':' . $source->name);

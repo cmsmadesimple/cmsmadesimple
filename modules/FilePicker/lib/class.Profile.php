@@ -25,7 +25,7 @@ class Profile extends \CMSMS\FilePickerProfile
         }
     }
 
-    public function __construct(array $in = null)
+    public function __construct(?array $in = null)
     {
         if( !is_array( $in ) ) return;
 
@@ -159,4 +159,3 @@ class Profile extends \CMSMS\FilePickerProfile
     return FALSE;
   }
 } // end of class
-

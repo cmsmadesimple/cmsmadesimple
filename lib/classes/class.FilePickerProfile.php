@@ -120,7 +120,7 @@ class FilePickerProfile
      *
      * @param array $params An associative array of params suitable for hte setValue method.
      */
-    public function __construct( array $params = null )
+    public function __construct( ?array $params = null )
     {
         if( !is_array($params) || !count($params) ) return;
         foreach( $params as $key => $val ) {
