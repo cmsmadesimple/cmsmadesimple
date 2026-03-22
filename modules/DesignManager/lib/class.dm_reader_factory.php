@@ -31,6 +31,7 @@ final class dm_reader_factory
     if( !$fh ) throw new CmsException($mod->Lang('error_fileopen',$xmlfile));
     $str = fread($fh,200);
     fclose($fh);
+    if( $str === FALSE || $str === '' ) throw new CmsException($mod->Lang('error_readxml'));
     if( strpos($str,'<!DOCTYPE') === FALSE ) throw new CmsException($mod->Lang('error_readxml'));
 
     // get the first element
@@ -42,7 +43,7 @@ final class dm_reader_factory
     if( $p === FALSE ) throw new CmsException($mod->Lang('error_readxml'));  // highly unlikely.
     $word = substr($str,0,$p);
 
-		$ob = null;
+    $ob = null;
     switch( $word ) {
     case 'theme':
       $ob = new dm_theme_reader($xmlfile);
@@ -52,7 +53,8 @@ final class dm_reader_factory
       $ob = new dm_design_reader($xmlfile);
       break;
     }
-		return $ob;
+    if( !$ob ) throw new CmsException($mod->Lang('error_readxml'));
+    return $ob;
   }
 } // end of class
 

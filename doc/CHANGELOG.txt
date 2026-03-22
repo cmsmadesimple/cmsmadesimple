@@ -9,8 +9,12 @@ Content Manager X.X
  - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;
  - Added a missing default-page content type error message;
 
+DesignManager X.X
+ - Export now skips missing or unreadable referenced assets, writes an export report and records warnings in the audit log;
+ - Import now fails more cleanly when the uploaded XML file cannot be copied, opened or read;
+
 News X.X
- - Minor typo fix;
+ - Fixed BR #12794 - News-fields typo item_orderr;
 
 
 Version 2.2.22 - Saskatoon

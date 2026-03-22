@@ -32,7 +32,7 @@ class dm_design_reader extends dm_reader_base
   public function __construct($fn)
   {
     $this->_xml = new dm_xml_reader();
-    $this->_xml->open($fn);
+    $this->_xml->open_file($fn);
     $this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
   }
   
@@ -40,7 +40,7 @@ class dm_design_reader extends dm_reader_base
   {
     while( $this->_xml->read() ) {
       if( !$this->_xml->isValid() ) {
-        throw new CmsException('Invalid XML FILE ');
+        throw new CmsException(cms_utils::get_module('DesignManager')->Lang('error_readxml'));
       }
     }
     // it validates.

@@ -50,6 +50,17 @@ class dm_xml_reader extends XMLReader
       set_error_handler($this->_old_err_handler);
   }
 
+  public function open_file($uri, $encoding = null, $flags = 0): bool
+  {
+    $this->__setup();
+    if( !parent::open($uri,$encoding,$flags) )
+    {
+      $mod = cms_utils::get_module('DesignManager');
+      throw new CmsException($mod->Lang('error_fileopen',$uri));
+    }
+    return TRUE;
+  }
+
   public function read(): bool
   {
     $this->__setup();
