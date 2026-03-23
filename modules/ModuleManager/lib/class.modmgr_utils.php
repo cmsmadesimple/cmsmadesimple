@@ -230,7 +230,7 @@ final class modmgr_utils
         $ts = strtotime($date);
         $stale_ts = strtotime('-2 years');
         $warn_ts = strtotime('-18 months');
-        $new_ts = strtotime('-1 month');
+        $new_ts = strtotime('-3 months');
         if( $ts <= $stale_ts ) return 'stale';
         if( $ts <= $warn_ts ) return 'warn';
         if( $ts >= $new_ts ) return 'new';
