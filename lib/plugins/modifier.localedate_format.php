@@ -228,15 +228,15 @@ function localedate_ise ($st, $mode)
         case "\6": // date without time
             $fmt = nl_langinfo(D_FMT);
             $fmt = localedate_adjust($fmt);
-            return date($fmt);
+            return date($fmt, $st);
         case "\7": // time without date
             $fmt = nl_langinfo(T_FMT);
             $fmt = localedate_adjust($fmt);
-            return date($fmt);
+            return date($fmt, $st);
         case "\x8": // date and time
             $fmt = nl_langinfo(D_T_FMT);
             $fmt = localedate_adjust($fmt);
-            return date($fmt);
+            return date($fmt, $st);
         case "\x0e": // am/pm, upper-case
         case "\x0f": // am/pm, lower-case
             $s = date('A', $st);

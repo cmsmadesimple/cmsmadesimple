@@ -19,9 +19,9 @@
 {function get_module_status_icon}
 {strip}
 {if $status == 'stale'}
-{$stale_img}
+{*$stale_img*}
 {elseif $status == 'warn'}
-{$warn_img}
+{*$warn_img*}
 {elseif $status == 'new'}
 {$new_img}
 {/if}
