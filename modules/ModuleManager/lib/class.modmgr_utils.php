@@ -200,7 +200,7 @@ final class modmgr_utils
         if( $url ) {
             $url .= '/version';
             $req = new modmgr_cached_request($url);
-            $req->setTimeout(3);
+            $req->setTimeout(10);
             $req->execute($url);
             if( ($status = $req->getStatus()) == 200 ) {
                 $tmp = $req->getResult();

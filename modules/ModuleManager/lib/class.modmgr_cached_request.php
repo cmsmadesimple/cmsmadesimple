@@ -50,7 +50,7 @@ final class modmgr_cached_request
     }
   }
 
-  public function execute($target = '',$data = array(), $age = '')
+  public function execute($target = '',$data = array(), $age = '', $method = 'GET')
   {
     $mod = cms_utils::get_module('ModuleManager');
     $config = cmsms()->GetConfig();
@@ -71,7 +71,7 @@ final class modmgr_cached_request
         // execute the request
         $req = new cms_http_request();
         if( $this->_timeout ) $req->setTimeout($this->_timeout);
-        $req->execute($target,'','POST',$data);
+        $req->execute($target,'',$method,$data);
         $this->_status = $req->getStatus();
         $this->_result = $req->getResult();
 
