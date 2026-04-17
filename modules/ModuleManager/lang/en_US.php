@@ -118,6 +118,8 @@ $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobyte
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 $lang['help_mm_importxml'] = 'This form allows importing a module XML file that you received from another user, or downloaded from the <a class="external" href="http://dev.cmsmadesimple.org" target="_blank">CMSMS Forge</a>';
 
+$lang['help_show_beta'] = 'When enabled, modules with beta, alpha, or rc in their version will be displayed in the module listings';
+
 // I
 $lang['importxml'] = 'Import Module';
 $lang['incompatible'] = 'Incompatible';
@@ -202,6 +204,7 @@ $lang['status'] = 'Status';
 $lang['status_db_newer'] = 'The version number stored in the database is greater than the one in the module.';
 $lang['status_need_upgrade'] = 'The upgrade routine needs to be run on this module';
 $lang['status_newer_available'] = 'A newer version of this module is available in the repository';
+$lang['show_beta'] = 'Show beta/pre-release modules';
 $lang['statustext'] = 'Status/Action';
 $lang['status_installed'] = 'This module is currently installed and available for use.';
 $lang['submit'] = 'Submit';

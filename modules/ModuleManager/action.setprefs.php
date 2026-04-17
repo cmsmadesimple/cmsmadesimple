@@ -47,6 +47,7 @@ if( isset($config['developer_mode']) && !empty($params['reseturl']) ) {
 if( isset($params['dl_chunksize']) ) $this->SetPreference('dl_chunksize',(int)trim($params['dl_chunksize']));
 $latestdepends = (int)get_parameter_value($params,'latestdepends');
 $this->SetPreference('latestdepends',$latestdepends);
+$this->SetPreference('show_beta',(int)get_parameter_value($params,'show_beta'));
 
 
 if( isset($config['developer_mode']) ) {

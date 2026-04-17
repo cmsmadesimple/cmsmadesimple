@@ -99,6 +99,17 @@ final class modmgr_utils
     {
         if( !is_array($xmldetails) ) return;
 
+        // Filter out beta/pre-release modules unless preference is enabled
+        $mod = cms_utils::get_module('ModuleManager');
+        if( !$mod->GetPreference('show_beta',0) ) {
+            $xmldetails = array_filter($xmldetails, function($det) {
+                $ver = isset($det['version']) ? strtolower($det['version']) : '';
+                $fn = isset($det['filename']) ? strtolower($det['filename']) : '';
+                return !preg_match('/(alpha|beta|rc|dev)/', $ver . $fn);
+            });
+            $xmldetails = array_values($xmldetails);
+        }
+
         // sort
         uasort( $xmldetails, array('modmgr_utils','uasort_cmp_details') );
 
