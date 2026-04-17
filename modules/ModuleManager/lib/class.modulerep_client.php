@@ -195,7 +195,7 @@ final class modulerep_client
                 // downloading the whole file at one shot.
                 $url .= '/modulexml';
                 $req = new cms_http_request();
-                $req->execute($url,'','POST',array('name'=>$xmlfile));
+                $req->execute($url,'','GET',array('name'=>$xmlfile));
                 $status = $req->GetStatus();
                 $result = $req->GetResult();
                 if( $status != 200 || $result == '' ) {
@@ -214,7 +214,7 @@ final class modulerep_client
             $nchunks = (int)ceil($size / $chunksize);
             $req = new cms_http_request();
             for( $i = 0; $i < $nchunks; $i++ ) {
-                $req->execute($url,'','POST', array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
+                $req->execute($url,'','GET', array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
                 $status = $req->GetStatus();
                 $result = $req->GetResult();
                 if( $status != 200 || $result == '' ) {
@@ -270,7 +270,7 @@ final class modulerep_client
         $url .= '/modulesearch';
 
         $req = new modmgr_cached_request();
-        $req->execute($url,array('json'=>json_encode($qparms)));
+        $req->execute($url,array('json'=>json_encode($qparms)),'','POST');
         $status = $req->getStatus();
         $result = $req->getResult();
         if( $status == 200 && $result == ''  ) return array(TRUE,null); // no results.
