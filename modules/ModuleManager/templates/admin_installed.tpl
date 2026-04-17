@@ -73,6 +73,7 @@ $(document).ready(function(){
   <thead>
     <tr>
       <th></th>
+      <th></th>
       <th>{$ModuleManager->Lang('nametext')}</th>
       <th><span title="{$ModuleManager->Lang('title_moduleversion')}">{$ModuleManager->Lang('vertext')}</span></th>
       <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('status')}</span></th>
@@ -91,6 +92,9 @@ $(document).ready(function(){
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
 	   {if $item.missing_deps || $item.notavailable}{$missingdep_img}{/if}
            {if $item.deprecated}{$deprecated_img}{/if}
+      </td>
+      <td style="text-align:center;">
+          <img src="https://cmsms-forge.s3.amazonaws.com/modules/{$item.name}/icon.png" alt="" style="width:24px;height:24px;" onerror="this.style.display='none'"/>
       </td>
       <td>
           {if !$item.installed || $item.e_status == 'need_upgrade'}
