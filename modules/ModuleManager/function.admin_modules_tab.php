@@ -107,6 +107,7 @@ if( count( $data ) ) {
       $onerow->$key = $value;
     }
     $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
+    $onerow->rawname = $row['name'];
     $onerow->version = $row['version'];
     $onerow->help_url = $this->create_url( $id, 'modulehelp', $returnid,
 					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
