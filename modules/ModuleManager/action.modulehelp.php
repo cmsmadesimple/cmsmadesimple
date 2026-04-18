@@ -52,14 +52,6 @@ if( !$version ) {
   return;
 }
 
-$url = $this->GetPreference('module_repository');
-if( !$url ) {
-  $this->SetError($this->Lang('error_norepositoryurl'));
-  $this->RedirectToAdminTab();
-  return;
-}
-$url .= '/modulehelp';
-
 $xmlfile = get_parameter_value($params,'filename');
 if( !$xmlfile ) {
   $this->SetError($this->Lang('error_nofilename'));
@@ -67,9 +59,8 @@ if( !$xmlfile ) {
   return;
 }
 
-
 $req = new modmgr_cached_request();
-$req->execute($url,array('name'=>$xmlfile));
+$req->execute('https://cdn.cmsmadesimple.org/repository/cache/module_' . urlencode($xmlfile) . '.json');
 $status = $req->getStatus();
 $result = $req->getResult();
 if( $status != 200 || $result == '' ) {
@@ -77,7 +68,8 @@ if( $status != 200 || $result == '' ) {
   $this->RedirectToAdminTab();
   return;
 }
-$help = json_decode($result,true);
+$data = json_decode($result,true);
+$help = isset($data['help']) ? base64_decode($data['help']) : '';
 if( !$help ) {
   $this->SetError($this->Lang('error_nodata'));
   $this->RedirectToAdminTab();

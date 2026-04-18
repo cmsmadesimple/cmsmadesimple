@@ -52,14 +52,6 @@ if( !$version ) {
   return;
 }
 
-$url = $this->GetPreference('module_repository');
-if( !$url ) {
-  $this->SetError($this->Lang('error_norepositoryurl'));
-  $this->RedirectToAdminTab();
-  return;
-}
-$url .= '/modulehelp';
-
 $xmlfile = get_parameter_value($params,'filename');
 if( !$xmlfile ) {
   $this->SetError($this->Lang('error_nofilename'));
@@ -67,11 +59,21 @@ if( !$xmlfile ) {
   return;
 }
 
-$depends = modulerep_client::get_module_depends($xmlfile);
-if( !is_array($depends) || count($depends) != 2 || $depends[0] == false ) {
-  $this->SetError($depends[1]);
+$req = new modmgr_cached_request();
+$req->execute('https://cdn.cmsmadesimple.org/repository/cache/module_' . urlencode($xmlfile) . '.json');
+$status = $req->getStatus();
+$result = $req->getResult();
+if( $status != 200 || $result == '' ) {
+  $this->SetError($this->Lang('error_request_problem'));
   $this->RedirectToAdminTab();
   return;
+}
+$data = json_decode($result,true);
+$depends_str = isset($data['depends']) ? $data['depends'] : '';
+$depends = array();
+if( $depends_str && $depends_str != 'a:0:{}' ) {
+  $depends = @unserialize($depends_str);
+  if( !is_array($depends) ) $depends = array();
 }
 
 $smarty->assign('title',$this->Lang('dependstxt'));
@@ -84,9 +86,8 @@ $smarty->assign('xmlfile',$xmlfile);
 $smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
 $smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
 
-$depends = $depends[1];
 $txt = '';
-if( is_array($depends) ) {
+if( is_array($depends) && count($depends) > 0 ) {
   $txt = '<ul>';
   foreach( $depends as $one ) {
     $txt .= '<li>'.$one['name'].' => '.$one['version'].'</li>';

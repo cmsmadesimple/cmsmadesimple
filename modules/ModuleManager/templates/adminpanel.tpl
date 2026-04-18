@@ -37,9 +37,8 @@
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
 			{*<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>*}
+			<th>&nbsp;</th>
 			<th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 		</tr>
@@ -47,9 +46,9 @@
 	<tbody>
 	{foreach from=$items item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
-			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-			<td style="text-align:center;"><img src="https://cmsms-forge.s3.amazonaws.com/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;" onerror="this.style.display='none'"/></td>
-			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
+		<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+			<td style="text-align:center;"><img src="https://cdn.cmsmadesimple.org/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;display:none;" onload="this.style.display='inline'"/></td>
+			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span> {get_module_status_icon status=$entry->age}</td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|localedate_format:'%x'}</td>
 			{*<td>{$entry->downloads}</td>*}
@@ -62,7 +61,6 @@
 			<td><a href="{$entry->depends_url}" title="{$ModuleManager->Lang('title_moduledepends')}">{$ModuleManager->Lang('dependstxt')}</a></td>
 			<td><a href="{$entry->help_url}" title="{$ModuleManager->Lang('title_modulehelp')}">{$ModuleManager->Lang('helptxt')}</a></td>
 			<td><a href="{$entry->about_url}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a></td>
-			<td>{get_module_status_icon status=$entry->age}</td>
 		</tr>
 	{/foreach}
 	</tbody>

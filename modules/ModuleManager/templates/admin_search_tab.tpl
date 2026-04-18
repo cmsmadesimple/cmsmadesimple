@@ -64,7 +64,7 @@ $(document).ready(function(){
 		{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
 			<td>{get_module_status_icon status=$entry->age}</td>
-			<td style="text-align:center;"><img src="https://cmsms-forge.s3.amazonaws.com/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;" onerror="this.style.display='none'"/></td>
+			<td style="text-align:center;"><img src="https://cdn.cmsmadesimple.org/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;display:none;" onload="this.style.display='inline'"/></td>
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|localedate_format:'%x'}</td>
