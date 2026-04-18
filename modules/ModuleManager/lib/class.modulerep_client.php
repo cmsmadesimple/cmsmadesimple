@@ -104,26 +104,38 @@ final class modulerep_client
     public static function get_repository_modules($prefix = '',$newest = 1,$exact = FALSE)
     {
         $mod = cms_utils::get_module('ModuleManager');
-        $url = $mod->GetPreference('module_repository');
-        if( !$url )	return array(false,$mod->Lang('error_norepositoryurl'));
-        $url .= '/moduledetailsgetall';
 
-        global $CMS_VERSION;
-        $data = array('newest'=>$newest);
-        if( $prefix ) $data['prefix'] = ltrim($prefix);
-        if( $exact ) $data['exact'] = 1;
-        $data['clientcmsversion'] = $CMS_VERSION;
+        if( $exact ) {
+            // Exact queries need the API (DynamoDB lookup)
+            $url = $mod->GetPreference('module_repository');
+            if( !$url ) return array(false,$mod->Lang('error_norepositoryurl'));
+            $url .= '/moduledetailsgetall';
+
+            global $CMS_VERSION;
+            $data = array('newest'=>$newest,'exact'=>1,'clientcmsversion'=>$CMS_VERSION);
+            if( $prefix ) $data['prefix'] = ltrim($prefix);
+
+            $req = new modmgr_cached_request();
+            $req->execute($url,$data);
+            $status = $req->getStatus();
+            $result = $req->getResult();
+            if( $status == 400 ) return array(true,array());
+            if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
+
+            $data = json_decode($result,true);
+            return array(true,$data);
+        }
+
+        // Fetch letter cache directly from CDN
+        if( !$prefix ) $prefix = 'A';
+        $cdn_url = 'https://cdn.cmsmadesimple.org/repository/cache/moduledetailsgetall_' . urlencode(strtoupper($prefix)) . '.json';
 
         $req = new modmgr_cached_request();
-        $req->execute($url,$data);
+        $req->execute($cdn_url);
         $status = $req->getStatus();
         $result = $req->getResult();
-        if( $status == 400 ) {
-            return array(true,array());
-        }
-        else if( $status != 200 || $result == '' ) {
-            return array(FALSE,$mod->Lang('error_request_problem'));
-        }
+        if( $status == 404 ) return array(true,array());
+        if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
         $data = json_decode($result,true);
         return array(true,$data);
@@ -185,49 +197,23 @@ final class modulerep_client
         if( !file_exists($tmpname) || $mod->GetPreference('disable_caching',0) || (time() - filemtime($tmpname)) > 7200 ) {
             @unlink($tmpname);
 
-            // must download
-            $orig_chunksize = $mod->GetPreference('dl_chunksize',256);
-            $chunksize = $orig_chunksize * 1024;
-            $url = $mod->GetPreference('module_repository');
-            if( $url == '' ) return FALSE;
-
-            if( $size <= $chunksize ) {
-                // downloading the whole file at one shot.
-                $url .= '/modulexml';
-                $req = new cms_http_request();
-                $req->execute($url,'','GET',array('name'=>$xmlfile));
-                $status = $req->GetStatus();
-                $result = $req->GetResult();
-                if( $status != 200 || $result == '' ) {
-                    $req->clear();
-                    return FALSE;
-                }
-                $fh = fopen($tmpname,'w');
-                fwrite($fh,$result);
-                fclose($fh);
-                return $tmpname;
-                $req->clear();
-            }
-
-            // download in chunks
-            $url .= '/modulegetpart';
-            $nchunks = (int)ceil($size / $chunksize);
+            // Get s3_key from per-module cache on CDN
+            $cache_url = 'https://cdn.cmsmadesimple.org/repository/cache/module_' . urlencode($xmlfile) . '.json';
             $req = new cms_http_request();
-            for( $i = 0; $i < $nchunks; $i++ ) {
-                $req->execute($url,'','GET', array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
-                $status = $req->GetStatus();
-                $result = $req->GetResult();
-                if( $status != 200 || $result == '' ) {
-                    unlink($tmpname);
-                    $req->clear();
-                    return FALSE;
-                }
+            $req->execute($cache_url);
+            if( $req->GetStatus() != 200 || !$req->GetResult() ) return FALSE;
+            $data = json_decode($req->GetResult(), true);
+            if( !$data || empty($data['s3_key']) ) return FALSE;
 
-                $fh = fopen($tmpname,'a');
-                fwrite($fh,base64_decode($result));
-                fclose($fh);
-                $req->clear();
-            }
+            // Download XML from CDN using s3_key
+            $xml_url = 'https://cdn.cmsmadesimple.org/' . $data['s3_key'];
+            $req->clear();
+            $req->execute($xml_url);
+            if( $req->GetStatus() != 200 || !$req->GetResult() ) return FALSE;
+
+            $fh = fopen($tmpname,'w');
+            fwrite($fh, $req->GetResult());
+            fclose($fh);
         }
 
         return $tmpname;

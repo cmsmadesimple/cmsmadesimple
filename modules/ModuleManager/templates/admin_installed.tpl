@@ -94,7 +94,7 @@ $(document).ready(function(){
            {if $item.deprecated}{$deprecated_img}{/if}
       </td>
       <td style="text-align:center;">
-          <img src="https://cmsms-forge.s3.amazonaws.com/modules/{$item.name}/icon.png" alt="" style="width:24px;height:24px;" onerror="this.style.display='none'"/>
+          <img src="https://cdn.cmsmadesimple.org/modules/{$item.name}/icon.png" alt="" style="width:24px;height:24px;display:none;" onload="this.style.display='inline'"/>
       </td>
       <td>
           {if !$item.installed || $item.e_status == 'need_upgrade'}

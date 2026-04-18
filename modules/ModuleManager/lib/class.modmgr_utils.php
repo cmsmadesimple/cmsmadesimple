@@ -206,32 +206,20 @@ final class modmgr_utils
         static $ok = -1;
         if( $ok != -1 ) return $ok;
 
-        $mod = cms_utils::get_module('ModuleManager');
-        $url = $mod->GetPreference('module_repository');
-        if( $url ) {
-            $url .= '/version';
-            $req = new modmgr_cached_request($url);
-            $req->setTimeout(10);
-            $req->execute($url);
-            if( ($status = $req->getStatus()) == 200 ) {
-                $tmp = $req->getResult();
-                if( empty($tmp) ) {
-                    $req->clearCache();
-                    $ok = FALSE;
-                    return FALSE;
-                }
-
-                $data = json_decode($req->getResult(),true);
+        $req = new modmgr_cached_request();
+        $req->setTimeout(10);
+        $req->execute('https://cdn.cmsmadesimple.org/repository/version.json');
+        if( $req->getStatus() == 200 ) {
+            $tmp = $req->getResult();
+            if( !empty($tmp) ) {
+                $data = json_decode($tmp,true);
                 if( version_compare($data,MINIMUM_REPOSITORY_VERSION) >= 0 ) {
                     $ok = TRUE;
                     return TRUE;
                 }
             }
-            else {
-                $req->clearCache();
-                audit($status,'ModuleManager','Cannot connect to ModuleRepository');
-            }
         }
+        $req->clearCache();
         $ok = FALSE;
         return FALSE;
     }
