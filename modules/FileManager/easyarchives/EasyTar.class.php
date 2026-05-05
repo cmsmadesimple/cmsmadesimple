@@ -145,8 +145,8 @@ $test->extractTar('./toto.Tar', './new/');
 		$infos['name100'] = str_replace($racine, '', $item);
 		list (, , $infos['mode8'], , $infos['uid8'], $infos['gid8'], , , , $infos['mtime12'] ) = stat($item);
 		$infos['size12'] = is_dir($item) ? 0 : filesize($item);
-		$infos['link1'] = is_link($item) ? 2 : is_dir ($item) ? 5 : 0;
-		$infos['link100'] == 2 ? readlink($item) : "";
+		$infos['link1'] = is_link($item) ? 2 : (is_dir($item) ? 5 : 0);
+		$infos['link100'] = $infos['link1'] == 2 ? readlink($item) : "";
 
 			$a=function_exists('posix_getpwuid')?posix_getpwuid (fileowner($item)):array('name'=>'Unknown');
 		$infos['userName32'] = $a['name'];
@@ -157,6 +157,7 @@ $test->extractTar('./toto.Tar', './new/');
 
 		$header = $this->tarHeader512($infos);
 		$data = str_pad(file_get_contents($item), floor(($infos['size12'] + 512 - 1) / 512) * 512, "\0");
+		$sub = '';
 		if (is_dir($item))
 		{
 			$lst = scandir($item);

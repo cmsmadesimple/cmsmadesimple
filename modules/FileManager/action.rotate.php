@@ -109,7 +109,6 @@ if( isset($params['save']) ) {
     imagesavealpha($newimg,TRUE);
     imagecopy($newimg,$rotated,0,0,$x0,$y0,$width,$height);
     
-    imagedestroy($rotated);
     $rotated = $newimg;
   }
   else if( $postrotate == 'resize' ) {
@@ -140,7 +139,6 @@ if( isset($params['save']) ) {
 
     imagecopyresampled($newimg,$rotated,$x0,$y0,0,0,$new_w,$new_h,$src_w,$src_h);
     
-    imagedestroy($rotated);
     $rotated = $newimg;
   }
 

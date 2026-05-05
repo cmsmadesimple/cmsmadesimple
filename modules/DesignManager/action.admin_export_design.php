@@ -122,7 +122,7 @@ function _get_tpl_urls($tpl_content)
 {
   $content = $tpl_content;
   $types = array("href", "src", "url");
-  while(list(,$type) = each($types)) {
+  foreach( $types as $type ) {
     $innerT = '[a-z0-9:?=&@/._-]+?';
     $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
 				     function($matches) {

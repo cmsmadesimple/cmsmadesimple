@@ -31,7 +31,7 @@ class dm_theme_reader extends dm_reader_base
   public function __construct($fn)
   {
     $this->_xml = new dm_xml_reader();
-    $this->_xml->open($fn);
+    $this->_xml->open_file($fn);
     //$this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
   }
 

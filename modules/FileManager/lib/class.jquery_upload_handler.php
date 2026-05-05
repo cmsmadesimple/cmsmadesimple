@@ -121,9 +121,6 @@ abstract class jquery_upload_handler
             $img_width,
             $img_height
         ) && $write_image($new_img, $new_file_path);
-        // Free up memory (imagedestroy does not delete files):
-        @imagedestroy($src_img);
-        @imagedestroy($new_img);
         return $success;
     }
 
@@ -196,8 +193,6 @@ abstract class jquery_upload_handler
           	    return false;
       	}
       	$success = imagejpeg($image, $file_path);
-      	// Free up memory (imagedestroy does not delete files):
-      	@imagedestroy($image);
       	return $success;
     }
 

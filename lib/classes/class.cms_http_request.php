@@ -847,8 +847,6 @@ class cms_http_request
             // Store the error (is any)
             $this->_setError(curl_error($ch));
 
-            // Close PHP cURL handle
-            curl_close($ch);
         }
         else
         {

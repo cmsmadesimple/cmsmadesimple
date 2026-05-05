@@ -309,7 +309,6 @@ final class filemanager_utils
             $fh = finfo_open(FILEINFO_MIME_TYPE);
             if( $fh ) {
                 $mime_type = finfo_file($fh,$filename);
-                finfo_close($fh);
                 return $mime_type;
             }
         }
@@ -382,7 +381,6 @@ final class filemanager_utils
                 elseif (function_exists('finfo_open')) {
                     $finfo = finfo_open(FILEINFO_MIME);
                     $mimetype = finfo_file($finfo, $filename);
-                    finfo_close($finfo);
                     return $mimetype;
                 }
                 else {

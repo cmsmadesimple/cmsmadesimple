@@ -1,16 +1,18 @@
 <?php
 class dm_design_exporter
 {
-    private $_design;
-    private $_tpl_list;
-    private $_css_list;
-    private $_files;
-    private $_image = null;
-    private $_description;
-    static  $_mm_types;
-    static  $_nav_types;
+  private $_design;
+  private $_tpl_list;
+  private $_css_list;
+  private $_files;
+  private $_image = null;
+  private $_description;
+  private $_export_warnings = array();
+  private $_export_report_file;
+  static  $_mm_types;
+  static  $_nav_types;
 
-    private static $_dtd = <<<EOT
+  private static $_dtd = <<<EOT
 <!DOCTYPE design [
   <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet*,file*)>
   <!ELEMENT name (#PCDATA)>
@@ -60,6 +62,164 @@ EOT;
         $this->_description = $text;
     }
 
+  public function get_export_report_file()
+  {
+    return $this->_export_report_file;
+  }
+
+  private function _get_report_dir()
+  {
+    $dir = cms_join_path(TMP_CACHE_LOCATION,'designmanager_export');
+    if( !is_dir($dir) ) @mkdir($dir,0777,TRUE);
+    return $dir;
+  }
+
+  private function _record_export_warning($value,$resolved,$reason)
+  {
+    $resolved = trim((string) $resolved);
+    $key = md5($value.'|'.$resolved.'|'.$reason);
+    if( isset($this->_export_warnings[$key]) ) return;
+
+    $entry = array(
+      'value' => $value,
+      'resolved' => $resolved,
+      'reason' => $reason
+    );
+    $this->_export_warnings[$key] = $entry;
+
+    $msg = 'Design "'.$this->_design->get_name().'" skipped asset "'.$value.'"';
+    if( $resolved != '' ) $msg .= ' resolved to "'.$resolved.'"';
+    $msg .= ' ('.$reason.')';
+    audit('','DesignManager/export',$msg);
+  }
+
+  private function _write_export_report()
+  {
+    $dir = $this->_get_report_dir();
+    if( !is_dir($dir) || !is_writable($dir) )
+    {
+      audit('','DesignManager/export','Unable to write export report to '.$dir);
+      return;
+    }
+
+    $filename = sprintf(
+      '%s-%s.log',
+      munge_string_to_url($this->_design->get_name()),
+      date('Ymd-His')
+    );
+    $filename = trim($filename,'-');
+    if( $filename == '' ) $filename = 'design-export-'.date('Ymd-His').'.log';
+    $report_file = cms_join_path($dir,$filename);
+
+    $lines = array();
+    $lines[] = 'CMS Made Simple Design Export Report';
+    $lines[] = 'Design: '.$this->_design->get_name();
+    $lines[] = 'Generated: '.date('c');
+    $lines[] = 'Warnings: '.count($this->_export_warnings);
+    $lines[] = '';
+
+    if( count($this->_export_warnings) )
+    {
+      foreach( $this->_export_warnings as $entry )
+      {
+        $lines[] = 'Asset: '.$entry['value'];
+        if( $entry['resolved'] != '' ) $lines[] = 'Resolved: '.$entry['resolved'];
+        $lines[] = 'Reason: '.$entry['reason'];
+        $lines[] = '';
+      }
+    }
+    else
+    {
+      $lines[] = 'No missing or unreadable referenced assets were detected.';
+    }
+
+    $content = implode(PHP_EOL,$lines).PHP_EOL;
+    if( @file_put_contents($report_file,$content) === FALSE )
+    {
+      audit('','DesignManager/export','Failed to write export report to '.$report_file);
+      return;
+    }
+
+    $this->_export_report_file = $report_file;
+    audit('','DesignManager/export','Export report written to '.$report_file.' with '.count($this->_export_warnings).' warning(s)');
+  }
+
+  private function _resolve_asset_path($value,&$nvalue,&$fn,&$reason = null)
+  {
+    $config = \cms_config::get_instance();
+    $smarty = cmsms()->GetSmarty();
+    $nvalue = $value;
+    $fn = null;
+    $reason = null;
+
+    try
+    {
+      if( strpos($value,'[[') !== FALSE )
+      {
+        $old_left = $smarty->left_delimiter;
+        $old_right = $smarty->right_delimiter;
+        try
+        {
+          $smarty->left_delimiter = '[[';
+          $smarty->right_delimiter = ']]';
+          $nvalue = $smarty->fetch('string:'.$value);
+        }
+        finally
+        {
+          $smarty->left_delimiter = $old_left;
+          $smarty->right_delimiter = $old_right;
+        }
+      }
+      else if( strpos($value,'{') !== FALSE )
+      {
+        $nvalue = $smarty->fetch('string:'.$value);
+      }
+    }
+    catch( \Throwable $e )
+    {
+      $reason = 'asset path could not be resolved from template expression';
+      return FALSE;
+    }
+
+    $fn = cms_join_path($config['root_path'],$nvalue);
+    if( startswith($nvalue,'/') && !startswith($nvalue,'//') )
+    {
+      $fn = cms_join_path($config['root_path'],$nvalue);
+    }
+    elseif( startswith($nvalue,$config['root_url']) )
+    {
+      $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
+    }
+
+    if( !is_file($fn) )
+    {
+      $reason = 'file does not exist';
+      return FALSE;
+    }
+
+    if( !is_readable($fn) )
+    {
+      $reason = 'file is not readable';
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  private function _get_url_signature($url)
+  {
+    $nvalue = null;
+    $fn = null;
+    $reason = null;
+    if( !$this->_resolve_asset_path($url,$nvalue,$fn,$reason) )
+    {
+      $this->_record_export_warning($url,$fn,$reason);
+      return FALSE;
+    }
+
+    return $this->_get_signature($url);
+  }
+
     /**
      * internal
      */
@@ -85,7 +245,8 @@ EOT;
                                              $config = cmsms()->GetConfig();
                                              $url = $matches[1];
                                              if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
-                                                 $sig = $ob->_get_signature($url);
+                                                 $sig = $ob->_get_url_signature($url);
+                                                 if( $sig === FALSE ) return $matches[0];
                                                  $sig = "url(".$sig.")";
                                                  return $sig;
                                              }
@@ -147,7 +308,8 @@ EOT;
                                                  $root_url = new cms_url($config['root_url']);
                                                  $the_url = new cms_url($url);
                                                  if( !startswith($url,'ignore::') && $is_same_host($root_url,$the_url) ) {
-                                                     $sig = $ob->_get_signature($url);
+                                                     $sig = $ob->_get_url_signature($url);
+                                                     if( $sig === FALSE ) return $matches[0];
                                                      //return $sig;
                                                      return " $type=\"$sig\"";
                                                  }
@@ -433,48 +595,30 @@ EOT;
 
     private function _xml_output_file($key,$value,$lvl = 0)
     {
-        $config = \cms_config::get_instance();
         if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
         $p = strpos($key,',,');
         $nkey = substr($key,0,$p);
         $nkey = substr($nkey,2);
 
-        $mod = cms_utils::get_module('DesignManager');
-        $smarty = cmsms()->GetSmarty();
         $output = $this->_open_tag('file',$lvl);
         $output .= $this->_output('fkey',$key,$lvl+1);
         switch($nkey) {
         case 'URL':
             // javascript file or image or something.
             // could have smarty syntax.
-            $nvalue = $value;
-            if( strpos($value,'[[') !== FALSE ) {
-                // smarty syntax with [[ and ]] as delimiters
-                $smarty->left_delimiter = '[[';
-                $smarty->right_delimiter = ']]';
-                $nvalue = $smarty->fetch('string:'.$value);
-                $smarty->left_delimiter = '{';
-                $smarty->right_delimiter = '}';
-            }
-            else if( strpos($value,'{') !== FALSE ) {
-                // smarty syntax with { and } as delimiters
-                $nvalue = $smarty->fetch('string:'.$value);
+            $nvalue = null;
+            $fn = null;
+            $reason = null;
+            if( !$this->_resolve_asset_path($value,$nvalue,$fn,$reason) ) {
+                $this->_record_export_warning($value,$fn,$reason);
+                return '';
             }
 
-            // now, it should be a full URL, or start at /
-            // gotta convert it to a file.
-            // assumes it's a filename relative to root.
-            $fn = cms_join_path($config['root_path'],$nvalue);
-            if( startswith($nvalue,'/') && !startswith($nvalue,'//') ) {
-                $fn = cms_join_path($config['root_path'],$nvalue);
-            } elseif( startswith($nvalue,$config['root_url']) ) {
-                $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
+            $data = @file_get_contents($fn);
+            if( $data === FALSE ) {
+                $this->_record_export_warning($value,$fn,'file could not be read');
+                return '';
             }
-
-            if( !is_file($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
-
-            $data = file_get_contents($fn);
-            if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
 
             $nvalue = basename($nvalue);
             $output .= $this->_output('fvalue',$nvalue,$lvl+1);
@@ -524,12 +668,13 @@ EOT;
         foreach( $this->_css_list as $rec ) {
             $output .= $this->_xml_output_stylesheet($rec['obj'],$rec['name'],1);
         }
-        if( count($this->_files) ) {
+        if( is_array($this->_files) && count($this->_files) ) {
             foreach( $this->_files as $key => $value ) {
                 $output .= $this->_xml_output_file($key,$value,1);
             }
         }
         $output .= $this->_close_tag('design',0);
+        $this->_write_export_report();
         return $output;
     }
 } // end of class

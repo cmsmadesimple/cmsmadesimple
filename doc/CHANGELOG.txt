@@ -1,3 +1,22 @@
+﻿Version 2.2.23 - Not Named
+-------------------------------
+
+Core - General
+ - Security hardening in Smarty template identifier handling to prevent a potential SSTI/LFI/RCE attack chain;
+ - Compatibility fixes for PHP 8.1, 8.2, 8.3, 8.4 and 8.5 in active runtime paths;
+
+Content Manager X.X
+ - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;
+ - Added a missing default-page content type error message;
+
+DesignManager X.X
+ - Export now skips missing or unreadable referenced assets, writes an export report and records warnings in the audit log;
+ - Import now fails more cleanly when the uploaded XML file cannot be copied, opened or read;
+
+News X.X
+ - Fixed BR #12794 - News-fields typo item_orderr;
+
+
 Version 2.2.22 - Saskatoon
 -------------------------------
 
@@ -284,7 +303,7 @@ DesignManager v1.1.8
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 FileManager v1.6.11
-  - Don’t disable advanced mode on upgrade.
+  - Donâ€™t disable advanced mode on upgrade.
   - Fix adding double // in site root link.
   - BR #12215 - FileManager 1.6.10 crashes when trying to rename a file.
   - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
