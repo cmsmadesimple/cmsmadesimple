@@ -9,6 +9,7 @@ Web server notes
 ---------------------------------
 Apache-style .htaccess reference: doc/htaccess.txt
 OpenLiteSpeed and LiteSpeed Enterprise (CyberPanel-friendly): doc/openlitespeed-litespeed-web.txt
+Sample root .htaccess for OpenLiteSpeed and LiteSpeed Enterprise: doc/htaccess-litespeed.txt (copy to the site root as .htaccess)
 
 System requirements (summary)
 ---------------------------------

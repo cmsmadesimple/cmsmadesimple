@@ -7,6 +7,7 @@
 
 Official CMSMS docs: https://docs.cmsmadesimple.org
 Apache-oriented sample rules: see doc/htaccess.txt in this package.
+Ready-to-copy root .htaccess for OLS and LSE: see doc/htaccess-litespeed.txt (rename to .htaccess in the document root).
 
 # PHP settings: prefer vhost or php.ini, not .htaccess
 # ----------------------------------------------------
