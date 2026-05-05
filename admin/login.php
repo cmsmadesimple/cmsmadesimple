@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: login.php 13234 2025-07-25 17:00:19Z JoMorg $
 
 namespace CMSMS;
 
@@ -32,6 +32,8 @@ $db = $gCms->GetDb();
 // getloginModule
 // call the module's getLoginForm() action
 //
+\CMSMS\HookManager::do_hook('Core::LoginAttempted', []);
+
 $login_ops = \CMSMS\LoginOperations::get_instance();
 
 $error = "";
@@ -195,16 +197,20 @@ else if( isset($_POST['loginsubmit']) ) {
         $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         // $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
-
         \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$oneuser  ] );
 
-        $login_ops->save_authentication($oneuser);
+        $login_ops->initialize_authentication($oneuser);
+        \CMSMS\HookManager::do_hook('Core::LoginVerified', ['user' => $oneuser]);
+
+        if (!isset($_SESSION['cms_pending_auth_userid'])) {
+            return;
+        }
+
+        // default fallback
+        $login_ops->finalize_authentication($oneuser);
 
         // put mention into the admin log
         audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
-
-        // send the post login event
-        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>$oneuser ] );
 
         // redirect outa hre somewhere
         if( isset($_SESSION['login_redirect_to']) ) {
