@@ -1,0 +1,79 @@
+# OpenLiteSpeed and LiteSpeed Enterprise notes for CMS Made Simple
+# -----------------------------------------------------------------
+# This file complements doc/htaccess.txt, which is written primarily for Apache
+# httpd. OpenLiteSpeed (OLS) and LiteSpeed Enterprise (LSE) are largely
+# Apache-compatible for rewrite rules and many directives, but there are
+# important differences for PHP settings and for how you apply changes.
+
+Official CMSMS docs: https://docs.cmsmadesimple.org
+Apache-oriented sample rules: see doc/htaccess.txt in this package.
+
+# PHP settings: prefer vhost or php.ini, not .htaccess
+# ----------------------------------------------------
+# Many hosts disable php_value, php_flag, and similar in .htaccess for security
+# or because the PHP SAPI is LiteSpeed PHP (lsphp), not mod_php.
+#
+# For CyberPanel-managed sites, set upload limits, session settings, memory, and
+# execution time in one of these places instead of relying on .htaccess:
+#   - CyberPanel: Websites -> List Websites -> Manage -> vhost / PHP tab
+#   - User-level php.ini where your panel documents it
+#   - LiteSpeed WebAdmin (Enterprise) virtual host configuration
+#
+# The commented examples in doc/htaccess.txt (php_value, php_flag) are still
+# valid concepts; you map them to the supported mechanism on your stack.
+
+# Rewrite rules and pretty URLs
+# -----------------------------
+# CMSMS pretty URLs need RewriteEngine and rules similar to doc/htaccess.txt.
+# In OLS/LSE, RewriteRule syntax is usually honored when Rewrite is enabled for
+# the virtual host and AllowOverride (or the LSWS equivalent) permits .htaccess.
+#
+# If CMSMS is in a subdirectory, set RewriteBase to match that path (same idea as
+# Apache). Wrong RewriteBase often yields 404s on inner pages.
+#
+# Context: in LiteSpeed WebAdmin, the virtual host document root must match the
+# directory that contains your index.php and .htaccess for the site.
+
+# Security rules from doc/htaccess.txt
+# --------------------------------------
+# You should still protect config.php, block direct execution of PHP under
+# uploads, assets, tmp, and modules where applicable, and block browsing of
+# sensitive extensions. RedirectMatch and RewriteCond patterns from
+# doc/htaccess.txt are the reference intent; test each rule after paste because
+# minor syntax differences can appear across versions.
+
+# Apache-specific modules in doc/htaccess.txt
+# --------------------------------------------
+# Blocks guarded with <IfModule mod_headers.c>, mod_expires.c, deflate_module,
+# and rewrite_module: on LiteSpeed, common equivalents exist, but unsupported
+# modules are skipped. If a directive is ignored, check the server error log and
+# simplify or move the feature to the panel or vhost.
+
+# LiteSpeed Enterprise: reload after material .htaccess changes
+# -------------------------------------------------------------
+# After you change root .htaccess or vhost-level rewrite in non-trivial ways, a
+# graceful restart or reload of LiteSpeed Enterprise is sometimes required so
+# all workers pick up the configuration. OpenLiteSpeed often reloads .htaccess
+# automatically; still verify with a quick curl test of a rewritten URL.
+
+# Optional: LiteSpeed Cache (LSCache)
+# -----------------------------------
+# LSCache is optional. Only enable it if you run LiteSpeed with the cache module
+# and you understand cache invalidation for dynamic CMS sites.
+#
+# Example (commented out on purpose). Do not uncomment blindly.
+#
+# <IfModule LiteSpeed>
+#   CacheLookup on
+# </IfModule>
+#
+# For CMSMS, dynamic admin and logged-in pages must not be cached incorrectly.
+# See LiteSpeed documentation for cache tags and "do not cache" cookie rules.
+
+# CyberPanel quick checklist
+# --------------------------
+# 1) Document root points at the directory that holds CMSMS index.php.
+# 2) PHP version meets installer checks (see lib/functions/test.functions.php).
+# 3) Apply PHP limits in the panel if .htaccess php_value is ignored.
+# 4) After .htaccess edits on LiteSpeed Enterprise, restart if behavior looks stale.
+# 5) Test: home page, one inner pretty URL, admin login, file upload size limit.
