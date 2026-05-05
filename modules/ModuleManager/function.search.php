@@ -94,6 +94,7 @@ if( isset($params['submit']) ) {
             foreach( $row as $k => $v ) {
                 $obj->$k = $v;
             }
+            $obj->cdn_modulename = $row['name'];
             $obj->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'],array('name'=>$row['name']));
             $obj->version = $row['version'];
             $obj->help_url = $this->create_url( $id, 'modulehelp', $returnid,

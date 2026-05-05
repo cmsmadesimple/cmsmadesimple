@@ -87,7 +87,9 @@ $(document).ready(function(){
     {foreach $module_info as $item}
     {cycle values="row1,row2" assign='rowclass'}
     <tr class="{$rowclass}" id="_{$item.name}">
-      <td>{if $item.system_module}{$system_img}{/if}
+      <td style="white-space:nowrap;vertical-align:middle;">
+           <img src="https://cdn.cmsmadesimple.org/modules/{$item.name|escape:'url'}/icon.png" width="24" height="24" alt="" title="{$item.name|cms_escape:'htmlall'}" loading="lazy" style="vertical-align:middle;margin-right:4px;" onerror="this.style.display='none';"/>
+           {if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
 	   {if $item.missing_deps || $item.notavailable}{$missingdep_img}{/if}
            {if $item.deprecated}{$deprecated_img}{/if}
