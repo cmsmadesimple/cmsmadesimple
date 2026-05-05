@@ -102,9 +102,15 @@ try {
             switch( $rec['action'] ) {
             case 'i': // install
                 $res = $ops->InstallModule($name);
+                if( is_array($res) && $res[0] ) {
+                    modmgr_utils::track_module_event($name, 'install', $rec['version']);
+                }
                 break;
             case 'u': // upgrade
                 $res = $ops->UpgradeModule($name,$rec['version']);
+                if( is_array($res) && $res[0] ) {
+                    modmgr_utils::track_module_event($name, 'upgrade', $rec['version']);
+                }
                 break;
             case 'a': // activate
                 $res = $ops->ActivateModule($name);
