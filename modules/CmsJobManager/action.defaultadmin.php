@@ -21,11 +21,16 @@ if( $job_objs ) {
 $list = array();
 $list[''] = '';
 $list[\CMSMS\Async\CronJob::RECUR_NONE] = '';
+$list[\CMSMS\Async\CronJob::RECUR_3M] = $this->Lang('recur_3m');
+$list[\CMSMS\Async\CronJob::RECUR_5M] = $this->Lang('recur_5m');
+$list[\CMSMS\Async\CronJob::RECUR_10M] = $this->Lang('recur_10m');
 $list[\CMSMS\Async\CronJob::RECUR_15M] = $this->Lang('recur_15m');
 $list[\CMSMS\Async\CronJob::RECUR_30M] = $this->Lang('recur_30m');
 $list[\CMSMS\Async\CronJob::RECUR_HOURLY] = $this->Lang('recur_hourly');
 $list[\CMSMS\Async\CronJob::RECUR_120M] = $this->Lang('recur_120m');
 $list[\CMSMS\Async\CronJob::RECUR_180M] = $this->Lang('recur_180m');
+$list[\CMSMS\Async\CronJob::RECUR_6H] = $this->Lang('recur_360m');
+$list[\CMSMS\Async\CronJob::RECUR_12H] = $this->Lang('recur_720m');
 $list[\CMSMS\Async\CronJob::RECUR_DAILY] = $this->Lang('recur_daily');
 $list[\CMSMS\Async\CronJob::RECUR_WEEKLY] = $this->Lang('recur_weekly');
 $list[\CMSMS\Async\CronJob::RECUR_MONTHLY] = $this->Lang('recur_monthly');
