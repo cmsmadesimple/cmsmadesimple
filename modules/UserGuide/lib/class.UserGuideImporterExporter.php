@@ -9,6 +9,12 @@
 
 class UserGuideImporterExporter {
 
+    private const ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    private const ALLOWED_IMAGE_MIMES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    private const MAX_IMAGE_BYTES = 10485760;    // 10MB
+    private const MAX_IMAGE_WIDTH = 10000;          
+    private const MAX_IMAGE_HEIGHT = 10000;
+
     private $modulename;
     private $mod;
     private $preferences;
@@ -135,6 +141,7 @@ class UserGuideImporterExporter {
         $data = array();
         foreach($this->tables as $old => $new) {
             $sql = 'SELECT * FROM '.cms_db_prefix().$new;
+            if ( $new == 'module_userguide' ) $sql .= ' ORDER BY position, id';
             $data[$new] = $db->GetArray($sql);
         }
         $this->_xml->addChild( 'db', base64_encode( serialize($data) ) );
@@ -178,8 +185,11 @@ class UserGuideImporterExporter {
                 $xmlFile->addChild( 'isdir', '1' );
             }
             else {
+                $rawData = @file_get_contents($filespec);
+                if ( $rawData === false || !$this->_isAllowedImageFile($file, $rawData) ) continue;
+
                 $xmlFile->addChild( 'isdir', '0' );
-                $data = base64_encode(file_get_contents($filespec));
+                $data = base64_encode($rawData);
                 $xmlFile->addChild( 'data', $data );
             }
 
@@ -294,7 +304,6 @@ class UserGuideImporterExporter {
                 foreach ($tabledata as $row) {
                     $data_rows = $row;
                     unset($data_rows['id']);    // remove id
-                    if ( isset($data_rows['position']) ) $data_rows['position'] = '10000'; // set to end
                     $fields = implode(',', array_keys($data_rows) );
                     $phs = implode(',', array_fill(0, count($data_rows), '?') );
                     $sql = 'INSERT INTO '.CMS_DB_PREFIX.$to_table.' ('.$fields.') VALUES ('.$phs.')';
@@ -317,6 +326,56 @@ class UserGuideImporterExporter {
 
 
 
+    private function _isAllowedImageFile($filename, $data) {
+    //***********************************************************************************************
+    // validate file is a real image with allowed type and sane limits
+    //***********************************************************************************************
+        if (empty($filename) || $data === false || $data === '') return false;
+
+        if (strlen($data) > self::MAX_IMAGE_BYTES) return false;
+
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (!in_array($ext, self::ALLOWED_IMAGE_EXTENSIONS, true)) return false;
+
+        $imageInfo = @getimagesizefromstring($data);    
+        if ($imageInfo === false || !isset($imageInfo['mime'])) return false;
+
+        $mime = strtolower($imageInfo['mime']);
+        if (!in_array($mime, self::ALLOWED_IMAGE_MIMES, true)) return false;
+
+        if (!isset($imageInfo[0], $imageInfo[1])) return false;
+        if ($imageInfo[0] < 1 || $imageInfo[1] < 1 || $imageInfo[0] > self::MAX_IMAGE_WIDTH || $imageInfo[1] > self::MAX_IMAGE_HEIGHT) return false;
+
+        return true;
+    }
+
+
+
+    private function _getUniqueDestinationFile($destDir, $filename) {
+    //***********************************************************************************************
+    // create a non-colliding destination path using "name (n).ext"
+    //***********************************************************************************************
+        $targetFile = $destDir.'/'.$filename;
+        if ( !file_exists($targetFile) ) return $targetFile;
+
+        $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+        $counter = 2;
+        while ( $counter < 10000 ) {
+            $candidate = $nameOnly.' ('.$counter.')';
+            if ( $extension !== '' ) $candidate .= '.'.$extension;
+
+            $targetFile = $destDir.'/'.$candidate;
+            if ( !file_exists($targetFile) ) return $targetFile;
+            ++$counter;
+        }
+
+        return false;
+    }
+
+
+
     private function _copyFilesToFolder() {
     //***********************************************************************************************
     //
@@ -324,28 +383,52 @@ class UserGuideImporterExporter {
         if ( !isset($this->_xml->files) ) return;
 
         $uploads_path = CmsApp::get_instance()->GetConfig()['uploads_path'];
+        $mod = cms_utils::get_module( $this->modulename );
         // first make sure that we can actually write to the uploads folder
         if ( !is_writable( $uploads_path ) ) return false;
 
         $imageFolder = $this->mod->GetPreference('imageFolder', '');
-        $dir = $uploads_path.'/'.$imageFolder;
+        $imageFolder = trim($imageFolder, '/.\\');  // strip off any leading/trailing slashes and dots for security
+        $destDir = $uploads_path.'/'.$imageFolder;
+
+        // create destination folder if it doesn't exist
+        if ( !file_exists( $destDir ) ) {
+            if (!@mkdir( $destDir ) && !is_dir( $destDir )) {
+                throw new CmsFileSystemException($mod->Lang('error_creating_directory').' '.$destDir);
+            }
+        }
+        // validate destination is within allowed directory
+        $realDestPath = realpath($destDir);
+        if (strpos($realDestPath, realpath($uploads_path)) !== 0) {
+            throw new CmsFileSystemException($mod->Lang('error_invalid_file_path'));
+        }
 
         foreach ($this->_xml->files->file as $xmlFile) {
             if (!isset($xmlFile->filename) || !isset($xmlFile->isdir) ) return false;
 
-            $filename = $dir.$xmlFile->filename;
-            $isdir = (string) $xmlFile->isdir;
-            if ( !file_exists( $dir ) ) {
-                if (!@mkdir( $dir ) && !is_dir( $dir )) break;
+            $filename = basename((string) $xmlFile->filename); // Remove path components
+            $filename = preg_replace('/[^a-zA-Z0-9._()% -]/', '', $filename); // Sanitize but keep spaces/parentheses/percent
+            $filename = trim($filename);
+            if ( $filename === '' ) continue;
+            // ignore all files that are 
 
-            } elseif ( $isdir ) {
-                if (!@mkdir( $filename ) && !is_dir( $filename )) break;
+
+            $isdir = (string) $xmlFile->isdir;
+            if ( $isdir ) {
+                $targetDir = $destDir.'/'.$filename;
+                if ( !empty($filename) && !@mkdir( $targetDir ) && !is_dir( $targetDir )) continue;
 
             } else {
                 $data = (string) $xmlFile->data;
-                if ( strlen( $data ) ) $data = base64_decode( $data );
-                $fp = @fopen( $filename, "w" );
-                if ( !$fp ) throw new CmsFileSystemException(lang('errorcantcreatefile').' '.$filename);
+                if ( strlen( $data ) ) $data = base64_decode( $data, true );
+                if ( $data === false ) continue;
+                if ( !$this->_isAllowedImageFile($filename, $data) ) continue;
+
+                $targetFile = $this->_getUniqueDestinationFile($destDir, $filename);
+                if ( $targetFile === false ) continue;
+
+                $fp = @fopen( $targetFile, "wb" );
+                if ( !$fp ) throw new CmsFileSystemException($mod->Lang('errorcantcreatefile').' '.$filename);
                 if ( strlen( $data ) ) @fwrite( $fp, $data );
                 @fclose( $fp );
 

@@ -49,7 +49,7 @@ class UserGuideQuery extends CmsDbQueryBase {
         $res = $db->Execute($sql);
         $sql = 'UPDATE '.CMS_DB_PREFIX.'module_userguide
             SET position = (@rownumber:=@rownumber+1)
-            ORDER BY position';
+            ORDER BY position, id';
         $res = $db->Execute($sql);
         if ( $db->ErrorMsg() ) {
             throw new \CmsSQLErrorException( $db->sql.' -- '.$db->ErrorMsg(). '(updatePositions)' );
