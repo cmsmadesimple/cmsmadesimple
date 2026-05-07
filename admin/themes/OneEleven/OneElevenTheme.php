@@ -171,7 +171,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
         $smarty = Smarty_CMS::get_instance();
 
 	  $smarty->template_dir = __DIR__ . '/templates';
-	  global $error,$warningLogin,$acceptLogin,$changepwhash;
+	  global $error,$warningLogin,$acceptLogin,$changepwhash,$force_password_change;
 	  $fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
 	  include($fn);
 

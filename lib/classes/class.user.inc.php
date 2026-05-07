@@ -78,6 +78,16 @@ class User
 	var $adminaccess;
 
 	/**
+	 * @var int $force_password_reset If 1, user must change password before admin session is finalized
+	 */
+	var $force_password_reset;
+
+	/**
+	 * @var string $force_password_reset_reason Optional note for administrators
+	 */
+	var $force_password_reset_reason;
+
+	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
 	function __construct()
@@ -100,6 +110,8 @@ class User
 		$this->email = '';
 		$this->active = false;
 		$this->adminaccess = false;
+		$this->force_password_reset = 0;
+		$this->force_password_reset_reason = '';
 	}
 
 	/**

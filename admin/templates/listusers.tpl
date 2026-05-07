@@ -157,6 +157,7 @@ $(document).ready(function() {
                 <option value="copyoptions">{lang('copyusersettings2')}</option>
                 <option value="disable">{lang('disable')}</option>
                 <option value="enable">{lang('enable')}</option>
+                <option value="forcereset">{lang('listusers_bulk_forcereset')}</option>
             </select>&nbsp;
             <div id="userlist" style="display: none;">
                 <label for="userlist_sub">{lang('copyfromuser')}:</label>&nbsp;

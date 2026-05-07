@@ -46,6 +46,8 @@ $passwordagain     = isset($_POST["passwordagain"]) ? $_POST["passwordagain"] : 
 $firstname         = isset($_POST["firstname"]) ? cleanValue($_POST["firstname"]) : '';
 $lastname          = isset($_POST["lastname"]) ? cleanValue($_POST["lastname"]) : '';
 $email             = isset($_POST["email"]) ? trim(strip_tags($_POST["email"])) : '';
+$force_password_reset = 0;
+$force_password_reset_reason = '';
 
 if (isset($_POST["user_id"])) {
     $user_id = cleanValue($_POST["user_id"]);
@@ -113,14 +115,26 @@ if (isset($_POST["submit"])) {
     if ($validinfo) {
         $result = false;
         if ($thisuser) {
+            $had_force_password_reset = !empty($thisuser->force_password_reset) ? 1 : 0;
             $thisuser->username    = $user;
             $thisuser->firstname   = $firstname;
             $thisuser->lastname    = $lastname;
             $thisuser->email       = $email;
             $thisuser->adminaccess = $adminaccess;
             $thisuser->active      = $active;
-            if ($password != '')
+            if ($manage_users && !$access_user) {
+                $thisuser->force_password_reset = !empty($_POST['force_password_reset']) ? 1 : 0;
+                $fr = isset($_POST['force_password_reset_reason']) ? trim(strip_tags(cms_html_entity_decode($_POST['force_password_reset_reason']))) : '';
+                if (strlen($fr) > 255) {
+                    $fr = substr($fr, 0, 255);
+                }
+                $thisuser->force_password_reset_reason = $fr;
+            }
+            if ($password != '') {
                 $thisuser->SetPassword($password);
+                $thisuser->force_password_reset = 0;
+                $thisuser->force_password_reset_reason = '';
+            }
 
             \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$thisuser ] );
 
@@ -144,6 +158,13 @@ if (isset($_POST["submit"])) {
         $message = lang('edited_user');
 
         if ($result) {
+            if ($manage_users && !$access_user && !empty($thisuser->force_password_reset) && !$had_force_password_reset) {
+                \CMSMS\HookManager::do_hook('Core::ForcePasswordReset', array(
+                    'user_id' => (int) $thisuser->id,
+                    'reason' => (string) $thisuser->force_password_reset_reason,
+                    'actor_uid' => (int) $userid,
+                ));
+            }
             if (isset($_POST['copyusersettings']) && $_POST['copyusersettings'] > 0) {
                 // copy user preferences from the template user to this user.
                 $prefs = cms_userprefs::get_all_for_user((int)$_POST['copyusersettings']);
@@ -183,6 +204,8 @@ if (isset($_POST["submit"])) {
     $email       = $thisuser->email;
     $adminaccess = $thisuser->adminaccess;
     $active      = $thisuser->active;
+    $force_password_reset = !empty($thisuser->force_password_reset) ? 1 : 0;
+    $force_password_reset_reason = isset($thisuser->force_password_reset_reason) ? (string) $thisuser->force_password_reset_reason : '';
 }
 
 /*--------------------
@@ -219,6 +242,8 @@ $smarty->assign('copyfromtemplate', $copyfromtemplate);
 $smarty->assign('access_user', $access_user);
 $smarty->assign('manage_users', $manage_users);
 $smarty->assign('users', $out);
+$smarty->assign('force_password_reset', $force_password_reset);
+$smarty->assign('force_password_reset_reason', $force_password_reset_reason);
 
 $smarty->display('edituser.tpl');
 

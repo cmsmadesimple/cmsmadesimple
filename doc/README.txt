@@ -5,6 +5,18 @@ For information on upgrading your installation from a previous version, see UPGR
 
 Official documentation website: https://docs.cmsmadesimple.org
 
+Web server notes
+---------------------------------
+Apache-style .htaccess reference: doc/htaccess.txt
+OpenLiteSpeed and LiteSpeed Enterprise (CyberPanel-friendly): doc/openlitespeed-litespeed-web.txt
+Sample root .htaccess for OpenLiteSpeed and LiteSpeed Enterprise: doc/htaccess-litespeed.txt (copy to the site root as .htaccess)
+
+System requirements (summary)
+---------------------------------
+PHP minimum and recommended values used by the installer checks are defined in
+lib/functions/test.functions.php (function getTestValues). As of this tree,
+PHP minimum is 7.4.4 and recommended is 8.1.0 unless you change that array.
+
 Notes
 ---------------------------------
 The version of ADODB_lite used is modified for CMS Made Simple's needs.

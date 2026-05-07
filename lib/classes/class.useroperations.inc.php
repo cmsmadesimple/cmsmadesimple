@@ -30,6 +30,8 @@
  * Include user class definition
  */
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'internal' . DIRECTORY_SEPARATOR . 'class.UserForcePasswordResetOps.inc.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'internal' . DIRECTORY_SEPARATOR . 'trait.UserOperationsListPermissions.inc.php');
 
 /**
  * Class for doing user related functions.  Maybe of the User object functions
@@ -41,6 +43,8 @@ require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
  */
 class UserOperations
 {
+	use UserOperationsListPermissionsTrait;
+
 	/**
 	 * @ignore
 	 */
@@ -76,6 +80,21 @@ class UserOperations
 		if( !is_object(self::$_instance) ) self::$_instance = new UserOperations();
 		return self::$_instance;
 	}
+
+	/**
+	 * Clear cached user rows after a direct SQL change to the users table.
+	 *
+	 * @param int|null $user_id If set, drop that id from the saved-user cache only.
+	 * @return void
+	 */
+	public function invalidateUserCaches($user_id = null)
+	{
+		if ($user_id !== null) {
+			unset($this->_saved_users[(int) $user_id]);
+		}
+		$this->_users = null;
+	}
+
 	
 	
 	/**
@@ -95,7 +114,7 @@ class UserOperations
 			$db = $gCms->GetDb();
 			$result = array();
 
-			$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access
+			$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access, force_password_reset, force_password_reset_reason
                       FROM ".CMS_DB_PREFIX."users ORDER BY username";
 			$dbresult = $db->SelectLimit($query,$limit,$offset);
 
@@ -110,6 +129,9 @@ class UserOperations
 				$oneuser->password = $row['password'];
 				$oneuser->active = $row['active'];
 				$oneuser->adminaccess = $row['admin_access'];
+				$oneuser->force_password_reset = isset($row['force_password_reset']) ? (int) $row['force_password_reset'] : 0;
+				$oneuser->force_password_reset_reason = isset($row['force_password_reset_reason']) && $row['force_password_reset_reason'] !== null
+					? (string) $row['force_password_reset_reason'] : '';
 				$result[] = $oneuser;
 				$dbresult->MoveNext();
 			}
@@ -135,7 +157,7 @@ class UserOperations
 		$db = $gCms->GetDb();
 		$result = array();
 
-		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".CMS_DB_PREFIX."users u, `".CMS_DB_PREFIX."groups` g, ".CMS_DB_PREFIX."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
+		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access, u.force_password_reset, u.force_password_reset_reason FROM ".CMS_DB_PREFIX."users u, `".CMS_DB_PREFIX."groups` g, ".CMS_DB_PREFIX."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
 		$dbresult = $db->Execute($query, array($groupid));
 
 		while ($dbresult && $row = $dbresult->FetchRow()) {
@@ -148,6 +170,9 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
+			$oneuser->force_password_reset = isset($row['force_password_reset']) ? (int) $row['force_password_reset'] : 0;
+			$oneuser->force_password_reset_reason = isset($row['force_password_reset_reason']) && $row['force_password_reset_reason'] !== null
+				? (string) $row['force_password_reset_reason'] : '';
 			$result[] = $oneuser;
 		}
 
@@ -224,7 +249,7 @@ class UserOperations
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
-		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".CMS_DB_PREFIX."users WHERE user_id = ?";
+		$query = "SELECT username, password, active, first_name, last_name, admin_access, email, force_password_reset, force_password_reset_reason FROM ".CMS_DB_PREFIX."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		while ($dbresult && $row = $dbresult->FetchRow()) {
@@ -237,6 +262,9 @@ class UserOperations
 			$oneuser->email = $row['email'];
 			$oneuser->adminaccess = $row['admin_access'];
 			$oneuser->active = $row['active'];
+			$oneuser->force_password_reset = isset($row['force_password_reset']) ? (int) $row['force_password_reset'] : 0;
+			$oneuser->force_password_reset_reason = isset($row['force_password_reset_reason']) && $row['force_password_reset_reason'] !== null
+				? (string) $row['force_password_reset_reason'] : '';
 			$result = $oneuser;
 		}
 
@@ -267,8 +295,13 @@ class UserOperations
 
 		$time = $db->DBTimeStamp(time());
 		$new_user_id = $db->GenID(CMS_DB_PREFIX."users_seq");
-		$query = "INSERT INTO ".CMS_DB_PREFIX."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
-		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
+		$fpr = isset($user->force_password_reset) ? (int) (bool) $user->force_password_reset : 0;
+		$fprr = isset($user->force_password_reset_reason) ? (string) $user->force_password_reset_reason : '';
+		if (strlen($fprr) > 255) {
+			$fprr = substr($fprr, 0, 255);
+		}
+		$query = "INSERT INTO ".CMS_DB_PREFIX."users (user_id, username, password, active, first_name, last_name, email, admin_access, force_password_reset, force_password_reset_reason, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $fpr, $fprr !== '' ? $fprr : null)); //Force admin access on
 		if ($dbresult !== false) $result = $new_user_id;
 
 		return $result;
@@ -295,10 +328,18 @@ class UserOperations
 		if( $tmp ) return $result;
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
-		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
-		if ($dbresult !== false) $result = true;
+		$fpr = isset($user->force_password_reset) ? (int) (bool) $user->force_password_reset : 0;
+		$fprr = isset($user->force_password_reset_reason) ? (string) $user->force_password_reset_reason : '';
+		if (strlen($fprr) > 255) {
+			$fprr = substr($fprr, 0, 255);
+		}
+		$fprr_param = ($fprr !== '') ? $fprr : null;
+		$query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ?, force_password_reset = ?, force_password_reset_reason = ? WHERE user_id = ?";
+		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $fpr, $fprr_param, $user->id));
+		if ($dbresult !== false) {
+			$result = true;
+			unset($this->_saved_users[(int) $user->id]);
+		}
 
 		return $result;
 	}
@@ -336,178 +377,46 @@ class UserOperations
 		if ($dbresult !== false) $result = true;
 		return $result;
 	}
-	
-	/**
-	 * Show the number of pages the given user's id owns.
-	 *
-	 * @param mixed $id Id of the user to count
-	 *
-	 * @return mixed Number of pages they own.  0 if any problems.
-	 * @throws \Exception
-	 * @since 0.6.1
-	 */
-	function CountPageOwnershipByID($id)
-	{
-		$result = 0;
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
-
-		$query = "SELECT count(*) AS count FROM ".CMS_DB_PREFIX."content WHERE owner_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		if ($dbresult && $dbresult->RecordCount() > 0) {
-			$row = $dbresult->FetchRow();
-			if (isset($row["count"])) $result = $row["count"];
-		}
-
-		return $result;
-	}
-
-    /**
-     * Generate an array of admin userids to usernames, suitable for use in a dropdown.
-     *
-     * @return array
-     * @since 2.2
-     */
-    public function GetList()
-    {
-        $allusers = $this->LoadUsers();
-        if( !count($allusers) ) return;
-
-        foreach( $allusers as $oneuser ) {
-            $out[$oneuser->id] = $oneuser->username;
-        }
-        return $out;
-    }
 
 	/**
-	 * Generate an HTML select element containing a user list
+	 * Require the user to set a new password on next successful admin login.
 	 *
-	 * @deprecated
-	 * @param int $currentuserid
-	 * @param string $name The HTML element name.
-	 */
-	function GenerateDropdown($currentuserid=null, $name='ownerid')
-	{
-        $result = null;
-        $list = $this->GetList();
-        if( count($list) ) {
-			$result .= '<select name="'.$name.'">';
-            foreach( $list as $uid => $username ) {
-                $result .= '<option value="'.$uid.'"';
-                if( $uid == $currentuserid ) $result .= ' selected="selected"';
-				$result .= '>'.$username.'</option>';
-            }
-			$result .= '</select>';
-        }
-        return $result;
-	}
-	
-	
-	/**
-	 * Tests $uid is a member of the group identified by $gid
-	 *
-	 * @param int $uid User ID to test
-	 * @param int $gid Group ID to test
-	 *
-	 * @return true if test passes, false otherwise
-	 * @throws \Exception
-	 */
-	function UserInGroup($uid,$gid)
-	{
-		$groups = $this->GetMemberGroups($uid);
-		if( in_array($gid,$groups) ) return TRUE;
-		return FALSE;
-	}
-	
-	/**
-	 * Test if the specified user is a member of the admin group, or is the first user account
-	 *
-	 * @param int $uid
-	 *
+	 * @param int $user_id
+	 * @param string $reason
+	 * @param int|null $actor_uid Acting admin user id (defaults to current user when in admin)
 	 * @return bool
-	 * @throws \Exception
 	 */
-	public function IsSuperuser($uid)
+	public function SetForcePasswordReset($user_id, $reason = '', $actor_uid = null)
 	{
-		if( $uid == 1 ) return TRUE;
-		$groups = $this->GetMemberGroups($uid);
-		if( is_array($groups) && count($groups) ) {
-			if( in_array($uid,$groups) ) return TRUE;
-		}
-		return FALSE;
+		return UserForcePasswordResetOps::set_flag($user_id, $reason, $actor_uid);
 	}
-	
-	/**
-	 * Get the ids of all groups to which the user belongs.
-	 *
-	 * @param int $uid
-	 *
-	 * @return array
-	 * @throws \Exception
-	 */
-	function GetMemberGroups($uid)
-	{
-		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
-			$db = CmsApp::get_instance()->GetDb();
-			$query = 'SELECT group_id FROM '.CMS_DB_PREFIX.'user_groups WHERE user_id = ?';
-			$col = $db->GetCol($query,array((int)$uid));
-			if( !is_array(self::$_user_groups) ) self::$_user_groups = array();
-			self::$_user_groups[$uid] = $col;
-		}
-		return self::$_user_groups[$uid];
-	}
-	
-	/**
-	 * Add the user to the specified group
-	 *
-	 * @param int $uid
-	 * @param int $gid
-	 *
-	 * @throws \Exception
-	 */
-	function AddMemberGroup($uid,$gid)
-	{
-		$uid = (int)$uid;
-		$gid = (int)$gid;
-		if( $uid < 1 || $gid < 1 ) return;
 
+	/**
+	 * Clear the forced password reset flag.
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	public function ClearForcePasswordReset($user_id)
+	{
+		return UserForcePasswordResetOps::clear_flag($user_id);
+	}
+
+	/**
+	 * Whether the user must change password before receiving a full admin session.
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	public function RequiresPasswordReset($user_id)
+	{
+		$user_id = (int) $user_id;
+		if ($user_id < 1) {
+			return false;
+		}
 		$db = CmsApp::get_instance()->GetDb();
-		$now = $db->DbTimeStamp(time());
-		$query = 'INSERT INTO '.CMS_DB_PREFIX."user_groups
-                  (group_id,user_id,create_date,modified_date)
-                  VALUES (?,?,$now,$now)";
-		$dbr = $db->Execute($query,array($gid,$uid));
-		if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
-	}
-	
-	/**
-	 * Test if the user has the specified permission
-	 *
-	 * Given the users member groups, test if any of those groups have the specified permission.
-	 *
-	 * @param int    $userid
-	 * @param string $permname
-	 *
-	 * @return bool
-	 * @throws \Exception
-	 */
-	public function CheckPermission($userid,$permname)
-	{
-		if( $userid <= 0 ) return FALSE;
-		$groups = $this->GetMemberGroups($userid);
-		if( !is_array($groups) ) return FALSE;
-		if( in_array(1,$groups) ) return TRUE; // member of admin group
-
-		try {
-			foreach( $groups as $gid ) {
-				if( GroupOperations::get_instance()->CheckPermission($gid,$permname) ) return TRUE;
-			}
-		}
-		catch( CmsException $e ) {
-			// nothing here.
-		}
-		return FALSE;
+		$v = $db->GetOne('SELECT force_password_reset FROM ' . CMS_DB_PREFIX . 'users WHERE user_id = ?', array($user_id));
+		return !empty($v);
 	}
 }
 

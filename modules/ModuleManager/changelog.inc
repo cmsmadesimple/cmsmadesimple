@@ -53,4 +53,9 @@ Added dependency checking.
   <li>Handle automatic upgrading of ddependencies.</li>
 </ul>
 </li>
+<li>Version 2.1.12 (NewsTargeted site patch, 05/05/2026)
+<ul>
+<li>Restored Forge CDN module icons at https://cdn.cmsmadesimple.org/modules/ (icon.png) on Installed Modules, Available Modules, Module Search results, Upgrades Available, and the per-module version list.</li>
+</ul>
+</li>
 </ul>

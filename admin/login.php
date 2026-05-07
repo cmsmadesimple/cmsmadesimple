@@ -39,6 +39,7 @@ $login_ops = \CMSMS\LoginOperations::get_instance();
 $error = "";
 $forgotmessage = "";
 $changepwhash = "";
+$force_password_change = false;
 
 /**
  * A function to send lost password recovery email to a specified admin user (by name)
@@ -160,6 +161,83 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
         }
     }
 }
+else if (isset($_REQUEST['forcepwchangeform']) && $_REQUEST['forcepwchangeform']) {
+    $uid = isset($_SESSION['cms_pending_auth_userid']) ? (int) $_SESSION['cms_pending_auth_userid'] : 0;
+    $userops = $gCms->GetUserOperations();
+    if ($uid < 1) {
+        $error = lang('usernameincorrect');
+    } else {
+        $u = $userops->LoadUserByID($uid);
+        if (!$u) {
+            $error = lang('usernotfound');
+        } else {
+            $pending_still_valid = isset($_SESSION['cms_pending_auth_time']) && $_SESSION['cms_pending_auth_time'] >= (time() - 300);
+            $p1 = isset($_REQUEST['password']) ? (string) $_REQUEST['password'] : '';
+            $p2 = isset($_REQUEST['passwordagain']) ? (string) $_REQUEST['passwordagain'] : '';
+            unset($_REQUEST['password'], $_POST['password'], $_REQUEST['passwordagain'], $_POST['passwordagain']);
+            if (!$userops->RequiresPasswordReset($uid)) {
+                try {
+                    $login_ops->finalize_authentication($u);
+                    audit($u->id, 'Admin Username: ' . $u->username, 'Logged In');
+                    if (isset($_SESSION['login_redirect_to'])) {
+                        $url_ob = new \cms_url($_SESSION['login_redirect_to']);
+                        unset($_SESSION['login_redirect_to']);
+                        $url_ob->erase_queryvar('_s_');
+                        $url_ob->erase_queryvar('sp_');
+                        $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME, $_SESSION[CMS_USER_KEY]);
+                        redirect((string) $url_ob);
+                    } else {
+                        $homepage = \cms_userprefs::get_for_user($u->id, 'homepage');
+                        if (!$homepage) {
+                            $homepage = $config['admin_url'];
+                        }
+                        $homepage = \CmsAdminUtils::get_session_url($homepage);
+                        redirect(html_entity_decode($homepage));
+                    }
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
+                    $login_ops->deauthenticate();
+                }
+            } elseif ($p1 === '') {
+                $error = lang('nofieldgiven', array(lang('password')));
+            } elseif ($p1 !== $p2) {
+                $error = lang('nopasswordmatch');
+            } else {
+                try {
+                    $u->SetPassword($p1);
+                    $u->force_password_reset = 0;
+                    $u->force_password_reset_reason = '';
+                    if (!$u->Save()) {
+                        throw new \RuntimeException(lang('errorupdatinguser'));
+                    }
+                    $login_ops->finalize_authentication($u);
+                    audit($u->id, 'Admin Username: ' . $u->username, 'Logged In');
+                    if (isset($_SESSION['login_redirect_to'])) {
+                        $url_ob = new \cms_url($_SESSION['login_redirect_to']);
+                        unset($_SESSION['login_redirect_to']);
+                        $url_ob->erase_queryvar('_s_');
+                        $url_ob->erase_queryvar('sp_');
+                        $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME, $_SESSION[CMS_USER_KEY]);
+                        redirect((string) $url_ob);
+                    } else {
+                        $homepage = \cms_userprefs::get_for_user($u->id, 'homepage');
+                        if (!$homepage) {
+                            $homepage = $config['admin_url'];
+                        }
+                        $homepage = \CmsAdminUtils::get_session_url($homepage);
+                        redirect(html_entity_decode($homepage));
+                    }
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
+                    $login_ops->deauthenticate();
+                }
+            }
+            if (!empty($error) && !empty($pending_still_valid) && $userops->RequiresPasswordReset($uid)) {
+                $force_password_change = true;
+            }
+        }
+    }
+}
 
 if (isset($_SESSION['logout_user_now'])) {
     // this does the actual logout stuff.
@@ -174,6 +252,10 @@ if (isset($_SESSION['logout_user_now'])) {
 }
 
 if( isset($_POST['logincancel']) ) {
+    if (isset($_POST['forcepwchangeform'])) {
+        $login_ops->deauthenticate();
+        redirect($config['admin_url'] . '/login.php');
+    }
     debug_buffer("Login cancelled.  Returning to content.");
     redirect($config["root_url"].'/index.php', true);
 }
@@ -206,32 +288,36 @@ else if( isset($_POST['loginsubmit']) ) {
             return;
         }
 
-        // default fallback
-        $login_ops->finalize_authentication($oneuser);
-
-        // put mention into the admin log
-        audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
-
-        // redirect outa hre somewhere
-        if( isset($_SESSION['login_redirect_to']) ) {
-            // we previously attempted a URL but didn't have the user key in the request.
-            $url_ob = new \cms_url($_SESSION['login_redirect_to']);
-            unset($_SESSION['login_redirect_to']);
-            $url_ob->erase_queryvar('_s_');
-            $url_ob->erase_queryvar('sp_');
-            $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
-            $url = (string) $url_ob;
-            redirect($url);
+        if ($userops->RequiresPasswordReset($oneuser->id)) {
+            $force_password_change = true;
         } else {
-            // find the users homepage, if any, and redirect there.
-            $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
-            if( !$homepage ) $homepage = $config['admin_url'];
+            // default fallback
+            $login_ops->finalize_authentication($oneuser);
 
-            $homepage = \CmsAdminUtils::get_session_url($homepage);
+            // put mention into the admin log
+            audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
-            // and redirect.
-            $homepage = html_entity_decode($homepage);
-            redirect($homepage);
+            // redirect outa hre somewhere
+            if( isset($_SESSION['login_redirect_to']) ) {
+                // we previously attempted a URL but didn't have the user key in the request.
+                $url_ob = new \cms_url($_SESSION['login_redirect_to']);
+                unset($_SESSION['login_redirect_to']);
+                $url_ob->erase_queryvar('_s_');
+                $url_ob->erase_queryvar('sp_');
+                $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
+                $url = (string) $url_ob;
+                redirect($url);
+            } else {
+                // find the users homepage, if any, and redirect there.
+                $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
+                if( !$homepage ) $homepage = $config['admin_url'];
+
+                $homepage = \CmsAdminUtils::get_session_url($homepage);
+
+                // and redirect.
+                $homepage = html_entity_decode($homepage);
+                redirect($homepage);
+            }
         }
     }
     catch( \Exception $e ) {
@@ -257,4 +343,5 @@ $vars = array('error'=>$error);
 if( isset($warningLogin) ) $vars['warningLogin'] = $warningLogin;
 if( isset($acceptLogin) ) $vars['acceptLogin'] = $acceptLogin;
 if( isset($changepwhash) ) $vars['changepwhash'] = $changepwhash;
+if( !empty($force_password_change) ) $vars['force_password_change'] = true;
 $themeObject->do_login($vars);

@@ -42,7 +42,9 @@
 {foreach from=$items item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-			<td>{get_module_status_icon status=$entry->age}</td>
+			<td style="white-space:nowrap;vertical-align:middle;">{get_module_status_icon status=$entry->age}
+			{if isset($entry->name) && $entry->name != ''}<img src="https://cdn.cmsmadesimple.org/modules/{$entry->name|escape:'url'}/icon.png" width="24" height="24" alt="" title="{$entry->name|cms_escape:'htmlall'}" loading="lazy" style="vertical-align:middle;margin-left:4px;" onerror="this.style.display='none';"/>{/if}
+			</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape|default:''}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|localedate_format:'%x'}</td>

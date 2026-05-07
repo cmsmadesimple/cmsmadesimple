@@ -1,9 +1,11 @@
-﻿Version 2.2.23 - Not Named
+Version 2.2.23 - Not Named
 -------------------------------
 
 Core - General
  - Security hardening in Smarty template identifier handling to prevent a potential SSTI/LFI/RCE attack chain;
  - Compatibility fixes for PHP 8.1, 8.2, 8.3, 8.4 and 8.5 in active runtime paths;
+ - Doc: added doc/openlitespeed-litespeed-web.txt for OpenLiteSpeed and LiteSpeed Enterprise deployments (CyberPanel-oriented notes);
+ - Doc: added doc/htaccess-litespeed.txt sample root .htaccess for OpenLiteSpeed and LiteSpeed Enterprise (mod_rewrite, security RedirectMatch, headers, deflate, expires);
 
 Content Manager X.X
  - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;

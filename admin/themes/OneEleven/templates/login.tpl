@@ -41,6 +41,14 @@
 					</header>
 					<form method="post" action="login.php">
 						<fieldset>
+						{if isset($force_password_change) && $force_password_change}
+							<p class="warning">{'forcepwchangeintro'|lang}</p>
+							<label for="lbpassword">{'password'|lang}</label>
+							<input id="lbpassword" class="focus" placeholder="{'password'|lang}" name="password" type="password" size="15" maxlength="100" autofocus="autofocus" />
+							<label for="lbpasswordagain">{'passwordagain'|lang}</label>
+							<input id="lbpasswordagain" name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" maxlength="100" />
+							<input type="hidden" name="forcepwchangeform" value="1" />
+						{else}
                                                         {assign var='usernamefld' value='username'}
 							{if isset($smarty.get.forgotpw)}{assign var='usernamefld' value='forgottenusername'}{/if}
 							<label for="lbusername">{'username'|lang}</label>
@@ -57,6 +65,7 @@
 							<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" maxlength="100" />
 							<input type="hidden" name="forgotpwchangeform" value="1" />
 							<input type="hidden" name="changepwhash" value="{$changepwhash}" />
+						{/if}
 						{/if}
 							<input class="loginsubmit" name="loginsubmit" type="submit" value="{'submit'|lang}" />
 							<input class="loginsubmit" name="logincancel" type="submit" value="{'cancel'|lang}" />
@@ -86,10 +95,18 @@
 						<div class="warning message">
 							{'passwordchange'|lang}
 						</div>
-					{/if} <a href="{root_url}" title="{'goto'|lang} {sitename}"> <img class="goback" width="16" height="16" src="{$config.admin_url}/themes/OneEleven/images/layout/goback.png" alt="{'goto'|lang} {sitename}" /> </a>
+					{/if}
+					{if isset($force_password_change) && $force_password_change}
+						<div class="warning message">
+							{'forcepwchangerequired'|lang}
+						</div>
+					{/if}
+					{if !isset($force_password_change) || !$force_password_change}
 					<p class="forgotpw">
 						<a href="login.php?forgotpw=1">{'lostpw'|lang}</a>
 					</p>
+					{/if}
+					<a href="{root_url}" title="{'goto'|lang} {sitename}"> <img class="goback" width="16" height="16" src="{$config.admin_url}/themes/OneEleven/images/layout/goback.png" alt="{'goto'|lang} {sitename}" /> </a>
 				</div>
 				<footer>
 					<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a></small>

@@ -56,6 +56,7 @@ if( !empty($newversions) ) {
 		foreach( $row as $key => $val ) {
 			$onerow->$key = $val;
 		}
+		$onerow->cdn_modulename = $row['name'];
 
 		$mod = $this->GetModuleInstance($row['name']);
 		if( !is_object($mod) ) {
