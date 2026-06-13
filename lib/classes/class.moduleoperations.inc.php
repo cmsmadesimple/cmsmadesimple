@@ -331,6 +331,15 @@ final class ModuleOperations
     {
         // first make sure that we can actually write to the module directory
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
+        $is_blocked_path = function( $filename ) {
+            $parts = preg_split('/[\\\/]+/', (string) $filename, -1, PREG_SPLIT_NO_EMPTY);
+            if( !is_array($parts) || !count($parts) ) return true;
+            foreach( $parts as $part ) {
+                if( $part === '.' || $part === '..' ) return true;
+                if( $part === '.svn' || $part === '.git' || $part === 'CVS' ) return true;
+            }
+            return false;
+        };
 
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
@@ -441,6 +450,12 @@ final class ModuleOperations
 
                         // ready to go
                         $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+                        if( $is_blocked_path($moduledetails['filename']) ) {
+                            unset( $moduledetails['filedata'] );
+                            unset( $moduledetails['filename'] );
+                            unset( $moduledetails['isdir'] );
+                            break;
+                        }
                         $filename=$moduledir.$moduledetails['filename'];
                         if( !file_exists( $moduledir ) ) {
                             if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
