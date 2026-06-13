@@ -59,10 +59,30 @@ class cms_mailer
   public function __construct($exceptions = true)
   {
     $dir = dirname(__DIR__).'/phpmailer/';
-    
-    require_once($dir.'Exception.php');
-    require_once($dir.'PHPMailer.php');
-    require_once($dir.'SMTP.php');
+
+    $bases = [
+      $dir.'src/',
+      $dir
+    ];
+
+    $loaded = false;
+    foreach( $bases as $base ) {
+      if( !is_file($base.'Exception.php') ||
+          !is_file($base.'PHPMailer.php') ||
+          !is_file($base.'SMTP.php') ) {
+        continue;
+      }
+
+      require_once($base.'Exception.php');
+      require_once($base.'PHPMailer.php');
+      require_once($base.'SMTP.php');
+      $loaded = true;
+      break;
+    }
+
+    if( !$loaded ) {
+      throw new \RuntimeException('Unable to locate PHPMailer library files');
+    }
 
     $this->_mailer = new PHPMailer($exceptions);
     $this->reset();
