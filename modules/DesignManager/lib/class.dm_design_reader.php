@@ -33,17 +33,32 @@ class dm_design_reader extends dm_reader_base
   {
     $this->_xml = new dm_xml_reader();
     $this->_xml->open_file($fn);
-    $this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
   }
   
   public function validate()
   {
-    while( $this->_xml->read() ) {
-      if( !$this->_xml->isValid() ) {
-        throw new CmsException(cms_utils::get_module('DesignManager')->Lang('error_readxml'));
+    $this->_scan();
+
+    $mod = cms_utils::get_module('DesignManager');
+    $required = array('name','description','generated','cmsversion');
+    foreach( $required as $key ) {
+      if( !isset($this->_raw_design_info[$key]) || $this->_raw_design_info[$key] === '' ) {
+        throw new CmsException($mod->Lang('error_readxml'));
       }
     }
-    // it validates.
+
+    if( !count($this->_tpl_info) ) {
+      throw new CmsException($mod->Lang('error_readxml'));
+    }
+
+    foreach( $this->_tpl_info as $one ) {
+      $required = array('key','name','desc','data','ttype_originator','ttype_name');
+      foreach( $required as $key ) {
+        if( !isset($one[$key]) ) {
+          throw new CmsException($mod->Lang('error_readxml'));
+        }
+      }
+    }
   }
   
   private function _scan()

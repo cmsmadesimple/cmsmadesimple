@@ -1,9 +1,10 @@
-﻿Version 2.2.23 - Not Named
+Version 2.2.23 - Not Named
 -------------------------------
 
 Core - General
  - Security hardening in Smarty template identifier handling to prevent a potential SSTI/LFI/RCE attack chain;
  - Compatibility fixes for PHP 8.1, 8.2, 8.3, 8.4 and 8.5 in active runtime paths;
+ - PHPMailer upgraded to version 6.12.0;
 
 Content Manager X.X
  - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;
@@ -11,7 +12,10 @@ Content Manager X.X
 
 DesignManager X.X
  - Export now skips missing or unreadable referenced assets, writes an export report and records warnings in the audit log;
- - Import now fails more cleanly when the uploaded XML file cannot be copied, opened or read;
+ - Import now handles malformed or non-design uploads more gracefully instead of triggering fatal errors or breaking the admin flow;
+
+FileManager X.X
+ - Add support for WEBP and AVIF image types for thumbnails generation, rotation or crop operations. Note: AVIF operations will not work on PHP7
 
 News X.X
  - Fixed BR #12794 - News-fields typo item_orderr;

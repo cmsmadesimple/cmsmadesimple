@@ -19,11 +19,17 @@
 #
 #-------------------------------------------------------------------------
 
-class dm_xml_reader extends XMLReader
+class dm_xml_reader
 {
+  private $_reader;
   private $_setup;
   private $_old_err_handler;
   private $_old_internal_errors;
+
+  public function __construct()
+  {
+    $this->_reader = new XMLReader();
+  }
 
   public static function __errhandler($errno,$errstr,$errfile,$errline)
   {
@@ -50,10 +56,20 @@ class dm_xml_reader extends XMLReader
       set_error_handler($this->_old_err_handler);
   }
 
+  public function __call($name,$args)
+  {
+    return $this->_reader->$name(...$args);
+  }
+
+  public function __get($name)
+  {
+    return $this->_reader->$name;
+  }
+
   public function open_file($uri, $encoding = null, $flags = 0): bool
   {
     $this->__setup();
-    if( !parent::open($uri,$encoding,$flags) )
+    if( !$this->_reader->open($uri,$encoding,$flags) )
     {
       $mod = cms_utils::get_module('DesignManager');
       throw new CmsException($mod->Lang('error_fileopen',$uri));
@@ -63,9 +79,9 @@ class dm_xml_reader extends XMLReader
 
   public function read(): bool
   {
-    $this->__setup();
-    return parent::read();
+    return $this->_reader->read();
   }
+
 } // end of class
 
 #

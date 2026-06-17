@@ -39,10 +39,9 @@ try {
           // check for uploaded file
           $key = $id.'import_xml_file';
           if( !isset($_FILES[$key]) || $_FILES[$key]['name'] == '' ) throw new CmsException($this->Lang('error_nofileuploaded'));
-          if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' || $_FILES[$key]['type'] == '') {
+          if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' ) {
             throw new CmsException($this->Lang('error_uploading','xml'));
           }
-          if( $_FILES[$key]['type'] != 'text/xml' ) throw new CmsException($this->Lang('error_upload_filetype',$_FILES[$key]['type']));
 
           $reader = dm_reader_factory::get_reader($_FILES[$key]['tmp_name']);
           $reader->validate();
@@ -61,6 +60,10 @@ try {
     }
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
+    }
+    catch( Throwable $e ) {
+      audit('','DesignManager/import',$e->getMessage());
+      echo $this->ShowErrors($this->Lang('error_readxml'));
     }
 
     echo $this->ProcessTemplate('admin_import_design.tpl');
@@ -113,6 +116,10 @@ try {
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
     }
+    catch( Throwable $e ) {
+      audit('','DesignManager/import',$e->getMessage());
+      echo $this->ShowErrors($this->Lang('error_readxml'));
+    }
     echo $this->ProcessTemplate('admin_import_design2.tpl');
     break;
 
@@ -146,6 +153,11 @@ try {
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());
+  $this->RedirectToAdminTab();
+}
+catch( Throwable $e ) {
+  audit('','DesignManager/import',$e->getMessage());
+  $this->SetError($this->Lang('error_readxml'));
   $this->RedirectToAdminTab();
 }
 
