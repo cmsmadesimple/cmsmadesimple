@@ -53,16 +53,16 @@ namespace CMSMS\Database {
          * @ignore
          */
         private function __construct() {}
-  
-      /**
-       * Initialize the database connection according to config settings.
-       *
-       * @param cms_config $config The config object
-       *
-       * @return \CMSMS\Database\Connection
-       * @throws \CMSMS\Database\ConnectionSpecException
-       * @internal
-       */
+
+        /**
+         * Initialize the database connection according to config settings.
+         *
+         * @param \cms_config $config The config object
+         *
+         * @return \CMSMS\Database\Connection
+         * @throws \CMSMS\Database\ConnectionSpecException
+         * @internal
+         */
         public static function init(\cms_config $config)
         {
             $spec = new ConnectionSpec;
@@ -128,21 +128,23 @@ namespace {
      * @return \CMSMS\Database\DataDictionary
      * @deprecated
      */
-    function &NewDataDictionary(\CMSMS\Database\Connection $conn)
+    function NewDataDictionary(\CMSMS\Database\Connection $conn) : \CMSMS\Database\DataDictionary
     {
         // called by module installation routines.
         return $conn->NewDataDictionary();
     }
-
+  
     /**
      * A function co create a new adodb database connection.
      *
      * @param string $dbms
      * @param string $flags
+     *
      * @return \CMSMS\Database\Connection
+     * @throws \Exception
      * @deprecated
      */
-    function &ADONewConnection( $dbms, $flags )
+    function ADONewConnection( $dbms, $flags )
     {
         // now that our connection object is stateless... this is just a wrapper
         // for our global db instance.... but should not be called.

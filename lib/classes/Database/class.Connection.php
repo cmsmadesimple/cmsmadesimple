@@ -67,22 +67,22 @@ namespace CMSMS\Database {
         /**
          * This constant defines an error with connecting to the database.
          */
-        const ERROR_CONNECT = 'CONNECT';
+        public const ERROR_CONNECT = 'CONNECT';
 
         /**
          * This constant defines an error with an execute statement.
          */
-        const ERROR_EXECUTE = 'EXECUTE';
+        public const ERROR_EXECUTE = 'EXECUTE';
 
         /**
          * This constant defines an error with a transaction.
          */
-        const ERROR_TRANSACTION = 'TRANSACTION';
+        public const ERROR_TRANSACTION = 'TRANSACTION';
 
         /**
          * This constant defines an error in a datadictionary command.
          */
-        const ERROR_DATADICT = 'DATADICTIONARY';
+        public const ERROR_DATADICT = 'DATADICTIONARY';
 
         /**
          * @ignore
@@ -102,7 +102,7 @@ namespace CMSMS\Database {
         /**
          * @ignore
          */
-        private $_queries = array();
+        private $_queries = [];
 
         /**
          * @ignore
@@ -147,8 +147,8 @@ namespace CMSMS\Database {
          */
         public function __get($key)
         {
-            if( $key == 'query_time_total' ) return $this->query_time_total;
-            if( $key == 'query_count' ) return $this->_query_count;
+            if('query_time_total' === $key) return $this->query_time_total;
+            if('query_count' === $key) return $this->_query_count;
         }
 
         /**
@@ -156,8 +156,8 @@ namespace CMSMS\Database {
          */
         public function __isset($key)
         {
-            if( $key == 'query_time_total' ) return TRUE;
-            if( $key == 'query_count' ) return TRUE;
+            if('query_time_total' === $key) return TRUE;
+            if('query_count' === $key) return TRUE;
             return FALSE;
         }
 
@@ -166,7 +166,7 @@ namespace CMSMS\Database {
          * Data Dictionary objects are used for manipulating tables, i.e: creating, altering and editing them.
          * @return \CMSMS\Database\DataDictionary
          */
-        abstract public function &NewDataDictionary();
+        abstract public function NewDataDictionary();
 
         /**
          * Return the database type.
@@ -277,10 +277,11 @@ namespace CMSMS\Database {
          * Execute an SQL Select and limit the output.
          *
          * @param string $sql
-         * @param int $nrows  The number of rows to return
-         * @param int $offset The starting offset of rows to return
-         * @param array Any additional paramters required by placeholders in the $sql statement.
-         * @return \CMSMS\Database\ResultSet
+         * @param int    $nrows    The number of rows to return
+         * @param int    $offset   The starting offset of rows to return
+         * @param array  $inputarr Any additional paramters required by placeholders in the $sql statement.
+         *
+         * @return \CMSMS\Database\ResultSet|null
          */
         public function SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
@@ -293,39 +294,38 @@ namespace CMSMS\Database {
                 $limit = ' LIMIT ' . $offset . ' ' . $nrows;
             }
 
-            if ($inputarr && is_array($inputarr)) {
-                $sqlarr = explode('?',$sql);
-                if( !is_array(reset($inputarr)) ) $inputarr = array($inputarr);
+            if( $inputarr && \is_array($inputarr) ) {
+                $sqlarr = \explode('?', $sql);
+                if( !\is_array(\reset($inputarr)) ) $inputarr = [$inputarr];
                 foreach( $inputarr as $arr ) {
                     $sql = ''; $i = 0;
                     foreach( $arr as $v ) {
                         $sql .= $sqlarr[$i];
-                        switch(gettype($v)){
+                        switch( \gettype($v) ) {
                         case 'string':
                             $sql .= $this->qstr($v);
                             break;
                         case 'double':
-                            $sql .= str_replace(',', '.', $v);
+                            $sql .= \str_replace(',', '.', $v);
                             break;
                         case 'boolean':
                             $sql .= $v ? 1 : 0;
                             break;
                         default:
-                            if ($v === null) $sql .= 'NULL';
+                            if( null === $v ) $sql .= 'NULL';
                             else $sql .= $v;
                         }
-                        $i += 1;
+                        ++$i;
                     }
                     $sql .= $sqlarr[$i];
-                    if ($i+1 != sizeof($sqlarr)) {
-                        $false = null;
-                        return $false;
+                    if( $i+1 != \count($sqlarr) ) {
+                        return null;
                     }
                 }
             }
             $sql .= $limit;
-            $rs = $this->do_sql( $sql );
-            return $rs;
+
+            return $this->do_sql($sql);
         }
 
         /**
@@ -337,12 +337,11 @@ namespace CMSMS\Database {
          */
         public function Execute($sql, $inputarr = null)
         {
-            $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
-            return $rs;
+            return $this->SelectLimit($sql, -1, -1, $inputarr);
         }
 
         /**
-         * Execute an SQL Commmand and return all of the results as an array.
+         * Execute an SQL Commmand and return all the results as an array.
          *
          * @param string $sql The SQL statement to execute.
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
@@ -352,8 +351,8 @@ namespace CMSMS\Database {
         {
             $result = $this->SelectLimit( $sql, -1, -1, $inputarr );
             if( !$result ) return;
-            $data = $result->GetArray();
-            return $data;
+
+            return $result->GetArray();
         }
 
         /**
@@ -404,8 +403,8 @@ namespace CMSMS\Database {
                 $key = null;
                 while (!$result->EOF) {
                     $row = $result->Fields();
-                    if( !$key ) $key = array_keys($row)[0];
-                    $data[] = ($trim) ? trim($row[$key]) : $row[$key];
+                    if( !$key ) $key = \array_keys($row)[0];
+                    $data[] = ($trim) ? \trim($row[$key]) : $row[$key];
                     $result->MoveNext();
                 }
             }
@@ -423,7 +422,7 @@ namespace CMSMS\Database {
         public function GetRow($sql, $inputarr = null)
         {
             $nrows = 1;
-            if( stripos( $sql, 'LIMIT' ) !== FALSE ) $nrows = -1;
+            if( FALSE !== \stripos($sql, 'LIMIT' ) ) $nrows = -1;
             $rs = $this->SelectLimit( $sql, $nrows, -1, $inputarr );
             if( !$rs ) return FALSE;
             return $rs->Fields();
@@ -440,7 +439,7 @@ namespace CMSMS\Database {
         {
             $res = $this->Getrow( $sql, $inputarr );
             if( !$res ) return FALSE;
-            $key = array_keys($res)[0];
+            $key = \array_keys($res)[0];
             return $res[$key];
         }
 
@@ -531,19 +530,19 @@ namespace CMSMS\Database {
          */
         public function DBTimeStamp($timestamp)
         {
-            if (empty($timestamp) && $timestamp !== 0) return 'null';
+            if (empty($timestamp) && 0 !== $timestamp) return 'null';
 
             // strlen(14) allows YYYYMMDDHHMMSS format
-            if( is_string($timestamp) ) {
-                if( strlen($timestamp) === 14 || preg_match('/[0-9\s:-]*/',$timestamp) ) {
-                    $tmp = strtotime($timestamp);
+            if( \is_string($timestamp) ) {
+                if(14 === \strlen($timestamp) || \preg_match('/[0-9\s:-]*/', $timestamp) ) {
+                    $tmp = \strtotime($timestamp);
                     if( $tmp < 1 ) return 'null';
                     $timestamp = $tmp;
-                } else if( is_numeric($timestamp) ) {
+                } else if( \is_numeric($timestamp) ) {
                     $timestamp = (int) $timestamp;
                 }
             }
-            if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
+            if( $timestamp > 0 ) return \date("'Y-m-d H:i:s'", $timestamp);
         }
 
         /**
@@ -555,8 +554,8 @@ namespace CMSMS\Database {
          */
         public function UnixTimeStamp($str)
         {
-          $str = $str ?? '';
-            return strtotime($str);
+            $str = $str ?? '';
+            return \strtotime($str);
         }
 
         /**
@@ -569,8 +568,8 @@ namespace CMSMS\Database {
         {
             if (empty($date) && $date !== 0) return 'null';
 
-            if (is_string($date) && !is_numeric($date)) {
-                if ($date === 'null' || strncmp($date, "'", 1) === 0) return $date;
+            if (\is_string($date) && !\is_numeric($date)) {
+                if ($date === 'null' || 0 === \strncmp($date, "'", 1)) return $date;
                 $date = $this->UnixDate($date);
             }
             return \locale_ftime("'%x'",$date);
@@ -584,7 +583,7 @@ namespace CMSMS\Database {
          */
         public function UnixDate()
         {
-            return strtotime('today midnight');
+            return \strtotime('today midnight');
         }
 
         /**
@@ -592,7 +591,7 @@ namespace CMSMS\Database {
          *
          * @return int
          */
-        public function Time() { return $this->UnixTimeStamp(); }
+        public function Time() { return $this->UnixTimeStamp(''); }
 
         /**
          * An Alias for the UnixDate method.
@@ -625,7 +624,7 @@ namespace CMSMS\Database {
         public function SetErrorHandler($fn = null)
         {
             $this->_errorhandler = null;
-            if( $fn && is_callable($fn) ) $this->_errorhandler = $fn;
+            if( $fn && \is_callable($fn) ) $this->_errorhandler = $fn;
         }
 
         /**
@@ -637,15 +636,15 @@ namespace CMSMS\Database {
         public function SetDebugMode($flag = true,$debug_handler = null)
         {
             $this->_debug = (bool) $flag;
-            if( $debug_handler && is_callable($this->_debug_handler) ) $this->_debug_cb = $debug_handler;
+            if( $debug_handler && \is_callable($debug_handler) ) $this->_debug_cb = $debug_handler;
         }
 
         /**
          * Set the debug callback.
          *
-         * @param callable $debug_handler
+         * @param callable|null $debug_handler
          */
-        public function SetDebugCallback(callable $debug_handler = null)
+        public function SetDebugCallback(?callable $debug_handler = null) : void
         {
             $this->_debug_cb = $debug_handler;
         }
@@ -659,7 +658,7 @@ namespace CMSMS\Database {
         protected function add_debug_query($sql)
         {
             $this->_query_count++;
-            if( $this->_debug && $this->_debug_cb ) call_user_func($this->_debug_cb,$sql);
+            if( $this->_debug && $this->_debug_cb ) \call_user_func($this->_debug_cb, $sql);
         }
 
         /**
@@ -674,8 +673,8 @@ namespace CMSMS\Database {
          */
         public function OnError($errtype, $error_number, $error_message )
         {
-            if( $this->_errorhandler && is_callable($this->_errorhandler) ) {
-                call_user_func($this->_errorhandler, $this, $errtype, $error_number, $error_message);
+            if( $this->_errorhandler && \is_callable($this->_errorhandler) ) {
+                \call_user_func($this->_errorhandler, $this, $errtype, $error_number, $error_message);
                 return;
             }
 
@@ -689,29 +688,30 @@ namespace CMSMS\Database {
         }
 
         //// initialization
-      
-      /**
-       * Create a new database connection object.
-       * This is the preferred wa to open a new database connection.
-       *
-       * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
-       *
-       * @return \CMSMS\Database\Connection
-       * @throws \CMSMS\Database\ConnectionSpecException
-       * @todo  Move this into a factory class
-       */
+
+        /**
+         * Create a new database connection object.
+         * This is the preferred wa to open a new database connection.
+         *
+         * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
+         *
+         * @return \CMSMS\Database\Connection
+         * @throws \CMSMS\Database\ConnectionSpecException
+         * @todo  Move this into a factory class
+         */
         public static function Initialize(ConnectionSpec $spec)
         {
             if( !$spec->valid() ) throw new ConnectionSpecException('Invalid or incorrect configuration information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';
-            if( !class_exists($connection_class) ) throw new \LogicException('Could not find a database abstraction layer named '.$spec->type);
+            if( !\class_exists($connection_class) ) throw new \LogicException('Could not find a database abstraction layer named ' . $spec->type);
 
             $obj = new $connection_class($spec);
             if( !($obj instanceof Connection ) ) throw new \LogicException("$connection_class is not derived from the primary database class.");
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
             if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
-          return $obj;
+
+            return $obj;
         }
 
     } // end of class
