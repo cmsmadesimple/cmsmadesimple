@@ -9,6 +9,7 @@ Core - General
 Content Manager X.X
  - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;
  - Added a missing default-page content type error message;
+ - Changing the page design now keeps the template selector usable even when the selected design has no explicit page-template associations;
 
 DesignManager X.X
  - Export now skips missing or unreadable referenced assets, writes an export report and records warnings in the audit log;
