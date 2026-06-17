@@ -18,6 +18,9 @@ DesignManager X.X
 FileManager X.X
  - Add support for WEBP and AVIF image types for thumbnails generation, rotation or crop operations. Note: AVIF operations will not work on PHP7
 
+MicroTiny X.X
+ - Removed a stale tabfocus plugin loader reference that could trigger a missing plugin warning;
+
 News X.X
  - Fixed BR #12794 - News-fields typo item_orderr;
 
