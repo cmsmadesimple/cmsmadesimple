@@ -74,10 +74,10 @@ final class LoginOperations
 
     public function save_authentication(\User $user,?\User $effective_user = null)
     {
-        return $this->finalize_authentication($user, $effective_user);
+        return $this->_persist_authentication($user, $effective_user);
     }
 
-    public function initialize_authentication(\User $user, \User $effective_user = null): void
+    public function initialize_authentication(\User $user, ?\User $effective_user = null): void
     {
         if (!$user || !$user->id) {
             throw new \LogicException('Invalid user for authentication initialization');
@@ -97,15 +97,10 @@ final class LoginOperations
                 : null;
     }
 
-    public function finalize_authentication(\User $user, \User $effective_user = null): string
+    protected function _persist_authentication(\User $user, ?\User $effective_user = null): string
     {
         if (!$user || !$user->id) {
-            throw new \LogicException('Invalid user for authentication finalization');
-        }
-
-        if (!isset($_SESSION['cms_pending_auth_time']) ||
-            $_SESSION['cms_pending_auth_time'] < (time() - 300)) {
-            throw new \LogicException('Pending authentication expired');
+            throw new \LogicException('Invalid user for authentication save');
         }
 
         if (session_status() === PHP_SESSION_ACTIVE) {
@@ -152,6 +147,20 @@ final class LoginOperations
         \CMSMS\HookManager::do_hook('Core::LoginPost', ['user' => $user]);
 
         return $key;
+    }
+
+    public function finalize_authentication(\User $user, ?\User $effective_user = null): string
+    {
+        if (!$user || !$user->id) {
+            throw new \LogicException('Invalid user for authentication finalization');
+        }
+
+        if (!isset($_SESSION['cms_pending_auth_time']) ||
+            $_SESSION['cms_pending_auth_time'] < (time() - 300)) {
+            throw new \LogicException('Pending authentication expired');
+        }
+
+        return $this->_persist_authentication($user, $effective_user);
     }
 
 
@@ -255,6 +264,9 @@ final class LoginOperations
     public function set_effective_user( ?\User $e_user = null )
     {
         $li_user = $this->get_loggedin_user();
+        if( !$li_user || !$li_user->id ) {
+            throw new \LogicException('Cannot switch effective user without an authenticated session');
+        }
         if( $e_user && $e_user->id == $li_user->id ) return;
 
         $new_key = $this->save_authentication($li_user,$e_user);
