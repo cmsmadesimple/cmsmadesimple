@@ -1,5 +1,8 @@
 <?php
-if( !isset($gCms) ) exit;
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
+if (!defined('CMS_VERSION')) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('installed');
 if( !isset($params['mod']) ) {
@@ -9,10 +12,10 @@ if( !isset($params['mod']) ) {
 $module = get_parameter_value($params,'mod');
 
 $info = ModuleManagerModuleInfo::get_module_info($module);
-$smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
-$smarty->assign('info',$info);
-
-echo $this->ProcessTemplate('local_missingdeps.tpl');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('local_missingdeps.tpl'), null, null, $smarty);
+$tpl->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
+$tpl->assign('info',$info);
+$tpl->display();
 #
 # EOF
 #

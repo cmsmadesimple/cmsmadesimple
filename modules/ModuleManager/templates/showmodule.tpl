@@ -12,10 +12,8 @@
 
 {function get_module_status_icon}
 {strip}
-{if $status == 'stale'}
+{if $status == 'incompatible'}
 {$stale_img}
-{elseif $status == 'warn'}
-{$warn_img}
 {elseif $status == 'new'}
 {$new_img}
 {/if}
@@ -29,6 +27,7 @@
 			<th></th>
 			<th>{$nametext}</th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_lastchecked')}">{$ModuleManager->Lang('lastchecked')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulereleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
 			{*<th><span title="{$ModuleManager->Lang('title_moduledownloads')}">{$ModuleManager->Lang('downloads')}</span></th>*}
 			<th>{$sizetext}</th>
@@ -42,10 +41,11 @@
 {foreach from=$items item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-			<td>{get_module_status_icon status=$entry->age}</td>
+			<td>{if $entry->age=='new'}{get_module_status_icon status='new'}{/if}</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape|default:''}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
-			<td>{$entry->date|localedate_format:'%x'}</td>
+			<td>{if isset($entry->cmsms_tested) && $entry->cmsms_tested}{$entry->cmsms_tested}{/if} {if isset($entry->incompatible) && $entry->incompatible}{$stale_img}{elseif $entry->age=='untested'}{$warn_img}{/if}</td>
+			<td>{$entry->date|cms_date_format:'%b %Y'}</td>
 			{*<td>{$entry->downloads}</td>*}
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>

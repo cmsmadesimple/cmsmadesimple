@@ -1,4 +1,7 @@
 <?php
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
 
 class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 {
@@ -24,13 +27,13 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
             }
             else if( $can_check_forge ) {
                 try {
-                    $rep_info = modulerep_client::get_upgrade_module_info($module_name);
+                    $rep_info = modmgr_rep_client::get_upgrade_module_info($module_name);
                     if( is_array($rep_info) ) {
                         if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
                     }
                 }
                 catch( Exception $e ) {
-                    // nothing here.
+                    audit('', 'ModuleManager', 'Error checking forge for ' . $module_name . ': ' . $e->GetMessage());
                 }
             }
         }
@@ -163,11 +166,11 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         $out = array();
         foreach( $allknownmodules as $module_name ) {
             try {
-                $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
+                        $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
                 $out[$module_name] = $info;
             }
             catch( \Exception $e ) {
-                debug_display($e->GetMessage(),$module_name);
+                audit('', 'ModuleManager', 'Error loading module info for ' . $module_name . ': ' . $e->GetMessage());
             }
         }
 

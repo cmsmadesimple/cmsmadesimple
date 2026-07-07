@@ -1,9 +1,6 @@
-{if !empty($updatestxt)}
-<div class="information"><p>{$updatestxt}</p></div>
-{else}
-<div class="information"><p>{$ModuleManager->Lang('info_searchtab')}</p></div>
+{if !empty($updatestxt) && !$ModuleManager->GetPreference('notice_dismissed', 0)}
+<p id="mm-upgrade-notice" class="pageinfo" style="margin:0 0 10px;padding:6px 10px;background:#f0f4f8;border-left:3px solid #5b9bd5;font-size:0.9em;">{$updatestxt}<span onclick="this.parentNode.style.display='none';$.get('{cms_action_url action='setprefs' dismiss_notice=1}')" style="cursor:pointer;float:right;font-weight:bold;margin-left:10px;">&times;</span></p>
 {/if}
-<div style="clear:both;">&nbsp;</div>
 {if isset($message)}
 <p class="pageerror">{$message}</p>
 {/if}
@@ -25,6 +22,7 @@
 	<thead>
 		<tr>
 			<th></th>
+			<th></th>
 			<th>{$nametext}</th>
 			<th><span title="{$ModuleManager->Lang('title_newmoduleversion')}">{$vertext}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_yourmoduledate')}">{$ModuleManager->Lang('releasedate')}</span></th>
@@ -42,12 +40,13 @@
 	{cycle values="row1,row2" assign='rowclass'}
 	<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
 		<td>{get_module_status_icon status=$entry->age}</td>
+		<td style="text-align:center;"><img src="https://cdn.cmsmadesimple.org/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;display:none;" onload="this.style.display='inline'"/></td>
 		<td>
 			<span title="{$entry->description|strip_tags|cms_escape}">{$entry->name|default:''}</span>
 			{if $entry->error}<br/><span style="color: red;">{$entry->error}</span>{/if}
 		</td>
 		<td>{$entry->version|default:''}</td>
-		<td>{$entry->date|localedate_format:'%x'}</td>
+		<td>{$entry->date|cms_date_format:'%b %Y'}</td>
 		{*<td>{$entry->downloads}</td>*}
 		<td>{$entry->size|default:''}</td>
 		<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>

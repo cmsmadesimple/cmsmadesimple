@@ -1,39 +1,7 @@
 <?php
-#BEGIN_LICENSE
-#-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2011 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
-#  An addon module for CMS Made Simple to allow browsing remotely stored
-#  modules, viewing information about them, and downloading or upgrading
-#
-#-------------------------------------------------------------------------
-# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
-# Visit our homepage at: http://www.cmsmadesimple.org
-#
-#-------------------------------------------------------------------------
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# However, as a special exception to the GPL, this software is distributed
-# as an addon module to CMS Made Simple.  You may not use this software
-# in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin
-# section that the site was built with CMS Made simple.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
-#
-#-------------------------------------------------------------------------
-#END_LICENSE
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
 
 final class modmgr_utils
 {
@@ -99,6 +67,17 @@ final class modmgr_utils
     {
         if( !is_array($xmldetails) ) return;
 
+        // Filter out beta/pre-release modules unless preference is enabled
+        $mod = cms_utils::get_module('ModuleManager');
+        if( !$mod->GetPreference('show_beta',0) ) {
+            $xmldetails = array_filter($xmldetails, function($det) {
+                $ver = isset($det['version']) ? strtolower($det['version']) : '';
+                $fn = isset($det['filename']) ? strtolower($det['filename']) : '';
+                return !preg_match('/(alpha|beta|rc|dev|\d+[ab]\d+)/i', $ver . $fn);
+            });
+            $xmldetails = array_values($xmldetails);
+        }
+
         // sort
         uasort( $xmldetails, array('modmgr_utils','uasort_cmp_details') );
 
@@ -156,16 +135,28 @@ final class modmgr_utils
         // Do a third loop
         // and check min and max cms version
         //
-        global $CMS_VERSION;
         $results2 = array();
         foreach( $results as $oneresult ) {
-            if( (!empty($oneresult['maxcmsversion']) && version_compare($CMS_VERSION,$oneresult['maxcmsversion']) > 0) ||
-                (!empty($oneresult['mincmsversion']) && version_compare($CMS_VERSION,$oneresult['mincmsversion']) < 0) ) {
+            if( (!empty($oneresult['maxcmsversion']) && version_compare(CMS_VERSION,$oneresult['maxcmsversion']) > 0) ||
+                (!empty($oneresult['mincmsversion']) && version_compare(CMS_VERSION,$oneresult['mincmsversion']) < 0) ||
+                (!empty($oneresult['cmsms_max']) && version_compare(CMS_VERSION,$oneresult['cmsms_max'].'.99') > 0) ||
+                (!empty($oneresult['php_max']) && version_compare(PHP_VERSION,$oneresult['php_max'].'.99') > 0) ) {
                 $oneresult['status'] = 'incompatible';
+            }
+            elseif( !empty($oneresult['cmsms_tested']) && version_compare(CMS_VERSION,$oneresult['cmsms_tested']) > 0 ) {
+                $oneresult['untested'] = true;
             }
             $results2[] = $oneresult;
         }
         $results = $results2;
+
+        // Filter out incompatible modules unless preference is enabled
+        if( !$mod->GetPreference('show_incompatible',0) ) {
+            $results = array_filter($results, function($r) {
+                return $r['status'] !== 'incompatible';
+            });
+            $results = array_values($results);
+        }
 
         // now we have everything
         // let's try sorting it
@@ -176,14 +167,14 @@ final class modmgr_utils
     public static function get_module_xml($filename,$size,$md5sum = null)
     {
         $mod = cms_utils::get_module('ModuleManager');
-        $xml_filename = modulerep_client::get_repository_xml($filename,$size);
+        $xml_filename = modmgr_rep_client::get_repository_xml($filename,$size);
         if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$filename));
 
-        if( !$md5sum ) $md5sum = modulerep_client::get_module_md5($filename);
+        if( !$md5sum ) $md5sum = modmgr_rep_client::get_module_md5($filename);
         $dl_md5 = md5_file($xml_filename);
 
         if( $md5sum != $dl_md5 ) {
-            @unlink($xml_filename);
+            if( file_exists($xml_filename) ) unlink($xml_filename);
             throw new CmsInvalidDataException($mod->Lang('error_checksum',array($md5sum,$dl_md5)));
         }
 
@@ -195,55 +186,52 @@ final class modmgr_utils
         static $ok = -1;
         if( $ok != -1 ) return $ok;
 
-        $mod = cms_utils::get_module('ModuleManager');
-        $url = $mod->GetPreference('module_repository');
-        if( $url ) {
-            $url .= '/version';
-            $req = new modmgr_cached_request($url);
-            $req->setTimeout(3);
-            $req->execute($url);
-            if( ($status = $req->getStatus()) == 200 ) {
-                $tmp = $req->getResult();
-                if( empty($tmp) ) {
-                    $req->clearCache();
-                    $ok = FALSE;
-                    return FALSE;
-                }
-
-                $data = json_decode($req->getResult(),true);
+        $req = new modmgr_cached_request();
+        $req->setTimeout(10);
+        $req->execute('https://cdn.cmsmadesimple.org/repository/version.json', array(), 1440);
+        if( $req->getStatus() == 200 ) {
+            $tmp = $req->getResult();
+            if( !empty($tmp) ) {
+                $data = json_decode($tmp,true);
                 if( version_compare($data,MINIMUM_REPOSITORY_VERSION) >= 0 ) {
                     $ok = TRUE;
                     return TRUE;
                 }
             }
-            else {
-                $req->clearCache();
-                audit($status,'ModuleManager','Cannot connect to ModuleRepository');
-            }
         }
+        $req->clearCache();
         $ok = FALSE;
         return FALSE;
     }
 
-    public static function get_status($date)
+    public static function get_status($date, $row = null)
     {
+        if( $row ) {
+            if( (!empty($row['cmsms_max']) && version_compare(CMS_VERSION,$row['cmsms_max'].'.99') > 0) ||
+                (!empty($row['php_max']) && version_compare(PHP_VERSION,$row['php_max'].'.99') > 0) ) {
+                return 'incompatible';
+            }
+            // Untested
+            if( !empty($row['cmsms_tested']) && version_compare(CMS_VERSION,$row['cmsms_tested']) > 0 ) {
+                return 'untested';
+            }
+        }
+
+        // New module (< 3 months)
         $ts = strtotime($date);
-        $stale_ts = strtotime('-2 years');
-        $warn_ts = strtotime('-18 months');
-        $new_ts = strtotime('-1 month');
-        if( $ts <= $stale_ts ) return 'stale';
-        if( $ts <= $warn_ts ) return 'warn';
+        $new_ts = strtotime('-3 months');
         if( $ts >= $new_ts ) return 'new';
+
+        return null;
     }
 
     public static function track_module_event($module_name, $event_type, $module_version)
     {
         try {
-            global $CMS_VERSION;
             $url = 'https://api.cmsmadesimple.org/v1/modules/' . urlencode($module_name) . '/events';
             $data = json_encode([
                 'eventType' => $event_type,
-                'cmsVersion' => $CMS_VERSION,
+                'cmsVersion' => CMS_VERSION,
                 'moduleVersion' => $module_version
             ]);
 
@@ -252,13 +240,17 @@ final class modmgr_utils
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
-            curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 60);
-            curl_exec($ch);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 300);
+            $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curl_error = curl_error($ch);
             curl_close($ch);
+
+            audit('', 'ModuleManager', "Event tracking: {$event_type} {$module_name} {$module_version} => HTTP {$http_code}" . ($curl_error ? " Error: {$curl_error}" : '') . ($response ? " Response: {$response}" : ''));
         } catch (Exception $e) {
-            // Silently fail - don't interrupt module operations
+            audit('', 'ModuleManager', 'Event tracking failed: ' . $e->getMessage());
         }
     }
 

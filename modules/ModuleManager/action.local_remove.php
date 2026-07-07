@@ -1,5 +1,8 @@
 <?php
-if( !isset($gCms) ) exit;
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
+if (!defined('CMS_VERSION')) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('installed');
 if( !isset($params['mod']) ) {

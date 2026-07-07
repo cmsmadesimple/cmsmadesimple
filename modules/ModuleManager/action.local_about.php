@@ -1,5 +1,8 @@
 <?php
-if( !isset($gCms) ) exit;
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
+if (!defined('CMS_VERSION')) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('installed');
 if( !isset($params['mod']) ) {
@@ -15,9 +18,9 @@ if( !is_object($modinstance) ) {
   $this->RedirectToAdminTab();
 }
 
-$smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
-$smarty->assign('about_page',$modinstance->GetAbout());
-$smarty->assign('about_title',$this->Lang('about_title',$modinstance->GetName()));
-
-echo $this->ProcessTemplate('local_about.tpl');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('local_about.tpl'), null, null, $smarty);
+$tpl->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
+$tpl->assign('about_page',$modinstance->GetAbout());
+$tpl->assign('about_title',$this->Lang('about_title',$modinstance->GetName()));
+$tpl->display();
 ?>

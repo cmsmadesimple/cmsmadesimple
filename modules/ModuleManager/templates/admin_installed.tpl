@@ -69,7 +69,7 @@ $(document).ready(function(){
   <a id="importbtn">{admin_icon icon='import.gif'} {$ModuleManager->Lang('importxml')}</a>
 </div>
 
-<table class="pagetable">
+<table class="pagetable" id="installed-modules">
   <thead>
     <tr>
       <th></th>
@@ -139,11 +139,7 @@ $(document).ready(function(){
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantremove')}">{$ModuleManager->Lang('cantremove')}</span>{/capture}{$ops[]=$op}
           {/if}
           {if isset($item.dependants)}
-	    {$tmp=[]}
-	    {foreach $item.dependants as $one}
-	      {$tmp[]="<a href=\"{cms_action_url}#_{$one}\">{$one}</a>"}
-	    {/foreach}
-            {capture assign='op'}<span title="{$ModuleManager->Lang('title_depends_upon')}">{$ModuleManager->Lang('depends_upon')}</span>: {implode(', ',$tmp)}{/capture}{$ops[]=$op}
+            {capture assign='op'}<span title="{$ModuleManager->Lang('title_depends_upon')}">{$ModuleManager->Lang('depends_upon')}</span>: {foreach $item.dependants as $one}{if !$one@first}, {/if}<a href="{cms_action_url}#_{$one}">{$one}</a>{/foreach}{/capture}{$ops[]=$op}
           {/if}
 
           {'<br/>'|implode:$ops}

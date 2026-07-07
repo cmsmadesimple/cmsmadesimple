@@ -48,6 +48,7 @@ $(document).ready(function(){
 	<thead>
 		<tr>
 			<th></th>
+			<th></th>
 			<th>{$ModuleManager->Lang('nametext')}</th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$ModuleManager->Lang('vertext')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
@@ -63,9 +64,10 @@ $(document).ready(function(){
 		{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
 			<td>{get_module_status_icon status=$entry->age}</td>
+			<td style="text-align:center;"><img src="https://cdn.cmsmadesimple.org/modules/{$entry->rawname}/icon.png" alt="" style="width:24px;height:24px;display:none;" onload="this.style.display='inline'"/></td>
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
-			<td>{$entry->date|localedate_format:'%x'}</td>
+			<td>{$entry->date|cms_date_format:'%b %Y'}</td>
 			{*<td>{$entry->downloads}</td>*}
 			<td>{if $entry->candownload}
 				<span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>

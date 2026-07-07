@@ -34,7 +34,7 @@ $lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?'
 $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
 $lang['confirm_remove'] = 'Are you sure you want to remove this modules files from the file system';
 $lang['confirm_upgrade'] = 'Are you sure you want to upgrade this module?';
-$lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMSMS Developers and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
+$lang['community_notice'] = 'Modules are contributed by the community. Review help and about info before installing. Use at your own risk.';
 
 // D
 $lang['db_newer'] = 'Database Version Newer';
@@ -94,6 +94,8 @@ $lang['error_upgrade'] = 'Upgrade of module %s failed!';
 $lang['export'] = 'Export';
 
 // F
+$lang['featured'] = 'Featured';
+$lang['featured_description'] = 'Featured Modules';
 $lang['friendlyname'] = 'Module Manager';
 
 // G
@@ -101,22 +103,51 @@ $lang['general_notice'] = 'The versions displayed here represent the latest XML 
 
 // H
 $lang['help'] = '<h3>What Does This Do?</h3>
-<p>A client for the CMS Made Simple Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.</p>
+<p>A client for the CMS Made Simple Module Repository. Browse, install, upgrade, and manage modules directly from the CMSMS admin panel. Module packages are downloaded from the CDN, integrity verified, and expanded automatically.</p>
 <h3>How Do I Use It</h3>
-<p>In order to use this module you will need the \'Modify Modules\' permission.</p>
-<br />
-<p>You can find the interface for this module under the \'Site Admin\' menu.  When you select this module, the \'Module Repository\' installation will automatically be queried for a list of it\'s available XML modules.  This list will be cross referenced with the list of currently installed modules, and a summary page displayed.  From here, you can view the descriptive information, the Help, and the About information for a module without physically installing it.  You can also choose to upgrade or install modules.</p>
+<p>You will need the \'Modify Modules\' permission. Navigate to \'Site Admin\' &rarr; \'Module Manager\'.</p>
+<p>The admin panel has the following tabs:</p>
+<ul>
+<li><strong>Featured</strong> &mdash; Recently updated modules from the repository.</li>
+<li><strong>Installed</strong> &mdash; All modules currently installed on your site.</li>
+<li><strong>Upgrades Available</strong> &mdash; Installed modules that have newer versions in the repository.</li>
+<li><strong>Search</strong> &mdash; Search the repository by keyword.</li>
+<li><strong>Available Modules</strong> &mdash; Browse all modules alphabetically.</li>
+<li><strong>Settings</strong> &mdash; Module preferences (requires \'Modify Site Preferences\' permission).</li>
+</ul>
+<h3>Compatibility</h3>
+<p>Modules are automatically filtered by PHP and CMSMS version compatibility. Incompatible modules are hidden by default. Modules not yet tested with your CMSMS version are marked with a warning icon. Beta/pre-release modules are hidden by default.</p>
+<h3>Settings</h3>
+<ul>
+<li><strong>Show beta/pre-release modules</strong> &mdash; Display modules with alpha, beta, or rc in their version.</li>
+<li><strong>Show incompatible modules</strong> &mdash; Display modules that exceed your PHP or CMSMS version limits.</li>
+<li><strong>Always fetch fresh data</strong> &mdash; Bypass local cache (developer mode only).</li>
+<li><strong>Allow uninstall</strong> &mdash; Allow Module Manager itself to be uninstalled (developer mode only).</li>
+</ul>
+<h3>Third-Party Services</h3>
+<p>This module connects to <strong>cdn.cmsmadesimple.org</strong> for module listings, packages, and icons, and <strong>api.cmsmadesimple.org</strong> for search, dependencies, and event tracking. No personal data is transmitted.</p>
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2006, calguy1000 <a href="mailto:calguy1000@hotmail.com">&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
+<p>Copyright &copy; 2008, calguy1000 <a href="mailto:calguy1000@hotmail.com"><calguy1000@hotmail.com></a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>';
 $lang['helptxt'] = 'Help';
 $lang['help_allowuninstall'] = 'If enabled, then this module can be uninstalled.  This option is provided to prevent the accidental removal of this module which would result in an unrecoverable error';
-$lang['help_disable_caching'] = 'TODO';
+$lang['help_disable_caching'] = 'When enabled, ModuleManager will bypass its local cache and always fetch fresh data from the CDN/API. Not recommended for production use.';
+$lang['help_featured'] = 'Featured modules are the most recently updated modules in the repository, displayed in random order. Modules incompatible with your PHP or CMSMS version are excluded, as are beta/pre-release versions (unless enabled in Settings).';
 $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobytes)</em> of each chunk of data that will be downloaded from the repository when requesting a module.';
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 $lang['help_mm_importxml'] = 'This form allows importing a module XML file that you received from another user, or downloaded from the <a class="external" href="http://dev.cmsmadesimple.org" target="_blank">CMSMS Forge</a>';
+
+$lang['help_show_beta'] = 'When enabled, modules with beta, alpha, or rc in their version will be displayed in the module listings';
+$lang['help_show_incompatible'] = 'When enabled, modules that are incompatible with your current PHP or CMSMS version will be displayed in the module listings';
+$lang['title_untested'] = 'This module has not been tested with your version of CMSMS. It may work, but use with caution.';
+$lang['title_cmsms_compat'] = 'CMSMS version compatibility status';
+$lang['title_php_compat'] = 'PHP version compatibility status';
+$lang['title_cmsms_incompat'] = 'Incompatible with your CMSMS version';
+$lang['title_php_incompat'] = 'Incompatible with your PHP version';
+$lang['lastchecked'] = 'Tested up to';
+$lang['title_lastchecked'] = 'The last CMSMS version this module was tested with by the author';
 
 // I
 $lang['importxml'] = 'Import Module';
@@ -160,6 +191,7 @@ $lang['msg_urlreset'] = 'The ModuleRepository URL has been reset to the default 
 // N
 $lang['nametext'] = 'Module Name';
 $lang['need_upgrade'] = 'This module is awaiting upgrade';
+$lang['new'] = 'New';
 $lang['newerversion'] = 'Newer version installed';
 $lang['newer_available'] = 'New version available';
 $lang['notavailable'] = 'This module cannot be loaded. Possibly due to dependencies';
@@ -177,7 +209,7 @@ $lang['postuninstall'] = 'Module Manager has been uninstalled.  Users will no lo
 $lang['preferences'] = 'Preferences';
 $lang['preferencessaved'] = 'Preferences saved';
 $lang['prompt_advancedsearch'] = 'Advanced Search';
-$lang['prompt_disable_caching'] = 'Disable caching of requests from the server';
+$lang['prompt_disable_caching'] = 'Always fetch fresh data';
 $lang['prompt_dl_chunksize'] = 'Download Chunk Size (Kb)';
 $lang['prompt_otheroptions'] = 'Other Options';
 $lang['prompt_repository_url'] = 'ModuleRepository URL';
@@ -202,6 +234,8 @@ $lang['status'] = 'Status';
 $lang['status_db_newer'] = 'The version number stored in the database is greater than the one in the module.';
 $lang['status_need_upgrade'] = 'The upgrade routine needs to be run on this module';
 $lang['status_newer_available'] = 'A newer version of this module is available in the repository';
+$lang['show_beta'] = 'Show beta/pre-release modules';
+$lang['show_incompatible'] = 'Show incompatible modules';
 $lang['statustext'] = 'Status/Action';
 $lang['status_installed'] = 'This module is currently installed and available for use.';
 $lang['submit'] = 'Submit';
@@ -249,13 +283,13 @@ $lang['title_notcompatible'] = 'This module has not passed compatibility tests';
 $lang['title_notinstalled'] = 'This module exists in the modules subdirectory but has not been installed for use';
 $lang['title_remove'] = 'Remove this modules files from the module directory';
 $lang['title_searchterm'] = 'Enter a natural language search term.  If advanced mode is enabled, then boolean operations similar to Google can be used';
-$lang['title_stale'] = 'This module is marked &quot;Stale&quot; (Last release over two years ago) This means it may work fine, but it has not had any recent development. Use your own discretion when using this module!';
+$lang['title_stale'] = 'This module may not be compatible with your version of CMSMS or PHP. If no compatibility data is available, the last release was over two years ago.';
 $lang['title_star'] = 'This icon indicates that a newer version of this module is available in the repository';
 $lang['title_system'] = 'This icon identifies a CMS Made Simple&trade; system module (module distributed with the CMSMS core)';
 $lang['title_uninstall_module'] = 'Uninstall Module';
 $lang['title_uninstall'] = 'Uninstall this module. This action may destroy data and templates associated with the module';
 $lang['title_upgrade'] = 'Upgrade this module';
-$lang['title_warning'] = 'This module was released some time ago. Use caution!';
+$lang['title_warning'] = 'This module has not been tested with your version of CMSMS. It may work, but use caution.';
 $lang['title_yourmoduledate'] = 'This column displays the date of the latest release for this module';
 $lang['title_yourmoduleversion'] = 'This column displays the version number of module that is currently installed';
 $lang['toggle_active'] = 'Set this module as active and usable';
@@ -265,6 +299,7 @@ $lang['toggle_inactive'] = 'Set this module as inactive and unused. No module da
 $lang['uninstall'] = 'Uninstall';
 $lang['uninstalled'] = 'Module Uninstalled';
 $lang['unknown'] = 'Unknown';
+$lang['untested'] = 'Untested';
 $lang['upgrade'] = 'Upgrade';
 $lang['upgraded'] = 'Module upgraded to version %s';
 $lang['upgrade_available'] = 'Newer version available (%s), you have (%s)';

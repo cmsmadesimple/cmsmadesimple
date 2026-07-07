@@ -1,40 +1,8 @@
 <?php
-#BEGIN_LICENSE
-#-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
-#  An addon module for CMS Made Simple to allow browsing remotely stored
-#  modules, viewing information about them, and downloading or upgrading
-#
-#-------------------------------------------------------------------------
-# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
-# Visit our homepage at: http://www.cmsmadesimple.org
-#
-#-------------------------------------------------------------------------
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# However, as a special exception to the GPL, this software is distributed
-# as an addon module to CMS Made Simple.  You may not use this software
-# in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin
-# section that the site was built with CMS Made simple.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
-#
-#-------------------------------------------------------------------------
-#END_LICENSE
-if (!isset($gCms)) exit;
+#--------------------------------------------------
+# See DOCS/LICENSE for full license information.
+#--------------------------------------------------
+if (!defined('CMS_VERSION')) exit;
 if( !$this->CheckPermission('Modify Modules') ) exit;
 
 if( !modmgr_utils::is_connection_ok() ) {
@@ -44,11 +12,11 @@ if( !modmgr_utils::is_connection_ok() ) {
 
 $caninstall = true;
 if( FALSE == can_admin_upload() ) {
-  echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.$this->Lang('error_permissions').'</p></div></div>';
+  echo $this->ShowErrors($this->Lang('error_permissions'));
   $caninstall = false;
 }
 
-$curletter = 'A';
+$curletter = 'featured';
 if( isset( $params['curletter'] ) ) {
   $curletter = $params['curletter'];
   $_SESSION['mm_curletter'] = $curletter;
@@ -57,11 +25,27 @@ else if (isset($_SESSION['mm_curletter'])) {
   $curletter = $_SESSION['mm_curletter'];
 }
 
+// build a letters list
+$letters = array();
+$letters['featured'] = $this->create_url($id,'defaultadmin',$returnid,array('curletter'=>'featured','__activetab'=>'modules'));
+$tmp = explode(',','A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z');
+foreach( $tmp as $i ) {
+  $letters[$i] = $this->create_url($id,'defaultadmin',$returnid,array('curletter'=>$i,'__activetab'=>'modules'));
+}
+
+// If Featured is selected, show the featured card layout
+if( $curletter === 'featured' ) {
+  if( !$this->GetPreference('notice_dismissed', 0) ) {
+    echo '<p id="mm-community-notice" class="pageinfo" style="margin:0 0 10px;padding:6px 10px;background:#f0f4f8;border-left:3px solid #5b9bd5;font-size:0.9em;">'.$this->Lang('community_notice').'<span onclick="this.parentNode.style.display=\'none\';$.get(\''.$this->create_url($id,'setprefs',$returnid,array('dismiss_notice'=>1)).'\')" style="cursor:pointer;float:right;font-weight:bold;margin-left:10px;">&times;</span></p>';
+  }
+  include(dirname(__FILE__).'/function.admin_featured_tab.php');
+  return;
+}
 
 // get the modules available in the repository
 $repmodules = '';
 {
-  $result = modulerep_client::get_repository_modules($curletter);
+  $result = modmgr_rep_client::get_repository_modules($curletter);
   if( ! $result[0] ) {
     $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
     return;
@@ -79,13 +63,6 @@ $instmodules = '';
   }
 
   $instmodules = $result[1];
-}
-
-// build a letters list
-$letters = array();
-$tmp = explode(',','A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z');
-foreach( $tmp as $i ) {
-  $letters[$i] = $this->create_url($id,'defaultadmin',$returnid,array('curletter'=>$i,'__activetab'=>'modules'));
 }
 
 // cross reference them
@@ -107,6 +84,7 @@ if( count( $data ) ) {
       $onerow->$key = $value;
     }
     $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
+    $onerow->rawname = $row['name'];
     $onerow->version = $row['version'];
     $onerow->help_url = $this->create_url( $id, 'modulehelp', $returnid,
 					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
@@ -128,10 +106,15 @@ if( count( $data ) ) {
     $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
 					    $this->Lang('abouttxt'),
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
-    $onerow->age = modmgr_utils::get_status($row['date']);
+    $onerow->age = modmgr_utils::get_status($row['date'], $row);
     $onerow->date = $row['date'];
     $onerow->downloads = isset($row['downloads'])?$row['downloads']:$this->Lang('unknown');
     $onerow->candownload = FALSE;
+    $onerow->untested = isset($row['untested']) ? $row['untested'] : false;
+    $onerow->incompatible = ($row['status'] === 'incompatible');
+    $onerow->cmsms_incompatible = (!empty($row['cmsms_max']) && version_compare(CMS_VERSION, $row['cmsms_max'].'.99') > 0);
+    $onerow->php_incompatible = (!empty($row['php_max']) && version_compare(PHP_VERSION, $row['php_max'].'.99') > 0);
+    if( !isset($onerow->cmsms_tested) ) $onerow->cmsms_tested = '';
 
     switch( $row['status'] ) {
     case 'incompatible':
@@ -189,21 +172,15 @@ else {
   $smarty->assign('message', $this->Lang('error_connectnomodules'));
 }
 
-// Setup search form
-$searchstart = $this->CreateFormStart( $id, 'searchmod', $returnid );
-$searchend = $this->CreateFormEnd();
-$searchfield = $this->CreateInputText($id, 'search_input', "Doesn't Work",  30, 100); //todo
-$searchsubmit = $this->CreateInputSubmit( $id, 'submit', 'Search'); // todo -- $this->Lang('search'));
-$smarty->assign('search',$searchstart.$searchfield.$searchsubmit.$searchend);
-
-// and display our page
-$smarty->assign('letter_urls',$letters);
-$smarty->assign('curletter',$curletter);
-$smarty->assign('nametext',$this->Lang('nametext'));
-$smarty->assign('vertext',$this->Lang('vertext'));
-$smarty->assign('sizetext',$this->Lang('sizetext'));
-$smarty->assign('statustext',$this->Lang('statustext'));
-echo $this->processTemplate('adminpanel.tpl');
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource('adminpanel.tpl'), null, null, $smarty);
+$tpl->assign('letter_urls',$letters);
+$tpl->assign('curletter',$curletter);
+$tpl->assign('show_incompatible',$this->GetPreference('show_incompatible',0));
+$tpl->assign('nametext',$this->Lang('nametext'));
+$tpl->assign('vertext',$this->Lang('vertext'));
+$tpl->assign('sizetext',$this->Lang('sizetext'));
+$tpl->assign('statustext',$this->Lang('statustext'));
+$tpl->display();
 
 #
 # EOF
