@@ -1,5 +1,13 @@
 <ul>
 
+    <li>
+      <b>Version 1.6.17</b> <em>(JoMorg)</em>
+      <br/>
+      Added support for WEBP and AVIF image types for thumbnails generation, rotation or crop operations.
+      <br/>
+      Note: AVIF operations do not work on PHP 7.
+    </li>
+
 
     <li>
       <b>Version 1.4.0</b> <em>(silmarillion)</em>
