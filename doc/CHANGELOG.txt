@@ -1,4 +1,4 @@
-Version 2.2.23 - Not Named
+Version 2.2.23 - Wunnumin
 -------------------------------
 
 Core - General
@@ -11,18 +11,27 @@ Content Manager X.X
  - Added a missing default-page content type error message;
  - Changing the page design now keeps the template selector usable even when the selected design has no explicit page-template associations;
 
-DesignManager X.X
+DesignManager 1.2.0
  - Export now skips missing or unreadable referenced assets, writes an export report and records warnings in the audit log;
  - Import now handles malformed or non-design uploads more gracefully instead of triggering fatal errors or breaking the admin flow;
 
-FileManager X.X
+FileManager 1.6.17
  - Add support for WEBP and AVIF image types for thumbnails generation, rotation or crop operations. Note: AVIF operations will not work on PHP7
 
-MicroTiny X.X
+MicroTiny 2.2.6
  - Removed stale TinyMCE plugin loader references that could trigger missing plugin warnings;
 
-News X.X
+ModuleManager 2.2.0
+ - Finalized the refreshed ModuleManager release line for CMSMS 2.2.23;
+
+Search 1.55
+ - Finalized the Search module version for this release line;
+
+News 2.51.14
  - Fixed BR #12794 - News-fields typo item_orderr;
+
+UserGuide 1.1
+ - Finalized the UserGuide module version for this release line;
 
 
 Version 2.2.22 - Saskatoon
@@ -311,7 +320,7 @@ DesignManager v1.1.8
   - BR #12225 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
 
 FileManager v1.6.11
-  - Donâ€™t disable advanced mode on upgrade.
+  - Don't disable advanced mode on upgrade.
   - Fix adding double // in site root link.
   - BR #12215 - FileManager 1.6.10 crashes when trying to rename a file.
   - BR #12224 - Reflected Cross-Site Scripting. Minor, because it can only be performed by a person that has access rights to the Admin panel.
