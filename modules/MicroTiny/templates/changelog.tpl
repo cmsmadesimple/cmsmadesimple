@@ -1,4 +1,5 @@
 <ul>
+    <li>2.2.6 - Removed stale TinyMCE plugin loader references that could trigger missing plugin warnings.</li>
     <li>1.2.3 - Reverted to pre 3.5 version of tinymce because of <p> and <br/> issues.</li>
     <li>1.2.1 - Updated to TinyMCE 3.5.2</li>
     <li>1.2.0 - Updated to TinyMCE 3.5</li>
