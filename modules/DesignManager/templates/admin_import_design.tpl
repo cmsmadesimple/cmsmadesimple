@@ -15,7 +15,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="import_xml_file">{$mod->Lang('prompt_import_xml_file')}:</label></p>
   <p class="pageinput">
-    <input type="file" id="import_xml_file" name="{$actionid}import_xml_file" size="50"/>
+<input type="file" id="import_xml_file" name="{$actionid}import_xml_file" size="50" accept=".xml,text/xml,application/xml"/>
     {admin_icon name='help_import_xml_file' icon='info.gif' class='helpicon'}
   </p>
 </div>
