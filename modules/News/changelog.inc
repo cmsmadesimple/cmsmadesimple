@@ -1,5 +1,9 @@
 <ul>
 <li>
+<p>Version 2.51.14</p>
+<p>- Fixed BR #12794 - News-fields typo item_orderr;</p>
+</li>
+<li>
 <p>Version: 1.0</p>
 <p>This module is a hacked and extended version of <em>Ted Kulp\'s</em> News module.  I simply added another field to the database, and some more code to make that field worl.... I also re-cleaned the code a bit, so it was a little easier to read, other than that, it\'s Ted\'s code.</p>
 </li> 
