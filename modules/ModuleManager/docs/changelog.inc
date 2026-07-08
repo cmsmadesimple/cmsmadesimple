@@ -2,11 +2,6 @@
 <li>Version 2.2.0
 <ul>
   <li>Finalized the ModuleManager release line for CMSMS 2.2.23</li>
-</ul>
-</li>
-<li>Version 3.0.1-beta.2
-<ul>
-  <li>Version renamed to 3.0.1-beta.2 (follows versioning convention)</li>
   <li>Browse modules now fetches letter caches from CDN instead of API</li>
   <li>XML downloads served via CDN instead of API</li>
   <li>Connection check uses CDN version.json (GET) instead of API (POST)</li>
@@ -46,10 +41,6 @@
   <li>Fixed unescaped quotes in he_IL translation</li>
   <li>Updated help text with v3.0.x features, tabs, settings, and third-party services</li>
   <li>PHP 8.4 readiness: no serialize, no @, no global, no sizeof</li>
-</ul>
-</li>
-<li>Version 3.0.0 - April, 2026
-<ul>
   <li>Introduced CloudFront CDN (cdn.cmsmadesimple.org) — module browsing, help, about, dependencies, and XML downloads now served from edge locations worldwide</li>
   <li>Default repository URL changed to api.cmsmadesimple.org</li>
   <li>Switched all API requests from POST to GET (except search) for CDN cacheability</li>

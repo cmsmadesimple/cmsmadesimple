@@ -46,7 +46,7 @@ $lang['depend_upgrade'] = 'Module %s will be upgraded to version %s.';
 $lang['depends_upon'] = 'Depends on';
 $lang['display_in_english'] = 'Display in English';
 $lang['display_in_mylanguage'] = 'Display in NAME LANGUAGE HERE';
-$lang['download'] = 'Download &amp; Install';
+$lang['download'] = 'Install';
 $lang['downloads'] = 'Downloads';
 
 // E

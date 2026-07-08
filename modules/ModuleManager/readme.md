@@ -2,6 +2,17 @@
 
 A client for the CMS Made Simple Module Repository. Browse, install, upgrade, and manage modules directly from the CMSMS admin panel.
 
+## Features
+
+- Featured modules tab with card layout
+- Browse modules alphabetically
+- Search the repository
+- Upgrade available tab with one-click upgrades
+- Installed modules management (install, upgrade, uninstall, export)
+- Dependency resolution and batch install
+- Module compatibility checking (CMSMS version, PHP version)
+- Local file-based HTTP caching
+
 ## Requirements
 
 - CMS Made Simple 2.2.3+
