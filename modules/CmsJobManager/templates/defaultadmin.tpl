@@ -29,6 +29,7 @@ $(document).ready(function(){
     </thead>
     <tbody>
     {foreach $jobs as $job}
+      {assign var=job_frequency value=$job->frequency|default:''}
       <tr class="{cycle values='row1,row2'}">
         <td>{$job->name}</td>
         <td>{$job->module|default:''}</td>
@@ -41,7 +42,7 @@ $(document).ready(function(){
              {$job->start|relative_time}
            </span>
         </td>
-        <td>{$recur_list[$job->frequency]}</td>
+        <td>{$recur_list[$job_frequency]|default:''}</td>
         <td>{if $job->until}{$job->until|localedate_format:'%x %X'}{/if}</td>
         <td>{if $job->errors > 0}<span style="color: red;">{$job->errors}</span>{/if}</td>
         <td></td>

@@ -50,14 +50,15 @@ final class cms_userprefs
 	 */
 	private static function _read($userid)
 	{
-		if( is_array(self::$_prefs) && isset(self::$_prefs[$userid]) && is_array(self::$_prefs[$userid]) ) return;
+		$userid = (int) $userid;
+		if( !is_array(self::$_prefs) ) self::$_prefs = array();
+		if( isset(self::$_prefs[$userid]) && is_array(self::$_prefs[$userid]) ) return;
 
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT preference,value FROM '.CMS_DB_PREFIX.'userprefs WHERE user_id = ?';
 		$dbr = $db->GetArray($query,array($userid));
+		self::$_prefs[$userid] = array();
 		if( is_array($dbr) ) {
-			if( !is_array(self::$_prefs) ) self::$_prefs = array();
-			self::$_prefs[$userid] = array();
 			for( $i = 0, $n = count($dbr); $i < $n; $i++ ) {
 				$row = $dbr[$i];
 				self::$_prefs[$userid][$row['preference']] = $row['value'];
@@ -91,6 +92,7 @@ final class cms_userprefs
 	 */
 	public static function get_for_user($userid,$key,$dflt = '')
 	{
+		$userid = (int) $userid;
 		self::_read($userid);
 		if( isset(self::$_prefs[$userid][$key]) ) return self::$_prefs[$userid][$key];
 		return $dflt;
@@ -133,6 +135,7 @@ final class cms_userprefs
 	{
 		$userid = (int)$userid;
 		self::_read($userid);
+		if( !isset(self::$_prefs[$userid]) || !is_array(self::$_prefs[$userid]) ) return FALSE;
 		if( in_array($key,array_keys(self::$_prefs[$userid])) ) return TRUE;
 		return FALSE;
 	}
