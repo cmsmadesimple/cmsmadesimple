@@ -97,13 +97,38 @@ final class cms_cookies
   /**
    * @ignore
    */
+  private static function __samesite_disabled()
+  {
+    $config = cms_config::get_instance();
+    return !empty($config['disable_cookie_samesite']);
+  }
+
+  /**
+   * @ignore
+   */
+  private static function __options($expire)
+  {
+    $out = [
+      'expires' => (int) $expire,
+      'path' => self::__path(),
+      'domain' => self::__domain(),
+      'secure' => CmsApp::get_instance()->is_https_request(),
+      'httponly' => TRUE
+    ];
+
+    if( !self::__samesite_disabled() ) {
+      $out['samesite'] = 'Lax';
+    }
+
+    return $out;
+  }
+
+  /**
+   * @ignore
+   */
   private static function __setcookie($key,$value,$expire)
   {
-    $res = setcookie($key,$value,$expire,
-					 self::__path(),
-					 self::__domain(),
-                     CmsApp::get_instance()->is_https_request(),
-					 TRUE);
+    return setcookie($key,$value,self::__options($expire));
   }
 
 

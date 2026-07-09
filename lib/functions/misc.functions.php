@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: misc.functions.php 13303 2026-07-09 14:05:10Z JoMorg $
 
 /**
  * Miscellaneous support functions
@@ -1268,9 +1268,16 @@ function setup_session($cachable = FALSE)
     #Setup session with different id and start it
     $session_name = 'CMSSESSID'.substr(md5(__DIR__.CMS_VERSION), 0, 12);
     if( !isset($CMS_INSTALL_PAGE) ) {
+        $config = cms_config::get_instance();
         @session_name($session_name);
         @ini_set('url_rewriter.tags', '');
         @ini_set('session.use_trans_sid', 0);
+        @ini_set('session.use_only_cookies', 1);
+        @ini_set('session.cookie_httponly', 1);
+        @ini_set('session.cookie_secure', CmsApp::get_instance()->is_https_request() ? '1' : '0');
+        if( empty($config['disable_cookie_samesite']) ) {
+            @ini_set('session.cookie_samesite', 'Lax');
+        }
     }
 
     if( isset($_COOKIE[$session_name]) ) {
