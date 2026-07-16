@@ -353,8 +353,32 @@ class News extends CMSModule
         case CmsCoreCapabilities::ADMINSEARCH:
         case CmsCoreCapabilities::TASKS:
             return TRUE;
+        case 'clicommands':
+            return TRUE;
         }
         return FALSE;
+    }
+
+    public function get_cli_commands($app)
+    {
+        $dir = __DIR__ . '/lib/Commands/';
+        foreach (glob($dir . 'class.*.php') as $file) {
+            require_once $file;
+        }
+        return [
+            new \News\Commands\ArticleListCommand($app),
+            new \News\Commands\ArticleCreateCommand($app),
+            new \News\Commands\ArticleEditCommand($app),
+            new \News\Commands\ArticleDeleteCommand($app),
+            new \News\Commands\CategoryListCommand($app),
+            new \News\Commands\CategoryCreateCommand($app),
+            new \News\Commands\CategoryEditCommand($app),
+            new \News\Commands\CategoryDeleteCommand($app),
+            new \News\Commands\FielddefListCommand($app),
+            new \News\Commands\FielddefCreateCommand($app),
+            new \News\Commands\FielddefEditCommand($app),
+            new \News\Commands\FielddefDeleteCommand($app),
+        ];
     }
 
     public function get_adminsearch_slaves()
