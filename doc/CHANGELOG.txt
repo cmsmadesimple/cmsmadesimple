@@ -7,7 +7,7 @@ Core - General
  - Hardened session and authentication-related cookies with explicit HttpOnly, Secure-on-HTTPS and SameSite handling, with a config opt-out for SameSite if needed for legacy integrations;
  - PHPMailer upgraded to version 6.12.0;
 
-Content Manager X.X
+Content Manager 1.1.15
  - Content copy flow now uses content_id 0 for new unsaved copied content while keeping backward compatibility;
  - Added a missing default-page content type error message;
  - Changing the page design now keeps the template selector usable even when the selected design has no explicit page-template associations;
