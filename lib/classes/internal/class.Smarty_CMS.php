@@ -350,27 +350,25 @@ class Smarty_CMS extends CMSSmartyBase
     {
       return false;
     }
-    
-    // Disallow Smarty resource prefixes (file:, string:, etc.)
-    if(false !== strpos($tpl, ':'))
-    {
-      if(cmsms()->is_frontend_request())
-      
-      {
-        return false;
-      }
-    }
-    
-    // Disallow filesystem semantics
-    if(
-      false !== strpos($tpl, '..') ||
-      false !== strpos($tpl, '/') ||
-      false !== strpos($tpl, '\\')
-    )
+
+    if( false !== strpos($tpl, '..') ||
+        false !== strpos($tpl, '/') ||
+        false !== strpos($tpl, '\\') )
     {
       return false;
     }
-    
+
+    // Frontend requests may only use known-safe CMSMS internal template resources.
+    if( false !== strpos($tpl, ':') && cmsms()->is_frontend_request() )
+    {
+      if( startswith($tpl, 'module_db_tpl:') || startswith($tpl, 'module_file_tpl:') )
+      {
+        return true;
+      }
+
+      return false;
+    }
+
     return true;
   }
   
