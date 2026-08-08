@@ -4,6 +4,7 @@ Version 2.2.23 - Wunnumin
 Core - General
  - Security hardening in Smarty template identifier handling to prevent a potential SSTI/LFI/RCE attack chain;
  - Restored frontend rendering of valid module database/file templates while keeping Smarty template identifier hardening against unsafe resource/path access;
+ - Restored valid frontend Smarty string/eval rendering for modules using parsed template content while keeping unsafe path-style template identifiers blocked;
  - Compatibility fixes for PHP 8.1, 8.2, 8.3, 8.4 and 8.5 in active runtime paths;
  - Hardened session and authentication-related cookies with explicit HttpOnly, Secure-on-HTTPS and SameSite handling, with a config opt-out for SameSite if needed for legacy integrations;
  - PHPMailer upgraded to version 6.12.0;

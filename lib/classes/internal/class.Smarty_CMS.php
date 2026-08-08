@@ -346,26 +346,23 @@ class Smarty_CMS extends CMSSmartyBase
    */
   protected function _is_valid_template_identifier($tpl)
   {
-    if( !is_string($tpl) || '' === $tpl)
+    if( !is_string($tpl) || '' === $tpl )
     {
       return false;
+    }
+
+    if( startswith($tpl, 'string:') ||
+        startswith($tpl, 'eval:') ||
+        startswith($tpl, 'module_db_tpl:') ||
+        startswith($tpl, 'module_file_tpl:') )
+    {
+      return true;
     }
 
     if( false !== strpos($tpl, '..') ||
         false !== strpos($tpl, '/') ||
         false !== strpos($tpl, '\\') )
     {
-      return false;
-    }
-
-    // Frontend requests may only use known-safe CMSMS internal template resources.
-    if( false !== strpos($tpl, ':') && cmsms()->is_frontend_request() )
-    {
-      if( startswith($tpl, 'module_db_tpl:') || startswith($tpl, 'module_file_tpl:') )
-      {
-        return true;
-      }
-
       return false;
     }
 
