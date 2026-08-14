@@ -91,16 +91,18 @@ class OneElevenTheme extends CmsAdminThemeBase {
         }
 
 		// get the image url.
-        $icon = "modules/{$module}/assets/icon.svg";
-        $path = cms_join_path($config['root_path'], $icon);
-        if (!file_exists($path)) {
-            $icon = "modules/{$module}/images/icon.gif";
-            $path = cms_join_path($config['root_path'], $icon);
-        }
-        if (file_exists($path)) {
-            $url = $config->smart_root_url() . '/' . $icon;
-            $this->set_value('module_icon_url', $url);
-        }
+    $icon = "modules/{$module}/assets/icon.svg";
+    $path = cms_join_path($config['root_path'], $icon);
+    if( !file_exists($path) )
+    {
+      $icon = "modules/{$module}/images/icon.gif";
+      $path = cms_join_path($config['root_path'], $icon);
+    }
+    if( file_exists($path) )
+    {
+      $url = $config->smart_root_url() . '/' . $icon;
+      $this->set_value('module_icon_url', $url);
+    }
 
 		if ($module_help_type) {
 			// set the module help url (this should be supplied TO the theme)

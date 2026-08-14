@@ -59,7 +59,7 @@ final class ModuleOperations
       'FilePicker',
       'UserGuide'
     ];
-    
+
     /**
      * System Modules - a list (hardcoded) of optional system modules
      *
@@ -70,7 +70,7 @@ final class ModuleOperations
       'News',
       'UserGuide'
     ];
-    
+
     /**
 	 * @ignore
 	 */
@@ -100,7 +100,7 @@ final class ModuleOperations
 	 * @ignore
 	 */
     private $xml_exclude_files = ['^\.svn', '^CVS$', '^\#.*\#$', '~$', '\.bak$', '^\.git', '^\.tmp$'];
-    
+
     /**
 	 * @ignore
 	 */
@@ -240,7 +240,7 @@ final class ModuleOperations
         }
         fclose($fh);
     }
-    
+
     /**
      * Creates an xml data package from the module directory.
      *
@@ -311,8 +311,8 @@ final class ModuleOperations
         unset($CMSMS_GENERATING_XML);
         return $xmltxt;
     }
-    
-    
+
+
     /**
      * Unpackage a module from an xml string
      * does not touch the database
@@ -332,7 +332,7 @@ final class ModuleOperations
         // first make sure that we can actually write to the module directory
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
         $is_blocked_path = function( $filename ) {
-            $parts = preg_split('/[\\\/]+/', (string) $filename, -1, PREG_SPLIT_NO_EMPTY);
+            $parts = preg_split('/[\\\\\/]+/', (string) $filename, -1, PREG_SPLIT_NO_EMPTY);
             if( !is_array($parts) || !count($parts) ) return true;
             foreach( $parts as $part ) {
                 if( $part === '.' || $part === '..' ) return true;
@@ -550,8 +550,8 @@ final class ModuleOperations
         // install returned something.
         return array(FALSE,$result);
     }
-    
-    
+
+
     /**
      * Install a module into the database
      *
@@ -705,13 +705,13 @@ final class ModuleOperations
         if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
             (isset($CMS_INSTALL_PAGE) || $this->IsQueuedForInstall($module_name)) ) {
             // not installed, can we auto-install it?
-            
+
             # Check if the module is in the system modules but not in the optional system modules
             # additionally check if the module is queued for install
             $can_auto_install =  (in_array($module_name, $this->cmssystemmodules)
                                  || in_array($module_name, $this->cmsoptsystemmodules) ) # we also auto install optional system modules @since 2.2.20
                                  || $this->IsQueuedForInstall($module_name);
-            
+
             if($can_auto_install)
             {
                 $res = $this->_install_module($obj);
@@ -739,7 +739,7 @@ final class ModuleOperations
                     $can_upgrade =  (in_array($module_name, $this->cmssystemmodules) && !in_array($module_name, $this->cmsoptsystemmodules) )
                                     || $this->IsQueuedForInstall($module_name)
                                        && !$gCms->is_frontend_request();
-                    
+
                     if($can_upgrade)
                     {
                         // we're allowed to upgrade
@@ -940,8 +940,8 @@ final class ModuleOperations
         if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
         return $this->_upgrade_module($module_obj,$to_version);
     }
-    
-    
+
+
     /**
      * Uninstall a module
      *
@@ -1037,8 +1037,8 @@ final class ModuleOperations
 
         return (bool)$info[$module_name]['active'];
     }
-    
-    
+
+
     /**
      * Activate a module
      *
@@ -1220,7 +1220,7 @@ final class ModuleOperations
     {
         return in_array($module_name,$this->cmssystemmodules);
     }
-    
+
     /**
      * Test if the specified module name is an optional system module
      *
@@ -1385,8 +1385,8 @@ final class ModuleOperations
         if( !isset($_SESSION['moduleoperations']) ) $_SESSION['moduleoperations'] = array();
         if( !isset($_SESSION['moduleoperations'][$module_name]) ) $_SESSION['moduleoperations'][$module_name] = 1;
     }
-    
-    
+
+
     /**
      * Get list of modules queued for install.
      *

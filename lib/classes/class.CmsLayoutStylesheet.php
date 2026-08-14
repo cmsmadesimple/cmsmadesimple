@@ -17,7 +17,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+#$Id$
 
 /**
  * Contains classes and utilities for working with the CmsLayoutStylesheet stuff
@@ -711,6 +711,8 @@ class CmsLayoutStylesheet
 
 		// clean up the input data
 		$is_ints = FALSE;
+		$orig_ids = null;
+
 		if( is_numeric($ids[0]) && (int)$ids[0] > 0 ) {
 			$is_ints = TRUE;
 			for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
@@ -718,8 +720,11 @@ class CmsLayoutStylesheet
 			}
 		}
 		else if( is_string($ids[0]) && strlen($ids[0]) > 0 ) {
+			$orig_ids = array();
+			$db = CmsApp::get_instance()->GetDb();
 			for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
-				$ids[$i] = "'".trim($ids[$i])."'";
+				$orig_ids[$i] = trim($ids[$i]);
+				$ids[$i] = $db->qstr($orig_ids[$i]);
 			}
 		}
 		else {
@@ -727,8 +732,9 @@ class CmsLayoutStylesheet
 			throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
 		}
 		$ids = array_unique($ids);
+		if( is_array($orig_ids) ) $orig_ids = array_unique($orig_ids);
 
-		$db = CmsApp::get_instance()->GetDb();
+		if( !isset($db) ) $db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
 		if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
 
@@ -750,7 +756,7 @@ class CmsLayoutStylesheet
 			}
 
 			// this makes sure that the returned array matches the order specified.
-			foreach( $ids as $one ) {
+			foreach( $ids as $key => $one ) {
 				$found = null;
 				if( $is_ints ) {
 					// find item in $dbr by id
@@ -762,15 +768,15 @@ class CmsLayoutStylesheet
 					}
 				}
 				else {
-					$one = trim($one,"'");
 					// find item in $dbr by name
 					foreach( $dbr as $row ) {
-						if( $row['name'] == $one ) {
+						if( $row['name'] == $orig_ids[$key] ) {
 							$found = $row;
 							break;
 						}
 					}
 				}
+				if( !$found ) continue;
 
 				$id = $found['id'];
 				$tmp = self::_load_from_data($found,(isset($designs_by_css[$id]))?$designs_by_css[$id]:null);

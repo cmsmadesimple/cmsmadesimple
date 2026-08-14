@@ -34,7 +34,7 @@ final class filemanager_utils
         if( strpos($name,'..') !== false ) return FALSE;
         if( $name[0] == '.' || $name[0] == ' ' ) return FALSE;
 	      if( endswith( $name, '.' ) ) return FALSE;
-  
+
         $ext = strtolower(substr(strrchr($name, '.'), 1));
         if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
 
@@ -175,7 +175,7 @@ final class filemanager_utils
         $ext = substr(strrchr($file, '.'), 1);
         if( !$ext ) return FALSE;
 
-        $tmp = array('gif','jpg','jpeg','png');
+        $tmp = array('gif','jpg','jpeg','png', 'webp', 'avif');
         if( in_array(strtolower($ext),$tmp) ) return TRUE;
         return FALSE;
     }
@@ -331,6 +331,7 @@ final class filemanager_utils
                     'flv' => 'video/x-flv',
 
                     // images
+                    'avif' => 'image/avif',
                     'png' => 'image/png',
                     'jpe' => 'image/jpeg',
                     'jpeg' => 'image/jpeg',
@@ -342,6 +343,7 @@ final class filemanager_utils
                     'tif' => 'image/tiff',
                     'svg' => 'image/svg+xml',
                     'svgz' => 'image/svg+xml',
+                    'webp' => 'image/webp',
 
                     // archives
                     'zip' => 'application/zip',
@@ -471,7 +473,7 @@ final class filemanager_utils
         }
 
         if( !$force && (file_exists($dest) && !is_writable($dest) ) ) return FALSE;
-        
+
         $info = getimagesize($src);
         if( !$info || !isset($info['mime']) ) return FALSE;
 
@@ -489,15 +491,21 @@ final class filemanager_utils
 
         $res = null;
         switch( $info['mime'] ) {
-        case 'image/gif':
-            $res = imagegif($i_dest,$dest);
-            break;
-        case 'image/png':
-            $res = imagepng($i_dest,$dest,9);
-            break;
-        case 'image/jpeg':
-            $res = imagejpeg($i_dest,$dest,100);
-            break;
+            case 'image/gif':
+                $res = imagegif($i_dest,$dest);
+                break;
+            case 'image/png':
+                $res = imagepng($i_dest,$dest,9);
+                break;
+            case 'image/jpeg':
+                $res = imagejpeg($i_dest,$dest,100);
+                break;
+            case 'image/webp':
+                $res = imagewebp($i_dest,$dest,100);
+                break;
+            case 'image/avif':
+                $res = imageavif($i_dest,$dest,100);
+                break;
         }
 
         if( !$res ) return FALSE;

@@ -170,7 +170,7 @@ class ContentOperations
 		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 
 		$ctph = $this->_get_content_type($type);
-		
+
 		if( is_object($ctph) ) {
 			if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) ) include_once( $ctph->filename );
 		}
@@ -216,11 +216,11 @@ class ContentOperations
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'content WHERE content_id = ?';
 		$row = $db->GetRow($query, array($id));
-		
+
 		if ($row) {
 			$classtype = strtolower($row['type']);
 			$contentobj = $this->CreateNewContent($classtype);
-			
+
 			if ($contentobj) {
 				$contentobj->LoadFromData($row, $loadprops);
 				cms_content_cache::add_content($id,$row['content_alias'],$contentobj);
@@ -287,7 +287,7 @@ class ContentOperations
 				$obj->type = strtolower($class);
 				$obj->filename = $one;
 				$obj->loaded = false;
-				
+
 				if( $obj->type == 'link' ) {
 					// cough... big hack... cough.
 					$obj->friendlyname_key = 'contenttype_redirlink';
@@ -298,7 +298,7 @@ class ContentOperations
 				$result[$type] = $obj;
 			}
 		}
-		
+
 		return $result;
 	}
 
@@ -308,12 +308,12 @@ class ContentOperations
 	 */
 	private function _get_content_types()
 	{
-		
+
 
 		if( !is_array($this->_content_types) ) {
 			// get the standard ones.
 			$this->_content_types = $this->_get_std_content_types();
-			
+
 			// get the list of modules that have content types.
 			// and load them.  content types from modules are
 			// registered in the constructor.
@@ -649,14 +649,25 @@ class ContentOperations
 	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
 	{
 		$db = CmsApp::get_instance()->GetDb();
+		$have_explicit_ids = is_array($explicit_ids) && count($explicit_ids);
 
-		$contentrows = [];
-		if( is_array($explicit_ids) && count($explicit_ids) ) {
+		$contentrows = array();
+
+		if( $have_explicit_ids ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
 			if( is_array($loaded_ids) && count($loaded_ids) ) $explicit_ids = array_diff($explicit_ids,$loaded_ids);
-        }
-		if( is_array($explicit_ids) && count($explicit_ids) ) {
-			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
+
+			$safe_ids = array();
+			foreach( $explicit_ids as $one ) {
+				if( is_numeric($one) && (int) $one > 0 ) $safe_ids[] = (int) $one;
+			}
+
+			$explicit_ids = array_unique($safe_ids);
+		}
+
+		if( $have_explicit_ids ) {
+			$expr = '1 = 0';
+			if( count($explicit_ids) ) $expr = 'content_id IN ('.implode(',',$explicit_ids).')';
 			if( !$all ) $expr .= ' AND active = 1';
 
 			// note, this is mysql specific...
@@ -670,29 +681,33 @@ class ContentOperations
 			if( $all ) $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
 		}
-		
+
 		// get the content ids from the returned data
 		$contentprops = null;
+
 		if( $loadprops ) {
-		    $child_ids = array();
-			if(!is_array($contentrows) ) { $contentrows = []; }
-			
-		    for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
+			$child_ids = array();
+			if( !is_array($contentrows) ) $contentrows = array();
+
+			for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
 				$child_ids[] = $contentrows[$i]['content_id'];
 			}
 
 			$tmp = null;
+
 			if( count($child_ids) ) {
 				// get all the properties for the child_ids
 				$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
 				$tmp = $db->GetArray($query);
 			}
 
-		    // re-organize the tmp data into a hash of arrays of properties for each content id.
-		    if( $tmp ) {
-				$contentprops = [];
+			// re-organize the tmp data into a hash of arrays of properties for each content id.
+			if( $tmp ) {
+				$contentprops = array();
+
 				for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
 					$content_id = $tmp[$i]['content_id'];
+
 					if( in_array($content_id,$child_ids) ) {
 						if( !isset($contentprops[$content_id]) ) $contentprops[$content_id] = array();
 						$contentprops[$content_id][] = $tmp[$i];
@@ -704,21 +719,21 @@ class ContentOperations
 
 		// build the content objects
 		for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
-		    $row =& $contentrows[$i];
-		    $id = $row['content_id'];
+			$row =& $contentrows[$i];
+			$id = $row['content_id'];
 
-		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
-            $contentobj = new Content();
-		    $contentobj = $this->CreateNewContent($row['type']);
+			if( !in_array($row['type'], array_keys($this->ListContentTypes())) ) continue;
+			$contentobj = new Content();
+			$contentobj = $this->CreateNewContent($row['type']);
 
-		    if ($contentobj) {
+			if( $contentobj ) {
 				$contentobj->LoadFromData($row, false);
 				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
 					// load the properties from local cache.
 					foreach( $contentprops[$id] as $oneprop ) {
 						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
 					}
-					
+
 					unset($contentprops[$id]);
 				}
 

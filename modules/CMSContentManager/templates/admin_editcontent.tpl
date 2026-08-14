@@ -158,6 +158,7 @@ $(document).ready(function(){
   $('#design_id').change(function(e,edata){
     var v = $(this).val();
     var lastValue = $(this).data('lastValue');
+    var suppress_alert = typeof edata != 'undefined' && typeof edata.suppress_alert != 'undefined';
     var data = { '{$actionid}design_id': v };
     $.get('{$designchanged_ajax_url}',data,function(data,text) {
       if( typeof data == 'object' ) {
@@ -169,8 +170,10 @@ $(document).ready(function(){
           if( key == sel ) fnd = true;
         }
         if( !first ) {
-          $('#design_id').val(lastValue);
-          cms_alert('{$mod->Lang('warn_notemplates_for_design')}');
+          if( !suppress_alert ) {
+            $('#design_id').val(lastValue);
+            cms_alert('{$mod->Lang('warn_notemplates_for_design')}');
+          }
         }
         else {
           $('#template_id').val('');
@@ -192,9 +195,9 @@ $(document).ready(function(){
     }, 'json' );
   });
 
-  $('#design_id').trigger('change', [{ skip_fallthru: 1 }]);
   $('#design_id').data('lastValue',$('#design_id').val());
   $('#template_id').data('lastValue',$('#template_id').val());
+  $('#design_id').trigger('change', [{ skip_fallthru: 1, suppress_alert: 1 }]);
   $('#Edit_Content').dirtyForm('option','dirty',false);
     {/if}
 });

@@ -109,6 +109,20 @@ abstract class jquery_upload_handler
                 $src_img = @imagecreatefrompng($file_path);
                 $write_image = 'imagepng';
                 break;
+            case 'webp':
+                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
+                @imagealphablending($new_img, false);
+                @imagesavealpha($new_img, true);
+                $src_img = @imagecreatefromwebp($file_path);
+                $write_image = 'imagewebp';
+                break;
+            case 'avif':
+                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
+                @imagealphablending($new_img, false);
+                @imagesavealpha($new_img, true);
+                $src_img = @imagecreatefromavif($file_path);
+                $write_image = 'imageavif';
+                break;
             default:
                 $src_img = $image_method = null;
         }
@@ -166,7 +180,7 @@ abstract class jquery_upload_handler
         $file_name = trim(basename(stripslashes($name)), ".\x00..\x20");
         // Add missing file extension for known image types:
         if (strpos($file_name, '.') === false &&
-            preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)) {
+            preg_match('/^image\/(gif|jpe?g|png|webp|avif)/', $type, $matches)) {
             $file_name .= '.'.$matches[1];
         }
         return $file_name;

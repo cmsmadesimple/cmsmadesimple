@@ -72,7 +72,10 @@ function image_info($file = null, $out = null) {
        13 => 'SWC',
        14 => 'IFF',
        15 => 'WBMP',
-       16 => 'XBM'
+       16 => 'XBM',
+       17 => 'ICO',
+       18 => 'WEBP',
+       20 => 'AVIF',
        );
        $temp = array();
        $data = array();
@@ -109,7 +112,9 @@ function GetFileInfo($filename,$ext,$dir=false) {
     switch (strtolower($ext)) {
       case "png" :
       case "gif" :
-      case "jpg" : {
+      case "jpg" :
+      case "webp" :
+      case "avif" : {
         $imginfo=image_info($filename);
         if ($imginfo) {
           $result=$imginfo["width"]."x".$imginfo["height"]."x".$imginfo["bits"];

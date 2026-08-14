@@ -40,7 +40,12 @@ final class imageEditor
 	public static function resize($image, $mimeType, $image_width, $image_height){
 
 		$newImage = @imagecreatetruecolor($image_width, $image_height);
-		if ($mimeType && ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF) || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG))) {
+		if ($mimeType
+			&& ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)
+			    || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG)
+				|| $mimeType == image_type_to_mime_type(IMAGETYPE_WEBP)
+				|| $mimeType == image_type_to_mime_type(IMAGETYPE_AVIF))
+		) {
 			//Keep transparency
 			imagecolortransparent($newImage, imagecolorallocatealpha($newImage, 0, 0, 0, 127));
 			imagealphablending($newImage, false);
@@ -66,7 +71,12 @@ final class imageEditor
 	public static function crop($image, $mimeType, $crop_x, $crop_y, $crop_width, $crop_height){
 
 		$newImage = @imagecreatetruecolor($crop_width, $crop_height);
-		if ($mimeType && ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF) || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG))) {
+		if ($mimeType
+			&& ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)
+			    || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG)
+				|| $mimeType == image_type_to_mime_type(IMAGETYPE_WEBP)
+				|| $mimeType == image_type_to_mime_type(IMAGETYPE_AVIF))
+		) {
 			//Keep transparency
 			imagecolortransparent($newImage, imagecolorallocatealpha($newImage, 0, 0, 0, 127));
 			imagealphablending($newImage, false);
@@ -92,7 +102,9 @@ final class imageEditor
 		$mime = image_type_to_mime_type($info[2]);
 		if($mime != image_type_to_mime_type(IMAGETYPE_JPEG)
 			&& $mime != image_type_to_mime_type(IMAGETYPE_GIF)
-			&& $mime != image_type_to_mime_type(IMAGETYPE_PNG)){
+			&& $mime != image_type_to_mime_type(IMAGETYPE_PNG)
+			&& $mime != image_type_to_mime_type(IMAGETYPE_WEBP)
+			&& $mime != image_type_to_mime_type(IMAGETYPE_AVIF)){
 			return false;
 		}
 		return $mime;
@@ -129,12 +141,14 @@ final class imageEditor
 
 		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {
 			return imagecreatefromjpeg($path);
-		}
-		else if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
 			return imagecreatefromgif($path);
-		}
-		else if ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
 			return imagecreatefrompng($path);
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_WEBP)) {
+			return imagecreatefromwebp($path);
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_AVIF)) {
+			return imagecreatefromavif($path);
 		}
 
 		return NULL;
@@ -151,11 +165,17 @@ final class imageEditor
 	public static function save($image, $path, $mimeType){
 		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {
 			return imagejpeg($image, $path);
-		} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {
 			return imagegif($image, $path);
-		} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_PNG)) {
 			imagesavealpha($image, true);
 			return imagepng($image, $path);
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_WEBP)) {
+			imagesavealpha($image, true);
+			return imagewebp($image, $path);
+		} elseif ($mimeType == image_type_to_mime_type(IMAGETYPE_AVIF)) {
+			imagesavealpha($image, true);
+			return imageavif($image, $path);
 		}
 	}
 }

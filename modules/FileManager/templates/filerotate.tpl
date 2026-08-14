@@ -3,6 +3,9 @@
 <style type="text/css">
 img#rotimg {
   z-index: 0;
+  max-height: 50dvh;
+  width: auto;
+  max-width: 60dvw;
 }
 </style>
 
