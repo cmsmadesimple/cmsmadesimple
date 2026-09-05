@@ -123,7 +123,7 @@ class Smarty_CMS extends CMSSmartyBase
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
 
             // Enable security object
-              $this->enableSecurity('CMSSmartySecurityPolicy');
+            if( !$config['permissive_smarty'] ) { $this->enableSecurity('CMSSmartySecurityPolicy'); }
         }
         else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
