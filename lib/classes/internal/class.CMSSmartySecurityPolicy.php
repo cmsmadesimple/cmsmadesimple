@@ -44,6 +44,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
         if($gCms->is_frontend_request() ) {
             $this->static_classes = []; // allow all static classes
             $this->php_functions = []; // allow any php functions
+            $this->php_modifiers = []; // allow any php modifiers
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
@@ -72,7 +73,6 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                     'var_dump'
                 ];
                 
-                $this->php_modifiers = [];
             }
         }
         else {
