@@ -368,6 +368,65 @@ class Smarty_CMS extends CMSSmartyBase
 
     return true;
   }
+
+  private function _is_legacy_modifier_deprecation($errno, $errstr, $errfile)
+  {
+    if( E_USER_DEPRECATED !== $errno )
+    {
+      return false;
+    }
+
+    if( 1 !== preg_match(
+      '/^Using unregistered function "[^"]+" in a template is deprecated and will be removed in a future release\\. Use Smarty::registerPlugin to explicitly register a custom modifier\\.$/',
+      $errstr
+    ) )
+    {
+      return false;
+    }
+
+    $compiler_files = [
+      realpath(SMARTY_SYSPLUGINS_DIR . 'smarty_internal_compile_private_modifier.php'),
+      realpath(SMARTY_SYSPLUGINS_DIR . 'smarty_internal_templatecompilerbase.php')
+    ];
+
+    return in_array(realpath($errfile), $compiler_files, true);
+  }
+
+  private function _fetch_template($_tpl, $display)
+  {
+    $previous_error_handler = null;
+    $previous_error_handler = set_error_handler(
+      function($errno, $errstr, $errfile, $errline) use (&$previous_error_handler)
+      {
+        if( $this->_is_legacy_modifier_deprecation($errno, $errstr, $errfile) )
+        {
+          return true;
+        }
+
+        if( is_callable($previous_error_handler) )
+        {
+          return call_user_func($previous_error_handler, $errno, $errstr, $errfile, $errline);
+        }
+
+        return false;
+      }
+    );
+
+    try
+    {
+      if( $display )
+      {
+        $_tpl->display();
+        return null;
+      }
+
+      return $_tpl->fetch();
+    }
+    finally
+    {
+      restore_error_handler();
+    }
+  }
   
   /**
    * fetch method
@@ -408,12 +467,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         //put the new template onto the stack, and do our work, to handle recursive calls.
         $this->_tpl_stack[] = $_tpl;
-        $tmp = null;
-        if( $display ) {
-            $_tpl->display();
-        } else {
-            $tmp = $_tpl->fetch();
-        }
+        $tmp = $this->_fetch_template($_tpl, $display);
 
         // and pop off the stack again.
         array_pop($this->_tpl_stack);
