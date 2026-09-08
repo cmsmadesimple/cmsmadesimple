@@ -1,4 +1,4 @@
-Version 2.2.24 - Not Named
+Version 2.2.24 - Oshawa
 -------------------------------
 
 Core - General

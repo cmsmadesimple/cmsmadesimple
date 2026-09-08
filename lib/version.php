@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #---------------------------------------------------------------------------
-$CMS_VERSION = '2.2.23';
-$CMS_VERSION_NAME = 'Wunnumin';
+$CMS_VERSION = '2.2.24';
+$CMS_VERSION_NAME = 'Oshawa';
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
