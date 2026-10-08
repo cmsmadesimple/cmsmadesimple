@@ -20,8 +20,12 @@ function ensure_tmp_dirs_exist() : bool
       }
     }
 
-    // Set permissions
-    if( !@chmod($dir, 0777) )
+    // Set permissions only when the directory is not already writable.
+    // On some filesystems (e.g. WSL-mounted Windows drives under /mnt) chmod()
+    // always fails even though the directory is writable, which produced a
+    // spurious "Failed to set permissions" error. If the directory is already
+    // writable there is nothing to fix and nothing to report.
+    if( !is_writable($dir) && !@chmod($dir, 0777) )
     {
       error_log("Failed to set permissions on directory: $dir");
     }
