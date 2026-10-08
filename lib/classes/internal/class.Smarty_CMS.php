@@ -171,7 +171,7 @@ class Smarty_CMS extends CMSSmartyBase
                 if( !is_array($parts) || count($parts) != 3 ) continue;
 
                 switch( $parts[0] ) {
-                case 'output':
+                case 'outputfilter':
                     $output[] = $parts[1];
                     break;
 
