@@ -44,7 +44,7 @@ if (!$access) {
 }
 
 $dirs = [];
-$dirs[] = $config['root_path'].'/assets/plugins';
+$dirs[] = $config['assets_path'].'/plugins';
 $dirs[] = $config['root_path'].'/plugins';
 $dirs[] = $config['root_path'].'/lib/plugins';
 $dirs[] = $config['admin_path'].'/plugins';
@@ -109,13 +109,17 @@ else if ($action == "showpluginabout") {
 else {
     $files = array();
     foreach( $dirs as $one ) {
-        $files = array_merge($files,glob($one.'/*.php'));
+        foreach( glob($one.'/*.php') as $pluginfilepath ) {
+            // key by filename so a later directory does not re-add an already-seen plugin
+            $files[basename($pluginfilepath)] = $pluginfilepath;
+        }
+        unset($pluginfilepath);
     }
 
     if( is_array($files) && count($files) ) {
         $file_array = array();
-        foreach($files as $onefile) {
-            $file = basename($onefile);
+        foreach($files as $file => $onefile) {
+            // $file is already the plugin filename key
             $parts = explode('.',$file);
 	    if( startswith($file,'prefilter.') || startswith($file,'postfilter.') ) continue;
             if( !is_array($parts) || count($parts) != 3 ) continue;
