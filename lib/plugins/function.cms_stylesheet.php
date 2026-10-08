@@ -83,9 +83,9 @@ function smarty_function_cms_stylesheet($params, $smarty)
         if( !empty($params['minify']) ) $minify = cms_to_bool($params['minify']);
         
         if($userid) {
-            $minify = FALSE;
-            $params['cache'] = '0';
-            $params['preload'] = '0';
+            if( empty($params['minify']) )   $minify = FALSE;
+            if( !isset($params['cache']) )   $params['cache'] = '0';
+            if( !isset($params['preload']) ) $params['preload'] = '0';
         }
 
         #---------------------------------------------
