@@ -64,7 +64,7 @@ try {
 	}
 
     $templates = CmsLayoutTemplate::get_editable_templates(get_userid());
-    if( count($templates) ) {
+    if( is_array($templates) && count($templates) ) {
         usort($templates,function($a,$b) {
                 return strcasecmp($a->get_name(),$b->get_name());
             });
