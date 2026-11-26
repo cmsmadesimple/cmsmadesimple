@@ -69,7 +69,7 @@ $(document).ready(function(){
   <a id="importbtn">{admin_icon icon='import.gif'} {$ModuleManager->Lang('importxml')}</a>
 </div>
 
-<table class="pagetable" id="installed-modules">
+<table class="pagetable">
   <thead>
     <tr>
       <th></th>
@@ -87,7 +87,9 @@ $(document).ready(function(){
     {foreach $module_info as $item}
     {cycle values="row1,row2" assign='rowclass'}
     <tr class="{$rowclass}" id="_{$item.name}">
-      <td>{if $item.system_module}{$system_img}{/if}
+      <td style="white-space:nowrap;vertical-align:middle;">
+           <img src="https://cdn.cmsmadesimple.org/modules/{$item.name|escape:'url'}/icon.png" width="24" height="24" alt="" title="{$item.name|cms_escape:'htmlall'}" loading="lazy" style="vertical-align:middle;margin-right:4px;" onerror="this.style.display='none';"/>
+           {if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
 	   {if $item.missing_deps || $item.notavailable}{$missingdep_img}{/if}
            {if $item.deprecated}{$deprecated_img}{/if}
@@ -139,7 +141,11 @@ $(document).ready(function(){
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantremove')}">{$ModuleManager->Lang('cantremove')}</span>{/capture}{$ops[]=$op}
           {/if}
           {if isset($item.dependants)}
-            {capture assign='op'}<span title="{$ModuleManager->Lang('title_depends_upon')}">{$ModuleManager->Lang('depends_upon')}</span>: {foreach $item.dependants as $one}{if !$one@first}, {/if}<a href="{cms_action_url}#_{$one}">{$one}</a>{/foreach}{/capture}{$ops[]=$op}
+	    {$tmp=[]}
+	    {foreach $item.dependants as $one}
+	      {$tmp[]="<a href=\"{cms_action_url}#_{$one}\">{$one}</a>"}
+	    {/foreach}
+            {capture assign='op'}<span title="{$ModuleManager->Lang('title_depends_upon')}">{$ModuleManager->Lang('depends_upon')}</span>: {implode(', ',$tmp)}{/capture}{$ops[]=$op}
           {/if}
 
           {'<br/>'|implode:$ops}
