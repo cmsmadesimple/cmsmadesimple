@@ -121,7 +121,11 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     $userobj->email = $email;
     \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$userobj ] );
 
-    if ($password != '') $userobj->SetPassword($password);
+    if ($password != '') {
+      $userobj->SetPassword($password);
+      $userobj->force_password_reset = 0;
+      $userobj->force_password_reset_reason = '';
+    }
     $result = $userobj->Save();
 
     if($result) {

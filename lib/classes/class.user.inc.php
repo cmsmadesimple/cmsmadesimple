@@ -78,6 +78,16 @@ class User
 	var $adminaccess;
 
 	/**
+	 * @var int Force password reset flag
+	 */
+	var $force_password_reset;
+
+	/**
+	 * @var string|null Force password reset reason
+	 */
+	var $force_password_reset_reason;
+
+	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
 	function __construct()
@@ -100,6 +110,8 @@ class User
 		$this->email = '';
 		$this->active = false;
 		$this->adminaccess = false;
+		$this->force_password_reset = 0;
+		$this->force_password_reset_reason = '';
 	}
 
 	/**

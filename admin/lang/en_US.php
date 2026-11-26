@@ -1726,5 +1726,12 @@ $lang['edittemplatesuccess'] = "Template updated";
 $lang['template'] = "Template";
 $lang['templateexists'] = "Template name already exists";
 $lang['templates'] = "Templates";
-
+$lang['event_desc_core::forcepasswordreset'] = "Sent when an administrator enables forced password reset for a backend user";
+$lang['event_help_core::forcepasswordreset'] = "<p>Parameters:</p><ul><li><em>user_id</em> - Target user</li><li><em>reason</em> - Optional text</li><li><em>actor_uid</em> - Admin who set the flag</li></ul>";
+$lang['forcepwchangeintro'] = "Your administrator requires a new password. Enter it twice below, then submit.";
+$lang['forcepwchangerequired'] = "You must choose a new password before you can use the admin console.";
+$lang['edituser_forcepw'] = "Require password change on next login";
+$lang['edituser_forcepw_reason'] = "Reason (optional, shown to administrators)";
+$lang['msg_forcepw_bulk'] = "%d user(s) will be required to change password on next login";
+$lang['listusers_bulk_forcereset'] = "Require password change on next login (bulk)";
 ?>

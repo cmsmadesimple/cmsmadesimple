@@ -30,6 +30,7 @@
  * Include user class definition
  */
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'internal' . DIRECTORY_SEPARATOR . 'class.UserForcePasswordResetOps.inc.php');
 
 /**
  * Class for doing user related functions.  Maybe of the User object functions
@@ -107,6 +108,10 @@ class UserOperations
 				$oneuser->firstname = $row['first_name'];
 				$oneuser->lastname = $row['last_name'];
 				$oneuser->email = $row['email'];
+			if (isset($row['force_password_reset'])) {
+				$oneuser->force_password_reset = (int) $row['force_password_reset'];
+				$oneuser->force_password_reset_reason = $row['force_password_reset_reason'];
+			}
 				$oneuser->password = $row['password'];
 				$oneuser->active = $row['active'];
 				$oneuser->adminaccess = $row['admin_access'];
@@ -224,7 +229,11 @@ class UserOperations
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
-		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".CMS_DB_PREFIX."users WHERE user_id = ?";
+		$force_cols = '';
+		if ((int) \CmsApp::get_instance()->get_installed_schema_version() >= 203) {
+			$force_cols = ', force_password_reset, force_password_reset_reason';
+		}
+		$query = "SELECT username, password, active, first_name, last_name, admin_access, email{$force_cols} FROM ".CMS_DB_PREFIX."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		while ($dbresult && $row = $dbresult->FetchRow()) {
@@ -295,9 +304,16 @@ class UserOperations
 		if( $tmp ) return $result;
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
-		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
+		$use_force_cols = ((int) \CmsApp::get_instance()->get_installed_schema_version() >= 203);
+		if ($use_force_cols) {
+			$fpr = isset($user->force_password_reset) ? (int) (bool) $user->force_password_reset : 0;
+			$fprr = isset($user->force_password_reset_reason) ? (string) $user->force_password_reset_reason : '';
+			$query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ?, force_password_reset = ?, force_password_reset_reason = ? WHERE user_id = ?";
+			$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $fpr, $fprr, $user->id));
+		} else {
+			$query = "UPDATE ".CMS_DB_PREFIX."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
+			$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
+		}
 		if ($dbresult !== false) $result = true;
 
 		return $result;
@@ -508,6 +524,52 @@ class UserOperations
 			// nothing here.
 		}
 		return FALSE;
+	}
+
+
+	/**
+	 * Require the user to set a new password on next successful admin login.
+	 *
+	 * @param int $user_id
+	 * @param string $reason
+	 * @param int|null $actor_uid Acting admin user id (defaults to current user when in admin)
+	 * @return bool
+	 */
+	public function SetForcePasswordReset($user_id, $reason = '', $actor_uid = null)
+	{
+		return UserForcePasswordResetOps::set_flag($user_id, $reason, $actor_uid);
+	}
+
+	/**
+	 * Clear the forced password reset flag.
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	public function ClearForcePasswordReset($user_id)
+	{
+		return UserForcePasswordResetOps::clear_flag($user_id);
+	}
+
+	/**
+	 * Whether the user must change password before receiving a full admin session.
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	public function RequiresPasswordReset($user_id)
+	{
+		$user_id = (int) $user_id;
+		if ($user_id < 1) {
+			return false;
+		}
+		// Codex P1: schema-safe read for pre-migration installs
+		if ((int) \CmsApp::get_instance()->get_installed_schema_version() < 203) {
+			return false;
+		}
+		$db = CmsApp::get_instance()->GetDb();
+		$v = $db->GetOne('SELECT force_password_reset FROM ' . CMS_DB_PREFIX . 'users WHERE user_id = ?', array($user_id));
+		return !empty($v);
 	}
 }
 
