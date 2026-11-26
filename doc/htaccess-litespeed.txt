@@ -1,0 +1,99 @@
+# CMS Made Simple sample .htaccess for OpenLiteSpeed (OLS) and LiteSpeed Enterprise (LSE)
+# --------------------------------------------------------------------------------------------
+# Copy this file to your CMSMS document root as ".htaccess" (rename after copy).
+# In config.php set url_rewriting to 'mod_rewrite' for pretty URLs.
+#
+# Before use:
+#   - Set RewriteBase if CMSMS is not at the domain root (see RewriteBase below).
+#   - Set PHP limits (upload_max_filesize, memory_limit, session) in CyberPanel or
+#     php.ini. lsphp often ignores php_value and php_flag in .htaccess.
+#   - Read doc/openlitespeed-litespeed-web.txt for panel notes and LSCache warnings.
+#
+# ServerSignature is omitted here because some OpenLiteSpeed builds reject it inside
+# .htaccess. Configure at the vhost level if you need it.
+
+#
+# Disallow directory indexes (recommended).
+#
+Options -Indexes
+
+#
+# Pretty URLs (same intent as doc/htaccess.txt).
+# LiteSpeed honors mod_rewrite-style rules when rewrite is allowed for this context.
+#
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	# Subdirectory installs: set the path from the domain root, for example: RewriteBase /cms/
+	RewriteBase /
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.+)$ index.php?page=$1 [QSA,L]
+</IfModule>
+
+#
+# Block browsing of sensitive paths and extensions (same intent as doc/htaccess.txt).
+# RedirectMatch is supported on LiteSpeed.
+#
+RedirectMatch 403 ^/.*\.htaccess$
+RedirectMatch 403 ^/.*\.log$
+RedirectMatch 403 ^/.*\.ini$
+RedirectMatch 403 ^/.*config\.php$
+RedirectMatch 403 ^.*/doc/.*$
+RedirectMatch 403 ^.*/lib/.*\.php$
+RedirectMatch 403 ^.*/tmp/.*\.php$
+RedirectMatch 403 ^.*/modules/.*\.php$
+RedirectMatch 403 ^.*/uploads/.*\.php$
+RedirectMatch 403 ^.*/assets/.*\.php$
+RedirectMatch 403 ^.*/assets/.*\.tpl$
+
+#
+# Security and cache-related response headers (requires mod_headers).
+#
+<IfModule mod_headers.c>
+	Header unset Last-Modified
+	Header unset ETag
+	FileETag None
+	Header set X-Frame-Options "SAMEORIGIN"
+	Header set X-Content-Type-Options "nosniff"
+	Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+#
+# Compression: LiteSpeed maps deflate to mod_deflate in many builds. If this block
+# is ignored, enable compression in the LiteSpeed WebAdmin or CyberPanel.
+#
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml text/javascript application/javascript application/x-javascript application/json application/pdf
+</IfModule>
+
+#
+# Browser caching for static assets (requires mod_expires).
+#
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault "access plus 1 month"
+	ExpiresByType image/jpg "access plus 1 year"
+	ExpiresByType image/jpeg "access plus 1 year"
+	ExpiresByType image/gif "access plus 1 year"
+	ExpiresByType image/ico "access plus 1 year"
+	ExpiresByType image/png "access plus 1 year"
+	ExpiresByType video/x-flv "access plus 1 year"
+	ExpiresByType application/pdf "access plus 1 year"
+	ExpiresByType application/x-shockwave-flash "access plus 1 year"
+	ExpiresByType application/javascript "access plus 1 month"
+	ExpiresByType application/x-javascript "access plus 1 month"
+	ExpiresByType text/javascript "access plus 1 month"
+	ExpiresByType text/css "access plus 1 month"
+	<IfModule mod_headers.c>
+		Header set Cache-Control "public"
+	</IfModule>
+</IfModule>
+
+#
+# Optional: LiteSpeed Cache. Do NOT enable unless you configure cache bypass for
+# the admin area and logged-in users. Wrong caching breaks CMSMS.
+#
+# <IfModule LiteSpeed>
+#   CacheLookup on
+# </IfModule>
