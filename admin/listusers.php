@@ -223,6 +223,30 @@ else if (isset($_GET["toggleactive"])) {
                 $message = lang('msg_usersedited', $nusers);
             }
             break;
+
+        case 'forcereset' :
+            $nusers = 0;
+            foreach ($_POST['multiselect'] as $uid) {
+                $uid = (int)$uid;
+                if ($uid <= 1) {
+                    continue;
+                }
+                if ($uid == get_userid()) {
+                    continue;
+                }
+                $oneuser = $userops->LoadUserById($uid);
+                if (!is_object($oneuser)) {
+                    continue;
+                }
+                if ($userops->SetForcePasswordReset($uid, '', $userid)) {
+                    audit($userid, 'Admin Username: ' . $oneuser->username, 'Bulk force password reset');
+                    $nusers++;
+                }
+            }
+            if ($nusers > 0) {
+                $message = lang('msg_forcepw_bulk', $nusers);
+            }
+            break;
     }
 }
 

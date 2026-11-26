@@ -112,6 +112,26 @@ $(document).ready(function(){
         </div>
         {/if}
 
+        {if $manage_users == true && !$access_user}
+        <div class="pageoverflow">
+            <p class="pagetext">
+                <label for="force_password_reset">{lang('edituser_forcepw')}:</label>
+            </p>
+            <p class="pageinput">
+                <input type="hidden" name="force_password_reset" value="0"/>
+                <input id="force_password_reset" type="checkbox" class="pagecheckbox" name="force_password_reset" value="1"{if $force_password_reset == 1} checked="checked"{/if}/>
+            </p>
+        </div>
+        <div class="pageoverflow">
+            <p class="pagetext">
+                <label for="force_password_reset_reason">{lang('edituser_forcepw_reason')}:</label>
+            </p>
+            <p class="pageinput">
+                <input id="force_password_reset_reason" type="text" name="force_password_reset_reason" maxlength="255" value="{$force_password_reset_reason|cms_escape}" class="standard"/>
+            </p>
+        </div>
+        {/if}
+
         {if isset($groups)}
         <!-- group options -->
         {tab_start name='groups'}
