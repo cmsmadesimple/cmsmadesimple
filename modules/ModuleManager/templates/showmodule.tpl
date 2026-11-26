@@ -12,8 +12,10 @@
 
 {function get_module_status_icon}
 {strip}
-{if $status == 'incompatible'}
+{if $status == 'stale'}
 {$stale_img}
+{elseif $status == 'warn'}
+{$warn_img}
 {elseif $status == 'new'}
 {$new_img}
 {/if}
@@ -27,7 +29,6 @@
 			<th></th>
 			<th>{$nametext}</th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
-			<th><span title="{$ModuleManager->Lang('title_lastchecked')}">{$ModuleManager->Lang('lastchecked')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulereleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
 			{*<th><span title="{$ModuleManager->Lang('title_moduledownloads')}">{$ModuleManager->Lang('downloads')}</span></th>*}
 			<th>{$sizetext}</th>
@@ -41,11 +42,12 @@
 {foreach from=$items item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-			<td>{if $entry->age=='new'}{get_module_status_icon status='new'}{/if}</td>
+			<td style="white-space:nowrap;vertical-align:middle;">{get_module_status_icon status=$entry->age}
+			{if isset($entry->name) && $entry->name != ''}<img src="https://cdn.cmsmadesimple.org/modules/{$entry->name|escape:'url'}/icon.png" width="24" height="24" alt="" title="{$entry->name|cms_escape:'htmlall'}" loading="lazy" style="vertical-align:middle;margin-left:4px;" onerror="this.style.display='none';"/>{/if}
+			</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape|default:''}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
-			<td>{if isset($entry->cmsms_tested) && $entry->cmsms_tested}{$entry->cmsms_tested}{/if} {if isset($entry->incompatible) && $entry->incompatible}{$stale_img}{elseif $entry->age=='untested'}{$warn_img}{/if}</td>
-			<td>{$entry->date|cms_date_format:'%b %Y'}</td>
+			<td>{$entry->date|localedate_format:'%x'}</td>
 			{*<td>{$entry->downloads}</td>*}
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>
