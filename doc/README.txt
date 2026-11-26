@@ -18,3 +18,7 @@ Their website is located at: http://smarty.php.net
 
 CMSMS uses the adodb_lite database abstraction library.
 It is released under the LGPGL license and is located at: http://adodblite.sourceforge.net/index.php
+
+LiteSpeed / OpenLiteSpeed
+-------------------------
+See doc/openlitespeed-litespeed-web.txt and doc/htaccess-litespeed.txt for sample configuration notes.
