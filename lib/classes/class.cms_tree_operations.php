@@ -87,6 +87,9 @@ class cms_tree_operations
       // create a tree object
       $tree = new cms_content_tree();
       $sorted = array();
+      // id => node map; rows arrive parent-before-child, so a parent is always present
+      // by the time its children are processed (O(n) instead of a tree walk per row).
+      $nodes_by_id = array();
 
       for( $i = 0, $n = count($data); $i < $n; $i++ ) {
           $row = $data[$i];
@@ -100,7 +103,7 @@ class cms_tree_operations
               $parent_node = $tree;
           }
           else {
-              $parent_node = $tree->find_by_tag('id',$row['parent_id'],FALSE,FALSE);
+              $parent_node = isset($nodes_by_id[$row['parent_id']]) ? $nodes_by_id[$row['parent_id']] : null;
               if( !$parent_node ) {
                   // ruh-roh
                   throw new \LogicException('Problem with internal content organization... could not get a parent node for content with id '.$row['content_id']);
@@ -109,6 +112,7 @@ class cms_tree_operations
 
           // add it.
           $parent_node->add_node($node);
+          $nodes_by_id[$row['content_id']] = $node;
       }
       return $tree;
   }
