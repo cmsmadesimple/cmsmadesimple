@@ -48,6 +48,10 @@ if ($changepwhash != '') {
 	$smarty -> assign('changepwhash', $changepwhash);
 }
 
+if (!empty($force_password_change)) {
+	$smarty->assign('force_password_change', true);
+}
+
 $smarty -> assign('encoding', get_encoding());
 $smarty -> assign('config', $gCms -> GetConfig());
 
